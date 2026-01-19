@@ -1,7 +1,7 @@
 # Site settings
 course_name: Data Structure
 course_description: "This is an programming course for students who need a basic understanding of data structure. We will have hands-on exercises and quizzes to help you get familiar with each topic, and students will exercise logical thinking and programming skills for dealing with scientific problems."
-course_semester: "Spring 2024"
+course_semester: "Spring 2026"
 
 baseurl: "/nsysu-math208" # the subpath of your site, e.g. /blog/
 url: "https://phonchi.github.io/" # the base hostname & protocol for your site
