@@ -41,6 +41,7 @@ permalink: /materials/
 ### Simulators/Visualization
 * [pythontutor](https://pythontutor.com/)
 * [visualgo](https://visualgo.net/en)
+* [OpenDSA](https://opendsa-server.cs.vt.edu/OpenDSA/Books/Everything/html/index.html)
 * [Data Structure Visualizations](https://cmps-people.ok.ubc.ca/ylucet/DS/Algorithms.html) [[中文版本](https://fchart.github.io/DS/)]
 
 ### Programming Environment (Python)
