@@ -1,0 +1,29 @@
+[
+    {
+        "question": "What value is printed when the following statement executes?",
+        "code": "print(18.0 // 4)",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "4.5",
+                "correct": false,
+                "feedback": "// does truncated division."
+            },
+            {
+                "answer": "5",
+                "correct": false,
+                "feedback": "Neither / nor // leads to rounding up"
+            },
+            {
+                "answer": "4",
+                "correct": false,
+                "feedback": "Even though it truncates, it produces a floating point result!"
+            },
+            {
+                "answer": "4.0",
+                "correct": true,
+                "feedback": "When working with different numerical type, it will implicitly converted to a wider or more precise type before calculation."
+            }
+        ]
+    }
+]

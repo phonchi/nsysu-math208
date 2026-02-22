@@ -1,0 +1,29 @@
+[
+    {
+        "question": "What is printed when the following statements execute?",
+        "code": "day = \"Thursday\" \nday = 32.5 \nday = 19 \nprint(day)",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "Nothing is printed. A runtime error occurs.",
+                "correct": false,
+                "feedback": "It is legal to change the type of data that a variable holds in Python."
+            },
+            {
+                "answer": "Thursday",
+                "correct": false,
+                "feedback": "This is the first value assigned to the variable day, but the next statements reassign that variable to new values."
+            },
+            {
+                "answer": "32.5",
+                "correct": false,
+                "feedback": "This is the second value assigned to the variable day, but the next statement reassigns that variable to a new value."
+            },
+            {
+                "answer": "19",
+                "correct": true,
+                "feedback": "The variable day will contain the last value assigned to it when it is printed."
+            }
+        ]
+    }
+]

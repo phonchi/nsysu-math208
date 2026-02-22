@@ -1,0 +1,29 @@
+[
+    {
+        "question": "What is printed by the following statements?",
+        "code": "name = \"Alice\"\nage = 30\nbalance = 1234.5678\nprint(f\"{name} is {age} years old and has a balance of {balance:.2f}\")",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "Alice is 30 years old and has a balance of 1234.57",
+                "correct": true,
+                "feedback": "Correct! The f-string substitutes the variable values and formats the balance to two decimal places."
+            },
+            {
+                "answer": "Alice is 30 years old and has a balance of 1234.5678",
+                "correct": false,
+                "feedback": "Incorrect. The balance is formatted to two decimal places, so it rounds to 1234.57."
+            },
+            {
+                "answer": "Alice is {age} years old and has a balance of {balance:.2f}",
+                "correct": false,
+                "feedback": "Incorrect. The expressions inside the curly braces are evaluated, not printed literally."
+            },
+            {
+                "answer": "name is 30 years old and has a balance of 1234.57",
+                "correct": false,
+                "feedback": "Incorrect. The variable 'name' should be replaced with its value, 'Alice'."
+            }
+        ]
+    }
+]

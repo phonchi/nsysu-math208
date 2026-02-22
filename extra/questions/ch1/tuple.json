@@ -1,0 +1,33 @@
+[
+    {
+        "question": "Which of the following statements about lists and tuples in Python are true? (Select all that apply)",
+        "type": "many_choice",
+        "answers": [
+            {
+                "answer": "Tuples are mutable, meaning their elements can be modified after creation.",
+                "correct": false,
+                "feedback": "Incorrect. Tuples are immutable; once they are created, their elements cannot be changed."
+            },
+            {
+                "answer": "Both lists and tuples support indexing and slicing operations.",
+                "correct": true,
+                "feedback": "Correct! Both data types allow accessing elements via indexing and slicing."
+            },
+            {
+                "answer": "Lists have methods like append() and extend(), while tuples do not support these methods.",
+                "correct": true,
+                "feedback": "Correct! Lists include methods such as append() and extend() for modification, which tuples lack since it is immutable."
+            },
+            {
+                "answer": "The size of a tuple can be changed after it is created.",
+                "correct": false,
+                "feedback": "Incorrect. Tuples are immutable, so their size and contents remain fixed after creation."
+            },
+            {
+                "answer": "Lists can store elements of different data types.",
+                "correct": true,
+                "feedback": "Correct! Lists can contain elements of various data types, such as integers, strings, and even other lists."
+            }
+        ]
+    }
+]

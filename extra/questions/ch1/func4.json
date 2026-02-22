@@ -1,0 +1,24 @@
+[
+    {
+        "question": "What is wrong with the following function definition if we would like to receive the summation from the function",
+        "code": "def add_em(x, y, z):\n    print(x+y+z)",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "The value None",
+                "correct": true,
+                "feedback": "We have accidentally used print where we mean return. Therefore, the function will return the value None by default. This mistake is also particularly difficult to find because when you run the function the output looks the same."
+            },
+            {
+                "answer": "The value of x+y+z",
+                "correct": false,
+                "feedback": "Careful! This is a very common mistake. Here we have printed the value x+y+z but we have not returned it. To return a value we MUST use the return keyword."
+            },
+            {
+                "answer": "The string ’x+y+z’",
+                "correct": false,
+                "feedback": "x+y+z calculates a number which represents the sum of the values x, y and z."
+            }
+        ]
+    }
+]

@@ -1,0 +1,29 @@
+[
+    {
+        "question": "What is the correct Python expression for checking to see if a number stored in a variable x is between 0 and 5.",
+        "type": "many_choice",
+        "answer_cols": 4,
+        "answers": [
+            {
+                "answer": "x > 0 and < 5",
+                "correct": false,
+                "feedback": "Each comparison must be between exactly two values. In this case the right-hand expression < 5 lacks a value on its left."
+            },
+            {
+                "answer": "0 < x < 5",
+                "correct": true,
+                "feedback": "The expression is equivalent to writing ``x > 0 and x < 5``, but this chained comparison is even more concise!"
+            },
+            {
+                "answer": "x > 0 or x < 5",
+                "correct": false,
+                "feedback": "It will evaluate to true for all numbers that are either greater than 0 or less than 5. Because all numbers are either greater than 0 or less than 5, this expression will always be True!"
+            },
+            {
+                "answer": "x > 0 and x < 5",
+                "correct": true,
+                "feedback": "Yes, with an ``and`` keyword both expressions must be true so the number must be greater than 0 an less than 5 for this expression to be true."
+            }
+        ]
+    }
+]

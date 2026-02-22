@@ -1,0 +1,29 @@
+[
+    {
+        "question": "How many times is the word HELLO printed by the following statements?",
+        "code": "s = \"python rocks\"\nfor ch in s:\n    print(\"HELLO\")",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "10",
+                "correct": false,
+                "feedback": "Iteration by item will process once for each item in the sequence."
+            },
+            {
+                "answer": "11",
+                "correct": false,
+                "feedback": "The blank is part of the sequence."
+            },
+            {
+                "answer": "12",
+                "correct": true,
+                "feedback": "Yes, there are 12 characters, including the blank."
+            },
+            {
+                "answer": "Error, the for statement needs to use the range() function.",
+                "correct": false,
+                "feedback": "The for statement can iterate over a sequence item by item."
+            }
+        ]
+    }
+]

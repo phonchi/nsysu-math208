@@ -1,0 +1,29 @@
+[
+    {
+        "question": "What value is printed when the following statement executes?",
+        "code": "print(int(53.785))",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "Nothing is printed. It generates a runtime error.",
+                "correct": false,
+                "feedback": "The statement is valid Python code. It calls the int function on 53.785 and then prints the value that is returned."
+            },
+            {
+                "answer": "53",
+                "correct": true,
+                "feedback": "The int function truncates all values after the decimal and prints the integer value."
+            },
+            {
+                "answer": "54",
+                "correct": false,
+                "feedback": "When converting to an integer, the int function does not round."
+            },
+            {
+                "answer": "53.785",
+                "correct": false,
+                "feedback": "The int function removes the fractional part of 53.785 and returns an integer, which is then printed."
+            }
+        ]
+    }
+]

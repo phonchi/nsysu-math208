@@ -1,0 +1,29 @@
+[
+    {
+        "question": "Which one is the definition of an algorithm?",
+        "type": "many_choice",
+        "answer_cols": 4,
+        "answers": [
+            {
+                "answer": "A special kind of notation used to describe how to solve a problem.",
+                "correct": false,
+                "feedback": "Programmers used notation such as Pseudo Code to illustrate an algorithm, but this is not the definition of an algorithm."
+            },
+            {
+                "answer": "It must be decribed using programming language.",
+                "correct": false,
+                "feedback": "It can be described in many ways incluing Pseudo Code and Programming language."
+            },
+            {
+                "answer": "A step-by-step list of instructions for solving any instance of the problem that might arise",
+                "correct": true,
+                "feedback": "Correct."
+            },
+            {
+                "answer": "It contains well-defined, unambiguous steps and must procude result in a finite time.",
+                "correct": true,
+                "feedback": "The formal definition of algorithm."
+            }
+        ]
+    }
+]
