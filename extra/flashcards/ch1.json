@@ -1,0 +1,162 @@
+[
+    {
+        "front": "Algorithm",
+        "back": "A step-by-step procedure or formula for solving a problem or accomplishing some task. It's a set of rules that precisely define a sequence of operations."
+    },
+    {
+        "front": "Computable",
+        "back": "Refers to a problem that can be solved by a computational process, i.e., there exists an algorithm that can produce an answer for any given input in a finite amount of time."
+    },
+    {
+        "front": "Abstraction",
+        "back": "The process of hiding the complex reality while exposing only the necessary parts. It's a fundamental concept in computer science and programming that helps in managing complexity by reducing and hiding details."
+    },
+    {
+        "front": "Interface",
+        "back": "A shared boundary across which two or more separate components of a computer system exchange information. It can refer to a software interface that allows two programs to communicate or a user interface that enables interaction between the user and the computer."
+    },
+    {
+        "front": "Procedure Abstraction",
+        "back": "A type of abstraction that involves creating procedures (or functions) that can be used to perform specific tasks, hiding the details of the task's implementation from the user of the procedure."
+    },
+    {
+        "front": "Programming",
+        "back": "The process of creating a set of instructions that tell a computer how to perform a task. Programming involves writing code in a programming language to solve specific problems or to create applications and software."
+    },
+    {
+        "front": "Control Constructs",
+        "back": "The elements of a programming language that control the flow of execution of the program, such as loops (for, while), conditional statements (if, switch), and branching statements (break, continue)."
+    },
+    {
+        "front": "Data Types",
+        "back": "Categories of data that tell the compiler or interpreter how the programmer intends to use the data. Common data types include integers, floating-point numbers, characters, and booleans."
+    },
+    {
+        "front": "ADT (Abstract Data Type)",
+        "back": "A mathematical model for data types where a data type is defined by its behavior (semantics) from the point of view of a user, specifically in terms of possible values, possible operations on data of this type, and the behavior of these operations."
+    },
+    {
+        "front": "Encapsulation",
+        "back": "A principle of object-oriented programming that involves bundling the data (attributes) and methods that operate on the data into a single unit or class and restricting access to some of the object's components."
+    },
+    {
+        "front": "Data Structure",
+        "back": "A particular way of organizing and storing data in a computer so that it can be accessed and modified efficiently. Examples include arrays, linked lists, trees, and graphs."
+    },
+    {
+        "front": "Identifiers",
+        "back": "Names used to identify variables, functions, classes, modules, and other entities in code. They help in distinguishing one entity from another."
+    },
+    {
+        "front": "Variables",
+        "back": "Symbols that are used to store data values. In programming, a variable is associated with a data type, and it can hold different values at different times during the execution of the program."
+    },
+    {
+        "front": "Assignment Statement",
+        "back": "A statement in programming that assigns a value to a variable. It typically uses the assignment operator (=) to assign the right-hand side expression to the left-hand side variable."
+    },
+    {
+        "front": "Sequence",
+        "back": "In programming, a sequence is an ordered collection of elements. It can refer to data structures like arrays or lists where elements are stored in a specific order."
+    },
+    {
+        "front": "Unordered Collections",
+        "back": "Data structures where elements are not stored in any specific order, and there is no particular sequence in which they are stored or accessed. Examples include sets and dictionaries (in some languages)."
+    },
+    {
+        "front": "Formatted String",
+        "back": "A string that contains placeholders for inserting variables or expressions into the string, allowing for dynamic string creation with variable content."
+    },
+    {
+        "front": "Mutable",
+        "back": "In programming, a mutable object is one whose state or value can be changed after it's created. This means that methods or operations can modify the data held by the object without needing to create a new object."
+    },
+    {
+        "front": "Format Operator",
+        "back": "An operator used in some programming languages (like `%` in `Python`) to format strings, by substituting variables or expressions into placeholders defined in a format string."
+    },
+    {
+        "front": "Format Modifier",
+        "back": "Instructions used in formatted strings to control the formatting of inserted values, such as specifying the number of decimal places for a floating-point number or padding for alignment."
+    },
+    {
+        "front": "Selection Statements",
+        "back": "Statements that allow a program to execute different code blocks based on certain conditions. The most common selection statement is the if statement."
+    },
+    {
+        "front": "Syntax Error",
+        "back": "An error in the syntax of a programming language code, meaning the code does not follow the rules or grammar of the language. Syntax errors are detected by the compiler or interpreter."
+    },
+    {
+        "front": "Logic Error",
+        "back": "A bug in a program that causes it to operate incorrectly but does not prevent the program from running. Logic errors produce unintended or erroneous output or behavior."
+    },
+    {
+        "front": "Exceptions",
+        "back": "Events that occur during the execution of a program that disrupt the normal flow of instructions. Exceptions are typically handled by exception handling constructs in programming languages."
+    },
+    {
+        "front": "Module",
+        "back": "A module is a file containing Python definitions and statements. The file name is the module name with the suffix `.py` added. Modules are used to organize code in a logical and manageable way."
+    },
+    {
+        "front": "Functions",
+        "back": "Blocks of code that perform a specific task and can be executed when called. Functions can take inputs (arguments) and can return outputs (return values)."
+    },
+    {
+        "front": "Argument",
+        "back": "In programming, an argument is a value that is passed to a function or method when it is called. In function definitions, the variables that receive these passed values are called parameters."
+    },
+    {
+        "front": "Keyword",
+        "back": "In programming, a keyword is a word that is reserved by a program because the word has a special meaning. Keywords can be commands or parameters and cannot be used for other purposes."
+    },
+    {
+        "front": "OOP",
+        "back": "Object-Oriented Programming (OOP) is a programming paradigm based on using \"objects\" — instances of classes, which encapsulate data and functions. It emphasizes principles like encapsulation, inheritance, and polymorphism."
+    },
+    {
+        "front": "Class",
+        "back": "In object-oriented programming (OOP), a class is a blueprint for creating objects. It defines a set of attributes (data members and methods) that will characterize any object that is instantiated from the class."
+    },
+    {
+        "front": "Object",
+        "back": "In object-oriented programming (OOP), an object is an instance of a class. It is a concrete entity that represents something in the program characterized by methods (behaviors) and attributes (states)."
+    },
+    {
+        "front": "Attribute",
+        "back": "In OOP, an attribute is a named property of a class. It has a type and is typically used to hold data. The state of an object is determined by the values of its attributes."
+    },
+    {
+        "front": "Methods",
+        "back": "Functions that are associated with an object or class in object-oriented programming. They can operate on the data (attributes) contained within the object/class."
+    },
+    {
+        "front": "Constructor",
+        "back": "A special method in a class whose primary purpose is to initialize new instances of that class. It is automatically called when an object of a class is instantiated."
+    },
+    {
+        "front": "Polymorphism",
+        "back": "The ability in programming to present the same interface for differing underlying forms (data types). With polymorphism, a single interface can represent different underlying forms of data."
+    },
+    {
+        "front": "Overrides",
+        "back": "A feature in OOP where a subclass or child class provides a specific implementation of a method that is already provided by one of its superclasses or parent classes."
+    },
+    {
+        "front": "Overloading",
+        "back": "The ability to define multiple functions or methods with the same name but different signatures (i.e., different sets of parameters) within the same scope."
+    },
+    {
+        "front": "Shallow Copies",
+        "back": "Copies of objects where the copy contains references to the same objects as the original. Changes to the contents of the objects in the copy will affect the original, and vice versa."
+    },
+    {
+        "front": "Deep Copies",
+        "back": "Copies of objects where the copy contains copies of all objects it originally contained, recursively. Changes to the contents of the objects in the copy will not affect the original."
+    },
+    {
+        "front": "Inheritance",
+        "back": "A principle in OOP where a new class is derived from an existing class. The derived class inherits attributes and methods of the existing class, allowing for code reuse."
+    }
+]
