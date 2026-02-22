@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加簽抽籤系統</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+        h2 { color: #2c3e50; text-align: center; margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #34495e; }
+        textarea { width: 100%; height: 150px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; resize: none; box-sizing: border-box; font-size: 14px; margin-bottom: 20px; }
+        .controls { display: flex; gap: 10px; margin-bottom: 20px; }
+        input[type="number"] { width: 80px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; }
+        button { flex-grow: 1; padding: 10px; background-color: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; transition: background 0.3s; }
+        button:hover { background-color: #2980b9; }
+        #result { margin-top: 20px; padding: 15px; border-radius: 8px; display: none; }
+        .winner-list { list-style: none; padding: 0; }
+        .winner-item { padding: 10px; background: #e8f6ef; border-left: 5px solid #2ecc71; margin-bottom: 8px; border-radius: 4px; font-weight: bold; display: flex; justify-content: space-between; }
+        .rank { color: #27ae60; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>課程加簽抽籤系統</h2>
+    
+    <label for="names">輸入學生名單 (每行一個名字或學號)</label>
+    <textarea id="names" placeholder="例如：&#10;王小明&#10;B112040XXX&#10;李華..."></textarea>
+    
+    <div class="controls">
+        <div style="display:flex; align-items:center; gap:5px;">
+            <label style="margin:0;">名額:</label>
+            <input type="number" id="quota" value="5" min="1">
+        </div>
+        <button onclick="runLottery()">開始抽籤</button>
+    </div>
+
+    <div id="result">
+        <label>抽籤結果：</label>
+        <div id="winnerContainer" class="winner-list"></div>
+    </div>
+</div>
+
+<script>
+    function runLottery() {
+        const nameText = document.getElementById('names').value.trim();
+        const quota = parseInt(document.getElementById('quota').value);
+        const resultDiv = document.getElementById('result');
+        const container = document.getElementById('winnerContainer');
+        
+        if (!nameText) {
+            alert('請輸入名單！');
+            return;
+        }
+
+        // 處理名單：過濾掉空行
+        let participants = nameText.split('\n').map(n => n.trim()).filter(n => n !== '');
+        
+        if (participants.length === 0) {
+            alert('名單格式不正確');
+            return;
+        }
+
+        // Fisher-Yates Shuffle 隨機演算法
+        for (let i = participants.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [participants[i], participants[j]] = [participants[j], participants[i]];
+        }
+
+        // 抽取前 N 名
+        const winners = participants.slice(0, quota);
+        
+        // 顯示結果
+        container.innerHTML = '';
+        winners.forEach((name, index) => {
+            const div = document.createElement('div');
+            div.className = 'winner-item';
+            div.innerHTML = `<span>${name}</span> <span class="rank">正取 ${index + 1}</span>`;
+            container.appendChild(div);
+        });
+
+        resultDiv.style.display = 'block';
+        
+        // 捲動到結果處
+        resultDiv.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
