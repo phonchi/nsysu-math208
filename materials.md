@@ -54,6 +54,7 @@ permalink: /materials/
 * [Dev C++](https://ithelp.ithome.com.tw/articles/10261850)
 
 ### Learning Python/C++
+* [PythonBook](https://pythonbook.cc/chapters/basic/introduction)
 * [Python Cheatsheet](https://github.com/AbdulMalikDev/PythonCheatSheet?tab=readme-ov-file)
 * [Python for everybody](https://runestone.academy/ns/books/published/py4e-int/index.html?mode=browsing)
 * [NSYSU MATH Python book](https://phonchi.github.io/Computer_Programming/)
