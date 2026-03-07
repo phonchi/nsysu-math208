@@ -1,0 +1,33 @@
+[
+    {
+        "question": "Which of the dictionary operations shown below is $O(1)$?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "code": "\"x\" in a_dict",
+                "correct": false,
+                "feedback": "This is indeed $O(1)$, but it is not the only one. Membership testing in a dictionary uses a hash function to jump directly to the key's location without scanning the entire collection."
+            },
+            {
+                "code": "del a_dict[\"x\"]",
+                "correct": false,
+                "feedback": "This is also $O(1)$. Deleting a key-value pair requires hashing the key to find the correct bucket and removing the entry. Since it does not require shifting other elements like a list would, it remains constant time."
+            },
+            {
+                "code": "a_dict[\"x\"] == 10",
+                "correct": false,
+                "feedback": "Correct, but there are others. This operation consists of a dictionary lookup (constant time) followed by a comparison with an integer (constant time), making the total operation $O(1)$."
+            },
+            {
+                "code": "a_dict[\"x\"] = a_dict[\"x\"] + 1",
+                "correct": false,
+                "feedback": "This involves a dictionary lookup, an addition, and an assignment back to the dictionary. Each of these sub-steps is an $O(1)$ operation, so the overall complexity is still $O(1)$."
+            },
+            {
+                "answer": "All are $O(1)$",
+                "correct": true,
+                "feedback": "Correct! Python dictionaries are implemented as hash tables. In the average case, the time required to search for, add, delete, or update a key is independent of the number of items stored in the dictionary. Therefore, all these operations are $O(1)$."
+            }
+        ]
+    }
+]

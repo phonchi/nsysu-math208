@@ -1,0 +1,29 @@
+[
+    {
+        "question": "Given the following code fragment, what is its Big O running time?",
+        "code": "test = 0\nfor i in range(n):\n   for j in range(n):\n      test = test + i * j",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "$O(n)$",
+                "correct": false,
+                "feedback": "No. $O(n)$ would be correct if there were only one loop."
+            },
+            {
+                "answer": "$O(n^2)$",
+                "correct": true,
+                "feedback": "Correct! The outer loop runs $n$ times and the inner loop also runs $n$ times for each iteration of the outer loop, resulting in $n \\times n = n^2$ total operations."
+            },
+            {
+                "answer": "$O(\\log n)$",
+                "correct": false,
+                "feedback": "No. Logarithmic time usually involves dividing the input size in each step, such as in binary search."
+            },
+            {
+                "answer": "$O(n^3)$",
+                "correct": false,
+                "feedback": "No. $O(n^3)$ would require three nested loops iterating up to $n$."
+            }
+        ]
+    }
+]

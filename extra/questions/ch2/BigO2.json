@@ -1,0 +1,29 @@
+[
+    {
+        "question": "Given the following code fragment, what is its Big O running time?",
+        "code": "test = 0\nfor i in range(n):\n   test = test + 1\nfor j in range(n):\n   test = test - 1",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "$O(n)$",
+                "correct": true,
+                "feedback": "Correct! These are two separate loops that run one after the other. $n + n = 2n$, which simplifies to $O(n)$ in Big O notation."
+            },
+            {
+                "answer": "$O(n^2)$",
+                "correct": false,
+                "feedback": "No. $O(n^2)$ would occur if the loops were nested (one inside the other)."
+            },
+            {
+                "answer": "$O(\\log n)$",
+                "correct": false,
+                "feedback": "No. The loops iterate through the entire range of $n$ linearly."
+            },
+            {
+                "answer": "$O(n^3)$",
+                "correct": false,
+                "feedback": "No. This would require three nested loops."
+            }
+        ]
+    }
+]

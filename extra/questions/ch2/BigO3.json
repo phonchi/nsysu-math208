@@ -1,0 +1,29 @@
+[
+    {
+        "question": "Given the following code fragment, what is its Big O running time?",
+        "code": "i = n\nwhile i > 0:\n   k = 2 + 2\n   i = i // 2",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "$O(n)$",
+                "correct": false,
+                "feedback": "No. $O(n)$ would require the variable $i$ to decrease by a constant amount (like $i = i - 1$) in each step."
+            },
+            {
+                "answer": "$O(n^2)$",
+                "correct": false,
+                "feedback": "No. This complexity typically involves nested linear loops."
+            },
+            {
+                "answer": "$O(\\log n)$",
+                "correct": true,
+                "feedback": "Correct! Since $i$ is divided by 2 in each iteration, the number of steps required to reach 0 is $\\log_2 n$."
+            },
+            {
+                "answer": "$O(n^3)$",
+                "correct": false,
+                "feedback": "No. This is far more efficient than cubic time."
+            }
+        ]
+    }
+]

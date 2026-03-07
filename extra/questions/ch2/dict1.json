@@ -1,0 +1,28 @@
+[
+    {
+        "question": "Which of the list operations shown below is NOT $O(1)$?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "a_list.pop(0)",
+                "correct": true,
+                "feedback": "Correct! `pop(0)` removes the first element, which requires all subsequent elements to be shifted one position to the left, taking $O(n)$ time."
+            },
+            {
+                "answer": "a_list.pop()",
+                "correct": false,
+                "feedback": "No. `pop()` removes the last element, which is an $O(1)$ operation because no shifting is required."
+            },
+            {
+                "answer": "a_list.append()",
+                "correct": false,
+                "feedback": "No. `append()` adds an element to the end of the list, which is $O(1)$ (amortized)."
+            },
+            {
+                "answer": "a_list[10]",
+                "correct": false,
+                "feedback": "No. Accessing an element by index is a direct memory lookup, which is $O(1)$."
+            }
+        ]
+    }
+]
