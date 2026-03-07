@@ -15,6 +15,8 @@ links:
 - [Notebook](https://github.com/phonchi/nsysu-math208/blob/main/static_files/presentations/02_Analysis.ipynb)
 - [Exercise](https://github.com/phonchi/nsysu-math208/blob/main/static_files/presentations/Ch2.ipynb)
 - [Exercise_sol](https://github.com/phonchi/nsysu-math208/blob/main/static_files/presentations/Ch2_sol.ipynb)
+- [Data Structures and Algorithms Complexity for Python](https://github.com/buildwithmalik/PythonCheatSheet)
+- [Data Structures and Algorithms Complexity for C++](https://github.com/gibsjose/cpp-cheat-sheet/blob/master/Data%20Structures%20and%20Algorithms.md)
 - Textbook Chapter 2
 
 
