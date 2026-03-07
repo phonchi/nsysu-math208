@@ -1,0 +1,50 @@
+[
+    {
+        "front": "Readability",
+        "back": "The ease with which a human reader can comprehend the purpose, control flow, and operation of source code. It is a measure of how simple it is to understand and maintain code."
+    },
+    {
+        "front": "Algorithm Analysis",
+        "back": "The process of determining the computational complexity of algorithms, measuring the amount of computing resources (time and space) an algorithm uses."
+    },
+    {
+        "front": "Benchmark Analysis",
+        "back": "Evaluating the performance of a program by running a series of standard tests and trials to compare the relative performance of the objects being measured."
+    },
+    {
+        "front": "Space Complexity",
+        "back": "The amount of memory space required by an algorithm to execute, as a function of the length of the input."
+    },
+    {
+        "front": "Time Complexity",
+        "back": "The computational complexity that describes the amount of time it takes to run an algorithm, typically expressed as a function of the size of the input."
+    },
+    {
+        "front": "Big-O",
+        "back": "A notation used to express the upper bound of the time complexity or space complexity of an algorithm, helping to describe how the algorithm scales as the input size grows."
+    },
+    {
+        "front": "Average-Case Performance",
+        "back": "The expected time or space complexity of an algorithm when all possible inputs are considered, providing a measure of the algorithm's efficiency under typical conditions."
+    },
+    {
+        "front": "Worst-Case Performance",
+        "back": "The maximum time or space complexity of an algorithm across all possible inputs, indicating the algorithm's efficiency in the most unfavorable conditions."
+    },
+    {
+        "front": "Brute-Force",
+        "back": "An algorithmic approach that tries all possible solutions to find the answer, typically considered inefficient but simple to implement."
+    },
+    {
+        "front": "Time and Space Trade-offs",
+        "back": "The concept that sometimes an algorithm can be made faster by using more memory space, or use less memory at the cost of slower performance, depending on the algorithm's design choices."
+    },
+    {
+        "front": "Indexing",
+        "back": "The process of creating an index to improve data retrieval speed by efficiently locating and accessing the data in a data structure."
+    },
+    {
+        "front": "Contains Operator",
+        "back": "An operator used in programming to check if a particular element is present within a data structure."
+    }
+]
