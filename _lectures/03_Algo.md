@@ -18,6 +18,7 @@ links:
 - [Data Structures and Algorithms Complexity for Python](https://github.com/buildwithmalik/PythonCheatSheet)
 - [Data Structures and Algorithms Complexity for C++](https://github.com/gibsjose/cpp-cheat-sheet/blob/master/Data%20Structures%20and%20Algorithms.md)
 - [Big-O overview](https://github.com/ReaVNaiL/big-o-complexity-cheat-sheet)
+- [[Recorded video]](https://youtube.com/playlist?list=PLHNZtBNWQ-84umgPFXzYvpzEc8vDfhXvV&si=j7HOjwrzIU3AwV-0)
 - Textbook Chapter 2
 
 
