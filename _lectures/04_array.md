@@ -12,7 +12,7 @@ links:
       name: Ch4_Slides
     - url: /static_files/presentations/03_Arrays.html
       name: Ch3_Slides_html
-    - url: /static_files/presentations/04_Linear Linked Structure.html
+    - url: /static_files/presentations/04_Linear_Linked_Structure.html
       name: Ch4_Slides_html
 ---
 **Suggested Readings:**
