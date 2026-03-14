@@ -1,0 +1,130 @@
+[
+    {
+        "front": "Searching",
+        "back": "The act of locating a specific number or entry within a collection based on predefined criteria or characteristics."
+    },
+    {
+        "front": "Sorting",
+        "back": "The process by which numbers in a dataset are arranged in a specific sequence, typically ascending or descending order, based on their values."
+    },
+    {
+        "front": "Sequential Search",
+        "back": "A search technique where each number in a list is examined one by one from the start until the desired number is found or the list ends."
+    },
+    {
+        "front": "Binary Search",
+        "back": "A search algorithm applied on a sorted array that repeatedly divides the search range in half, comparing the midpoint against the target number to find it efficiently."
+    },
+    {
+        "front": "Divide and Conquer",
+        "back": "A strategy for solving problems by breaking them into smaller subproblems of the same type, solving these subproblems independently, and combining their solutions to solve the original problem."
+    },
+    {
+        "front": "Hashing",
+        "back": "A method used for uniquely identifying a specific number from a set of numbers by converting the input into a fixed-size string or number through a hash function."
+    },
+    {
+        "front": "Hash Table",
+        "back": "A data structure that implements an associative array abstract data type, allowing for the efficient retrieval of values keyed by numbers, through hashing."
+    },
+    {
+        "front": "Collision",
+        "back": "This occurs when two different keys (numbers) hash to the same index in a hash table."
+    },
+    {
+        "front": "Perfect Hash Function",
+        "back": "A hash function that, when applied to each key (number) in the input set, produces a unique index in the hash table, thus eliminating collisions."
+    },
+    {
+        "front": "Remainder Method",
+        "back": "A method for generating a hash value by taking the remainder of the division of the key (number) by the hash table size."
+    },
+    {
+        "front": "Folding Method",
+        "back": "A technique for hashing where a key (number) is divided into parts, these parts are then added together, and the hash value is derived from this sum."
+    },
+    {
+        "front": "Mid-square Method",
+        "back": "A hashing technique where the key (number) is squared, and a portion of the resulting number (often the middle part) is used as the hash value."
+    },
+    {
+        "front": "Collision Resolution",
+        "back": "Various strategies, such as chaining or open addressing, used to address the issue of two keys hashing to the same index in a hash table."
+    },
+    {
+        "front": "Open Addressing",
+        "back": "A method of resolving hash table collisions by probing the hash table to find the next empty slot according to a predefined sequence."
+    },
+    {
+        "front": "Linear Probing",
+        "back": "A specific type of open addressing where the next sequential slot is checked for availability after a collision."
+    },
+    {
+        "front": "Rehashing",
+        "back": "The process of increasing the size of a hash table and rehashing all existing keys (numbers), typically performed when the load factor exceeds a certain threshold."
+    },
+    {
+        "front": "Quadratic Probing",
+        "back": "A collision resolution technique in open addressing that uses a quadratic function to find the next slot, reducing clustering compared to linear probing."
+    },
+    {
+        "front": "Chaining",
+        "back": "A collision resolution technique in hash tables where each table index points to a list (or chain) of entries that hash to the same index."
+    },
+    {
+        "front": "Map",
+        "back": "A data structure that stores pairs of keys and values, allowing for efficient retrieval of a value based on its associated key (number)."
+    },
+    {
+        "front": "Loading Factor",
+        "back": "A measure of how full a hash table is, calculated as the ratio of the number of entries to the total number of slots available in the table."
+    },
+    {
+        "front": "Bubble Sort",
+        "back": "A straightforward sorting algorithm that repeatedly steps through the list, compares adjacent numbers, and swaps them if they are in the wrong order."
+    },
+    {
+        "front": "Selection Sort",
+        "back": "An in-place comparison sorting algorithm that segmentation the list into sorted and unsorted parts, repeatedly moving the minimum number to the sorted segment."
+    },
+    {
+        "front": "Insertion Sort",
+        "back": "A simple sorting technique that builds the final sorted array one number at a time by inserting each new number into its proper position."
+    },
+    {
+        "front": "Shell Sort",
+        "back": "An algorithm that sorts numbers by comparing elements separated by a gap of several positions, reducing the gap size over time until it reaches one."
+    },
+    {
+        "front": "Gap",
+        "back": "The distance between numbers being compared and sorted in the context of the Shell Sort algorithm."
+    },
+    {
+        "front": "Merge Sort",
+        "back": "A divide-and-conquer sorting algorithm that divides the unsorted list into n sublists and then repeatedly merges them to produce sorted sublists."
+    },
+    {
+        "front": "Stable Sort",
+        "back": "A sorting algorithm is considered stable if it maintains the relative order of numbers with equal values within the sorted list."
+    },
+    {
+        "front": "Quick Sort",
+        "back": "An efficient sorting algorithm that employs a divide-and-conquer strategy to select a pivot number and partition the array into two halves."
+    },
+    {
+        "front": "Pivot Value",
+        "back": "The chosen value around which the quick sort algorithm organizes the other numbers in the array during the partitioning process."
+    },
+    {
+        "front": "Split Point",
+        "back": "The position at which the pivot number is placed in the sorted array, such that all numbers to the left are smaller and all numbers to the right are larger."
+    },
+    {
+        "front": "Partition Process",
+        "back": "The critical step in quick sort where numbers are rearranged based on their relationship to a chosen pivot number."
+    },
+    {
+        "front": "Median of Three",
+        "back": "A strategy to choose the pivot number in quick sort by finding the median value of the first, middle, and last numbers of the array segment."
+    }
+]

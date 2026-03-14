@@ -1,0 +1,138 @@
+[
+    {
+        "front": "Trees",
+        "back": "A hierarchical data structure consisting of nodes, where each node contains data and references to child nodes, facilitating efficient data organization and retrieval."
+    },
+    {
+        "front": "Node",
+        "back": "A fundamental part of a tree that stores data and contains references to other nodes (children). Each node can represent a data point or a position in the structure."
+    },
+    {
+        "front": "Edge",
+        "back": "The connection between two nodes in a tree, representing the relationship or link from a parent node to a child node."
+    },
+    {
+        "front": "Root",
+        "back": "The topmost node in a tree, from which all other nodes descend. It does not have a parent node."
+    },
+    {
+        "front": "Path",
+        "back": "A sequence of nodes and edges connecting a node with a descendant, showing the route from one node to another within the tree."
+    },
+    {
+        "front": "Children",
+        "back": "Nodes that are directly connected and descend from another node (the parent) within a tree."
+    },
+    {
+        "front": "Parent",
+        "back": "A node that has one or more nodes (children) directly under it in the hierarchy."
+    },
+    {
+        "front": "Sibling",
+        "back": "Nodes that share the same parent and reside at the same level within a tree."
+    },
+    {
+        "front": "Subtree",
+        "back": "A portion of a tree structure consisting of a node and all its descendants, forming a tree itself."
+    },
+    {
+        "front": "Leaf node",
+        "back": "A node with no children, representing an endpoint of a tree."
+    },
+    {
+        "front": "Level",
+        "back": "The layer or depth of a node, starting at zero for the root and increasing by one for each step down."
+    },
+    {
+        "front": "Height",
+        "back": "The total number of levels in a tree, or the length of the longest path from the root to a leaf node."
+    },
+    {
+        "front": "Binary Tree",
+        "back": "A type of tree where each node has at most two children, typically called the left and right children."
+    },
+    {
+        "front": "List of Lists",
+        "back": "A method for implementing a tree using a nested list structure where each list represents a node and its children."
+    },
+    {
+        "front": "Nodes and References",
+        "back": "A tree implementation method where each node contains its data and explicit links to its child nodes."
+    },
+    {
+        "front": "Parse Tree",
+        "back": "A tree representing the syntactic structure of a string according to a formal grammar, used in compilers."
+    },
+    {
+        "front": "Expression Tree",
+        "back": "A binary tree used to represent expressions where internal nodes are operators and leaf nodes are operands."
+    },
+    {
+        "front": "Preorder",
+        "back": "A tree traversal where each node is processed before its child nodes (root, left, right)."
+    },
+    {
+        "front": "Postorder",
+        "back": "A tree traversal where each node is processed after its child nodes (left, right, root)."
+    },
+    {
+        "front": "Inorder",
+        "back": "A traversal for binary trees where nodes are processed in the order: left-child, root, right-child."
+    },
+    {
+        "front": "Priority Queue",
+        "back": "An abstract data type where each element has a priority, and elements are served based on that priority."
+    },
+    {
+        "front": "Binary Heap",
+        "back": "A binary tree-based structure that satisfies the heap property, where nodes are ordered relative to their children."
+    },
+    {
+        "front": "Complete Binary Tree",
+        "back": "A binary tree where every level except possibly the last is filled, and all nodes are as far left as possible."
+    },
+    {
+        "front": "Heap Structure Property",
+        "back": "A requirement that a heap must be a complete binary tree to ensure balance."
+    },
+    {
+        "front": "Heap Order Property",
+        "back": "A requirement maintaining a specific order between a node and its children (max-heap or min-heap)."
+    },
+    {
+        "front": "Max-Heap",
+        "back": "A heap where the value of each node is greater than or equal to its children, keeping the maximum value at the root."
+    },
+    {
+        "front": "Min-Heap",
+        "back": "A heap where the value of each node is less than or equal to its children, keeping the minimum value at the root."
+    },
+    {
+        "front": "Binary Search Tree (BST)",
+        "back": "A binary tree where each node's key is greater than all keys in its left subtree and less than those in its right subtree."
+    },
+    {
+        "front": "BST Property",
+        "back": "The defining rule for a BST: left subtree elements are less than the node, and right subtree elements are greater."
+    },
+    {
+        "front": "Successor",
+        "back": "The node that immediately follows a given node in an inorder traversal of a binary search tree."
+    },
+    {
+        "front": "Generator Function",
+        "back": "A function that returns an iterator and yields values one at a time, pausing between each execution."
+    },
+    {
+        "front": "Balanced Binary Search Tree",
+        "back": "A BST that automatically adjusts to maintain a low height, ensuring minimal path lengths."
+    },
+    {
+        "front": "Balance Factor",
+        "back": "In AVL trees, the difference between the heights of a node's left and right subtrees."
+    },
+    {
+        "front": "AVL Tree",
+        "back": "A self-balancing BST where the height of subtrees differs by at most one, ensuring logarithmic time complexity."
+    }
+]

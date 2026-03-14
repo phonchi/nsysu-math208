@@ -1,0 +1,46 @@
+[
+    {
+        "front": "Array",
+        "back": "A data structure consisting of a collection of elements, each identified by at least one array index or key. Arrays store elements of the same data type and allocate memory in a contiguous block."
+    },
+    {
+        "front": "Segmentation Fault",
+        "back": "An error that occurs when a program attempts to access memory that it is not allowed to, often leading to a program crash. This can happen for reasons like accessing an array beyond its bounds."
+    },
+    {
+        "front": "Referential Array",
+        "back": "An array that contains references (or pointers) to objects rather than the objects themselves. This allows for more flexible data structures, such as linked lists or trees, to be built using arrays."
+    },
+    {
+        "front": "Compact Array",
+        "back": "An array with minimal memory overhead, designed to store data densely without pointers or references. It usually implies that the array is precisely as large as necessary to hold its contents."
+    },
+    {
+        "front": "Multidimensional Array",
+        "back": "An array containing one or more arrays. The data is organized in a grid or matrix, accessible through multiple indices. For example, a two-dimensional array represents rows and columns."
+    },
+    {
+        "front": "Column Major",
+        "back": "A method of storing multidimensional arrays in memory where elements are stored column by column. This contrasts with row-major order, affecting how operations like traversals and computations are optimized."
+    },
+    {
+        "front": "Row Major",
+        "back": "A method of storing multidimensional arrays in memory where elements are stored row by row. This is the default storage method in many programming languages, affecting the efficiency of various operations."
+    },
+    {
+        "front": "Sparse Matrix",
+        "back": "A matrix in which most of the elements are zero. Storing only the non-zero elements in memory-efficient data structures saves space and computational resources."
+    },
+    {
+        "front": "Coordinate Format (COO)",
+        "back": "A method for storing sparse matrices by representing them as three lists (row, column, value), where each list represents a non-zero element and its position in the matrix."
+    },
+    {
+        "front": "Dictionaries of Keys Matrix (DOK)",
+        "back": "A sparse matrix representation using a dictionary (or hash map) where each key is a tuple (row, column) and the value is the element value."
+    },
+    {
+        "front": "Sparse Matrix as Linear List",
+        "back": "Representing a sparse matrix by linking the non-zero elements together in a linear list, possibly sorted by row and column indices. This approach can optimize certain operations but may be less efficient for random access compared to other sparse matrix representations."
+    }
+]

@@ -1,0 +1,118 @@
+[
+    {
+        "front": "Graph",
+        "back": "A data structure composed of a set of vertices (nodes) and edges (links) that connect pairs of these vertices. It is used to model relationships in complex systems."
+    },
+    {
+        "front": "Vertex",
+        "back": "Also known as a node, it represents an entity within a graph and serves as the fundamental unit of the structure."
+    },
+    {
+        "front": "Edge",
+        "back": "A connection between two vertices. In a directed graph, edges indicate a specific direction of relationship."
+    },
+    {
+        "front": "Weight",
+        "back": "A numerical value assigned to an edge representing cost, distance, or another measure impacting traversal."
+    },
+    {
+        "front": "Path",
+        "back": "A sequence of vertices connected by edges, defined by starting at one vertex and traversing through edges to reach another."
+    },
+    {
+        "front": "Cycle",
+        "back": "A path that begins and ends at the same vertex, containing at least one edge and no repeated edges or internal vertices."
+    },
+    {
+        "front": "Acyclic Graph",
+        "back": "A graph with no cycles, meaning it is impossible to return to a starting vertex by following edges."
+    },
+    {
+        "front": "Directed Graph",
+        "back": "A graph where edges have a specific direction, indicating a one-way relationship from one vertex to another."
+    },
+    {
+        "front": "DAG (Directed Acyclic Graph)",
+        "back": "A directed graph containing no cycles, often used for task scheduling and sequences where tasks do not repeat."
+    },
+    {
+        "front": "Tree",
+        "back": "A type of acyclic graph with a designated root vertex where all other vertices are connected by exactly one path to that root."
+    },
+    {
+        "front": "Adjacency Matrix",
+        "back": "A square matrix used to represent a graph where elements indicate whether pairs of vertices are adjacent."
+    },
+    {
+        "front": "Adjacency List",
+        "back": "A collection of lists used to represent a graph, where each list describes the neighbors of a specific vertex."
+    },
+    {
+        "front": "Breadth-First Search (BFS)",
+        "back": "A search algorithm that explores all neighbor nodes at the current depth prior to moving on to nodes at the next depth level."
+    },
+    {
+        "front": "Knight's Tour",
+        "back": "A sequence of moves on a chessboard where a knight visits every square exactly once."
+    },
+    {
+        "front": "Depth-First Search (DFS)",
+        "back": "A traversal algorithm that explores as far as possible along each branch before backtracking."
+    },
+    {
+        "front": "Search Tree",
+        "back": "A tree data structure used for efficiently locating specific keys within a set through insertion, deletion, and search operations."
+    },
+    {
+        "front": "Heuristic",
+        "back": "A technique designed to solve problems quickly or find approximate solutions when classic methods are too slow or infeasible."
+    },
+    {
+        "front": "Warnsdorff's Algorithm",
+        "back": "A heuristic for the knight's tour where the knight always moves to the square with the fewest onward moves."
+    },
+    {
+        "front": "Depth-First Forest",
+        "back": "A collection of trees formed during a depth-first search, where each tree corresponds to a set of vertices explored contiguously."
+    },
+    {
+        "front": "Parenthesis Property",
+        "back": "A DFS property stating that discovery and finish time intervals for any two vertices are either entirely disjoint or nested."
+    },
+    {
+        "front": "Topological Sorting",
+        "back": "A linear ordering of vertices in a directed graph where for every edge uv, vertex u comes before v."
+    },
+    {
+        "front": "Strongly Connected Components",
+        "back": "Maximal subgraphs where every pair of vertices has a directed path to and from each other."
+    },
+    {
+        "front": "Shortest Path Problems",
+        "back": "The challenge of finding a path between two vertices such that the sum of the weights of the edges is minimized."
+    },
+    {
+        "front": "Dijkstra's Algorithm",
+        "back": "An algorithm for finding the shortest paths between nodes in a graph with non-negative edge weights."
+    },
+    {
+        "front": "Priority Queue",
+        "back": "A data structure where each element has a priority, and elements are served based on that priority rather than just arrival order."
+    },
+    {
+        "front": "Uncontrolled Flooding",
+        "back": "A networking technique where a packet is sent to every outgoing link except the one it arrived on."
+    },
+    {
+        "front": "Minimum Spanning Tree (MST)",
+        "back": "A subset of edges connecting all vertices without cycles and with the minimum total edge weight."
+    },
+    {
+        "front": "Prim's Algorithm",
+        "back": "An algorithm that finds a minimum spanning tree by growing a tree one edge at a time from a starting vertex."
+    },
+    {
+        "front": "Greedy Algorithms",
+        "back": "A class of algorithms that build a solution by always choosing the next piece that offers the most immediate benefit."
+    }
+]

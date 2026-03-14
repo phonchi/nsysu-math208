@@ -1,0 +1,30 @@
+[
+    {
+        "front": "Recursion",
+        "back": "A programming technique where a function calls itself directly or indirectly to solve a problem. It breaks down a problem into smaller, more manageable parts until reaching a base case that can be solved directly."
+    },
+    {
+        "front": "Base Case",
+        "back": "The condition in recursion that stops the function from calling itself. It typically represents the simplest instance of the problem that can be solved directly without further recursive calls."
+    },
+    {
+        "front": "Stack Frame",
+        "back": "A portion of stack memory that contains all information necessary to execute a function call, including parameters, return addresses, and local variables. Each recursive call creates a new stack frame on the call stack."
+    },
+    {
+        "front": "Fractals",
+        "back": "Geometric figures that are self-similar across different scales. These complex patterns are created by repeating a simple process in an ongoing feedback loop and are often used to generate natural-looking scenarios in computer graphics."
+    },
+    {
+        "front": "Dynamic Programming",
+        "back": "A method for solving complex problems by breaking them down into simpler, overlapping subproblems. Each subproblem is solved once and its solution is stored to avoid redundant calculations."
+    },
+    {
+        "front": "Greedy Method",
+        "back": "A problem-solving strategy that makes the locally optimal choice at each step with the hope of finding a global optimum. While simple to implement, it does not guarantee an optimal solution for all problems."
+    },
+    {
+        "front": "Memoization",
+        "back": "A specific form of caching used in dynamic programming to speed up programs by storing the results of expensive function calls and returning the cached result when the same inputs occur again."
+    }
+]

@@ -1,0 +1,34 @@
+[
+    {
+        "front": "Unordered List",
+        "back": "A collection of items where each item holds a relative position with respect to the others, but the specific sequence is not based on the values themselves. In a linked implementation, items are typically added at the head for efficiency."
+    },
+    {
+        "front": "Linked List",
+        "back": "A data structure used to maintain the relative positioning of items without requiring contiguous memory. It consists of nodes where each node contains the item and an explicit reference to the location of the next item."
+    },
+    {
+        "front": "Node",
+        "back": "The basic building block of a linked list. It contains a data field to store the list item and a next field to store a reference to the following node."
+    },
+    {
+        "front": "Head of Linked List",
+        "back": "An external reference that specifies the location of the first item in the list. It serves as the single entry point for traversing the linked structure."
+    },
+    {
+        "front": "Tail of Linked List",
+        "back": "The last node in a linked list. Its next reference is set to None to indicate that there is no subsequent node in the sequence."
+    },
+    {
+        "front": "Ordered List",
+        "back": "A collection of items where each item holds a relative position based on some underlying characteristic (such as ascending or descending value). The ordering is preserved during additions."
+    },
+    {
+        "front": "Circularly Linked List",
+        "back": "A variant of a linked list where the tail of the list uses its next reference to point back to the head node instead of None. This is useful for data sets that are cyclic."
+    },
+    {
+        "front": "Doubly Linked List",
+        "back": "A linked list where each node keeps two explicit references: one to the node after it (next) and one to the node before it (prev). This allows for efficient bidirectional traversal and updates."
+    }
+]

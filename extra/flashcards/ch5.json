@@ -1,0 +1,58 @@
+[
+    {
+        "front": "Linear ADT",
+        "back": "An abstract data type where data elements are arranged in a sequential order, and each member element is connected to its previous and next element in a single level. Examples include stacks and queues."
+    },
+    {
+        "front": "Stack",
+        "back": "A linear data structure that follows a particular order in which operations are performed. The order is Last In First Out (LIFO), meaning the element added last is the first one to be removed."
+    },
+    {
+        "front": "Front",
+        "back": "In the context of queues, the start of the queue where the first element resides and from which elements are removed during the dequeue operation."
+    },
+    {
+        "front": "Rear",
+        "back": "In the context of queues, the end of the queue where new elements are added during the enqueue operation."
+    },
+    {
+        "front": "Top",
+        "back": "In the context of stacks, the last added element and the current endpoint of the structure. It is the first element to be removed due to the LIFO policy."
+    },
+    {
+        "front": "Base",
+        "back": "In the context of stacks, the bottom of the stack where the first inserted element resides."
+    },
+    {
+        "front": "LIFO (Last In First Out)",
+        "back": "A principle used primarily in stacks where the last element added to the structure is the first one to be removed."
+    },
+    {
+        "front": "Infix",
+        "back": "A notation in which operators are written in-between their operands, such as the expression A + B."
+    },
+    {
+        "front": "Prefix",
+        "back": "A notation in which operators precede their operands. For example, the infix expression A + B would be written as +AB."
+    },
+    {
+        "front": "Postfix",
+        "back": "A notation in which operators follow their operands. For example, the infix expression A + B would be written as AB+."
+    },
+    {
+        "front": "Fully Parenthesized Expression",
+        "back": "An expression where every binary or unary operation is explicitly enclosed in parentheses to specify the order of operations without ambiguity."
+    },
+    {
+        "front": "Queue",
+        "back": "A linear data structure that follows the First In First Out (FIFO) principle, where the first element added is the first one to be removed."
+    },
+    {
+        "front": "FIFO (First In First Out)",
+        "back": "A principle used primarily in queues where the first element added to the structure is the first one to be removed."
+    },
+    {
+        "front": "Deque",
+        "back": "Short for double-ended queue, it is a data structure that allows the insertion and removal of elements from both the front and the rear, providing more flexibility than standard queues or stacks."
+    }
+]
