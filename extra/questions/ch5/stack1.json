@@ -1,0 +1,29 @@
+[
+    {
+        "question": "Given the following sequence of stack operations, what is the top item on the stack when the sequence is complete?",
+        "code": "m = Stack()\nm.push(\"x\")\nm.push(\"y\")\nm.pop()\nm.push(\"z\")\nm.peek()",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "\"x\"",
+                "correct": false,
+                "feedback": "Incorrect. While \"x\" is still in the stack, it is at the bottom. After pushing \"z\", \"z\" becomes the new top element."
+            },
+            {
+                "answer": "\"y\"",
+                "correct": false,
+                "feedback": "Incorrect. \"y\" was removed from the stack by the `pop()` operation."
+            },
+            {
+                "answer": "\"z\"",
+                "correct": true,
+                "feedback": "Correct! Here is the trace: 1. push(\"x\") -> [\"x\"]; 2. push(\"y\") -> [\"x\", \"y\"]; 3. pop() removes \"y\" -> [\"x\"]; 4. push(\"z\") -> [\"x\", \"z\"]. The `peek()` operation returns \"z\", which is at the top."
+            },
+            {
+                "answer": "The stack is empty",
+                "correct": false,
+                "feedback": "Incorrect. The stack contains \"x\" and \"z\" at the end of the sequence."
+            }
+        ]
+    }
+]

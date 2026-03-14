@@ -1,0 +1,28 @@
+[
+	{
+        "question": "In the implementation of the add(item) method for an unordered linked list, what is the consequence of reversing the order of the linking steps (specifically, setting self.head = temp before calling temp.set_next(self.head))?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "The new item will be added to the end of the list instead of the head.",
+                "correct": false,
+                "feedback": "Incorrect. Adding to the end of a singly linked list requires a full traversal to find the tail node."
+            },
+            {
+                "answer": "The original nodes in the list will be lost and can no longer be accessed.",
+                "correct": true,
+                "feedback": "Correct! Since the head is the only external reference to the list, updating it to the new node before linking the new node to the rest of the list causes all existing nodes to be lost."
+            },
+            {
+                "answer": "The list will automatically become a circularly linked list.",
+                "correct": false,
+                "feedback": "Incorrect. A circularly linked list requires the tail node to explicitly point back to the head node."
+            },
+            {
+                "answer": "The operation will result in a SyntaxError in Python.",
+                "correct": false,
+                "feedback": "Incorrect. The code is syntactically valid but logically flawed, leading to data loss."
+            }
+        ]
+    }
+]

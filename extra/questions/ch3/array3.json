@@ -1,0 +1,28 @@
+[
+    {
+        "question": "When using a Python list, which of the following operations has a time complexity of $O(n)$ due to the need to shift elements?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "code": "a_list.append(value)",
+                "correct": false,
+                "feedback": "Incorrect. Adding to the end is O(1) amortized because no elements need to be shifted."
+            },
+            {
+                "code": "a_list.pop()",
+                "correct": false,
+                "feedback": "Incorrect. Removing the last element is O(1) as no shifting is required."
+            },
+            {
+                "code": "a_list[i] = value",
+                "correct": false,
+                "feedback": "Incorrect. Changing a value at a specific index is a direct access operation, which is O(1)."
+            },
+            {
+                "code": "a_list.insert(0, value)",
+                "correct": true,
+                "feedback": "Correct! Inserting at index 0 requires every existing element in the list to be shifted one position to the right, which takes linear time."
+            }
+        ]
+    }
+]

@@ -1,0 +1,28 @@
+[
+	{
+        "question": "What is the primary structural difference in how Breadth-First Search (BFS) and Depth-First Search (DFS) track the next vertex to explore?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "BFS uses a stack while DFS uses a queue.",
+                "correct": false,
+                "feedback": "Incorrect. The usage is actually the opposite."
+            },
+            {
+                "answer": "BFS uses a queue to explore layer by layer, while DFS uses a stack (often via recursion) to explore as deep as possible.",
+                "correct": true,
+                "feedback": "Correct! BFS uses a First-In-First-Out queue to maintain the layer-by-layer search order, whereas DFS utilizes a Last-In-First-Out stack."
+            },
+            {
+                "answer": "Both algorithms must use a priority queue to ensure the correct search order.",
+                "correct": false,
+                "feedback": "Incorrect. Priority queues are typically reserved for algorithms like Dijkstra's or Prim's that involve weights."
+            },
+            {
+                "answer": "BFS tracks vertices using a dictionary, while DFS only uses a simple list.",
+                "correct": false,
+                "feedback": "Incorrect. While both may use dictionaries or sets to track visited nodes, the core difference lies in the queue versus stack for scheduling exploration."
+            }
+        ]
+    }
+]

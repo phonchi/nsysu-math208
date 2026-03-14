@@ -1,0 +1,29 @@
+[
+    {
+        "question": "Given the following sequence of stack operations, what is the top item on the stack when the sequence is complete?",
+        "code": "m = Stack()\nm.push(\"x\")\nm.push(\"y\")\nm.push(\"z\")\nwhile not m.is_empty():\n   m.pop()\n   m.pop()",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "\"x\"",
+                "correct": false,
+                "feedback": "Incorrect. While x is the last item remaining after the first iteration of the loop, the loop will run a second time because the stack is not yet empty, leading to further pops."
+            },
+            {
+                "answer": "the stack is empty",
+                "correct": false,
+                "feedback": "Incorrect. Although the stack does become empty during the process, the sequence cannot complete normally because it attempts to remove an item from an empty stack."
+            },
+            {
+                "answer": "an error will occur",
+                "correct": true,
+                "feedback": "Correct! The stack starts with 3 items (x, y, z). In the first loop iteration, z and y are popped, leaving only x. Because the stack still contains x, the while loop runs again. It pops x successfully, but then immediately attempts a second pop on an empty stack, which triggers an error."
+            },
+            {
+                "answer": "\"z\"",
+                "correct": false,
+                "feedback": "Incorrect. z is the first item removed from the stack during the very first pop operation."
+            }
+        ]
+    }
+]

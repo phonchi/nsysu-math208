@@ -1,0 +1,28 @@
+[
+    {
+        "question": "What is the primary reason for using a specialized Sparse Matrix class instead of a standard 2D array?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "To allow the matrix to store different data types like strings and integers together.",
+                "correct": false,
+                "feedback": "Incorrect. The primary goal of a sparse matrix is related to memory efficiency for zero-heavy data."
+            },
+            {
+                "answer": "To save memory and computation time when the majority of the elements in the matrix are zero.",
+                "correct": true,
+                "feedback": "Correct! By only storing non-zero elements (typically in a dictionary or coordinate list), we avoid wasting space on zeros."
+            },
+            {
+                "answer": "To make the matrix operations like addition and multiplication slower but more accurate.",
+                "correct": false,
+                "feedback": "Incorrect. Sparse structures are designed to make operations faster by skipping zero values."
+            },
+            {
+                "answer": "Because standard 2D arrays cannot have more than 100 rows.",
+                "correct": false,
+                "feedback": "Incorrect. Standard arrays can be any size, but they become extremely memory-inefficient if they are mostly empty."
+            }
+        ]
+    }
+]

@@ -1,0 +1,28 @@
+[
+	{
+        "question": "In Prim's algorithm for finding a Minimum Spanning Tree (MST), what defines a safe edge?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "Any edge that does not create a cycle when added to the current tree.",
+                "correct": false,
+                "feedback": "Incorrect. While true of any tree edge, Prim's specifically looks for the minimum weight edge connecting the tree to a new vertex."
+            },
+            {
+                "answer": "The edge with the minimum weight that connects a vertex in the tree to a vertex outside the tree.",
+                "correct": true,
+                "feedback": "Correct! This greedy choice ensures that we grow the tree while keeping the total weight as low as possible without creating cycles."
+            },
+            {
+                "answer": "An edge that has a weight lower than the average of all edges in the graph.",
+                "correct": false,
+                "feedback": "Incorrect. The algorithm focuses on the absolute minimum weight connection for the current boundary."
+            },
+            {
+                "answer": "The first edge encountered during a depth-first search of the graph.",
+                "correct": false,
+                "feedback": "Incorrect. Prim's algorithm is distinct from DFS and uses weights to determine the next edge."
+            }
+        ]
+    }
+]

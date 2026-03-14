@@ -1,0 +1,28 @@
+[
+    {
+        "question": "Suppose you have the following sorted list [3, 5, 6, 8, 11, 12, 14, 15, 17, 18] and are using the recursive binary search algorithm. Which group of numbers correctly shows the sequence of comparisons used to search for the key 16?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "11, 14, 17",
+                "correct": false,
+                "feedback": "Incorrect. This sequence does not align with the standard midpoint calculation (len // 2) used in recursive binary search implementations."
+            },
+            {
+                "answer": "18, 17, 15",
+                "correct": false,
+                "feedback": "Incorrect. Binary search begins near the middle of the list, not from the end."
+            },
+            {
+                "answer": "14, 17, 15",
+                "correct": false,
+                "feedback": "Incorrect. The first midpoint for a 10-element list is typically index 5 (value 12), not index 6 (value 14)."
+            },
+            {
+                "answer": "12, 17, 15",
+                "correct": true,
+                "feedback": "Correct! Here is the trace: 1. The list has 10 elements. The midpoint (10 // 2) is index 5, which is 12. 2. Since 16 > 12, we search the right half [14, 15, 17, 18]. 3. This sublist has 4 elements. The midpoint (4 // 2) is index 2 of this slice, which is 17. 4. Since 16 < 17, we search the left half of that slice, which is [14, 15]. 5. This sublist has 2 elements. The midpoint (2 // 2) is index 1, which is 15. The sequence is 12, 17, 15."
+            }
+        ]
+    }
+]

@@ -1,0 +1,28 @@
+[
+    {
+        "question": "What is the result of evaluating the following postfix expression: $17 \\ 10 \\ + \\ 3 \\ * \\ 9 \\ /$ ?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "9",
+                "correct": true,
+                "feedback": "Correct! The calculation follows these steps: (17 + 10) = 27; then (27 * 3) = 81; and finally (81 / 9) = 9."
+            },
+            {
+                "answer": "15",
+                "correct": false,
+                "feedback": "Incorrect. This might occur if the operators were applied in a different order or to the wrong operands."
+            },
+            {
+                "answer": "27",
+                "correct": false,
+                "feedback": "Incorrect. This is only the result of the first part of the expression (17 + 10)."
+            },
+            {
+                "answer": "81",
+                "correct": false,
+                "feedback": "Incorrect. This is the result before the final division by 9 is performed."
+            }
+        ]
+    }
+]

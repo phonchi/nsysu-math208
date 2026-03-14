@@ -1,0 +1,29 @@
+[
+    {
+        "question": "Suppose you have the following series of queue operations. What items are left on the queue?",
+        "code": "q = Queue()\nq.enqueue(\"hello\")\nq.enqueue(\"dog\")\nq.enqueue(3)\nq.dequeue()",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "[\"dog\", 3]",
+                "correct": true,
+                "feedback": "Correct! A queue follows the First-In, First-Out (FIFO) principle. The sequence of operations works as follows: 1. enqueue(\"hello\") adds \"hello\" to the front. 2. enqueue(\"dog\") adds \"dog\" behind it. 3. enqueue(3) adds 3 to the rear. 4. dequeue() removes the item at the front, which was \"hello\". This leaves \"dog\" and 3 in the queue."
+            },
+            {
+                "answer": "[\"hello\", \"dog\"]",
+                "correct": false,
+                "feedback": "Incorrect. This would happen if the dequeue operation removed the last item added (LIFO behavior), which is characteristic of a stack, not a queue."
+            },
+            {
+                "answer": "[\"hello\", \"dog\", 3]",
+                "correct": false,
+                "feedback": "Incorrect. This is the state of the queue before the dequeue operation was performed. The dequeue operation must remove one element from the front."
+            },
+            {
+                "answer": "[3]",
+                "correct": false,
+                "feedback": "Incorrect. This would imply that two dequeue operations were performed, or that the queue only kept the most recent entry."
+            }
+        ]
+    }
+]

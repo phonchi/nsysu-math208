@@ -1,0 +1,28 @@
+[
+    {
+        "question": "Suppose you are given the following set of keys to insert into a hash table that holds exactly 11 values: 113, 117, 97, 100, 114, 108, 116, 105, 99. Which of the following best demonstrates the contents of the hash table after all the keys have been inserted using linear probing?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "100, __, __, 113, 114, 105, 116, 117, 97, 108, 99",
+                "correct": false,
+                "feedback": "Incorrect. This sequence places 100 at index 0, but 100 % 11 results in index 1."
+            },
+            {
+                "answer": "99, 100, __, 113, 114, __, 116, 117, 105, 97, 108",
+                "correct": true,
+                "feedback": "Correct! The keys are mapped as follows: 99(0), 100(1), 113(3), 114(4), 116(6), 117(7), 105(probed to 8), 97(9), and 108(probed to 10)."
+            },
+            {
+                "answer": "100, 113, 117, 97, 14, 108, 116, 105, 99, __, __",
+                "correct": false,
+                "feedback": "Incorrect. This does not follow the correct remainder results for the given keys."
+            },
+            {
+                "answer": "117, 114, 108, 116, 105, 99, __, __, 97, 100, 113",
+                "correct": false,
+                "feedback": "Incorrect. The distribution of keys here does not match the modulo 11 arithmetic required."
+            }
+        ]
+    }
+]

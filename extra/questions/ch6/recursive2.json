@@ -1,0 +1,28 @@
+[
+    {
+        "question": "Suppose you are going to write a recursive function to calculate the factorial of a number. fact(n) returns n * (n-1) * (n-2) * ... where the factorial of zero is defined to be 1. What would be the most efficient and appropriate base case?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "code": "n == 0",
+                "correct": false,
+                "feedback": "Incorrect. While this correctly handles the definition of 0!, it is less efficient than other options because it forces the function to make one extra recursive call when n is 1."
+            },
+            {
+                "code": "n == 1",
+                "correct": false,
+                "feedback": "Incorrect. This base case would fail to correctly handle the specific input fact(0) as defined in the problem."
+            },
+            {
+                "code": "n >= 0",
+                "correct": false,
+                "feedback": "Incorrect. This is a validity check for the input but does not act as a termination condition for the recursion."
+            },
+            {
+                "code": "n <= 1",
+                "correct": true,
+                "feedback": "Correct! This is the most efficient choice. Since both 0! and 1! result in 1, this base case stops the recursion at n = 1 for all positive inputs while still correctly returning 1 for the n = 0 case."
+            }
+        ]
+    }
+]

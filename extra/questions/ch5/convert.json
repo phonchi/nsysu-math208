@@ -1,0 +1,18 @@
+[
+    {
+        "question": "What is the value of 25 expressed as an octal number?",
+        "type": "string",
+        "answers": [
+            {
+                "answer": "31",
+                "correct": true,
+                "feedback": "Correct! 25 in decimal is 31 in octal ($3 \\times 8^1 + 1 \\times 8^0 = 25$)."
+            },
+            {
+                "answer": "0o31",
+                "correct": true,
+                "feedback": "Correct! 0o31 is the standard Python representation for the octal value 31."
+            }
+        ]
+    }
+]

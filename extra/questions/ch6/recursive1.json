@@ -1,0 +1,28 @@
+[
+    {
+        "question": "How many recursive calls are made when computing the sum of the list [2, 4, 6, 8, 10]?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "6",
+                "correct": false,
+                "feedback": "Incorrect. This number exceeds the total number of elements in the list."
+            },
+            {
+                "answer": "5",
+                "correct": false,
+                "feedback": "Incorrect. While the function is executed a total of 5 times, only 4 of those are recursive calls (the first call is the initial call, not a recursive one)."
+            },
+            {
+                "answer": "4",
+                "correct": true,
+                "feedback": "Correct! For a list of 5 elements, the first call is the initial call. It then makes 4 recursive calls: 1. sum([4,6,8,10]), 2. sum([6,8,10]), 3. sum([8,10]), and 4. sum([10]). The call with a single element [10] is the base case and does not make a further recursive call."
+            },
+            {
+                "answer": "3",
+                "correct": false,
+                "feedback": "Incorrect. This would not be enough calls to reduce the 5-element list down to the base case."
+            }
+        ]
+    }
+]

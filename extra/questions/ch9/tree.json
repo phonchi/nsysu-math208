@@ -1,0 +1,28 @@
+[
+	{
+        "question": "Which statement about edges and nodes in a tree is correct?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "Every node in a tree must have at least one incoming edge.",
+                "correct": false,
+                "feedback": "Incorrect. The root node is a special case that has no incoming edges."
+            },
+            {
+                "answer": "Every node except the root is connected by exactly one incoming edge from another node.",
+                "correct": true,
+                "feedback": "Correct! This is a fundamental property of the tree structure defined in the text."
+            },
+            {
+                "answer": "A leaf node is defined as a node that has exactly one outgoing edge.",
+                "correct": false,
+                "feedback": "Incorrect. A leaf node is a node that has no children, meaning it has zero outgoing edges."
+            },
+            {
+                "answer": "The height of a tree is equal to the total number of edges it contains.",
+                "correct": false,
+                "feedback": "Incorrect. Height is the maximum level of any node in the tree."
+            }
+        ]
+    }
+]

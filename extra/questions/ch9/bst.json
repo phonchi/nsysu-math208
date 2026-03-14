@@ -1,0 +1,28 @@
+[
+	{
+        "question": "In a Binary Search Tree (BST), what property must hold for every node to ensure efficient searching?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "The key of a node must be greater than the keys in its left subtree and smaller than the keys in its right subtree.",
+                "correct": true,
+                "feedback": "Correct! This property allows the search algorithm to eliminate half of the remaining tree at each step."
+            },
+            {
+                "answer": "Every node must have exactly two children to maintain a balance.",
+                "correct": false,
+                "feedback": "Incorrect. Nodes can have zero, one, or two children; having two children is not required for a BST."
+            },
+            {
+                "answer": "The keys must be inserted in sorted order to create the most efficient tree.",
+                "correct": false,
+                "feedback": "Incorrect. Inserting keys in sorted order actually results in a 'skewed' tree (like a list), which is very inefficient."
+            },
+            {
+                "answer": "All leaf nodes must be at the same depth level.",
+                "correct": false,
+                "feedback": "Incorrect. This describes a perfectly balanced tree, which a basic BST does not guarantee."
+            }
+        ]
+    }
+]

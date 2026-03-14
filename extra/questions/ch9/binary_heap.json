@@ -1,0 +1,28 @@
+[
+	{
+        "question": "What is the primary reason for using a Binary Heap to implement a Priority Queue?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "It allows us to find the maximum or minimum element in O(n) time.",
+                "correct": false,
+                "feedback": "Incorrect. The benefit of a heap is that the root (min/max) can be found in O(1) time."
+            },
+            {
+                "answer": "It keeps the tree perfectly balanced so that both enqueue and dequeue operations take O(log n) time.",
+                "correct": true,
+                "feedback": "Correct! Because it is a complete binary tree, the height is always log n, ensuring efficient operations."
+            },
+            {
+                "answer": "It stores elements in a completely sorted order in the underlying list.",
+                "correct": false,
+                "feedback": "Incorrect. A heap is only partially ordered (heap-order property), not fully sorted."
+            },
+            {
+                "answer": "It eliminates the need for any comparison operations during insertion.",
+                "correct": false,
+                "feedback": "Incorrect. Insertion requires comparisons to perform the percolate up (upheap) process."
+            }
+        ]
+    }
+]

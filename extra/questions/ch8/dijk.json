@@ -1,0 +1,28 @@
+[
+	{
+        "question": "Which of the following is a known limitation or characteristic of Dijkstra's algorithm?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "It can accurately find shortest paths in graphs with negative edge weights.",
+                "correct": false,
+                "feedback": "Incorrect. The lecture notes specify that Dijkstra's algorithm only works correctly when all edge weights are positive."
+            },
+            {
+                "answer": "It is an iterative algorithm that provides the shortest path from a single source to all other reachable vertices.",
+                "correct": true,
+                "feedback": "Correct! It repeatedly expands the 'known' set of vertices by choosing the one with the smallest distance estimate."
+            },
+            {
+                "answer": "The time complexity is independent of the number of edges in the graph.",
+                "correct": false,
+                "feedback": "Incorrect. The complexity is O((V + E) log V), which depends on both vertices and edges."
+            },
+            {
+                "answer": "It does not require a complete map of the graph to function in a routing environment.",
+                "correct": false,
+                "feedback": "Incorrect. For Dijkstra's to work in routing, every router must have a complete map of the network."
+            }
+        ]
+    }
+]

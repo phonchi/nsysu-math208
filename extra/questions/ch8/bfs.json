@@ -1,0 +1,28 @@
+[
+	{
+        "question": "Why is Breadth-First Search (BFS) guaranteed to find the shortest path in an unweighted graph?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "It explores all vertices at distance k from the starting vertex before moving to vertices at distance k+1.",
+                "correct": true,
+                "feedback": "Correct! By exploring in concentric circles or layers, the first time BFS reaches a target, it must be via the shortest possible path."
+            },
+            {
+                "answer": "It always chooses the edge with the smallest numerical weight first.",
+                "correct": false,
+                "feedback": "Incorrect. BFS is generally applied to unweighted graphs where all edges are considered equal."
+            },
+            {
+                "answer": "It uses a greedy approach to prune paths that are too long.",
+                "correct": false,
+                "feedback": "Incorrect. BFS does not prune based on length; it simply explores all possibilities layer by layer."
+            },
+            {
+                "answer": "It marks vertices as black only when the shortest path has been confirmed.",
+                "correct": false,
+                "feedback": "Incorrect. Marking a vertex as black simply means its neighbors have been fully explored."
+            }
+        ]
+    }
+]

@@ -1,0 +1,28 @@
+[
+    {
+        "question": "Why is a Python list considered a referential array?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "Because it stores the actual bits of the data directly in the array cells.",
+                "correct": false,
+                "feedback": "Incorrect. That describes a compact array. Python lists store references instead."
+            },
+            {
+                "answer": "Because it only allows elements of the same data type to be stored.",
+                "correct": false,
+                "feedback": "Incorrect. Referential arrays are what allow Python lists to store multiple different data types."
+            },
+            {
+                "answer": "Because each cell of the list stores a memory address (pointer) that points to an object elsewhere in memory.",
+                "correct": true,
+                "feedback": "Correct! This architecture allows the list to contain objects of different sizes and types by storing fixed-size pointers."
+            },
+            {
+                "answer": "Because it is implemented in the C programming language.",
+                "correct": false,
+                "feedback": "Incorrect. While Python lists are implemented in C, the term referential refers specifically to the use of pointers to objects."
+            }
+        ]
+    }
+]

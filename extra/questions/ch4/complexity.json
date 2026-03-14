@@ -1,0 +1,28 @@
+[
+	{
+        "question": "Which of the following UnorderedList methods has an average and worst-case time complexity of $O(1)$?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "code": "size()",
+                "correct": false,
+                "feedback": "Incorrect. This method is $O(n)$ because it must traverse from the head to the end to count every node."
+            },
+            {
+                "code": "is_empty()",
+                "correct": true,
+                "feedback": "Correct! This method only requires one step to check if the head reference is None."
+            },
+            {
+                "code": "search(item)",
+                "correct": false,
+                "feedback": "Incorrect. Searching requires traversal and takes $O(n)$ time as it may process every node in the list."
+            },
+            {
+                "code": "remove(item)",
+                "correct": false,
+                "feedback": "Incorrect. Removing an item requires a traversal process to find the specific node, which is $O(n)$."
+            }
+        ]
+    }
+]

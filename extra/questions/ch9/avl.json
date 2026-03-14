@@ -1,0 +1,28 @@
+[
+	{
+        "question": "How does an AVL tree improve upon a standard Binary Search Tree?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "It uses a special hash function to distribute nodes more evenly.",
+                "correct": false,
+                "feedback": "Incorrect. AVL trees use rotations based on height, not hashing."
+            },
+            {
+                "answer": "It automatically performs rotations to ensure the height of the tree remains O(log n).",
+                "correct": true,
+                "feedback": "Correct! By maintaining a balance factor for each node, it prevents the tree from becoming skewed and ensures logarithmic search time."
+            },
+            {
+                "answer": "It allows multiple keys to be stored in a single node to save memory.",
+                "correct": false,
+                "feedback": "Incorrect. This describes other structures like B-Trees; AVL nodes still hold individual keys."
+            },
+            {
+                "answer": "It completely eliminates the need for a delete operation.",
+                "correct": false,
+                "feedback": "Incorrect. AVL trees still support and require a delete operation, which also includes rebalancing."
+            }
+        ]
+    }
+]
