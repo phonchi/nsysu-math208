@@ -24,5 +24,6 @@ links:
 - [Exercise 4_sol](https://github.com/phonchi/nsysu-math208/blob/main/static_files/presentations/Ch4_sol.ipynb)
 - Reference book Chapter 5
 - Textbook Chapter 3 and 8.2
+- [[Recorded video]](https://www.youtube.com/playlist?list=PLHNZtBNWQ-86UyemgHoNWRmPVeigXHX5e)
 
 
