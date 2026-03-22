@@ -1,6 +1,6 @@
 ---
 type: lecture
-date: 2026-03-29
+date: 2026-03-30
 title: Stack and Queue
 tldr: 
 thumbnail: 
