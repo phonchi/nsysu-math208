@@ -1,6 +1,6 @@
 ---
 type: lecture
-date: 2026-03-22
+date: 2026-03-23
 title: Linked list and Stack
 tldr: 
 thumbnail: 
