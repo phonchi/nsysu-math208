@@ -9,7 +9,7 @@ links:
 
 ---
 **Suggested Readings:**
-- [Infix to postfix visualization](https://exconvert.glitch.me/)
+- [Infix to postfix visualization](https://www.dsavisualizer.in/visualizer/stack/polish/postfix)
 - [Postfix evaluation visualization](https://notation-visualizer.ajayliu.com/stack)
 - Textbook Chapter 3
 
