@@ -16,5 +16,5 @@ links:
 - [Exercise 5](https://github.com/phonchi/nsysu-math208/blob/main/static_files/presentations/Ch5.ipynb)
 - [Exercise 5_sol](https://github.com/phonchi/nsysu-math208/blob/main/static_files/presentations/Ch5_sol.ipynb)
 - Textbook Chapter 3
-
+- [[Recorded video]](https://www.youtube.com/playlist?list=PLHNZtBNWQ-87KsSPuel9QbSIDOjEtt2yA)
 
