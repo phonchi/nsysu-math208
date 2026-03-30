@@ -12,5 +12,6 @@ links:
 - [Infix to postfix visualization](https://www.dsavisualizer.in/visualizer/stack/polish/postfix)
 - [Postfix evaluation visualization](https://notation-visualizer.ajayliu.com/stack)
 - Textbook Chapter 3
+- [[Recorded video]](https://www.youtube.com/playlist?list=PLHNZtBNWQ-86DDNfao7eMt8yYkZUfvO4E)
 
 
