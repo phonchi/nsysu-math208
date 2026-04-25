@@ -184,11 +184,6 @@ body.rise-enabled .ds07-anim { font-size: 2.2vmin; }
 .reveal .ds07-anim .preset-btn { padding: .15rem .4rem; font-size: .82em; }
 .reveal .ds07-anim .input-row input[type="text"],
 .reveal .ds07-anim .input-row input[type="number"] { font-size: .8em; padding: .2rem .35rem; }
-/* HIDE the side-panel entirely on slides — the live counter in the status
-   banner gives enough feedback, and the pseudocode/info cards duplicate
-   content already shown in adjacent code cells. */
-.reveal .ds07-anim .side-panel { display: none; }
-.reveal .ds07-anim .info-box { display: none; }
 .reveal .ds07-anim .hash-table-wrap { gap: 2px; margin: .35rem 0; }
 .reveal .ds07-anim .hash-slot .slot-val { font-size: .82em; }
 .reveal .ds07-anim .hash-slot .slot-idx { font-size: .58em; }
