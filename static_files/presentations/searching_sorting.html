@@ -1,0 +1,2601 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>搜尋與排序演算法 — Searching &amp; Sorting Interactive</title>
+<script>
+  MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1a2e;--paper:#f7f3eb;--accent:#c0392b;--accent2:#2c3e7a;--accent3:#1a6b4a;
+  --muted:#8a8578;--card:#fffdf7;--card-border:#e8e2d6;--highlight:#fff3cd;
+  --code-bg:#2d2d3f;--code-fg:#e8e6df;
+  --bar-default:#5b7eb8;--bar-compare:#f39c12;--bar-swap:#c0392b;
+  --bar-sorted:#27ae60;--bar-pivot:#8e44ad;--bar-found:#16a085;
+  --bar-active:#2c3e7a;--bar-key:#e67e22;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.9;font-size:17px;}
+
+/* Hero */
+.hero{min-height:62vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem;position:relative;overflow:hidden;background:linear-gradient(170deg,#1a1a2e 0%,#2c3e7a 40%,#1a6b4a 100%);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.06) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.04) 0%,transparent 40%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);}
+.hero-content{position:relative;z-index:1;max-width:860px;}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;color:#fff;letter-spacing:.04em;line-height:1.3;margin-bottom:1rem;}
+.hero h1 .green{color:#2ecc71;}
+.hero h1 .blue{color:#5dade2;}
+.hero h1 .orange{color:#f39c12;}
+.hero .subtitle{font-size:clamp(.95rem,2.2vw,1.2rem);color:rgba(255,255,255,.65);font-weight:300;margin-bottom:2rem;}
+.hero .big-formula{color:#2ecc71;background:rgba(0,0,0,.3);padding:.8rem 2rem;border-radius:12px;display:inline-block;border:1px solid rgba(255,255,255,.1);margin-bottom:2rem;backdrop-filter:blur(4px);font-size:1.05rem;}
+.scroll-hint{color:rgba(255,255,255,.4);font-size:.9rem;animation:bounce 2s infinite;}
+.scroll-hint span{display:block;font-size:1.4rem;margin-top:.3rem;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+/* Layout */
+.container{max-width:1180px;margin:0 auto;padding:3rem 1.5rem;}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.5rem;}
+h2{font-family:'Noto Serif TC',serif;font-size:1.65rem;font-weight:700;color:var(--ink);margin-bottom:1.2rem;line-height:1.4;}
+h3{font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:700;color:var(--accent2);margin:1.4rem 0 .8rem;}
+section{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--card-border);}
+section:last-of-type{border-bottom:none;}
+p{margin-bottom:1rem;}
+
+/* TOC */
+.toc{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:1.2rem 1.5rem;margin:1rem 0 2rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.toc-title{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.7rem;}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.5rem .8rem;}
+.toc-grid a{color:var(--accent2);text-decoration:none;font-size:.9rem;padding:.3rem 0;display:flex;align-items:center;gap:.4rem;transition:color .2s;}
+.toc-grid a:hover{color:var(--accent);}
+.toc-grid a .toc-num{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);min-width:34px;}
+
+/* Viz layout */
+.viz-layout{display:grid;grid-template-columns:1fr 320px;gap:1.3rem;margin:1.2rem 0;align-items:start;}
+@media(max-width:900px){.viz-layout{grid-template-columns:1fr;}}
+
+.viz-panel{background:linear-gradient(160deg,#fffdf7 0%,#f4efe3 100%);border:1px solid var(--card-border);border-radius:12px;padding:1rem;box-shadow:0 4px 18px rgba(0,0,0,.06);position:relative;}
+
+/* Algorithm canvas (bars area) */
+.algo-canvas{position:relative;width:100%;height:340px;background:#fafafa;border-radius:8px;overflow:hidden;border:1px solid #ececec;}
+.bars-container{position:absolute;inset:0;}
+.algo-canvas .baseline{position:absolute;left:0;right:0;bottom:50px;border-bottom:1px solid #ddd;}
+
+/* Bars */
+.bar{position:absolute;bottom:50px;display:flex;align-items:flex-start;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#fff;padding-top:5px;border-radius:4px 4px 0 0;background:var(--bar-default);transition:left .35s cubic-bezier(.4,0,.2,1),height .25s ease,background .2s ease,transform .25s ease,box-shadow .2s ease,opacity .2s ease;text-shadow:0 1px 2px rgba(0,0,0,.25);box-sizing:border-box;}
+.bar.compare{background:var(--bar-compare);transform:translateY(-10px);box-shadow:0 5px 14px rgba(243,156,18,.45);z-index:2;}
+.bar.swap{background:var(--bar-swap);transform:scale(1.04);box-shadow:0 6px 16px rgba(192,57,43,.5);z-index:3;}
+.bar.sorted{background:var(--bar-sorted);}
+.bar.pivot{background:var(--bar-pivot);box-shadow:0 0 0 3px #f1c40f, 0 5px 14px rgba(142,68,173,.5);z-index:4;}
+.bar.found{background:var(--bar-found);transform:scale(1.08);box-shadow:0 0 0 3px #2ecc71, 0 6px 18px rgba(22,160,133,.5);animation:pulse-found 1s ease-out;z-index:5;}
+.bar.active{background:var(--bar-active);}
+.bar.key{background:var(--bar-key);transform:translateY(-14px);box-shadow:0 5px 14px rgba(230,126,34,.45);z-index:3;}
+.bar.faded{opacity:.35;}
+.bar.eliminated{opacity:.2;background:#aaa;}
+@keyframes pulse-found{0%{box-shadow:0 0 0 0 rgba(46,204,113,.6);}50%{box-shadow:0 0 0 18px rgba(46,204,113,0);}100%{box-shadow:0 0 0 3px #2ecc71, 0 6px 18px rgba(22,160,133,.5);}}
+
+/* Index labels */
+.idx-label{position:absolute;bottom:24px;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#999;text-align:center;transition:left .35s cubic-bezier(.4,0,.2,1),color .2s;font-weight:500;}
+.idx-label.highlight{color:var(--accent);font-weight:700;}
+
+/* Pointers (low/mid/high, left_mark/right_mark) */
+.pointer{position:absolute;bottom:0;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.74rem;font-weight:700;transition:left .35s cubic-bezier(.4,0,.2,1),opacity .2s;}
+.pointer .arrow{width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;display:inline-block;margin-bottom:1px;}
+.pointer.low{color:#2980b9;}
+.pointer.low .arrow{border-bottom:9px solid #2980b9;}
+.pointer.high{color:#c0392b;}
+.pointer.high .arrow{border-bottom:9px solid #c0392b;}
+.pointer.mid{color:#27ae60;}
+.pointer.mid .arrow{border-bottom:9px solid #27ae60;}
+.pointer.left-mark{color:#16a085;}
+.pointer.left-mark .arrow{border-bottom:9px solid #16a085;}
+.pointer.right-mark{color:#d35400;}
+.pointer.right-mark .arrow{border-bottom:9px solid #d35400;}
+
+/* Sub-array brackets (for merge sort, quick sort) */
+.subarr-bracket{position:absolute;top:8px;height:5px;background:transparent;border-top:3px solid var(--accent2);border-radius:3px 3px 0 0;transition:left .3s,width .3s,border-color .3s;}
+.subarr-bracket.left{border-color:#3498db;}
+.subarr-bracket.right{border-color:#e67e22;}
+.subarr-bracket.merging{border-color:var(--accent3);}
+.subarr-bracket-label{position:absolute;top:-3px;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--accent2);font-weight:600;background:#fafafa;padding:0 4px;}
+
+/* Gap indicators (shell sort) */
+.gap-arc{position:absolute;border-top:2px dashed var(--bar-pivot);border-radius:50%;pointer-events:none;transition:all .3s;}
+
+/* Status banner */
+.status-banner{margin-top:.8rem;padding:.7rem 1rem;background:var(--code-bg);color:#fff;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.85rem;min-height:42px;display:flex;align-items:center;gap:.6rem;}
+.status-banner .status-icon{color:#2ecc71;font-weight:700;}
+.status-banner .status-text{flex:1;}
+
+/* Controls */
+.controls-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--card-border);}
+.btn{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:600;padding:.45rem 1rem;border-radius:6px;border:none;cursor:pointer;transition:all .2s;}
+.btn-play{background:var(--accent3);color:#fff;}
+.btn-play:hover{background:#22845c;}
+.btn-play.active{background:var(--accent);}
+.btn-step{background:var(--accent2);color:#fff;}
+.btn-step:hover{background:#1f2e5f;}
+.btn-step:disabled{background:#ccc;cursor:not-allowed;}
+.btn-reset{background:var(--card-border);color:var(--ink);}
+.btn-reset:hover{background:#ccc;}
+.btn-toggle{background:var(--accent2);color:#fff;}
+.btn-toggle:hover{background:#1f2e5f;}
+.btn-toggle.off{background:#bbb;color:#555;}
+.btn-shuffle{background:#8e44ad;color:#fff;}
+.btn-shuffle:hover{background:#6c3485;}
+
+/* Slider row */
+.slider-row{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;background:var(--paper);border-radius:8px;margin-bottom:.5rem;}
+.slider-row .slider-label{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent2);font-weight:600;min-width:60px;}
+.slider-row input[type="range"]{flex:1;accent-color:var(--accent3);height:5px;cursor:pointer;}
+.slider-row .slider-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--accent);font-weight:600;min-width:60px;text-align:right;}
+
+/* Side panel */
+.side-panel{display:flex;flex-direction:column;gap:.85rem;}
+.info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.info-card .ic-title{font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem;display:flex;align-items:center;justify-content:space-between;}
+.info-card .ic-title .ic-badge{font-size:.7rem;color:#fff;background:var(--accent3);padding:1px 7px;border-radius:3px;letter-spacing:.05em;font-weight:700;}
+.info-card .ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.83rem;padding:.2rem 0;}
+.info-card .ic-label{color:var(--muted);}
+.info-card .ic-value{color:var(--ink);font-weight:600;}
+.info-card .ic-value.highlight{color:var(--accent);}
+.info-card .ic-value.big{font-size:1.4rem;color:var(--accent2);}
+
+/* Stats grid */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.4rem;}
+.stat-tile{background:var(--paper);border-radius:8px;padding:.5rem .7rem;text-align:center;}
+.stat-tile .stat-label{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;}
+.stat-tile .stat-value{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;color:var(--accent2);}
+.stat-tile.compare .stat-value{color:var(--bar-compare);}
+.stat-tile.swap .stat-value{color:var(--bar-swap);}
+
+.eq-card{background:var(--code-bg);border-radius:10px;padding:.95rem 1.1rem;color:#fff;}
+.eq-card .eq-label{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#2ecc71;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;}
+.eq-card .eq-formula{font-size:1.0rem;color:#fff;text-align:center;}
+.eq-card .eq-sub{font-size:.78rem;color:rgba(255,255,255,.55);margin-top:.4rem;text-align:center;}
+
+/* Pseudo code */
+.pseudo-code{background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:.85rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.6;overflow-x:auto;}
+.pseudo-code .line{padding:1px 4px;border-radius:3px;display:block;white-space:pre;}
+.pseudo-code .line.active{background:rgba(243,156,18,.3);color:#fff;border-left:3px solid var(--bar-compare);padding-left:6px;}
+.pseudo-code .kw{color:#ff79c6;}
+.pseudo-code .fn{color:#50fa7b;}
+.pseudo-code .num{color:#bd93f9;}
+.pseudo-code .com{color:#6272a4;font-style:italic;}
+
+/* Hash table viz */
+.hash-table-wrap{display:grid;grid-template-columns:repeat(11,1fr);gap:4px;margin:1rem 0;}
+.hash-slot{aspect-ratio:1/1.4;background:#fff;border:2px solid var(--card-border);border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;transition:all .25s;position:relative;}
+.hash-slot .slot-idx{font-size:.66rem;color:var(--muted);margin-bottom:.15rem;}
+.hash-slot .slot-val{font-size:.95rem;font-weight:700;color:var(--ink);}
+.hash-slot.empty .slot-val{color:#ccc;font-weight:400;}
+.hash-slot.active{border-color:var(--accent);background:#fff5f0;transform:translateY(-3px);box-shadow:0 4px 10px rgba(192,57,43,.2);}
+.hash-slot.collision{border-color:var(--bar-compare);background:#fef5e7;}
+.hash-slot.placed{border-color:var(--accent3);background:#eafaf1;}
+.hash-slot.searching{border-color:#3498db;background:#ebf5fb;}
+.hash-slot.found{border-color:var(--bar-found);background:#d4f5ed;animation:pulse-found 1s ease-out;}
+.hash-chain{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:4px;display:flex;flex-direction:column;gap:3px;z-index:5;}
+.chain-node{background:var(--accent2);color:#fff;font-size:.72rem;padding:2px 7px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-weight:600;position:relative;white-space:nowrap;}
+.chain-node::before{content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:1px;height:4px;background:#888;}
+.chain-node:first-child::before{display:none;}
+@media(max-width:600px){.hash-table-wrap{grid-template-columns:repeat(11,minmax(0,1fr));gap:2px;}.hash-slot .slot-val{font-size:.78rem;}}
+
+/* Preset row */
+.preset-row{display:flex;gap:.4rem;flex-wrap:wrap;margin:.6rem 0 1rem;}
+.preset-btn{font-family:'JetBrains Mono',monospace;font-size:.78rem;padding:.4rem .85rem;border-radius:6px;border:2px solid var(--card-border);background:var(--card);cursor:pointer;transition:all .2s;color:var(--ink);}
+.preset-btn:hover{border-color:var(--accent2);}
+.preset-btn.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
+
+/* Input box */
+.input-row{display:flex;gap:.5rem;align-items:center;margin:.5rem 0;flex-wrap:wrap;}
+.input-row label{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--accent2);font-weight:600;}
+.input-row input[type="text"],.input-row input[type="number"]{font-family:'JetBrains Mono',monospace;font-size:.85rem;padding:.4rem .6rem;border:1px solid var(--card-border);border-radius:6px;background:#fff;}
+.input-row input[type="text"]{flex:1;min-width:160px;}
+.input-row input[type="number"]{width:80px;}
+
+/* Info box */
+.info-box{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1.1rem 1.4rem;margin:1.3rem 0;position:relative;}
+.info-box .info-label{position:absolute;top:-11px;left:14px;background:var(--accent2);color:#fff;font-size:.74rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.05em;}
+.info-box.warm{background:#fef5e7;border-color:#d68910;}
+.info-box.warm .info-label{background:#d68910;}
+.info-box.green{background:#eafaf1;border-color:var(--accent3);}
+.info-box.green .info-label{background:var(--accent3);}
+
+/* Pill labels */
+.pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:4px;margin:0 .15rem;vertical-align:1px;}
+.pill-blue{background:rgba(41,128,185,.12);color:#2980b9;border:1px solid rgba(41,128,185,.3);}
+.pill-red{background:rgba(192,57,43,.12);color:var(--accent);border:1px solid rgba(192,57,43,.3);}
+.pill-green{background:rgba(39,174,96,.12);color:var(--accent3);border:1px solid rgba(39,174,96,.3);}
+.pill-orange{background:rgba(243,156,18,.12);color:#d68910;border:1px solid rgba(243,156,18,.3);}
+.pill-purple{background:rgba(142,68,173,.12);color:#8e44ad;border:1px solid rgba(142,68,173,.3);}
+
+/* Comparison table */
+.cmp-table{width:100%;border-collapse:collapse;font-size:.86rem;margin:.8rem 0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.cmp-table th{background:var(--accent2);color:#fff;padding:.6rem .8rem;text-align:center;font-weight:600;font-size:.82rem;}
+.cmp-table td{padding:.6rem .8rem;text-align:center;border-bottom:1px solid var(--card-border);font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.cmp-table td:first-child{font-family:'Noto Sans TC',sans-serif;color:var(--accent2);font-weight:600;text-align:left;}
+.cmp-table tr:last-child td{border-bottom:none;}
+.cmp-table tr:nth-child(even){background:rgba(0,0,0,.015);}
+.cmp-table .best{color:var(--accent3);font-weight:700;}
+.cmp-table .worst{color:var(--accent);font-weight:700;}
+
+/* Recursion tree (merge sort) */
+.tree-canvas{position:relative;width:100%;min-height:240px;background:#fafafa;border-radius:8px;border:1px solid #ececec;padding:1rem;overflow-x:auto;}
+.tree-row{display:flex;justify-content:center;gap:.4rem;margin-bottom:.4rem;}
+.tree-node{background:#fff;border:2px solid var(--card-border);border-radius:6px;padding:.3rem .55rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;min-width:34px;text-align:center;transition:all .25s;}
+.tree-node.active{border-color:var(--bar-compare);background:#fef5e7;}
+.tree-node.merging{border-color:var(--accent3);background:#eafaf1;}
+.tree-node.done{border-color:var(--accent3);background:var(--accent3);color:#fff;}
+
+/* Color legend */
+.legend{display:flex;flex-wrap:wrap;gap:.6rem;margin:.6rem 0;font-family:'JetBrains Mono',monospace;font-size:.75rem;}
+.legend-item{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .5rem;background:var(--paper);border-radius:5px;}
+.legend-item .lg-swatch{width:14px;height:14px;border-radius:3px;}
+
+/* Floating sidebar navigation */
+.float-nav{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:2px;background:rgba(255,253,250,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--card-border);border-radius:12px;padding:10px 7px;box-shadow:0 6px 24px rgba(0,0,0,.10);font-family:'JetBrains Mono',monospace;max-height:88vh;overflow-y:auto;transition:padding .25s ease;}
+.float-nav .fn-title{font-family:'Noto Serif TC',serif;font-weight:700;font-size:.68rem;color:var(--accent2);text-align:center;letter-spacing:1.5px;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--card-border);max-width:0;overflow:hidden;transition:max-width .25s ease;}
+.float-nav:hover .fn-title{max-width:220px;}
+.float-nav a{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:7px;color:var(--ink);text-decoration:none;white-space:nowrap;transition:all .2s ease;border-left:3px solid transparent;}
+.float-nav a .fn-num{font-weight:700;font-size:.66rem;color:var(--muted);letter-spacing:.4px;flex-shrink:0;width:30px;text-align:left;}
+.float-nav a .fn-name{font-family:'Noto Sans TC',sans-serif;font-size:.76rem;font-weight:500;max-width:0;overflow:hidden;transition:max-width .25s ease,padding .25s ease;padding:0;}
+.float-nav:hover a .fn-name{max-width:220px;padding-left:2px;}
+.float-nav a:hover{background:var(--card);}
+.float-nav a.active{background:var(--accent2);color:#fff;border-left-color:var(--accent);box-shadow:0 2px 6px rgba(192,57,43,.25);}
+.float-nav a.active .fn-num{color:rgba(255,255,255,.85);}
+.float-nav a.active .fn-name{color:#fff;}
+.float-nav .fn-top{margin-top:6px;padding-top:6px;border-top:1px solid var(--card-border);justify-content:center;}
+.float-nav .fn-top .fn-num{width:auto;color:var(--accent2);font-size:.78rem;}
+@media(max-width:768px){
+  .float-nav{right:8px;top:auto;bottom:14px;transform:none;padding:6px 5px;max-height:70vh;}
+  .float-nav .fn-title{display:none;}
+  .float-nav a{padding:4px 7px;}
+  .float-nav a .fn-num{width:26px;font-size:.62rem;}
+}
+
+footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border);}
+</style>
+</head>
+<body>
+
+<!-- Floating navigation sidebar -->
+<nav class="float-nav" id="floatNav" aria-label="章節導覽">
+  <div class="fn-title">章節導覽</div>
+  <a href="#prologue" data-target="prologue"><span class="fn-num">P00</span><span class="fn-name">引言</span></a>
+  <a href="#seq-search" data-target="seq-search"><span class="fn-num">P01</span><span class="fn-name">循序搜尋</span></a>
+  <a href="#bin-search" data-target="bin-search"><span class="fn-num">P02</span><span class="fn-name">二分搜尋</span></a>
+  <a href="#hashing" data-target="hashing"><span class="fn-num">P03</span><span class="fn-name">雜湊</span></a>
+  <a href="#bubble" data-target="bubble"><span class="fn-num">P04</span><span class="fn-name">氣泡排序</span></a>
+  <a href="#selection" data-target="selection"><span class="fn-num">P05</span><span class="fn-name">選擇排序</span></a>
+  <a href="#insertion" data-target="insertion"><span class="fn-num">P06</span><span class="fn-name">插入排序</span></a>
+  <a href="#shell" data-target="shell"><span class="fn-num">P07</span><span class="fn-name">希爾排序</span></a>
+  <a href="#merge" data-target="merge"><span class="fn-num">P08</span><span class="fn-name">合併排序</span></a>
+  <a href="#quick" data-target="quick"><span class="fn-num">P09</span><span class="fn-name">快速排序</span></a>
+  <a href="#depends" data-target="depends"><span class="fn-num">P10</span><span class="fn-name">依賴的資料結構</span></a>
+  <a href="#reference" data-target="reference"><span class="fn-num">REF</span><span class="fn-name">總覽比較</span></a>
+  <a href="#top" class="fn-top" title="回到頂端"><span class="fn-num">↑ TOP</span></a>
+</nav>
+
+<div class="hero" id="top">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <h1><span class="blue">搜尋</span>與<span class="orange">排序</span>演算法</h1>
+    <div class="subtitle">Chapter 5 — Searching, Hashing &amp; Sorting (Interactive Visualization)</div>
+    <div class="big-formula">循序搜尋｜二分搜尋｜雜湊｜氣泡｜選擇｜插入｜希爾｜合併｜快速</div>
+    <div class="scroll-hint">向下捲動開始互動<span>↓</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-title">CONTENTS · 內容目錄</div>
+  <div class="toc-grid">
+    <a href="#prologue"><span class="toc-num">P00</span>引言：比較單位與目標</a>
+    <a href="#seq-search"><span class="toc-num">P01</span>循序搜尋 Sequential</a>
+    <a href="#bin-search"><span class="toc-num">P02</span>二分搜尋 Binary</a>
+    <a href="#hashing"><span class="toc-num">P03</span>雜湊 Hashing</a>
+    <a href="#bubble"><span class="toc-num">P04</span>氣泡排序 Bubble</a>
+    <a href="#selection"><span class="toc-num">P05</span>選擇排序 Selection</a>
+    <a href="#insertion"><span class="toc-num">P06</span>插入排序 Insertion</a>
+    <a href="#shell"><span class="toc-num">P07</span>希爾排序 Shell</a>
+    <a href="#merge"><span class="toc-num">P08</span>合併排序 Merge</a>
+    <a href="#quick"><span class="toc-num">P09</span>快速排序 Quick</a>
+    <a href="#depends"><span class="toc-num">P10</span>依賴的資料結構</a>
+    <a href="#reference"><span class="toc-num">REF</span>總覽比較表</a>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PROLOGUE -->
+<!-- ============================================================ -->
+<section id="prologue">
+  <div class="section-number">PROLOGUE · 開場</div>
+  <h2>先看懂：演算法分析的「比較」與「目標」</h2>
+  <p>本章探討兩件事：<strong>搜尋（searching）</strong> 從一堆資料中找出特定元素，<strong>排序（sorting）</strong> 把資料重新排列成有序狀態。我們會從 Python <code>in</code> 運算子開始，逐步揭開背後的演算法，並且<strong>用「比較次數」當作分析的單位</strong>。</p>
+
+  <div class="info-box">
+    <span class="info-label">分析的兩個約定</span>
+    <strong>1. 計算單位 = 比較次數。</strong>對搜尋而言，是「拿目標和某個元素比一下」算一次；對排序而言，是「比較兩個元素誰大誰小」算一次。<br>
+    <strong>2. 等機率假設。</strong>搜尋成功時，假設目標出現在每個位置的機率都相同；這樣才能合理地討論「平均情況」。
+  </div>
+
+  <h3>顏色語義（整頁通用）</h3>
+  <div class="legend">
+    <span class="legend-item"><span class="lg-swatch" style="background:var(--bar-default)"></span>未處理</span>
+    <span class="legend-item"><span class="lg-swatch" style="background:var(--bar-compare)"></span>正在比較</span>
+    <span class="legend-item"><span class="lg-swatch" style="background:var(--bar-swap)"></span>正在交換</span>
+    <span class="legend-item"><span class="lg-swatch" style="background:var(--bar-sorted)"></span>已排序</span>
+    <span class="legend-item"><span class="lg-swatch" style="background:var(--bar-pivot)"></span>樞紐值 (pivot)</span>
+    <span class="legend-item"><span class="lg-swatch" style="background:var(--bar-key)"></span>插入鍵值 (cur_val)</span>
+    <span class="legend-item"><span class="lg-swatch" style="background:var(--bar-found)"></span>找到目標</span>
+  </div>
+
+  <p>每一節都採用相同的版面：左邊是「視覺化畫布」與「控制列」，右邊是「即時統計」、「對應虛擬碼（pseudo-code）」與「複雜度分析」。請大膽地按 <span class="pill pill-green">▶ 開始</span> 看完整動畫，或按 <span class="pill pill-blue">→ 單步</span> 一格一格觀察。</p>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART 01: Sequential Search -->
+<!-- ============================================================ -->
+<section id="seq-search">
+  <div class="section-number">PART 01 · 循序搜尋</div>
+  <h2>循序搜尋：從頭到尾一個一個比</h2>
+  <p>把資料想像成一排櫃子，要找某個物件，最直覺的辦法就是<strong>從第 0 格開始、一格一格打開來看</strong>。這就是 <em>sequential search</em>，也叫 linear search。它<strong>不要求資料有序</strong>，是處理一般 list 時最基本的搜尋方法。</p>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="algo-canvas" id="canvas-seq"><div class="bars-container"></div><div class="baseline"></div></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="seqStatus">設定目標值後按「開始」</span></div>
+        <div class="input-row">
+          <label>陣列：</label>
+          <input type="text" id="seqArrInput" value="54, 26, 93, 17, 77, 31, 44, 55, 20, 65">
+          <label>目標：</label>
+          <input type="number" id="seqTarget" value="44" style="width:70px;">
+          <button class="btn btn-shuffle" id="seqApply">套用</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="seqPlay">▶ 開始</button>
+          <button class="btn btn-step" id="seqStep">→ 單步</button>
+          <button class="btn btn-reset" id="seqReset">↺ 重置</button>
+          <div style="flex:1;min-width:160px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);">速度</span>
+            <input type="range" id="seqSpeed" min="100" max="1500" step="50" value="600" style="flex:1;accent-color:var(--accent3);">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="stats-grid">
+          <div class="stat-tile compare"><div class="stat-label">比較次數</div><div class="stat-value" id="seqCmp">0</div></div>
+          <div class="stat-tile"><div class="stat-label">當前 pos</div><div class="stat-value" id="seqPos">—</div></div>
+        </div>
+        <div class="ic-row" style="margin-top:.6rem;"><span class="ic-label">結果</span><span class="ic-value highlight" id="seqResult">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="seqCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">sequential_search</span>(a_list, item):</span><span class="line" data-l="2">    pos = <span class="num">0</span></span><span class="line" data-l="3">    <span class="kw">while</span> pos &lt; <span class="fn">len</span>(a_list):</span><span class="line" data-l="4">        <span class="kw">if</span> a_list[pos] == item:</span><span class="line" data-l="5">            <span class="kw">return</span> <span class="num">True</span></span><span class="line" data-l="6">        pos = pos + <span class="num">1</span></span><span class="line" data-l="7">    <span class="kw">return</span> <span class="num">False</span></span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">最佳 (item 在頭)</span><span class="ic-value">$O(1)$</span></div>
+        <div class="ic-row"><span class="ic-label">最差 (沒找到)</span><span class="ic-value">$O(n)$</span></div>
+        <div class="ic-row"><span class="ic-label">平均 (找得到)</span><span class="ic-value">$O(n/2)=O(n)$</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box warm">
+    <span class="info-label">為何平均是 n/2？</span>
+    在「等機率假設」下，目標出現在每個位置的機率相同。若 list 長度是 $n$，找到所需的比較次數為 $1, 2, \ldots, n$，平均為 $\dfrac{1+2+\cdots+n}{n} = \dfrac{n+1}{2}$；用大 O 仍是 $O(n)$。<strong>找不到的情形需要 $n$ 次比較</strong>——必須逐一檢查每一格。
+  </div>
+
+  <h3>有序版本：可以提前停止</h3>
+  <p>如果 list 已經<strong>排序好</strong>了，就有捷徑：當看到的元素已經比目標大（升冪情況下），後面就不可能有了，可以立刻回傳 <code>False</code>。雖然找到的時候沒省到比較次數，但<strong>找不到時平均能少做一半</strong>——預期比較次數降到 $n/2$（仍是 $O(n)$，但常數變小）。</p>
+
+  <div class="info-card" style="margin-top:.8rem;">
+    <div class="ic-title">虛擬碼 — ordered_sequential_search <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+    <div class="pseudo-code">
+      <span class="line"><span class="kw">def</span> <span class="fn">ordered_sequential_search</span>(a_list, item):</span>
+      <span class="line">    pos = <span class="num">0</span></span>
+      <span class="line">    <span class="kw">while</span> pos &lt; <span class="fn">len</span>(a_list):</span>
+      <span class="line">        <span class="kw">if</span> a_list[pos] == item:</span>
+      <span class="line">            <span class="kw">return</span> <span class="num">True</span></span>
+      <span class="line">        <span class="kw">if</span> a_list[pos] &gt; item:    <span class="com"># 提前結束的關鍵</span></span>
+      <span class="line">            <span class="kw">return</span> <span class="num">False</span></span>
+      <span class="line">        pos = pos + <span class="num">1</span></span>
+      <span class="line">    <span class="kw">return</span> <span class="num">False</span></span>
+    </div>
+  </div>
+
+  <div class="info-box green" style="margin-top:.8rem;">
+    <span class="info-label">關鍵差異對比表</span>
+    <div style="font-size:.86rem;line-height:1.65;margin-top:.4rem;">
+      <table style="width:100%;font-family:'JetBrains Mono',monospace;font-size:.78rem;">
+        <thead><tr><th style="text-align:left;padding:.3rem;">情境</th><th style="padding:.3rem;">最佳</th><th style="padding:.3rem;">最差</th><th style="padding:.3rem;">平均</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:.3rem;">item 在 list 中（兩種版本）</td><td style="text-align:center;">$1$</td><td style="text-align:center;">$n$</td><td style="text-align:center;">$n/2$</td></tr>
+          <tr style="background:#fef0e7;"><td style="padding:.3rem;">item <strong>不在</strong> — 普通版</td><td style="text-align:center;">$n$</td><td style="text-align:center;">$n$</td><td style="text-align:center;">$n$</td></tr>
+          <tr style="background:#eafaf1;"><td style="padding:.3rem;">item <strong>不在</strong> — 有序版</td><td style="text-align:center;">$1$</td><td style="text-align:center;">$n$</td><td style="text-align:center;">$n/2$</td></tr>
+        </tbody>
+      </table>
+    </div>
+    結論：兩種版本的<strong>大 $O$ 都是 $O(n)$</strong>，有序版只是<strong>常數變小</strong>。要真正快，得換演算法 → 二分搜尋。
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- PART 02: Binary Search -->
+<!-- ============================================================ -->
+<section id="bin-search">
+  <div class="section-number">PART 02 · 二分搜尋</div>
+  <h2>二分搜尋：每次砍掉一半的可能位置</h2>
+  <p>當 list <strong>已排序</strong>，可以用更聰明的策略：直接看<strong>正中間</strong>那一個。比目標大就往左半找；比目標小就往右半找；剛好相等就找到了。每次比較<strong>排除掉一半</strong>，所以總比較次數最多 $\lceil \log_2 n \rceil + 1$。</p>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="algo-canvas" id="canvas-bin" style="height:380px;"><div class="bars-container"></div><div class="baseline"></div></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="binStatus">陣列已排序，按「開始」執行二分搜尋</span></div>
+        <div class="input-row">
+          <label>已排序陣列：</label>
+          <input type="text" id="binArrInput" value="17, 20, 26, 31, 44, 54, 55, 65, 77, 93">
+          <label>目標：</label>
+          <input type="number" id="binTarget" value="44" style="width:70px;">
+          <button class="btn btn-shuffle" id="binApply">套用</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="binPlay">▶ 開始</button>
+          <button class="btn btn-step" id="binStep">→ 單步</button>
+          <button class="btn btn-reset" id="binReset">↺ 重置</button>
+          <div style="flex:1;min-width:160px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);">速度</span>
+            <input type="range" id="binSpeed" min="200" max="1800" step="50" value="800" style="flex:1;accent-color:var(--accent3);">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">當前指標 <span class="ic-badge">LIVE</span></div>
+        <div class="ic-row"><span class="ic-label">first</span><span class="ic-value" id="binLow" style="color:#2980b9;">0</span></div>
+        <div class="ic-row"><span class="ic-label">last</span><span class="ic-value" id="binHigh" style="color:var(--accent);">9</span></div>
+        <div class="ic-row"><span class="ic-label">midpoint = (first+last)//2</span><span class="ic-value" id="binMid" style="color:var(--accent3);">4</span></div>
+        <div class="ic-row" style="margin-top:.4rem;border-top:1px solid var(--card-border);padding-top:.4rem;"><span class="ic-label">比較次數</span><span class="ic-value highlight" id="binCmp">0</span></div>
+        <div class="ic-row"><span class="ic-label">結果</span><span class="ic-value highlight" id="binResult">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="binCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">binary_search</span>(a_list, item):</span><span class="line" data-l="2">    first = <span class="num">0</span></span><span class="line" data-l="3">    last = <span class="fn">len</span>(a_list) - <span class="num">1</span></span><span class="line" data-l="4">    <span class="kw">while</span> first &lt;= last:</span><span class="line" data-l="5">        midpoint = (first + last) // <span class="num">2</span></span><span class="line" data-l="6">        <span class="kw">if</span> a_list[midpoint] == item:</span><span class="line" data-l="7">            <span class="kw">return</span> <span class="num">True</span></span><span class="line" data-l="8">        <span class="kw">elif</span> item &lt; a_list[midpoint]:</span><span class="line" data-l="9">            last = midpoint - <span class="num">1</span></span><span class="line" data-l="10">        <span class="kw">else</span>:</span><span class="line" data-l="11">            first = midpoint + <span class="num">1</span></span><span class="line" data-l="12">    <span class="kw">return</span> <span class="num">False</span></span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">最佳 (mid 命中)</span><span class="ic-value">$O(1)$</span></div>
+        <div class="ic-row"><span class="ic-label">最差 / 平均</span><span class="ic-value">$O(\log n)$</span></div>
+        <div class="ic-row"><span class="ic-label">前置條件</span><span class="ic-value">必須<strong>已排序</strong></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">為何是 log n？</span>
+    每次比較讓搜尋範圍變成原本的一半。$n \to n/2 \to n/4 \to \cdots \to 1$，要做 $\log_2 n$ 次切割。<br>
+    <strong>數值感受：</strong> $n=1{,}000{,}000$ 的 list，循序搜尋最多 $10^6$ 次比較，二分搜尋只要 $\lceil \log_2 10^6 \rceil = 20$ 次！
+  </div>
+
+  <div class="info-box warm">
+    <span class="info-label">陷阱</span>
+    二分搜尋的<strong>排序成本</strong>不能忽略。若 list 只搜尋一次，先 $O(n\log n)$ 排序再 $O(\log n)$ 搜尋，反而慢於直接 $O(n)$ 循序搜尋。<strong>多次搜尋同一份排序好的資料</strong>時，二分搜尋才划算。
+  </div>
+
+  <h3>分而治之的另一種寫法：遞迴版</h3>
+  <p>講義也提供 <strong>recursive binary search</strong>，本質上和迴圈版本完全等價，但更能體現「<em>divide and conquer</em>」的概念——把問題切成更小的子問題，再對其中一邊遞迴呼叫。</p>
+
+  <div class="info-card" style="margin-top:.5rem;">
+    <div class="ic-title">虛擬碼 — binary_search_rec <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+    <div class="pseudo-code">
+      <span class="line"><span class="kw">def</span> <span class="fn">binary_search_rec</span>(a_list, item):</span>
+      <span class="line">    <span class="kw">if</span> <span class="fn">len</span>(a_list) == <span class="num">0</span>:           <span class="com"># base case: 找不到</span></span>
+      <span class="line">        <span class="kw">return</span> <span class="num">False</span></span>
+      <span class="line">    midpoint = (<span class="fn">len</span>(a_list) - <span class="num">1</span>) // <span class="num">2</span></span>
+      <span class="line">    <span class="kw">if</span> a_list[midpoint] == item:</span>
+      <span class="line">        <span class="kw">return</span> <span class="num">True</span></span>
+      <span class="line">    <span class="kw">elif</span> item &lt; a_list[midpoint]:</span>
+      <span class="line">        <span class="kw">return</span> <span class="fn">binary_search_rec</span>(a_list[:midpoint], item)        <span class="com"># 左半</span></span>
+      <span class="line">    <span class="kw">else</span>:</span>
+      <span class="line">        <span class="kw">return</span> <span class="fn">binary_search_rec</span>(a_list[midpoint+<span class="num">1</span>:], item)      <span class="com"># 右半</span></span>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <span class="info-label">小細節</span>
+    這個版本用 <strong>list slicing</strong>（<code>a_list[:midpoint]</code>），看起來簡潔，但每次切片其實會<strong>複製整個子陣列</strong>，多花 $O(n)$ 空間，整體變 $O(n \log n)$ 而不是 $O(\log n)$！更乾淨的寫法是傳入 <code>start</code>、<code>end</code> 索引（講義 Exercise 1：<code>binary_search_rec2(a_list, item, start, last)</code>），不切片就能保留 $O(\log n)$ 空間複雜度。
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART 03: Hashing -->
+<!-- ============================================================ -->
+<section id="hashing">
+  <div class="section-number">PART 03 · 雜湊</div>
+  <h2>雜湊：用「函數」一次跳到該去的位置</h2>
+  <p>有沒有可能讓搜尋變成 $O(1)$？只要我們<strong>事先決定每個值該存哪裡</strong>就行。<em>hash function</em> $h(\text{item})$ 把每個值對應到一個槽（slot）的索引。最簡單的 hash 函數是 <strong>remainder method</strong>：$h(\text{item}) = \text{item} \bmod m$，其中 $m$ 是表的大小。</p>
+
+  <div class="info-box">
+    <span class="info-label">範例：m = 11，存入 [54, 26, 93, 17, 77, 31]</span>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.88rem;line-height:1.8;margin-top:.4rem;">
+      $54 \bmod 11 = 10$　$26 \bmod 11 = 4$　$93 \bmod 11 = 5$<br>
+      $17 \bmod 11 = 6$　$77 \bmod 11 = 0$　$31 \bmod 11 = 9$
+    </div>
+    全部都落在不同槽，<em>load factor</em> $\lambda = 6/11 \approx 0.55$。
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <h3 style="margin-top:0;">雜湊表 (m = 11)</h3>
+        <div class="hash-table-wrap" id="hashTable"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="hashStatus">輸入要插入或搜尋的值</span></div>
+        <div class="input-row">
+          <label>值：</label>
+          <input type="number" id="hashVal" value="44" style="width:80px;">
+          <button class="btn btn-step" id="hashInsert">插入 (insert)</button>
+          <button class="btn btn-play" id="hashSearch">搜尋 (search)</button>
+        </div>
+        <div class="input-row">
+          <label>策略：</label>
+          <button class="preset-btn active" data-strategy="linear">線性探查</button>
+          <button class="preset-btn" data-strategy="chain">鏈結法</button>
+          <button class="btn btn-reset" id="hashClear" style="margin-left:auto;">↺ 清空表</button>
+        </div>
+        <div class="input-row">
+          <label>批次：</label>
+          <input type="text" id="hashBatch" value="54, 26, 93, 17, 77, 31" style="flex:1;">
+          <button class="btn btn-shuffle" id="hashBatchInsert">全部插入</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">餘數雜湊函數</div>
+        <div class="eq-formula">$h(item) = item \bmod m$</div>
+        <div class="eq-sub">$m = 11$（表大小，建議用質數）</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="ic-row"><span class="ic-label">已用槽數</span><span class="ic-value" id="hashUsed">0 / 11</span></div>
+        <div class="ic-row"><span class="ic-label">負載因子 λ</span><span class="ic-value highlight" id="hashLoad">0.00</span></div>
+        <div class="ic-row"><span class="ic-label">本次比較次數</span><span class="ic-value" id="hashOps">0</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">何謂碰撞 collision</div>
+        <div style="font-size:.84rem;line-height:1.65;">
+          兩個不同的 item 雜湊到<strong>同一個 slot</strong>就是碰撞。處理方法：<br>
+          <span class="pill pill-blue">線性探查</span> 往後找第一個空的<br>
+          <span class="pill pill-purple">鏈結法</span> 在該 slot 接一條 list
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">理想 (無碰撞)</span><span class="ic-value">$O(1)$</span></div>
+        <div class="ic-row"><span class="ic-label">線性探查 search</span><span class="ic-value">$\frac{1}{2}\!\left(1+\frac{1}{1-\lambda}\right)$</span></div>
+        <div class="ic-row"><span class="ic-label">鏈結法 search</span><span class="ic-value">$1 + \lambda/2$</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:1.5rem;">其他常見的雜湊函數</h3>
+  <div class="viz-layout" style="margin-top:.8rem;">
+    <div>
+      <div class="info-card">
+        <div class="ic-title">折疊法 folding method</div>
+        <div style="font-size:.84rem;line-height:1.65;">
+          把 item 切成<strong>等長的片段</strong>，加總後再取餘數。例如電話號碼 <code>436-555-4601</code> 切成 <code>43, 65, 55, 46, 01</code>，加總得 $210$；除以 11 得 $h = 210 \bmod 11 = 1$。<br>
+          進階：<strong>反轉版本</strong>把每隔一片反過來再相加，例如 <code>34 + 56 + 55 + 64 + 10 = 219 → 219 mod 11 = 10</code>。
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">平方取中法 mid-square</div>
+        <div style="font-size:.84rem;line-height:1.65;">
+          先把 item 平方，取中間幾位數，再取餘數。<br>
+          例：item = 44 → $44^2 = 1936$ → 取中間兩位 <code>93</code> → $93 \bmod 11 = 5$。<br>
+          <span class="pill pill-blue">範例對照表</span> &nbsp; <code>54→3, 26→1, 93→9, 17→6, 77→4, 31→8</code>
+          <p style="font-size:.78rem;color:var(--muted);margin-top:.4rem;font-style:italic;">
+            ⓘ 對 17, 31 這類平方後位數不夠的情況，先補 0 至偶數位再取「正中間兩位」做 mod 11 是統一的做法。例如 $17^2 = 289$ → 補成 <code>0289</code> → 取 <code>28</code> → $28 \bmod 11 = 6$；$31^2 = 961$ → 補成 <code>0961</code> → 取 <code>96</code> → $96 \bmod 11 = 8$。
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">字串雜湊 string hashing</div>
+        <div style="font-size:.84rem;line-height:1.65;">
+          字串可以用每個字元的 <strong>ordinal value</strong>（ASCII 碼）來算：
+          <div class="pseudo-code" style="margin-top:.4rem;">
+            <span class="line"><span class="kw">def</span> <span class="fn">hash_str</span>(s, m):</span>
+            <span class="line">    <span class="kw">return</span> <span class="fn">sum</span>(<span class="fn">ord</span>(c) <span class="kw">for</span> c <span class="kw">in</span> s) % m</span>
+          </div>
+          <strong>陷阱：</strong>"cat"、"act"、"tac" 全是同樣 ord 總和，會撞在一起（anagrams 衝突）。改良：<strong>用位置當權重</strong>，例如 $\sum i \cdot \text{ord}(c_i) \bmod m$。
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">設計目標</div>
+        <div style="font-size:.84rem;line-height:1.65;">
+          理想的 hash 函數應該：<br>
+          <span class="pill pill-blue">易於計算</span> 不能比直接搜尋還慢<br>
+          <span class="pill pill-purple">分布均勻</span> 減少碰撞機率<br>
+          <span class="pill pill-orange">Perfect hash</span> 對特定資料集無碰撞，但<strong>不存在通用方法</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:1.5rem;">碰撞解決：除了線性探查還有什麼？</h3>
+  <div class="info-box">
+    <span class="info-label">rehash 通式：$\text{rehash}(\text{pos}) = (\text{pos} + \text{skip}) \bmod m$</span>
+    <strong>線性探查 (linear probing)</strong>：skip = 1，每次往後找下一格。簡單但容易產生<em>聚集 (clustering)</em>——許多碰撞在同一段連續 slot 累積，後續插入會被牽連。<br><br>
+    <strong>+3 探查 (plus-3)</strong>：skip = 3，跳格搜尋。要求 skip 與 $m$ 互質，否則會循環走不完整個表（這也是為何 $m$ 常選<strong>質數</strong>）。<br><br>
+    <strong>平方探查 (quadratic probing)</strong>：skip 不是定值，而是 $1, 4, 9, 16, \ldots$（連續完全平方數）。即 $h, h+1, h+4, h+9, \ldots$。能有效打散聚集。<br><br>
+    <strong>鏈結法 (chaining)</strong>：每個 slot 存一條 list（或其他 collection），所有 hash 到該 slot 的 item 都掛在同一條鏈上。$\lambda$ 可以超過 1。
+  </div>
+
+  <h3 style="margin-top:1.5rem;">應用：Map ADT (字典/HashTable)</h3>
+  <div class="info-box warm">
+    <span class="info-label">用 hash 表實作 key-value 字典</span>
+    Python 的 <code>dict</code> 背後就是 hash table。Map ADT 定義為「key 與 data value 之間關聯的無序集合」，包含 6 個核心操作：
+    <div style="font-size:.84rem;line-height:1.7;margin:.5rem 0;">
+      <table style="width:100%;font-family:'JetBrains Mono',monospace;font-size:.78rem;border-collapse:collapse;">
+        <thead><tr style="background:var(--paper);border-bottom:2px solid var(--card-border);"><th style="text-align:left;padding:.35rem;">操作</th><th style="text-align:left;padding:.35rem;">語意</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:.3rem;color:var(--accent2);font-weight:600;">Map()</td><td>建立一個新的空 map</td></tr>
+          <tr style="background:#fff;"><td style="padding:.3rem;color:var(--accent2);font-weight:600;">put(key, val)</td><td>新增 key–value 對；若 key 已存在則覆寫舊值</td></tr>
+          <tr><td style="padding:.3rem;color:var(--accent2);font-weight:600;">get(key)</td><td>傳回對應 value，找不到則回傳 <code>None</code></td></tr>
+          <tr style="background:#fff;"><td style="padding:.3rem;color:var(--accent2);font-weight:600;">del map[key]</td><td>刪除指定的 key–value 對</td></tr>
+          <tr><td style="padding:.3rem;color:var(--accent2);font-weight:600;">size()</td><td>回傳目前儲存的 key–value 對總數</td></tr>
+          <tr style="background:#fff;"><td style="padding:.3rem;color:var(--accent2);font-weight:600;">in</td><td><code>key in map</code> 回傳 True/False</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pseudo-code" style="margin-top:.4rem;">
+      <span class="line"><span class="kw">class</span> <span class="fn">HashTable</span>:</span>
+      <span class="line">    <span class="kw">def</span> <span class="fn">__init__</span>(self):</span>
+      <span class="line">        self.size = <span class="num">11</span></span>
+      <span class="line">        self.slots = [<span class="num">None</span>] * self.size  <span class="com"># 存 key</span></span>
+      <span class="line">        self.data  = [<span class="num">None</span>] * self.size  <span class="com"># 平行陣列存 value</span></span>
+      <span class="line">    <span class="kw">def</span> <span class="fn">hash_function</span>(self, key, size): <span class="kw">return</span> key % size</span>
+      <span class="line">    <span class="kw">def</span> <span class="fn">rehash</span>(self, old_hash, size):  <span class="kw">return</span> (old_hash + <span class="num">1</span>) % size</span>
+      <span class="line">    <span class="kw">def</span> <span class="fn">put</span>(self, key, val): <span class="com"># 用 hash + rehash 找空位插入；若 key 已存在則覆寫</span></span>
+      <span class="line">    <span class="kw">def</span> <span class="fn">get</span>(self, key):       <span class="com"># 同樣的 probe 路徑找回，position == start_slot 時停止</span></span>
+      <span class="line">    <span class="kw">def</span> <span class="fn">__getitem__</span>(self, key): <span class="kw">return</span> self.<span class="fn">get</span>(key)  <span class="com"># 支援 h[key]</span></span>
+      <span class="line">    <span class="kw">def</span> <span class="fn">__setitem__</span>(self, key, data): self.<span class="fn">put</span>(key, data)  <span class="com"># 支援 h[key] = v</span></span>
+    </div>
+    <strong>關鍵：</strong>用兩個平行 list (<code>slots</code>、<code>data</code>) 分別存 key 和 value，索引位置必須對齊。<code>get</code> 時要走和 <code>put</code> 一樣的 rehash 路徑，且要偵測「<strong>繞回起點</strong>」(<code>position == start_slot</code>) 以結束搜尋（代表整個探查鏈都沒有該 key）。
+  </div>
+
+  <h3 style="margin-top:1.5rem;">分析：載入因子 $\lambda$ 與比較次數</h3>
+  <div class="info-box green">
+    <span class="info-label">當 $\lambda$ 變大，效能如何下降？</span>
+    <strong>線性探查 + 開放定址 (open addressing)：</strong><br>
+    　・成功搜尋平均比較次數 $\approx \dfrac{1}{2}\!\left(1 + \dfrac{1}{1-\lambda}\right)$<br>
+    　・失敗搜尋平均比較次數 $\approx \dfrac{1}{2}\!\left(1 + \left(\dfrac{1}{1-\lambda}\right)^2\right)$<br><br>
+    <strong>鏈結法 (chaining)：</strong><br>
+    　・成功搜尋平均比較次數 $\approx 1 + \dfrac{\lambda}{2}$<br>
+    　・失敗搜尋平均比較次數 $\approx \lambda$<br><br>
+    當 $\lambda \to 1$ 時，線性探查的失敗搜尋會爆炸性增加；鏈結法則是線性增加，較為穩定。
+  </div>
+
+  <div class="info-box warm">
+    <span class="info-label">小實驗</span>
+    試試<strong>用「線性探查」</strong>把 <code>54, 26, 93, 17, 77, 31, 44, 55, 20</code> 全部插入：你會發現 44、55、20 都會發生碰撞，被推到別的槽去。再切換到<strong>「鏈結法」</strong>清空、重做一次，會看到撞到的 item 直接掛在槽下面，不會佔走別人的位置。
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART 04: Bubble Sort -->
+<!-- ============================================================ -->
+<section id="bubble">
+  <div class="section-number">PART 04 · 氣泡排序</div>
+  <h2>氣泡排序：相鄰兩個比一比，大的往後送</h2>
+  <p><strong>Bubble sort</strong> 的想法很單純：每一輪從頭走到尾，遇到「左邊比右邊大」就交換。經過一輪之後，<strong>最大的元素一定會被送到最右邊</strong>——就像氣泡浮到水面一樣。下一輪只要處理剩下的部分，依此類推。</p>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="algo-canvas" id="canvas-bubble"><div class="bars-container"></div><div class="baseline"></div></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="bubbleStatus">按「開始」執行氣泡排序</span></div>
+        <div class="input-row">
+          <label>陣列：</label>
+          <input type="text" id="bubbleArrInput" value="54, 26, 93, 17, 77, 31, 44, 55, 20">
+          <button class="btn btn-shuffle" id="bubbleShuffle">隨機洗牌</button>
+          <button class="btn btn-shuffle" id="bubbleApply" style="background:var(--accent2);">套用</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="bubblePlay">▶ 開始</button>
+          <button class="btn btn-step" id="bubbleStep">→ 單步</button>
+          <button class="btn btn-reset" id="bubbleReset">↺ 重置</button>
+          <div style="flex:1;min-width:160px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);">速度</span>
+            <input type="range" id="bubbleSpeed" min="50" max="1200" step="50" value="350" style="flex:1;accent-color:var(--accent3);">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="stats-grid">
+          <div class="stat-tile compare"><div class="stat-label">比較</div><div class="stat-value" id="bubbleCmp">0</div></div>
+          <div class="stat-tile swap"><div class="stat-label">交換</div><div class="stat-value" id="bubbleSwp">0</div></div>
+        </div>
+        <div class="ic-row" style="margin-top:.6rem;"><span class="ic-label">當前 pass</span><span class="ic-value" id="bubblePass">0</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="bubbleCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">bubble_sort</span>(a):</span><span class="line" data-l="2">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(a)-<span class="num">1</span>, <span class="num">0</span>, -<span class="num">1</span>):</span><span class="line" data-l="3">        <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(i):</span><span class="line" data-l="4">            <span class="kw">if</span> a[j] &gt; a[j+<span class="num">1</span>]:</span><span class="line" data-l="5">                a[j], a[j+<span class="num">1</span>] = a[j+<span class="num">1</span>], a[j]</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">比較次數</span><span class="ic-value">$\binom{n}{2} = \frac{n(n-1)}{2}$</span></div>
+        <div class="ic-row"><span class="ic-label">時間 (各情況)</span><span class="ic-value">$O(n^2)$</span></div>
+        <div class="ic-row"><span class="ic-label">空間</span><span class="ic-value">$O(1)$</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">短路最佳化 short bubble</span>
+    若某一輪<strong>都沒發生交換</strong>，代表已經完全排序了——可以提早結束！這時最佳情況變成 $O(n)$（已排序時只需一輪）。但平均與最差仍是 $O(n^2)$。
+  </div>
+
+  <div class="info-card" style="margin-top:.8rem;">
+    <div class="ic-title">虛擬碼 — bubble_sort_short <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+    <div class="pseudo-code">
+      <span class="line"><span class="kw">def</span> <span class="fn">bubble_sort_short</span>(a_list):</span>
+      <span class="line">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(a_list)-<span class="num">1</span>, <span class="num">0</span>, -<span class="num">1</span>):</span>
+      <span class="line">        exchanges = <span class="num">False</span></span>
+      <span class="line">        <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(i):</span>
+      <span class="line">            <span class="kw">if</span> a_list[j] &gt; a_list[j+<span class="num">1</span>]:</span>
+      <span class="line">                exchanges = <span class="num">True</span></span>
+      <span class="line">                a_list[j], a_list[j+<span class="num">1</span>] = a_list[j+<span class="num">1</span>], a_list[j]</span>
+      <span class="line">        <span class="kw">if</span> <span class="kw">not</span> exchanges:</span>
+      <span class="line">            <span class="kw">break</span>    <span class="com"># 已經排序好，可以離開</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- PART 05: Selection Sort -->
+<!-- ============================================================ -->
+<section id="selection">
+  <div class="section-number">PART 05 · 選擇排序</div>
+  <h2>選擇排序：每一輪挑出最小者放到前面</h2>
+  <p><strong>Selection sort</strong> 跟氣泡排序的<strong>比較次數一樣多</strong>，但聰明在「<strong>每一輪只交換一次</strong>」：先掃一遍找出未排序區裡<strong>最小</strong>的元素，再把它和未排序區的<strong>第一格</strong>直接交換，就完成一輪。氣泡排序每比一次就可能交換，selection sort 把交換成本壓到最低。<small>（講義版本以「找最小放前面」實作；也有等價的「找最大放後面」變體。）</small></p>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="algo-canvas" id="canvas-sel"><div class="bars-container"></div><div class="baseline"></div></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="selStatus">按「開始」執行選擇排序</span></div>
+        <div class="input-row">
+          <label>陣列：</label>
+          <input type="text" id="selArrInput" value="54, 26, 93, 17, 77, 31, 44, 55, 20">
+          <button class="btn btn-shuffle" id="selShuffle">隨機洗牌</button>
+          <button class="btn btn-shuffle" id="selApply" style="background:var(--accent2);">套用</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="selPlay">▶ 開始</button>
+          <button class="btn btn-step" id="selStep">→ 單步</button>
+          <button class="btn btn-reset" id="selReset">↺ 重置</button>
+          <div style="flex:1;min-width:160px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);">速度</span>
+            <input type="range" id="selSpeed" min="50" max="1200" step="50" value="350" style="flex:1;accent-color:var(--accent3);">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="stats-grid">
+          <div class="stat-tile compare"><div class="stat-label">比較</div><div class="stat-value" id="selCmp">0</div></div>
+          <div class="stat-tile swap"><div class="stat-label">交換</div><div class="stat-value" id="selSwp">0</div></div>
+        </div>
+        <div class="ic-row" style="margin-top:.6rem;"><span class="ic-label">本輪當前最小 idx</span><span class="ic-value highlight" id="selMinIdx">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼</div>
+        <div class="pseudo-code" id="selCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">selection_sort</span>(a_list):</span><span class="line" data-l="2">    <span class="kw">for</span> i, item <span class="kw">in</span> <span class="fn">enumerate</span>(a_list):</span><span class="line" data-l="3">        min_idx = <span class="fn">len</span>(a_list) - <span class="num">1</span></span><span class="line" data-l="4">        <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(i, <span class="fn">len</span>(a_list)):</span><span class="line" data-l="5">            <span class="kw">if</span> a_list[j] &lt; a_list[min_idx]:</span><span class="line" data-l="6">                min_idx = j</span><span class="line" data-l="7">        <span class="kw">if</span> min_idx != i:</span><span class="line" data-l="8">            a_list[min_idx], a_list[i] = a_list[i], a_list[min_idx]</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">比較次數</span><span class="ic-value">$\frac{n(n-1)}{2}$</span></div>
+        <div class="ic-row"><span class="ic-label">交換次數</span><span class="ic-value class="best">最多 $n-1$</span></div>
+        <div class="ic-row"><span class="ic-label">時間</span><span class="ic-value">$O(n^2)$</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <span class="info-label">vs. 氣泡</span>
+    <strong>比較次數相同</strong>都是 $O(n^2)$，但 selection sort <strong>每輪最多交換一次</strong>，氣泡排序每輪可能交換很多次。當「交換成本」很高（例如要移動的物件很大）時，selection sort 表現會比 bubble sort 好。
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- PART 06: Insertion Sort -->
+<!-- ============================================================ -->
+<section id="insertion">
+  <div class="section-number">PART 06 · 插入排序</div>
+  <h2>插入排序：像整理撲克牌</h2>
+  <p><strong>Insertion sort</strong> 把陣列分成「已排序」（左半）和「未排序」（右半）兩區。每一輪取出未排序的第一張當 <em>cur_val</em>（current value，當前要插入的值），往左在已排序區裡找出該插入的位置——遇到比它大的，就把它<strong>右移一格</strong>讓出空間。注意：這裡做的是<strong>位移（shift）而不是交換</strong>，所以可能比氣泡排序快一點。</p>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="algo-canvas" id="canvas-ins"><div class="bars-container"></div><div class="baseline"></div></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="insStatus">按「開始」執行插入排序</span></div>
+        <div class="input-row">
+          <label>陣列：</label>
+          <input type="text" id="insArrInput" value="54, 26, 93, 17, 77, 31, 44, 55, 20">
+          <button class="btn btn-shuffle" id="insShuffle">隨機洗牌</button>
+          <button class="btn btn-shuffle" id="insApply" style="background:var(--accent2);">套用</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="insPlay">▶ 開始</button>
+          <button class="btn btn-step" id="insStep">→ 單步</button>
+          <button class="btn btn-reset" id="insReset">↺ 重置</button>
+          <div style="flex:1;min-width:160px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);">速度</span>
+            <input type="range" id="insSpeed" min="50" max="1200" step="50" value="350" style="flex:1;accent-color:var(--accent3);">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="stats-grid">
+          <div class="stat-tile compare"><div class="stat-label">比較</div><div class="stat-value" id="insCmp">0</div></div>
+          <div class="stat-tile" style="background:#fef0e7;"><div class="stat-label">位移 shift</div><div class="stat-value" id="insShift" style="color:#d68910;">0</div></div>
+        </div>
+        <div class="ic-row" style="margin-top:.6rem;"><span class="ic-label">當前 cur_val</span><span class="ic-value highlight" id="insKey">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼</div>
+        <div class="pseudo-code" id="insCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">insertion_sort</span>(a_list):</span><span class="line" data-l="2">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="fn">len</span>(a_list)):</span><span class="line" data-l="3">        cur_val = a_list[i]</span><span class="line" data-l="4">        cur_pos = i</span><span class="line" data-l="5">        <span class="kw">while</span> cur_pos &gt; <span class="num">0</span> <span class="kw">and</span> a_list[cur_pos-<span class="num">1</span>] &gt; cur_val:</span><span class="line" data-l="6">            a_list[cur_pos] = a_list[cur_pos-<span class="num">1</span>]</span><span class="line" data-l="7">            cur_pos = cur_pos - <span class="num">1</span></span><span class="line" data-l="8">        a_list[cur_pos] = cur_val</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">最佳 (已排序)</span><span class="ic-value best">$O(n)$</span></div>
+        <div class="ic-row"><span class="ic-label">最差 / 平均</span><span class="ic-value">$O(n^2)$</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">為什麼適合「幾乎排序好」的資料？</span>
+    insertion sort 處理已排序資料時非常快——每個 key 只需要一次比較就能確認位置，時間複雜度降到 $O(n)$。如果你正在「<strong>插入新資料到已排序的 list</strong>」這個情境，insertion sort 是最自然的選擇。
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART 07: Shell Sort -->
+<!-- ============================================================ -->
+<section id="shell">
+  <div class="section-number">PART 07 · 希爾排序</div>
+  <h2>希爾排序：插入排序的「跳格」加速版</h2>
+  <p><strong>Shell sort</strong> 是 1959 年 Donald Shell 提出的方法。觀察到 insertion sort 對「幾乎排序好」的資料很快，但對亂序資料慢。Shell sort 的策略：先用一個<strong>較大的 gap</strong> 把陣列拆成數個「子陣列」（每個子陣列的元素彼此相距 gap），對每個子陣列各自做插入排序；接著縮小 gap 再做一次；最後 gap = 1（變成普通的 insertion sort），但<strong>此時資料已經幾乎排序好</strong>。</p>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="algo-canvas" id="canvas-shell" style="height:380px;"><div class="bars-container"></div><div class="baseline"></div></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="shellStatus">按「開始」執行希爾排序</span></div>
+        <div class="input-row">
+          <label>陣列：</label>
+          <input type="text" id="shellArrInput" value="54, 26, 93, 17, 77, 31, 44, 55, 20">
+          <button class="btn btn-shuffle" id="shellShuffle">隨機洗牌</button>
+          <button class="btn btn-shuffle" id="shellApply" style="background:var(--accent2);">套用</button>
+        </div>
+        <div class="input-row">
+          <label>gap 序列：</label>
+          <button class="preset-btn active" data-gap="half">n/2 折半 (Shell 原版)</button>
+          <button class="preset-btn" data-gap="2k-1">2^k − 1 = 1,3,7,15,... (Hibbard)</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="shellPlay">▶ 開始</button>
+          <button class="btn btn-step" id="shellStep">→ 單步</button>
+          <button class="btn btn-reset" id="shellReset">↺ 重置</button>
+          <div style="flex:1;min-width:160px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);">速度</span>
+            <input type="range" id="shellSpeed" min="50" max="1200" step="50" value="300" style="flex:1;accent-color:var(--accent3);">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="ic-row"><span class="ic-label">當前 gap</span><span class="ic-value highlight" id="shellGap" style="font-size:1.2rem;">—</span></div>
+        <div class="stats-grid" style="margin-top:.4rem;">
+          <div class="stat-tile compare"><div class="stat-label">比較</div><div class="stat-value" id="shellCmp">0</div></div>
+          <div class="stat-tile swap"><div class="stat-label">交換</div><div class="stat-value" id="shellSwp">0</div></div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 (gap = n//2 折半)</div>
+        <div class="pseudo-code" id="shellCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">shell_sort</span>(a):</span><span class="line" data-l="2">    gap = <span class="fn">len</span>(a) // <span class="num">2</span></span><span class="line" data-l="3">    <span class="kw">while</span> gap &gt; <span class="num">0</span>:</span><span class="line" data-l="4">        <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(gap, <span class="fn">len</span>(a)):</span><span class="line" data-l="5">            key, pos = a[i], i</span><span class="line" data-l="6">            <span class="kw">while</span> pos &gt;= gap <span class="kw">and</span> a[pos-gap] &gt; key:</span><span class="line" data-l="7">                a[pos] = a[pos-gap]</span><span class="line" data-l="8">                pos -= gap</span><span class="line" data-l="9">            a[pos] = key</span><span class="line" data-l="10">        gap //= <span class="num">2</span></span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">時間 (依 gap 序列)</span><span class="ic-value">$O(n^{3/2}) \sim O(n^2)$</span></div>
+        <div class="ic-row"><span class="ic-label">Hibbard 序列 $2^k-1$</span><span class="ic-value best">$O(n^{3/2})$</span></div>
+        <div class="ic-row"><span class="ic-label">空間</span><span class="ic-value">$O(1)$</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <span class="info-label">關鍵直覺</span>
+    當 gap 大時：每個子陣列很短，<strong>大跨度的調整很快</strong>，亂度迅速降低。<br>
+    當 gap 小時：陣列已接近排好，<strong>小範圍的微調很便宜</strong>。<br>
+    Shell sort 不像 merge / quick sort 那麼快，但<strong>程式碼短、不需要遞迴、空間 $O(1)$</strong>，是嵌入式系統與小型應用常見的選擇。
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART 08: Merge Sort -->
+<!-- ============================================================ -->
+<section id="merge">
+  <div class="section-number">PART 08 · 合併排序</div>
+  <h2>合併排序：分而治之的經典範例</h2>
+  <p><strong>Merge sort</strong> 是一個遞迴演算法，分成兩個動作：<br>
+  <strong>(1) Divide 切：</strong> 把 list 從中間切成左、右兩半，各自呼叫 merge sort。<br>
+  <strong>(2) Conquer + Merge 合：</strong> 兩半都排序好之後，<em>合併</em>成一個有序的大 list——用兩個指標分別走過左、右，每次把較小的那個寫進新 list。<br>
+  Base case：list 長度 ≤ 1 時自然有序，直接回傳。</p>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="algo-canvas" id="canvas-merge" style="height:380px;"><div class="bars-container"></div><div class="baseline"></div></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="mergeStatus">按「開始」執行合併排序</span></div>
+        <div class="input-row">
+          <label>陣列：</label>
+          <input type="text" id="mergeArrInput" value="54, 26, 93, 17, 77, 31, 44, 55">
+          <button class="btn btn-shuffle" id="mergeShuffle">隨機洗牌</button>
+          <button class="btn btn-shuffle" id="mergeApply" style="background:var(--accent2);">套用</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="mergePlay">▶ 開始</button>
+          <button class="btn btn-step" id="mergeStep">→ 單步</button>
+          <button class="btn btn-reset" id="mergeReset">↺ 重置</button>
+          <div style="flex:1;min-width:160px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);">速度</span>
+            <input type="range" id="mergeSpeed" min="100" max="1500" step="50" value="500" style="flex:1;accent-color:var(--accent3);">
+          </div>
+        </div>
+      </div>
+
+      <h3>遞迴呼叫樹 (recursion tree)</h3>
+      <div class="tree-canvas" id="mergeTree"></div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="stats-grid">
+          <div class="stat-tile compare"><div class="stat-label">比較</div><div class="stat-value" id="mergeCmp">0</div></div>
+          <div class="stat-tile" style="background:#eef5fc;"><div class="stat-label">寫入</div><div class="stat-value" id="mergeWrite" style="color:#2980b9;">0</div></div>
+        </div>
+        <div class="ic-row" style="margin-top:.6rem;"><span class="ic-label">當前階段</span><span class="ic-value" id="mergePhase">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼</div>
+        <div class="pseudo-code" id="mergeCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">merge_sort</span>(a):</span><span class="line" data-l="2">    <span class="kw">if</span> <span class="fn">len</span>(a) &lt;= <span class="num">1</span>: <span class="kw">return</span></span><span class="line" data-l="3">    mid = <span class="fn">len</span>(a) // <span class="num">2</span></span><span class="line" data-l="4">    L, R = a[:mid], a[mid:]</span><span class="line" data-l="5">    <span class="fn">merge_sort</span>(L)</span><span class="line" data-l="6">    <span class="fn">merge_sort</span>(R)</span><span class="line" data-l="7">    <span class="com"># merge L and R back into a</span></span><span class="line" data-l="8">    i = j = k = <span class="num">0</span></span><span class="line" data-l="9">    <span class="kw">while</span> i &lt; <span class="fn">len</span>(L) <span class="kw">and</span> j &lt; <span class="fn">len</span>(R):</span><span class="line" data-l="10">        <span class="kw">if</span> L[i] &lt;= R[j]:</span><span class="line" data-l="11">            a[k] = L[i]; i += <span class="num">1</span></span><span class="line" data-l="12">        <span class="kw">else</span>:</span><span class="line" data-l="13">            a[k] = R[j]; j += <span class="num">1</span></span><span class="line" data-l="14">        k += <span class="num">1</span></span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">時間 (各情況)</span><span class="ic-value best">$O(n \log n)$</span></div>
+        <div class="ic-row"><span class="ic-label">空間</span><span class="ic-value worst">$O(n)$ 額外</span></div>
+        <div class="ic-row"><span class="ic-label">是否穩定</span><span class="ic-value">穩定 ✓</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">為何是 n log n？</span>
+    每一層遞迴把問題切成兩半 → 共 $\log_2 n$ 層；每一層的「merge 動作」總共要看過所有 $n$ 個元素 → 每層 $O(n)$。整體 $O(n) \times O(\log n) = O(n \log n)$。<br>
+    這是<strong>比較式排序的下界</strong>——任何只透過比較來排序的演算法都至少要 $\Omega(n\log n)$，merge sort 達到這個下界。
+  </div>
+
+  <div class="info-box warm">
+    <span class="info-label">代價：額外空間</span>
+    merge sort 需要<strong>額外 $O(n)$ 的暫存空間</strong>來存 L、R 半段（Python 的 slicing 也會建立新 list）。處理超大資料時，這個記憶體開銷可能成為問題。
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART 09: Quick Sort -->
+<!-- ============================================================ -->
+<section id="quick">
+  <div class="section-number">PART 09 · 快速排序</div>
+  <h2>快速排序：選一個 pivot，把比它小、比它大的分開</h2>
+  <p><strong>Quicksort</strong> 也是分而治之，但策略不同：先選一個元素當 <em>pivot</em>（樞紐值），用一個 <strong>partition</strong> 過程把陣列重新排成「<span class="pill pill-blue">比 pivot 小</span> ｜ <span class="pill pill-purple">pivot</span> ｜ <span class="pill pill-orange">比 pivot 大</span>」三段——pivot 就<strong>確定到了它的最終位置</strong>。接著對左、右兩段各自遞迴呼叫 quicksort。和 merge sort 不一樣，<strong>不需要額外陣列</strong>，partition 就地完成。</p>
+
+  <div class="info-box">
+    <span class="info-label">partition 的雙指標技術</span>
+    從 pivot 右邊開始：<span class="pill pill-green">left_mark</span> 從左往右走、找<strong>大於 pivot 的</strong>；<span class="pill pill-orange">right_mark</span> 從右往左走、找<strong>小於 pivot 的</strong>。兩者都停下時就交換它們。當 left_mark 越過 right_mark 之後，把 pivot 和 right_mark 交換——pivot 就到位了。
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="algo-canvas" id="canvas-quick" style="height:380px;"><div class="bars-container"></div><div class="baseline"></div></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="quickStatus">按「開始」執行快速排序</span></div>
+        <div class="input-row">
+          <label>陣列：</label>
+          <input type="text" id="quickArrInput" value="54, 26, 93, 17, 77, 31, 44, 55, 20">
+          <button class="btn btn-shuffle" id="quickShuffle">隨機洗牌</button>
+          <button class="btn btn-shuffle" id="quickApply" style="background:var(--accent2);">套用</button>
+        </div>
+        <div class="input-row">
+          <label>pivot 策略：</label>
+          <button class="preset-btn active" data-pivot="first">第一個 (講義版本)</button>
+          <button class="preset-btn" data-pivot="median">三者取中 median-of-three</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="quickPlay">▶ 開始</button>
+          <button class="btn btn-step" id="quickStep">→ 單步</button>
+          <button class="btn btn-reset" id="quickReset">↺ 重置</button>
+          <div style="flex:1;min-width:160px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);">速度</span>
+            <input type="range" id="quickSpeed" min="100" max="1500" step="50" value="500" style="flex:1;accent-color:var(--accent3);">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時狀態 <span class="ic-badge">LIVE</span></div>
+        <div class="ic-row"><span class="ic-label">當前 pivot</span><span class="ic-value highlight" id="quickPivot">—</span></div>
+        <div class="ic-row"><span class="ic-label">左右範圍 [first, last]</span><span class="ic-value" id="quickRange">—</span></div>
+        <div class="ic-row"><span class="ic-label">left_mark</span><span class="ic-value" id="quickLM" style="color:#16a085;">—</span></div>
+        <div class="ic-row"><span class="ic-label">right_mark</span><span class="ic-value" id="quickRM" style="color:#d35400;">—</span></div>
+        <div class="stats-grid" style="margin-top:.5rem;">
+          <div class="stat-tile compare"><div class="stat-label">比較</div><div class="stat-value" id="quickCmp">0</div></div>
+          <div class="stat-tile swap"><div class="stat-label">交換</div><div class="stat-value" id="quickSwp">0</div></div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼</div>
+        <div class="pseudo-code" id="quickCode"><span class="line" data-l="0"><span class="kw">def</span> <span class="fn">quick_sort_helper</span>(a_list, first, last):</span><span class="line" data-l="0a">    <span class="kw">if</span> first &lt; last:</span><span class="line" data-l="0b">        split = <span class="fn">partition</span>(a_list, first, last)</span><span class="line" data-l="0c">        <span class="fn">quick_sort_helper</span>(a_list, first, split-<span class="num">1</span>)</span><span class="line" data-l="0d">        <span class="fn">quick_sort_helper</span>(a_list, split+<span class="num">1</span>, last)</span><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">partition</span>(a_list, first, last):</span><span class="line" data-l="2">    pivot_val = a_list[first]</span><span class="line" data-l="3">    left_mark, right_mark = first+<span class="num">1</span>, last</span><span class="line" data-l="4">    done = <span class="num">False</span></span><span class="line" data-l="5">    <span class="kw">while</span> <span class="kw">not</span> done:</span><span class="line" data-l="6">        <span class="kw">while</span> left_mark &lt;= right_mark <span class="kw">and</span> a_list[left_mark] &lt;= pivot_val:</span><span class="line" data-l="7">            left_mark += <span class="num">1</span></span><span class="line" data-l="8">        <span class="kw">while</span> left_mark &lt;= right_mark <span class="kw">and</span> a_list[right_mark] &gt;= pivot_val:</span><span class="line" data-l="9">            right_mark -= <span class="num">1</span></span><span class="line" data-l="10">        <span class="kw">if</span> right_mark &lt; left_mark:</span><span class="line" data-l="11">            done = <span class="num">True</span></span><span class="line" data-l="12">        <span class="kw">else</span>:</span><span class="line" data-l="13">            a_list[left_mark], a_list[right_mark] = a_list[right_mark], a_list[left_mark]</span><span class="line" data-l="14">    a_list[first], a_list[right_mark] = a_list[right_mark], a_list[first]</span><span class="line" data-l="15">    <span class="kw">return</span> right_mark  <span class="com"># split point</span></span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">最佳 / 平均</span><span class="ic-value best">$O(n \log n)$</span></div>
+        <div class="ic-row"><span class="ic-label">最差 (pivot 極差)</span><span class="ic-value worst">$O(n^2)$</span></div>
+        <div class="ic-row"><span class="ic-label">空間 (遞迴)</span><span class="ic-value">$O(\log n)$ 期望</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box warm">
+    <span class="info-label">最差情況：當 pivot 是極端值</span>
+    若每次選的 pivot 剛好是最大或最小（例如已排序的陣列 + 「選第一個當 pivot」策略），每次只能切下 1 個元素 → 退化成 $O(n^2)$。<strong>median-of-three</strong> 取「first、middle、last 三者中位數」當 pivot，能大幅降低最差情況的機率，對「幾乎排序好」的資料尤其有效。
+  </div>
+
+  <div class="info-box">
+    <span class="info-label">vs. merge sort</span>
+    quicksort <strong>就地排序，不需要 $O(n)$ 額外空間</strong>，常數係數也比 merge sort 小，<strong>實務上通常更快</strong>。但 quicksort 不穩定、且最差是 $O(n^2)$；merge sort 任何情況都是 $O(n\log n)$ 且穩定。Python 的 <code>list.sort()</code> 用的是 <em>Timsort</em>，正是 merge sort 的最佳化變種。
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART 10: Required Data Structures -->
+<!-- ============================================================ -->
+<section id="depends">
+  <div class="section-number">PART 10 · 依賴的資料結構</div>
+  <h2>每個演算法需要什麼底層支援？</h2>
+  <p>同樣的演算法，搬到不同的資料結構上效能可能截然不同——甚至根本跑不動。本節整理本章九個演算法各自<strong>能在哪些資料結構上有效執行</strong>，重點放在「為什麼某些演算法<em>必須</em>用 Array 而不能用 Linked List」這個關鍵差異上。</p>
+
+  <h3>兩種基本存取模式</h3>
+  <div class="viz-layout">
+    <div>
+      <div class="info-card">
+        <div class="ic-title">Random Access — 隨機存取 <span class="ic-badge" style="background:#2980b9;">FAST</span></div>
+        <div style="font-size:.86rem;line-height:1.7;">
+          可以用「索引」<strong>$O(1)$ 跳到任意位置</strong>。陣列 (Array) 最典型——記憶體連續，<code>a[i]</code> 直接用 <code>base + i × sizeof(T)</code> 算出位址即可。<br><br>
+          <span class="pill pill-blue">代表結構</span> Python <code>list</code>、NumPy <code>ndarray</code>、C 風格 array、Java <code>ArrayList</code><br>
+          <span class="pill pill-green">關鍵動作</span> <code>a[i]</code> = $O(1)$，<code>a[i] = v</code> = $O(1)$，連續走訪 cache 友善
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">Sequential Access — 循序存取 <span class="ic-badge" style="background:var(--accent);">SLOW INDEX</span></div>
+        <div style="font-size:.86rem;line-height:1.7;">
+          只能<strong>從頭往後一個一個走</strong>（透過 <code>node.next</code>）；想跳到第 $k$ 個必須走過前 $k-1$ 個 → $O(k)$。<br><br>
+          <span class="pill pill-purple">代表結構</span> Linked List (鏈結串列)、Iterator、Generator、Stream<br>
+          <span class="pill pill-orange">優勢</span> 中間插入/刪除 $O(1)$（已知前一節點時）、不用連續記憶體
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>核心對照表：每個演算法所需的資料結構</h3>
+  <table class="cmp-table">
+    <thead>
+      <tr>
+        <th>演算法</th>
+        <th>必要屬性</th>
+        <th style="background:#2980b9;">Array</th>
+        <th style="background:#8e44ad;">Linked List</th>
+        <th>關鍵原因</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>循序搜尋</td>
+        <td>可逐一拜訪</td>
+        <td class="best">✓ 自然</td>
+        <td class="best">✓ 自然</td>
+        <td>只需 sequential access，兩種結構都可以</td>
+      </tr>
+      <tr>
+        <td>有序循序搜尋</td>
+        <td>可逐一拜訪 + <strong>有序</strong></td>
+        <td class="best">✓</td>
+        <td class="best">✓</td>
+        <td>遇到 a[pos] &gt; item 即停，鏈結串列也行</td>
+      </tr>
+      <tr style="background:#fef0e7;">
+        <td><strong>二分搜尋</strong></td>
+        <td>$O(1)$ 隨機存取 + 有序</td>
+        <td class="best">✓ <strong>必須</strong></td>
+        <td class="worst">✗ 不行</td>
+        <td>跳到 midpoint 在鏈結串列要 $O(n)$，破壞 $\log n$</td>
+      </tr>
+      <tr>
+        <td>雜湊表 (Hashing)</td>
+        <td>固定大小 array 當底層</td>
+        <td class="best">✓ <strong>必須</strong></td>
+        <td class="worst">✗</td>
+        <td>$h(\text{item}) \to$ slot 索引，必須隨機存取</td>
+      </tr>
+      <tr>
+        <td>氣泡排序</td>
+        <td>隨機存取 + 可變</td>
+        <td class="best">✓</td>
+        <td>△ 慢但可</td>
+        <td>需要 a[j] 與 a[j+1] 的相鄰比較交換</td>
+      </tr>
+      <tr>
+        <td>選擇排序</td>
+        <td>隨機存取 + 可交換</td>
+        <td class="best">✓</td>
+        <td>△ 慢但可</td>
+        <td>找到 min_idx 後 swap a[i] ↔ a[min_idx]</td>
+      </tr>
+      <tr>
+        <td>插入排序</td>
+        <td>隨機存取（位移）</td>
+        <td class="best">✓</td>
+        <td>△ 變體可行</td>
+        <td>位移 a[cur_pos-1] → a[cur_pos] 在 array 是 $O(1)$</td>
+      </tr>
+      <tr style="background:#fef0e7;">
+        <td><strong>希爾排序</strong></td>
+        <td>隨機存取（gap 跳格）</td>
+        <td class="best">✓ <strong>必須</strong></td>
+        <td class="worst">✗ 不行</td>
+        <td>需要 a[pos − gap]，鏈結串列做不到「跳 gap 格」</td>
+      </tr>
+      <tr style="background:#eafaf1;">
+        <td><strong>合併排序</strong></td>
+        <td>可拆分 + 可合併</td>
+        <td>✓ 但需 $O(n)$ 額外空間</td>
+        <td class="best">✓ <strong>更佳！</strong> $O(1)$ 額外空間</td>
+        <td>鏈結串列 merge 只重接指標，不必複製 ★</td>
+      </tr>
+      <tr style="background:#fef0e7;">
+        <td><strong>快速排序</strong></td>
+        <td>雙向隨機存取（雙指標）</td>
+        <td class="best">✓ <strong>必須</strong></td>
+        <td class="worst">✗ 不行</td>
+        <td>partition 需要左右雙指標雙向走，singly-linked 無法</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:.82rem;color:var(--muted);margin-top:.4rem;">
+    <span class="pill" style="background:var(--accent3);color:#fff;">✓</span> 自然支援　
+    <span class="pill" style="background:#f39c12;color:#fff;">△</span> 可以但效能下降　
+    <span class="pill" style="background:var(--accent);color:#fff;">✗</span> 演算法的核心動作做不到，必須換結構
+  </p>
+
+  <h3>三個值得記住的關鍵案例</h3>
+
+  <div class="info-box warm">
+    <span class="info-label">為何「Binary Search 必須要 Array」？</span>
+    Binary search 每次跳到 <code>midpoint = (first+last)//2</code>。<br>
+    　・在 Array：用記憶體位址計算就能 $O(1)$ 取到 a[midpoint]<br>
+    　・在 Linked List：要走到第 midpoint 個 node 必須<strong>從頭走 midpoint 步</strong>，每次比較都要 $O(n)$<br><br>
+    這樣總時間就從 $O(\log n)$ 退化成 $O(n \log n)$，比循序搜尋還慢！結論：<strong>排序好的資料若以 Linked List 儲存，binary search 沒有意義</strong>，必須轉成 Array（或一開始就用 Array）。
+  </div>
+
+  <div class="info-box warm">
+    <span class="info-label">為何「Quick Sort 不能用 Singly Linked List」？</span>
+    Partition 需要兩個指標 <code>left_mark</code>、<code>right_mark</code> ——一個從左往右、一個<strong>從右往左</strong>走。<br><br>
+    但<strong>單向鏈結串列只能從左往右</strong>（每個 node 只有 <code>next</code>，沒有 <code>prev</code>），<code>right_mark--</code> 沒有有效率的實作方式。雖然 <em>doubly-linked list</em> 可以雙向走，但每次比較都要追指標、cache miss 嚴重，常數係數比 Array 大太多。<br><br>
+    這就是為什麼<strong>快速排序的教科書版本永遠用 Array 來講</strong>——partition 的優美只在 Array 上才成立。
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">為何「Merge Sort 反而<em>更</em>適合 Linked List」？★ 反直覺！</span>
+    Array 版的 merge sort 需要 $O(n)$ 額外空間存 L、R 子陣列。但<strong>Linked List 版的 merge 只需重接指標</strong>：把較小的 node 從左/右串列上「摘下」，接到結果串列尾端，<strong>完全不需要複製資料</strong>，額外空間只有 $O(1)$（幾個指標變數而已）。<br><br>
+    換句話說，merge sort 在 linked list 上反而<strong>更省記憶體、更乾淨</strong>。所以當資料天生就是 linked list 形式（functional 語言、stream pipeline、某些 OS 內部資料結構），merge sort 是首選排序法。<br><br>
+    <strong>實務小知識：</strong>Java 的 <code>java.util.LinkedList.sort()</code> 內部就是先轉成 Array 再用 mergesort，因為 cache 表現更好；但概念上 linked list mergesort 是經典範例。
+  </div>
+
+  <h3>Hash Table 自身的內部結構</h3>
+  <div class="info-box">
+    <span class="info-label">Hash Table 是什麼底層結構？答：仍然是 Array！</span>
+    Hash table <strong>本身的底層</strong>就是一個固定大小（$m$）的 Array：
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:.5rem;">
+      <div style="background:#fff;padding:.7rem;border-radius:6px;border:1px solid var(--card-border);">
+        <strong style="color:var(--bar-default);">線性 / 平方探查</strong><br>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;">純 Array of (key, value)；衝突時往別的 slot 找空位</span>
+      </div>
+      <div style="background:#fff;padding:.7rem;border-radius:6px;border:1px solid var(--card-border);">
+        <strong style="color:var(--accent2);">鏈結法 chaining</strong><br>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;">Array of <em>Linked List</em>；每個 slot 是一條 list 的 head</span>
+      </div>
+      <div style="background:#fff;padding:.7rem;border-radius:6px;border:1px solid var(--card-border);grid-column:1/-1;">
+        <strong style="color:var(--accent3);">Map ADT 實作（講義版本）</strong><br>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;">兩個平行 Array：<code>slots[]</code> 存 key、<code>data[]</code> 存 value，索引位置一一對齊</span>
+      </div>
+    </div>
+    這就是為何 Python <code>dict</code>、Java <code>HashMap</code> 內部都看得到 Array — 雜湊表離不開 random access。
+  </div>
+
+  <h3>選擇底層結構的決策樹</h3>
+  <div class="info-card">
+    <div class="ic-title">給定情境，該選哪種底層結構？</div>
+    <div style="font-size:.88rem;line-height:1.85;">
+      <strong>① 需要快速隨機存取 + 排序後重複搜尋？</strong><br>
+      &nbsp;&nbsp;→ <span class="pill pill-blue">Array</span> + 排序 $O(n\log n)$ 一次 + 二分搜尋 $O(\log n)$ 多次<br>
+      <br>
+      <strong>② 大量「鍵值對」key-value 查詢？</strong><br>
+      &nbsp;&nbsp;→ <span class="pill pill-purple">Hash Table</span>（底層 Array），平均 $O(1)$ 查詢<br>
+      <br>
+      <strong>③ 頻繁從中間插入/刪除元素？</strong><br>
+      &nbsp;&nbsp;→ <span class="pill pill-orange">Linked List</span>，必要時排序選 merge sort（$O(1)$ 額外空間版本）<br>
+      <br>
+      <strong>④ 資料天然有序、僅追加（如 log）？</strong><br>
+      &nbsp;&nbsp;→ 順序儲存（Array 或 file stream），搜尋用循序或二分皆可<br>
+      <br>
+      <strong>⑤ 記憶體吃緊、不能用額外 $O(n)$ 暫存？</strong><br>
+      &nbsp;&nbsp;→ 排序選 <strong>quick sort</strong>（in-place）；搜尋選 <strong>binary search</strong>（也 in-place）<br>
+      <br>
+      <strong>⑥ 必須穩定且效能保證 $O(n\log n)$？</strong><br>
+      &nbsp;&nbsp;→ <strong>merge sort</strong>，犧牲 $O(n)$ 空間換取保證
+    </div>
+  </div>
+
+  <div class="info-box warm">
+    <span class="info-label">本章其他資料結構的關係（前情提要）</span>
+    本書前幾章學過的資料結構，在本章扮演的角色：
+    <ul style="margin:.4rem 0;padding-left:1.4rem;font-size:.86rem;line-height:1.7;">
+      <li><strong>Stack：</strong>quick sort / merge sort 的<strong>遞迴呼叫堆疊</strong>就是 stack；如果改寫成 iterative 版本，會明確使用一個 stack 來模擬遞迴。</li>
+      <li><strong>Queue：</strong>iterative merge sort 的「bottom-up」版本可以用 queue 來組織待合併的子串列。</li>
+      <li><strong>Linked List：</strong>chaining 法雜湊表的 collision bucket、merge sort 的最佳載體。</li>
+      <li><strong>Tree：</strong>合併排序的遞迴呼叫關係本身就是一棵<strong>二元樹</strong>（PART 08 的視覺化就是把這棵樹畫出來）。</li>
+    </ul>
+    搜尋與排序不是孤立的章節——它們是建立在前面所有資料結構之上的<strong>應用範例</strong>。
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- REFERENCE -->
+<!-- ============================================================ -->
+<section id="reference">
+  <div class="section-number">REFERENCE · 比較總覽</div>
+  <h2>九個演算法一次比較</h2>
+
+  <h3>搜尋演算法</h3>
+  <table class="cmp-table">
+    <thead><tr><th>演算法</th><th>最佳</th><th>平均</th><th>最差</th><th>前置條件</th><th>空間</th></tr></thead>
+    <tbody>
+      <tr><td>循序搜尋</td><td>$O(1)$</td><td>$O(n)$</td><td class="worst">$O(n)$</td><td>無</td><td>$O(1)$</td></tr>
+      <tr><td>循序搜尋 (有序)</td><td>$O(1)$</td><td>$O(n/2)$</td><td>$O(n)$</td><td>已排序</td><td>$O(1)$</td></tr>
+      <tr><td>二分搜尋</td><td class="best">$O(1)$</td><td class="best">$O(\log n)$</td><td class="best">$O(\log n)$</td><td>已排序</td><td>$O(1)$</td></tr>
+      <tr><td>雜湊 (理想)</td><td class="best">$O(1)$</td><td class="best">$O(1)$</td><td class="worst">$O(n)$</td><td>有 hash 函數</td><td>$O(m)$</td></tr>
+    </tbody>
+  </table>
+
+  <h3>排序演算法</h3>
+  <table class="cmp-table">
+    <thead><tr><th>演算法</th><th>最佳</th><th>平均</th><th>最差</th><th>空間</th><th>穩定</th><th>就地</th></tr></thead>
+    <tbody>
+      <tr><td>氣泡排序 Bubble</td><td>$O(n)$ ★</td><td>$O(n^2)$</td><td class="worst">$O(n^2)$</td><td>$O(1)$</td><td>✓</td><td>✓</td></tr>
+      <tr><td>選擇排序 Selection</td><td>$O(n^2)$</td><td>$O(n^2)$</td><td class="worst">$O(n^2)$</td><td>$O(1)$</td><td>✗</td><td>✓</td></tr>
+      <tr><td>插入排序 Insertion</td><td class="best">$O(n)$</td><td>$O(n^2)$</td><td>$O(n^2)$</td><td>$O(1)$</td><td>✓</td><td>✓</td></tr>
+      <tr><td>希爾排序 Shell</td><td>$O(n\log n)$</td><td>$O(n^{3/2})$</td><td>$O(n^2)$</td><td>$O(1)$</td><td>✗</td><td>✓</td></tr>
+      <tr><td>合併排序 Merge</td><td class="best">$O(n\log n)$</td><td class="best">$O(n\log n)$</td><td class="best">$O(n\log n)$</td><td class="worst">$O(n)$</td><td>✓</td><td>✗</td></tr>
+      <tr><td>快速排序 Quick</td><td class="best">$O(n\log n)$</td><td class="best">$O(n\log n)$</td><td class="worst">$O(n^2)$</td><td>$O(\log n)$</td><td>✗</td><td>✓</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:.82rem;color:var(--muted);">★ 氣泡排序的 $O(n)$ 最佳情況需要使用<strong>「短路最佳化」</strong>（一輪沒交換就停）。</p>
+
+  <h3>選擇指南</h3>
+  <table class="cmp-table">
+    <thead><tr><th>情境</th><th>建議演算法</th><th>原因</th></tr></thead>
+    <tbody>
+      <tr><td>資料量小 (n &lt; 20)</td><td>插入排序</td><td>常數小、邏輯簡單</td></tr>
+      <tr><td>資料幾乎已排序</td><td>插入排序 / 氣泡 (短路)</td><td>$O(n)$ 最佳</td></tr>
+      <tr><td>需要穩定且效能保證</td><td>合併排序</td><td>始終 $O(n\log n)$、穩定</td></tr>
+      <tr><td>記憶體有限</td><td>希爾 / 快速排序</td><td>就地排序</td></tr>
+      <tr><td>實務通用、最快</td><td>快速排序 (含中位數策略)</td><td>常數最小</td></tr>
+      <tr><td>大量搜尋同份資料</td><td>排序後二分搜尋 / 雜湊表</td><td>建立成本攤提</td></tr>
+      <tr><td>需要 $O(1)$ 平均搜尋</td><td>雜湊表</td><td>用空間換時間</td></tr>
+    </tbody>
+  </table>
+
+  <h3>關鍵概念複習</h3>
+  <div class="info-box">
+    <span class="info-label">穩定 stable</span>
+    當兩個元素「比較相等」時，若排序後它們的<strong>相對順序不變</strong>，演算法就是穩定的。在多鍵排序（先按姓名再按部門）時很重要。
+  </div>
+  <div class="info-box">
+    <span class="info-label">就地 in-place</span>
+    僅使用 $O(1)$ 或 $O(\log n)$ 額外空間（除了輸入本身）的排序。merge sort 不是就地（需要 $O(n)$ 暫存），quick sort 是（只需遞迴堆疊）。
+  </div>
+  <div class="info-box green">
+    <span class="info-label">比較式排序的下界</span>
+    任何只透過「兩兩比較」來排序的演算法，最差情況都至少要 $\Omega(n\log n)$ 次比較。merge / heap / 平均下的 quick sort 都達到這個下界。要打破它必須使用「非比較」方法，例如 counting sort 或 radix sort（要求資料形態特定）。
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <p>Prepared for the Department of Applied Mathematics, NSYSU.<br>
+  Data Structures &amp; Algorithms — Chapter 5: Searching, Hashing &amp; Sorting.</p>
+</footer>
+
+
+<script>
+/* ============================================================
+   SHARED UTILITIES
+   ============================================================ */
+
+function $(id) { return document.getElementById(id); }
+
+function parseArr(text, len) {
+  const out = text.split(/[,\s]+/).map(s => parseInt(s, 10)).filter(n => !isNaN(n));
+  if (typeof len === 'number') return out.slice(0, len);
+  return out;
+}
+
+function range(a, b) { const r = []; for (let i = a; i < b; i++) r.push(i); return r; }
+function shuffleArr(arr) { const a = [...arr]; for (let i = a.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
+function randomArray(n, max) { const arr = []; for (let i = 0; i < n; i++) arr.push(Math.floor(Math.random() * (max - 5)) + 5); return arr; }
+
+/* ============================================================
+   BAR VISUALIZATION
+   ============================================================ */
+class BarVis {
+  constructor(canvasEl) {
+    this.canvas = canvasEl;
+    this.barsEl = canvasEl.querySelector('.bars-container');
+    this.bars = [];        // bars[origIdx] = {el, value, idxLabel}
+    this.pointers = {};    // {name: {el, idx}}
+    this.brackets = [];    // bracket bars (for merge/quick)
+    this.canvasH = 0;
+    this.canvasW = 0;
+    this.barWidth = 0;
+    this.gap = 4;
+    this.barAreaTop = 50;
+    this.barAreaBottom = 50;
+  }
+
+  setData(arr) {
+    this.barsEl.innerHTML = '';
+    this.bars = [];
+    this.pointers = {};        // clear stale pointer refs (DOM nodes were removed)
+    this.brackets = [];        // clear stale bracket refs
+    this.lastFrame = null;
+    this.values = [...arr];
+    this.origIdx = arr.map((_, i) => i);
+    const N = arr.length;
+    this.layout();
+
+    arr.forEach((v, i) => {
+      const el = document.createElement('div');
+      el.className = 'bar';
+      el.textContent = v;
+      this.barsEl.appendChild(el);
+
+      const lab = document.createElement('div');
+      lab.className = 'idx-label';
+      lab.textContent = i;
+      this.barsEl.appendChild(lab);
+
+      this.bars.push({el, value: v, idxLabel: lab});
+    });
+    this.applyLayout();
+  }
+
+  layout() {
+    this.canvasW = this.canvas.clientWidth;
+    this.canvasH = this.canvas.clientHeight;
+    const N = this.values ? this.values.length : 1;
+    const totalGap = (N - 1) * this.gap;
+    this.barWidth = Math.max(20, (this.canvasW - 20 - totalGap) / N);
+    this.startX = (this.canvasW - (N * this.barWidth + totalGap)) / 2;
+  }
+
+  positionFor(idx) { return this.startX + idx * (this.barWidth + this.gap); }
+
+  applyLayout() {
+    if (!this.values) return;
+    const maxV = Math.max(...this.values, 1);
+    const usableH = this.canvasH - this.barAreaTop - this.barAreaBottom;
+    for (let pos = 0; pos < this.values.length; pos++) {
+      const oi = this.origIdx[pos];
+      const bar = this.bars[oi];
+      bar.el.style.width = this.barWidth + 'px';
+      bar.el.style.left = this.positionFor(pos) + 'px';
+      bar.el.style.height = (bar.value / maxV * usableH + 22) + 'px';
+      bar.idxLabel.style.left = (this.positionFor(pos)) + 'px';
+      bar.idxLabel.style.width = this.barWidth + 'px';
+    }
+  }
+
+  applyFrame(frame) {
+    this.values = [...frame.arr];
+    if (frame.origIdx) this.origIdx = [...frame.origIdx];
+
+    const maxV = Math.max(...this.values, 1);
+    const usableH = this.canvasH - this.barAreaTop - this.barAreaBottom;
+
+    for (let pos = 0; pos < this.values.length; pos++) {
+      const oi = this.origIdx[pos];
+      const bar = this.bars[oi];
+      bar.value = this.values[pos];
+      bar.el.textContent = this.values[pos];
+      bar.el.style.left = this.positionFor(pos) + 'px';
+      bar.el.style.height = (bar.value / maxV * usableH + 22) + 'px';
+      bar.el.className = 'bar';
+
+      bar.idxLabel.style.left = this.positionFor(pos) + 'px';
+      bar.idxLabel.style.width = this.barWidth + 'px';
+      bar.idxLabel.className = 'idx-label';
+      bar.idxLabel.textContent = pos;
+    }
+
+    if (frame.faded) {
+      for (const pos of frame.faded) {
+        const oi = this.origIdx[pos];
+        if (this.bars[oi]) this.bars[oi].el.classList.add('faded');
+      }
+    }
+    if (frame.eliminated) {
+      for (const pos of frame.eliminated) {
+        const oi = this.origIdx[pos];
+        if (this.bars[oi]) this.bars[oi].el.classList.add('eliminated');
+      }
+    }
+    if (frame.sorted) {
+      for (const pos of frame.sorted) {
+        const oi = this.origIdx[pos];
+        if (this.bars[oi]) this.bars[oi].el.classList.add('sorted');
+      }
+    }
+    if (frame.highlights) {
+      for (const [posStr, type] of Object.entries(frame.highlights)) {
+        const pos = +posStr;
+        const oi = this.origIdx[pos];
+        if (this.bars[oi]) {
+          this.bars[oi].el.classList.add(type);
+          this.bars[oi].idxLabel.classList.add('highlight');
+        }
+      }
+    }
+
+    this.setPointers(frame.pointers || {});
+    this.setBrackets(frame.brackets || []);
+  }
+
+  setPointers(map) {
+    for (const name of Object.keys(this.pointers)) {
+      if (!(name in map)) {
+        this.pointers[name].el.style.opacity = '0';
+        setTimeout(() => { this.pointers[name].el.style.display = 'none'; }, 200);
+      }
+    }
+    for (const [name, info] of Object.entries(map)) {
+      let p = this.pointers[name];
+      if (!p) {
+        const el = document.createElement('div');
+        el.className = 'pointer ' + (info.cls || name);
+        el.innerHTML = '<div class="arrow"></div>' + (info.label || name);
+        this.barsEl.appendChild(el);
+        p = this.pointers[name] = {el, idx: info.idx};
+      }
+      p.el.style.display = 'block';
+      p.el.style.opacity = '1';
+      p.el.style.width = this.barWidth + 'px';
+      p.el.style.left = this.positionFor(info.idx) + 'px';
+      p.idx = info.idx;
+    }
+  }
+
+  setBrackets(arr) {
+    for (const b of this.brackets) b.remove();
+    this.brackets = [];
+    for (const br of arr) {
+      const el = document.createElement('div');
+      el.className = 'subarr-bracket' + (br.cls ? ' ' + br.cls : '');
+      el.style.left = (this.positionFor(br.from) - 2) + 'px';
+      el.style.width = ((br.to - br.from + 1) * (this.barWidth + this.gap) - this.gap + 4) + 'px';
+      el.style.top = (br.row || 0) * 16 + 8 + 'px';
+      this.barsEl.appendChild(el);
+      if (br.label) {
+        const lab = document.createElement('div');
+        lab.className = 'subarr-bracket-label';
+        lab.style.left = (this.positionFor(br.from) + 4) + 'px';
+        lab.style.top = ((br.row || 0) * 16 + 0) + 'px';
+        lab.textContent = br.label;
+        this.barsEl.appendChild(lab);
+        this.brackets.push(lab);
+      }
+      this.brackets.push(el);
+    }
+  }
+
+  resize() {
+    this.layout();
+    this.applyLayout();
+    if (this.lastFrame) this.applyFrame(this.lastFrame);
+  }
+}
+
+/* ============================================================
+   ANIMATOR
+   ============================================================ */
+class Animator {
+  constructor(opts) {
+    this.frames = [];
+    this.idx = 0;
+    this.playing = false;
+    this.timer = null;
+    this.onFrame = opts.onFrame;
+    this.onEnd = opts.onEnd;
+    this.getDelay = opts.getDelay;
+  }
+
+  setFrames(frames) {
+    this.stop();
+    this.frames = frames;
+    this.idx = 0;
+    if (frames.length) this.onFrame(frames[0], 0);
+  }
+
+  play() {
+    if (this.idx >= this.frames.length - 1) this.idx = 0;
+    this.playing = true;
+    this._tick();
+  }
+
+  pause() { this.playing = false; clearTimeout(this.timer); }
+  stop() { this.pause(); this.idx = 0; }
+
+  step() {
+    this.pause();
+    if (this.idx < this.frames.length - 1) {
+      this.idx++;
+      this.onFrame(this.frames[this.idx], this.idx);
+    }
+  }
+
+  reset() {
+    this.pause();
+    this.idx = 0;
+    if (this.frames.length) this.onFrame(this.frames[0], 0);
+  }
+
+  _tick() {
+    if (!this.playing) return;
+    if (this.idx >= this.frames.length - 1) {
+      this.playing = false;
+      if (this.onEnd) this.onEnd();
+      return;
+    }
+    this.idx++;
+    this.onFrame(this.frames[this.idx], this.idx);
+    this.timer = setTimeout(() => this._tick(), this.getDelay());
+  }
+}
+
+/* ============================================================
+   FRAME GENERATORS
+   ============================================================ */
+
+// --- Sequential Search ---
+function genSequentialSearch(arr, target) {
+  const frames = [];
+  let cmp = 0;
+  frames.push({arr:[...arr], origIdx:arr.map((_,i)=>i), highlights:{}, message:`目標：找出 ${target}`, stats:{cmp,pos:'—',result:'搜尋中...'}, pcLine:1});
+  for (let pos = 0; pos < arr.length; pos++) {
+    cmp++;
+    frames.push({arr:[...arr], origIdx:arr.map((_,i)=>i), highlights:{[pos]:'compare'}, message:`比較 a[${pos}]=${arr[pos]} 與目標 ${target}`, stats:{cmp,pos,result:'搜尋中...'}, pcLine:4});
+    if (arr[pos] === target) {
+      frames.push({arr:[...arr], origIdx:arr.map((_,i)=>i), highlights:{[pos]:'found'}, message:`★ 找到！a[${pos}] = ${target}`, stats:{cmp,pos,result:`True (位置 ${pos})`}, pcLine:5});
+      return frames;
+    }
+  }
+  frames.push({arr:[...arr], origIdx:arr.map((_,i)=>i), highlights:{}, faded:range(0,arr.length), message:`✗ 走完整個 list 沒找到 ${target}`, stats:{cmp,pos:'—',result:'False'}, pcLine:7});
+  return frames;
+}
+
+// --- Binary Search ---
+function genBinarySearch(arr, target) {
+  const sorted = [...arr].sort((a,b) => a - b);
+  const frames = [];
+  let cmp = 0;
+  let first = 0, last = sorted.length - 1;
+  const oi = sorted.map((_,i)=>i);
+  frames.push({arr:[...sorted], origIdx:oi, highlights:{}, pointers:{low:{idx:first,label:'first',cls:'low'},high:{idx:last,label:'last',cls:'high'}}, message:`對已排序陣列進行二分搜尋，目標 = ${target}`, stats:{cmp,low:first,high:last,mid:'—',result:'搜尋中...'}, pcLine:3});
+
+  while (first <= last) {
+    const midpoint = Math.floor((first + last) / 2);
+    cmp++;
+    const elimL = range(0, first);
+    const elimR = range(last+1, sorted.length);
+    frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'compare'}, eliminated:[...elimL,...elimR], pointers:{low:{idx:first,label:'first',cls:'low'},high:{idx:last,label:'last',cls:'high'},mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`midpoint = (${first}+${last})//2 = ${midpoint}，比較 a_list[${midpoint}] = ${sorted[midpoint]} 與 ${target}`, stats:{cmp,low:first,high:last,mid:midpoint,result:'搜尋中...'}, pcLine:5});
+
+    if (sorted[midpoint] === target) {
+      frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'found'}, eliminated:[...elimL,...elimR], pointers:{mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`★ 命中！a_list[${midpoint}] = ${target}`, stats:{cmp,low:first,high:last,mid:midpoint,result:`True (位置 ${midpoint})`}, pcLine:7});
+      return frames;
+    } else if (target < sorted[midpoint]) {
+      frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'compare'}, eliminated:[...elimL,...elimR,...range(midpoint,sorted.length)], pointers:{low:{idx:first,label:'first',cls:'low'},high:{idx:last,label:'last',cls:'high'},mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`${target} < ${sorted[midpoint]} → 右半全部排除，last = ${midpoint-1}`, stats:{cmp,low:first,high:last,mid:midpoint,result:'搜尋中...'}, pcLine:9});
+      last = midpoint - 1;
+    } else {
+      frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'compare'}, eliminated:[...elimL,...elimR,...range(0,midpoint+1)], pointers:{low:{idx:first,label:'first',cls:'low'},high:{idx:last,label:'last',cls:'high'},mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`${target} > ${sorted[midpoint]} → 左半全部排除，first = ${midpoint+1}`, stats:{cmp,low:first,high:last,mid:midpoint,result:'搜尋中...'}, pcLine:11});
+      first = midpoint + 1;
+    }
+  }
+  frames.push({arr:[...sorted], origIdx:oi, highlights:{}, eliminated:range(0,sorted.length), message:`✗ first (${first}) > last (${last})，沒找到 ${target}`, stats:{cmp,low:first,high:last,mid:'—',result:'False'}, pcLine:12});
+  return frames;
+}
+
+// --- Bubble Sort ---
+function genBubbleSort(initial) {
+  const frames = [];
+  const a = [...initial];
+  const N = a.length;
+  const oi = a.map((_,i)=>i);
+  let cmp = 0, swp = 0;
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:'初始陣列', stats:{cmp,swp,pass:0}, pcLine:1});
+  for (let i = N - 1; i > 0; i--) {
+    const sortedSet = range(i+1, N);
+    for (let j = 0; j < i; j++) {
+      cmp++;
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[j]:'compare',[j+1]:'compare'}, sorted:sortedSet, message:`pass ${N-i}: 比較 a[${j}]=${a[j]} 與 a[${j+1}]=${a[j+1]}`, stats:{cmp,swp,pass:N-i}, pcLine:4});
+      if (a[j] > a[j+1]) {
+        [a[j], a[j+1]] = [a[j+1], a[j]];
+        [oi[j], oi[j+1]] = [oi[j+1], oi[j]];
+        swp++;
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[j]:'swap',[j+1]:'swap'}, sorted:sortedSet, message:`${a[j+1]} > ${a[j]} → 交換`, stats:{cmp,swp,pass:N-i}, pcLine:5});
+      }
+    }
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(i, N), message:`pass ${N-i} 結束：第 ${N-i} 大元素已歸位 (a[${i}]=${a[i]})`, stats:{cmp,swp,pass:N-i}, pcLine:2});
+  }
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(0, N), message:`★ 排序完成！共 ${cmp} 次比較、${swp} 次交換`, stats:{cmp,swp,pass:N-1}, pcLine:1});
+  return frames;
+}
+
+// --- Selection Sort (lecture version: find min, place at front) ---
+function genSelectionSort(initial) {
+  const frames = [];
+  const a = [...initial];
+  const N = a.length;
+  const oi = a.map((_,i)=>i);
+  let cmp = 0, swp = 0;
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:'初始陣列', stats:{cmp,swp,minIdx:'—'}, pcLine:1});
+  for (let i = 0; i < N - 1; i++) {
+    // Lecture's exact init: min_idx = len(a_list) - 1
+    let minIdx = N - 1;
+    const sortedSet = range(0, i);
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{[minIdx]:'active'}, sorted:sortedSet, message:`pass ${i+1}: 從 a[${i}..${N-1}] 找最小值，依講義初始 min_idx = ${N-1}（最末端），a[${minIdx}]=${a[minIdx]}`, stats:{cmp,swp,minIdx}, pcLine:3});
+    for (let j = i; j < N; j++) {
+      cmp++;
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[minIdx]:'active',[j]:'compare'}, sorted:sortedSet, message:`比較 a[${j}]=${a[j]} 與目前最小 a[${minIdx}]=${a[minIdx]}`, stats:{cmp,swp,minIdx}, pcLine:5});
+      if (a[j] < a[minIdx]) {
+        minIdx = j;
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[minIdx]:'active'}, sorted:sortedSet, message:`更小！更新 min_idx = ${minIdx}（值 ${a[minIdx]}）`, stats:{cmp,swp,minIdx}, pcLine:6});
+      }
+    }
+    if (minIdx !== i) {
+      [a[i], a[minIdx]] = [a[minIdx], a[i]];
+      [oi[i], oi[minIdx]] = [oi[minIdx], oi[i]];
+      swp++;
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'swap',[minIdx]:'swap'}, sorted:sortedSet, message:`交換 a[${minIdx}] ↔ a[${i}]：最小值歸位到 a[${i}]`, stats:{cmp,swp,minIdx}, pcLine:8});
+    } else {
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'sorted'}, sorted:sortedSet, message:`min_idx == i，已在正確位置，無需交換`, stats:{cmp,swp,minIdx}, pcLine:7});
+    }
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(0, i+1), message:`pass ${i+1} 結束：a[${i}]=${a[i]} 已就位`, stats:{cmp,swp,minIdx:'—'}, pcLine:1});
+  }
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(0, N), message:`★ 排序完成！${cmp} 次比較、${swp} 次交換（最多 n−1 次）`, stats:{cmp,swp,minIdx:'—'}, pcLine:1});
+  return frames;
+}
+
+// --- Insertion Sort ---
+function genInsertionSort(initial) {
+  const frames = [];
+  const a = [...initial];
+  const N = a.length;
+  const oi = a.map((_,i)=>i);
+  let cmp = 0, sft = 0;
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:[0], message:'初始：a[0] 自成一個已排序區', stats:{cmp,sft,key:'—'}, pcLine:1});
+  for (let i = 1; i < N; i++) {
+    const cur_val = a[i];
+    const oiKey = oi[i];
+    let cur_pos = i;
+    const sortedSet = range(0, i);
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, sorted:sortedSet, message:`取出 cur_val = a_list[${i}] = ${cur_val}, cur_pos = ${i}`, stats:{cmp,sft,key:cur_val}, pcLine:3});
+    while (cur_pos > 0 && a[cur_pos-1] > cur_val) {
+      cmp++;
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos-1]:'compare',[cur_pos]:'key'}, sorted:sortedSet, message:`比較 a_list[${cur_pos-1}]=${a[cur_pos-1]} 與 cur_val=${cur_val}：${a[cur_pos-1]} > ${cur_val}`, stats:{cmp,sft,key:cur_val}, pcLine:5});
+      a[cur_pos] = a[cur_pos-1];
+      oi[cur_pos] = oi[cur_pos-1];
+      sft++;
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'swap'}, sorted:sortedSet, message:`位移 a_list[${cur_pos-1}] → a_list[${cur_pos}]，cur_pos = ${cur_pos-1}`, stats:{cmp,sft,key:cur_val}, pcLine:6});
+      cur_pos--;
+    }
+    if (cur_pos > 0) {
+      cmp++;
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos-1]:'compare'}, sorted:sortedSet, message:`比較 a_list[${cur_pos-1}]=${a[cur_pos-1]} 與 cur_val=${cur_val}：${a[cur_pos-1]} ≤ ${cur_val}，停止位移`, stats:{cmp,sft,key:cur_val}, pcLine:5});
+    }
+    a[cur_pos] = cur_val;
+    oi[cur_pos] = oiKey;
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'sorted'}, sorted:range(0, i+1), message:`把 cur_val=${cur_val} 插入 a_list[${cur_pos}]`, stats:{cmp,sft,key:cur_val}, pcLine:8});
+  }
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(0, N), message:`★ 排序完成！${cmp} 次比較、${sft} 次位移`, stats:{cmp,sft,key:'—'}, pcLine:1});
+  return frames;
+}
+
+// --- Shell Sort ---
+function genShellSort(initial, gapSeq) {
+  const frames = [];
+  const a = [...initial];
+  const N = a.length;
+  const oi = a.map((_,i)=>i);
+  let cmp = 0, swp = 0;
+  let gaps;
+  if (gapSeq === '2k-1') {
+    // Hibbard 序列：2^k − 1 = 1, 3, 7, 15, 31, ... 從最大可用值往下用
+    gaps = [];
+    let k = 1;
+    while ((1 << k) - 1 <= N) k++;
+    for (let i = k - 1; i >= 1; i--) gaps.push((1 << i) - 1);
+  } else {
+    gaps = [];
+    let g = Math.floor(N / 2);
+    while (g > 0) { gaps.push(g); g = Math.floor(g / 2); }
+  }
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`gap 序列：${gaps.join(' → ')}`, stats:{cmp,swp,gap:'—'}, pcLine:2});
+  for (const gap of gaps) {
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`▸ 開始 gap = ${gap} 階段`, stats:{cmp,swp,gap}, pcLine:3});
+    for (let i = gap; i < N; i++) {
+      const key = a[i];
+      const oiKey = oi[i];
+      let pos = i;
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, message:`gap=${gap}: 取出 key = a[${i}] = ${key}，與 a[${i-gap}], a[${i-2*gap}], ... 比較`, stats:{cmp,swp,gap}, pcLine:5});
+      while (pos >= gap && a[pos-gap] > key) {
+        cmp++;
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[pos-gap]:'compare',[pos]:'key'}, message:`比較 a[${pos-gap}]=${a[pos-gap]} > key=${key}，要位移`, stats:{cmp,swp,gap}, pcLine:6});
+        a[pos] = a[pos-gap];
+        oi[pos] = oi[pos-gap];
+        swp++;
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[pos]:'swap'}, message:`位移 a[${pos-gap}] → a[${pos}] (跨 ${gap} 格)`, stats:{cmp,swp,gap}, pcLine:7});
+        pos -= gap;
+      }
+      if (pos >= gap) {
+        cmp++;
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[pos-gap]:'compare'}, message:`a[${pos-gap}]=${a[pos-gap]} ≤ key=${key}，停止`, stats:{cmp,swp,gap}, pcLine:6});
+      }
+      a[pos] = key;
+      oi[pos] = oiKey;
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[pos]:'sorted'}, message:`插入 key=${key} 至 a[${pos}]`, stats:{cmp,swp,gap}, pcLine:9});
+    }
+  }
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(0, N), message:`★ 排序完成！${cmp} 次比較、${swp} 次位移`, stats:{cmp,swp,gap:'—'}, pcLine:1});
+  return frames;
+}
+
+// --- Merge Sort ---
+function genMergeSort(initial) {
+  const frames = [];
+  const a = [...initial];
+  const N = a.length;
+  const oi = a.map((_,i)=>i);
+  let cmp = 0, wr = 0;
+  const treeNodes = []; // {level, from, to, status}
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:'初始：呼叫 merge_sort(0, n-1)', stats:{cmp,wr,phase:'初始化'}, brackets:[{from:0,to:N-1,row:0,label:`[0..${N-1}]`}], tree:[{level:0,from:0,to:N-1,status:'active'}], pcLine:1});
+
+  function snapshotTree(extras) {
+    return treeNodes.map(n => ({...n, status: extras[`${n.from}-${n.to}`] || n.status}));
+  }
+
+  function mergeSortHelper(lo, hi, level) {
+    if (lo >= hi) {
+      treeNodes.push({level, from:lo, to:hi, status:'done'});
+      return;
+    }
+    const mid = Math.floor((lo + hi) / 2);
+    treeNodes.push({level, from:lo, to:hi, status:'splitting'});
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`split [${lo}..${hi}] → [${lo}..${mid}] | [${mid+1}..${hi}]`, stats:{cmp,wr,phase:`split level ${level}`}, brackets:[{from:lo,to:mid,row:Math.min(level,4),label:'L',cls:'left'},{from:mid+1,to:hi,row:Math.min(level,4),label:'R',cls:'right'}], tree:[...treeNodes], pcLine:3});
+
+    mergeSortHelper(lo, mid, level + 1);
+    mergeSortHelper(mid + 1, hi, level + 1);
+
+    // Merge step
+    const Lvals = a.slice(lo, mid + 1);
+    const Loi = oi.slice(lo, mid + 1);
+    const Rvals = a.slice(mid + 1, hi + 1);
+    const Roi = oi.slice(mid + 1, hi + 1);
+    let i = 0, j = 0, k = lo;
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`▸ 開始合併 L=[${Lvals.join(',')}] 與 R=[${Rvals.join(',')}]`, stats:{cmp,wr,phase:`merge ${lo}..${hi}`}, brackets:[{from:lo,to:mid,row:0,label:'L',cls:'left'},{from:mid+1,to:hi,row:0,label:'R',cls:'right'}], tree:snapshotTree({[`${lo}-${hi}`]:'merging'}), pcLine:7});
+    while (i < Lvals.length && j < Rvals.length) {
+      cmp++;
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[lo+i]:'compare',[mid+1+j]:'compare'}, message:`比較 L[${i}]=${Lvals[i]} vs R[${j}]=${Rvals[j]}`, stats:{cmp,wr,phase:`merge ${lo}..${hi}`}, brackets:[{from:lo,to:mid,row:0,label:'L',cls:'left'},{from:mid+1,to:hi,row:0,label:'R',cls:'right'}], tree:snapshotTree({[`${lo}-${hi}`]:'merging'}), pcLine:10});
+      if (Lvals[i] <= Rvals[j]) {
+        a[k] = Lvals[i];
+        oi[k] = Loi[i];
+        wr++;
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[k]:'swap'}, message:`L[${i}]=${Lvals[i]} ≤ R[${j}]=${Rvals[j]} → 寫入 a[${k}] = ${Lvals[i]}`, stats:{cmp,wr,phase:`merge ${lo}..${hi}`}, brackets:[{from:lo,to:mid,row:0,label:'L',cls:'left'},{from:mid+1,to:hi,row:0,label:'R',cls:'right'}], tree:snapshotTree({[`${lo}-${hi}`]:'merging'}), pcLine:11});
+        i++;
+      } else {
+        a[k] = Rvals[j];
+        oi[k] = Roi[j];
+        wr++;
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[k]:'swap'}, message:`L[${i}]=${Lvals[i]} > R[${j}]=${Rvals[j]} → 寫入 a[${k}] = ${Rvals[j]}`, stats:{cmp,wr,phase:`merge ${lo}..${hi}`}, brackets:[{from:lo,to:mid,row:0,label:'L',cls:'left'},{from:mid+1,to:hi,row:0,label:'R',cls:'right'}], tree:snapshotTree({[`${lo}-${hi}`]:'merging'}), pcLine:13});
+        j++;
+      }
+      k++;
+    }
+    while (i < Lvals.length) {
+      a[k] = Lvals[i]; oi[k] = Loi[i]; wr++; k++; i++;
+    }
+    while (j < Rvals.length) {
+      a[k] = Rvals[j]; oi[k] = Roi[j]; wr++; k++; j++;
+    }
+    treeNodes.find(n => n.from === lo && n.to === hi).status = 'done';
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(lo, hi+1), message:`✓ [${lo}..${hi}] 合併完成 → [${a.slice(lo,hi+1).join(',')}]`, stats:{cmp,wr,phase:`merged ${lo}..${hi}`}, brackets:[{from:lo,to:hi,row:0,label:`done`,cls:'merging'}], tree:[...treeNodes], pcLine:14});
+  }
+
+  mergeSortHelper(0, N - 1, 0);
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(0, N), message:`★ 排序完成！${cmp} 次比較、${wr} 次寫入`, stats:{cmp,wr,phase:'完成'}, tree:[...treeNodes], pcLine:1});
+  return frames;
+}
+
+// --- Quick Sort ---
+function genQuickSort(initial, pivotMode) {
+  const frames = [];
+  const a = [...initial];
+  const N = a.length;
+  const oi = a.map((_,i)=>i);
+  let cmp = 0, swp = 0;
+  const finalSorted = new Set();
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:'初始：呼叫 quick_sort(0, n-1)', stats:{cmp,swp,pivot:'—',rangeStr:`[0..${N-1}]`,lm:'—',rm:'—'}, brackets:[{from:0,to:N-1,row:0,label:`[0..${N-1}]`}], pcLine:1});
+
+  function partition(first, last) {
+    let pivotIdx = first;
+    if (pivotMode === 'median' && last - first >= 2) {
+      const mid = Math.floor((first + last) / 2);
+      const candidates = [{i:first, v:a[first]}, {i:mid, v:a[mid]}, {i:last, v:a[last]}].sort((x,y) => x.v - y.v);
+      pivotIdx = candidates[1].i;
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[first]:'compare',[mid]:'compare',[last]:'compare'}, message:`三者取中：a[${first}]=${a[first]}, a[${mid}]=${a[mid]}, a[${last}]=${a[last]} → 中位數是 a[${pivotIdx}]=${a[pivotIdx]}`, stats:{cmp,swp,pivot:a[pivotIdx],rangeStr:`[${first}..${last}]`,lm:'—',rm:'—'}, brackets:[{from:first,to:last,row:0,label:`partition`}], pcLine:2, sorted:[...finalSorted]});
+      if (pivotIdx !== first) {
+        [a[first], a[pivotIdx]] = [a[pivotIdx], a[first]];
+        [oi[first], oi[pivotIdx]] = [oi[pivotIdx], oi[first]];
+        swp++;
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[first]:'pivot'}, message:`把中位數搬到 a[${first}]`, stats:{cmp,swp,pivot:a[first],rangeStr:`[${first}..${last}]`,lm:'—',rm:'—'}, brackets:[{from:first,to:last,row:0,label:`partition`}], pcLine:2, sorted:[...finalSorted]});
+      }
+    }
+    const pivot = a[first];
+    let L = first + 1, R = last;
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{[first]:'pivot'}, pointers:{lm:{idx:L,label:'L',cls:'left-mark'},rm:{idx:R,label:'R',cls:'right-mark'}}, message:`pivot = a[${first}] = ${pivot}，初始 L = ${L}, R = ${R}`, stats:{cmp,swp,pivot,rangeStr:`[${first}..${last}]`,lm:L,rm:R}, brackets:[{from:first,to:last,row:0,label:`partition`}], pcLine:3, sorted:[...finalSorted]});
+
+    let done = false;
+    while (!done) {
+      while (L <= R && a[L] <= pivot) {
+        cmp++;
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[first]:'pivot',[L]:'compare'}, pointers:{lm:{idx:L,label:'L',cls:'left-mark'},rm:{idx:R,label:'R',cls:'right-mark'}}, message:`a[L=${L}]=${a[L]} ≤ pivot=${pivot} → L 右移`, stats:{cmp,swp,pivot,rangeStr:`[${first}..${last}]`,lm:L,rm:R}, brackets:[{from:first,to:last,row:0}], pcLine:6, sorted:[...finalSorted]});
+        L++;
+      }
+      if (L <= R) {
+        cmp++;
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[first]:'pivot',[L]:'compare'}, pointers:{lm:{idx:L,label:'L',cls:'left-mark'},rm:{idx:R,label:'R',cls:'right-mark'}}, message:`a[L=${L}]=${a[L]} > pivot=${pivot} → L 停下`, stats:{cmp,swp,pivot,rangeStr:`[${first}..${last}]`,lm:L,rm:R}, brackets:[{from:first,to:last,row:0}], pcLine:6, sorted:[...finalSorted]});
+      }
+      while (L <= R && a[R] >= pivot) {
+        cmp++;
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[first]:'pivot',[R]:'compare'}, pointers:{lm:{idx:L,label:'L',cls:'left-mark'},rm:{idx:R,label:'R',cls:'right-mark'}}, message:`a[R=${R}]=${a[R]} ≥ pivot=${pivot} → R 左移`, stats:{cmp,swp,pivot,rangeStr:`[${first}..${last}]`,lm:L,rm:R}, brackets:[{from:first,to:last,row:0}], pcLine:8, sorted:[...finalSorted]});
+        R--;
+      }
+      if (L <= R) {
+        cmp++;
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[first]:'pivot',[R]:'compare'}, pointers:{lm:{idx:L,label:'L',cls:'left-mark'},rm:{idx:R,label:'R',cls:'right-mark'}}, message:`a[R=${R}]=${a[R]} < pivot=${pivot} → R 停下`, stats:{cmp,swp,pivot,rangeStr:`[${first}..${last}]`,lm:L,rm:R}, brackets:[{from:first,to:last,row:0}], pcLine:8, sorted:[...finalSorted]});
+      }
+      if (R < L) {
+        done = true;
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[first]:'pivot'}, pointers:{lm:{idx:L,label:'L',cls:'left-mark'},rm:{idx:R,label:'R',cls:'right-mark'}}, message:`R(${R}) < L(${L})，停止迴圈`, stats:{cmp,swp,pivot,rangeStr:`[${first}..${last}]`,lm:L,rm:R}, brackets:[{from:first,to:last,row:0}], pcLine:11, sorted:[...finalSorted]});
+      } else {
+        [a[L], a[R]] = [a[R], a[L]];
+        [oi[L], oi[R]] = [oi[R], oi[L]];
+        swp++;
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[first]:'pivot',[L]:'swap',[R]:'swap'}, pointers:{lm:{idx:L,label:'L',cls:'left-mark'},rm:{idx:R,label:'R',cls:'right-mark'}}, message:`交換 a[${L}] ↔ a[${R}]`, stats:{cmp,swp,pivot,rangeStr:`[${first}..${last}]`,lm:L,rm:R}, brackets:[{from:first,to:last,row:0}], pcLine:13, sorted:[...finalSorted]});
+      }
+    }
+    [a[first], a[R]] = [a[R], a[first]];
+    [oi[first], oi[R]] = [oi[R], oi[first]];
+    swp++;
+    finalSorted.add(R);
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{[R]:'sorted'}, message:`pivot 與 a[R=${R}] 交換 → pivot 歸位 a[${R}] = ${pivot}`, stats:{cmp,swp,pivot,rangeStr:`[${first}..${last}]`,lm:'—',rm:'—'}, brackets:[{from:first,to:last,row:0}], pcLine:14, sorted:[...finalSorted]});
+    return R;
+  }
+
+  function quickHelper(first, last) {
+    if (first >= last) {
+      if (first === last) finalSorted.add(first);
+      return;
+    }
+    const split = partition(first, last);
+    quickHelper(first, split - 1);
+    quickHelper(split + 1, last);
+  }
+  quickHelper(0, N - 1);
+  for (let i = 0; i < N; i++) finalSorted.add(i);
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(0, N), message:`★ 排序完成！${cmp} 次比較、${swp} 次交換`, stats:{cmp,swp,pivot:'—',rangeStr:'—',lm:'—',rm:'—'}, pcLine:1});
+  return frames;
+}
+
+
+/* ============================================================
+   GENERIC WIRING HELPER FOR FRAME-BASED ALGORITHM SECTIONS
+   ============================================================ */
+function wireSection(prefix, opts) {
+  // canvas IDs follow pattern "canvas-<short>"; allow opts.canvasId override
+  const canvas = $(opts.canvasId || ('canvas-' + prefix));
+  if (!canvas) { console.warn('Canvas not found for prefix', prefix); return null; }
+
+  const playBtn  = $(prefix + 'Play');
+  const stepBtn  = $(prefix + 'Step');
+  const resetBtn = $(prefix + 'Reset');
+  const speed    = $(prefix + 'Speed');
+  const status   = $(prefix + 'Status');
+  const codeEl   = $(prefix + 'Code');
+
+  const vis = new BarVis(canvas);
+  vis.setData(opts.initialArr);
+
+  const animator = new Animator({
+    onFrame: (frame, i) => {
+      vis.applyFrame(frame);
+      vis.lastFrame = frame;
+      if (frame.message) status.textContent = frame.message;
+      if (opts.renderStats) opts.renderStats(frame.stats || {});
+      // pseudo-code highlight
+      if (codeEl) {
+        codeEl.querySelectorAll('.line').forEach(ln => ln.classList.remove('active'));
+        if (frame.pcLine != null) {
+          const ln = codeEl.querySelector(`.line[data-l="${frame.pcLine}"]`);
+          if (ln) ln.classList.add('active');
+        }
+      }
+      // tree (merge sort)
+      if (opts.renderTree && frame.tree) opts.renderTree(frame.tree);
+      // play button label
+      if (playBtn) playBtn.textContent = animator.playing ? '⏸ 暫停' : '▶ 開始';
+    },
+    onEnd: () => { if (playBtn) playBtn.textContent = '▶ 重播'; },
+    getDelay: () => speed ? +speed.value : 500
+  });
+
+  function regen() {
+    const arr = opts.getArr();
+    vis.setData(arr);
+    const frames = opts.gen(arr);
+    animator.setFrames(frames);
+    if (playBtn) playBtn.textContent = '▶ 開始';
+  }
+
+  if (playBtn) playBtn.onclick = () => {
+    if (animator.playing) { animator.pause(); playBtn.textContent = '▶ 繼續'; }
+    else { animator.play(); playBtn.textContent = '⏸ 暫停'; }
+  };
+  if (stepBtn)  stepBtn.onclick  = () => { animator.step(); if (playBtn) playBtn.textContent = '▶ 繼續'; };
+  if (resetBtn) resetBtn.onclick = () => { animator.reset(); if (playBtn) playBtn.textContent = '▶ 開始'; };
+
+  return { vis, animator, regen };
+}
+
+/* ============================================================
+   SECTION INITIALIZERS
+   ============================================================ */
+
+// --- 01: Sequential Search ---
+function initSeqSearch() {
+  const ctx = wireSection('seq', {
+    initialArr: parseArr($('seqArrInput').value),
+    getArr: () => parseArr($('seqArrInput').value),
+    gen: (arr) => genSequentialSearch(arr, parseInt($('seqTarget').value)),
+    renderStats: (s) => {
+      $('seqCmp').textContent = s.cmp ?? 0;
+      $('seqPos').textContent = s.pos ?? '—';
+      const r = $('seqResult');
+      const res = s.result || '';
+      if (res.startsWith('True'))      { r.textContent = '✓ ' + res; r.style.color = 'var(--bar-found)'; }
+      else if (res === 'False')        { r.textContent = '✗ False (未找到)'; r.style.color = 'var(--accent)'; }
+      else                              { r.textContent = res || '—'; r.style.color = ''; }
+    }
+  });
+  if (!ctx) return;
+  $('seqApply').onclick   = () => ctx.regen();
+  $('seqArrInput').addEventListener('change', () => ctx.regen());
+  $('seqTarget').addEventListener('change', () => ctx.regen());
+  ctx.regen();
+  return ctx;
+}
+
+// --- 02: Binary Search ---
+function initBinSearch() {
+  const ctx = wireSection('bin', {
+    initialArr: parseArr($('binArrInput').value).slice().sort((a,b)=>a-b),
+    getArr: () => parseArr($('binArrInput').value).slice().sort((a,b)=>a-b),
+    gen: (arr) => genBinarySearch(arr, parseInt($('binTarget').value)),
+    renderStats: (s) => {
+      $('binCmp').textContent = s.cmp ?? 0;
+      $('binLow').textContent  = s.low  ?? '—';
+      $('binHigh').textContent = s.high ?? '—';
+      $('binMid').textContent  = s.mid  ?? '—';
+      const r = $('binResult');
+      const res = s.result || '';
+      if (res.startsWith('True'))      { r.textContent = '✓ ' + res; r.style.color = 'var(--bar-found)'; }
+      else if (res === 'False')        { r.textContent = '✗ False (未找到)'; r.style.color = 'var(--accent)'; }
+      else                              { r.textContent = res || '—'; r.style.color = ''; }
+    }
+  });
+  if (!ctx) return;
+  $('binApply').onclick = () => {
+    // Sort the input visibly
+    const sorted = parseArr($('binArrInput').value).slice().sort((a,b)=>a-b);
+    $('binArrInput').value = sorted.join(', ');
+    ctx.regen();
+  };
+  $('binArrInput').addEventListener('change', () => ctx.regen());
+  $('binTarget').addEventListener('change', () => ctx.regen());
+  // sort initial input field
+  const init = parseArr($('binArrInput').value).slice().sort((a,b)=>a-b);
+  $('binArrInput').value = init.join(', ');
+  ctx.regen();
+  return ctx;
+}
+
+// --- 03: Hashing (interactive, NOT frame-based) ---
+function initHashing() {
+  const M = 11;
+  const wrap = $('hashTable');
+  let strategy = 'linear';
+  let table = new Array(M).fill(null);    // for linear probing: number or null
+  let chain = Array.from({length: M}, () => []); // for chaining: list of numbers per slot
+  let highlightSlot = -1;
+  let highlightCls = '';
+  let probedSlots = []; // recently visited slots
+  let opCount = 0;
+
+  function buildTable() {
+    wrap.innerHTML = '';
+    for (let i = 0; i < M; i++) {
+      const slot = document.createElement('div');
+      slot.className = 'hash-slot';
+      slot.dataset.idx = i;
+      const idxEl = document.createElement('div');
+      idxEl.className = 'slot-idx';
+      idxEl.textContent = i;
+      const valEl = document.createElement('div');
+      valEl.className = 'slot-val';
+      valEl.textContent = '—';
+      const chainEl = document.createElement('div');
+      chainEl.className = 'hash-chain';
+      slot.appendChild(idxEl);
+      slot.appendChild(valEl);
+      slot.appendChild(chainEl);
+      slot.classList.add('empty');
+      wrap.appendChild(slot);
+    }
+  }
+
+  function refresh() {
+    const slots = wrap.children;
+    for (let i = 0; i < M; i++) {
+      const slot = slots[i];
+      slot.className = 'hash-slot';
+      const valEl = slot.querySelector('.slot-val');
+      const chainEl = slot.querySelector('.hash-chain');
+      chainEl.innerHTML = '';
+      if (strategy === 'linear') {
+        if (table[i] != null) { valEl.textContent = table[i]; }
+        else { valEl.textContent = '—'; slot.classList.add('empty'); }
+      } else {
+        // chain
+        if (chain[i].length === 0) { valEl.textContent = '—'; slot.classList.add('empty'); }
+        else {
+          valEl.textContent = chain[i][0];
+          for (let k = 1; k < chain[i].length; k++) {
+            const node = document.createElement('div');
+            node.className = 'chain-node';
+            node.textContent = chain[i][k];
+            chainEl.appendChild(node);
+          }
+        }
+      }
+      // apply highlight
+      if (probedSlots.includes(i)) slot.classList.add('searching');
+    }
+    if (highlightSlot >= 0 && highlightCls) {
+      slots[highlightSlot].classList.remove('empty','searching');
+      slots[highlightSlot].classList.add(highlightCls);
+    }
+    // stats
+    let used;
+    if (strategy === 'linear') used = table.filter(x => x != null).length;
+    else used = chain.reduce((s, c) => s + (c.length > 0 ? 1 : 0), 0);
+    $('hashUsed').textContent = `${used} / ${M}`;
+    let load;
+    if (strategy === 'linear') load = used / M;
+    else load = chain.reduce((s,c)=>s+c.length,0) / M;
+    $('hashLoad').textContent = load.toFixed(2);
+    $('hashOps').textContent = opCount;
+  }
+
+  function setStatus(msg) { $('hashStatus').textContent = msg; }
+
+  function clearHighlights() {
+    highlightSlot = -1; highlightCls = ''; probedSlots = [];
+  }
+
+  async function animate(steps) {
+    for (const s of steps) {
+      Object.assign({highlightSlot, highlightCls, probedSlots}, s);
+      if ('highlightSlot' in s) highlightSlot = s.highlightSlot;
+      if ('highlightCls' in s) highlightCls = s.highlightCls;
+      if ('probedSlots' in s) probedSlots = s.probedSlots;
+      if ('msg' in s) setStatus(s.msg);
+      if ('table' in s) table = s.table;
+      if ('chain' in s) chain = s.chain;
+      refresh();
+      await new Promise(r => setTimeout(r, 600));
+    }
+  }
+
+  async function insert(val) {
+    if (isNaN(val)) return;
+    opCount = 0;
+    clearHighlights();
+    const h = ((val % M) + M) % M;
+    if (strategy === 'linear') {
+      const probed = [];
+      let i = h;
+      let steps = 0;
+      while (steps < M) {
+        opCount++;
+        probed.push(i);
+        if (table[i] == null) {
+          await animate([
+            {msg: `h(${val}) = ${val} mod ${M} = ${h}，probe slot ${i}`, highlightSlot: i, highlightCls: 'searching', probedSlots: [...probed]},
+            {msg: `slot ${i} 為空 → 插入 ${val}`, highlightSlot: i, highlightCls: 'placed', probedSlots: probed.slice(0,-1), table: (() => { const t=[...table]; t[i]=val; return t; })()}
+          ]);
+          return;
+        }
+        if (table[i] === val) {
+          await animate([{msg: `slot ${i} 已是 ${val}（重複）`, highlightSlot: i, highlightCls: 'collision', probedSlots: probed}]);
+          return;
+        }
+        await animate([{msg: `slot ${i} 被 ${table[i]} 佔用 → 線性探查下一個`, highlightSlot: i, highlightCls: 'collision', probedSlots: [...probed]}]);
+        i = (i + 1) % M;
+        steps++;
+      }
+      setStatus('表已滿，無法插入');
+    } else {
+      // chain
+      opCount++;
+      const c = [...chain[h]];
+      if (c.includes(val)) {
+        await animate([{msg: `slot ${h} 的鏈結串列已含 ${val}（重複）`, highlightSlot: h, highlightCls: 'collision'}]);
+        return;
+      }
+      const newChain = chain.map((x,idx) => idx === h ? [...x, val] : x);
+      await animate([
+        {msg: `h(${val}) = ${h}，插入 slot ${h} 的鏈結串列`, highlightSlot: h, highlightCls: 'searching'},
+        {msg: `slot ${h} 已加入 ${val}（鏈長 ${newChain[h].length}）`, highlightSlot: h, highlightCls: 'placed', chain: newChain}
+      ]);
+    }
+  }
+
+  async function search(val) {
+    if (isNaN(val)) return;
+    opCount = 0;
+    clearHighlights();
+    const h = ((val % M) + M) % M;
+    if (strategy === 'linear') {
+      let i = h;
+      let steps = 0;
+      const probed = [];
+      while (steps < M) {
+        opCount++;
+        probed.push(i);
+        if (table[i] == null) {
+          await animate([{msg: `slot ${i} 為空 → 找不到 ${val}`, highlightSlot: i, highlightCls: 'collision', probedSlots: probed.slice(0,-1)}]);
+          return;
+        }
+        if (table[i] === val) {
+          await animate([{msg: `✓ 在 slot ${i} 找到 ${val}！比較了 ${opCount} 次`, highlightSlot: i, highlightCls: 'found', probedSlots: probed.slice(0,-1)}]);
+          return;
+        }
+        await animate([{msg: `slot ${i} = ${table[i]} ≠ ${val}，繼續探查`, highlightSlot: i, highlightCls: 'searching', probedSlots: [...probed]}]);
+        i = (i + 1) % M;
+        steps++;
+      }
+      setStatus(`找不到 ${val}（已掃過整個表）`);
+    } else {
+      const c = chain[h];
+      for (let k = 0; k < c.length; k++) {
+        opCount++;
+        if (c[k] === val) {
+          await animate([{msg: `✓ 在 slot ${h} 鏈結串列第 ${k+1} 位找到 ${val}（比較 ${opCount} 次）`, highlightSlot: h, highlightCls: 'found'}]);
+          return;
+        }
+      }
+      opCount = Math.max(opCount, 1);
+      await animate([{msg: `slot ${h} 的鏈結串列中沒有 ${val}`, highlightSlot: h, highlightCls: 'collision'}]);
+    }
+  }
+
+  buildTable();
+  refresh();
+
+  $('hashInsert').onclick = () => insert(parseInt($('hashVal').value));
+  $('hashSearch').onclick = () => search(parseInt($('hashVal').value));
+  $('hashClear').onclick = () => {
+    table = new Array(M).fill(null);
+    chain = Array.from({length: M}, () => []);
+    opCount = 0;
+    clearHighlights();
+    refresh();
+    setStatus('已清空雜湊表');
+  };
+  $('hashBatchInsert').onclick = async () => {
+    const arr = parseArr($('hashBatch').value);
+    for (const v of arr) {
+      await insert(v);
+      await new Promise(r => setTimeout(r, 200));
+    }
+  };
+  // strategy buttons
+  document.querySelectorAll('#hashing .preset-btn[data-strategy]').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('#hashing .preset-btn[data-strategy]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      strategy = btn.dataset.strategy;
+      // clear table when switching for clarity
+      table = new Array(M).fill(null);
+      chain = Array.from({length: M}, () => []);
+      opCount = 0;
+      clearHighlights();
+      refresh();
+      setStatus(`已切換為「${strategy === 'linear' ? '線性探查' : '鏈結法'}」並清空表`);
+    };
+  });
+}
+
+// --- 04: Bubble Sort ---
+function initBubble() {
+  const ctx = wireSection('bubble', {
+    initialArr: parseArr($('bubbleArrInput').value),
+    getArr: () => parseArr($('bubbleArrInput').value),
+    gen: (arr) => genBubbleSort(arr),
+    renderStats: (s) => {
+      $('bubbleCmp').textContent  = s.cmp ?? 0;
+      $('bubbleSwp').textContent  = s.swp ?? 0;
+      $('bubblePass').textContent = s.pass ?? 0;
+    }
+  });
+  if (!ctx) return;
+  $('bubbleApply').onclick   = () => ctx.regen();
+  $('bubbleShuffle').onclick = () => {
+    const arr = randomArray(10, 99);
+    $('bubbleArrInput').value = arr.join(', ');
+    ctx.regen();
+  };
+  $('bubbleArrInput').addEventListener('change', () => ctx.regen());
+  ctx.regen();
+  return ctx;
+}
+
+// --- 05: Selection Sort ---
+function initSelection() {
+  const ctx = wireSection('sel', {
+    initialArr: parseArr($('selArrInput').value),
+    getArr: () => parseArr($('selArrInput').value),
+    gen: (arr) => genSelectionSort(arr),
+    renderStats: (s) => {
+      $('selCmp').textContent = s.cmp ?? 0;
+      $('selSwp').textContent = s.swp ?? 0;
+      $('selMinIdx').textContent = s.minIdx ?? '—';
+    }
+  });
+  if (!ctx) return;
+  $('selApply').onclick   = () => ctx.regen();
+  $('selShuffle').onclick = () => {
+    const arr = randomArray(10, 99);
+    $('selArrInput').value = arr.join(', ');
+    ctx.regen();
+  };
+  $('selArrInput').addEventListener('change', () => ctx.regen());
+  ctx.regen();
+  return ctx;
+}
+
+// --- 06: Insertion Sort ---
+function initInsertion() {
+  const ctx = wireSection('ins', {
+    initialArr: parseArr($('insArrInput').value),
+    getArr: () => parseArr($('insArrInput').value),
+    gen: (arr) => genInsertionSort(arr),
+    renderStats: (s) => {
+      $('insCmp').textContent  = s.cmp ?? 0;
+      $('insShift').textContent = s.sft ?? 0;
+      $('insKey').textContent  = s.key ?? '—';
+    }
+  });
+  if (!ctx) return;
+  $('insApply').onclick   = () => ctx.regen();
+  $('insShuffle').onclick = () => {
+    const arr = randomArray(10, 99);
+    $('insArrInput').value = arr.join(', ');
+    ctx.regen();
+  };
+  $('insArrInput').addEventListener('change', () => ctx.regen());
+  ctx.regen();
+  return ctx;
+}
+
+// --- 07: Shell Sort ---
+function initShell() {
+  let gapSeq = 'half';
+  const ctx = wireSection('shell', {
+    initialArr: parseArr($('shellArrInput').value),
+    getArr: () => parseArr($('shellArrInput').value),
+    gen: (arr) => genShellSort(arr, gapSeq),
+    renderStats: (s) => {
+      $('shellCmp').textContent = s.cmp ?? 0;
+      $('shellSwp').textContent = s.swp ?? 0;
+      $('shellGap').textContent = s.gap ?? '—';
+    }
+  });
+  if (!ctx) return;
+  $('shellApply').onclick   = () => ctx.regen();
+  $('shellShuffle').onclick = () => {
+    const arr = randomArray(10, 99);
+    $('shellArrInput').value = arr.join(', ');
+    ctx.regen();
+  };
+  $('shellArrInput').addEventListener('change', () => ctx.regen());
+  document.querySelectorAll('#shell .preset-btn[data-gap]').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('#shell .preset-btn[data-gap]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      gapSeq = btn.dataset.gap;
+      ctx.regen();
+    };
+  });
+  ctx.regen();
+  return ctx;
+}
+
+// --- 08: Merge Sort ---
+function renderMergeTree(treeData) {
+  const treeEl = $('mergeTree');
+  if (!treeEl) return;
+  treeEl.innerHTML = '';
+  // group by level
+  const byLevel = {};
+  for (const n of treeData) {
+    if (!byLevel[n.level]) byLevel[n.level] = [];
+    byLevel[n.level].push(n);
+  }
+  const levels = Object.keys(byLevel).map(Number).sort((a,b)=>a-b);
+  for (const lv of levels) {
+    const row = document.createElement('div');
+    row.className = 'tree-row';
+    // sort nodes left-to-right
+    byLevel[lv].sort((a,b)=>a.from - b.from);
+    for (const n of byLevel[lv]) {
+      const node = document.createElement('div');
+      node.className = 'tree-node';
+      if (n.status === 'splitting' || n.status === 'active') node.classList.add('active');
+      else if (n.status === 'merging') node.classList.add('merging');
+      else if (n.status === 'done') node.classList.add('done');
+      node.textContent = n.from === n.to ? `[${n.from}]` : `[${n.from}..${n.to}]`;
+      row.appendChild(node);
+    }
+    treeEl.appendChild(row);
+  }
+}
+
+function initMerge() {
+  const ctx = wireSection('merge', {
+    initialArr: parseArr($('mergeArrInput').value),
+    getArr: () => parseArr($('mergeArrInput').value),
+    gen: (arr) => genMergeSort(arr),
+    renderStats: (s) => {
+      $('mergeCmp').textContent   = s.cmp ?? 0;
+      $('mergeWrite').textContent = s.wr ?? 0;
+      $('mergePhase').textContent = s.phase ?? '—';
+    },
+    renderTree: renderMergeTree
+  });
+  if (!ctx) return;
+  $('mergeApply').onclick   = () => ctx.regen();
+  $('mergeShuffle').onclick = () => {
+    const arr = randomArray(8, 99);
+    $('mergeArrInput').value = arr.join(', ');
+    ctx.regen();
+  };
+  $('mergeArrInput').addEventListener('change', () => ctx.regen());
+  ctx.regen();
+  return ctx;
+}
+
+// --- 09: Quick Sort ---
+function initQuick() {
+  let pivotMode = 'first';
+  const ctx = wireSection('quick', {
+    initialArr: parseArr($('quickArrInput').value),
+    getArr: () => parseArr($('quickArrInput').value),
+    gen: (arr) => genQuickSort(arr, pivotMode),
+    renderStats: (s) => {
+      $('quickCmp').textContent   = s.cmp ?? 0;
+      $('quickSwp').textContent   = s.swp ?? 0;
+      $('quickPivot').textContent = (s.pivot != null && s.pivot !== '—') ? s.pivot : '—';
+      $('quickRange').textContent = s.rangeStr ?? '—';
+      $('quickLM').textContent    = s.lm ?? '—';
+      $('quickRM').textContent    = s.rm ?? '—';
+    }
+  });
+  if (!ctx) return;
+  $('quickApply').onclick   = () => ctx.regen();
+  $('quickShuffle').onclick = () => {
+    const arr = randomArray(9, 99);
+    $('quickArrInput').value = arr.join(', ');
+    ctx.regen();
+  };
+  $('quickArrInput').addEventListener('change', () => ctx.regen());
+  document.querySelectorAll('#quick .preset-btn[data-pivot]').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('#quick .preset-btn[data-pivot]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      pivotMode = btn.dataset.pivot;
+      ctx.regen();
+    };
+  });
+  ctx.regen();
+  return ctx;
+}
+
+/* ============================================================
+   GLOBAL INIT + RESIZE
+   ============================================================ */
+const allContexts = [];
+
+function setupFloatNav() {
+  const navLinks = document.querySelectorAll('#floatNav a[data-target]');
+  const sections = Array.from(navLinks).map(a => ({
+    link: a,
+    el: document.getElementById(a.dataset.target)
+  })).filter(x => x.el);
+  if (!sections.length) return;
+
+  function setActive(id) {
+    navLinks.forEach(a => a.classList.toggle('active', a.dataset.target === id));
+  }
+
+  // pick the section whose top is closest to (but not below) ~30% from the top of the viewport
+  function updateActive() {
+    const cutoff = window.innerHeight * 0.30;
+    let activeId = sections[0].el.id;
+    for (const s of sections) {
+      const top = s.el.getBoundingClientRect().top;
+      if (top <= cutoff) activeId = s.el.id;
+      else break;
+    }
+    setActive(activeId);
+  }
+
+  let scrollTimer = null;
+  window.addEventListener('scroll', () => {
+    if (scrollTimer) return;
+    scrollTimer = requestAnimationFrame(() => {
+      updateActive();
+      scrollTimer = null;
+    });
+  }, {passive: true});
+
+  // close behaviour on mobile (when sidebar is bottom-stuck): just let click happen + scroll
+  navLinks.forEach(a => {
+    a.addEventListener('click', () => {
+      // Set active immediately for snappy feedback
+      setTimeout(() => updateActive(), 100);
+    });
+  });
+
+  updateActive();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  setupFloatNav();
+  // table-of-contents smooth scroll behaviour built-in via anchor
+  const inits = [
+    initSeqSearch, initBinSearch, initHashing,
+    initBubble, initSelection, initInsertion,
+    initShell, initMerge, initQuick
+  ];
+  for (const fn of inits) {
+    try { const ctx = fn(); if (ctx) allContexts.push(ctx); }
+    catch (e) { console.error('Init failed:', fn.name, e); }
+  }
+  // re-typeset MathJax just in case (info-cards already rendered during page load)
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise();
+  }
+});
+
+let resizeTimer = null;
+window.addEventListener('resize', () => {
+  if (resizeTimer) clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    for (const ctx of allContexts) {
+      if (ctx && ctx.vis) ctx.vis.resize();
+    }
+  }, 150);
+});
+
+</script>
+</body>
+</html>
