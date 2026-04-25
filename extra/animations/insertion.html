@@ -1,0 +1,41 @@
+<div class="ds07-anim" id="insertion">
+  <h3 style="margin-top:0;color:var(--accent2);">插入排序互動 — 像整理撲克牌</h3>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="algo-canvas" id="canvas-ins"><div class="bars-container"></div><div class="baseline"></div></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="insStatus">按「開始」執行插入排序</span></div>
+        <div class="input-row">
+          <label>陣列：</label>
+          <input type="text" id="insArrInput" value="54, 26, 93, 17, 77, 31, 44, 55, 20">
+          <button class="btn btn-shuffle" id="insShuffle">隨機洗牌</button>
+          <button class="btn btn-shuffle" id="insApply" style="background:var(--accent2);">套用</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="insPlay">▶ 開始</button>
+          <button class="btn btn-step" id="insStep">→ 單步</button>
+          <button class="btn btn-reset" id="insReset">↺ 重置</button>
+          <div style="flex:1;min-width:140px;display:flex;align-items:center;gap:.4rem;">
+            <span style="font-size:.74rem;color:var(--muted);">速度</span>
+            <input type="range" id="insSpeed" min="50" max="1200" step="50" value="350" style="flex:1;">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="stats-grid">
+          <div class="stat-tile compare"><div class="stat-label">比較</div><div class="stat-value" id="insCmp">0</div></div>
+          <div class="stat-tile" style="background:#fef0e7;"><div class="stat-label">位移 shift</div><div class="stat-value" id="insShift" style="color:#d68910;">0</div></div>
+        </div>
+        <div class="ic-row" style="margin-top:.5rem;"><span class="ic-label">當前 cur_val</span><span class="ic-value highlight" id="insKey">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="insCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">insertion_sort</span>(a_list):</span><span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="fn">len</span>(a_list)):</span><span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur_val = a_list[i]</span><span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur_pos = i</span><span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> cur_pos &gt; <span class="num">0</span> <span class="kw">and</span> a_list[cur_pos-<span class="num">1</span>] &gt; cur_val:</span><span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a_list[cur_pos] = a_list[cur_pos-<span class="num">1</span>]</span><span class="line" data-l="7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur_pos = cur_pos - <span class="num">1</span></span><span class="line" data-l="8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a_list[cur_pos] = cur_val</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>(function go(){ if(!window.DS07||!window.DS07.init){setTimeout(go,50);return;} window.DS07.init.insertion(); })();</script>

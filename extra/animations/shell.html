@@ -1,0 +1,46 @@
+<div class="ds07-anim" id="shell">
+  <h3 style="margin-top:0;color:var(--accent2);">希爾排序互動 — 跨格的插入排序</h3>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="algo-canvas" id="canvas-shell" style="height:340px;"><div class="bars-container"></div><div class="baseline"></div></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="shellStatus">按「開始」執行希爾排序</span></div>
+        <div class="input-row">
+          <label>陣列：</label>
+          <input type="text" id="shellArrInput" value="54, 26, 93, 17, 77, 31, 44, 55, 20">
+          <button class="btn btn-shuffle" id="shellShuffle">隨機洗牌</button>
+          <button class="btn btn-shuffle" id="shellApply" style="background:var(--accent2);">套用</button>
+        </div>
+        <div class="input-row">
+          <label>gap 序列：</label>
+          <button class="preset-btn active" data-gap="half">n/2 折半 (Shell 原版)</button>
+          <button class="preset-btn" data-gap="2k-1">2^k − 1 (Hibbard)</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="shellPlay">▶ 開始</button>
+          <button class="btn btn-step" id="shellStep">→ 單步</button>
+          <button class="btn btn-reset" id="shellReset">↺ 重置</button>
+          <div style="flex:1;min-width:140px;display:flex;align-items:center;gap:.4rem;">
+            <span style="font-size:.74rem;color:var(--muted);">速度</span>
+            <input type="range" id="shellSpeed" min="50" max="1200" step="50" value="300" style="flex:1;">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="ic-row"><span class="ic-label">當前 gap</span><span class="ic-value highlight" id="shellGap" style="font-size:1.1rem;">—</span></div>
+        <div class="stats-grid" style="margin-top:.35rem;">
+          <div class="stat-tile compare"><div class="stat-label">比較</div><div class="stat-value" id="shellCmp">0</div></div>
+          <div class="stat-tile swap"><div class="stat-label">位移</div><div class="stat-value" id="shellSwp">0</div></div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 (gap = n//2)</div>
+        <div class="pseudo-code" id="shellCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">shell_sort</span>(a):</span><span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;gap = <span class="fn">len</span>(a) // <span class="num">2</span></span><span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> gap &gt; <span class="num">0</span>:</span><span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(gap, <span class="fn">len</span>(a)):</span><span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;key, pos = a[i], i</span><span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> pos &gt;= gap <span class="kw">and</span> a[pos-gap] &gt; key:</span><span class="line" data-l="7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a[pos] = a[pos-gap]</span><span class="line" data-l="8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pos -= gap</span><span class="line" data-l="9">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a[pos] = key</span><span class="line" data-l="10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gap //= <span class="num">2</span></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>(function go(){ if(!window.DS07||!window.DS07.init){setTimeout(go,50);return;} window.DS07.init.shell(); })();</script>

@@ -1,0 +1,50 @@
+<div class="ds07-anim" id="hashing">
+  <h3 style="margin-top:0;color:var(--accent2);">雜湊表互動 — 線性探查 vs 鏈結法</h3>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div style="font-weight:600;color:var(--accent2);font-size:.85rem;margin-bottom:.3rem;">雜湊表 (m = 11)</div>
+        <div class="hash-table-wrap" id="hashTable"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="hashStatus">輸入要插入或搜尋的值</span></div>
+        <div class="input-row">
+          <label>值：</label>
+          <input type="number" id="hashVal" value="44" style="width:80px;">
+          <button class="btn btn-step" id="hashInsert">插入</button>
+          <button class="btn btn-play" id="hashSearch">搜尋</button>
+        </div>
+        <div class="input-row">
+          <label>策略：</label>
+          <button class="preset-btn active" data-strategy="linear">線性探查</button>
+          <button class="preset-btn" data-strategy="chain">鏈結法</button>
+          <button class="btn btn-reset" id="hashClear" style="margin-left:auto;">↺ 清空表</button>
+        </div>
+        <div class="input-row">
+          <label>批次：</label>
+          <input type="text" id="hashBatch" value="54, 26, 93, 17, 77, 31" style="flex:1;">
+          <button class="btn btn-shuffle" id="hashBatchInsert">全部插入</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">餘數雜湊函數</div>
+        <div class="eq-formula">$h(item) = item \bmod m$</div>
+        <div class="eq-sub">$m = 11$（建議用質數）</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="ic-row"><span class="ic-label">已用槽數</span><span class="ic-value" id="hashUsed">0 / 11</span></div>
+        <div class="ic-row"><span class="ic-label">負載因子 λ</span><span class="ic-value highlight" id="hashLoad">0.00</span></div>
+        <div class="ic-row"><span class="ic-label">本次比較次數</span><span class="ic-value" id="hashOps">0</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">碰撞解決</div>
+        <div style="font-size:.78rem;line-height:1.55;">
+          <span class="pill pill-blue">線性探查</span> 撞了往後找下一格<br>
+          <span class="pill pill-purple">鏈結法</span> 在該 slot 接一條 list
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>(function go(){ if(!window.DS07||!window.DS07.init){setTimeout(go,50);return;} window.DS07.init.hash(); })();</script>

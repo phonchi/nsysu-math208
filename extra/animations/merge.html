@@ -1,0 +1,43 @@
+<div class="ds07-anim" id="merge">
+  <h3 style="margin-top:0;color:var(--accent2);">合併排序互動 — 分而治之</h3>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="algo-canvas" id="canvas-merge" style="height:340px;"><div class="bars-container"></div><div class="baseline"></div></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="mergeStatus">按「開始」執行合併排序</span></div>
+        <div class="input-row">
+          <label>陣列：</label>
+          <input type="text" id="mergeArrInput" value="54, 26, 93, 17, 77, 31, 44, 55">
+          <button class="btn btn-shuffle" id="mergeShuffle">隨機洗牌</button>
+          <button class="btn btn-shuffle" id="mergeApply" style="background:var(--accent2);">套用</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="mergePlay">▶ 開始</button>
+          <button class="btn btn-step" id="mergeStep">→ 單步</button>
+          <button class="btn btn-reset" id="mergeReset">↺ 重置</button>
+          <div style="flex:1;min-width:140px;display:flex;align-items:center;gap:.4rem;">
+            <span style="font-size:.74rem;color:var(--muted);">速度</span>
+            <input type="range" id="mergeSpeed" min="100" max="1500" step="50" value="500" style="flex:1;">
+          </div>
+        </div>
+      </div>
+      <h3 style="margin-top:.7rem;">遞迴呼叫樹 (recursion tree)</h3>
+      <div class="tree-canvas" id="mergeTree"></div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="stats-grid">
+          <div class="stat-tile compare"><div class="stat-label">比較</div><div class="stat-value" id="mergeCmp">0</div></div>
+          <div class="stat-tile" style="background:#eef5fc;"><div class="stat-label">寫入</div><div class="stat-value" id="mergeWrite" style="color:#2980b9;">0</div></div>
+        </div>
+        <div class="ic-row" style="margin-top:.5rem;"><span class="ic-label">當前階段</span><span class="ic-value" id="mergePhase">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="mergeCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">merge_sort</span>(a):</span><span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> <span class="fn">len</span>(a) &lt;= <span class="num">1</span>: <span class="kw">return</span></span><span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;mid = <span class="fn">len</span>(a) // <span class="num">2</span></span><span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;L, R = a[:mid], a[mid:]</span><span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">merge_sort</span>(L)</span><span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">merge_sort</span>(R)</span><span class="line" data-l="7">&nbsp;&nbsp;&nbsp;&nbsp;<span class="com"># merge L and R back into a</span></span><span class="line" data-l="8">&nbsp;&nbsp;&nbsp;&nbsp;i = j = k = <span class="num">0</span></span><span class="line" data-l="9">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> i &lt; <span class="fn">len</span>(L) <span class="kw">and</span> j &lt; <span class="fn">len</span>(R):</span><span class="line" data-l="10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> L[i] &lt;= R[j]:</span><span class="line" data-l="11">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a[k] = L[i]; i += <span class="num">1</span></span><span class="line" data-l="12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">else</span>:</span><span class="line" data-l="13">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a[k] = R[j]; j += <span class="num">1</span></span><span class="line" data-l="14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k += <span class="num">1</span></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>(function go(){ if(!window.DS07||!window.DS07.init){setTimeout(go,50);return;} window.DS07.init.merge(); })();</script>

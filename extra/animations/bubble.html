@@ -1,0 +1,41 @@
+<div class="ds07-anim" id="bubble">
+  <h3 style="margin-top:0;color:var(--accent2);">氣泡排序互動 — 相鄰兩個比一比，大的往後送</h3>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="algo-canvas" id="canvas-bubble"><div class="bars-container"></div><div class="baseline"></div></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="bubbleStatus">按「開始」執行氣泡排序</span></div>
+        <div class="input-row">
+          <label>陣列：</label>
+          <input type="text" id="bubbleArrInput" value="54, 26, 93, 17, 77, 31, 44, 55, 20">
+          <button class="btn btn-shuffle" id="bubbleShuffle">隨機洗牌</button>
+          <button class="btn btn-shuffle" id="bubbleApply" style="background:var(--accent2);">套用</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="bubblePlay">▶ 開始</button>
+          <button class="btn btn-step" id="bubbleStep">→ 單步</button>
+          <button class="btn btn-reset" id="bubbleReset">↺ 重置</button>
+          <div style="flex:1;min-width:140px;display:flex;align-items:center;gap:.4rem;">
+            <span style="font-size:.74rem;color:var(--muted);">速度</span>
+            <input type="range" id="bubbleSpeed" min="50" max="1200" step="50" value="350" style="flex:1;">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="stats-grid">
+          <div class="stat-tile compare"><div class="stat-label">比較</div><div class="stat-value" id="bubbleCmp">0</div></div>
+          <div class="stat-tile swap"><div class="stat-label">交換</div><div class="stat-value" id="bubbleSwp">0</div></div>
+        </div>
+        <div class="ic-row" style="margin-top:.5rem;"><span class="ic-label">當前 pass</span><span class="ic-value" id="bubblePass">0</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="bubbleCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">bubble_sort</span>(a):</span><span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(a)-<span class="num">1</span>, <span class="num">0</span>, -<span class="num">1</span>):</span><span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(i):</span><span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> a[j] &gt; a[j+<span class="num">1</span>]:</span><span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a[j], a[j+<span class="num">1</span>] = a[j+<span class="num">1</span>], a[j]</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>(function go(){ if(!window.DS07||!window.DS07.init){setTimeout(go,50);return;} window.DS07.init.bubble(); })();</script>

@@ -1,0 +1,42 @@
+<div class="ds07-anim" id="seq-search">
+  <h3 style="margin-top:0;color:var(--accent2);">循序搜尋互動 — 從頭一格一格找</h3>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="algo-canvas" id="canvas-seq"><div class="bars-container"></div><div class="baseline"></div></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="seqStatus">設定目標值後按「開始」</span></div>
+        <div class="input-row">
+          <label>陣列：</label>
+          <input type="text" id="seqArrInput" value="54, 26, 93, 17, 77, 31, 44, 55, 20, 65">
+          <label>目標：</label>
+          <input type="number" id="seqTarget" value="44" style="width:70px;">
+          <button class="btn btn-shuffle" id="seqApply">套用</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="seqPlay">▶ 開始</button>
+          <button class="btn btn-step" id="seqStep">→ 單步</button>
+          <button class="btn btn-reset" id="seqReset">↺ 重置</button>
+          <div style="flex:1;min-width:140px;display:flex;align-items:center;gap:.4rem;">
+            <span style="font-size:.74rem;color:var(--muted);">速度</span>
+            <input type="range" id="seqSpeed" min="100" max="1500" step="50" value="600" style="flex:1;">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="stats-grid">
+          <div class="stat-tile compare"><div class="stat-label">比較次數</div><div class="stat-value" id="seqCmp">0</div></div>
+          <div class="stat-tile"><div class="stat-label">當前 pos</div><div class="stat-value" id="seqPos">—</div></div>
+        </div>
+        <div class="ic-row" style="margin-top:.5rem;"><span class="ic-label">結果</span><span class="ic-value highlight" id="seqResult">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="seqCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">sequential_search</span>(a_list, item):</span><span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;pos = <span class="num">0</span></span><span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> pos &lt; <span class="fn">len</span>(a_list):</span><span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> a_list[pos] == item:</span><span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="num">True</span></span><span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pos = pos + <span class="num">1</span></span><span class="line" data-l="7">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="num">False</span></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>(function go(){ if(!window.DS07||!window.DS07.init){setTimeout(go,50);return;} window.DS07.init.seq(); })();</script>

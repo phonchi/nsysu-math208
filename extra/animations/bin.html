@@ -1,0 +1,42 @@
+<div class="ds07-anim" id="bin-search">
+  <h3 style="margin-top:0;color:var(--accent2);">二分搜尋互動 — 每次砍掉一半</h3>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="algo-canvas" id="canvas-bin" style="height:340px;"><div class="bars-container"></div><div class="baseline"></div></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="binStatus">陣列已自動排序，按「開始」執行二分搜尋</span></div>
+        <div class="input-row">
+          <label>已排序：</label>
+          <input type="text" id="binArrInput" value="17, 20, 26, 31, 44, 54, 55, 65, 77, 93">
+          <label>目標：</label>
+          <input type="number" id="binTarget" value="44" style="width:70px;">
+          <button class="btn btn-shuffle" id="binApply">套用</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="binPlay">▶ 開始</button>
+          <button class="btn btn-step" id="binStep">→ 單步</button>
+          <button class="btn btn-reset" id="binReset">↺ 重置</button>
+          <div style="flex:1;min-width:140px;display:flex;align-items:center;gap:.4rem;">
+            <span style="font-size:.74rem;color:var(--muted);">速度</span>
+            <input type="range" id="binSpeed" min="200" max="1800" step="50" value="800" style="flex:1;">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">當前指標 <span class="ic-badge">LIVE</span></div>
+        <div class="ic-row"><span class="ic-label">first</span><span class="ic-value" id="binLow" style="color:#2980b9;">0</span></div>
+        <div class="ic-row"><span class="ic-label">last</span><span class="ic-value" id="binHigh" style="color:var(--accent);">9</span></div>
+        <div class="ic-row"><span class="ic-label">midpoint</span><span class="ic-value" id="binMid" style="color:var(--accent3);">4</span></div>
+        <div class="ic-row" style="margin-top:.35rem;border-top:1px solid var(--card-border);padding-top:.35rem;"><span class="ic-label">比較</span><span class="ic-value highlight" id="binCmp">0</span></div>
+        <div class="ic-row"><span class="ic-label">結果</span><span class="ic-value highlight" id="binResult">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="binCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">binary_search</span>(a_list, item):</span><span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;first = <span class="num">0</span></span><span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;last = <span class="fn">len</span>(a_list) - <span class="num">1</span></span><span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> first &lt;= last:</span><span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;midpoint = (first + last) // <span class="num">2</span></span><span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> a_list[midpoint] == item:</span><span class="line" data-l="7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="num">True</span></span><span class="line" data-l="8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">elif</span> item &lt; a_list[midpoint]:</span><span class="line" data-l="9">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;last = midpoint - <span class="num">1</span></span><span class="line" data-l="10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">else</span>:</span><span class="line" data-l="11">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first = midpoint + <span class="num">1</span></span><span class="line" data-l="12">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="num">False</span></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>(function go(){ if(!window.DS07||!window.DS07.init){setTimeout(go,50);return;} window.DS07.init.bin(); })();</script>
