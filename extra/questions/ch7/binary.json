@@ -1,0 +1,28 @@
+[
+    {
+        "question": "Suppose you have the following sorted list [3, 5, 6, 8, 11, 12, 14, 15, 17, 18] and are using the recursive binary search algorithm (with midpoint = (len(a_list) - 1) // 2). Which group of numbers correctly shows the sequence of comparisons used to search for the key 16?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "12, 17, 15",
+                "correct": false,
+                "feedback": "Incorrect. This sequence uses midpoint = len(a_list) // 2, but the lecture's recursive binary search uses midpoint = (len(a_list) - 1) // 2, so the first midpoint of a 10-element list is index 4 (value 11), not index 5 (value 12)."
+            },
+            {
+                "answer": "18, 17, 15",
+                "correct": false,
+                "feedback": "Incorrect. Binary search begins near the middle of the list, not from the end."
+            },
+            {
+                "answer": "11, 14, 17",
+                "correct": false,
+                "feedback": "Incorrect. The first midpoint is correct (11), but after recursing on [12, 14, 15, 17, 18], the next midpoint is (5-1)//2 = 2, which is 15, not 14."
+            },
+            {
+                "answer": "11, 15, 17",
+                "correct": true,
+                "feedback": "Correct! Trace using midpoint = (len(a_list) - 1) // 2: 1. The list has 10 elements. The midpoint is (10-1)//2 = 4, which is 11. Since 16 > 11, we recurse on [12, 14, 15, 17, 18]. 2. This sublist has 5 elements. The midpoint is (5-1)//2 = 2, which is 15. Since 16 > 15, we recurse on [17, 18]. 3. This sublist has 2 elements. The midpoint is (2-1)//2 = 0, which is 17. Since 16 < 17, we recurse on the empty list and return False. The sequence is 11, 15, 17."
+            }
+        ]
+    }
+]
