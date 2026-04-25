@@ -1,6 +1,6 @@
 ---
 type: lecture
-date: 2024-04-27
+date: 2026-04-27
 title: Searching and Sorting
 tldr: 
 thumbnail: 
