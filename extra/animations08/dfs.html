@@ -1,0 +1,50 @@
+<div class="ds08-anim" id="ds08-dfs">
+  <h3 style="margin-top:0;color:var(--accent2);">DFS 深度優先搜尋 — 一條路走到黑，碰壁再回頭</h3>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="graph-canvas" id="canvas-dfsDfs"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="dfsStatusDfs">按「開始」跑完整 DFS（會走遍整個 forest）</span></div>
+        <div class="slider-row">
+          <span class="slider-label">起點</span>
+          <select id="dfsStartDfs" style="font-family:'JetBrains Mono',monospace;padding:.3rem .5rem;border-radius:6px;border:1px solid var(--card-border);background:#fff;">
+            <option value="A" selected>A</option><option value="B">B</option><option value="C">C</option>
+            <option value="D">D</option><option value="E">E</option><option value="F">F</option>
+          </select>
+          <span style="font-size:.78rem;color:var(--muted);">速度</span>
+          <input type="range" id="dfsSpeedDfs" min="200" max="1500" step="50" value="700" style="flex:1;accent-color:var(--accent3);">
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="dfsPlayDfs">▶ 開始</button>
+          <button class="btn btn-step" id="dfsStepDfs">→ 單步</button>
+          <button class="btn btn-reset" id="dfsResetDfs">↺ 重置</button>
+        </div>
+        <div style="margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;">
+          <strong style="color:var(--accent2);">Recursion stack（隱式）：</strong>
+          <span class="ds-display" id="dfsStackDfs"><span class="ds-empty">empty</span></span>
+        </div>
+        <div style="margin-top:.4rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;">
+          <strong style="color:var(--accent2);">時間計數：</strong>
+          <span style="color:var(--accent);font-weight:700;" id="dfsTimeDfs">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">頂點時間表</div>
+        <div id="dfsTableDfs" style="overflow-x:auto;"></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="dfsCodeDfs"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">dfs</span>(graph):</span><span class="line" data-l="2">    <span class="kw">for</span> v <span class="kw">in</span> graph: v.color = <span class="str">"white"</span></span><span class="line" data-l="3">    time = <span class="num">0</span></span><span class="line" data-l="4">    <span class="kw">for</span> v <span class="kw">in</span> graph:</span><span class="line" data-l="5">        <span class="kw">if</span> v.color == <span class="str">"white"</span>:</span><span class="line" data-l="6">            dfs_visit(v)</span><span class="line" data-l="7"></span><span class="line" data-l="8"><span class="kw">def</span> <span class="fn">dfs_visit</span>(u):</span><span class="line" data-l="9">    u.color = <span class="str">"gray"</span></span><span class="line" data-l="10">    time += <span class="num">1</span>; u.discovery = time</span><span class="line" data-l="11">    <span class="kw">for</span> nb <span class="kw">in</span> u.get_neighbors():</span><span class="line" data-l="12">        <span class="kw">if</span> nb.color == <span class="str">"white"</span>:</span><span class="line" data-l="13">            nb.previous = u</span><span class="line" data-l="14">            dfs_visit(nb)  <span class="com"># 遞迴</span></span><span class="line" data-l="15">    u.color = <span class="str">"black"</span></span><span class="line" data-l="16">    time += <span class="num">1</span>; u.closing = time</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">時間</span><span class="ic-value">O(|V| + |E|)</span></div>
+        <div class="ic-row"><span class="ic-label">空間</span><span class="ic-value">O(|V|) 遞迴</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>(function go(){ if(!window.DS08||!window.DS08.init){setTimeout(go,50);return;} window.DS08.init.dfs(); })();</script>

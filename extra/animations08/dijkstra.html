@@ -1,0 +1,47 @@
+<div class="ds08-anim" id="ds08-dijkstra">
+  <h3 style="margin-top:0;color:var(--accent2);">Dijkstra 最短路徑 — 加權圖上的「貪婪式 BFS」</h3>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="graph-canvas" id="canvas-dijkstraDij"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="dijStatusDij">選擇起點，按「開始」執行 Dijkstra</span></div>
+        <div class="slider-row">
+          <span class="slider-label">起點</span>
+          <select id="dijStartDij" style="font-family:'JetBrains Mono',monospace;padding:.3rem .5rem;border-radius:6px;border:1px solid var(--card-border);background:#fff;">
+            <option value="u" selected>u</option><option value="v">v</option><option value="w">w</option>
+            <option value="x">x</option><option value="y">y</option><option value="z">z</option>
+          </select>
+          <span style="font-size:.78rem;color:var(--muted);">速度</span>
+          <input type="range" id="dijSpeedDij" min="200" max="2000" step="50" value="800" style="flex:1;accent-color:var(--accent3);">
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="dijPlayDij">▶ 開始</button>
+          <button class="btn btn-step" id="dijStepDij">→ 單步</button>
+          <button class="btn btn-reset" id="dijResetDij">↺ 重置</button>
+        </div>
+        <div style="margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;">
+          <strong style="color:var(--accent2);">Priority Queue：</strong>
+          <span class="ds-display" id="dijPQDij"><span class="ds-empty">empty</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">距離表 <span class="ic-badge">LIVE</span></div>
+        <div id="dijTableDij" style="overflow-x:auto;"></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="dijCodeDij"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">dijkstra</span>(graph, start):</span><span class="line" data-l="2">    pq = PriorityQueue()</span><span class="line" data-l="3">    start.distance = <span class="num">0</span></span><span class="line" data-l="4">    pq.insert((<span class="num">0</span>, start))</span><span class="line" data-l="5">    visited = set()</span><span class="line" data-l="6">    <span class="kw">while not</span> pq.is_empty():</span><span class="line" data-l="7">        d, u = pq.delete()  <span class="com"># 取最小</span></span><span class="line" data-l="8">        visited.add(u)</span><span class="line" data-l="9">        <span class="kw">for</span> v <span class="kw">in</span> u.get_neighbors():</span><span class="line" data-l="10">            <span class="kw">if</span> v <span class="kw">in</span> visited: <span class="kw">continue</span></span><span class="line" data-l="11">            new_d = d + u.weight(v)</span><span class="line" data-l="12">            <span class="kw">if</span> new_d &lt; v.distance:</span><span class="line" data-l="13">                v.distance = new_d</span><span class="line" data-l="14">                v.previous = u</span><span class="line" data-l="15">                pq.update(v, new_d)</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">時間（heap）</span><span class="ic-value">O((|V|+|E|) log|V|)</span></div>
+        <div class="ic-row"><span class="ic-label">建 PQ</span><span class="ic-value">O(|V|)</span></div>
+        <div class="ic-row"><span class="ic-label">邊鬆弛</span><span class="ic-value">O(|E| log|V|)</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>(function go(){ if(!window.DS08||!window.DS08.init){setTimeout(go,50);return;} window.DS08.init.dijkstra(); })();</script>

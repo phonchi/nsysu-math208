@@ -1,0 +1,45 @@
+<div class="ds08-anim" id="ds08-topsort">
+  <h3 style="margin-top:0;color:var(--accent2);">Topological Sort — DFS 後序反轉得到拓撲順序</h3>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="graph-canvas" id="canvas-topsortTop"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="topStatusTop">按「開始」執行 DFS-based 拓撲排序</span></div>
+        <div class="slider-row">
+          <span style="font-size:.78rem;color:var(--muted);">速度</span>
+          <input type="range" id="topSpeedTop" min="200" max="2000" step="50" value="900" style="flex:1;accent-color:var(--accent3);">
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="topPlayTop">▶ 開始</button>
+          <button class="btn btn-step" id="topStepTop">→ 單步</button>
+          <button class="btn btn-reset" id="topResetTop">↺ 重置</button>
+        </div>
+        <div style="margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;">
+          <strong style="color:var(--accent2);">Recursion stack：</strong>
+          <span class="ds-display" id="topStackTop"><span class="ds-empty">empty</span></span>
+        </div>
+        <div class="topsort-result" id="topResultTop"><span class="ts-label">result</span><span style="color:rgba(255,255,255,.4)">（尚無結束的頂點）</span></div>
+        <div class="topsort-result" id="topOrderTop" style="margin-top:.35rem;"><span class="ts-label">topo</span><span style="color:rgba(255,255,255,.4)">（DFS 結束後反轉 result）</span></div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="topCodeTop"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">topsort</span>(graph):</span><span class="line" data-l="2">    result = []</span><span class="line" data-l="3">    visited = set()</span><span class="line" data-l="4">    <span class="kw">def</span> <span class="fn">dfs</span>(v):</span><span class="line" data-l="5">        visited.add(v)</span><span class="line" data-l="6">        <span class="kw">for</span> u <span class="kw">in</span> v.neighbors():</span><span class="line" data-l="7">            <span class="kw">if</span> u <span class="kw">not in</span> visited: <span class="fn">dfs</span>(u)</span><span class="line" data-l="8">        result.append(v)   <span class="com"># 後序：離開時加入</span></span><span class="line" data-l="9"></span><span class="line" data-l="10"></span><span class="line" data-l="11">    <span class="kw">for</span> v <span class="kw">in</span> graph:</span><span class="line" data-l="12">        <span class="kw">if</span> v <span class="kw">not in</span> visited: <span class="fn">dfs</span>(v)</span><span class="line" data-l="13">    <span class="kw">return</span> reversed(result)   <span class="com"># 反轉 → 拓撲順序</span></span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">用途</div>
+        <div style="font-size:.83em;line-height:1.55;">
+          <strong>拓撲排序</strong>適用於 <strong>DAG</strong>（有向無環圖）：給每條邊 <code>u→v</code> 一個線性順序，使 <code>u</code> 永遠出現在 <code>v</code> 之前。常見於課程先修、編譯依賴、build 系統等。
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">時間</span><span class="ic-value">O(|V| + |E|)</span></div>
+        <div class="ic-row"><span class="ic-label">空間</span><span class="ic-value">O(|V|)</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>(function go(){ if(!window.DS08||!window.DS08.init){setTimeout(go,50);return;} window.DS08.init.topsort(); })();</script>

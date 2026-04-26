@@ -1,0 +1,50 @@
+<div class="ds08-anim" id="ds08-prim">
+  <h3 style="margin-top:0;color:var(--accent2);">Prim 最小生成樹 — 用最小邊權連通整張圖</h3>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="graph-canvas" id="canvas-primPrim"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="primStatusPrim">選擇起點，按「開始」逐步建立 MST</span></div>
+        <div class="slider-row">
+          <span class="slider-label">起點</span>
+          <select id="primStartPrim" style="font-family:'JetBrains Mono',monospace;padding:.3rem .5rem;border-radius:6px;border:1px solid var(--card-border);background:#fff;">
+            <option value="A" selected>A</option><option value="B">B</option><option value="C">C</option>
+            <option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option>
+          </select>
+          <span style="font-size:.78rem;color:var(--muted);">速度</span>
+          <input type="range" id="primSpeedPrim" min="200" max="2000" step="50" value="800" style="flex:1;accent-color:var(--accent3);">
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="primPlayPrim">▶ 開始</button>
+          <button class="btn btn-step" id="primStepPrim">→ 單步</button>
+          <button class="btn btn-reset" id="primResetPrim">↺ 重置</button>
+        </div>
+        <div style="margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;">
+          <strong style="color:var(--accent2);">Priority Queue：</strong>
+          <span class="ds-display" id="primPQPrim"><span class="ds-empty">empty</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="ic-row"><span class="ic-label">已加入節點</span><span class="ic-value" id="primInTreePrim">0/0</span></div>
+        <div class="ic-row"><span class="ic-label">MST 總權重</span><span class="ic-value highlight big" id="primTotalPrim">0</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">MST 邊清單</div>
+        <div id="primEdgesPrim" style="font-family:'JetBrains Mono',monospace;font-size:.82rem;">—</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="primCodePrim"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">prim</span>(graph, start):</span><span class="line" data-l="2">    <span class="kw">for</span> v <span class="kw">in</span> graph:</span><span class="line" data-l="3">        v.distance = <span class="num">∞</span></span><span class="line" data-l="4">        v.previous = <span class="kw">None</span></span><span class="line" data-l="5">    start.distance = <span class="num">0</span></span><span class="line" data-l="6">    pq = PriorityQueue(graph)</span><span class="line" data-l="7">    <span class="kw">while not</span> pq.is_empty():</span><span class="line" data-l="8">        d, u = pq.delete()</span><span class="line" data-l="9">        <span class="kw">for</span> v <span class="kw">in</span> u.get_neighbors():</span><span class="line" data-l="10">            new_d = u.weight(v)  <span class="com"># 注意：只看單邊權！</span></span><span class="line" data-l="11">            <span class="kw">if</span> v <span class="kw">in</span> pq <span class="kw">and</span> new_d &lt; v.distance:</span><span class="line" data-l="12">                v.previous = u</span><span class="line" data-l="13">                v.distance = new_d</span><span class="line" data-l="14">                pq.update(v, new_d)</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">時間（heap）</span><span class="ic-value">O((|V|+|E|) log|V|)</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>(function go(){ if(!window.DS08||!window.DS08.init){setTimeout(go,50);return;} window.DS08.init.prim(); })();</script>
