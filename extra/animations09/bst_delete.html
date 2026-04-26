@@ -1,0 +1,64 @@
+<div class="ds09-anim" id="ds09-bst-delete">
+  <h3 style="margin-top:0;color:var(--accent2);">BST 刪除 — 三種情境與 in-order successor</h3>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="tree-canvas" id="canvas-bstdelDel" style="height:360px;">
+          <svg class="edges-layer"></svg>
+          <div class="nodes-layer"></div>
+        </div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="delStatusDel">點選下方 case 預設或輸入 key 後按「刪除」</span></div>
+        <div class="input-row">
+          <label>樹結構（依序插入）：</label>
+          <input type="text" id="delInitInputDel" value="50, 30, 70, 20, 40, 60, 80, 35, 45, 75">
+          <button class="btn btn-reset" id="delApplyInitDel">建立樹</button>
+        </div>
+        <div class="input-row">
+          <label>刪除 key：</label>
+          <input type="number" id="delKeyDel" value="30" style="width:80px;">
+          <button class="btn btn-play" id="delPlayDel">▶ 刪除</button>
+          <button class="btn btn-step" id="delStepDel">→ 單步</button>
+          <button class="btn btn-reset" id="delResetDel">↺ 重建</button>
+        </div>
+        <div class="preset-row">
+          <button class="preset-btn" data-delk="20">Case 1：刪 20（葉）</button>
+          <button class="preset-btn" data-delk="80">Case 2：刪 80（一子）</button>
+          <button class="preset-btn" data-delk="30">Case 3：刪 30（兩子）</button>
+          <button class="preset-btn" data-delk="50">Case 3：刪 50（root）</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">當前情境 <span class="ic-badge">CASE</span></div>
+        <div class="ic-row"><span class="ic-label">情境</span><span class="ic-value highlight" id="delCaseDel">—</span></div>
+        <div class="ic-row"><span class="ic-label">target key</span><span class="ic-value" id="delTargetDel">—</span></div>
+        <div class="ic-row"><span class="ic-label">successor</span><span class="ic-value" id="delSuccDel">—</span></div>
+        <div class="ic-row"><span class="ic-label">階段</span><span class="ic-value" id="delPhaseDel">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">find_successor <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" style="font-size:.74em;">
+<span class="line"><span class="kw">def</span> <span class="fn">find_successor</span>(self):</span>
+<span class="line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> self.right_child:</span>
+<span class="line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> self.right_child.<span class="fn">find_min</span>()</span>
+<span class="line">&nbsp;&nbsp;&nbsp;&nbsp;...</span>
+<span class="line"><span class="kw">def</span> <span class="fn">find_min</span>(self):</span>
+<span class="line">&nbsp;&nbsp;&nbsp;&nbsp;cur = self</span>
+<span class="line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> cur.left_child:</span>
+<span class="line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur = cur.left_child</span>
+<span class="line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> cur</span>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">圖例</div>
+        <div style="font-size:.78em;line-height:1.55;">
+          <span class="legend-item"><span class="lg-swatch" style="background:var(--node-current)"></span>要刪除的節點</span><br>
+          <span class="legend-item"><span class="lg-swatch" style="background:var(--node-target)"></span>successor</span><br>
+          <span class="legend-item"><span class="lg-swatch" style="background:#e67e22"></span>搜尋路徑</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>(function go(){ if(!window.DS09||!window.DS09.init){setTimeout(go,50);return;} window.DS09.init.bstDelete(); })();</script>

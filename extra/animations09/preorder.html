@@ -1,0 +1,57 @@
+<div class="ds09-anim" id="ds09-preorder">
+  <h3 style="margin-top:0;color:var(--accent2);">前序走訪 Preorder — root → 左 → 右</h3>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="tree-canvas" id="canvas-travPre" style="height:280px;">
+          <svg class="edges-layer"></svg>
+          <div class="nodes-layer"></div>
+        </div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="travStatusPre">點「開始」播放動畫，或用「單步」逐步觀察</span></div>
+        <div class="traversal-output" id="travOutputPre"><span style="color:rgba(255,255,255,.4)">輸出將顯示在此 →</span></div>
+        <div class="preset-row">
+          <button class="preset-btn active" data-trav="preorder">Preorder 前序</button>
+          <button class="preset-btn" data-trav="inorder">Inorder 中序</button>
+          <button class="preset-btn" data-trav="postorder">Postorder 後序</button>
+        </div>
+        <div class="preset-row">
+          <button class="preset-btn active" data-tree="parse">解析樹 (3+(4*5))</button>
+          <button class="preset-btn" data-tree="bst">BST 範例</button>
+          <button class="preset-btn" data-tree="balanced">完整二元樹</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="travPlayPre">▶ 開始</button>
+          <button class="btn btn-step" id="travStepPre">→ 單步</button>
+          <button class="btn btn-reset" id="travResetPre">↺ 重置</button>
+          <div style="flex:1;min-width:160px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78em;color:var(--muted);">速度</span>
+            <input type="range" id="travSpeedPre" min="200" max="1800" step="100" value="700" style="flex:1;accent-color:var(--accent3);">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="travCodePre"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">preorder</span>(tree):</span>
+<span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> tree:</span>
+<span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">visit</span>(tree.key)   <span class="com"># root</span></span>
+<span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">preorder</span>(tree.left)</span>
+<span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">preorder</span>(tree.right)</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">遞迴呼叫堆疊 <span class="ic-badge" style="background:var(--accent2)">STACK</span></div>
+        <div class="stack-vis" id="travStackPre">
+          <div class="stack-label">call stack ↓</div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">用途</div>
+        <div style="font-size:.83em;line-height:1.55;">
+          <strong>Preorder</strong>：複製樹、序列化、目錄列表（先列父再進子）。
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>(function go(){ if(!window.DS09||!window.DS09.init){setTimeout(go,50);return;} window.DS09.init.preorder(); })();</script>

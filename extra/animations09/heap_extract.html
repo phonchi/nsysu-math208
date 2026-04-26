@@ -1,0 +1,66 @@
+<div class="ds09-anim" id="ds09-heap-extract">
+  <h3 style="margin-top:0;color:var(--accent2);">Min-Heap Delete-min — perc_down 動畫</h3>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="tree-canvas" id="canvas-heapExt" style="height:280px;">
+          <svg class="edges-layer"></svg>
+          <div class="nodes-layer"></div>
+        </div>
+        <div style="margin-top:.5rem;font-family:'JetBrains Mono',monospace;font-size:.74em;color:var(--muted);">陣列表示（heap[i]）：</div>
+        <div class="heap-list" id="heapListExt"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="heapStatusExt">按「開始」執行 delete-min</span></div>
+        <div class="preset-row">
+          <button class="preset-btn" data-op="insert">Insert</button>
+          <button class="preset-btn active" data-op="delete">Delete-min</button>
+          <button class="preset-btn" data-op="heapify">Heapify (建堆積)</button>
+        </div>
+        <div class="input-row" id="heapInsertRowExt">
+          <label>插入 key：</label>
+          <input type="number" id="heapInsertKeyExt" value="2" style="width:80px;">
+          <button class="btn btn-shuffle" id="heapInsertBtnExt">插入</button>
+          <span style="font-size:.78em;color:var(--muted);">當前 heap：</span>
+          <input type="text" id="heapArrInputExt" value="3, 5, 9, 7, 11, 15, 14" style="flex:1;min-width:140px;">
+          <button class="btn btn-reset" id="heapApplyArrExt">套用</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="heapPlayExt">▶ 開始</button>
+          <button class="btn btn-step" id="heapStepExt">→ 單步</button>
+          <button class="btn btn-reset" id="heapResetExt">↺ 重置</button>
+          <div style="flex:1;min-width:160px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78em;color:var(--muted);">速度</span>
+            <input type="range" id="heapSpeedExt" min="200" max="2000" step="100" value="700" style="flex:1;accent-color:var(--accent3);">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="stats-grid">
+          <div class="stat-tile"><div class="stat-label">交換次數</div><div class="stat-value" id="heapSwapExt">0</div></div>
+          <div class="stat-tile"><div class="stat-label">比較次數</div><div class="stat-value" id="heapCmpExt">0</div></div>
+        </div>
+        <div class="ic-row" style="margin-top:.6rem;"><span class="ic-label">當前索引 i</span><span class="ic-value highlight" id="heapIdxExt">—</span></div>
+        <div class="ic-row"><span class="ic-label">parent (i-1)//2</span><span class="ic-value" id="heapParExt">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="heapCodeExt" style="font-size:.74em;">
+<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">delete_min</span>(self):</span>
+<span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;m = heap[<span class="num">0</span>]</span>
+<span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;heap[<span class="num">0</span>] = heap.<span class="fn">pop</span>()</span>
+<span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;self.<span class="fn">_perc_down</span>(<span class="num">0</span>)</span>
+<span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> m</span>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">用途</div>
+        <div style="font-size:.83em;line-height:1.55;">
+          <strong>Delete-min</strong>：取出 root（最小值），把最後元素搬到 root，<strong>perc_down</strong> 與較小子節點交換直到恢復 heap 性質，$O(\log n)$。
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>(function go(){ if(!window.DS09||!window.DS09.init){setTimeout(go,50);return;} window.DS09.init.heapExtract(); })();</script>

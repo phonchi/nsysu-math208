@@ -1,0 +1,62 @@
+<div class="ds09-anim" id="ds09-bst-insert">
+  <h3 style="margin-top:0;color:var(--accent2);">BST 插入 (put) — 沿 BST 性質找空位</h3>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="tree-canvas" id="canvas-bstInsert" style="height:380px;">
+          <svg class="edges-layer"></svg>
+          <div class="nodes-layer"></div>
+        </div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="bstStatusInsert">輸入 key 後按 put 進行插入</span></div>
+        <div class="input-row">
+          <label>初始 keys：</label>
+          <input type="text" id="bstInitInputInsert" value="70, 31, 93, 94, 14, 23, 73">
+          <button class="btn btn-reset" id="bstApplyInitInsert">建立樹</button>
+          <button class="btn btn-shuffle" id="bstShuffleInsert">隨機</button>
+        </div>
+        <div class="input-row">
+          <label>插入 key：</label>
+          <input type="number" id="bstOpKeyInsert" value="40" style="width:80px;">
+          <button class="btn btn-play" data-bstop="put">put (插入)</button>
+          <button class="btn btn-play" data-bstop="get" style="background:var(--accent2);">get (搜尋)</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-step" id="bstStepInsert">→ 單步</button>
+          <button class="btn btn-reset" id="bstResetInsert">↺ 重置</button>
+          <div style="flex:1;min-width:160px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78em;color:var(--muted);">速度</span>
+            <input type="range" id="bstSpeedInsert" min="200" max="1800" step="100" value="700" style="flex:1;accent-color:var(--accent3);">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時狀態 <span class="ic-badge">LIVE</span></div>
+        <div class="ic-row"><span class="ic-label">當前操作</span><span class="ic-value highlight" id="bstOpNameInsert">—</span></div>
+        <div class="ic-row"><span class="ic-label">比較次數</span><span class="ic-value" id="bstCmpInsert">0</span></div>
+        <div class="ic-row"><span class="ic-label">當前 node</span><span class="ic-value" id="bstCurInsert">—</span></div>
+        <div class="ic-row"><span class="ic-label">樹高度</span><span class="ic-value" id="bstHeightInsert">—</span></div>
+        <div class="ic-row"><span class="ic-label">節點數</span><span class="ic-value" id="bstSizeInsert">—</span></div>
+        <div class="ic-row"><span class="ic-label">結果</span><span class="ic-value" id="bstResultInsert">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title" id="bstCodeTitleInsert">虛擬碼 — _put <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="bstCodeInsert" style="font-size:.73em;">
+<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_put</span>(key, val, cur):</span>
+<span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> key &lt; cur.key:</span>
+<span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> cur.left:</span>
+<span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">_put</span>(key, val, cur.left)</span>
+<span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">else</span>:</span>
+<span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur.left = <span class="fn">TreeNode</span>(key, val)</span>
+<span class="line" data-l="7">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">else</span>:</span>
+<span class="line" data-l="8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> cur.right:</span>
+<span class="line" data-l="9">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">_put</span>(key, val, cur.right)</span>
+<span class="line" data-l="10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">else</span>:</span>
+<span class="line" data-l="11">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur.right = <span class="fn">TreeNode</span>(key, val)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>(function go(){ if(!window.DS09||!window.DS09.init){setTimeout(go,50);return;} window.DS09.init.bstInsert(); })();</script>

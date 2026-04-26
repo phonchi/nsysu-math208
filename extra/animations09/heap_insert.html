@@ -1,0 +1,67 @@
+<div class="ds09-anim" id="ds09-heap-insert">
+  <h3 style="margin-top:0;color:var(--accent2);">Min-Heap Insert — perc_up 動畫</h3>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="tree-canvas" id="canvas-heapIns" style="height:280px;">
+          <svg class="edges-layer"></svg>
+          <div class="nodes-layer"></div>
+        </div>
+        <div style="margin-top:.5rem;font-family:'JetBrains Mono',monospace;font-size:.74em;color:var(--muted);">陣列表示（heap[i]）：</div>
+        <div class="heap-list" id="heapListIns"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="heapStatusIns">輸入 key 後按「插入」或「開始」</span></div>
+        <div class="preset-row">
+          <button class="preset-btn active" data-op="insert">Insert</button>
+          <button class="preset-btn" data-op="delete">Delete-min</button>
+          <button class="preset-btn" data-op="heapify">Heapify (建堆積)</button>
+        </div>
+        <div class="input-row" id="heapInsertRowIns">
+          <label>插入 key：</label>
+          <input type="number" id="heapInsertKeyIns" value="2" style="width:80px;">
+          <button class="btn btn-shuffle" id="heapInsertBtnIns">插入</button>
+          <span style="font-size:.78em;color:var(--muted);">當前 heap：</span>
+          <input type="text" id="heapArrInputIns" value="3, 5, 9, 7, 11, 15, 14" style="flex:1;min-width:140px;">
+          <button class="btn btn-reset" id="heapApplyArrIns">套用</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="heapPlayIns">▶ 開始</button>
+          <button class="btn btn-step" id="heapStepIns">→ 單步</button>
+          <button class="btn btn-reset" id="heapResetIns">↺ 重置</button>
+          <div style="flex:1;min-width:160px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78em;color:var(--muted);">速度</span>
+            <input type="range" id="heapSpeedIns" min="200" max="2000" step="100" value="700" style="flex:1;accent-color:var(--accent3);">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="stats-grid">
+          <div class="stat-tile"><div class="stat-label">交換次數</div><div class="stat-value" id="heapSwapIns">0</div></div>
+          <div class="stat-tile"><div class="stat-label">比較次數</div><div class="stat-value" id="heapCmpIns">0</div></div>
+        </div>
+        <div class="ic-row" style="margin-top:.6rem;"><span class="ic-label">當前索引 i</span><span class="ic-value highlight" id="heapIdxIns">—</span></div>
+        <div class="ic-row"><span class="ic-label">parent (i-1)//2</span><span class="ic-value" id="heapParIns">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="heapCodeIns" style="font-size:.74em;">
+<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_perc_up</span>(self, i):</span>
+<span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> (i - <span class="num">1</span>) // <span class="num">2</span> &gt;= <span class="num">0</span>:</span>
+<span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p = (i - <span class="num">1</span>) // <span class="num">2</span></span>
+<span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> heap[i] &lt; heap[p]:</span>
+<span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">swap</span>(heap[i], heap[p])</span>
+<span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i = p</span>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">用途</div>
+        <div style="font-size:.83em;line-height:1.55;">
+          <strong>Insert</strong>：把新 key 放到陣列尾端（保結構），再 <strong>perc_up</strong> 與 parent 比較交換直到滿足 heap 性質，總成本 $O(\log n)$。
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>(function go(){ if(!window.DS09||!window.DS09.init){setTimeout(go,50);return;} window.DS09.init.heapInsert(); })();</script>
