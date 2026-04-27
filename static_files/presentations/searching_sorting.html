@@ -277,6 +277,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <a href="#quick" data-target="quick"><span class="fn-num">P09</span><span class="fn-name">快速排序</span></a>
   <a href="#depends" data-target="depends"><span class="fn-num">P10</span><span class="fn-name">依賴的資料結構</span></a>
   <a href="#reference" data-target="reference"><span class="fn-num">REF</span><span class="fn-name">總覽比較</span></a>
+  <a href="#supplement" data-target="supplement"><span class="fn-num">SUP</span><span class="fn-name">補充</span></a>
   <a href="#top" class="fn-top" title="回到頂端"><span class="fn-num">↑ TOP</span></a>
 </nav>
 
@@ -308,6 +309,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <a href="#quick"><span class="toc-num">P09</span>快速排序 Quick</a>
     <a href="#depends"><span class="toc-num">P10</span>依賴的資料結構</a>
     <a href="#reference"><span class="toc-num">REF</span>總覽比較表</a>
+    <a href="#supplement"><span class="toc-num">SUP</span>補充：quadratic & put 分支</a>
   </div>
 </div>
 
@@ -1376,6 +1378,187 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div class="info-box green">
     <span class="info-label">比較式排序的下界</span>
     任何只透過「兩兩比較」來排序的演算法，最差情況都至少要 $\Omega(n\log n)$ 次比較。merge / heap / 平均下的 quick sort 都達到這個下界。要打破它必須使用「非比較」方法，例如 counting sort 或 radix sort（要求資料形態特定）。
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- SUPPLEMENT -->
+<!-- ============================================================ -->
+<section id="supplement">
+  <div class="section-number">SUP · 補充</div>
+  <h2>補充：兩個 PDF 上不容易看出來的細節</h2>
+  <p>這一節針對 PDF 講義中兩個容易卡住的點補完整的逐步追蹤：（A）quadratic probing 把 77、44、55 放到表裡時為什麼會落在那個位置；（B）Map ADT 的 <code>put()</code> 為什麼有 4 個 if/else 分支、每個分支什麼時候會被觸發，以及哪個才是真正的 collision。</p>
+
+  <!-- ============= PART A : quadratic probing trace ============= -->
+  <h3 id="sup-quadratic" style="margin-top:1.5rem;">A. Quadratic probing 全程追蹤（m = 11）</h3>
+
+  <div class="info-box">
+    <span class="info-label">設定</span>
+    <strong>雜湊函數</strong>：$h(\text{item}) = \text{item} \bmod 11$。<br>
+    <strong>Rehash</strong>：$\text{rehash}(p, \text{skip}) = (p + \text{skip}) \bmod 11$，其中 skip 依序取 $1^2, 2^2, 3^2, 4^2, 5^2, \ldots = 1, 4, 9, 16, 25, \ldots$（這也是「quadratic」的由來）。<br>
+    <strong>插入順序</strong>：<code>54, 26, 93, 17, 77, 31, 44, 55, 20</code>（與教材 PDF 圖示同）。
+  </div>
+
+  <h4 style="margin-top:1.2rem;color:var(--accent2);font-family:'Noto Serif TC',serif;">Step 1 — 前六筆都直接落空槽</h4>
+  <table class="cmp-table">
+    <thead><tr><th>item</th><th>item % 11</th><th>落點 slot</th><th>狀況</th></tr></thead>
+    <tbody>
+      <tr><td>54</td><td>10</td><td>10</td><td>空 ✓</td></tr>
+      <tr><td>26</td><td>4</td><td>4</td><td>空 ✓</td></tr>
+      <tr><td>93</td><td>5</td><td>5</td><td>空 ✓</td></tr>
+      <tr><td>17</td><td>6</td><td>6</td><td>空 ✓</td></tr>
+      <tr><td>77</td><td>0</td><td>0</td><td>空 ✓</td></tr>
+      <tr><td>31</td><td>9</td><td>9</td><td>空 ✓</td></tr>
+    </tbody>
+  </table>
+  <p>此時表的狀態：</p>
+<pre style="background:#2d2d3f;color:#e8e6df;font-family:'JetBrains Mono',monospace;font-size:.82rem;padding:.85rem 1rem;border-radius:10px;line-height:1.6;overflow-x:auto;">idx :  0    1    2    3    4    5    6    7    8    9    10
+val : 77    .    .    .   26   93   17    .    .   31    54</pre>
+
+  <h4 style="margin-top:1.2rem;color:var(--accent2);font-family:'Noto Serif TC',serif;">Step 2 — 插 44（44 % 11 = 0，撞 77）</h4>
+  <table class="cmp-table">
+    <thead><tr><th>嘗試</th><th>skip</th><th>計算位置</th><th>slot 內容</th><th>結果</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>$1^2 = 1$</td><td>(0+1) % 11 = <strong>1</strong></td><td>空</td><td><span class="pill pill-green">落 slot 1</span></td></tr>
+    </tbody>
+  </table>
+
+  <h4 style="margin-top:1.2rem;color:var(--accent2);font-family:'Noto Serif TC',serif;">Step 3 — 插 55（55 % 11 = 0，撞 77；之後又連撞 4 次）</h4>
+  <table class="cmp-table">
+    <thead><tr><th>嘗試</th><th>skip</th><th>計算位置</th><th>slot 內容</th><th>結果</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>$1^2 = 1$</td><td>(0+1) % 11 = 1</td><td>44</td><td>占用</td></tr>
+      <tr><td>2</td><td>$2^2 = 4$</td><td>(0+4) % 11 = 4</td><td>26</td><td>占用</td></tr>
+      <tr><td>3</td><td>$3^2 = 9$</td><td>(0+9) % 11 = 9</td><td>31</td><td>占用</td></tr>
+      <tr><td>4</td><td>$4^2 = 16$</td><td>(0+16) % 11 = <strong>5</strong></td><td>93</td><td>占用</td></tr>
+      <tr><td>5</td><td>$5^2 = 25$</td><td>(0+25) % 11 = <strong>3</strong></td><td>空</td><td><span class="pill pill-green">落 slot 3</span></td></tr>
+    </tbody>
+  </table>
+  <div class="info-box warm">
+    <span class="info-label">關鍵</span>
+    skip 序列是「<strong>連續完全平方數本身</strong>」（$1, 4, 9, 16, 25$），<strong>不是累加</strong>。每次都從原始 hash 位置 $h$ 起算，所以第 4 次跳到 $(0+16) \bmod 11 = 5$、第 5 次跳到 $(0+25) \bmod 11 = 3$ — 兩次都「跨過」了表的另一端。這正是 quadratic probing 能打散 linear probing 那種連續聚集（clustering）的原因。
+  </div>
+
+  <h4 style="margin-top:1.2rem;color:var(--accent2);font-family:'Noto Serif TC',serif;">Step 4 — 插 20（20 % 11 = 9，撞 31）</h4>
+  <table class="cmp-table">
+    <thead><tr><th>嘗試</th><th>skip</th><th>計算位置</th><th>slot 內容</th><th>結果</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>$1^2 = 1$</td><td>(9+1) % 11 = 10</td><td>54</td><td>占用</td></tr>
+      <tr><td>2</td><td>$2^2 = 4$</td><td>(9+4) % 11 = <strong>2</strong></td><td>空</td><td><span class="pill pill-green">落 slot 2</span></td></tr>
+    </tbody>
+  </table>
+
+  <h4 style="margin-top:1.2rem;color:var(--accent2);font-family:'Noto Serif TC',serif;">最終表狀態</h4>
+<pre style="background:#2d2d3f;color:#e8e6df;font-family:'JetBrains Mono',monospace;font-size:.82rem;padding:.85rem 1rem;border-radius:10px;line-height:1.6;overflow-x:auto;">idx :  0    1    2    3    4    5    6    7    8    9    10
+val : 77   44   20   55   26   93   17    .    .   31    54</pre>
+
+
+  <!-- ============= PART B : Map ADT put() 4 branches ============= -->
+  <h3 id="sup-put" style="margin-top:2rem;">B. Map ADT <code>put()</code> 的 4 個分支（最容易跟 collision 搞混的地方）</h3>
+
+  <div class="info-box warm">
+    <span class="info-label">先講清楚：什麼是 collision、什麼不是？</span>
+    <strong style="display:block;font-size:1.05em;color:var(--accent);">Collision 的判準是「<u>hash 值</u>相同」，不是「key 相同」 — 千萬別搞反。</strong>
+    <p style="margin-top:.5rem;">正式定義：<strong>兩個<u>不同的 item</u> 經過 <code>hash_function</code> 後得到<u>同一個 hash 值</u></strong>（也就是 <code>hash(k₁) == hash(k₂)</code>，因此被映射到同一個 slot），這才叫 collision。判 collision 看的是「hash 值」這個運算結果，不是「key 本身」。</p>
+    <p>同一個 key 重複 <code>put</code>（如 <code>h[77]="bird"</code> 然後 <code>h[77]="eagle"</code>）— hash 值當然會相同，<strong>但兩次塞的是同一個 item</strong>，只是更新同一個 entry，<strong>這不是 collision，也不會觸發任何 rehash</strong>。collision 必須是「兩個不同 item 撞到同一格」。</p>
+    <table class="cmp-table" style="margin-top:.8rem;">
+      <thead><tr><th>狀況</th><th>兩個 item 的 hash 值</th><th>是同一個 key 嗎？</th><th>這算 collision 嗎？</th><th><code>put</code> 要做的事</th></tr></thead>
+      <tbody>
+        <tr><td>情況一</td><td>相同（必然）</td><td>是（同 key 重複 put）</td><td><span class="pill pill-green">不是</span></td><td>直接覆寫舊值（字典「同 key 重新賦值」的語意）</td></tr>
+        <tr><td>情況二</td><td><strong>相同</strong>（hash 撞到了）</td><td><strong>否</strong>（不同 key）</td><td><span class="pill pill-orange">是</span></td><td>啟動 rehash 探查，找下一個位置</td></tr>
+        <tr><td>情況三</td><td>不同</td><td>否</td><td><span class="pill pill-green">不是</span></td><td>各走各的 slot，互不相干</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:.5rem;font-size:.92em;">情況一、二 在程式裡都會「<code>slots[hash]</code> 已經有東西」，但只有情況二才是真 collision — 差別就在那個被佔的 slot 裡放的 key 跟我「是不是同一個 item」。</p>
+  </div>
+
+  <h4 style="margin-top:1.2rem;color:var(--accent2);font-family:'Noto Serif TC',serif;">教科書版本的 <code>put()</code></h4>
+  <div class="pseudo-code">
+<span class="line"><span class="kw">def</span> <span class="fn">put</span>(self, key, data):</span>
+<span class="line">    hash_value = self.<span class="fn">hash_function</span>(key, <span class="fn">len</span>(self.slots))</span>
+<span class="line">&nbsp;</span>
+<span class="line">    <span class="kw">if</span> self.slots[hash_value] <span class="kw">is</span> <span class="num">None</span>:           <span class="com"># ① 外層 if</span></span>
+<span class="line">        self.slots[hash_value] = key</span>
+<span class="line">        self.data[hash_value]  = data</span>
+<span class="line">    <span class="kw">else</span>:                                      <span class="com">#    外層 else：slot 被佔了，但被誰佔？</span></span>
+<span class="line">        <span class="kw">if</span> self.slots[hash_value] == key:      <span class="com"># ② 內層 if：被「同一個 key」佔（不是 collision）</span></span>
+<span class="line">            self.data[hash_value] = data</span>
+<span class="line">        <span class="kw">else</span>:                                  <span class="com">#    內層 else：hash 值撞到別人的 key → 真 collision</span></span>
+<span class="line">            next_slot = self.<span class="fn">rehash</span>(hash_value, <span class="fn">len</span>(self.slots))</span>
+<span class="line">            <span class="kw">while</span> (self.slots[next_slot] <span class="kw">is not</span> <span class="num">None</span></span>
+<span class="line">                   <span class="kw">and</span> self.slots[next_slot] != key):</span>
+<span class="line">                next_slot = self.<span class="fn">rehash</span>(next_slot, <span class="fn">len</span>(self.slots))</span>
+<span class="line">&nbsp;</span>
+<span class="line">            <span class="kw">if</span> self.slots[next_slot] <span class="kw">is</span> <span class="num">None</span>:    <span class="com"># ③ 探查後 if：路徑上撞到空槽 → 新插入</span></span>
+<span class="line">                self.slots[next_slot] = key</span>
+<span class="line">                self.data[next_slot]  = data</span>
+<span class="line">            <span class="kw">else</span>:                                <span class="com"># ④ 探查後 else：路徑上撞到「同 key」 → 覆寫</span></span>
+<span class="line">                self.data[next_slot] = data</span>
+  </div>
+
+  <h4 style="margin-top:1.2rem;color:var(--accent2);font-family:'Noto Serif TC',serif;">把 4 個分支按「碰撞 / 探查」分類</h4>
+  <table class="cmp-table">
+    <thead><tr><th></th><th>hash 第一次命中（無探查）</th><th>rehash 探查之後</th></tr></thead>
+    <tbody>
+      <tr><td><strong>新增 entry</strong>（slot 是空的）</td><td>① 外層 if</td><td>③ 探查後 if<br><span style="color:var(--accent3);font-weight:700;">↑ 唯一真正在「處理 collision」的分支</span></td></tr>
+      <tr><td><strong>覆寫已有同 key</strong>（不是 collision）</td><td>② 內層 if</td><td>④ 探查後 else<br><span style="color:var(--muted);">同 key 在探查路徑上，沿路找回去覆寫</span></td></tr>
+    </tbody>
+  </table>
+
+  <h4 style="margin-top:1.2rem;color:var(--accent2);font-family:'Noto Serif TC',serif;">情境設定：4 步剛好走 4 個分支</h4>
+  <p><code>h = HashTable(size=11)</code>，<code>hash = key % 11</code>，<code>rehash = (p+1) % 11</code>。依序執行下列 4 條 <code>h[key] = val</code>，每一條剛好觸發一個分支：</p>
+
+  <table class="cmp-table">
+    <thead><tr><th>步驟</th><th>操作</th><th>hash</th><th>slots[hash]</th><th>走哪條分支</th><th>是 collision 嗎？</th><th>為何</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><code>h[77]="bird"</code></td><td>0</td><td><code>None</code></td><td><strong>① 外層 if</strong></td><td>—</td><td style="text-align:left;font-family:'Noto Sans TC',sans-serif;">slot 0 空，直接寫入，不必探查</td></tr>
+      <tr><td>2</td><td><code>h[77]="eagle"</code></td><td>0</td><td><code>77</code></td><td><strong>② 內層 if</strong></td><td><span class="pill pill-green">否</span></td><td style="text-align:left;font-family:'Noto Sans TC',sans-serif;">slot 0 已有的 key 就是 77 → 同 key 重新賦值，直接覆寫，<strong>不啟動 rehash</strong></td></tr>
+      <tr><td>3</td><td><code>h[44]="goat"</code></td><td>0</td><td><code>77</code> (≠ 44)</td><td><strong>③ 探查後 if</strong></td><td><span class="pill pill-orange">是</span></td><td style="text-align:left;font-family:'Noto Sans TC',sans-serif;">44 和 77 hash 值都是 0（不同 key、相同 hash） → 真 collision → 進 while：<code>next_slot = 1</code>、<code>slots[1] is None</code> → 退出 → 在 slot 1 新插入</td></tr>
+      <tr><td>4</td><td><code>h[44]="lamb"</code></td><td>0</td><td><code>77</code> (≠ 44)</td><td><strong>④ 探查後 else</strong></td><td><span class="pill pill-green">否（很容易被誤認）</span></td><td style="text-align:left;font-family:'Noto Sans TC',sans-serif;">hash slot 雖然被別人佔，但 44 真正的家在 slot 1（步驟 3 放的）→ while 沿著 rehash 路徑走到 slot 1 找到 key 44 → 退出 → 覆寫 slot 1 的值</td></tr>
+    </tbody>
+  </table>
+
+  <h4 style="margin-top:1.2rem;color:var(--accent2);font-family:'Noto Serif TC',serif;">每一步之後的表狀態（slots / data 同時看）</h4>
+<pre style="background:#2d2d3f;color:#e8e6df;font-family:'JetBrains Mono',monospace;font-size:.78rem;padding:.85rem 1rem;border-radius:10px;line-height:1.6;overflow-x:auto;">init     :  slots = [ . , . , . , . , . , . , . , . , . , . , . ]
+            data  = [ . , . , . , . , . , . , . , . , . , . , . ]
+
+step 1 (① h[77]="bird"):
+            slots = [77 , . , . , . , . , . , . , . , . , . , . ]
+            data  = ["bird", . , . , . , . , . , . , . , . , . , . ]
+
+step 2 (② h[77]="eagle"):  ← 同 key 覆寫，slots 不變
+            slots = [77 , . , . , . , . , . , . , . , . , . , . ]
+            data  = ["eagle", . , . , . , . , . , . , . , . , . , . ]
+
+step 3 (③ h[44]="goat"):   ← collision，rehash 到 slot 1
+            slots = [77 , 44 , . , . , . , . , . , . , . , . , . ]
+            data  = ["eagle","goat", . , . , . , . , . , . , . , . , . ]
+
+step 4 (④ h[44]="lamb"):   ← 不是 collision，沿著 rehash 路徑找到既存 key 44 並覆寫
+            slots = [77 , 44 , . , . , . , . , . , . , . , . , . ]
+            data  = ["eagle","lamb", . , . , . , . , . , . , . , . , . ]</pre>
+  <p style="font-size:.86rem;color:var(--muted);">注意 <code>slots</code> 在第 4 步<strong>完全沒動</strong>，只動 <code>data</code> — 這正是「同一個 key 永遠只占一格」的保證。</p>
+
+  <div class="info-box green">
+    <span class="info-label">最容易誤會的兩件事</span>
+    <strong>誤會 1：「分支 ② 是 collision」</strong> ❌<br>
+    分支 ② 發生時 <code>slots[hash] == key</code>，這是<strong>同一個 key 第二次 <code>put</code></strong>。雖然 hash 值相同，但 collision 的判準是「<strong>不同 item 的 hash 值相同</strong>」，這裡兩次 put 的根本是同一個 item，所以不是 collision，只是字典重新賦值。真正在處理 collision 的路徑是「外層 else → 內層 else → 進 rehash 迴圈」，亦即步驟 3、4 走的路。
+    <br><br>
+    <strong>誤會 2：「分支 ④ 是 collision」</strong> ❌<br>
+    分支 ④ 表示「我這個 key 之前因為 hash 撞到別人（步驟 3：44 跟 77 hash 值都是 0）被擠到 slot 1；現在我又要 <code>put</code> 同一個 key，沿著當年的 rehash 路徑走回去把舊值覆寫」。這次 put 的還是同一個 key，<strong>不是新的不同 item 撞到</strong>，所以也不是新的 collision 事件，跟字典 <code>d[k] = v2</code> 改寫舊值是完全一樣的語意。新的 collision 只在分支 ③（不同 item hash 到已被別人佔的格、需要找新位置安置）才發生。
+    <br><br>
+    <strong>結論</strong>：<code>put</code> 的 4 個分支中，<strong>只有 ③ 是真正在「解決 collision」</strong>；① 是無事發生，②、④ 都是「同 key 覆寫」（差別只在 hash 第一次就命中、還是探查後才命中）。判 collision 看的是「<u>不同 item、相同 hash 值</u>」，不是「同一個 key 第二次來」。
+  </div>
+
+  <div class="info-box">
+    <span class="info-label">為什麼 while 要同時檢查 <code>is not None</code> 和 <code>!= key</code>？</span>
+    迴圈兩個條件<strong>任一</strong>不滿足就停：
+    <ul style="margin:.4rem 0 .4rem 1.4rem;line-height:1.8;">
+      <li>撞到 <code>None</code> 停 → 落到分支 ③（新插入）</li>
+      <li>撞到 <code>== key</code> 停 → 落到分支 ④（覆寫）</li>
+    </ul>
+    <strong>不能只檢查 <code>is not None</code></strong> — 否則「同 key 已在路徑上」（步驟 4 那種情況）時會繼續往下走，最後在另一個 slot 又寫一次，<strong>製造出兩個 slots 都是同一個 key</strong>。字典就壞掉了：<code>get</code> 查回來的值會看 rehash 路徑長度而異。這就是分支 ④ 必須存在、while 必須帶 <code>!= key</code> 條件的原因。
   </div>
 </section>
 
