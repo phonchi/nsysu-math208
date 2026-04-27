@@ -20,5 +20,5 @@ links:
 - [Hash table 2](https://fchart.github.io/DS/DSVisualization/ClosedHash.html)
 - [排序與搜尋概論](/nsysu-math208/static_files/presentations/searching_sorting.html)
 - Textbook Chapter 5
-
+- [[Recorded video]](https://www.youtube.com/playlist?list=PLHNZtBNWQ-86PNK4ZIuEzahkk2BC9sVSA)
 
