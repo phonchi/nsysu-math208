@@ -170,6 +170,33 @@ function setEdgeClass(canvas, fromId, toId, cls, on=true) {
   if (el) el.classList.toggle(cls, on);
 }
 
+/* Re-run a render closure once the canvas actually has non-zero size.
+   Init time may fire when the panel is in a hidden reveal section or
+   before layout has flushed — clientWidth is 0, layoutTree falls back
+   to 600px, and nodes get clipped by the narrower real canvas. We
+   call the closure once now (so something paints); if the canvas was
+   zero-sized we hook a ResizeObserver to re-call it the moment the
+   canvas is laid out. */
+function _ensurePanelReady(canvas, rerender) {
+  if (!canvas) return;
+  if (canvas.clientWidth > 0) return;
+  if (typeof ResizeObserver === 'undefined') {
+    const tick = () => {
+      if (canvas.clientWidth > 0) rerender();
+      else setTimeout(tick, 100);
+    };
+    setTimeout(tick, 100);
+    return;
+  }
+  const ro = new ResizeObserver(() => {
+    if (canvas.clientWidth > 0) {
+      ro.disconnect();
+      rerender();
+    }
+  });
+  ro.observe(canvas);
+}
+
 /* Build tree from preorder array (use null for empty). Helper. */
 function buildFromArr(arr, idx={i:0}) {
   if (idx.i >= arr.length || arr[idx.i] === null) {
@@ -251,7 +278,9 @@ function initVocabulary() {
   ]);
 
   function render() {
-    layoutTree(root, canvas.clientWidth, canvas.clientHeight, 35, 35);
+    const w = canvas.clientWidth || 600;
+    const h = canvas.clientHeight || parseInt(canvas.style.height, 10) || 280;
+    layoutTree(root, w, h, 35, 35);
     renderTree(canvas, root, {
       onClick: (n) => clickNode(n),
       onHover: (n) => hoverNode(n),
@@ -333,6 +362,7 @@ function initVocabulary() {
   };
 
   render();
+  _ensurePanelReady(canvas, render);
   return { resize: render };
 }
 
@@ -407,7 +437,9 @@ function initNodesRefs() {
   function applyStep(i) {
     const s = steps[i];
     const root = s.tree();
-    layoutTree(root, canvas.clientWidth, canvas.clientHeight, 35, 35);
+    const w = canvas.clientWidth || 600;
+    const h = canvas.clientHeight || parseInt(canvas.style.height, 10) || 280;
+    layoutTree(root, w, h, 35, 35);
     renderTree(canvas, root);
     if (s.highlight) {
       // find node with that key and mark
@@ -463,6 +495,7 @@ function initNodesRefs() {
   };
 
   reset();
+  _ensurePanelReady(canvas, () => applyStep(stepIdx));
   return { resize: () => applyStep(stepIdx) };
 }
 
@@ -581,7 +614,9 @@ function initParseTree() {
       if (nd.rightId != null) { n.right = map.get(nd.rightId); n.right.parent = n; }
     }
     const root = map.get(struct.rootId);
-    layoutTree(root, canvas.clientWidth, canvas.clientHeight, 35, 35);
+    const w = canvas.clientWidth || 600;
+    const h = canvas.clientHeight || parseInt(canvas.style.height, 10) || 280;
+    layoutTree(root, w, h, 35, 35);
     renderTree(canvas, root);
 
     // Highlight cur
@@ -657,6 +692,7 @@ function initParseTree() {
   };
 
   regen();
+  _ensurePanelReady(canvas, regen);
   return { resize: regen };
 }
 
@@ -826,6 +862,7 @@ function initTraversals(suffix = '', lockedKind = null) {
   });
 
   regen();
+  _ensurePanelReady(canvas, regen);
   return { resize: regen };
 }
 
@@ -1172,6 +1209,7 @@ function initHeap(suffix = '', lockedOp = null) {
   });
 
   renderHeap(heapArr, {});
+  _ensurePanelReady(canvas, () => renderHeap(heapArr, {}));
   return { resize: () => renderHeap(heapArr, {}) };
 }
 
@@ -1413,6 +1451,7 @@ function initBST(suffix = '', lockedOp = null) {
   });
 
   rebuild();
+  _ensurePanelReady(canvas, () => render(null, null, null));
   return { resize: () => render(null, null, null) };
 }
 
@@ -1594,6 +1633,7 @@ function initBSTDelete(suffix = '') {
   });
 
   rebuild();
+  _ensurePanelReady(canvas, () => render({}));
   return { resize: () => render({}) };
 }
 
@@ -1652,6 +1692,7 @@ function initBSTAnalysis() {
 
   $('bstAnalRegen').onclick = regen;
   regen();
+  _ensurePanelReady(canvas, regen);
   return { resize: regen };
 }
 
@@ -1787,6 +1828,7 @@ function initAVL() {
   });
 
   regen();
+  _ensurePanelReady(canvas, regen);
   return { resize: regen };
 }
 
