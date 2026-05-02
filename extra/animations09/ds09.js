@@ -692,7 +692,11 @@ function initParseTree() {
   };
 
   regen();
-  _ensurePanelReady(canvas, regen);
+  _ensurePanelReady(canvas, () => {
+    if (player && player.steps && player.steps[player.idx]) {
+      player.apply(player.steps[player.idx], player.idx);
+    } else regen();
+  });
   return { resize: regen };
 }
 
@@ -862,7 +866,11 @@ function initTraversals(suffix = '', lockedKind = null) {
   });
 
   regen();
-  _ensurePanelReady(canvas, regen);
+  _ensurePanelReady(canvas, () => {
+    if (player && player.steps && player.steps[player.idx]) {
+      player.apply(player.steps[player.idx], player.idx);
+    } else regen();
+  });
   return { resize: regen };
 }
 
@@ -1209,7 +1217,11 @@ function initHeap(suffix = '', lockedOp = null) {
   });
 
   renderHeap(heapArr, {});
-  _ensurePanelReady(canvas, () => renderHeap(heapArr, {}));
+  _ensurePanelReady(canvas, () => {
+    if (player && player.steps && player.steps[player.idx]) {
+      player.apply(player.steps[player.idx], player.idx);
+    } else renderHeap(heapArr, {});
+  });
   return { resize: () => renderHeap(heapArr, {}) };
 }
 
@@ -1451,7 +1463,21 @@ function initBST(suffix = '', lockedOp = null) {
   });
 
   rebuild();
-  _ensurePanelReady(canvas, () => render(null, null, null));
+  _ensurePanelReady(canvas, () => {
+    // 不能呼叫 player.apply()：commit / commit-root step 會 create TNode 並 mutate root，
+    // ResizeObserver fire 時 replay 會二次 insert → 樹結構壞。改用 pure render(...) snapshot。
+    if (player && player.steps && player.steps[player.idx]) {
+      const s = player.steps[player.idx];
+      // For commit frame，root 已被當初的 applyStep 插入新節點，從 s.node[s.side] 直接取出
+      // 並 highlight 它，否則只會 highlight 到 parent。
+      if (s.type === 'commit' && s.node && s.side) {
+        const child = s.node[s.side];
+        render(child ? s.path.concat([child]) : s.path, child || s.node, s.status ?? null);
+      } else {
+        render(s.path || null, s.node || null, s.status ?? null);
+      }
+    } else render(null, null, null);
+  });
   return { resize: () => render(null, null, null) };
 }
 
@@ -1610,19 +1636,29 @@ function initBSTDelete(suffix = '') {
     $$('delPhase').textContent = '—';
   }
 
-  function startDel() {
+  // Build a fresh Player for the current key but do not auto-play.
+  // startDel() calls this then play()s; delStep() calls this then step()s.
+  function prepareDel() {
     const k = parseInt($$('delKey').value, 10);
-    if (isNaN(k)) return;
+    if (isNaN(k)) return false;
     if (player) player.stop();
     const steps = genDeleteSteps(k);
     player = new Player({ steps, apply: applyStep, delay: 800 });
     player.reset();
-    player.play();
+    return true;
+  }
+  function startDel() {
+    if (prepareDel()) player.play();
   }
 
   $$('delApplyInit').onclick = rebuild;
   $$('delPlay').onclick = startDel;
-  $$('delStep').onclick = () => { if (!player) startDel(); else player.step(); };
+  $$('delStep').onclick = () => {
+    if (!player) {
+      if (!prepareDel()) return;
+    }
+    player.step();
+  };
   $$('delReset').onclick = rebuild;
   panelRoot.querySelectorAll('.preset-btn[data-delk]').forEach(btn => {
     btn.onclick = () => {
@@ -1633,7 +1669,14 @@ function initBSTDelete(suffix = '') {
   });
 
   rebuild();
-  _ensurePanelReady(canvas, () => render({}));
+  _ensurePanelReady(canvas, () => {
+    // 不能呼叫 player.apply()：commit step (remove-leaf / lift-child / copy-key / splice-succ)
+    // 會 mutate root（刪節點 / 接子樹），replay 會二次刪 → 樹結構壞。
+    // render(hl) 是 pure：只讀 root + 套 highlight，不改 tree。
+    if (player && player.steps && player.steps[player.idx]) {
+      render(player.steps[player.idx].hl || {});
+    } else render({});
+  });
   return { resize: () => render({}) };
 }
 
@@ -1692,7 +1735,11 @@ function initBSTAnalysis() {
 
   $('bstAnalRegen').onclick = regen;
   regen();
-  _ensurePanelReady(canvas, regen);
+  _ensurePanelReady(canvas, () => {
+    if (player && player.steps && player.steps[player.idx]) {
+      player.apply(player.steps[player.idx], player.idx);
+    } else regen();
+  });
   return { resize: regen };
 }
 
@@ -1828,7 +1875,11 @@ function initAVL() {
   });
 
   regen();
-  _ensurePanelReady(canvas, regen);
+  _ensurePanelReady(canvas, () => {
+    if (player && player.steps && player.steps[player.idx]) {
+      player.apply(player.steps[player.idx], player.idx);
+    } else regen();
+  });
   return { resize: regen };
 }
 
