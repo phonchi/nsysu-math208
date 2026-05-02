@@ -56,7 +56,8 @@ function layoutTree(root, w, h, topPad=40, botPad=40) {
     place(n.left,  d+1, lo, mid);
     place(n.right, d+1, mid, hi);
   }
-  place(root, 0, 0, w);
+  const xPad = 24;
+  place(root, 0, xPad, Math.max(xPad, w - xPad));
   return depth;
 }
 
@@ -168,6 +169,10 @@ function setNodeClass(canvas, id, cls, on=true) {
 function setEdgeClass(canvas, fromId, toId, cls, on=true) {
   const el = canvas.querySelector('.edge-' + fromId + '-' + toId);
   if (el) el.classList.toggle(cls, on);
+}
+
+function setText(el, value) {
+  if (el) el.textContent = value;
 }
 
 /* Re-run a render closure once the canvas actually has non-zero size.
@@ -1121,11 +1126,11 @@ function initHeap(suffix = '', lockedOp = null) {
 
   function applyStep(s) {
     renderHeap(s.arr, s.hl || {});
-    $$('heapStatus').textContent = s.status || '';
-    $$('heapSwap').textContent = s.swap;
-    $$('heapCmp').textContent = s.cmp;
-    $$('heapIdx').textContent = s.idx;
-    $$('heapPar').textContent = s.par;
+    setText($$('heapStatus'), s.status || '');
+    setText($$('heapSwap'), s.swap);
+    setText($$('heapCmp'), s.cmp);
+    setText($$('heapIdx'), s.idx);
+    setText($$('heapPar'), s.par);
     hlLine($$('heapCode'), s.line);
     if (s.commit && s.finalArr) {
       heapArr = s.finalArr.slice();
@@ -1207,9 +1212,9 @@ function initHeap(suffix = '', lockedOp = null) {
       heapArr = $$('heapArrInput').value.split(/[\s,]+/).map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
     }
     renderHeap(heapArr, {});
-    $$('heapStatus').textContent = '已重置。';
-    $$('heapSwap').textContent = '0'; $$('heapCmp').textContent = '0';
-    $$('heapIdx').textContent = '—'; $$('heapPar').textContent = '—';
+    setText($$('heapStatus'), '已重置。');
+    setText($$('heapSwap'), '0'); setText($$('heapCmp'), '0');
+    setText($$('heapIdx'), '—'); setText($$('heapPar'), '—');
     hlLine($$('heapCode'), null);
   };
   $$('heapSpeed').addEventListener('input', () => {
@@ -1313,9 +1318,9 @@ function initBST(suffix = '', lockedOp = null) {
       }
     }
     if (currentNode) setNodeClass(canvas, currentNode.id, 'current');
-    if (status != null) $$('bstStatus').textContent = status;
-    $$('bstHeight').textContent = treeHeight(root);
-    $$('bstSize').textContent = nodeCount(root);
+    if (status != null) setText($$('bstStatus'), status);
+    setText($$('bstHeight'), treeHeight(root));
+    setText($$('bstSize'), nodeCount(root));
   }
 
   // Generate steps for a put or get operation
@@ -1393,21 +1398,21 @@ function initBST(suffix = '', lockedOp = null) {
       if (s.side === 'left') s.node.left = newN; else s.node.right = newN;
       render(s.path.concat([newN]), newN, s.status);
     } else if (s.type === 'init-empty') {
-      $('bstStatus').textContent = s.status;
+      setText($$('bstStatus'), s.status);
     } else {
       render(s.path || null, s.node || null, s.status);
     }
-    if (s.cmp != null) $$('bstCmp').textContent = s.cmp;
-    if (s.node) $$('bstCur').textContent = s.node.key;
-    if (s.result) $$('bstResult').textContent = s.result;
+    if (s.cmp != null) setText($$('bstCmp'), s.cmp);
+    if (s.node) setText($$('bstCur'), s.node.key);
+    if (s.result) setText($$('bstResult'), s.result);
     hlLine($$('bstCode'), s.line);
   }
 
   function startOp(op, key) {
     setCodePanel(op);
-    $$('bstOpName').textContent = op === 'put' ? `put(${key})` : `get(${key})`;
-    $$('bstResult').textContent = '—';
-    $$('bstCmp').textContent = '0';
+    setText($$('bstOpName'), op === 'put' ? `put(${key})` : `get(${key})`);
+    setText($$('bstResult'), '—');
+    setText($$('bstCmp'), '0');
     if (player) player.stop();
     const steps = genOpSteps(op, key);
     player = new Player({
@@ -1423,10 +1428,10 @@ function initBST(suffix = '', lockedOp = null) {
     const raw = $$('bstInitInput').value.split(/[\s,]+/).map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
     root = buildBST(raw);
     render(null, null, `已建立 BST（${raw.length} 個 keys）`);
-    $$('bstOpName').textContent = '—';
-    $$('bstResult').textContent = '—';
-    $$('bstCmp').textContent = '0';
-    $$('bstCur').textContent = '—';
+    setText($$('bstOpName'), '—');
+    setText($$('bstResult'), '—');
+    setText($$('bstCmp'), '0');
+    setText($$('bstCur'), '—');
     hlLine($$('bstCode'), null);
   }
 
