@@ -21,6 +21,7 @@
    ============================================================ */
 const $ = (id) => document.getElementById(id);
 const SVG_NS = 'http://www.w3.org/2000/svg';
+const LAYOUT_X_PAD = 30;
 
 /* Tree node data structure for visualizations */
 class TNode {
@@ -56,7 +57,7 @@ function layoutTree(root, w, h, topPad=40, botPad=40) {
     place(n.left,  d+1, lo, mid);
     place(n.right, d+1, mid, hi);
   }
-  const xPad = 24;
+  const xPad = LAYOUT_X_PAD;
   place(root, 0, xPad, Math.max(xPad, w - xPad));
   return depth;
 }
@@ -838,6 +839,16 @@ function initTraversals(suffix = '', lockedKind = null) {
     $$('travCode').innerHTML = codeMap[currentTrav];
   }
 
+  function relayoutCurrentFrame() {
+    const w = canvas.clientWidth || 600;
+    const h = canvas.clientHeight || parseInt(canvas.style.height, 10) || 280;
+    layoutTree(currentTree, w, h, 35, 35);
+    renderTree(canvas, currentTree);
+    if (player && player.steps && player.steps[player.idx]) {
+      applyFrame(player.steps[player.idx], player.idx);
+    }
+  }
+
   if (lockedKind) {
     // Hide the traversal-kind preset row (kind is locked by panel choice)
     panelRoot.querySelectorAll('.preset-btn[data-trav]').forEach(b => {
@@ -873,7 +884,7 @@ function initTraversals(suffix = '', lockedKind = null) {
   regen();
   _ensurePanelReady(canvas, () => {
     if (player && player.steps && player.steps[player.idx]) {
-      player.apply(player.steps[player.idx], player.idx);
+      relayoutCurrentFrame();
     } else regen();
   });
   return { resize: regen };
@@ -1581,44 +1592,48 @@ function initBSTDelete(suffix = '') {
       }
       const succ = cur;
       steps.push({status:`找到 successor = ${succ.key}（必為 case 1 或 case 2）`, hl:{path, target, successor:succ}, case:'Case 3', target:target.key, succ:succ.key, phase:'splice succ'});
-      steps.push({status:`把 successor 的 key=${succ.key} 拷貝到 target 位置`, hl:{path, target, successor:succ}, case:'Case 3', target:target.key, succ:succ.key, phase:'copy key', commit:'copy-key', target, succ});
+      steps.push({status:`把 successor 的 key=${succ.key} 拷貝到 target 位置`, hl:{path, target, successor:succ}, case:'Case 3', target:target.key, succ:succ.key, phase:'copy key', commit:'copy-key', target, succNode:succ});
       steps.push({status:`從原位置 splice out successor（最多一個 right child）`, hl:{deleted:succ}, case:'Case 3', target:succ.key, succ:succ.key, phase:'splice succ'});
-      steps.push({status:'刪除完成 ✓', commit:'splice-succ', succ, case:'Case 3', phase:'完成', target:succ.key, succ:succ.key});
+      steps.push({status:'刪除完成 ✓', commit:'splice-succ', succNode:succ, case:'Case 3', phase:'完成', target:succ.key, succ:succ.key});
     }
     return steps;
   }
 
   function applyStep(s) {
-    if (s.commit === 'remove-leaf') {
-      const t = s.target;
-      if (t.parent) {
-        if (t.parent.left === t) t.parent.left = null;
-        else t.parent.right = null;
-      } else { root = null; }
-      render({});
-    } else if (s.commit === 'lift-child') {
-      const t = s.target, c = s.child;
-      c.parent = t.parent;
-      if (t.parent) {
-        if (t.parent.left === t) t.parent.left = c;
-        else t.parent.right = c;
-      } else { root = c; }
-      render({});
-    } else if (s.commit === 'copy-key') {
-      s.target.key = s.succ.key;
-      render({target: s.target, successor: s.succ});
-    } else if (s.commit === 'splice-succ') {
-      const succ = s.succ;
-      // succ has at most a right child
-      const child = succ.right;
-      if (succ.parent) {
-        if (succ.parent.left === succ) succ.parent.left = child;
-        else succ.parent.right = child;
-        if (child) child.parent = succ.parent;
+    function spliceNode(node, child) {
+      if (!node) return false;
+      const p = node.parent;
+      if (p) {
+        if (p.left === node) p.left = child;
+        else if (p.right === node) p.right = child;
+        else return false;
+        if (child) child.parent = p;
       } else {
+        if (root !== node) return false;
         root = child;
         if (child) child.parent = null;
       }
+      node.parent = null;
+      return true;
+    }
+
+    if (s.commit === 'remove-leaf') {
+      const t = s.target;
+      spliceNode(t, null);
+      render({});
+    } else if (s.commit === 'lift-child') {
+      const t = s.target, c = s.child;
+      spliceNode(t, c);
+      render({});
+    } else if (s.commit === 'copy-key') {
+      const succ = s.succNode || s.succ;
+      s.target.key = succ.key;
+      render({target: s.target, successor: succ});
+    } else if (s.commit === 'splice-succ') {
+      const succ = s.succNode || s.succ;
+      // succ has at most a right child
+      const child = succ.right;
+      spliceNode(succ, child);
       render({});
     } else {
       render(s.hl || {});
@@ -1682,7 +1697,14 @@ function initBSTDelete(suffix = '') {
       render(player.steps[player.idx].hl || {});
     } else render({});
   });
-  return { resize: () => render({}) };
+  return {
+    resize: () => render({}),
+    _test: {
+      root: () => root,
+      genDeleteSteps,
+      applyStep,
+    }
+  };
 }
 
 /* ============================================================
@@ -1918,6 +1940,11 @@ function initAVL() {
       bstSearch:   _once('bstSearch',   () => initBST('Search', 'search')),
       bstInsert:   _once('bstInsert',   () => initBST('Insert', 'insert')),
       bstDelete:   _once('bstDelete',   () => initBSTDelete('Del')),
+    },
+    _test: {
+      TNode,
+      layoutTree,
+      LAYOUT_X_PAD,
     }
   };
 
