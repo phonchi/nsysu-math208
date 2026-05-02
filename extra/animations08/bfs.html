@@ -3,7 +3,7 @@
   <div class="viz-layout">
     <div>
       <div class="viz-panel">
-        <div class="graph-canvas" id="canvas-bfsBfs"></div>
+        <div class="graph-canvas" id="canvas-bfsBfs" style="height:240px;"></div>
         <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="bfsStatusBfs">選擇起點，按「開始」執行 BFS</span></div>
         <div class="slider-row">
           <span class="slider-label">起點</span>
@@ -29,25 +29,12 @@
 
     <div class="side-panel">
       <div class="info-card">
-        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
-        <div class="stats-grid">
-          <div class="stat-tile"><div class="stat-label">已探索</div><div class="stat-value" id="bfsVisitedBfs">0</div></div>
-          <div class="stat-tile"><div class="stat-label">當前距離</div><div class="stat-value" id="bfsDistBfs">—</div></div>
-        </div>
-      </div>
-      <div class="info-card">
         <div class="ic-title">頂點狀態表</div>
         <div id="bfsTableBfs" style="overflow-x:auto;"></div>
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
         <div class="pseudo-code" id="bfsCodeBfs"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">bfs</span>(start):</span><span class="line" data-l="2">    start.color = <span class="str">"gray"</span></span><span class="line" data-l="3">    start.distance = <span class="num">0</span></span><span class="line" data-l="4">    start.previous = <span class="kw">None</span></span><span class="line" data-l="5">    queue = Queue()</span><span class="line" data-l="6">    queue.enqueue(start)</span><span class="line" data-l="7">    <span class="kw">while</span> queue.size() &gt; <span class="num">0</span>:</span><span class="line" data-l="8">        current = queue.dequeue()</span><span class="line" data-l="9">        <span class="kw">for</span> nb <span class="kw">in</span> current.get_neighbors():</span><span class="line" data-l="10">            <span class="kw">if</span> nb.color == <span class="str">"white"</span>:</span><span class="line" data-l="11">                nb.color = <span class="str">"gray"</span></span><span class="line" data-l="12">                nb.distance = current.distance + <span class="num">1</span></span><span class="line" data-l="13">                nb.previous = current</span><span class="line" data-l="14">                queue.enqueue(nb)</span><span class="line" data-l="15">        current.color = <span class="str">"black"</span></span></div>
-      </div>
-      <div class="info-card">
-        <div class="ic-title">複雜度</div>
-        <div class="ic-row"><span class="ic-label">時間</span><span class="ic-value">O(|V| + |E|)</span></div>
-        <div class="ic-row"><span class="ic-label">空間</span><span class="ic-value">O(|V|)</span></div>
-        <div class="ic-row"><span class="ic-label">最短路徑</span><span class="ic-value">無權圖 ✓</span></div>
       </div>
     </div>
   </div>

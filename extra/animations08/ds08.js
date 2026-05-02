@@ -277,7 +277,7 @@
         if (qEl) {
           if (s.queue.length === 0) qEl.innerHTML = '<span class="ds-empty">empty</span>';
           else qEl.innerHTML = s.queue.map((v, i) =>
-            `<span class="ds-item ${i === 0 ? 'front' : ''}">${v}</span>` +
+            `<span class="ds-item"${i === 0 ? ' style="background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);"' : ''}>${v}</span>` +
             (i < s.queue.length - 1 ? '<span class="ds-arrow">←</span>' : '')
           ).join('');
         }
