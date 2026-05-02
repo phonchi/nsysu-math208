@@ -8,7 +8,10 @@
      <script>(function go(){
         if(!window.DS09||!window.DS09.init){setTimeout(go,50);return;}
         window.DS09.init.preorder();   // or .inorder, .postorder, .heapInsert, ...
-     })();</script>
+     })();<\/script>
+   (the backslash-escaped `<\/script>` keeps this docstring literal from
+   prematurely closing the outer <script> when this file is inlined into
+   a Jupyter saved-output HTML page.)
 */
 (function () {
   if (window.DS09) return;   // idempotent — re-running cell 6 must not redeclare

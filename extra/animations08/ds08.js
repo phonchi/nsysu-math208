@@ -10,7 +10,10 @@
      <script>(function go(){
         if(!window.DS08||!window.DS08.init){setTimeout(go,50);return;}
         window.DS08.init.bfs();   // or .dfs, .topsort, .dijkstra, .prim
-     })();</script>
+     })();<\/script>
+   (the backslash-escaped `<\/script>` keeps this docstring literal from
+   prematurely closing the outer <script> when this file is inlined into
+   a Jupyter saved-output HTML page.)
 */
 (function () {
   if (window.DS08) return;   // idempotent — re-running cell must not redeclare
