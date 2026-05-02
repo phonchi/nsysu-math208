@@ -760,7 +760,9 @@ function initTraversals(suffix = '', lockedKind = null) {
   }
 
   function regen() {
-    layoutTree(currentTree, canvas.clientWidth, canvas.clientHeight, 35, 35);
+    const w = canvas.clientWidth || 600;
+    const h = canvas.clientHeight || parseInt(canvas.style.height, 10) || 280;
+    layoutTree(currentTree, w, h, 35, 35);
     renderTree(canvas, currentTree);
     const steps = genTraversalSteps(currentTree, currentTrav);
     if (player) player.stop();
