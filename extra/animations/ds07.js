@@ -410,8 +410,8 @@ function genInsertionSort(initial) {
 //   shell_sort(a_list)：外層 while sublist_count，對每個 pos_start 呼叫 gap_insertion_sort
 //   gap_insertion_sort(a_list, start, gap)：對子列 [start, start+gap, start+2gap, ...] 做 insertion sort
 // 變數命名 (cur_val / cur_pos / pos_start / sublist_count) 全照講義 snake_case。
-// origIdx 在 shift 過程中必須保持 permutation：把 oi[cur_pos-gap] 暫填 oiKey (cur_val 之 hole)
-// 否則 BarVis 會把同一個 DOM bar 畫在兩個 pos，視覺上「位置不對」。
+  // shift 過程中把 cur_val 放在移動中的 hole，讓 arr 與 origIdx 都描述同一個 bar。
+  // 否則 BarVis 會把 key bar 移到 hole，但用被位移值的文字重畫它。
 function genShellSort(initial, gapSeq) {
   const frames = [];
   const a = [...initial];
@@ -453,8 +453,9 @@ function genShellSort(initial, gapSeq) {
         frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos-gap]:'compare',[cur_pos]:'key'}, message:`while ${cur_pos} >= ${gap} and a_list[${cur_pos-gap}]=${a[cur_pos-gap]} > cur_val=${cur_val} → 進入迴圈`, stats:{cmp,swp,gap}, pcLine:12});
 
         // SHIFT: a[cur_pos] ← a[cur_pos - gap]
-        // origIdx 維持 permutation：oi[cur_pos-gap] 暫填 oiKey (cur_val 之 hole)
+        // 同步維持 moving key 的 visual hole，讓 origIdx 與 arr 一致。
         a[cur_pos] = a[cur_pos - gap];
+        a[cur_pos - gap] = cur_val;
         oi[cur_pos] = oi[cur_pos - gap];
         oi[cur_pos - gap] = oiKey;
         swp++;
@@ -475,7 +476,7 @@ function genShellSort(initial, gapSeq) {
       }
 
       // pcLine 15: a_list[cur_pos] = cur_val
-      // 由於 shift 中 oi[cur_pos-gap] = oiKey，最後 cur_pos 經過 -= gap 後正好指到那個 hole，oi[cur_pos] 已等於 oiKey，無需再動。
+      // shift 中 arr[cur_pos] 與 oi[cur_pos] 已同步代表 moving key；此處保留講義的插入步驟。
       a[cur_pos] = cur_val;
       frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'sorted'}, message:`a_list[${cur_pos}] = cur_val = ${cur_val}`, stats:{cmp,swp,gap}, pcLine:15});
     }
