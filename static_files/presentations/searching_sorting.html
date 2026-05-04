@@ -944,8 +944,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         </div>
       </div>
       <div class="info-card">
-        <div class="ic-title">虛擬碼 (gap = n//2 折半)</div>
-        <div class="pseudo-code" id="shellCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">shell_sort</span>(a):</span><span class="line" data-l="2">    gap = <span class="fn">len</span>(a) // <span class="num">2</span></span><span class="line" data-l="3">    <span class="kw">while</span> gap &gt; <span class="num">0</span>:</span><span class="line" data-l="4">        <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(gap, <span class="fn">len</span>(a)):</span><span class="line" data-l="5">            key, pos = a[i], i</span><span class="line" data-l="6">            <span class="kw">while</span> pos &gt;= gap <span class="kw">and</span> a[pos-gap] &gt; key:</span><span class="line" data-l="7">                a[pos] = a[pos-gap]</span><span class="line" data-l="8">                pos -= gap</span><span class="line" data-l="9">            a[pos] = key</span><span class="line" data-l="10">        gap //= <span class="num">2</span></span></div>
+        <div class="ic-title">虛擬碼 (對齊講義 cell 194)</div>
+        <div class="pseudo-code" id="shellCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">shell_sort</span>(a_list):</span><span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;sublist_count = <span class="fn">len</span>(a_list) // <span class="num">2</span></span><span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> sublist_count &gt; <span class="num">0</span>:</span><span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> pos_start <span class="kw">in</span> <span class="fn">range</span>(sublist_count):</span><span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">gap_insertion_sort</span>(a_list, pos_start, sublist_count)</span><span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sublist_count = sublist_count // <span class="num">2</span></span><span class="line" data-l="7">&nbsp;</span><span class="line" data-l="8"><span class="kw">def</span> <span class="fn">gap_insertion_sort</span>(a_list, start, gap):</span><span class="line" data-l="9">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(start + gap, <span class="fn">len</span>(a_list), gap):</span><span class="line" data-l="10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur_val = a_list[i]</span><span class="line" data-l="11">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur_pos = i</span><span class="line" data-l="12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> cur_pos &gt;= gap <span class="kw">and</span> a_list[cur_pos - gap] &gt; cur_val:</span><span class="line" data-l="13">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a_list[cur_pos] = a_list[cur_pos - gap]</span><span class="line" data-l="14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur_pos = cur_pos - gap</span><span class="line" data-l="15">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a_list[cur_pos] = cur_val</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -962,6 +962,31 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     當 gap 小時：陣列已接近排好，<strong>小範圍的微調很便宜</strong>。<br>
     Shell sort 不像 merge / quick sort 那麼快，但<strong>程式碼短、不需要遞迴、空間 $O(1)$</strong>，是嵌入式系統與小型應用常見的選擇。
   </div>
+
+  <h3 style="margin-top:1.5rem;">講義原始實作（cell 194）</h3>
+  <p>外層 <code>shell_sort</code> 維護當前 <code>sublist_count</code>（折半），對每個 <code>pos_start</code> 呼叫 <code>gap_insertion_sort</code>，把該子陣列做插入排序。</p>
+<pre style="background:#2d2d3f;color:#e8e6df;font-family:'JetBrains Mono',monospace;font-size:.82rem;padding:.85rem 1rem;border-radius:10px;line-height:1.6;overflow-x:auto;"><span style="color:#c678dd;">def</span> <span style="color:#61afef;">shell_sort</span>(a_list):
+    sublist_count = <span style="color:#61afef;">len</span>(a_list) // <span style="color:#d19a66;">2</span>
+    <span style="color:#c678dd;">while</span> sublist_count &gt; <span style="color:#d19a66;">0</span>:
+        <span style="color:#c678dd;">for</span> pos_start <span style="color:#c678dd;">in</span> <span style="color:#61afef;">range</span>(sublist_count):
+            <span style="color:#61afef;">gap_insertion_sort</span>(a_list, pos_start, sublist_count)
+        <span style="color:#61afef;">print</span>(<span style="color:#98c379;">"After increments of size"</span>, sublist_count, <span style="color:#98c379;">"the list is"</span>, a_list)
+        sublist_count = sublist_count // <span style="color:#d19a66;">2</span>
+
+
+<span style="color:#c678dd;">def</span> <span style="color:#61afef;">gap_insertion_sort</span>(a_list, start, gap):
+    <span style="color:#c678dd;">for</span> i <span style="color:#c678dd;">in</span> <span style="color:#61afef;">range</span>(start + gap, <span style="color:#61afef;">len</span>(a_list), gap):
+        cur_val = a_list[i]
+        cur_pos = i
+        <span style="color:#c678dd;">while</span> cur_pos &gt;= gap <span style="color:#c678dd;">and</span> a_list[cur_pos - gap] &gt; cur_val:
+            a_list[cur_pos] = a_list[cur_pos - gap]
+            cur_pos = cur_pos - gap
+        a_list[cur_pos] = cur_val
+
+
+a_list = [<span style="color:#d19a66;">5</span>, <span style="color:#d19a66;">16</span>, <span style="color:#d19a66;">20</span>, <span style="color:#d19a66;">12</span>, <span style="color:#d19a66;">3</span>, <span style="color:#d19a66;">8</span>, <span style="color:#d19a66;">9</span>, <span style="color:#d19a66;">17</span>, <span style="color:#d19a66;">19</span>, <span style="color:#d19a66;">7</span>, <span style="color:#d19a66;">11</span>]
+<span style="color:#61afef;">shell_sort</span>(a_list)
+<span style="color:#61afef;">print</span>(a_list)</pre>
 </section>
 
 
@@ -1973,6 +1998,12 @@ function genInsertionSort(initial) {
 }
 
 // --- Shell Sort ---
+// 嚴格對齊講義（07_Searching and Sorting.ipynb cell 194）的兩個函式架構：
+//   shell_sort(a_list)：外層 while sublist_count，對每個 pos_start 呼叫 gap_insertion_sort
+//   gap_insertion_sort(a_list, start, gap)：對子列 [start, start+gap, start+2gap, ...] 做 insertion sort
+// 變數命名 (cur_val / cur_pos / pos_start / sublist_count) 全照講義 snake_case。
+// origIdx 在 shift 過程中必須保持 permutation：把 oi[cur_pos-gap] 暫填 oiKey (cur_val 之 hole)
+// 否則 BarVis 會把同一個 DOM bar 畫在兩個 pos，視覺上「位置不對」。
 function genShellSort(initial, gapSeq) {
   const frames = [];
   const a = [...initial];
@@ -1981,42 +2012,99 @@ function genShellSort(initial, gapSeq) {
   let cmp = 0, swp = 0;
   let gaps;
   if (gapSeq === '2k-1') {
-    // Hibbard 序列：2^k − 1 = 1, 3, 7, 15, 31, ... 從最大可用值往下用
+    // Hibbard 序列：2^k − 1 = 1, 3, 7, 15, 31, ...
     gaps = [];
     let k = 1;
     while ((1 << k) - 1 <= N) k++;
     for (let i = k - 1; i >= 1; i--) gaps.push((1 << i) - 1);
   } else {
+    // 講義版：sublist_count = N // 2，每輪折半
     gaps = [];
     let g = Math.floor(N / 2);
     while (g > 0) { gaps.push(g); g = Math.floor(g / 2); }
   }
-  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`gap 序列：${gaps.join(' → ')}`, stats:{cmp,swp,gap:'—'}, pcLine:2});
-  for (const gap of gaps) {
-    frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`▸ 開始 gap = ${gap} 階段`, stats:{cmp,swp,gap}, pcLine:3});
-    for (let i = gap; i < N; i++) {
-      const key = a[i];
+
+  // === 講義版 gap_insertion_sort：對 a_list 從 start 開始、stride = gap 的子列做 insertion sort ===
+  function gap_insertion_sort(start, gap) {
+    // pcLine 9: for i in range(start + gap, len(a_list), gap)
+    for (let i = start + gap; i < N; i += gap) {
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, message:`for i in range(${start}+${gap}, ${N}, ${gap})：i = ${i}`, stats:{cmp,swp,gap}, pcLine:9});
+
+      const cur_val = a[i];
       const oiKey = oi[i];
-      let pos = i;
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, message:`gap=${gap}: 取出 key = a[${i}] = ${key}，與 a[${i-gap}], a[${i-2*gap}], ... 比較`, stats:{cmp,swp,gap}, pcLine:5});
-      while (pos >= gap && a[pos-gap] > key) {
+      let cur_pos = i;
+
+      // pcLine 10: cur_val = a_list[i]
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, message:`cur_val = a_list[${i}] = ${cur_val}`, stats:{cmp,swp,gap}, pcLine:10});
+      // pcLine 11: cur_pos = i
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'key'}, message:`cur_pos = i = ${cur_pos}`, stats:{cmp,swp,gap}, pcLine:11});
+
+      while (cur_pos >= gap && a[cur_pos - gap] > cur_val) {
         cmp++;
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[pos-gap]:'compare',[pos]:'key'}, message:`比較 a[${pos-gap}]=${a[pos-gap]} > key=${key}，要位移`, stats:{cmp,swp,gap}, pcLine:6});
-        a[pos] = a[pos-gap];
-        oi[pos] = oi[pos-gap];
+        // pcLine 12: while-condition 為真
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos-gap]:'compare',[cur_pos]:'key'}, message:`while ${cur_pos} >= ${gap} and a_list[${cur_pos-gap}]=${a[cur_pos-gap]} > cur_val=${cur_val} → 進入迴圈`, stats:{cmp,swp,gap}, pcLine:12});
+
+        // SHIFT: a[cur_pos] ← a[cur_pos - gap]
+        // 同步維持 moving key 的 visual hole，讓 origIdx 與 arr 一致。
+        a[cur_pos] = a[cur_pos - gap];
+        a[cur_pos - gap] = cur_val;
+        oi[cur_pos] = oi[cur_pos - gap];
+        oi[cur_pos - gap] = oiKey;
         swp++;
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[pos]:'swap'}, message:`位移 a[${pos-gap}] → a[${pos}] (跨 ${gap} 格)`, stats:{cmp,swp,gap}, pcLine:7});
-        pos -= gap;
+        // pcLine 13: a_list[cur_pos] = a_list[cur_pos - gap]
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'swap',[cur_pos-gap]:'key'}, message:`a_list[${cur_pos}] = a_list[${cur_pos-gap}] = ${a[cur_pos]} (位移)`, stats:{cmp,swp,gap}, pcLine:13});
+
+        cur_pos -= gap;
+        // pcLine 14: cur_pos = cur_pos - gap
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'key'}, message:`cur_pos = cur_pos - gap = ${cur_pos}`, stats:{cmp,swp,gap}, pcLine:14});
       }
-      if (pos >= gap) {
+
+      // while exit: 兩種情況都 highlight cur_pos
+      if (cur_pos >= gap) {
         cmp++;
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[pos-gap]:'compare'}, message:`a[${pos-gap}]=${a[pos-gap]} ≤ key=${key}，停止`, stats:{cmp,swp,gap}, pcLine:6});
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos-gap]:'compare',[cur_pos]:'key'}, message:`while: a_list[${cur_pos-gap}]=${a[cur_pos-gap]} ≤ cur_val=${cur_val} → 停止`, stats:{cmp,swp,gap}, pcLine:12});
+      } else {
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'key'}, message:`while: cur_pos=${cur_pos} < gap=${gap} → 停止（已到子列開頭）`, stats:{cmp,swp,gap}, pcLine:12});
       }
-      a[pos] = key;
-      oi[pos] = oiKey;
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[pos]:'sorted'}, message:`插入 key=${key} 至 a[${pos}]`, stats:{cmp,swp,gap}, pcLine:9});
+
+      // pcLine 15: a_list[cur_pos] = cur_val
+      // shift 中 arr[cur_pos] 與 oi[cur_pos] 已同步代表 moving key；此處保留講義的插入步驟。
+      a[cur_pos] = cur_val;
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'sorted'}, message:`a_list[${cur_pos}] = cur_val = ${cur_val}`, stats:{cmp,swp,gap}, pcLine:15});
     }
   }
+
+  // === 講義版 shell_sort：外層折半 + 對每個 pos_start 呼叫 gap_insertion_sort ===
+  // pcLine 2: sublist_count 初始化
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublist_count = len(a_list) // 2 = ${gaps[0]}`, stats:{cmp,swp,gap:'—'}, pcLine:2});
+
+  for (let gIdx = 0; gIdx < gaps.length; gIdx++) {
+    const sublist_count = gaps[gIdx];
+    // pcLine 3: while sublist_count > 0
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`while sublist_count > 0：sublist_count = ${sublist_count}`, stats:{cmp,swp,gap:sublist_count}, pcLine:3});
+
+    for (let pos_start = 0; pos_start < sublist_count; pos_start++) {
+      // pcLine 4: for pos_start in range(sublist_count)
+      const indices = [];
+      for (let k = pos_start; k < N; k += sublist_count) indices.push(k);
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`for pos_start in range(${sublist_count})：pos_start = ${pos_start}, 子列索引 = [${indices.join(', ')}]`, stats:{cmp,swp,gap:sublist_count}, pcLine:4});
+      // pcLine 5: 呼叫 gap_insertion_sort
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`gap_insertion_sort(a_list, ${pos_start}, ${sublist_count})`, stats:{cmp,swp,gap:sublist_count}, pcLine:5});
+
+      // 真正呼叫子函式（不再 inline 展開）
+      gap_insertion_sort(pos_start, sublist_count);
+    }
+
+    // pcLine 6: sublist_count = sublist_count // 2 (outer while 收尾)
+    if (gIdx < gaps.length - 1) {
+      const newGap = gaps[gIdx + 1];
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublist_count = sublist_count // 2 = ${newGap}`, stats:{cmp,swp,gap:newGap}, pcLine:6});
+    } else {
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublist_count = sublist_count // 2 = 0 → while 結束`, stats:{cmp,swp,gap:'—'}, pcLine:6});
+    }
+  }
+
+  // 最終：全部排序完成
   frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(0, N), message:`★ 排序完成！${cmp} 次比較、${swp} 次位移`, stats:{cmp,swp,gap:'—'}, pcLine:1});
   return frames;
 }
