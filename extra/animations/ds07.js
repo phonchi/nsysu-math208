@@ -406,10 +406,12 @@ function genInsertionSort(initial) {
 }
 
 // --- Shell Sort ---
-// 對齊講義（07_Searching and Sorting.ipynb cell 194）的雙層架構：
-//   shell_sort: outer while sublist_count + inner for pos_start in range(sublist_count)
-//   gap_insertion_sort: for i, cur_val / cur_pos, while shift, insert
-// origIdx 在 shift 過程中必須保持 permutation（無重複），否則 BarVis 會把同一個 DOM bar 畫在兩個 pos，視覺上「位置不對」。
+// 嚴格對齊講義（07_Searching and Sorting.ipynb cell 194）的兩個函式架構：
+//   shell_sort(a_list)：外層 while sublist_count，對每個 pos_start 呼叫 gap_insertion_sort
+//   gap_insertion_sort(a_list, start, gap)：對子列 [start, start+gap, start+2gap, ...] 做 insertion sort
+// 變數命名 (cur_val / cur_pos / pos_start / sublist_count) 全照講義 snake_case。
+// origIdx 在 shift 過程中必須保持 permutation：把 oi[cur_pos-gap] 暫填 oiKey (cur_val 之 hole)
+// 否則 BarVis 會把同一個 DOM bar 畫在兩個 pos，視覺上「位置不對」。
 function genShellSort(initial, gapSeq) {
   const frames = [];
   const a = [...initial];
@@ -424,73 +426,80 @@ function genShellSort(initial, gapSeq) {
     while ((1 << k) - 1 <= N) k++;
     for (let i = k - 1; i >= 1; i--) gaps.push((1 << i) - 1);
   } else {
-    // 講義版：sublist_count = N // 2，halving
+    // 講義版：sublist_count = N // 2，每輪折半
     gaps = [];
     let g = Math.floor(N / 2);
     while (g > 0) { gaps.push(g); g = Math.floor(g / 2); }
   }
+
+  // === 講義版 gap_insertion_sort：對 a_list 從 start 開始、stride = gap 的子列做 insertion sort ===
+  function gap_insertion_sort(start, gap) {
+    // pcLine 9: for i in range(start + gap, len(a_list), gap)
+    for (let i = start + gap; i < N; i += gap) {
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, message:`for i in range(${start}+${gap}, ${N}, ${gap})：i = ${i}`, stats:{cmp,swp,gap}, pcLine:9});
+
+      const cur_val = a[i];
+      const oiKey = oi[i];
+      let cur_pos = i;
+
+      // pcLine 10: cur_val = a_list[i]
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, message:`cur_val = a_list[${i}] = ${cur_val}`, stats:{cmp,swp,gap}, pcLine:10});
+      // pcLine 11: cur_pos = i
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'key'}, message:`cur_pos = i = ${cur_pos}`, stats:{cmp,swp,gap}, pcLine:11});
+
+      while (cur_pos >= gap && a[cur_pos - gap] > cur_val) {
+        cmp++;
+        // pcLine 12: while-condition 為真
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos-gap]:'compare',[cur_pos]:'key'}, message:`while ${cur_pos} >= ${gap} and a_list[${cur_pos-gap}]=${a[cur_pos-gap]} > cur_val=${cur_val} → 進入迴圈`, stats:{cmp,swp,gap}, pcLine:12});
+
+        // SHIFT: a[cur_pos] ← a[cur_pos - gap]
+        // origIdx 維持 permutation：oi[cur_pos-gap] 暫填 oiKey (cur_val 之 hole)
+        a[cur_pos] = a[cur_pos - gap];
+        oi[cur_pos] = oi[cur_pos - gap];
+        oi[cur_pos - gap] = oiKey;
+        swp++;
+        // pcLine 13: a_list[cur_pos] = a_list[cur_pos - gap]
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'swap',[cur_pos-gap]:'key'}, message:`a_list[${cur_pos}] = a_list[${cur_pos-gap}] = ${a[cur_pos]} (位移)`, stats:{cmp,swp,gap}, pcLine:13});
+
+        cur_pos -= gap;
+        // pcLine 14: cur_pos = cur_pos - gap
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'key'}, message:`cur_pos = cur_pos - gap = ${cur_pos}`, stats:{cmp,swp,gap}, pcLine:14});
+      }
+
+      // while exit: 兩種情況都 highlight cur_pos
+      if (cur_pos >= gap) {
+        cmp++;
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos-gap]:'compare',[cur_pos]:'key'}, message:`while: a_list[${cur_pos-gap}]=${a[cur_pos-gap]} ≤ cur_val=${cur_val} → 停止`, stats:{cmp,swp,gap}, pcLine:12});
+      } else {
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'key'}, message:`while: cur_pos=${cur_pos} < gap=${gap} → 停止（已到子列開頭）`, stats:{cmp,swp,gap}, pcLine:12});
+      }
+
+      // pcLine 15: a_list[cur_pos] = cur_val
+      // 由於 shift 中 oi[cur_pos-gap] = oiKey，最後 cur_pos 經過 -= gap 後正好指到那個 hole，oi[cur_pos] 已等於 oiKey，無需再動。
+      a[cur_pos] = cur_val;
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'sorted'}, message:`a_list[${cur_pos}] = cur_val = ${cur_val}`, stats:{cmp,swp,gap}, pcLine:15});
+    }
+  }
+
+  // === 講義版 shell_sort：外層折半 + 對每個 pos_start 呼叫 gap_insertion_sort ===
   // pcLine 2: sublist_count 初始化
   frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublist_count = len(a_list) // 2 = ${gaps[0]}`, stats:{cmp,swp,gap:'—'}, pcLine:2});
 
   for (let gIdx = 0; gIdx < gaps.length; gIdx++) {
-    const gap = gaps[gIdx];
+    const sublist_count = gaps[gIdx];
     // pcLine 3: while sublist_count > 0
-    frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`while sublist_count > 0：sublist_count = ${gap}`, stats:{cmp,swp,gap}, pcLine:3});
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`while sublist_count > 0：sublist_count = ${sublist_count}`, stats:{cmp,swp,gap:sublist_count}, pcLine:3});
 
-    for (let posStart = 0; posStart < gap; posStart++) {
+    for (let pos_start = 0; pos_start < sublist_count; pos_start++) {
       // pcLine 4: for pos_start in range(sublist_count)
       const indices = [];
-      for (let k = posStart; k < N; k += gap) indices.push(k);
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`for pos_start in range(${gap})：pos_start = ${posStart}, 子列索引 = [${indices.join(', ')}]`, stats:{cmp,swp,gap}, pcLine:4});
+      for (let k = pos_start; k < N; k += sublist_count) indices.push(k);
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`for pos_start in range(${sublist_count})：pos_start = ${pos_start}, 子列索引 = [${indices.join(', ')}]`, stats:{cmp,swp,gap:sublist_count}, pcLine:4});
       // pcLine 5: 呼叫 gap_insertion_sort
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`gap_insertion_sort(a_list, ${posStart}, ${gap})`, stats:{cmp,swp,gap}, pcLine:5});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`gap_insertion_sort(a_list, ${pos_start}, ${sublist_count})`, stats:{cmp,swp,gap:sublist_count}, pcLine:5});
 
-      // === gap_insertion_sort(a_list, posStart, gap) 內部 ===
-      for (let i = posStart + gap; i < N; i += gap) {
-        // pcLine 9: for i in range(start + gap, len(a_list), gap)
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, message:`for i in range(${posStart}+${gap}, ${N}, ${gap})：i = ${i}`, stats:{cmp,swp,gap}, pcLine:9});
-
-        const curVal = a[i];
-        const oiKey = oi[i];
-        let curPos = i;
-
-        // pcLine 10: cur_val = a_list[i]
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, message:`cur_val = a_list[${i}] = ${curVal}`, stats:{cmp,swp,gap}, pcLine:10});
-        // pcLine 11: cur_pos = i
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos]:'key'}, message:`cur_pos = i = ${curPos}`, stats:{cmp,swp,gap}, pcLine:11});
-
-        while (curPos >= gap && a[curPos-gap] > curVal) {
-          cmp++;
-          // pcLine 12: while-condition 為真
-          frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos-gap]:'compare',[curPos]:'key'}, message:`while ${curPos} >= ${gap} and a_list[${curPos-gap}]=${a[curPos-gap]} > cur_val=${curVal} → 進入迴圈`, stats:{cmp,swp,gap}, pcLine:12});
-
-          // SHIFT: a[curPos] ← a[curPos-gap]
-          // origIdx 維持 permutation：把 oi[curPos-gap] 暫填 oiKey (cur_val 之 hole)
-          a[curPos] = a[curPos-gap];
-          oi[curPos] = oi[curPos-gap];
-          oi[curPos-gap] = oiKey;
-          swp++;
-          // pcLine 13: a_list[cur_pos] = a_list[cur_pos - gap]
-          frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos]:'swap',[curPos-gap]:'key'}, message:`a_list[${curPos}] = a_list[${curPos-gap}] = ${a[curPos]} (位移)`, stats:{cmp,swp,gap}, pcLine:13});
-
-          curPos -= gap;
-          // pcLine 14: cur_pos = cur_pos - gap
-          frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos]:'key'}, message:`cur_pos = cur_pos - gap = ${curPos}`, stats:{cmp,swp,gap}, pcLine:14});
-        }
-
-        // while exit: 兩種情況都 highlight curPos (與 curPos-gap 若還在範圍)
-        if (curPos >= gap) {
-          cmp++;
-          frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos-gap]:'compare',[curPos]:'key'}, message:`while: a_list[${curPos-gap}]=${a[curPos-gap]} ≤ cur_val=${curVal} → 停止`, stats:{cmp,swp,gap}, pcLine:12});
-        } else {
-          frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos]:'key'}, message:`while: cur_pos=${curPos} < gap=${gap} → 停止（已到子列開頭）`, stats:{cmp,swp,gap}, pcLine:12});
-        }
-
-        // pcLine 15: a_list[cur_pos] = cur_val
-        // 注意：由於 shift 中 oi[curPos-gap] = oiKey，最後 curPos 經過 -= gap 後正好指向那個 hole，oi[curPos] 此時已等於 oiKey，無需再動。
-        a[curPos] = curVal;
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos]:'sorted'}, message:`a_list[${curPos}] = cur_val = ${curVal}`, stats:{cmp,swp,gap}, pcLine:15});
-      }
+      // 真正呼叫子函式（不再 inline 展開）
+      gap_insertion_sort(pos_start, sublist_count);
     }
 
     // pcLine 6: sublist_count = sublist_count // 2 (outer while 收尾)
