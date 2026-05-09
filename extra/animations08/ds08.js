@@ -957,20 +957,21 @@
   /* ============================================================
      PUBLIC API
      ============================================================ */
-  const _initialized = new Set();
-  const _once = (name, fn) => () => {
-    if (_initialized.has(name)) return;
-    _initialized.add(name);
-    return fn();
-  };
-
+  // Each init.X() must be re-runnable: in classic Jupyter, re-executing a
+  // load_anim cell clears the old output DOM and injects a fresh empty
+  // canvas — a one-shot guard would leave that fresh canvas blank.
+  // GraphRenderer's constructor clears its container before rendering, and
+  // `if (!canvas) return` early-bails when the panel HTML is absent. The
+  // init bodies attach button listeners on each call without removing old
+  // ones, so re-running is only safe when the previous output DOM has been
+  // replaced (Jupyter re-run) — never re-call init on the same DOM.
   window.DS08 = {
     init: {
-      bfs:      _once('bfs',      () => initBfs('Bfs')),
-      dfs:      _once('dfs',      () => initDfs('Dfs')),
-      topsort:  _once('topsort',  () => initTopSort('Top')),
-      dijkstra: _once('dijkstra', () => initDijkstra('Dij')),
-      prim:     _once('prim',     () => initPrim('Prim')),
+      bfs:      () => initBfs('Bfs'),
+      dfs:      () => initDfs('Dfs'),
+      topsort:  () => initTopSort('Top'),
+      dijkstra: () => initDijkstra('Dij'),
+      prim:     () => initPrim('Prim'),
     },
   };
 })();
