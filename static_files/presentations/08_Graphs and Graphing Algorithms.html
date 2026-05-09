@@ -7862,9 +7862,9 @@ a.anchor-link {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="b656e453-a3a2-4eb2-9b3c-3493f12bc26d" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="6522b697-2d73-4c74-b886-22f9bd34e03d" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('b656e453-a3a2-4eb2-9b3c-3493f12bc26d');
+var element = document.getElementById('6522b697-2d73-4c74-b886-22f9bd34e03d');
 Jupyter.notebook.kernel.restart()
 </script>
 </div>
@@ -7928,7 +7928,7 @@ Jupyter.notebook.kernel.restart()
     <span class="k">def</span><span class="w"> </span><span class="nf">_repr_html_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">html</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_anim_iframe</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">430</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_anim_iframe</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">460</span><span class="p">):</span>
     <span class="n">css</span> <span class="o">=</span> <span class="n">_fetch</span><span class="p">(</span><span class="s2">"ds08.css"</span><span class="p">)</span>
     <span class="n">js</span> <span class="o">=</span> <span class="n">_fetch</span><span class="p">(</span><span class="s2">"ds08.js"</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"&lt;/script&gt;"</span><span class="p">,</span> <span class="s2">"&lt;</span><span class="se">\\</span><span class="s2">/script&gt;"</span><span class="p">)</span>
     <span class="n">panel</span> <span class="o">=</span> <span class="n">_fetch</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s2">".html"</span><span class="p">)</span>
@@ -8393,8 +8393,8 @@ is a set of edges $e$ and vertices $v$ such that $e \subset E$ and $v \subset V$
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="PwxxTBqQCBhK" style="border-radius: 10px; text-align: left"><style>
-#PwxxTBqQCBhK {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="zFKHXFBNhKXl" style="border-radius: 10px; text-align: left"><style>
+#zFKHXFBNhKXl {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -8622,10 +8622,10 @@ is a set of edges $e$ and vertices $v$ such that $e \subset E$ and $v \subset V$
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="a66323c9-253c-4f87-909b-f02229e1aa35" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="509757d5-c313-4a4f-aba2-9f0f6f27c118" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('a66323c9-253c-4f87-909b-f02229e1aa35');
-var questionsPwxxTBqQCBhK=[
+var element = document.getElementById('509757d5-c313-4a4f-aba2-9f0f6f27c118');
+var questionszFKHXFBNhKXl=[
 	{
         "question": "Regarding graph implementation methods, which of the following statements is true according to the materials?",
         "type": "multiple_choice",
@@ -9720,10 +9720,10 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
   setTimeout(() => controller.abort(), 5000);
   fetch("https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch8/graph.json", { signal })
     .then(response => response.json())
-    .then(json => show_questions(json, PwxxTBqQCBhK))
+    .then(json => show_questions(json, zFKHXFBNhKXl))
     .catch(err => {
       console.log("Fetch error or timeout", err);
-      show_questions(questionsPwxxTBqQCBhK, PwxxTBqQCBhK);
+      show_questions(questionszFKHXFBNhKXl, zFKHXFBNhKXl);
     });
 }
 }
@@ -10576,11 +10576,11 @@ $5,110 \cdot 5,110= 26,112,100$ cells. The graph constructed by the <code>build_
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>  Key   | Color  |Distance|Discover|Closing|Previous
+  pool  | black  |   1    |   0    |   0    |fool
   fool  | black  |   0    |   0    |   0    |None
   cool  | black  |   1    |   0    |   0    |fool
-  pool  | black  |   1    |   0    |   0    |fool
-  foil  | black  |   1    |   0    |   0    |fool
   foul  | black  |   1    |   0    |   0    |fool
+  foil  | black  |   1    |   0    |   0    |fool
   poll  | black  |   2    |   0    |   0    |pool
   pall  | black  |   3    |   0    |   0    |poll
   pole  | black  |   3    |   0    |   0    |poll
@@ -10787,11 +10787,11 @@ $5,110 \cdot 5,110= 26,112,100$ cells. The graph constructed by the <code>build_
 @keyframes ds08-fadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
 
 /* RISE / reveal scaling — keep panels readable across export modes */
-body.rise-enabled .ds08-anim { font-size: 1.75vmin; line-height: 1.35; padding: .55rem; margin: 0; border-radius: 8px; }
+body.rise-enabled .ds08-anim { font-size: 14px; line-height: 1.35; padding: .55rem; margin: 0; border-radius: 8px; }
 body.rise-enabled .ds08-anim h3{font-size:.95em;margin:0 0 .25rem 0;}
 body.rise-enabled .ds08-anim .viz-layout{grid-template-columns:minmax(0,1fr) 300px;gap:.65rem;margin:.35rem 0;}
 body.rise-enabled .ds08-anim .viz-panel{padding:.55rem;border-radius:8px;}
-body.rise-enabled .ds08-anim .graph-canvas{height:180px!important;}
+body.rise-enabled .ds08-anim .graph-canvas{height:170px!important;}
 body.rise-enabled .ds08-anim .status-banner{margin-top:.4rem;padding:.35rem .55rem;min-height:28px;line-height:1.25;}
 body.rise-enabled .ds08-anim .slider-row{padding:.28rem .45rem;margin-bottom:.2rem;gap:.35rem;}
 body.rise-enabled .ds08-anim .controls-bar{margin-top:.35rem;padding-top:.35rem;gap:.35rem;}
@@ -11825,7 +11825,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 })();
 &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;" style="width:100%;height:430px;border:0;display:block;" title="DS08 bfs animation"></iframe>
+&lt;/html&gt;" style="width:100%;height:460px;border:0;display:block;" title="DS08 bfs animation"></iframe>
 </div>
 </div>
 </div>
@@ -13683,11 +13683,11 @@ F
 @keyframes ds08-fadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
 
 /* RISE / reveal scaling — keep panels readable across export modes */
-body.rise-enabled .ds08-anim { font-size: 1.75vmin; line-height: 1.35; padding: .55rem; margin: 0; border-radius: 8px; }
+body.rise-enabled .ds08-anim { font-size: 14px; line-height: 1.35; padding: .55rem; margin: 0; border-radius: 8px; }
 body.rise-enabled .ds08-anim h3{font-size:.95em;margin:0 0 .25rem 0;}
 body.rise-enabled .ds08-anim .viz-layout{grid-template-columns:minmax(0,1fr) 300px;gap:.65rem;margin:.35rem 0;}
 body.rise-enabled .ds08-anim .viz-panel{padding:.55rem;border-radius:8px;}
-body.rise-enabled .ds08-anim .graph-canvas{height:180px!important;}
+body.rise-enabled .ds08-anim .graph-canvas{height:170px!important;}
 body.rise-enabled .ds08-anim .status-banner{margin-top:.4rem;padding:.35rem .55rem;min-height:28px;line-height:1.25;}
 body.rise-enabled .ds08-anim .slider-row{padding:.28rem .45rem;margin-bottom:.2rem;gap:.35rem;}
 body.rise-enabled .ds08-anim .controls-bar{margin-top:.35rem;padding-top:.35rem;gap:.35rem;}
@@ -14724,7 +14724,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 })();
 &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;" style="width:100%;height:430px;border:0;display:block;" title="DS08 dfs animation"></iframe>
+&lt;/html&gt;" style="width:100%;height:460px;border:0;display:block;" title="DS08 dfs animation"></iframe>
 </div>
 </div>
 </div>
@@ -14783,8 +14783,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="SseNvBEICGNr" style="border-radius: 10px; text-align: left"><style>
-#SseNvBEICGNr {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="IpokELgHqkgN" style="border-radius: 10px; text-align: left"><style>
+#IpokELgHqkgN {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -15012,10 +15012,10 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d5d0e495-e0eb-4ea7-bc36-844178f82855" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="2ed6cfd0-6a14-453d-80e2-32f7f92d4413" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('d5d0e495-e0eb-4ea7-bc36-844178f82855');
-var questionsSseNvBEICGNr=[
+var element = document.getElementById('2ed6cfd0-6a14-453d-80e2-32f7f92d4413');
+var questionsIpokELgHqkgN=[
 	{
         "question": "What is the primary structural difference in how Breadth-First Search (BFS) and Depth-First Search (DFS) track the next vertex to explore?",
         "type": "multiple_choice",
@@ -16110,10 +16110,10 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
   setTimeout(() => controller.abort(), 5000);
   fetch("https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch8/bfs_dfs.json", { signal })
     .then(response => response.json())
-    .then(json => show_questions(json, SseNvBEICGNr))
+    .then(json => show_questions(json, IpokELgHqkgN))
     .catch(err => {
       console.log("Fetch error or timeout", err);
-      show_questions(questionsSseNvBEICGNr, SseNvBEICGNr);
+      show_questions(questionsIpokELgHqkgN, IpokELgHqkgN);
     });
 }
 }
@@ -16476,11 +16476,11 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
 @keyframes ds08-fadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
 
 /* RISE / reveal scaling — keep panels readable across export modes */
-body.rise-enabled .ds08-anim { font-size: 1.75vmin; line-height: 1.35; padding: .55rem; margin: 0; border-radius: 8px; }
+body.rise-enabled .ds08-anim { font-size: 14px; line-height: 1.35; padding: .55rem; margin: 0; border-radius: 8px; }
 body.rise-enabled .ds08-anim h3{font-size:.95em;margin:0 0 .25rem 0;}
 body.rise-enabled .ds08-anim .viz-layout{grid-template-columns:minmax(0,1fr) 300px;gap:.65rem;margin:.35rem 0;}
 body.rise-enabled .ds08-anim .viz-panel{padding:.55rem;border-radius:8px;}
-body.rise-enabled .ds08-anim .graph-canvas{height:180px!important;}
+body.rise-enabled .ds08-anim .graph-canvas{height:170px!important;}
 body.rise-enabled .ds08-anim .status-banner{margin-top:.4rem;padding:.35rem .55rem;min-height:28px;line-height:1.25;}
 body.rise-enabled .ds08-anim .slider-row{padding:.28rem .45rem;margin-bottom:.2rem;gap:.35rem;}
 body.rise-enabled .ds08-anim .controls-bar{margin-top:.35rem;padding-top:.35rem;gap:.35rem;}
@@ -17503,7 +17503,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 })();
 &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;" style="width:100%;height:430px;border:0;display:block;" title="DS08 topsort animation"></iframe>
+&lt;/html&gt;" style="width:100%;height:460px;border:0;display:block;" title="DS08 topsort animation"></iframe>
 </div>
 </div>
 </div>
@@ -17859,8 +17859,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="ieVoNCpGtLyi" style="border-radius: 10px; text-align: left"><style>
-#ieVoNCpGtLyi {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="lBeUpuwXqpXo" style="border-radius: 10px; text-align: left"><style>
+#lBeUpuwXqpXo {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -18088,10 +18088,10 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="37714f48-7005-46a5-8dd7-f3ff6a7a9604" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="094e1a1f-e989-4155-9bf3-77a0751539db" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('37714f48-7005-46a5-8dd7-f3ff6a7a9604');
-var questionsieVoNCpGtLyi=[
+var element = document.getElementById('094e1a1f-e989-4155-9bf3-77a0751539db');
+var questionslBeUpuwXqpXo=[
 	{
         "question": "Why is Breadth-First Search (BFS) guaranteed to find the shortest path in an unweighted graph?",
         "type": "multiple_choice",
@@ -19186,10 +19186,10 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
   setTimeout(() => controller.abort(), 5000);
   fetch("https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch8/bfs.json", { signal })
     .then(response => response.json())
-    .then(json => show_questions(json, ieVoNCpGtLyi))
+    .then(json => show_questions(json, lBeUpuwXqpXo))
     .catch(err => {
       console.log("Fetch error or timeout", err);
-      show_questions(questionsieVoNCpGtLyi, ieVoNCpGtLyi);
+      show_questions(questionslBeUpuwXqpXo, lBeUpuwXqpXo);
     });
 }
 }
@@ -19863,11 +19863,11 @@ Path from 'u' to 'z': u -&gt; x -&gt; y -&gt; z
 @keyframes ds08-fadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
 
 /* RISE / reveal scaling — keep panels readable across export modes */
-body.rise-enabled .ds08-anim { font-size: 1.75vmin; line-height: 1.35; padding: .55rem; margin: 0; border-radius: 8px; }
+body.rise-enabled .ds08-anim { font-size: 14px; line-height: 1.35; padding: .55rem; margin: 0; border-radius: 8px; }
 body.rise-enabled .ds08-anim h3{font-size:.95em;margin:0 0 .25rem 0;}
 body.rise-enabled .ds08-anim .viz-layout{grid-template-columns:minmax(0,1fr) 300px;gap:.65rem;margin:.35rem 0;}
 body.rise-enabled .ds08-anim .viz-panel{padding:.55rem;border-radius:8px;}
-body.rise-enabled .ds08-anim .graph-canvas{height:180px!important;}
+body.rise-enabled .ds08-anim .graph-canvas{height:170px!important;}
 body.rise-enabled .ds08-anim .status-banner{margin-top:.4rem;padding:.35rem .55rem;min-height:28px;line-height:1.25;}
 body.rise-enabled .ds08-anim .slider-row{padding:.28rem .45rem;margin-bottom:.2rem;gap:.35rem;}
 body.rise-enabled .ds08-anim .controls-bar{margin-top:.35rem;padding-top:.35rem;gap:.35rem;}
@@ -20900,7 +20900,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 })();
 &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;" style="width:100%;height:430px;border:0;display:block;" title="DS08 dijkstra animation"></iframe>
+&lt;/html&gt;" style="width:100%;height:460px;border:0;display:block;" title="DS08 dijkstra animation"></iframe>
 </div>
 </div>
 </div>
@@ -20970,8 +20970,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="SHDvuMlrBVzP" style="border-radius: 10px; text-align: left"><style>
-#SHDvuMlrBVzP {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="PCglzvTusdpq" style="border-radius: 10px; text-align: left"><style>
+#PCglzvTusdpq {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -21199,10 +21199,10 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="75edddf3-5b0d-4778-bb81-469c49446300" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d954eacd-ef0d-44dc-9c61-61a6c32ab0e4" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('75edddf3-5b0d-4778-bb81-469c49446300');
-var questionsSHDvuMlrBVzP=[
+var element = document.getElementById('d954eacd-ef0d-44dc-9c61-61a6c32ab0e4');
+var questionsPCglzvTusdpq=[
 	{
         "question": "Which of the following is a known limitation or characteristic of Dijkstra's algorithm?",
         "type": "multiple_choice",
@@ -22297,10 +22297,10 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
   setTimeout(() => controller.abort(), 5000);
   fetch("https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch8/dijk.json", { signal })
     .then(response => response.json())
-    .then(json => show_questions(json, SHDvuMlrBVzP))
+    .then(json => show_questions(json, PCglzvTusdpq))
     .catch(err => {
       console.log("Fetch error or timeout", err);
-      show_questions(questionsSHDvuMlrBVzP, SHDvuMlrBVzP);
+      show_questions(questionsPCglzvTusdpq, PCglzvTusdpq);
     });
 }
 }
@@ -22726,11 +22726,11 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
 @keyframes ds08-fadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
 
 /* RISE / reveal scaling — keep panels readable across export modes */
-body.rise-enabled .ds08-anim { font-size: 1.75vmin; line-height: 1.35; padding: .55rem; margin: 0; border-radius: 8px; }
+body.rise-enabled .ds08-anim { font-size: 14px; line-height: 1.35; padding: .55rem; margin: 0; border-radius: 8px; }
 body.rise-enabled .ds08-anim h3{font-size:.95em;margin:0 0 .25rem 0;}
 body.rise-enabled .ds08-anim .viz-layout{grid-template-columns:minmax(0,1fr) 300px;gap:.65rem;margin:.35rem 0;}
 body.rise-enabled .ds08-anim .viz-panel{padding:.55rem;border-radius:8px;}
-body.rise-enabled .ds08-anim .graph-canvas{height:180px!important;}
+body.rise-enabled .ds08-anim .graph-canvas{height:170px!important;}
 body.rise-enabled .ds08-anim .status-banner{margin-top:.4rem;padding:.35rem .55rem;min-height:28px;line-height:1.25;}
 body.rise-enabled .ds08-anim .slider-row{padding:.28rem .45rem;margin-bottom:.2rem;gap:.35rem;}
 body.rise-enabled .ds08-anim .controls-bar{margin-top:.35rem;padding-top:.35rem;gap:.35rem;}
@@ -23764,7 +23764,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 })();
 &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;" style="width:100%;height:430px;border:0;display:block;" title="DS08 prim animation"></iframe>
+&lt;/html&gt;" style="width:100%;height:460px;border:0;display:block;" title="DS08 prim animation"></iframe>
 </div>
 </div>
 </div>
@@ -24005,8 +24005,8 @@ Edges in the Minimum Spanning Tree:
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="DSqmUnkCNcHl" style="border-radius: 10px; text-align: left"><style>
-#DSqmUnkCNcHl {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="ekzQAHEjSSNA" style="border-radius: 10px; text-align: left"><style>
+#ekzQAHEjSSNA {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -24234,10 +24234,10 @@ Edges in the Minimum Spanning Tree:
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="921a8fb4-61c6-42c9-91b8-c56fb081ac28" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="3024cc5f-2f5b-4028-80f1-237392f30d77" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('921a8fb4-61c6-42c9-91b8-c56fb081ac28');
-var questionsDSqmUnkCNcHl=[
+var element = document.getElementById('3024cc5f-2f5b-4028-80f1-237392f30d77');
+var questionsekzQAHEjSSNA=[
 	{
         "question": "In Prim's algorithm for finding a Minimum Spanning Tree (MST), what defines a safe edge?",
         "type": "multiple_choice",
@@ -25332,10 +25332,10 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
   setTimeout(() => controller.abort(), 5000);
   fetch("https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch8/prim.json", { signal })
     .then(response => response.json())
-    .then(json => show_questions(json, DSqmUnkCNcHl))
+    .then(json => show_questions(json, ekzQAHEjSSNA))
     .catch(err => {
       console.log("Fetch error or timeout", err);
-      show_questions(questionsDSqmUnkCNcHl, DSqmUnkCNcHl);
+      show_questions(questionsekzQAHEjSSNA, ekzQAHEjSSNA);
     });
 }
 }
@@ -25751,14 +25751,14 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="nlgupAILRhdo" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="nlgupAILRhdo-next" onclick="window.checkFlip('nlgupAILRhdo')"> </div> <div style="height:40px"></div>
+<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="wabyqlOExjuQ" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="wabyqlOExjuQ-next" onclick="window.checkFlip('wabyqlOExjuQ')"> </div> <div style="height:40px"></div>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d592ef04-c904-4f69-8729-8eb6068387b3" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="74b0ea7c-961a-45ae-be71-d1b32a632501" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('d592ef04-c904-4f69-8729-8eb6068387b3');
+var element = document.getElementById('74b0ea7c-961a-45ae-be71-d1b32a632501');
 /*!
  * swiped-events.js - v1.1.4
  * Pure JavaScript swipe events
@@ -26555,7 +26555,7 @@ window.setTopics = function(idOrElem, topics) {
 
 (function() {
     var observer = new MutationObserver(function(mutations, obs) {
-        var el = document.getElementById("nlgupAILRhdo");
+        var el = document.getElementById("wabyqlOExjuQ");
         if (el) {
             el.dataset.url = "https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/flashcards/ch8.json";
             el.dataset.cards = JSON.stringify([{"front": "Graph", "back": "A data structure composed of a set of vertices (nodes) and edges (links) that connect pairs of these vertices. It is used to model relationships in complex systems.", "seqNum": 0}, {"front": "Vertex", "back": "Also known as a node, it represents an entity within a graph and serves as the fundamental unit of the structure.", "seqNum": 1}, {"front": "Edge", "back": "A connection between two vertices. In a directed graph, edges indicate a specific direction of relationship.", "seqNum": 2}, {"front": "Weight", "back": "A numerical value assigned to an edge representing cost, distance, or another measure impacting traversal.", "seqNum": 3}, {"front": "Path", "back": "A sequence of vertices connected by edges, defined by starting at one vertex and traversing through edges to reach another.", "seqNum": 4}, {"front": "Cycle", "back": "A path that begins and ends at the same vertex, containing at least one edge and no repeated edges or internal vertices.", "seqNum": 5}, {"front": "Acyclic Graph", "back": "A graph with no cycles, meaning it is impossible to return to a starting vertex by following edges.", "seqNum": 6}, {"front": "Directed Graph", "back": "A graph where edges have a specific direction, indicating a one-way relationship from one vertex to another.", "seqNum": 7}, {"front": "DAG (Directed Acyclic Graph)", "back": "A directed graph containing no cycles, often used for task scheduling and sequences where tasks do not repeat.", "seqNum": 8}, {"front": "Tree", "back": "A type of acyclic graph with a designated root vertex where all other vertices are connected by exactly one path to that root.", "seqNum": 9}, {"front": "Adjacency Matrix", "back": "A square matrix used to represent a graph where elements indicate whether pairs of vertices are adjacent.", "seqNum": 10}, {"front": "Adjacency List", "back": "A collection of lists used to represent a graph, where each list describes the neighbors of a specific vertex.", "seqNum": 11}, {"front": "Breadth-First Search (BFS)", "back": "A search algorithm that explores all neighbor nodes at the current depth prior to moving on to nodes at the next depth level.", "seqNum": 12}, {"front": "Knight's Tour", "back": "A sequence of moves on a chessboard where a knight visits every square exactly once.", "seqNum": 13}, {"front": "Depth-First Search (DFS)", "back": "A traversal algorithm that explores as far as possible along each branch before backtracking.", "seqNum": 14}, {"front": "Search Tree", "back": "A tree data structure used for efficiently locating specific keys within a set through insertion, deletion, and search operations.", "seqNum": 15}, {"front": "Heuristic", "back": "A technique designed to solve problems quickly or find approximate solutions when classic methods are too slow or infeasible.", "seqNum": 16}, {"front": "Warnsdorff's Algorithm", "back": "A heuristic for the knight's tour where the knight always moves to the square with the fewest onward moves.", "seqNum": 17}, {"front": "Depth-First Forest", "back": "A collection of trees formed during a depth-first search, where each tree corresponds to a set of vertices explored contiguously.", "seqNum": 18}, {"front": "Parenthesis Property", "back": "A DFS property stating that discovery and finish time intervals for any two vertices are either entirely disjoint or nested.", "seqNum": 19}, {"front": "Topological Sorting", "back": "A linear ordering of vertices in a directed graph where for every edge uv, vertex u comes before v.", "seqNum": 20}, {"front": "Strongly Connected Components", "back": "Maximal subgraphs where every pair of vertices has a directed path to and from each other.", "seqNum": 21}, {"front": "Shortest Path Problems", "back": "The challenge of finding a path between two vertices such that the sum of the weights of the edges is minimized.", "seqNum": 22}, {"front": "Dijkstra's Algorithm", "back": "An algorithm for finding the shortest paths between nodes in a graph with non-negative edge weights.", "seqNum": 23}, {"front": "Priority Queue", "back": "A data structure where each element has a priority, and elements are served based on that priority rather than just arrival order.", "seqNum": 24}, {"front": "Uncontrolled Flooding", "back": "A networking technique where a packet is sent to every outgoing link except the one it arrived on.", "seqNum": 25}, {"front": "Minimum Spanning Tree (MST)", "back": "A subset of edges connecting all vertices without cycles and with the minimum total edge weight.", "seqNum": 26}, {"front": "Prim's Algorithm", "back": "An algorithm that finds a minimum spanning tree by growing a tree one edge at a time from a starting vertex.", "seqNum": 27}, {"front": "Greedy Algorithms", "back": "A class of algorithms that build a solution by always choosing the next piece that offers the most immediate benefit.", "seqNum": 28}]);
@@ -26567,7 +26567,7 @@ window.setTopics = function(idOrElem, topics) {
             el.dataset.shuffleCards = false;
             el.dataset.title = "";
             el.dataset.subject = "";
-            createCards("nlgupAILRhdo");
+            createCards("wabyqlOExjuQ");
             obs.disconnect();
         }
     });
