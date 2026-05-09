@@ -7862,9 +7862,9 @@ a.anchor-link {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="7e4d991b-6c11-4b7c-ae04-03097d05edcc" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="0868cbf0-a0ec-4109-8540-61d0f33cb806" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('7e4d991b-6c11-4b7c-ae04-03097d05edcc');
+var element = document.getElementById('0868cbf0-a0ec-4109-8540-61d0f33cb806');
 Jupyter.notebook.kernel.restart()
 </script>
 </div>
@@ -8393,8 +8393,8 @@ is a set of edges $e$ and vertices $v$ such that $e \subset E$ and $v \subset V$
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="ytaIrFZNsUWb" style="border-radius: 10px; text-align: left"><style>
-#ytaIrFZNsUWb {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="olStTQPzXNmi" style="border-radius: 10px; text-align: left"><style>
+#olStTQPzXNmi {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -8622,10 +8622,10 @@ is a set of edges $e$ and vertices $v$ such that $e \subset E$ and $v \subset V$
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="158db0a5-d5c6-4701-9157-c7fecdb693e8" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="7b78d083-bc16-480b-9cda-408dc3927a34" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('158db0a5-d5c6-4701-9157-c7fecdb693e8');
-var questionsytaIrFZNsUWb=[
+var element = document.getElementById('7b78d083-bc16-480b-9cda-408dc3927a34');
+var questionsolStTQPzXNmi=[
 	{
         "question": "Regarding graph implementation methods, which of the following statements is true according to the materials?",
         "type": "multiple_choice",
@@ -9720,10 +9720,10 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
   setTimeout(() => controller.abort(), 5000);
   fetch("https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch8/graph.json", { signal })
     .then(response => response.json())
-    .then(json => show_questions(json, ytaIrFZNsUWb))
+    .then(json => show_questions(json, olStTQPzXNmi))
     .catch(err => {
       console.log("Fetch error or timeout", err);
-      show_questions(questionsytaIrFZNsUWb, ytaIrFZNsUWb);
+      show_questions(questionsolStTQPzXNmi, olStTQPzXNmi);
     });
 }
 }
@@ -10576,11 +10576,11 @@ $5,110 \cdot 5,110= 26,112,100$ cells. The graph constructed by the <code>build_
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>  Key   | Color  |Distance|Discover|Closing|Previous
-  cool  | black  |   1    |   0    |   0    |fool
-  pool  | black  |   1    |   0    |   0    |fool
   fool  | black  |   0    |   0    |   0    |None
-  foul  | black  |   1    |   0    |   0    |fool
+  pool  | black  |   1    |   0    |   0    |fool
+  cool  | black  |   1    |   0    |   0    |fool
   foil  | black  |   1    |   0    |   0    |fool
+  foul  | black  |   1    |   0    |   0    |fool
   poll  | black  |   2    |   0    |   0    |pool
   pall  | black  |   3    |   0    |   0    |poll
   pole  | black  |   3    |   0    |   0    |poll
@@ -10788,6 +10788,7 @@ $5,110 \cdot 5,110= 26,112,100$ cells. The graph constructed by the <code>build_
 
 /* RISE / reveal scaling — keep panels readable across export modes */
 body.rise-enabled .ds08-anim { font-size: 2.2vmin; }
+body.rise-enabled .ds08-anim .viz-layout{grid-template-columns:minmax(0,1fr) 320px;}
 .reveal .ds08-anim { font-size: 0.6em; }
 &lt;/style&gt;
 &lt;/head&gt;
@@ -13669,6 +13670,7 @@ F
 
 /* RISE / reveal scaling — keep panels readable across export modes */
 body.rise-enabled .ds08-anim { font-size: 2.2vmin; }
+body.rise-enabled .ds08-anim .viz-layout{grid-template-columns:minmax(0,1fr) 320px;}
 .reveal .ds08-anim { font-size: 0.6em; }
 &lt;/style&gt;
 &lt;/head&gt;
@@ -14753,8 +14755,8 @@ body.rise-enabled .ds08-anim { font-size: 2.2vmin; }
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="PTdacXXKRaiY" style="border-radius: 10px; text-align: left"><style>
-#PTdacXXKRaiY {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="cKFMLHDySIyU" style="border-radius: 10px; text-align: left"><style>
+#cKFMLHDySIyU {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -14982,10 +14984,10 @@ body.rise-enabled .ds08-anim { font-size: 2.2vmin; }
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="87793a16-9ffb-4f27-8321-891065c7463a" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="7b19fc4c-fb0f-424a-9be1-505e4ec88ab4" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('87793a16-9ffb-4f27-8321-891065c7463a');
-var questionsPTdacXXKRaiY=[
+var element = document.getElementById('7b19fc4c-fb0f-424a-9be1-505e4ec88ab4');
+var questionscKFMLHDySIyU=[
 	{
         "question": "What is the primary structural difference in how Breadth-First Search (BFS) and Depth-First Search (DFS) track the next vertex to explore?",
         "type": "multiple_choice",
@@ -16080,10 +16082,10 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
   setTimeout(() => controller.abort(), 5000);
   fetch("https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch8/bfs_dfs.json", { signal })
     .then(response => response.json())
-    .then(json => show_questions(json, PTdacXXKRaiY))
+    .then(json => show_questions(json, cKFMLHDySIyU))
     .catch(err => {
       console.log("Fetch error or timeout", err);
-      show_questions(questionsPTdacXXKRaiY, PTdacXXKRaiY);
+      show_questions(questionscKFMLHDySIyU, cKFMLHDySIyU);
     });
 }
 }
@@ -16447,6 +16449,7 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
 
 /* RISE / reveal scaling — keep panels readable across export modes */
 body.rise-enabled .ds08-anim { font-size: 2.2vmin; }
+body.rise-enabled .ds08-anim .viz-layout{grid-template-columns:minmax(0,1fr) 320px;}
 .reveal .ds08-anim { font-size: 0.6em; }
 &lt;/style&gt;
 &lt;/head&gt;
@@ -17814,8 +17817,8 @@ body.rise-enabled .ds08-anim { font-size: 2.2vmin; }
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="VVMLisEIyLef" style="border-radius: 10px; text-align: left"><style>
-#VVMLisEIyLef {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="TdWOeYZyYrDn" style="border-radius: 10px; text-align: left"><style>
+#TdWOeYZyYrDn {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -18043,10 +18046,10 @@ body.rise-enabled .ds08-anim { font-size: 2.2vmin; }
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="282ae7b7-e1dd-41bc-900f-241985796753" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="b731baca-7271-4b8e-8d51-a1705e26b844" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('282ae7b7-e1dd-41bc-900f-241985796753');
-var questionsVVMLisEIyLef=[
+var element = document.getElementById('b731baca-7271-4b8e-8d51-a1705e26b844');
+var questionsTdWOeYZyYrDn=[
 	{
         "question": "Why is Breadth-First Search (BFS) guaranteed to find the shortest path in an unweighted graph?",
         "type": "multiple_choice",
@@ -19141,10 +19144,10 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
   setTimeout(() => controller.abort(), 5000);
   fetch("https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch8/bfs.json", { signal })
     .then(response => response.json())
-    .then(json => show_questions(json, VVMLisEIyLef))
+    .then(json => show_questions(json, TdWOeYZyYrDn))
     .catch(err => {
       console.log("Fetch error or timeout", err);
-      show_questions(questionsVVMLisEIyLef, VVMLisEIyLef);
+      show_questions(questionsTdWOeYZyYrDn, TdWOeYZyYrDn);
     });
 }
 }
@@ -19819,6 +19822,7 @@ Path from 'u' to 'z': u -&gt; x -&gt; y -&gt; z
 
 /* RISE / reveal scaling — keep panels readable across export modes */
 body.rise-enabled .ds08-anim { font-size: 2.2vmin; }
+body.rise-enabled .ds08-anim .viz-layout{grid-template-columns:minmax(0,1fr) 320px;}
 .reveal .ds08-anim { font-size: 0.6em; }
 &lt;/style&gt;
 &lt;/head&gt;
@@ -20910,8 +20914,8 @@ body.rise-enabled .ds08-anim { font-size: 2.2vmin; }
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="VoIAwiCARFwb" style="border-radius: 10px; text-align: left"><style>
-#VoIAwiCARFwb {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="pchoXwIIqqhT" style="border-radius: 10px; text-align: left"><style>
+#pchoXwIIqqhT {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -21139,10 +21143,10 @@ body.rise-enabled .ds08-anim { font-size: 2.2vmin; }
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="1a8112b0-b1e2-4884-ab46-beb9823c4167" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="e04d0d17-0c43-4e06-923c-3549459ce6f7" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('1a8112b0-b1e2-4884-ab46-beb9823c4167');
-var questionsVoIAwiCARFwb=[
+var element = document.getElementById('e04d0d17-0c43-4e06-923c-3549459ce6f7');
+var questionspchoXwIIqqhT=[
 	{
         "question": "Which of the following is a known limitation or characteristic of Dijkstra's algorithm?",
         "type": "multiple_choice",
@@ -22237,10 +22241,10 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
   setTimeout(() => controller.abort(), 5000);
   fetch("https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch8/dijk.json", { signal })
     .then(response => response.json())
-    .then(json => show_questions(json, VoIAwiCARFwb))
+    .then(json => show_questions(json, pchoXwIIqqhT))
     .catch(err => {
       console.log("Fetch error or timeout", err);
-      show_questions(questionsVoIAwiCARFwb, VoIAwiCARFwb);
+      show_questions(questionspchoXwIIqqhT, pchoXwIIqqhT);
     });
 }
 }
@@ -22667,6 +22671,7 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
 
 /* RISE / reveal scaling — keep panels readable across export modes */
 body.rise-enabled .ds08-anim { font-size: 2.2vmin; }
+body.rise-enabled .ds08-anim .viz-layout{grid-template-columns:minmax(0,1fr) 320px;}
 .reveal .ds08-anim { font-size: 0.6em; }
 &lt;/style&gt;
 &lt;/head&gt;
@@ -23930,8 +23935,8 @@ Edges in the Minimum Spanning Tree:
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="vhWdEpnWpPrF" style="border-radius: 10px; text-align: left"><style>
-#vhWdEpnWpPrF {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="MNzxHSajIwZp" style="border-radius: 10px; text-align: left"><style>
+#MNzxHSajIwZp {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -24159,10 +24164,10 @@ Edges in the Minimum Spanning Tree:
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="5725fc16-24d3-4930-a49e-fe674eeb4bfd" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="14e28e99-cf0a-4077-aba2-a682357c115a" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('5725fc16-24d3-4930-a49e-fe674eeb4bfd');
-var questionsvhWdEpnWpPrF=[
+var element = document.getElementById('14e28e99-cf0a-4077-aba2-a682357c115a');
+var questionsMNzxHSajIwZp=[
 	{
         "question": "In Prim's algorithm for finding a Minimum Spanning Tree (MST), what defines a safe edge?",
         "type": "multiple_choice",
@@ -25257,10 +25262,10 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
   setTimeout(() => controller.abort(), 5000);
   fetch("https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch8/prim.json", { signal })
     .then(response => response.json())
-    .then(json => show_questions(json, vhWdEpnWpPrF))
+    .then(json => show_questions(json, MNzxHSajIwZp))
     .catch(err => {
       console.log("Fetch error or timeout", err);
-      show_questions(questionsvhWdEpnWpPrF, vhWdEpnWpPrF);
+      show_questions(questionsMNzxHSajIwZp, MNzxHSajIwZp);
     });
 }
 }
@@ -25676,14 +25681,14 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="oEuHZGBZxUvb" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="oEuHZGBZxUvb-next" onclick="window.checkFlip('oEuHZGBZxUvb')"> </div> <div style="height:40px"></div>
+<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="LyuKLTpwcoUO" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="LyuKLTpwcoUO-next" onclick="window.checkFlip('LyuKLTpwcoUO')"> </div> <div style="height:40px"></div>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d88bf0d4-e7c6-4c4e-a1d3-281aa4cdaa24" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="253bf86a-0217-4038-8e2c-bc363281dc91" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('d88bf0d4-e7c6-4c4e-a1d3-281aa4cdaa24');
+var element = document.getElementById('253bf86a-0217-4038-8e2c-bc363281dc91');
 /*!
  * swiped-events.js - v1.1.4
  * Pure JavaScript swipe events
@@ -26480,7 +26485,7 @@ window.setTopics = function(idOrElem, topics) {
 
 (function() {
     var observer = new MutationObserver(function(mutations, obs) {
-        var el = document.getElementById("oEuHZGBZxUvb");
+        var el = document.getElementById("LyuKLTpwcoUO");
         if (el) {
             el.dataset.url = "https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/flashcards/ch8.json";
             el.dataset.cards = JSON.stringify([{"front": "Graph", "back": "A data structure composed of a set of vertices (nodes) and edges (links) that connect pairs of these vertices. It is used to model relationships in complex systems.", "seqNum": 0}, {"front": "Vertex", "back": "Also known as a node, it represents an entity within a graph and serves as the fundamental unit of the structure.", "seqNum": 1}, {"front": "Edge", "back": "A connection between two vertices. In a directed graph, edges indicate a specific direction of relationship.", "seqNum": 2}, {"front": "Weight", "back": "A numerical value assigned to an edge representing cost, distance, or another measure impacting traversal.", "seqNum": 3}, {"front": "Path", "back": "A sequence of vertices connected by edges, defined by starting at one vertex and traversing through edges to reach another.", "seqNum": 4}, {"front": "Cycle", "back": "A path that begins and ends at the same vertex, containing at least one edge and no repeated edges or internal vertices.", "seqNum": 5}, {"front": "Acyclic Graph", "back": "A graph with no cycles, meaning it is impossible to return to a starting vertex by following edges.", "seqNum": 6}, {"front": "Directed Graph", "back": "A graph where edges have a specific direction, indicating a one-way relationship from one vertex to another.", "seqNum": 7}, {"front": "DAG (Directed Acyclic Graph)", "back": "A directed graph containing no cycles, often used for task scheduling and sequences where tasks do not repeat.", "seqNum": 8}, {"front": "Tree", "back": "A type of acyclic graph with a designated root vertex where all other vertices are connected by exactly one path to that root.", "seqNum": 9}, {"front": "Adjacency Matrix", "back": "A square matrix used to represent a graph where elements indicate whether pairs of vertices are adjacent.", "seqNum": 10}, {"front": "Adjacency List", "back": "A collection of lists used to represent a graph, where each list describes the neighbors of a specific vertex.", "seqNum": 11}, {"front": "Breadth-First Search (BFS)", "back": "A search algorithm that explores all neighbor nodes at the current depth prior to moving on to nodes at the next depth level.", "seqNum": 12}, {"front": "Knight's Tour", "back": "A sequence of moves on a chessboard where a knight visits every square exactly once.", "seqNum": 13}, {"front": "Depth-First Search (DFS)", "back": "A traversal algorithm that explores as far as possible along each branch before backtracking.", "seqNum": 14}, {"front": "Search Tree", "back": "A tree data structure used for efficiently locating specific keys within a set through insertion, deletion, and search operations.", "seqNum": 15}, {"front": "Heuristic", "back": "A technique designed to solve problems quickly or find approximate solutions when classic methods are too slow or infeasible.", "seqNum": 16}, {"front": "Warnsdorff's Algorithm", "back": "A heuristic for the knight's tour where the knight always moves to the square with the fewest onward moves.", "seqNum": 17}, {"front": "Depth-First Forest", "back": "A collection of trees formed during a depth-first search, where each tree corresponds to a set of vertices explored contiguously.", "seqNum": 18}, {"front": "Parenthesis Property", "back": "A DFS property stating that discovery and finish time intervals for any two vertices are either entirely disjoint or nested.", "seqNum": 19}, {"front": "Topological Sorting", "back": "A linear ordering of vertices in a directed graph where for every edge uv, vertex u comes before v.", "seqNum": 20}, {"front": "Strongly Connected Components", "back": "Maximal subgraphs where every pair of vertices has a directed path to and from each other.", "seqNum": 21}, {"front": "Shortest Path Problems", "back": "The challenge of finding a path between two vertices such that the sum of the weights of the edges is minimized.", "seqNum": 22}, {"front": "Dijkstra's Algorithm", "back": "An algorithm for finding the shortest paths between nodes in a graph with non-negative edge weights.", "seqNum": 23}, {"front": "Priority Queue", "back": "A data structure where each element has a priority, and elements are served based on that priority rather than just arrival order.", "seqNum": 24}, {"front": "Uncontrolled Flooding", "back": "A networking technique where a packet is sent to every outgoing link except the one it arrived on.", "seqNum": 25}, {"front": "Minimum Spanning Tree (MST)", "back": "A subset of edges connecting all vertices without cycles and with the minimum total edge weight.", "seqNum": 26}, {"front": "Prim's Algorithm", "back": "An algorithm that finds a minimum spanning tree by growing a tree one edge at a time from a starting vertex.", "seqNum": 27}, {"front": "Greedy Algorithms", "back": "A class of algorithms that build a solution by always choosing the next piece that offers the most immediate benefit.", "seqNum": 28}]);
@@ -26492,7 +26497,7 @@ window.setTopics = function(idOrElem, topics) {
             el.dataset.shuffleCards = false;
             el.dataset.title = "";
             el.dataset.subject = "";
-            createCards("oEuHZGBZxUvb");
+            createCards("LyuKLTpwcoUO");
             obs.disconnect();
         }
     });

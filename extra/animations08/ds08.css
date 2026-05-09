@@ -164,4 +164,5 @@
 
 /* RISE / reveal scaling — keep panels readable across export modes */
 body.rise-enabled .ds08-anim { font-size: 2.2vmin; }
+body.rise-enabled .ds08-anim .viz-layout{grid-template-columns:minmax(0,1fr) 320px;}
 .reveal .ds08-anim { font-size: 0.6em; }
