@@ -30,10 +30,6 @@
 <div class="ic-title">距離表 <span class="ic-badge">LIVE</span></div>
 <div id="dijTableDij" style="overflow-x:auto;"></div>
 </div>
-<div class="info-card">
-<div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-<div class="pseudo-code" id="dijCodeDij"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">dijkstra</span>(graph, start):</span><span class="line" data-l="2">    pq = PriorityQueue()</span><span class="line" data-l="3">    start.distance = <span class="num">0</span></span><span class="line" data-l="4">    pq.insert((<span class="num">0</span>, start))</span><span class="line" data-l="5">    visited = set()</span><span class="line" data-l="6"> <span class="kw">while not</span> pq.is_empty():</span><span class="line" data-l="7">        d, u = pq.delete()  <span class="com"># 取最小</span></span><span class="line" data-l="8">        visited.add(u)</span><span class="line" data-l="9"> <span class="kw">for</span> v <span class="kw">in</span> u.get_neighbors():</span><span class="line" data-l="10"> <span class="kw">if</span> v <span class="kw">in</span> visited: <span class="kw">continue</span></span><span class="line" data-l="11">            new_d = d + u.weight(v)</span><span class="line" data-l="12"> <span class="kw">if</span> new_d &lt; v.distance:</span><span class="line" data-l="13">                v.distance = new_d</span><span class="line" data-l="14">                v.previous = u</span><span class="line" data-l="15">                pq.update(v, new_d)</span></div>
-</div>
 
 </div>
 </div>

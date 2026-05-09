@@ -22,14 +22,6 @@
 <div class="topsort-result" id="topOrderTop" style="margin-top:.35rem;"><span class="ts-label">topo</span><span style="color:rgba(255,255,255,.4)">（DFS 結束後反轉 result）</span></div>
 </div>
 </div>
-<div class="side-panel">
-<div class="info-card">
-<div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-<div class="pseudo-code" id="topCodeTop"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">topsort</span>(graph):</span><span class="line" data-l="2">    result = []</span><span class="line" data-l="3">    visited = set()</span><span class="line" data-l="4"> <span class="kw">def</span> <span class="fn">dfs</span>(v):</span><span class="line" data-l="5">        visited.add(v)</span><span class="line" data-l="6"> <span class="kw">for</span> u <span class="kw">in</span> v.neighbors():</span><span class="line" data-l="7"> <span class="kw">if</span> u <span class="kw">not in</span> visited: <span class="fn">dfs</span>(u)</span><span class="line" data-l="8">        result.append(v)   <span class="com"># 後序：離開時加入</span></span><span class="line" data-l="9"></span><span class="line" data-l="10"></span><span class="line" data-l="11"> <span class="kw">for</span> v <span class="kw">in</span> graph:</span><span class="line" data-l="12"> <span class="kw">if</span> v <span class="kw">not in</span> visited: <span class="fn">dfs</span>(v)</span><span class="line" data-l="13"> <span class="kw">return</span> reversed(result)   <span class="com"># 反轉 → 拓撲順序</span></span></div>
-</div>
-
-
-</div>
 </div>
 </div>
 <script>(function go(){ if(!window.DS08||!window.DS08.init){setTimeout(go,50);return;} window.DS08.init.topsort(); })();</script>

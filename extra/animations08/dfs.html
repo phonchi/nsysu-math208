@@ -34,10 +34,6 @@
 <div class="ic-title">頂點時間表</div>
 <div id="dfsTableDfs" style="overflow-x:auto;"></div>
 </div>
-<div class="info-card">
-<div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-<div class="pseudo-code" id="dfsCodeDfs"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">dfs</span>(graph):</span><span class="line" data-l="2"> <span class="kw">for</span> v <span class="kw">in</span> graph: v.color = <span class="str">"white"</span></span><span class="line" data-l="3">    time = <span class="num">0</span></span><span class="line" data-l="4"> <span class="kw">for</span> v <span class="kw">in</span> graph:</span><span class="line" data-l="5"> <span class="kw">if</span> v.color == <span class="str">"white"</span>:</span><span class="line" data-l="6">            dfs_visit(v)</span><span class="line" data-l="7"></span><span class="line" data-l="8"><span class="kw">def</span> <span class="fn">dfs_visit</span>(u):</span><span class="line" data-l="9">    u.color = <span class="str">"gray"</span></span><span class="line" data-l="10">    time += <span class="num">1</span>; u.discovery = time</span><span class="line" data-l="11"> <span class="kw">for</span> nb <span class="kw">in</span> u.get_neighbors():</span><span class="line" data-l="12"> <span class="kw">if</span> nb.color == <span class="str">"white"</span>:</span><span class="line" data-l="13">            nb.previous = u</span><span class="line" data-l="14">            dfs_visit(nb)  <span class="com"># 遞迴</span></span><span class="line" data-l="15">    u.color = <span class="str">"black"</span></span><span class="line" data-l="16">    time += <span class="num">1</span>; u.closing = time</span></div>
-</div>
 
 </div>
 </div>

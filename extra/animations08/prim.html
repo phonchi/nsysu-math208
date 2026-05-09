@@ -31,10 +31,6 @@
 <div class="ic-title">MST 邊清單</div>
 <div id="primEdgesPrim" style="font-family:'JetBrains Mono',monospace;font-size:.82rem;">—</div>
 </div>
-<div class="info-card">
-<div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-<div class="pseudo-code" id="primCodePrim"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">prim</span>(graph, start):</span><span class="line" data-l="2"> <span class="kw">for</span> v <span class="kw">in</span> graph:</span><span class="line" data-l="3">        v.distance = <span class="num">∞</span></span><span class="line" data-l="4">        v.previous = <span class="kw">None</span></span><span class="line" data-l="5">    start.distance = <span class="num">0</span></span><span class="line" data-l="6">    pq = PriorityQueue(graph)</span><span class="line" data-l="7"> <span class="kw">while not</span> pq.is_empty():</span><span class="line" data-l="8">        d, u = pq.delete()</span><span class="line" data-l="9"> <span class="kw">for</span> v <span class="kw">in</span> u.get_neighbors():</span><span class="line" data-l="10">            new_d = u.weight(v)  <span class="com"># 注意：只看單邊權！</span></span><span class="line" data-l="11"> <span class="kw">if</span> v <span class="kw">in</span> pq <span class="kw">and</span> new_d &lt; v.distance:</span><span class="line" data-l="12">                v.previous = u</span><span class="line" data-l="13">                v.distance = new_d</span><span class="line" data-l="14">                pq.update(v, new_d)</span></div>
-</div>
 
 </div>
 </div>

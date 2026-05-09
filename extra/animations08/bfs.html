@@ -32,10 +32,6 @@
         <div class="ic-title">頂點狀態表</div>
         <div id="bfsTableBfs" style="overflow-x:auto;"></div>
       </div>
-      <div class="info-card">
-        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="bfsCodeBfs"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">bfs</span>(start):</span><span class="line" data-l="2">    start.color = <span class="str">"gray"</span></span><span class="line" data-l="3">    start.distance = <span class="num">0</span></span><span class="line" data-l="4">    start.previous = <span class="kw">None</span></span><span class="line" data-l="5">    queue = Queue()</span><span class="line" data-l="6">    queue.enqueue(start)</span><span class="line" data-l="7">    <span class="kw">while</span> queue.size() &gt; <span class="num">0</span>:</span><span class="line" data-l="8">        current = queue.dequeue()</span><span class="line" data-l="9">        <span class="kw">for</span> nb <span class="kw">in</span> current.get_neighbors():</span><span class="line" data-l="10">            <span class="kw">if</span> nb.color == <span class="str">"white"</span>:</span><span class="line" data-l="11">                nb.color = <span class="str">"gray"</span></span><span class="line" data-l="12">                nb.distance = current.distance + <span class="num">1</span></span><span class="line" data-l="13">                nb.previous = current</span><span class="line" data-l="14">                queue.enqueue(nb)</span><span class="line" data-l="15">        current.color = <span class="str">"black"</span></span></div>
-      </div>
     </div>
   </div>
 </div>
