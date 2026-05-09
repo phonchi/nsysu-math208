@@ -7862,9 +7862,9 @@ a.anchor-link {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="6522b697-2d73-4c74-b886-22f9bd34e03d" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="0f32b658-5157-4caa-9998-47a42c8c818e" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('6522b697-2d73-4c74-b886-22f9bd34e03d');
+var element = document.getElementById('0f32b658-5157-4caa-9998-47a42c8c818e');
 Jupyter.notebook.kernel.restart()
 </script>
 </div>
@@ -7928,7 +7928,7 @@ Jupyter.notebook.kernel.restart()
     <span class="k">def</span><span class="w"> </span><span class="nf">_repr_html_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">html</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_anim_iframe</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">460</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_anim_iframe</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">500</span><span class="p">):</span>
     <span class="n">css</span> <span class="o">=</span> <span class="n">_fetch</span><span class="p">(</span><span class="s2">"ds08.css"</span><span class="p">)</span>
     <span class="n">js</span> <span class="o">=</span> <span class="n">_fetch</span><span class="p">(</span><span class="s2">"ds08.js"</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"&lt;/script&gt;"</span><span class="p">,</span> <span class="s2">"&lt;</span><span class="se">\\</span><span class="s2">/script&gt;"</span><span class="p">)</span>
     <span class="n">panel</span> <span class="o">=</span> <span class="n">_fetch</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s2">".html"</span><span class="p">)</span>
@@ -8393,8 +8393,8 @@ is a set of edges $e$ and vertices $v$ such that $e \subset E$ and $v \subset V$
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="zFKHXFBNhKXl" style="border-radius: 10px; text-align: left"><style>
-#zFKHXFBNhKXl {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="AjeJuBqVnKsN" style="border-radius: 10px; text-align: left"><style>
+#AjeJuBqVnKsN {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -8622,10 +8622,10 @@ is a set of edges $e$ and vertices $v$ such that $e \subset E$ and $v \subset V$
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="509757d5-c313-4a4f-aba2-9f0f6f27c118" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="8cb6baaa-dedf-45ea-82db-96dc791a5df2" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('509757d5-c313-4a4f-aba2-9f0f6f27c118');
-var questionszFKHXFBNhKXl=[
+var element = document.getElementById('8cb6baaa-dedf-45ea-82db-96dc791a5df2');
+var questionsAjeJuBqVnKsN=[
 	{
         "question": "Regarding graph implementation methods, which of the following statements is true according to the materials?",
         "type": "multiple_choice",
@@ -9720,10 +9720,10 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
   setTimeout(() => controller.abort(), 5000);
   fetch("https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch8/graph.json", { signal })
     .then(response => response.json())
-    .then(json => show_questions(json, zFKHXFBNhKXl))
+    .then(json => show_questions(json, AjeJuBqVnKsN))
     .catch(err => {
       console.log("Fetch error or timeout", err);
-      show_questions(questionszFKHXFBNhKXl, zFKHXFBNhKXl);
+      show_questions(questionsAjeJuBqVnKsN, AjeJuBqVnKsN);
     });
 }
 }
@@ -11825,7 +11825,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 })();
 &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;" style="width:100%;height:460px;border:0;display:block;" title="DS08 bfs animation"></iframe>
+&lt;/html&gt;" style="width:100%;height:500px;border:0;display:block;" title="DS08 bfs animation"></iframe>
 </div>
 </div>
 </div>
@@ -14724,7 +14724,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 })();
 &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;" style="width:100%;height:460px;border:0;display:block;" title="DS08 dfs animation"></iframe>
+&lt;/html&gt;" style="width:100%;height:500px;border:0;display:block;" title="DS08 dfs animation"></iframe>
 </div>
 </div>
 </div>
@@ -14783,8 +14783,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="IpokELgHqkgN" style="border-radius: 10px; text-align: left"><style>
-#IpokELgHqkgN {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="fmjXmSJbQPKu" style="border-radius: 10px; text-align: left"><style>
+#fmjXmSJbQPKu {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -15012,10 +15012,10 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="2ed6cfd0-6a14-453d-80e2-32f7f92d4413" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="2ff0e596-449b-4fb5-afc5-882eae88a193" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('2ed6cfd0-6a14-453d-80e2-32f7f92d4413');
-var questionsIpokELgHqkgN=[
+var element = document.getElementById('2ff0e596-449b-4fb5-afc5-882eae88a193');
+var questionsfmjXmSJbQPKu=[
 	{
         "question": "What is the primary structural difference in how Breadth-First Search (BFS) and Depth-First Search (DFS) track the next vertex to explore?",
         "type": "multiple_choice",
@@ -16110,10 +16110,10 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
   setTimeout(() => controller.abort(), 5000);
   fetch("https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch8/bfs_dfs.json", { signal })
     .then(response => response.json())
-    .then(json => show_questions(json, IpokELgHqkgN))
+    .then(json => show_questions(json, fmjXmSJbQPKu))
     .catch(err => {
       console.log("Fetch error or timeout", err);
-      show_questions(questionsIpokELgHqkgN, IpokELgHqkgN);
+      show_questions(questionsfmjXmSJbQPKu, fmjXmSJbQPKu);
     });
 }
 }
@@ -17503,7 +17503,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 })();
 &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;" style="width:100%;height:460px;border:0;display:block;" title="DS08 topsort animation"></iframe>
+&lt;/html&gt;" style="width:100%;height:500px;border:0;display:block;" title="DS08 topsort animation"></iframe>
 </div>
 </div>
 </div>
@@ -17859,8 +17859,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="lBeUpuwXqpXo" style="border-radius: 10px; text-align: left"><style>
-#lBeUpuwXqpXo {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="oESrrIsqtsro" style="border-radius: 10px; text-align: left"><style>
+#oESrrIsqtsro {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -18088,10 +18088,10 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="094e1a1f-e989-4155-9bf3-77a0751539db" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="0d1a751d-82e5-400c-9d77-42b52f7b33e2" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('094e1a1f-e989-4155-9bf3-77a0751539db');
-var questionslBeUpuwXqpXo=[
+var element = document.getElementById('0d1a751d-82e5-400c-9d77-42b52f7b33e2');
+var questionsoESrrIsqtsro=[
 	{
         "question": "Why is Breadth-First Search (BFS) guaranteed to find the shortest path in an unweighted graph?",
         "type": "multiple_choice",
@@ -19186,10 +19186,10 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
   setTimeout(() => controller.abort(), 5000);
   fetch("https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch8/bfs.json", { signal })
     .then(response => response.json())
-    .then(json => show_questions(json, lBeUpuwXqpXo))
+    .then(json => show_questions(json, oESrrIsqtsro))
     .catch(err => {
       console.log("Fetch error or timeout", err);
-      show_questions(questionslBeUpuwXqpXo, lBeUpuwXqpXo);
+      show_questions(questionsoESrrIsqtsro, oESrrIsqtsro);
     });
 }
 }
@@ -20900,7 +20900,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 })();
 &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;" style="width:100%;height:460px;border:0;display:block;" title="DS08 dijkstra animation"></iframe>
+&lt;/html&gt;" style="width:100%;height:500px;border:0;display:block;" title="DS08 dijkstra animation"></iframe>
 </div>
 </div>
 </div>
@@ -20970,8 +20970,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="PCglzvTusdpq" style="border-radius: 10px; text-align: left"><style>
-#PCglzvTusdpq {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="IlMSydvLAnRs" style="border-radius: 10px; text-align: left"><style>
+#IlMSydvLAnRs {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -21199,10 +21199,10 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d954eacd-ef0d-44dc-9c61-61a6c32ab0e4" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="9e72d5b4-9799-48b1-a540-dc338b67a54f" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('d954eacd-ef0d-44dc-9c61-61a6c32ab0e4');
-var questionsPCglzvTusdpq=[
+var element = document.getElementById('9e72d5b4-9799-48b1-a540-dc338b67a54f');
+var questionsIlMSydvLAnRs=[
 	{
         "question": "Which of the following is a known limitation or characteristic of Dijkstra's algorithm?",
         "type": "multiple_choice",
@@ -22297,10 +22297,10 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
   setTimeout(() => controller.abort(), 5000);
   fetch("https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch8/dijk.json", { signal })
     .then(response => response.json())
-    .then(json => show_questions(json, PCglzvTusdpq))
+    .then(json => show_questions(json, IlMSydvLAnRs))
     .catch(err => {
       console.log("Fetch error or timeout", err);
-      show_questions(questionsPCglzvTusdpq, PCglzvTusdpq);
+      show_questions(questionsIlMSydvLAnRs, IlMSydvLAnRs);
     });
 }
 }
@@ -22317,7 +22317,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Exercise-1:-Given-a-weighted-directed-graph-with-negative-edges-as-follows,-what-is-the-resulting-shortest-path-from-vertex-A-to-D-after-performing-Dijkstra's-algorithm-if-we-do-check-the-visited-node?">Exercise 1: Given a weighted directed graph with negative edges as follows, what is the resulting shortest path from vertex A to D after performing Dijkstra's algorithm if we do check the visited node?<a class="anchor-link" href="#Exercise-1:-Given-a-weighted-directed-graph-with-negative-edges-as-follows,-what-is-the-resulting-shortest-path-from-vertex-A-to-D-after-performing-Dijkstra's-algorithm-if-we-do-check-the-visited-node?">¶</a></h4><p>(A) <code>A-&gt;B-&gt;D</code></p>
+<h4 id="Exercise-1:-Given-a-weighted-directed-graph-with-negative-edges-as-follows,-what-is-the-resulting-shortest-path-from-vertex-A-to-D-after-performing-Dijkstra's-algorithm-if-we-do-check-the-visited-node?">Exercise 1: Given a weighted directed graph with negative edges as follows, what is the resulting shortest path from vertex A to D after performing Dijkstra's algorithm if we do check the visited node?<a class="anchor-link" href="#Exercise-1:-Given-a-weighted-directed-graph-with-negative-edges-as-follows,-what-is-the-resulting-shortest-path-from-vertex-A-to-D-after-performing-Dijkstra's-algorithm-if-we-do-check-the-visited-node?">¶</a></h4><center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/Dij.png" width="25%"/></center>
+<p>(A) <code>A-&gt;B-&gt;D</code></p>
 <p>(B) <code>A-&gt;C-&gt;D</code></p>
 <p>(C) <code>A-&gt;E-&gt;G-&gt;D</code></p>
 <p>(D) <code>A-&gt;C-&gt;E-&gt;G-&gt;D</code></p>
@@ -23764,7 +23765,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 })();
 &lt;/script&gt;
 &lt;/body&gt;
-&lt;/html&gt;" style="width:100%;height:460px;border:0;display:block;" title="DS08 prim animation"></iframe>
+&lt;/html&gt;" style="width:100%;height:500px;border:0;display:block;" title="DS08 prim animation"></iframe>
 </div>
 </div>
 </div>
@@ -24005,8 +24006,8 @@ Edges in the Minimum Spanning Tree:
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="ekzQAHEjSSNA" style="border-radius: 10px; text-align: left"><style>
-#ekzQAHEjSSNA {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="KcYIKyGlUezj" style="border-radius: 10px; text-align: left"><style>
+#KcYIKyGlUezj {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -24234,10 +24235,10 @@ Edges in the Minimum Spanning Tree:
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="3024cc5f-2f5b-4028-80f1-237392f30d77" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="3f8e9530-e438-4b44-aad9-1881f0bb3d18" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('3024cc5f-2f5b-4028-80f1-237392f30d77');
-var questionsekzQAHEjSSNA=[
+var element = document.getElementById('3f8e9530-e438-4b44-aad9-1881f0bb3d18');
+var questionsKcYIKyGlUezj=[
 	{
         "question": "In Prim's algorithm for finding a Minimum Spanning Tree (MST), what defines a safe edge?",
         "type": "multiple_choice",
@@ -25332,10 +25333,10 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
   setTimeout(() => controller.abort(), 5000);
   fetch("https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch8/prim.json", { signal })
     .then(response => response.json())
-    .then(json => show_questions(json, ekzQAHEjSSNA))
+    .then(json => show_questions(json, KcYIKyGlUezj))
     .catch(err => {
       console.log("Fetch error or timeout", err);
-      show_questions(questionsekzQAHEjSSNA, ekzQAHEjSSNA);
+      show_questions(questionsKcYIKyGlUezj, KcYIKyGlUezj);
     });
 }
 }
@@ -25363,7 +25364,7 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Exercise-2:-Considering-the-following-graph,-when-Prim's-algorithm-is-used-and-starts-from-node-F,-what-is-the-weight-of-the-last-edge-to-be-added-into-the-minimum-spanning-tree?">Exercise 2: Considering the following graph, when Prim's algorithm is used and starts from node F, what is the weight of the last edge to be added into the minimum spanning tree?<a class="anchor-link" href="#Exercise-2:-Considering-the-following-graph,-when-Prim's-algorithm-is-used-and-starts-from-node-F,-what-is-the-weight-of-the-last-edge-to-be-added-into-the-minimum-spanning-tree?">¶</a></h4>
+<h4 id="Exercise-2:-Considering-the-following-graph,-when-Prim's-algorithm-is-used-and-starts-from-node-F,-what-is-the-weight-of-the-last-edge-to-be-added-into-the-minimum-spanning-tree?">Exercise 2: Considering the following graph, when Prim's algorithm is used and starts from node F, what is the weight of the last edge to be added into the minimum spanning tree?<a class="anchor-link" href="#Exercise-2:-Considering-the-following-graph,-when-Prim's-algorithm-is-used-and-starts-from-node-F,-what-is-the-weight-of-the-last-edge-to-be-added-into-the-minimum-spanning-tree?">¶</a></h4><center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/primq.png" width="25%"/></center>
 </div>
 </div>
 </div>
@@ -25751,14 +25752,14 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="wabyqlOExjuQ" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="wabyqlOExjuQ-next" onclick="window.checkFlip('wabyqlOExjuQ')"> </div> <div style="height:40px"></div>
+<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="EdhkrZBxuHib" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="EdhkrZBxuHib-next" onclick="window.checkFlip('EdhkrZBxuHib')"> </div> <div style="height:40px"></div>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="74b0ea7c-961a-45ae-be71-d1b32a632501" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="4f955d5b-35a3-485e-aaa2-aeef62b1e2fa" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('74b0ea7c-961a-45ae-be71-d1b32a632501');
+var element = document.getElementById('4f955d5b-35a3-485e-aaa2-aeef62b1e2fa');
 /*!
  * swiped-events.js - v1.1.4
  * Pure JavaScript swipe events
@@ -26555,7 +26556,7 @@ window.setTopics = function(idOrElem, topics) {
 
 (function() {
     var observer = new MutationObserver(function(mutations, obs) {
-        var el = document.getElementById("wabyqlOExjuQ");
+        var el = document.getElementById("EdhkrZBxuHib");
         if (el) {
             el.dataset.url = "https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/flashcards/ch8.json";
             el.dataset.cards = JSON.stringify([{"front": "Graph", "back": "A data structure composed of a set of vertices (nodes) and edges (links) that connect pairs of these vertices. It is used to model relationships in complex systems.", "seqNum": 0}, {"front": "Vertex", "back": "Also known as a node, it represents an entity within a graph and serves as the fundamental unit of the structure.", "seqNum": 1}, {"front": "Edge", "back": "A connection between two vertices. In a directed graph, edges indicate a specific direction of relationship.", "seqNum": 2}, {"front": "Weight", "back": "A numerical value assigned to an edge representing cost, distance, or another measure impacting traversal.", "seqNum": 3}, {"front": "Path", "back": "A sequence of vertices connected by edges, defined by starting at one vertex and traversing through edges to reach another.", "seqNum": 4}, {"front": "Cycle", "back": "A path that begins and ends at the same vertex, containing at least one edge and no repeated edges or internal vertices.", "seqNum": 5}, {"front": "Acyclic Graph", "back": "A graph with no cycles, meaning it is impossible to return to a starting vertex by following edges.", "seqNum": 6}, {"front": "Directed Graph", "back": "A graph where edges have a specific direction, indicating a one-way relationship from one vertex to another.", "seqNum": 7}, {"front": "DAG (Directed Acyclic Graph)", "back": "A directed graph containing no cycles, often used for task scheduling and sequences where tasks do not repeat.", "seqNum": 8}, {"front": "Tree", "back": "A type of acyclic graph with a designated root vertex where all other vertices are connected by exactly one path to that root.", "seqNum": 9}, {"front": "Adjacency Matrix", "back": "A square matrix used to represent a graph where elements indicate whether pairs of vertices are adjacent.", "seqNum": 10}, {"front": "Adjacency List", "back": "A collection of lists used to represent a graph, where each list describes the neighbors of a specific vertex.", "seqNum": 11}, {"front": "Breadth-First Search (BFS)", "back": "A search algorithm that explores all neighbor nodes at the current depth prior to moving on to nodes at the next depth level.", "seqNum": 12}, {"front": "Knight's Tour", "back": "A sequence of moves on a chessboard where a knight visits every square exactly once.", "seqNum": 13}, {"front": "Depth-First Search (DFS)", "back": "A traversal algorithm that explores as far as possible along each branch before backtracking.", "seqNum": 14}, {"front": "Search Tree", "back": "A tree data structure used for efficiently locating specific keys within a set through insertion, deletion, and search operations.", "seqNum": 15}, {"front": "Heuristic", "back": "A technique designed to solve problems quickly or find approximate solutions when classic methods are too slow or infeasible.", "seqNum": 16}, {"front": "Warnsdorff's Algorithm", "back": "A heuristic for the knight's tour where the knight always moves to the square with the fewest onward moves.", "seqNum": 17}, {"front": "Depth-First Forest", "back": "A collection of trees formed during a depth-first search, where each tree corresponds to a set of vertices explored contiguously.", "seqNum": 18}, {"front": "Parenthesis Property", "back": "A DFS property stating that discovery and finish time intervals for any two vertices are either entirely disjoint or nested.", "seqNum": 19}, {"front": "Topological Sorting", "back": "A linear ordering of vertices in a directed graph where for every edge uv, vertex u comes before v.", "seqNum": 20}, {"front": "Strongly Connected Components", "back": "Maximal subgraphs where every pair of vertices has a directed path to and from each other.", "seqNum": 21}, {"front": "Shortest Path Problems", "back": "The challenge of finding a path between two vertices such that the sum of the weights of the edges is minimized.", "seqNum": 22}, {"front": "Dijkstra's Algorithm", "back": "An algorithm for finding the shortest paths between nodes in a graph with non-negative edge weights.", "seqNum": 23}, {"front": "Priority Queue", "back": "A data structure where each element has a priority, and elements are served based on that priority rather than just arrival order.", "seqNum": 24}, {"front": "Uncontrolled Flooding", "back": "A networking technique where a packet is sent to every outgoing link except the one it arrived on.", "seqNum": 25}, {"front": "Minimum Spanning Tree (MST)", "back": "A subset of edges connecting all vertices without cycles and with the minimum total edge weight.", "seqNum": 26}, {"front": "Prim's Algorithm", "back": "An algorithm that finds a minimum spanning tree by growing a tree one edge at a time from a starting vertex.", "seqNum": 27}, {"front": "Greedy Algorithms", "back": "A class of algorithms that build a solution by always choosing the next piece that offers the most immediate benefit.", "seqNum": 28}]);
@@ -26567,7 +26568,7 @@ window.setTopics = function(idOrElem, topics) {
             el.dataset.shuffleCards = false;
             el.dataset.title = "";
             el.dataset.subject = "";
-            createCards("wabyqlOExjuQ");
+            createCards("EdhkrZBxuHib");
             obs.disconnect();
         }
     });
