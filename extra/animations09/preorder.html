@@ -35,9 +35,9 @@
 <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
 <div class="pseudo-code" id="travCodePre"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">preorder</span>(tree):</span>
 <span class="line" data-l="2">    <span class="kw">if</span> tree:</span>
-<span class="line" data-l="3">        <span class="fn">visit</span>(tree.key)   <span class="com"># root</span></span>
-<span class="line" data-l="4">        <span class="fn">preorder</span>(tree.left)</span>
-<span class="line" data-l="5">        <span class="fn">preorder</span>(tree.right)</span></div>
+<span class="line" data-l="3">        <span class="fn">print</span>(tree._key, end=<span class="str">" "</span>)</span>
+<span class="line" data-l="4">        <span class="fn">preorder</span>(tree._left_child)</span>
+<span class="line" data-l="5">        <span class="fn">preorder</span>(tree._right_child)</span></div>
 </div>
 <div class="info-card">
 <div class="ic-title">遞迴呼叫堆疊 <span class="ic-badge" style="background:var(--accent2)">STACK</span></div>

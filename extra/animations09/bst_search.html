@@ -35,14 +35,14 @@
 <div class="info-card">
 <div class="ic-title" id="bstCodeTitleSearch">虛擬碼 — _get <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
 <div class="pseudo-code" id="bstCodeSearch" style="font-size:.73em;">
-<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_get</span>(key, cur):</span>
-<span class="line" data-l="2">    <span class="kw">if not</span> cur: <span class="kw">return None</span></span>
-<span class="line" data-l="3">    <span class="kw">if</span> cur.key == key:</span>
-<span class="line" data-l="4">        <span class="kw">return</span> cur</span>
-<span class="line" data-l="5">    <span class="kw">elif</span> key &lt; cur.key:</span>
-<span class="line" data-l="6">        <span class="kw">return</span> <span class="fn">_get</span>(key, cur.left)</span>
+<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_get</span>(self, key, current_node):</span>
+<span class="line" data-l="2">    <span class="kw">if not</span> current_node: <span class="kw">return None</span></span>
+<span class="line" data-l="3">    <span class="kw">if</span> current_node.key == key:</span>
+<span class="line" data-l="4">        <span class="kw">return</span> current_node</span>
+<span class="line" data-l="5">    <span class="kw">elif</span> key &lt; current_node.key:</span>
+<span class="line" data-l="6">        <span class="kw">return</span> self.<span class="fn">_get</span>(key, current_node.left_child)</span>
 <span class="line" data-l="7">    <span class="kw">else</span>:</span>
-<span class="line" data-l="8">        <span class="kw">return</span> <span class="fn">_get</span>(key, cur.right)</span>
+<span class="line" data-l="8">        <span class="kw">return</span> self.<span class="fn">_get</span>(key, current_node.right_child)</span>
 </div>
 </div>
 </div>

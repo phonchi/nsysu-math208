@@ -822,19 +822,19 @@ function initTraversals(suffix = '', lockedKind = null) {
     const codeMap = {
       preorder: `<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">preorder</span>(tree):</span>
 <span class="line" data-l="2">    <span class="kw">if</span> tree:</span>
-<span class="line" data-l="3">        <span class="fn">visit</span>(tree.key)   <span class="com"># root</span></span>
-<span class="line" data-l="4">        <span class="fn">preorder</span>(tree.left)</span>
-<span class="line" data-l="5">        <span class="fn">preorder</span>(tree.right)</span>`,
+<span class="line" data-l="3">        <span class="fn">print</span>(tree._key, end=<span class="str">" "</span>)</span>
+<span class="line" data-l="4">        <span class="fn">preorder</span>(tree._left_child)</span>
+<span class="line" data-l="5">        <span class="fn">preorder</span>(tree._right_child)</span>`,
       inorder: `<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">inorder</span>(tree):</span>
 <span class="line" data-l="2">    <span class="kw">if</span> tree:</span>
-<span class="line" data-l="3">        <span class="fn">inorder</span>(tree.left)</span>
-<span class="line" data-l="4">        <span class="fn">visit</span>(tree.key)   <span class="com"># root</span></span>
-<span class="line" data-l="5">        <span class="fn">inorder</span>(tree.right)</span>`,
+<span class="line" data-l="3">        <span class="fn">inorder</span>(tree._left_child)</span>
+<span class="line" data-l="4">        <span class="fn">print</span>(tree._key, end=<span class="str">" "</span>)</span>
+<span class="line" data-l="5">        <span class="fn">inorder</span>(tree._right_child)</span>`,
       postorder: `<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">postorder</span>(tree):</span>
 <span class="line" data-l="2">    <span class="kw">if</span> tree:</span>
-<span class="line" data-l="3">        <span class="fn">postorder</span>(tree.left)</span>
-<span class="line" data-l="4">        <span class="fn">postorder</span>(tree.right)</span>
-<span class="line" data-l="5">        <span class="fn">visit</span>(tree.key)   <span class="com"># root</span></span>`,
+<span class="line" data-l="3">        <span class="fn">postorder</span>(tree._left_child)</span>
+<span class="line" data-l="4">        <span class="fn">postorder</span>(tree._right_child)</span>
+<span class="line" data-l="5">        <span class="fn">print</span>(tree._key, end=<span class="str">" "</span>)</span>`,
     };
     $$('travCode').innerHTML = codeMap[currentTrav];
   }
@@ -1046,11 +1046,10 @@ function initHeap(suffix = '', lockedOp = null) {
         [a[i], a[p]] = [a[p], a[i]];
         swapCnt++;
         steps.push({arr:a.slice(), hl:{swap:[i,p]}, status:`heap[${i}] < heap[${p}]，交換`, line:5, swap:swapCnt, cmp:cmpCnt, idx:p, par:p>0?Math.floor((p-1)/2):'—'});
-        i = p;
       } else {
-        steps.push({arr:a.slice(), hl:{active:i}, status:`heap[${i}] ≥ heap[${p}]，停止`, line:4, swap:swapCnt, cmp:cmpCnt, idx:i, par:p});
-        break;
+        steps.push({arr:a.slice(), hl:{active:i, parent:p}, status:`heap[${i}] ≥ heap[${p}]，不交換；依 notebook 設 i = parent_idx 繼續`, line:6, swap:swapCnt, cmp:cmpCnt, idx:p, par:p>0?Math.floor((p-1)/2):'—'});
       }
+      i = p;
     }
     steps.push({arr:a.slice(), hl:{}, status:'插入完成 ✓', line:null, swap:swapCnt, cmp:cmpCnt, idx:'—', par:'—', commit:true, finalArr:a.slice()});
     return steps;
@@ -1066,7 +1065,7 @@ function initHeap(suffix = '', lockedOp = null) {
       let mc = li;
       if (ri <= endI) {
         cmpCnt++;
-        if (a[ri] < a[li]) mc = ri;
+        if (!(a[li] < a[ri])) mc = ri;
       }
       steps.push({arr:a.slice(), hl:{active:i, parent:mc}, status:`找出 heap[${i}]=${a[i]} 的較小子節點：heap[${mc}]=${a[mc]}`, line:null, swap:swapCnt, cmp:cmpCnt, idx:i, par:mc});
       cmpCnt++;
@@ -1261,28 +1260,28 @@ function initBST(suffix = '', lockedOp = null) {
   const codeTemplates = {
     put: {
       title: '虛擬碼 — _put <span class="ic-badge" style="background:var(--accent2)">CODE</span>',
-      html: '<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_put</span>(key, val, cur):</span>\n' +
-            '<span class="line" data-l="2">    <span class="kw">if</span> key &lt; cur.key:</span>\n' +
-            '<span class="line" data-l="3">        <span class="kw">if</span> cur.left:</span>\n' +
-            '<span class="line" data-l="4">            <span class="fn">_put</span>(key, val, cur.left)</span>\n' +
+      html: '<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_put</span>(self, key, value, current_node):</span>\n' +
+            '<span class="line" data-l="2">    <span class="kw">if</span> key &lt; current_node.key:</span>\n' +
+            '<span class="line" data-l="3">        <span class="kw">if</span> current_node.left_child:</span>\n' +
+            '<span class="line" data-l="4">            self.<span class="fn">_put</span>(key, value, current_node.left_child)</span>\n' +
             '<span class="line" data-l="5">        <span class="kw">else</span>:</span>\n' +
-            '<span class="line" data-l="6">            cur.left = <span class="fn">TreeNode</span>(key, val)</span>\n' +
+            '<span class="line" data-l="6">            current_node.left_child = <span class="fn">TreeNode</span>(key, value, parent=current_node)</span>\n' +
             '<span class="line" data-l="7">    <span class="kw">else</span>:</span>\n' +
-            '<span class="line" data-l="8">        <span class="kw">if</span> cur.right:</span>\n' +
-            '<span class="line" data-l="9">            <span class="fn">_put</span>(key, val, cur.right)</span>\n' +
+            '<span class="line" data-l="8">        <span class="kw">if</span> current_node.right_child:</span>\n' +
+            '<span class="line" data-l="9">            self.<span class="fn">_put</span>(key, value, current_node.right_child)</span>\n' +
             '<span class="line" data-l="10">        <span class="kw">else</span>:</span>\n' +
-            '<span class="line" data-l="11">            cur.right = <span class="fn">TreeNode</span>(key, val)</span>'
+            '<span class="line" data-l="11">            current_node.right_child = <span class="fn">TreeNode</span>(key, value, parent=current_node)</span>'
     },
     get: {
       title: '虛擬碼 — _get <span class="ic-badge" style="background:var(--accent2)">CODE</span>',
-      html: '<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_get</span>(key, cur):</span>\n' +
-            '<span class="line" data-l="2">    <span class="kw">if not</span> cur: <span class="kw">return None</span></span>\n' +
-            '<span class="line" data-l="3">    <span class="kw">if</span> cur.key == key:</span>\n' +
-            '<span class="line" data-l="4">        <span class="kw">return</span> cur</span>\n' +
-            '<span class="line" data-l="5">    <span class="kw">elif</span> key &lt; cur.key:</span>\n' +
-            '<span class="line" data-l="6">        <span class="kw">return</span> <span class="fn">_get</span>(key, cur.left)</span>\n' +
+      html: '<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_get</span>(self, key, current_node):</span>\n' +
+            '<span class="line" data-l="2">    <span class="kw">if not</span> current_node: <span class="kw">return None</span></span>\n' +
+            '<span class="line" data-l="3">    <span class="kw">if</span> current_node.key == key:</span>\n' +
+            '<span class="line" data-l="4">        <span class="kw">return</span> current_node</span>\n' +
+            '<span class="line" data-l="5">    <span class="kw">elif</span> key &lt; current_node.key:</span>\n' +
+            '<span class="line" data-l="6">        <span class="kw">return</span> self.<span class="fn">_get</span>(key, current_node.left_child)</span>\n' +
             '<span class="line" data-l="7">    <span class="kw">else</span>:</span>\n' +
-            '<span class="line" data-l="8">        <span class="kw">return</span> <span class="fn">_get</span>(key, cur.right)</span>'
+            '<span class="line" data-l="8">        <span class="kw">return</span> self.<span class="fn">_get</span>(key, current_node.right_child)</span>'
     }
   };
 
@@ -1294,7 +1293,6 @@ function initBST(suffix = '', lockedOp = null) {
 
   function bstInsert(r, key) {
     if (!r) return new TNode(key);
-    if (key === r.key) return r;
     if (key < r.key) {
       r.left = bstInsert(r.left, key);
       r.left.parent = r;
@@ -1360,12 +1358,8 @@ function initBST(suffix = '', lockedOp = null) {
       path.push(cur);
       cmp++;
       steps.push({type:'visit', node:cur, path:path.slice(), status:`比較 key=${key} 與 ${cur.key}`, line: key < cur.key ? L.visitLT : L.visitGTE, cmp});
-      if (key === cur.key) {
-        if (op === 'get') {
-          steps.push({type:'found', node:cur, path:path.slice(), status:`找到 ${key} ✓`, line:L.foundEq, result:'FOUND', cmp});
-        } else {
-          steps.push({type:'dup', node:cur, path:path.slice(), status:`key=${key} 已存在，更新 value（不改結構）`, line:null, cmp});
-        }
+      if (key === cur.key && op === 'get') {
+        steps.push({type:'found', node:cur, path:path.slice(), status:`找到 ${key} ✓`, line:L.foundEq, result:'FOUND', cmp});
         return steps;
       }
       if (key < cur.key) {
@@ -1374,7 +1368,7 @@ function initBST(suffix = '', lockedOp = null) {
           cur = cur.left;
         } else {
           if (op === 'put') {
-            steps.push({type:'insert-left', node:cur, path:path.slice(), key, status:`${key} < ${cur.key} 且 left 為空，插入為左子`, line:L.insertLeft, cmp});
+            steps.push({type:'insert-left', node:cur, path:path.slice(), key, status:`${key} < ${cur.key} 且 left_child 為空，插入為左子`, line:L.insertLeft, cmp});
             steps.push({type:'commit', node:cur, path:path.slice(), key, side:'left', status:`插入 ${key} 完成 ✓`, line:null, cmp});
           } else {
             steps.push({type:'not-found', node:cur, path:path.slice(), status:`${key} 不在樹中`, line:L.notFound, result:'NOT FOUND', cmp});
@@ -1383,11 +1377,11 @@ function initBST(suffix = '', lockedOp = null) {
         }
       } else {
         if (cur.right) {
-          steps.push({type:'go-right', node:cur, path:path.slice(), status:`${key} > ${cur.key}，往右`, line:L.goRight, cmp});
+          steps.push({type:'go-right', node:cur, path:path.slice(), status:`${key} >= ${cur.key}，往右`, line:L.goRight, cmp});
           cur = cur.right;
         } else {
           if (op === 'put') {
-            steps.push({type:'insert-right', node:cur, path:path.slice(), key, status:`${key} > ${cur.key} 且 right 為空，插入為右子`, line:L.insertRight, cmp});
+            steps.push({type:'insert-right', node:cur, path:path.slice(), key, status:`${key} >= ${cur.key} 且 right_child 為空，插入為右子`, line:L.insertRight, cmp});
             steps.push({type:'commit', node:cur, path:path.slice(), key, side:'right', status:`插入 ${key} 完成 ✓`, line:null, cmp});
           } else {
             steps.push({type:'not-found', node:cur, path:path.slice(), status:`${key} 不在樹中`, line:L.notFound, result:'NOT FOUND', cmp});
