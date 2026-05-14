@@ -690,10 +690,19 @@ function initParseTree() {
     if (player) player.setDelay(parseInt($('parseSpeed').value, 10));
   });
   $('parseEvalBtn').onclick = () => {
-    // jump to last step
-    if (player) {
-      player.stop();
-      while (player.step()) {}
+    if (!player || !player.steps || player.steps.length === 0) regen();
+    if (!player || !player.steps || player.steps.length === 0) return;
+    player.stop();
+    player.idx = player.steps.length - 1;
+    const last = player.steps[player.idx];
+    player.apply(last, player.idx);
+    const resultEl = $('parseResult');
+    if (resultEl && last.evalRes !== undefined && last.evalRes !== null) {
+      resultEl.textContent = last.evalRes;
+    }
+    const statusEl = $('parseStatus');
+    if (statusEl && last.evalRes !== undefined && last.evalRes !== null) {
+      statusEl.textContent = `評估結果 = ${last.evalRes}`;
     }
   };
 
@@ -1255,6 +1264,7 @@ function initBST(suffix = '', lockedOp = null) {
 
   let root = null;
   let player = null;
+  let currentBstOp = initialBstOp || 'put';
 
   // Pseudo-code variants for put vs get; line numbers in genOpSteps refer to these.
   const codeTemplates = {
@@ -1413,7 +1423,8 @@ function initBST(suffix = '', lockedOp = null) {
     hlLine($$('bstCode'), s.line);
   }
 
-  function startOp(op, key) {
+  function startOp(op, key, autoplay = true) {
+    currentBstOp = op;
     setCodePanel(op);
     setText($$('bstOpName'), op === 'put' ? `put(${key})` : `get(${key})`);
     setText($$('bstResult'), '—');
@@ -1426,7 +1437,7 @@ function initBST(suffix = '', lockedOp = null) {
       delay: parseInt($$('bstSpeed').value, 10)
     });
     player.reset();
-    player.play();
+    if (autoplay) player.play();
   }
 
   function rebuild() {
@@ -1466,7 +1477,15 @@ function initBST(suffix = '', lockedOp = null) {
     $$('bstInitInput').value = arr.join(', ');
     rebuild();
   };
-  $$('bstStep').onclick = () => { if (player) player.step(); };
+  $$('bstStep').onclick = () => {
+    const k = parseInt($$('bstOpKey').value, 10);
+    if (isNaN(k)) return;
+    if (!player || player.idx >= player.steps.length - 1) {
+      startOp(currentBstOp, k, false);
+    } else {
+      player.step();
+    }
+  };
   $$('bstReset').onclick = rebuild;
   $$('bstSpeed').addEventListener('input', () => {
     if (player) player.setDelay(parseInt($$('bstSpeed').value, 10));
