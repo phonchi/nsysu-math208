@@ -78,7 +78,7 @@
 
     render() {
       for (const e of this.config.edges) {
-        const [u, v, w, dirOverride] = e;
+        const [u, v, w, dirOverride, labelOffset = 0] = e;
         const directed = dirOverride !== undefined ? dirOverride : this.opts.directed;
         const u2v = this.edgeKey(u, v);
         const reverseExists = this.config.edges.some(ee => ee[0] === v && ee[1] === u);
@@ -105,6 +105,10 @@
           pathD = `M ${sx} ${sy} L ${ex} ${ey}`;
           labelX = (sx + ex) / 2;
           labelY = (sy + ey) / 2;
+        }
+        if (labelOffset) {
+          labelX += uy * labelOffset;
+          labelY -= ux * labelOffset;
         }
         const path = svgEl('path', { d: pathD, class: 'graph-edge' });
         if (directed) path.setAttribute('marker-end', `url(#${this.markerId})`);
@@ -823,7 +827,7 @@
         G: { x: 560, y: 180 },
       },
       edges: [
-        ['A','B',2], ['A','C',3], ['B','C',1], ['B','D',1],
+        ['A','B',2], ['A','C',3, undefined, -26], ['B','C',1], ['B','D',1],
         ['B','E',4], ['D','E',1], ['C','F',5], ['E','F',1], ['F','G',1],
       ],
     };
