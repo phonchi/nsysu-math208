@@ -840,18 +840,18 @@
         const dist = {}, prev = {}, inTree = {};
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; inTree[v] = false; }
         dist[start] = 0;
-        let pq = verts.map(v => [dist[v], v]);
-        const sortPq = () => pq.sort((a,b) => a[0] - b[0]);
+        let pq = [[0, start]];
+        const sortPq = () => pq.sort((a,b) => a[0] - b[0] || verts.indexOf(a[1]) - verts.indexOf(b[1]));
+        const pqIndex = (v) => pq.findIndex(p => p[1] === v);
         const steps = [];
         const mstEdges = [];
         let total = 0;
         sortPq();
-        steps.push({ kind:'init', codeLine:5, current:null, pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`初始化：起點 ${start} distance=0；其他全部 ∞` });
+        steps.push({ kind:'init', codeLine:5, current:null, pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`初始化：候選 PQ 先放起點 ${start}:0` });
 
         while (pq.length > 0) {
           sortPq();
           const [d, u] = pq.shift();
-          if (d === Infinity) break;
           if (inTree[u]) continue;
           inTree[u] = true;
           if (prev[u]) {
@@ -861,18 +861,17 @@
           steps.push({ kind:'add', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`從 PQ 取出 ${u} (key=${d})，加入 MST。${prev[u] ? `加入邊 ${prev[u]}—${u} (weight=${d})` : '（起點，無邊加入）'}` });
 
           for (const { to: vv, w: weight } of adj[u]) {
-            if (inTree[vv]) {
-              steps.push({ kind:'skip', codeLine:11, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`鄰居 ${vv} 已在 MST 中，跳過` });
-              continue;
-            }
+            if (inTree[vv]) continue;
             const newD = weight;
             steps.push({ kind:'relax-check', codeLine:10, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`檢查 ${u}—${vv}：邊權 = ${weight}，目前 key(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}` });
             if (newD < dist[vv]) {
+              const idx = pqIndex(vv);
+              const wasQueued = idx !== -1;
               dist[vv] = newD; prev[vv] = u;
-              pq = pq.filter(p => p[1] !== vv);
-              pq.push([newD, vv]);
+              if (wasQueued) pq[idx][0] = newD;
+              else pq.push([newD, vv]);
               sortPq();
-              steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`更新！key(${vv}) = ${newD}，previous(${vv}) = ${u}` });
+              steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`${wasQueued ? '更新候選' : '加入候選'} ${vv}：key=${newD}，previous(${vv}) = ${u}` });
             }
           }
         }
@@ -894,7 +893,6 @@
         }
         for (const [u, vv] of s.mstEdges || []) primR.setEdgeClassUndirected(u, vv, 'mst');
         if (s.kind === 'relax-check' && s.edge) primR.setEdgeClassUndirected(s.edge[0], s.edge[1], 'exploring');
-        if (s.kind === 'skip' && s.current && s.neighbor) primR.setEdgeClassUndirected(s.current, s.neighbor, 'dotted');
         const pqEl = $$('primPQ');
         if (pqEl) {
           const visiblePq = (s.pq || []).filter(p => isFinite(p[0]));
