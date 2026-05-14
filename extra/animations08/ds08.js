@@ -840,17 +840,24 @@
         const dist = {}, prev = {}, inTree = {};
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; inTree[v] = false; }
         dist[start] = 0;
-        let pq = [[0, start]];
-        const sortPq = () => pq.sort((a,b) => a[0] - b[0] || verts.indexOf(a[1]) - verts.indexOf(b[1]));
+        let pq = verts.map(v => [dist[v], v]);
+        const sortPq = () => pq.sort((a,b) => {
+          if (a[0] === b[0]) return verts.indexOf(a[1]) - verts.indexOf(b[1]);
+          if (a[0] === Infinity) return 1;
+          if (b[0] === Infinity) return -1;
+          return a[0] - b[0];
+        });
         const pqIndex = (v) => pq.findIndex(p => p[1] === v);
+        const snapPq = () => pq.map(([key, v]) => [key, v]);
         const steps = [];
         const mstEdges = [];
         let total = 0;
         sortPq();
-        steps.push({ kind:'init', codeLine:5, current:null, pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`初始化：候選 PQ 先放起點 ${start}:0` });
+        steps.push({ kind:'init', codeLine:6, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`heapify：所有頂點都在 PQ；${start}.distance = 0，其餘為 sys.maxsize` });
 
         while (pq.length > 0) {
           sortPq();
+          steps.push({ kind:'print-pq', codeLine:8, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`print(pq)：目前 PQ = ${pq.map(([key, v]) => `${v}:${key === Infinity ? '∞' : key}`).join(', ')}` });
           const [d, u] = pq.shift();
           if (inTree[u]) continue;
           inTree[u] = true;
@@ -858,20 +865,18 @@
             mstEdges.push([prev[u], u, d]);
             total += d;
           }
-          steps.push({ kind:'add', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`從 PQ 取出 ${u} (key=${d})，加入 MST。${prev[u] ? `加入邊 ${prev[u]}—${u} (weight=${d})` : '（起點，無邊加入）'}` });
+          steps.push({ kind:'add', codeLine:8, current:u, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`從 PQ 取出 ${u} (key=${d})，加入 MST。${prev[u] ? `加入邊 ${prev[u]}—${u} (weight=${d})` : '（起點，無邊加入）'}` });
 
           for (const { to: vv, w: weight } of adj[u]) {
-            if (inTree[vv]) continue;
             const newD = weight;
-            steps.push({ kind:'relax-check', codeLine:10, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`檢查 ${u}—${vv}：邊權 = ${weight}，目前 key(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}` });
-            if (newD < dist[vv]) {
-              const idx = pqIndex(vv);
-              const wasQueued = idx !== -1;
+            const idx = pqIndex(vv);
+            const inPq = idx !== -1;
+            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`檢查 ${u}—${vv}：new_distance = ${weight}；條件 next_v in pq 為 ${inPq ? 'True' : 'False'}，目前 distance(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}` });
+            if (inPq && newD < dist[vv]) {
               dist[vv] = newD; prev[vv] = u;
-              if (wasQueued) pq[idx][0] = newD;
-              else pq.push([newD, vv]);
+              pq[idx][0] = newD;
               sortPq();
-              steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`${wasQueued ? '更新候選' : '加入候選'} ${vv}：key=${newD}，previous(${vv}) = ${u}` });
+              steps.push({ kind:'relax-update', codeLine:15, current:u, neighbor:vv, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`change_priority(${vv}, ${newD})：previous(${vv}) = ${u}，distance(${vv}) = ${newD}` });
             }
           }
         }
@@ -895,9 +900,9 @@
         if (s.kind === 'relax-check' && s.edge) primR.setEdgeClassUndirected(s.edge[0], s.edge[1], 'exploring');
         const pqEl = $$('primPQ');
         if (pqEl) {
-          const visiblePq = (s.pq || []).filter(p => isFinite(p[0]));
+          const visiblePq = s.pq || [];
           if (visiblePq.length === 0) pqEl.innerHTML = '<span class="ds-empty">empty</span>';
-          else pqEl.innerHTML = visiblePq.map((p,i) => `<span class="ds-item pq ${i===0?'min':''}">${p[1]}:${p[0]}</span>`).join(' ');
+          else pqEl.innerHTML = visiblePq.map((p,i) => `<span class="ds-item pq ${i===0?'min':''}">${p[1]}:${isFinite(p[0]) ? p[0] : '∞'}</span>`).join(' ');
         }
         const eEl = $$('primEdges');
         if (eEl) {
