@@ -624,7 +624,18 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="heap">
   <div class="section-number">PART 05 · 二元堆積</div>
   <h2>Binary Heap：用陣列實作的優先佇列</h2>
-  <p>優先佇列（priority queue）每次都要 dequeue<strong>優先序最高</strong>的元素。用 list 的天真實作有兩條路，但都不夠好：<strong>維持已排序的 list</strong>，插入需搬移 $O(n)$；<strong>不排序、每次找最小再 sort</strong>，sort 是 $O(n \log n)$。<strong>Binary heap</strong> 把 enqueue 和 dequeue 都壓到 $O(\log n)$。它有兩個關鍵性質：</p>
+  <p>優先佇列（priority queue）的核心需求是：每次 <code>dequeue</code> 都要取出<strong>優先序最高</strong>的元素。Min-heap 的慣例是「key 越小，優先序越高」，所以 <code>dequeue</code> 會取出最小 key。</p>
+
+  <p>如果只用一般 list 來做，有兩種很直覺但不理想的實作。第一種是<strong>永遠維持 sorted list</strong>：這樣最小值可以很快拿到，但每次 <code>enqueue</code> 新元素時，都必須找到正確位置並搬移後面的元素，最差要 $O(n)$。第二種是<strong>維持 unsorted list</strong>：插入可以直接 append，成本 $O(1)$，但每次 <code>dequeue</code> 時就必須掃描整個 list 找最小值，成本 $O(n)$；如果每次 dequeue 前乾脆重新 sort，甚至會變成 $O(n\log n)$。問題的本質是：sorted list 讓插入慢，unsorted list 讓取出最高優先序慢。</p>
+
+  <p><strong>Binary heap</strong> 的設計目標就是折衷這兩件事：不要求整個 list 完全排序，只維持足夠的局部順序，讓 <code>enqueue</code> 與 <code>dequeue</code> 都是 $O(\log n)$，而 <code>get-min</code> 可以是 $O(1)$。</p>
+
+  <div class="info-box">
+    <span class="info-label">先看編號方式：Level-order traversal (BFS)</span>
+    要把一棵樹放進陣列，最自然的編號方式是 <strong>level-order traversal</strong>，也就是 BFS：先拜訪 root，再由左到右拜訪第 1 層，接著由左到右拜訪第 2 層，依此類推。若用 0-based index 編號，root 是 0，下一層從左到右是 1、2，再下一層是 3、4、5、6。
+    <br><br>
+    因為 heap 的樹形會保持為 complete binary tree，這種 BFS 編號不會在中間留下空洞；所以我們可以直接用 <code>heap[i]</code> 表示「BFS 編號為 $i$ 的節點」。
+  </div>
 
   <div class="info-box">
     <span class="info-label">堆積的兩個性質</span>
