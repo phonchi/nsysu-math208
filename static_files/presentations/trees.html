@@ -634,6 +634,28 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     結構性質讓我們可以用<strong>單一陣列</strong>儲存整棵樹：節點 $p$ 的左子在 $2p+1$、右子在 $2p+2$、父節點在 $\lfloor (p-1)/2 \rfloor$。完全不需要指標！
   </div>
 
+  <div class="info-box warm">
+    <span class="info-label">為什麼 child / parent index 是這樣？</span>
+    Heap 使用 <strong>0-based index</strong>，root 在第 $0$ 層。因為 complete binary tree 的前 $l$ 層節點數是
+    $$1 + 2 + 4 + \cdots + 2^l = 2^{l+1}-1,$$
+    所以第 $l$ 層最後一個節點的 index 是
+    $$\text{last}(l) = 2^{l+1}-2.$$
+    也就是說，<code>last(l)</code> 是第 $l$ 層最右邊節點的位置。
+    <br><br>
+    現在從右往左數。假設第 $l$ 層某個 parent 的 index 是
+    $$p = \text{last}(l) - j,$$
+    其中 $j$ 表示它距離該層最右端有幾格。往下一層時，每個 parent 會對應兩個 child；因此它的<strong>右小孩</strong>會距離第 $l+1$ 層最右端 $2j$ 格：
+    $$\text{right}(p) = \text{last}(l+1) - 2j.$$
+    代入 $j=\text{last}(l)-p$：
+    $$\text{right}(p)=\text{last}(l+1)-2(\text{last}(l)-p).$$
+    再代入 $\text{last}(l+1)=2^{l+2}-2$ 與 $\text{last}(l)=2^{l+1}-2$：
+    $$\text{right}(p)=(2^{l+2}-2)-2(2^{l+1}-2-p)=2p+2.$$
+    左小孩就在右小孩前一格，所以
+    $$\text{left}(p)=2p+1,\qquad \text{right}(p)=2p+2.$$
+    反過來看，若某個 child index 是 $i$，它一定是某個 $2p+1$ 或 $2p+2$。兩種情況都會被整數除法合併成同一條 parent 公式：
+    $$\text{parent}(i)=\left\lfloor\frac{i-1}{2}\right\rfloor=(i-1)//2.$$
+  </div>
+
   <div class="viz-layout">
     <div>
       <div class="viz-panel">
