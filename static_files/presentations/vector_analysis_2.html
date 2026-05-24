@@ -1,0 +1,2583 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>向量分析（下）— 第 15.5–15.8 節</title>
+<script>
+  MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1a2e;--paper:#f7f3eb;--accent:#c0392b;--accent2:#2c3e7a;--accent3:#1a6b4a;
+  --muted:#8a8578;--card:#fffdf7;--card-border:#e8e2d6;--highlight:#fff3cd;
+  --code-bg:#2d2d3f;--code-fg:#e8e6df;
+  --x-axis:#e74c3c;--y-axis:#27ae60;--z-axis:#2980b9;
+  --field-arrow:#2c3e7a;--field-mag:#c0392b;--curve-path:#1a6b4a;
+  --ru:#e74c3c;--rv:#27ae60;--nvec:#5dade2;--tan-plane:#f1c40f;
+  --surface-light:#9b59b6;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.9;font-size:17px;}
+
+/* Hero (purple/gold theme, complement to part 1) */
+.hero{min-height:62vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem;position:relative;overflow:hidden;background:linear-gradient(170deg,#1a1a2e 0%,#5e3473 45%,#a47700 100%);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 25% 30%,rgba(241,196,15,.08) 0%,transparent 50%),radial-gradient(circle at 75% 70%,rgba(155,89,182,.07) 0%,transparent 45%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);}
+.hero-content{position:relative;z-index:1;max-width:920px;}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;color:#fff;letter-spacing:.04em;line-height:1.3;margin-bottom:1rem;}
+.hero h1 .gold{color:#f1c40f;}
+.hero h1 .violet{color:#c39bd3;}
+.hero h1 .green{color:#2ecc71;}
+.hero .subtitle{font-size:clamp(.95rem,2.2vw,1.2rem);color:rgba(255,255,255,.7);font-weight:300;margin-bottom:2rem;}
+.hero .big-formula{color:#f1c40f;background:rgba(0,0,0,.32);padding:.8rem 2rem;border-radius:12px;display:inline-block;border:1px solid rgba(255,255,255,.1);margin-bottom:2rem;backdrop-filter:blur(4px);font-size:1.0rem;}
+.scroll-hint{color:rgba(255,255,255,.45);font-size:.9rem;animation:bounce 2s infinite;}
+.scroll-hint span{display:block;font-size:1.4rem;margin-top:.3rem;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+/* Layout */
+.container{max-width:1180px;margin:0 auto;padding:3rem 1.5rem;}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.5rem;}
+h2{font-family:'Noto Serif TC',serif;font-size:1.65rem;font-weight:700;color:var(--ink);margin-bottom:1.2rem;line-height:1.4;}
+h3{font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:700;color:var(--accent2);margin:1.4rem 0 .8rem;}
+h4{font-family:'Noto Serif TC',serif;font-size:1.0rem;font-weight:700;color:var(--accent3);margin:1.0rem 0 .5rem;}
+section{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--card-border);}
+section:last-of-type{border-bottom:none;}
+p{margin-bottom:1rem;}
+.subsection{margin:2rem 0;}
+
+/* Viz layout */
+.viz-layout{display:grid;grid-template-columns:1fr 320px;gap:1.3rem;margin:1.2rem 0;align-items:start;}
+@media(max-width:900px){.viz-layout{grid-template-columns:1fr;}}
+
+.canvas3d-panel{background:linear-gradient(160deg,#fffdf7 0%,#f4efe3 100%);border:1px solid var(--card-border);border-radius:12px;padding:1rem;box-shadow:0 4px 18px rgba(0,0,0,.06);position:relative;}
+.canvas3d-panel .canvas-wrap{width:100%;aspect-ratio:1/0.78;position:relative;border-radius:8px;overflow:hidden;background:#fbf7ed;}
+.canvas3d-panel.dark .canvas-wrap{background:#1a1a2e;}
+.canvas3d-panel .plot-host{width:100%;height:100%;}
+.hint-overlay{position:absolute;top:8px;right:10px;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:rgba(0,0,0,.5);background:rgba(255,255,255,.7);padding:3px 8px;border-radius:4px;pointer-events:none;z-index:2;}
+.canvas3d-panel.dark .hint-overlay{color:rgba(255,255,255,.55);background:rgba(0,0,0,.35);}
+.t-display{position:absolute;top:8px;left:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f1c40f;background:rgba(0,0,0,.45);padding:4px 10px;border-radius:4px;pointer-events:none;font-weight:600;z-index:2;}
+
+/* Dual plot */
+.dual-plot{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+@media(max-width:760px){.dual-plot{grid-template-columns:1fr;}}
+.plot-subtitle{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--accent2);font-weight:600;text-align:center;margin-bottom:.45rem;padding:.25rem .5rem;background:#eef2ff;border-radius:5px;}
+
+/* Side nav */
+.side-nav{position:fixed;top:50%;right:1rem;transform:translateY(-50%);background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.45rem .5rem;font-size:.74rem;font-family:'JetBrains Mono',monospace;box-shadow:0 4px 18px rgba(0,0,0,.08);z-index:50;display:flex;flex-direction:column;gap:.1rem;max-width:220px;max-height:88vh;overflow-y:auto;}
+.side-nav .sn-title{font-size:.66rem;color:var(--muted);letter-spacing:.1em;padding:.2rem .55rem .35rem;border-bottom:1px solid var(--card-border);margin-bottom:.25rem;}
+.side-nav .sn-item{display:block;padding:.26rem .55rem;color:var(--muted);text-decoration:none;border-left:2px solid transparent;border-radius:4px;transition:all .15s;line-height:1.3;}
+.side-nav .sn-item.sn-sub{padding-left:1.1rem;font-size:.7rem;color:#a8a496;}
+.side-nav .sn-item:hover{color:var(--ink);background:var(--highlight);}
+.side-nav .sn-item.active{color:var(--accent3);border-left-color:var(--accent3);background:rgba(26,107,74,.06);font-weight:600;}
+.side-nav .sn-back{margin-top:.4rem;padding:.32rem .55rem;color:var(--accent2);text-decoration:none;border-top:1px solid var(--card-border);font-size:.7rem;font-weight:700;}
+.side-nav .sn-back:hover{background:var(--highlight);}
+@media(max-width:1280px){.side-nav{display:none;}}
+
+/* Axis legend */
+.axis-legend{display:flex;gap:1rem;justify-content:center;margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.8rem;flex-wrap:wrap;}
+.axis-legend span{display:inline-flex;align-items:center;gap:.3rem;}
+.axis-legend span::before{content:'';display:inline-block;width:14px;height:3px;border-radius:2px;}
+.axis-legend .ax-x::before{background:var(--x-axis);}
+.axis-legend .ax-y::before{background:var(--y-axis);}
+.axis-legend .ax-z::before{background:var(--z-axis);}
+.axis-legend .ax-ru::before{background:var(--ru);}
+.axis-legend .ax-rv::before{background:var(--rv);}
+.axis-legend .ax-N::before{background:var(--nvec);}
+.axis-legend .ax-tan::before{background:var(--tan-plane);}
+.axis-legend .ax-surf::before{background:var(--surface-light);}
+.axis-legend .ax-flux::before{background:#f1c40f;}
+
+/* Controls */
+.controls-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--card-border);}
+.btn{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:600;padding:.45rem 1rem;border-radius:6px;border:none;cursor:pointer;transition:all .2s;}
+.btn-play{background:var(--accent3);color:#fff;}
+.btn-play:hover{background:#22845c;}
+.btn-play.active{background:var(--accent);}
+.btn-reset{background:var(--card-border);color:var(--ink);}
+.btn-reset:hover{background:#ccc;}
+.btn-toggle{background:var(--accent2);color:#fff;}
+.btn-toggle:hover{background:#1f2e5f;}
+.btn-toggle.off{background:#bbb;color:#555;}
+
+/* Slider row */
+.slider-row{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;background:var(--paper);border-radius:8px;margin-bottom:.5rem;}
+.slider-row .slider-label{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent2);font-weight:600;min-width:62px;}
+.slider-row input[type="range"]{flex:1;accent-color:var(--accent3);height:5px;cursor:pointer;}
+.slider-row .slider-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--accent);font-weight:600;min-width:72px;text-align:right;}
+
+/* Selector dropdown */
+.field-select{font-family:'JetBrains Mono',monospace;font-size:.82rem;padding:.4rem .7rem;border-radius:6px;border:1.5px solid var(--card-border);background:var(--card);color:var(--ink);cursor:pointer;width:100%;}
+.field-select:focus{outline:none;border-color:var(--accent2);}
+
+/* Side panel */
+.side-panel{display:flex;flex-direction:column;gap:.85rem;}
+
+.info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.info-card .ic-title{font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem;}
+.info-card .ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.82rem;padding:.18rem 0;align-items:center;gap:.4rem;}
+.info-card .ic-label{color:var(--muted);}
+.info-card .ic-value{color:var(--ink);font-weight:600;text-align:right;}
+.info-card .ic-value.highlight{color:var(--accent);}
+.info-card .ic-value.ok{color:var(--accent3);}
+.info-card .ic-value.bad{color:var(--accent);}
+.info-card .ic-value.ru{color:var(--ru);}
+.info-card .ic-value.rv{color:var(--rv);}
+.info-card .ic-value.nv{color:var(--accent2);}
+.info-card .ic-value.muted{color:var(--muted);font-weight:400;}
+
+.eq-card{background:var(--code-bg);border-radius:10px;padding:.95rem 1.1rem;color:#fff;}
+.eq-card .eq-label{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#2ecc71;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;}
+.eq-card .eq-formula{font-size:1.0rem;color:#fff;text-align:center;}
+.eq-card .eq-sub{font-size:.78rem;color:rgba(255,255,255,.55);margin-top:.4rem;text-align:center;}
+
+/* Accumulation bar */
+.accum-bar{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.7rem .9rem;}
+.accum-bar .ab-label{font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.4rem;display:flex;justify-content:space-between;}
+.accum-bar .ab-track{width:100%;height:18px;background:#f0eadc;border-radius:9px;overflow:hidden;position:relative;border:1px solid var(--card-border);}
+.accum-bar .ab-fill{height:100%;background:linear-gradient(90deg,#1a6b4a,#27ae60);transition:width .08s linear;border-radius:9px;}
+.accum-bar .ab-fill.neg{background:linear-gradient(90deg,#c0392b,#e74c3c);}
+.accum-bar .ab-fill.violet{background:linear-gradient(90deg,#5e3473,#9b59b6);}
+.accum-bar .ab-val{font-family:'JetBrains Mono',monospace;font-size:.95rem;font-weight:700;color:var(--accent3);text-align:center;margin-top:.35rem;}
+.accum-bar .ab-target{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);text-align:center;margin-top:.1rem;}
+
+/* Reference */
+.ref-group{margin:1.5rem 0 2rem;}
+.ref-group-title{font-family:'Noto Serif TC',serif;font-size:1.12rem;font-weight:700;color:var(--accent2);padding-bottom:.4rem;border-bottom:2px solid var(--accent2);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;}
+.ref-group-title .rg-badge{font-size:.7rem;font-weight:600;color:#fff;background:var(--accent2);padding:2px 8px;border-radius:3px;font-family:'JetBrains Mono',monospace;}
+.ref-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:1rem 1.2rem;margin-bottom:.9rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.ref-card-header{display:flex;align-items:baseline;gap:.8rem;margin-bottom:.5rem;flex-wrap:wrap;}
+.ref-card-name{font-family:'Noto Serif TC',serif;font-weight:700;font-size:1.02rem;color:var(--ink);}
+.ref-card-name-en{font-size:.8rem;color:var(--muted);font-weight:400;}
+.ref-card-eq{background:var(--code-bg);color:#fff;border-radius:8px;padding:.65rem 1rem;text-align:center;font-size:.95rem;margin-bottom:.55rem;}
+.ref-note{font-size:.85rem;color:var(--muted);margin-top:.5rem;padding-left:.8rem;border-left:3px solid var(--card-border);}
+
+/* Conversion table */
+.conv-table{width:100%;border-collapse:collapse;font-size:.88rem;margin:.8rem 0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.conv-table th{background:var(--accent2);color:#fff;padding:.6rem .8rem;text-align:center;font-weight:600;font-size:.82rem;}
+.conv-table td{padding:.6rem .8rem;text-align:center;border-bottom:1px solid var(--card-border);font-family:'JetBrains Mono',monospace;font-size:.85rem;}
+.conv-table td:first-child{font-family:'Noto Sans TC',sans-serif;color:var(--accent2);font-weight:600;text-align:left;}
+.conv-table tr:last-child td{border-bottom:none;}
+.conv-table tr:nth-child(even){background:rgba(0,0,0,.015);}
+
+/* Info box */
+.info-box{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1.1rem 1.4rem;margin:1.3rem 0;position:relative;}
+.info-box .info-label{position:absolute;top:-11px;left:14px;background:var(--accent2);color:#fff;font-size:.74rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.05em;}
+.info-box.warm{background:#fef5e7;border-color:#d68910;}
+.info-box.warm .info-label{background:#d68910;}
+.info-box.green{background:#eaf5ee;border-color:var(--accent3);}
+.info-box.green .info-label{background:var(--accent3);}
+.info-box.red{background:#fdebeb;border-color:var(--accent);}
+.info-box.red .info-label{background:var(--accent);}
+.info-box.violet{background:#f4ecf7;border-color:var(--surface-light);}
+.info-box.violet .info-label{background:var(--surface-light);}
+
+/* Pill */
+.pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:4px;margin:0 .15rem;vertical-align:1px;}
+.pill-x{background:rgba(231,76,60,.12);color:var(--x-axis);border:1px solid rgba(231,76,60,.3);}
+.pill-y{background:rgba(39,174,96,.12);color:var(--y-axis);border:1px solid rgba(39,174,96,.3);}
+.pill-z{background:rgba(41,128,185,.12);color:var(--z-axis);border:1px solid rgba(41,128,185,.3);}
+.pill-blue{background:rgba(44,62,122,.13);color:var(--accent2);border:1px solid rgba(44,62,122,.3);}
+.pill-green{background:rgba(26,107,74,.13);color:var(--accent3);border:1px solid rgba(26,107,74,.3);}
+.pill-red{background:rgba(192,57,43,.13);color:var(--accent);border:1px solid rgba(192,57,43,.3);}
+.pill-violet{background:rgba(155,89,182,.13);color:var(--surface-light);border:1px solid rgba(155,89,182,.3);}
+.pill-gold{background:rgba(241,196,15,.15);color:#a07a08;border:1px solid rgba(241,196,15,.45);}
+
+/* Toggle */
+.toggle-group{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.5rem;}
+.tg-btn{font-family:'JetBrains Mono',monospace;font-size:.72rem;padding:.25rem .6rem;border-radius:4px;border:1px solid var(--card-border);background:var(--paper);cursor:pointer;transition:all .2s;}
+.tg-btn.active{background:var(--accent3);color:#fff;border-color:var(--accent3);}
+
+/* Step block */
+.step-block{background:#fffaf0;border-left:4px solid var(--accent3);border-radius:8px;padding:.9rem 1.2rem;margin:.7rem 0;}
+.step-block .step-num{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);font-weight:700;letter-spacing:.1em;margin-bottom:.3rem;}
+.lecture-example{background:var(--card);border:1px solid var(--card-border);border-left:5px solid var(--accent3);border-radius:10px;padding:1rem 1.2rem;margin:1rem 0;box-shadow:0 2px 10px rgba(0,0,0,.04);}
+.lecture-example .ex-tag{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--accent3);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.35rem;}
+.lecture-example .ex-title{font-family:'Noto Serif TC',serif;font-weight:700;color:var(--ink);margin-bottom:.65rem;background:#f5f7fb;border:1px solid #dfe5f0;border-radius:8px;padding:.65rem .85rem;}
+.lecture-example .ex-title::before{content:"題目";display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#fff;background:var(--accent2);border-radius:4px;padding:1px 7px;margin-right:.55rem;letter-spacing:.06em;}
+.lecture-example .ex-method{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;background:rgba(26,107,74,.12);color:var(--accent3);border:1px solid rgba(26,107,74,.35);border-radius:4px;padding:1px 7px;margin:.1rem .25rem .1rem 0;}
+.lecture-example .step-block:first-of-type{margin-top:1.8rem;position:relative;}
+.lecture-example .step-block:first-of-type::before{content:"解題";position:absolute;top:-1.35rem;left:0;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#fff;background:var(--accent3);border-radius:4px;padding:1px 7px;letter-spacing:.06em;}
+.lecture-example .ex-answer{background:#f3fbf6;border:1px solid #cdebd9;border-radius:8px;padding:.65rem .85rem;margin-top:.65rem;font-size:.95rem;}
+.lecture-example .ex-answer::before{content:"答案";display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#fff;background:var(--accent3);border-radius:4px;padding:1px 7px;font-weight:700;margin-right:.5rem;letter-spacing:.06em;}
+.method-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem;margin:1rem 0;}
+@media(max-width:720px){.method-grid{grid-template-columns:1fr;}}
+
+/* Property list */
+.prop-list{counter-reset:prop;list-style:none;padding:0;margin:1rem 0;}
+.prop-list li{counter-increment:prop;background:var(--card);border:1px solid var(--card-border);border-radius:8px;padding:.7rem 1rem .7rem 3rem;margin-bottom:.55rem;position:relative;font-size:.95rem;box-shadow:0 1px 3px rgba(0,0,0,.03);}
+.prop-list li::before{content:counter(prop);position:absolute;left:.85rem;top:50%;transform:translateY(-50%);width:1.7rem;height:1.7rem;background:var(--accent3);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.85rem;}
+
+/* Dual cards */
+.dual-card{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:1rem 0;}
+@media(max-width:600px){.dual-card{grid-template-columns:1fr;}}
+.dual-card .dc{padding:.9rem 1.1rem;border-radius:10px;}
+.dual-card .dc-real{background:#fff5e6;border:1px solid #f0c674;}
+.dual-card .dc-vec{background:#e8f0ff;border:1px solid #7a96d3;}
+.dual-card .dc-cons{background:#eaf5ee;border:1px solid #6fbf91;}
+.dual-card .dc-noncons{background:#fde9e7;border:1px solid #e08580;}
+.dual-card .dc-violet{background:#f4ecf7;border:1px solid #c39bd3;}
+.dual-card .dc-title{font-weight:700;font-size:.88rem;margin-bottom:.4rem;}
+.dual-card .dc-real .dc-title{color:#a06800;}
+.dual-card .dc-vec .dc-title{color:#1f3a7a;}
+.dual-card .dc-cons .dc-title{color:var(--accent3);}
+.dual-card .dc-noncons .dc-title{color:var(--accent);}
+.dual-card .dc-violet .dc-title{color:var(--surface-light);}
+
+footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border);}
+
+/* Quiz */
+.quiz-card{background:#eef5ff;border:1.5px solid var(--accent2);border-radius:10px;padding:1rem 1.2rem;margin:1.2rem 0;box-shadow:0 2px 10px rgba(44,62,122,.07);}
+.quiz-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#fff;background:var(--accent2);padding:2px 8px;border-radius:4px;letter-spacing:.08em;margin-bottom:.45rem;}
+.quiz-q{font-weight:600;margin-bottom:.6rem;}
+.quiz-options{display:flex;flex-direction:column;gap:.4rem;}
+.quiz-opt{padding:.45rem .85rem;border:1.5px solid var(--card-border);border-radius:6px;cursor:pointer;background:var(--card);text-align:left;font-size:.94rem;transition:all .15s;font-family:inherit;}
+.quiz-opt:hover{border-color:var(--accent2);background:#fafcff;}
+.quiz-opt.correct{border-color:var(--accent3);background:#eaf5ee;color:var(--accent3);font-weight:600;}
+.quiz-opt.wrong{border-color:var(--accent);background:#fde9e7;color:var(--accent);}
+.quiz-feedback{font-size:.86rem;margin-top:.5rem;padding:.45rem .7rem;border-radius:5px;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.ok{background:#eaf5ee;color:var(--accent3);border-left:3px solid var(--accent3);}
+.quiz-feedback.no{background:#fde9e7;color:var(--accent);border-left:3px solid var(--accent);}
+
+/* Verify banner */
+.verify-banner{display:flex;align-items:center;gap:.6rem;padding:.55rem .9rem;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:600;margin-top:.6rem;}
+.verify-banner.ok{background:#eaf5ee;color:var(--accent3);border:1px solid var(--accent3);}
+.verify-banner.no{background:#fde9e7;color:var(--accent);border:1px solid var(--accent);}
+.verify-banner.pending{background:#fef5e7;color:#a06800;border:1px solid #d68910;}
+.verify-banner .vb-icon{font-size:1.1rem;}
+
+/* Theorem card */
+.theorem-card{background:linear-gradient(135deg,#eef2ff 0%,#e8f0ff 100%);border:2px solid var(--accent2);border-radius:12px;padding:1.2rem 1.5rem;margin:1.4rem 0;position:relative;box-shadow:0 4px 16px rgba(44,62,122,.08);}
+.theorem-card::before{content:attr(data-thm);position:absolute;top:-12px;left:18px;background:var(--accent2);color:#fff;padding:3px 11px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:700;letter-spacing:.05em;}
+.theorem-card .thm-name{font-family:'Noto Serif TC',serif;font-weight:700;font-size:1.05rem;color:var(--accent2);margin-bottom:.5rem;}
+.theorem-card.violet{background:linear-gradient(135deg,#f4ecf7 0%,#ebd8f3 100%);border-color:var(--surface-light);}
+.theorem-card.violet::before{background:var(--surface-light);}
+.theorem-card.violet .thm-name{color:var(--surface-light);}
+.theorem-card.gold{background:linear-gradient(135deg,#fef5e7 0%,#fdebcc 100%);border-color:#d68910;}
+.theorem-card.gold::before{background:#d68910;}
+.theorem-card.gold .thm-name{color:#a07a08;}
+</style>
+</head>
+<body>
+
+<!-- Side navigation -->
+<nav class="side-nav" id="sideNav">
+  <div class="sn-title">第 15 章（第二部分）</div>
+  <a class="sn-item" href="#sec-15-5">15.5 參數曲面</a>
+  <a class="sn-item sn-sub" href="#sec-15-5-1">  · 定義與範例</a>
+  <a class="sn-item sn-sub" href="#sec-15-5-2">  · 示範 F 互動曲面</a>
+  <a class="sn-item sn-sub" href="#sec-15-5-3">  · 切平面 & 法向量</a>
+  <a class="sn-item sn-sub" href="#sec-15-5-4">  · 表面面積</a>
+  <a class="sn-item" href="#sec-15-6">15.6 表面積分</a>
+  <a class="sn-item sn-sub" href="#sec-15-6-1">  · 純量 ∫∫f dS</a>
+  <a class="sn-item sn-sub" href="#sec-15-6-2">  · 定向 & N</a>
+  <a class="sn-item sn-sub" href="#sec-15-6-3">  · 示範 H 通量動畫</a>
+  <a class="sn-item" href="#sec-15-7">15.7 散度定理</a>
+  <a class="sn-item sn-sub" href="#sec-15-7-1">  · 定理陳述</a>
+  <a class="sn-item sn-sub" href="#sec-15-7-2">  · 示範 I 邊界 ↔ 體積</a>
+  <a class="sn-item sn-sub" href="#sec-15-7-3">  · 源點 / 匯點</a>
+  <a class="sn-item" href="#sec-15-8">15.8 Stokes 定理</a>
+  <a class="sn-item sn-sub" href="#sec-15-8-1">  · 定理陳述</a>
+  <a class="sn-item sn-sub" href="#sec-15-8-2">  · 示範 J 邊界 ↔ 曲面</a>
+  <a class="sn-item sn-sub" href="#sec-15-8-3">  · 旋度物理意義</a>
+  <a class="sn-item" href="#sec-ref">速查</a>
+  <a class="sn-back" href="vector_analysis.html">← 回 15.1–15.4</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <h1><span class="violet">參數曲面</span> · <span class="gold">通量</span> · <span class="green">散度 / Stokes</span></h1>
+    <div class="subtitle">第 15.5–15.8 節 — 參數曲面 · 表面積分 · 散度定理 · Stokes 定理（互動版）</div>
+    <div class="big-formula">$\displaystyle dS=\|\mathbf{r}_u\times\mathbf{r}_v\|\,dA,\quad \iint_S \mathbf{F}\cdot\mathbf{N}\,dS = \iiint_Q \mathrm{div}\,\mathbf{F}\,dV,\quad \oint_C \mathbf{F}\cdot d\mathbf{r}=\iint_S (\mathrm{curl}\,\mathbf{F})\cdot\mathbf{N}\,dS$</div>
+    <div class="scroll-hint">向下捲動開始互動<span>↓</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+<section id="sec-15-5">
+  <div class="section-number">第 15.5 節 · 參數曲面</div>
+  <h2>參數曲面：用兩個參數畫出三維空間中的一張面</h2>
+  <p>過去用<strong>一個參數</strong>表示曲線 $\mathbf{r}(t)$；現在要用<strong>兩個參數</strong> $(u,v)$ 描述「一張面」。一條繩子有一個自由度、走過一條曲線；一張布有兩個自由度、覆蓋一個曲面。這節要把曲面用向量值函數 $\mathbf{r}(u,v)$ 寫出來，計算其<span class="pill pill-violet">切平面</span>、<span class="pill pill-z">法向量</span>與<span class="pill pill-gold">表面面積</span>。</p>
+
+  <!-- §15.5.1 Definition & 例題s -->
+  <div id="sec-15-5-1" class="subsection">
+    <h3>15.5.1 定義與範例</h3>
+
+    <div class="info-box">
+      <span class="info-label">定義 15.8</span>
+      <strong>參數曲面 (參數曲面)</strong>
+      <p style="margin:.55rem 0 .3rem;">設 $x,\,y,\,z$ 都是兩變數函數 $x(u,v),\,y(u,v),\,z(u,v)$，在 $uv$-平面中的某個區域 $D$ 上連續。則集合 $\{(x,y,z): (u,v)\in D\}$ 經由
+      $$\mathbf{r}(u,v) = x(u,v)\,\mathbf{i} + y(u,v)\,\mathbf{j} + z(u,v)\,\mathbf{k}$$
+      所描繪出來的就是<strong>參數曲面 $S$</strong>。其三個分量 $x = x(u,v),\,y = y(u,v),\,z = z(u,v)$ 為<strong>參數方程式</strong>。</p>
+    </div>
+
+    <p>當點 $(u,v)$ 在 $D$ 中移動，$\mathbf{r}(u,v)$ 就像「位置向量」在三維空間掃出整張曲面。</p>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 1 · 描繪參數曲面</div>
+      <div class="ex-title">辨識並描述參數曲面 $\mathbf{r}(u,v) = 3\cos u\,\mathbf{i} + 3\sin u\,\mathbf{j} + v\,\mathbf{k}$，$0\le u\le 2\pi,\ 0\le v\le 4$。</div>
+      <span class="ex-method">消參法</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 觀察各分量</div>
+        <p>$x = 3\cos u,\ y = 3\sin u$ ⇒ $x^2 + y^2 = 9$（半徑 3 的圓，與 $u$ 對應）。<br>$z = v$ 自由變動於 $[0,4]$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 幾何解讀</div>
+        <p>每個固定 $v=v_0$ 對應 $z=v_0$ 平面與圓柱 $x^2+y^2=9$ 的交線（一個圓）。$v$ 從 0 跑到 4，這些圓沿 $z$ 軸由低到高堆疊。</p>
+      </div>
+      <div class="ex-answer">$S$ 是<strong>半徑 3、高度 4 的圓柱面</strong>（不含上下底圓盤）。$u$ 是繞 $z$ 軸的方位角、$v$ 是高度。示範 F 可直接切到此曲面對照。</div>
+    </div>
+
+    <h4>把熟悉的曲面寫成參數形式</h4>
+    <p>反過來，給<strong>曲面</strong>找<strong>參數方程式</strong>常常較難。但若曲面寫成 $z = f(x,y)$，最自然的參數化就是：</p>
+
+    <div class="eq-card" style="margin:.6rem 0 1rem;">
+      <div class="eq-label">$z=f(x,y)$ 的自然參數化</div>
+      <div class="eq-formula">$\mathbf{r}(x,y) = x\,\mathbf{i} + y\,\mathbf{j} + f(x,y)\,\mathbf{k}$</div>
+      <div class="eq-sub">直接拿 $x,\,y$ 當參數即可。</div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 3 · 圓錐的參數化</div>
+      <div class="ex-title">為圓錐 $z = \sqrt{x^2 + y^2}$ 找出一組參數方程式。</div>
+      <span class="ex-method">柱座標啟發</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 用柱座標</div>
+        <p>令 $x = u\cos v,\ y = u\sin v$（$u\ge 0$ 為半徑、$v\in[0,2\pi]$ 為方位角）。則
+        $z = \sqrt{u^2\cos^2 v + u^2\sin^2 v} = u$（取正根）。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 寫成 r(u,v)</div>
+        <p>$\mathbf{r}(u,v) = u\cos v\,\mathbf{i} + u\sin v\,\mathbf{j} + u\,\mathbf{k},\quad 0\le u,\ 0\le v\le 2\pi$。</p>
+      </div>
+      <div class="ex-answer">這是一個從原點往上展開的圓錐。<strong>注意</strong>在原點 $u=0$ 處 $\mathbf{r}_u\times\mathbf{r}_v=\mathbf{0}$（無法定義法向量），所以該圓錐<strong>不光滑</strong>（頂點處有尖點）。</div>
+    </div>
+  </div>
+
+  <!-- §15.5.2 示範 F -->
+  <div id="sec-15-5-2" class="subsection">
+    <h3>15.5.2 互動 示範 F：6 種參數曲面 + 切平面探針</h3>
+    <p>下面互動圖把講義例題與兩個補充曲面放在同一個介面：用兩個滑桿 $(u_0, v_0)$ 設定探針點 $P = \mathbf{r}(u_0, v_0)$，即時顯示三組向量：<span style="color:var(--ru);font-weight:600;">$\mathbf{r}_u$（紅）</span>、<span style="color:var(--rv);font-weight:600;">$\mathbf{r}_v$（綠）</span>、<span style="color:var(--accent2);font-weight:600;">$\mathbf{N}=\mathbf{r}_u\times\mathbf{r}_v$（藍）</span>。可切換切平面顯示。下方累積條表示目前掃過的 $u$ 比例，並把 $\iint_D\|\mathbf{r}_u\times\mathbf{r}_v\|\,dA$ 的部分面積與總面積作比較；它是掃描進度，不是正確率。</p>
+
+    <div class="viz-layout">
+      <div class="canvas3d-panel dark">
+        <div class="canvas-wrap">
+          <div id="plot-15-5-f" class="plot-host"></div>
+          <div class="hint-overlay">拖曳旋轉 · 滾輪縮放</div>
+        </div>
+        <div class="axis-legend">
+          <span class="ax-x">x</span><span class="ax-y">y</span><span class="ax-z">z</span>
+          <span class="ax-surf">曲面</span>
+          <span class="ax-ru">r_u</span><span class="ax-rv">r_v</span><span class="ax-N">N=r_u×r_v</span>
+          <span class="ax-tan">切平面</span>
+        </div>
+        <div class="controls-bar">
+          <label style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent2);font-weight:600;">曲面：</label>
+          <select class="field-select" id="dF-surf" style="max-width:280px;">
+            <option value="cylinder">圓柱面（例題 1）</option>
+            <option value="cone">圓錐面（例題 3）</option>
+            <option value="sphere">單位球面（例題 6）</option>
+            <option value="paraboloid">拋物面（例題 5）</option>
+            <option value="torus">補充 · 環面</option>
+            <option value="helicoid">補充 · 螺旋面</option>
+          </select>
+          <button class="btn btn-toggle" id="dF-tan">切平面</button>
+          <button class="btn btn-reset" id="dF-reset">↺ 重設</button>
+        </div>
+      </div>
+      <div class="side-panel">
+        <div class="info-card">
+          <div class="ic-title">探針點</div>
+          <div class="slider-row"><span class="slider-label">u₀</span><input type="range" id="dF-u" min="0" max="1" step="0.01" value="0.4"><span class="slider-val" id="dF-uV">—</span></div>
+          <div class="slider-row"><span class="slider-label">v₀</span><input type="range" id="dF-v" min="0" max="1" step="0.01" value="0.3"><span class="slider-val" id="dF-vV">—</span></div>
+          <div class="ic-row"><span class="ic-label">P = r(u₀,v₀)</span><span class="ic-value" id="dF-P">—</span></div>
+          <div class="ic-row"><span class="ic-label" style="color:var(--ru);">r_u</span><span class="ic-value ru" id="dF-ru">—</span></div>
+          <div class="ic-row"><span class="ic-label" style="color:var(--rv);">r_v</span><span class="ic-value rv" id="dF-rv">—</span></div>
+          <div class="ic-row"><span class="ic-label" style="color:var(--accent2);">N</span><span class="ic-value nv" id="dF-N">—</span></div>
+          <div class="ic-row"><span class="ic-label">‖N‖</span><span class="ic-value highlight" id="dF-Nmag">—</span></div>
+        </div>
+        <div class="accum-bar">
+          <div class="ab-label"><span>掃描比例 / 表面面積 ∫∫‖N‖ dA</span><span id="dF-pct">0%</span></div>
+          <div class="ab-track"><div class="ab-fill violet" id="dF-fill" style="width:0%"></div></div>
+          <div class="ab-val" id="dF-area">0.000</div>
+          <div class="ab-target">目標：<span id="dF-tgt">—</span></div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">u 掃描（面積累積）</div>
+          <div class="slider-row"><span class="slider-label">掃描 u</span><input type="range" id="dF-scan" min="0" max="1" step="0.01" value="1"><span class="slider-val" id="dF-scanV">100%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- §15.5.3 Normal vectors / Tangent planes -->
+  <div id="sec-15-5-3" class="subsection">
+    <h3>15.5.3 法向量與切平面</h3>
+    <p>固定 $v = v_0$，$\mathbf{r}(u, v_0)$ 是<strong>一參數</strong>曲線 $C_1\subset S$，其切向量為 $\mathbf{r}_u(u_0, v_0)$。同理固定 $u = u_0$ 得到 $C_2$，切向量為 $\mathbf{r}_v(u_0, v_0)$。$C_1$ 與 $C_2$ 都通過 $P$，所以它們的切向量 $\mathbf{r}_u,\,\mathbf{r}_v$ 張出 $P$ 處的<strong>切平面</strong>，而<strong>法向量</strong>就是它們的<strong>外積</strong>。</p>
+
+    <div class="info-box warm">
+      <span class="info-label">定義 15.9</span>
+      <strong>光滑參數曲面的法向量</strong>
+      <p style="margin:.55rem 0 .3rem;">若 $\mathbf{r}(u,v) = x(u,v)\,\mathbf{i}+y(u,v)\,\mathbf{j}+z(u,v)\,\mathbf{k}$ 在 $D$ 上具連續偏導，且 $\mathbf{r}_u\times\mathbf{r}_v\ne\mathbf{0}$（對任何 $(u,v)\in D$ 都成立），則稱 $S$ 為<strong>光滑</strong>。$(u_0, v_0)$ 對應點 $(x_0,y_0,z_0)$ 的法向量為
+      $$\mathbf{N} = \mathbf{r}_u(u_0,v_0) \times \mathbf{r}_v(u_0,v_0) = \begin{vmatrix}\mathbf{i}&\mathbf{j}&\mathbf{k}\\[2pt] x_u & y_u & z_u\\[2pt] x_v & y_v & z_v\end{vmatrix}.$$</p>
+      <p style="margin:.4rem 0 0;font-size:.92rem;color:var(--muted);">$\mathbf{N} = \mathbf{0}$ 的地方就是「不光滑點」（如圓錐尖端、自交曲面）。</p>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 5 · 拋物面上的切平面</div>
+      <div class="ex-title">求拋物面 $\mathbf{r}(u,v) = u\,\mathbf{i} + v\,\mathbf{j} + (u^2 + v^2)\,\mathbf{k}$ 在點 $(1, 2, 5)$ 的切平面方程式。</div>
+      <span class="ex-method">外積求 N + 平面點法式</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 確定參數值</div>
+        <p>$(u_0, v_0) = (1, 2)$ 可以對應到 $(1, 2, 1+4) = (1, 2, 5)$ ✓。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 算 r_u, r_v</div>
+        <p>$\mathbf{r}_u = (1, 0, 2u),\quad \mathbf{r}_v = (0, 1, 2v)$。<br>
+        在 $(1,2)$：$\mathbf{r}_u = (1, 0, 2)$，$\mathbf{r}_v = (0, 1, 4)$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 3 · 外積 N = r_u × r_v</div>
+        <p>$\mathbf{N} = \begin{vmatrix}\mathbf{i}&\mathbf{j}&\mathbf{k}\\ 1 & 0 & 2\\ 0 & 1 & 4\end{vmatrix} = (0\cdot 4 - 2\cdot 1)\,\mathbf{i} - (1\cdot 4 - 2\cdot 0)\,\mathbf{j} + (1\cdot 1 - 0\cdot 0)\,\mathbf{k} = (-2, -4, 1)$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 4 · 切平面方程式</div>
+        <p>過點 $(1,2,5)$ 與法向量 $(-2,-4,1)$ 的平面：<br>
+        $-2(x-1) - 4(y-2) + (z-5) = 0$<br>
+        $\Rightarrow -2x - 4y + z + 2 + 8 - 5 = 0$<br>
+        $\Rightarrow -2x - 4y + z = -5$<br>
+        $\Rightarrow 2x + 4y - z = 5$。</p>
+      </div>
+      <div class="ex-answer">$\boxed{2x + 4y - z = 5}$。可在 示範 F 切到 拋物面，把 $(u_0,v_0)$ 滑到 $(1,2)$ 觀察切平面是否吻合。</div>
+    </div>
+  </div>
+
+  <!-- §15.5.4 Surface area -->
+  <div id="sec-15-5-4" class="subsection">
+    <h3>15.5.4 表面面積</h3>
+    <p>把 $D$ 切成 $n$ 個小矩形，每個小矩形 $\Delta u_i \Delta v_i$ 對應到 $S$ 上一塊小曲面 $\Delta S_i$。用切平面上的<strong>平行四邊形</strong>近似 $\Delta S_i$，其兩邊為 $\Delta u_i\,\mathbf{r}_u$ 與 $\Delta v_i\,\mathbf{r}_v$，面積為
+    $\|\Delta u_i\,\mathbf{r}_u \times \Delta v_i\,\mathbf{r}_v\| = \|\mathbf{r}_u\times\mathbf{r}_v\|\,\Delta u_i\Delta v_i$。取 $\|\Delta\|\to 0$：</p>
+
+    <div class="info-box">
+      <span class="info-label">定義 15.10</span>
+      <strong>參數曲面的面積</strong>
+      <p style="margin:.55rem 0 .3rem;">若每個 $D$ 中的 $(u,v)$ 對應 $S$ 上恰好一個點，則 $S$ 的表面面積為
+      $$\mathrm{Area}(S) = \iint_S dS = \iint_D \|\mathbf{r}_u\times\mathbf{r}_v\|\,dA,$$
+      其中 $\mathbf{r}_u, \mathbf{r}_v$ 同 定義 15.9。</p>
+    </div>
+
+    <div class="dual-card">
+      <div class="dc dc-violet">
+        <div class="dc-title">特例：z = f(x,y) 自然參數化</div>
+        <p style="margin:0;font-size:.93rem;">$\mathbf{r}_x = (1,0,f_x),\,\mathbf{r}_y=(0,1,f_y)$。<br>$\mathbf{r}_x\times\mathbf{r}_y = (-f_x,-f_y,1)$，$\|\cdot\| = \sqrt{1 + f_x^2 + f_y^2}$。<br>$\mathrm{Area}(S) = \iint_R \sqrt{1 + f_x^2 + f_y^2}\,dA$，即 §14.5 公式。</p>
+      </div>
+      <div class="dc dc-real">
+        <div class="dc-title">特例：旋轉面</div>
+        <p style="margin:0;font-size:.93rem;">$f\ge 0$ 沿 $x$ 軸繞旋轉，可參數化 $\mathbf{r}(u,v)=(u, f(u)\cos v, f(u)\sin v)$。<br>$\|\mathbf{r}_u\times\mathbf{r}_v\| = f(u)\sqrt{1 + [f'(u)]^2}$。<br>$\mathrm{Area} = 2\pi\!\int_a^b f(u)\sqrt{1+[f'(u)]^2}\,du$，即 §7.4 公式。</p>
+      </div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 6 · 單位球面的表面積</div>
+      <div class="ex-title">用參數方程式 $\mathbf{r}(u,v) = \sin u\cos v\,\mathbf{i} + \sin u\sin v\,\mathbf{j} + \cos u\,\mathbf{k}$，$0\le u\le \pi,\,0\le v\le 2\pi$，求單位球面的面積。</div>
+      <span class="ex-method">外積後做雙重積分</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 算偏導</div>
+        <p>$\mathbf{r}_u = (\cos u\cos v,\,\cos u\sin v,\,-\sin u)$。<br>
+        $\mathbf{r}_v = (-\sin u\sin v,\,\sin u\cos v,\,0)$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 外積</div>
+        <p>$\mathbf{r}_u\times\mathbf{r}_v = (\sin^2 u\cos v,\,\sin^2 u\sin v,\,\sin u\cos u)$。<br>
+        $\|\cdot\|^2 = \sin^4 u (\cos^2 v+\sin^2 v) + \sin^2 u\cos^2 u = \sin^4 u + \sin^2 u \cos^2 u = \sin^2 u (\sin^2 u + \cos^2 u) = \sin^2 u$。<br>
+        所以 $\|\mathbf{r}_u\times\mathbf{r}_v\| = |\sin u| = \sin u$（因為 $u\in[0,\pi]$）。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 3 · 對 D 積分</div>
+        <p>$\mathrm{Area} = \displaystyle\int_0^{2\pi}\!\int_0^\pi \sin u\,du\,dv = \int_0^{2\pi}[-\cos u]_0^\pi\,dv = \int_0^{2\pi} 2\,dv = 4\pi$。</p>
+      </div>
+      <div class="ex-answer">$\mathrm{Area}(\text{unit sphere}) = 4\pi$。示範 F 切到 球面可看到累積條收斂至此值。</div>
+    </div>
+
+    <h3>概念測驗 15.5</h3>
+
+    <div class="quiz-card" id="quiz-15-5-1">
+      <span class="quiz-tag">Q15-5-1 · 辨識曲面</span>
+      <div class="quiz-q">$\mathbf{r}(u,v) = \cos v\,\mathbf{i} + \sin v\,\mathbf{j} + u\,\mathbf{k}$，$u\in\mathbb{R},\ v\in[0,2\pi]$，描述哪一種曲面？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">半徑 1 的<strong>圓柱面</strong>（軸沿 $z$ 軸）</button>
+        <button class="quiz-opt">半徑 1 的<strong>球面</strong></button>
+        <button class="quiz-opt">頂點在原點的<strong>圓錐</strong></button>
+        <button class="quiz-opt">$z=x^2+y^2$ 的<strong>拋物面</strong></button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-card" id="quiz-15-5-2">
+      <span class="quiz-tag">Q15-5-2 · 算 r_u × r_v</span>
+      <div class="quiz-q">設 $\mathbf{r}(u,v) = u\,\mathbf{i} + v\,\mathbf{j} + uv\,\mathbf{k}$。在 $(u,v)=(1,1)$ 處，$\mathbf{r}_u\times\mathbf{r}_v$ 等於？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">$(-1, -1, 1)$</button>
+        <button class="quiz-opt">$(1, 1, 1)$</button>
+        <button class="quiz-opt">$(1, -1, 0)$</button>
+        <button class="quiz-opt">$(0, 0, 1)$</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-card" id="quiz-15-5-3">
+      <span class="quiz-tag">Q15-5-3 · 不光滑判定</span>
+      <div class="quiz-q">下列哪一個敘述<strong>正確</strong>？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">$\mathbf{r}_u\times\mathbf{r}_v=\mathbf{0}$ 表示曲面在該點是「光滑」的，特別漂亮。</button>
+        <button class="quiz-opt">$\mathbf{r}_u\times\mathbf{r}_v=\mathbf{0}$ 表示無法在該點定義法向量、曲面在該點<strong>不光滑</strong>（如圓錐尖端）。</button>
+        <button class="quiz-opt">不論 $\mathbf{r}_u, \mathbf{r}_v$ 在該點是否為零，只要 $\mathbf{r}$ 連續就是光滑曲面。</button>
+        <button class="quiz-opt">外積為零的點通常是曲面內部最平坦的點。</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+  </div>
+</section>
+
+<section id="sec-15-6">
+  <div class="section-number">第 15.6 節 · 表面積分</div>
+  <h2>表面積分：在曲面上累積純量與通量</h2>
+  <p>線積分 $\int_C f\,ds$ 把純量函數沿曲線累積；雙重積分 $\iint_R f\,dA$ 把它在平面區域上累積。本節要把累積的「領域」換成<span class="pill pill-violet">曲面</span>，得到<strong>表面積分</strong> $\iint_S f\,dS$。它有兩個面孔：<span class="pill pill-blue">純量被積函數</span>（如質量密度 → 總質量）與<span class="pill pill-gold">向量被積函數（通量）</span>（如流場通過曲面的流量、電場通量）。</p>
+
+  <!-- §15.6.1 Scalar surface integral -->
+  <div id="sec-15-6-1" class="subsection">
+    <h3>15.6.1 純量表面積分</h3>
+
+    <div class="info-box">
+      <span class="info-label">定義</span>
+      <strong>表面積分 (表面積分)</strong>
+      <p style="margin:.55rem 0 .3rem;">設 $S$ 是 $z=g(x,y)$（$R$ 為其在 $xy$ 平面的投影）上的光滑曲面，$f$ 在 $S$ 上連續。把 $S$ 分割為 $n$ 小塊 $\Delta S_i$，取樣點 $(x_i, y_i, z_i)$，則
+      $$\iint_S f(x,y,z)\,dS = \lim_{\|\Delta\|\to 0}\sum_{i=1}^n f(x_i, y_i, z_i)\,\Delta S_i,$$
+      若極限存在。$f\equiv 1$ 時退化為 $\iint_S dS = $ 表面面積。</p>
+    </div>
+
+    <div class="theorem-card" data-thm="定理 15.10">
+      <div class="thm-name">表面積分的計算公式 (z = g(x,y) 版)</div>
+      <p>若 $g, g_x, g_y$ 在 $R$ 上連續、$f$ 在 $S$ 上連續，則
+      $$\iint_S f(x,y,z)\,dS = \iint_R f(x, y, g(x,y))\,\sqrt{1 + g_x^2 + g_y^2}\,dA.$$</p>
+      <p style="font-size:.92rem;color:var(--muted);margin-top:.3rem;">若 $S$ 寫成 $y=g(x,z)$ 或 $x=g(y,z)$，把 $\sqrt{1+g_x^2+g_z^2}$ 或 $\sqrt{1+g_y^2+g_z^2}$ 替換，投影改到對應坐標平面即可。</p>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 2 · 圓柱片</div>
+      <div class="ex-title">求 $\displaystyle\iint_S (x+z)\,dS$，其中 $S$ 是第一象限中圓柱面 $y^2 + z^2 = 9$ 介於 $x=0$ 與 $x=4$ 之間的部分。</div>
+      <span class="ex-method">參數化 + 直接代入</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 參數化曲面</div>
+        <p>令 $y = 3\cos\theta,\ z = 3\sin\theta$（$0\le\theta\le\pi/2$ 第一象限），$x = x$（$0\le x\le 4$）。<br>
+        $\mathbf{r}(\theta, x) = (x,\,3\cos\theta,\,3\sin\theta)$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 算 ‖r_θ × r_x‖</div>
+        <p>$\mathbf{r}_\theta = (0,\,-3\sin\theta,\,3\cos\theta)$；$\mathbf{r}_x = (1,\,0,\,0)$。<br>
+        $\mathbf{r}_\theta\times\mathbf{r}_x = (0,\,3\cos\theta,\,3\sin\theta)$（注意符號慣例：用此順序得到指向外的法向量）。<br>
+        $\|\mathbf{r}_\theta\times\mathbf{r}_x\| = \sqrt{9\cos^2\theta + 9\sin^2\theta} = 3$。所以 $dS = 3\,d\theta\,dx$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 3 · 代入積分</div>
+        <p>沿 $S$ 取值：$x + z = x + 3\sin\theta$。<br>
+        $\displaystyle\iint_S (x+z)\,dS = \int_0^{\pi/2}\!\!\int_0^4 (x + 3\sin\theta)\cdot 3\,dx\,d\theta$。<br>
+        內：$\int_0^4 (x+3\sin\theta)\,dx = 8 + 12\sin\theta$。<br>
+        外：$3\int_0^{\pi/2}(8 + 12\sin\theta)\,d\theta = 3\left[8\cdot \tfrac{\pi}{2} + 12\cdot 1\right] = 3(4\pi + 12) = 12\pi + 36$。</p>
+      </div>
+      <div class="ex-answer">$\displaystyle\iint_S (x+z)\,dS = 12\pi + 36 \approx 73.70$。示範 H 中切到此情境可看到累積收斂到此值。</div>
+    </div>
+
+    <h4>參數形式（更一般的曲面）</h4>
+    <p>若 $S$ 由 $\mathbf{r}(u,v)$ 在 $(u,v)\in D$ 上描繪：</p>
+
+    <div class="eq-card" style="margin:.6rem 0 1rem;">
+      <div class="eq-label">參數形式下的曲面積分</div>
+      <div class="eq-formula">$\displaystyle\iint_S f(x,y,z)\,dS = \iint_D f(\mathbf{r}(u,v))\,\|\mathbf{r}_u\times\mathbf{r}_v\|\,dA$</div>
+      <div class="eq-sub">注意與 $\int_C f\,ds = \int_a^b f(\mathbf{r}(t))\,\|\mathbf{r}'(t)\|\,dt$ 的<strong>結構相似性</strong>：把 $ds$ 改成 $dS$、把 $\|\mathbf{r}'(t)\|\,dt$ 改成 $\|\mathbf{r}_u\times\mathbf{r}_v\|\,dA$ 即可。</div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 4 · 用參數形式重算</div>
+      <div class="ex-title">用參數形式重做例題 2：$\displaystyle\iint_S (x+z)\,dS$，$S$ 同上。</div>
+      <span class="ex-method">驗證兩種公式給同答案</span>
+      <div class="step-block">
+        <div class="step-num">步驟 · 直接套參數公式</div>
+        <p>由步驟 2 已知 $\|\mathbf{r}_\theta\times\mathbf{r}_x\| = 3$。<br>
+        $\displaystyle\iint_S(x+z)\,dS = \int_0^{\pi/2}\!\!\int_0^4 (x+3\sin\theta)\cdot 3\,dx\,d\theta = 12\pi + 36$（與 例題 2 完全相同）。</p>
+      </div>
+      <div class="ex-answer">結果一致：$\iint_S(x+z)\,dS = 12\pi + 36$。當 $S$ 不能寫成 $z=g(x,y)$（如球面、環面、自交曲面）時，<strong>參數形式</strong>是唯一可行的算法。</div>
+    </div>
+  </div>
+
+  <!-- §15.6.2 Orientation & N -->
+  <div id="sec-15-6-2" class="subsection">
+    <h3>15.6.2 曲面定向 & 法向量</h3>
+    <p>若能在 $S$ 的每個非邊界點處定義一個<strong>連續變動</strong>的單位法向量 $\mathbf{N}$，就稱 $S$ 為<strong>可定向</strong>。可定向曲面有兩面（兩個相反方向的 $\mathbf{N}$），通常規定：</p>
+
+    <ul class="prop-list" style="counter-reset: prop;">
+      <li><strong>閉曲面</strong>（如球面、四面體）：規定 $\mathbf{N}$ 指<strong>向外</strong>。</li>
+      <li><strong>開曲面</strong> $z = g(x,y)$ 寫成 $G(x,y,z) = z - g(x,y)$：<br>
+      上向 $\mathbf{N} = \dfrac{\nabla G}{\|\nabla G\|} = \dfrac{(-g_x,\,-g_y,\,1)}{\sqrt{1+g_x^2+g_y^2}}$；下向取負號。</li>
+      <li><strong>參數曲面</strong>：$\mathbf{N} = \dfrac{\mathbf{r}_u\times\mathbf{r}_v}{\|\mathbf{r}_u\times\mathbf{r}_v\|}$（順序固定）。反序 $\mathbf{r}_v\times\mathbf{r}_u$ 給相反向。</li>
+    </ul>
+
+    <div class="info-box red" style="margin-top:1rem;">
+      <span class="info-label">⚠ 反例</span>
+      <strong>Möbius 帶不可定向</strong>
+      <p style="margin:.55rem 0 0;">Möbius 帶只有<strong>一面</strong>，沿單一閉環走一週後法向量會變號 → 不存在連續單位法向量場。一般教學中遇到的<strong>球面、平面、圓柱、橢球、拋物面、環面</strong>都是可定向的，因此本章定理皆適用。</p>
+    </div>
+
+    <div class="info-box warm">
+      <span class="info-label">定義 15.11</span>
+      <strong>通量積分</strong>
+      <p style="margin:.55rem 0 .3rem;">設 $\mathbf{F}(x,y,z) = M\,\mathbf{i} + N\,\mathbf{j} + P\,\mathbf{k}$，其分量在 $S$ 上具連續一階偏導。$S$ 由單位法向量 $\mathbf{N}$ 定向。$\mathbf{F}$ 通過 $S$ 的<strong>通量積分</strong>為
+      $$\iint_S \mathbf{F}\cdot\mathbf{N}\,dS.$$</p>
+      <p style="margin:.4rem 0 0;font-size:.92rem;color:var(--muted);">物理意義：若 $\mathbf{F}$ 是流體速度場，$\iint_S \mathbf{F}\cdot\mathbf{N}\,dS$ = 每單位時間通過 $S$ 的流體體積。若 $\rho$ 是密度，$\iint_S \rho\mathbf{F}\cdot\mathbf{N}\,dS$ = 質量流量。</p>
+    </div>
+
+    <div class="theorem-card" data-thm="定理 15.11">
+      <div class="thm-name">通量積分計算公式 (z = g(x,y) 版)</div>
+      <p>$S$ 由 $z = g(x,y)$ 定義，$R$ 是其 $xy$ 投影。對上向定向：
+      $$\iint_S \mathbf{F}\cdot\mathbf{N}\,dS = \iint_R \mathbf{F}\cdot(-g_x,\,-g_y,\,1)\,dA.$$
+      下向時取相反符號 $(g_x,\,g_y,\,-1)$。</p>
+      <p style="font-size:.9rem;color:var(--accent3);margin-top:.3rem;">注意：分母 $\sqrt{1+g_x^2+g_y^2}$ 在 $\mathbf{N}$ 與 $dS$ 中剛好相消，所以最後寫成簡潔形式。</p>
+    </div>
+  </div>
+
+  <!-- §15.6.3 示範 H -->
+  <div id="sec-15-6-3" class="subsection">
+    <h3>15.6.3 互動 示範 H：表面積分 / 通量同步動畫</h3>
+    <p>下面互動圖把表面積分（純量）與通量積分（向量）放在同一個 3D 畫布上：把曲面切成小片，依掃描比例逐漸亮起，每個小片的顏色按 $f$ 或 $\mathbf{F}\cdot\mathbf{N}$ 著色，下方數值顯示目前已掃過小片的累積近似值。進度條只表示掃描比例；累積值最後才用來和目標值比較。三個情境分別對應例題 2 / 例題 6 / 補充上半球 $z\,\mathbf{k}$ 通量。</p>
+
+    <div class="viz-layout">
+      <div class="canvas3d-panel dark">
+        <div class="canvas-wrap">
+          <div id="plot-15-6-h" class="plot-host"></div>
+          <div class="t-display" id="dH-t">進度 0%</div>
+        </div>
+        <div class="axis-legend">
+          <span class="ax-x">x</span><span class="ax-y">y</span><span class="ax-z">z</span>
+          <span class="ax-surf">曲面 S</span><span class="ax-N">法向 N</span><span class="ax-flux">F·N 或 f</span>
+        </div>
+        <div class="controls-bar">
+          <label style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent2);font-weight:600;">場景：</label>
+          <select class="field-select" id="dH-scene" style="max-width:380px;">
+            <option value="ex2">例題 2 · 圓柱片 + 純量 f = x + z（目標 12π+36）</option>
+            <option value="ex6">例題 6 · 球面 + 反平方場通量（目標 4πkq, k=q=1）</option>
+            <option value="zflux">補充 · 上半球 + F = z·k 上向通量（目標 2π/3）</option>
+          </select>
+          <button class="btn btn-play" id="dH-play">▶ 播放</button>
+          <button class="btn btn-reset" id="dH-reset">↺ 重設</button>
+        </div>
+      </div>
+      <div class="side-panel">
+        <div class="info-card">
+          <div class="ic-title">公式</div>
+          <div class="ic-row"><span class="ic-label">類型</span><span class="ic-value" id="dH-kind">純量 ∫∫ f dS</span></div>
+          <div class="ic-row"><span class="ic-label">f 或 F</span><span class="ic-value" id="dH-fF">x + z</span></div>
+          <div class="ic-row"><span class="ic-label">S</span><span class="ic-value" id="dH-S">圓柱片</span></div>
+        </div>
+        <div class="accum-bar">
+          <div class="ab-label"><span>掃描進度</span><span id="dH-pct">0%</span></div>
+          <div class="ab-track"><div class="ab-fill violet" id="dH-fill" style="width:0%"></div></div>
+          <div class="ab-val" id="dH-acc">0.0000</div>
+          <div class="ab-target">目標：<span id="dH-tgt">12π+36 ≈ 73.700</span></div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">速度</div>
+          <div class="slider-row"><span class="slider-label">速度</span><input type="range" id="dH-speed" min="0.2" max="3" value="1" step="0.1"><span class="slider-val" id="dH-speedV">1.0×</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 6 · 反平方場的通量</div>
+      <div class="ex-title">設反平方場 $\mathbf{F}(x,y,z) = \dfrac{kq\,\mathbf{r}}{\|\mathbf{r}\|^3}$（$\mathbf{r}=x\mathbf{i}+y\mathbf{j}+z\mathbf{k}$），$S$ 為球面 $x^2+y^2+z^2 = a^2$，向外定向。求通量 $\iint_S \mathbf{F}\cdot\mathbf{N}\,dS$。</div>
+      <span class="ex-method">球面上特殊對稱</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 球面上的 N</div>
+        <p>球面上指向外的單位法向量為 $\mathbf{N} = \dfrac{\mathbf{r}}{\|\mathbf{r}\|} = \dfrac{\mathbf{r}}{a}$（因球面上 $\|\mathbf{r}\| = a$）。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · F · N</div>
+        <p>$\mathbf{F}\cdot\mathbf{N} = \dfrac{kq\,\mathbf{r}}{\|\mathbf{r}\|^3}\cdot\dfrac{\mathbf{r}}{a} = \dfrac{kq\,\|\mathbf{r}\|^2}{a\,\|\mathbf{r}\|^3} = \dfrac{kq}{a\cdot a^2}\cdot a = \dfrac{kq}{a^2}$。<br>
+        — 在整個球面上 <strong>是個常數！</strong></p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 3 · 通量 = 常數 × 表面積</div>
+        <p>球面面積 $= 4\pi a^2$，故
+        $\displaystyle\iint_S \mathbf{F}\cdot\mathbf{N}\,dS = \dfrac{kq}{a^2}\cdot 4\pi a^2 = 4\pi k q$。</p>
+      </div>
+      <div class="ex-answer">$\boxed{\iint_S\mathbf{F}\cdot\mathbf{N}\,dS = 4\pi k q}$ — 與球的半徑 $a$ <strong>無關！</strong>這就是電磁學的 <strong>Gauss 定律</strong>：包圍電荷 $q$ 的任何閉曲面，電場通量永遠是 $4\pi k q$（在 $4\pi k = 1/\varepsilon_0$ 的單位制下即 $q/\varepsilon_0$）。</div>
+    </div>
+
+    <h3>概念測驗 15.6</h3>
+
+    <div class="quiz-card" id="quiz-15-6-1">
+      <span class="quiz-tag">Q15-6-1 · 定向關不關</span>
+      <div class="quiz-q">下列哪一個是「純量表面積分 $\iint_S f\,dS$」與「通量積分 $\iint_S\mathbf{F}\cdot\mathbf{N}\,dS$」的<strong>關鍵差異</strong>？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">純量積分需要曲面光滑；通量積分不需要。</button>
+        <button class="quiz-opt">純量積分<strong>不受定向影響</strong>；通量積分<strong>翻轉定向會變號</strong>。</button>
+        <button class="quiz-opt">純量積分只能用 $z = g(x,y)$ 形式；通量積分只能用參數形式。</button>
+        <button class="quiz-opt">兩者完全相同，只是符號不同。</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-card" id="quiz-15-6-2">
+      <span class="quiz-tag">Q15-6-2 · ‖r_x × r_y‖</span>
+      <div class="quiz-q">若 $S$ 由 $z = g(x,y)$ 自然參數化 $\mathbf{r}(x,y) = (x,y,g(x,y))$，則 $\|\mathbf{r}_x\times\mathbf{r}_y\|$ 等於？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">$g_x^2 + g_y^2$</button>
+        <button class="quiz-opt">$\sqrt{1 + g_x^2 + g_y^2}$</button>
+        <button class="quiz-opt">$1 + g_x + g_y$</button>
+        <button class="quiz-opt">$g_x \cdot g_y$</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-card" id="quiz-15-6-3">
+      <span class="quiz-tag">Q15-6-3 · Gauss 定律</span>
+      <div class="quiz-q">例題 6 顯示反平方場通過球面的通量為 $4\pi kq$，且<strong>與球半徑無關</strong>。這代表？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">這只是巧合，僅對球面成立；對其他閉曲面不成立。</button>
+        <button class="quiz-opt">這是 Gauss 定律的特例：包圍電荷 $q$ 的<strong>任何</strong>閉曲面，總通量都是 $4\pi kq$。</button>
+        <button class="quiz-opt">通量是 0，因為反平方場是保守的。</button>
+        <button class="quiz-opt">通量會隨半徑增大而 0，因為球面越大、表面密度越小。</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+  </div>
+</section>
+
+<section id="sec-15-7">
+  <div class="section-number">第 15.7 節 · 散度定理</div>
+  <h2>散度定理：閉曲面通量 ↔ 體積散度積分</h2>
+  <p>回憶 §15.4 Green 定理的散度形式：$\displaystyle\oint_C \mathbf{F}\cdot\mathbf{N}\,ds = \iint_R \mathrm{div}\,\mathbf{F}\,dA$。把這個「平面（2D） 邊界 ↔ 內部」的對應推到三維就得到<strong>散度定理</strong>：把「閉曲面（邊界） 上的通量」與「體積內（內部） 散度的總和」連起來。它是物理中守恆律（流量守恆、電場 Gauss 定律、熱傳導）的數學底層。</p>
+
+  <!-- §15.7.1 Statement -->
+  <div id="sec-15-7-1" class="subsection">
+    <h3>15.7.1 定理陳述</h3>
+
+    <div class="info-box warm">
+      <span class="info-label">閉曲面</span>
+      <strong>閉曲面與外向定向</strong>
+      <p style="margin:.55rem 0 .3rem;">$Q$ 是三維空間中一塊立體區域；$S$ 是「圍住 $Q$ 的完整邊界」 — 此時稱 $S$ 為<strong>閉曲面</strong>。<br>外向定向：在 $S$ 的每點 $\mathbf{N}$ 都指向<strong>離開 $Q$ 內部</strong>的那一側。球面、立方體面、橢球、四面體都是常見的閉曲面。</p>
+    </div>
+
+    <div class="theorem-card gold" data-thm="定理 15.12">
+      <div class="thm-name">散度定理（Gauss 定理）</div>
+      <p>設 $Q$ 為三維空間中一塊立體，邊界 $S$ 為閉曲面、外向定向。若 $\mathbf{F}$ 的分量函數在 $Q$ 上具連續一階偏導，則
+      $$\iint_S \mathbf{F}\cdot\mathbf{N}\,dS = \iiint_Q \mathrm{div}\,\mathbf{F}\,dV.$$</p>
+      <p style="font-size:.92rem;color:#a07a08;margin-top:.3rem;">直觀：「淨流出 $Q$ 的量」（左邊）= 「$Q$ 內部所有 source/sink 的總和」（右邊）。內部相鄰小方塊之間的流量自我抵消，剩下的只是邊界上的淨流出。</p>
+    </div>
+
+    <p>定理對「多個簡單立體的有限聯集」也成立。若 $Q$ 由兩個閉曲面 $S_1, S_2$ 包圍（例如 $S_2$ 在 $S_1$ 內、$Q$ 是中間環狀區），則總通量 為 $\iint_{S_1}\mathbf{F}\cdot\mathbf{N}_1\,dS + \iint_{S_2}\mathbf{F}\cdot\mathbf{N}_2\,dS$，方向都<strong>向外</strong>（指出 $Q$）— 所以對 $S_2$ 而言是「指向中心」。</p>
+  </div>
+
+  <!-- §15.7.2 示範 I -->
+  <div id="sec-15-7-2" class="subsection">
+    <h3>15.7.2 互動 示範 I：邊界通量 ↔ 體積散度（左右對照動畫）</h3>
+    <p>下面左右兩個 3D 圖同步播放：左邊是<strong>邊界閉曲面 $S$</strong>，每個小片顏色按 $\mathbf{F}\cdot\mathbf{N}$，累積 $\iint_S \mathbf{F}\cdot\mathbf{N}\,dS$；右邊是<strong>立體 $Q$ 內部</strong>，每個樣本按 $\mathrm{div}\,\mathbf{F}$ 著色，累積 $\iiint_Q \mathrm{div}\,\mathbf{F}\,dV$。進度條只表示已掃描比例，左右數值才是積分近似值；動畫結束時兩邊應接近同一個目標值（驗證散度定理）。</p>
+
+    <div class="viz-layout">
+      <div class="canvas3d-panel">
+        <div class="dual-plot">
+          <div>
+            <div class="plot-subtitle">左：邊界 S 通量 ∫∫ F·N dS</div>
+            <div class="canvas-wrap" style="aspect-ratio:1/1; background:#1a1a2e;">
+              <div id="plot-15-7-iL" class="plot-host"></div>
+            </div>
+          </div>
+          <div>
+            <div class="plot-subtitle">右：體積 Q 散度 ∫∫∫ 散度 F dV</div>
+            <div class="canvas-wrap" style="aspect-ratio:1/1; background:#1a1a2e;">
+              <div id="plot-15-7-iR" class="plot-host"></div>
+            </div>
+          </div>
+        </div>
+        <div class="controls-bar">
+          <label style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent2);font-weight:600;">情境：</label>
+          <select class="field-select" id="dI-scene" style="max-width:380px;">
+            <option value="ex1">例題 1 · 四面體 + F = (x, y², z)（目標 63/2）</option>
+            <option value="ex2">例題 2 · 拋物面與底盤 + F = (2z, x, y²)（目標 0）</option>
+            <option value="ex4">例題 4 · 球 r=2 + F = (2x³, 2y³, 2z³)（目標 768π/5）</option>
+          </select>
+          <button class="btn btn-play" id="dI-play">▶ 播放</button>
+          <button class="btn btn-reset" id="dI-reset">↺ 重設</button>
+        </div>
+      </div>
+      <div class="side-panel">
+        <div class="info-card">
+          <div class="ic-title">場與立體</div>
+          <div class="ic-row"><span class="ic-label">F</span><span class="ic-value" id="dI-F">x i + y² j + z k</span></div>
+          <div class="ic-row"><span class="ic-label">散度 F</span><span class="ic-value" id="dI-div">2 + 2y</span></div>
+          <div class="ic-row"><span class="ic-label">Q</span><span class="ic-value" id="dI-Q">四面體</span></div>
+        </div>
+        <div class="accum-bar">
+          <div class="ab-label"><span>左 · 掃描 S</span><span id="dI-pctL">0%</span></div>
+          <div class="ab-track"><div class="ab-fill" id="dI-fillL" style="width:0%"></div></div>
+          <div class="ab-val" id="dI-accL">0.0000</div>
+        </div>
+        <div class="accum-bar">
+          <div class="ab-label"><span>右 · 掃描 Q</span><span id="dI-pctR">0%</span></div>
+          <div class="ab-track"><div class="ab-fill violet" id="dI-fillR" style="width:0%"></div></div>
+          <div class="ab-val" id="dI-accR">0.0000</div>
+          <div class="ab-target">目標：<span id="dI-tgt">63/2 = 31.500</span></div>
+        </div>
+        <div class="verify-banner pending" id="dI-banner">
+          <span class="vb-icon">⏳</span>
+          <span id="dI-banText">尚未播放</span>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">速度</div>
+          <div class="slider-row"><span class="slider-label">速度</span><input type="range" id="dI-speed" min="0.2" max="3" value="1" step="0.1"><span class="slider-val" id="dI-speedV">1.0×</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 1 · 四面體</div>
+      <div class="ex-title">設 $Q$ 為座標平面與 $2x + 2y + z = 6$ 所圍的四面體，$\mathbf{F} = x\,\mathbf{i} + y^2\,\mathbf{j} + z\,\mathbf{k}$。求 $\iint_S \mathbf{F}\cdot\mathbf{N}\,dS$。</div>
+      <span class="ex-method">用散度定理 + 重積分</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 算 散度 F</div>
+        <p>$\mathrm{div}\,\mathbf{F} = \dfrac{\partial}{\partial x}(x) + \dfrac{\partial}{\partial y}(y^2) + \dfrac{\partial}{\partial z}(z) = 1 + 2y + 1 = 2 + 2y$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 描述 Q</div>
+        <p>$Q$: $x\ge 0,\ y\ge 0,\ z\ge 0,\ 2x+2y+z\le 6$。<br>
+        在 $xy$ 投影上：$x+y\le 3$、$x,y\ge 0$。$z$ 從 0 到 $6 - 2x - 2y$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 3 · 三重積分</div>
+        <p>$\displaystyle\iiint_Q (2+2y)\,dV = \int_0^3\!\int_0^{3-x}\!\int_0^{6-2x-2y}(2+2y)\,dz\,dy\,dx$。<br>
+        內：$\int_0^{6-2x-2y}(2+2y)\,dz = (2+2y)(6-2x-2y)$。<br>
+        中（令 $u = 3-x$）：$\int_0^{u}(2+2y)(6-2x-2y)\,dy = \dfrac{2}{3}u^3 + 2u^2$（展開、合併、積分可得）。<br>
+        外（令 $t = 3-x$，$dt = -dx$，邊界對調符號抵消）：<br>
+        $\displaystyle\int_0^3 \left[\dfrac{2}{3}t^3 + 2t^2\right]dt = \left[\dfrac{t^4}{6} + \dfrac{2t^3}{3}\right]_0^3 = \dfrac{81}{6} + \dfrac{54}{3} = \dfrac{27}{2} + 18 = \dfrac{63}{2} = 31.5$。</p>
+      </div>
+      <div class="ex-answer">$\displaystyle\iint_S \mathbf{F}\cdot\mathbf{N}\,dS = \dfrac{63}{2} = 31.5$。若不用散度定理，需把 $S$ 拆成 4 個三角形面分別算通量加總 — 工作量大很多。示範 I 可數值驗證兩邊收斂到 31.5。</div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 2 · 拋物面與底盤</div>
+      <div class="ex-title">設 $Q$ 為拋物面 $z = 4 - x^2 - y^2$ 與 $xy$ 平面之間的立體，$\mathbf{F} = 2z\,\mathbf{i} + x\,\mathbf{j} + y^2\,\mathbf{k}$。驗證散度定理。</div>
+      <span class="ex-method">兩邊都算到 0</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 算 散度 F</div>
+        <p>$\mathrm{div}\,\mathbf{F} = \dfrac{\partial}{\partial x}(2z) + \dfrac{\partial}{\partial y}(x) + \dfrac{\partial}{\partial z}(y^2) = 0 + 0 + 0 = 0$。<br>
+        所以右邊 $\iiint_Q 0\,dV = 0$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 左邊邊界 = 拋物面 + 底盤</div>
+        <p>邊界 $S = S_1\cup S_2$：$S_1$ 是拋物面（外向 = 上方）；$S_2$ 是 $z=0$ 圓盤 $x^2+y^2\le 4$（外向 = 下方）。<br>分別算 $\iint_{S_1}\mathbf{F}\cdot\mathbf{N}\,dS$ 與 $\iint_{S_2}\mathbf{F}\cdot\mathbf{N}\,dS$，兩者一定互相抵消（散度定理保證總和 = 0）。</p>
+      </div>
+      <div class="ex-answer">$\iint_S \mathbf{F}\cdot\mathbf{N}\,dS = 0$。本例提醒：在散度定理條件滿足、且 $\mathrm{div}\,\mathbf{F}=0$ 的區域內，任何包住該區域的閉曲面淨通量為 0。示範 I 中此情境可看到左右累積值都維持在 0。</div>
+    </div>
+  </div>
+
+  <!-- §15.7.3 源點 / 匯點 / 不可壓縮 -->
+  <div id="sec-15-7-3" class="subsection">
+    <h3>15.7.3 物理直觀：散度 F = 單位體積的「淨流出」</h3>
+    <p>把散度定理用到一個很小的球 $S_\alpha$（半徑 $\alpha$）取極限，得到：</p>
+    <div class="eq-card">
+      <div class="eq-label">散度是單位體積的淨通量</div>
+      <div class="eq-formula">$\displaystyle \mathrm{div}\,\mathbf{F}(P) = \lim_{\alpha\to 0}\dfrac{1}{V(S_\alpha)}\iint_{S_\alpha}\mathbf{F}\cdot\mathbf{N}\,dS$</div>
+      <div class="eq-sub">「在 $P$ 點，每單位體積有多少流體流出 / 流入」 → div 是「源 / 匯 」的數量指標。</div>
+    </div>
+
+    <div class="dual-card" style="grid-template-columns:1fr 1fr 1fr;">
+      <div class="dc dc-noncons">
+        <div class="dc-title">源點 · 散度 F &gt; 0</div>
+        <p style="margin:0;font-size:.9rem;">在該點「噴出」流體，箭頭從 $P$ 向外輻射。典型例：$\mathbf{F} = (x,y,z)$，div = 3。</p>
+      </div>
+      <div class="dc dc-vec">
+        <div class="dc-title">匯點 · 散度 F &lt; 0</div>
+        <p style="margin:0;font-size:.9rem;">在該點「吸收」流體，箭頭朝 $P$ 收斂。典型例：$\mathbf{F} = -(x,y,z)$，div = $-3$。</p>
+      </div>
+      <div class="dc dc-cons">
+        <div class="dc-title">不可壓縮 · 散度 F = 0</div>
+        <p style="margin:0;font-size:.9rem;">局部既不生也不滅，流量平衡。典型例：旋轉場 $(-y,x,0)$、例題 2 的 $\mathbf{F}=(2z,x,y^2)$。</p>
+      </div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 4 · 通過球面的通量</div>
+      <div class="ex-title">設 $Q$ 為球 $x^2+y^2+z^2\le 4$，$\mathbf{F}(x,y,z) = 2x^3\,\mathbf{i} + 2y^3\,\mathbf{j} + 2z^3\,\mathbf{k}$。求向外通量。</div>
+      <span class="ex-method">散度 + 球座標</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 算 散度 F</div>
+        <p>$\mathrm{div}\,\mathbf{F} = 6x^2 + 6y^2 + 6z^2 = 6(x^2+y^2+z^2) = 6\rho^2$（球座標）。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 換球座標</div>
+        <p>$dV = \rho^2\sin\phi\,d\rho\,d\phi\,d\theta$，$\rho\in[0,2]$, $\phi\in[0,\pi]$, $\theta\in[0,2\pi]$。<br>
+        $\displaystyle\iiint_Q 6\rho^2\,dV = \int_0^{2\pi}\!\int_0^{\pi}\!\int_0^2 6\rho^2\cdot \rho^2\sin\phi\,d\rho\,d\phi\,d\theta$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 3 · 分離積分</div>
+        <p>$=6\cdot\!\left(\int_0^{2\pi} d\theta\right)\!\left(\int_0^\pi \sin\phi\,d\phi\right)\!\left(\int_0^2 \rho^4\,d\rho\right) = 6\cdot 2\pi\cdot 2\cdot \dfrac{32}{5} = \dfrac{768\pi}{5}$。</p>
+      </div>
+      <div class="ex-answer">$\displaystyle\iint_S\mathbf{F}\cdot\mathbf{N}\,dS = \dfrac{768\pi}{5} \approx 482.55$。直接算 $S$ 上面的通量（球面）也是可行的（用球面 $\mathbf{N} = \mathbf{r}/2$），但會繁瑣很多。</div>
+    </div>
+
+    <h3>概念測驗 15.7</h3>
+
+    <div class="quiz-card" id="quiz-15-7-1">
+      <span class="quiz-tag">Q15-7-1 · 定向要求</span>
+      <div class="quiz-q">散度定理 $\iint_S\mathbf{F}\cdot\mathbf{N}\,dS = \iiint_Q \mathrm{div}\,\mathbf{F}\,dV$ 中，$\mathbf{N}$ 必須？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">指向曲面內側</button>
+        <button class="quiz-opt"><strong>指向曲面外側</strong>（離開 $Q$）</button>
+        <button class="quiz-opt">與 $z$ 軸方向一致</button>
+        <button class="quiz-opt">隨便選一邊，符號自然會調整</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-card" id="quiz-15-7-2">
+      <span class="quiz-tag">Q15-7-2 · 源點 / 匯點判定</span>
+      <div class="quiz-q">設 $\mathbf{F}(x,y,z) = (-y,\,x,\,0)$（旋轉場），$\mathrm{div}\,\mathbf{F}$ 等於？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">$2$（源點）</button>
+        <button class="quiz-opt">$-2$（匯點）</button>
+        <button class="quiz-opt"><strong>$0$（不可壓縮）</strong></button>
+        <button class="quiz-opt">隨點而變，無法一概而論</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-card" id="quiz-15-7-3">
+      <span class="quiz-tag">Q15-7-3 · 用散度定理的時機</span>
+      <div class="quiz-q">下列何時用散度定理把表面通量 轉成體積分能<strong>顯著</strong>節省時間？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">$S$ 由多片光滑曲面拼成（如盒子、四面體、複合體）、且 散度 F 易算</button>
+        <button class="quiz-opt">$S$ 不封閉（如半球頂）</button>
+        <button class="quiz-opt">$\mathbf{F}$ 在 $Q$ 內某點奇異（如反平方場通過包含原點的閉曲面）</button>
+        <button class="quiz-opt">$\mathrm{div}\,\mathbf{F}$ 非常複雜、無法解析積分</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+  </div>
+</section>
+
+<section id="sec-15-8">
+  <div class="section-number">第 15.8 節 · Stokes 定理</div>
+  <h2>Stokes 定理：曲面 旋度積分 ↔ 邊界線積分</h2>
+  <p>Green 定理另一個推廣方向是把<strong>平面區域 + 邊界線</strong> 換成<strong>曲面 + 邊界線</strong>。這就是 <strong>Stokes 定理</strong>：在三維中，曲面 $S$ 上的 旋度積分 = 邊界 $C$ 上的線積分。在 §15.7 我們把 Green 散度形式推到三維得到散度定理；本節把 Green curl 形式推到三維得到 Stokes，整個第 15 章就在此處收束。</p>
+
+  <!-- §15.8.1 Statement -->
+  <div id="sec-15-8-1" class="subsection">
+    <h3>15.8.1 定理陳述</h3>
+
+    <div class="info-box violet">
+      <span class="info-label">右手定則</span>
+      <strong>定向約定：右手定則</strong>
+      <p style="margin:.55rem 0 .3rem;">$S$ 由單位法向量 $\mathbf{N}$ 定向；$C$ 為 $S$ 的邊界。<strong>正方向</strong>定義為：將右手拇指沿 $\mathbf{N}$ 方向，其餘四指捲曲的方向即 $C$ 的正方向。等價說法：站在 $\mathbf{N}$ 那一側往下看，$C$ 逆時針繞 $S$。</p>
+    </div>
+
+    <div class="theorem-card violet" data-thm="定理 15.13">
+      <div class="thm-name">Stokes 定理</div>
+      <p>設 $S$ 為定向曲面，邊界 $C$ 為分段光滑簡單閉曲線，正定向。若 $\mathbf{F}$ 的分量函數在含 $S$、$C$ 的開區域上具連續一階偏導，則
+      $$\oint_C \mathbf{F}\cdot d\mathbf{r} = \iint_S (\mathrm{curl}\,\mathbf{F})\cdot\mathbf{N}\,dS.$$</p>
+      <p style="font-size:.92rem;color:var(--surface-light);margin-top:.3rem;">特例：若 $S\subset xy$ 平面、$\mathbf{N}=\mathbf{k}$，則 $(\mathrm{curl}\,\mathbf{F})\cdot\mathbf{k} = \partial N/\partial x - \partial M/\partial y$，退化回 Green 定理！</p>
+    </div>
+  </div>
+
+  <!-- §15.8.2 示範 J -->
+  <div id="sec-15-8-2" class="subsection">
+    <h3>15.8.2 互動 示範 J：邊界線積分 ↔ 曲面 旋度積分（左右對照動畫）</h3>
+    <p>左右兩個 3D 圖同步播放：左邊標記沿邊界 $C$ 走、累積 $\oint_C \mathbf{F}\cdot d\mathbf{r}$；右邊曲面 $S$ 上樣本按 $(\mathrm{curl}\,\mathbf{F})\cdot\mathbf{N}$ 著色亮起、累積 $\iint_S(\mathrm{curl}\,\mathbf{F})\cdot\mathbf{N}\,dS$。進度條表示走過或掃過的比例，不代表數值正確率；最後左右累積值應接近同一個目標值。</p>
+
+    <div class="viz-layout">
+      <div class="canvas3d-panel">
+        <div class="dual-plot">
+          <div>
+            <div class="plot-subtitle">左：邊界 ∮_C F · dr</div>
+            <div class="canvas-wrap" style="aspect-ratio:1/1; background:#1a1a2e;">
+              <div id="plot-15-8-jL" class="plot-host"></div>
+            </div>
+          </div>
+          <div>
+            <div class="plot-subtitle">右：曲面 ∫∫ 旋度 F·N dS</div>
+            <div class="canvas-wrap" style="aspect-ratio:1/1; background:#1a1a2e;">
+              <div id="plot-15-8-jR" class="plot-host"></div>
+            </div>
+          </div>
+        </div>
+        <div class="controls-bar">
+          <label style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent2);font-weight:600;">情境：</label>
+          <select class="field-select" id="dJ-scene" style="max-width:380px;">
+            <option value="ex1">例題 1 · 平面三角形 + F = (−y², z, x)（目標 −9）</option>
+            <option value="ex2">例題 2 · 拋物面 + F = (2z, x, y²)（目標 4π）</option>
+          </select>
+          <button class="btn btn-play" id="dJ-play">▶ 播放</button>
+          <button class="btn btn-reset" id="dJ-reset">↺ 重設</button>
+        </div>
+      </div>
+      <div class="side-panel">
+        <div class="info-card">
+          <div class="ic-title">場與曲面</div>
+          <div class="ic-row"><span class="ic-label">F</span><span class="ic-value" id="dJ-F">-y² i + z j + x k</span></div>
+          <div class="ic-row"><span class="ic-label">旋度 F</span><span class="ic-value" id="dJ-curl">−i − j + 2y k</span></div>
+          <div class="ic-row"><span class="ic-label">S</span><span class="ic-value" id="dJ-S">平面三角形</span></div>
+        </div>
+        <div class="accum-bar">
+          <div class="ab-label"><span>左 · 沿 C 前進</span><span id="dJ-pctL">0%</span></div>
+          <div class="ab-track"><div class="ab-fill" id="dJ-fillL" style="width:0%"></div></div>
+          <div class="ab-val" id="dJ-accL">0.0000</div>
+        </div>
+        <div class="accum-bar">
+          <div class="ab-label"><span>右 · 掃描 S</span><span id="dJ-pctR">0%</span></div>
+          <div class="ab-track"><div class="ab-fill violet" id="dJ-fillR" style="width:0%"></div></div>
+          <div class="ab-val" id="dJ-accR">0.0000</div>
+          <div class="ab-target">目標：<span id="dJ-tgt">−9</span></div>
+        </div>
+        <div class="verify-banner pending" id="dJ-banner">
+          <span class="vb-icon">⏳</span>
+          <span id="dJ-banText">尚未播放</span>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">速度</div>
+          <div class="slider-row"><span class="slider-label">速度</span><input type="range" id="dJ-speed" min="0.2" max="3" value="1" step="0.1"><span class="slider-val" id="dJ-speedV">1.0×</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 1 · 平面上的三角形</div>
+      <div class="ex-title">設 $C$ 為平面 $2x + 2y + z = 6$ 在第一象限與三個座標面相交所形成的三角形，逆時針定向（$\mathbf{N}$ 朝向上方）。$\mathbf{F} = -y^2\,\mathbf{i} + z\,\mathbf{j} + x\,\mathbf{k}$。求 $\displaystyle\oint_C\mathbf{F}\cdot d\mathbf{r}$。</div>
+      <span class="ex-method">用 Stokes 轉成曲面積分</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 算 旋度 F</div>
+        <p>$M=-y^2,\ N=z,\ P=x$。<br>
+        $\mathbf{i}$ 分量：$P_y - N_z = 0 - 1 = -1$。<br>
+        $\mathbf{j}$ 分量（注意要加負號）：$-(P_x - M_z) = -(1 - 0) = -1$。<br>
+        $\mathbf{k}$ 分量：$N_x - M_y = 0 - (-2y) = 2y$。<br>
+        所以 $\mathrm{curl}\,\mathbf{F} = -\mathbf{i} - \mathbf{j} + 2y\,\mathbf{k}$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 取 S 與 N</div>
+        <p>$S$ 是該三角形的<strong>平面片</strong>。$z = 6 - 2x - 2y$ 上向定向：$\nabla G = (2, 2, 1)$，其中 $G = 2x+2y+z-6$。<br>
+        $\mathbf{N}\,dS = (2, 2, 1)\,dA$（直接形式，無需化單位向量），其中 $dA$ 為 $xy$ 投影區域 $R$（$x+y\le 3$，$x,y\ge 0$）。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 3 · 算 旋度 F · N dS</div>
+        <p>$\mathrm{curl}\,\mathbf{F}\cdot(2,2,1) = -2 - 2 + 2y = 2y - 4$。<br>
+        $\displaystyle\iint_S \mathrm{curl}\,\mathbf{F}\cdot\mathbf{N}\,dS = \iint_R (2y - 4)\,dA = \int_0^3\!\int_0^{3-y}(2y - 4)\,dx\,dy = \int_0^3 (2y - 4)(3 - y)\,dy$<br>
+        $= \int_0^3 (6y - 2y^2 - 12 + 4y)\,dy = \int_0^3 (-2y^2 + 10y - 12)\,dy = -18 + 45 - 36 = -9$。</p>
+      </div>
+      <div class="ex-answer">$\displaystyle\oint_C\mathbf{F}\cdot d\mathbf{r} = -9$。互動 示範 J 的例題 1 場景兩邊會收斂到 $-9$。</div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 2 · 在拋物面上驗證 Stokes 定理</div>
+      <div class="ex-title">設 $S$ 為 $z = 4 - x^2 - y^2$ 在 $z\ge 0$ 部分（上向定向），$C$ 是其邊界圓 $x^2+y^2=4$ 在 $xy$ 平面（逆時針）。$\mathbf{F} = 2z\,\mathbf{i} + x\,\mathbf{j} + y^2\,\mathbf{k}$。驗證 Stokes 定理。</div>
+      <span class="ex-method">兩邊都算 + 比較</span>
+      <div class="step-block">
+        <div class="step-num">方法 1：曲面積分</div>
+        <p>$M=2z,\ N=x,\ P=y^2$。<br>
+        旋度 F：$\mathbf{i}$ 分量 $P_y - N_z = 2y - 0 = 2y$；$\mathbf{j}$ 分量 $-(P_x - M_z) = -(0 - 2) = 2$；$\mathbf{k}$ 分量 $N_x - M_y = 1 - 0 = 1$。<br>
+        $\mathrm{curl}\,\mathbf{F} = (2y,\,2,\,1)$。<br>
+        $\nabla G = (2x, 2y, 1)$ for $G = z + x^2 + y^2 - 4$（上向）。<br>
+        $\mathrm{curl}\,\mathbf{F}\cdot\mathbf{N}\,dS = (2y)(2x) + (2)(2y) + (1)(1) = 4xy + 4y + 1$。<br>
+        積分區 $R$ 是圓盤 $x^2 + y^2\le 4$。對稱性：$\iint 4xy\,dA = 0$、$\iint 4y\,dA = 0$、$\iint 1\,dA = $ 面積 $= 4\pi$。<br>
+        ⇒ $\displaystyle\iint_S\mathrm{curl}\,\mathbf{F}\cdot\mathbf{N}\,dS = 4\pi$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">方法 2：邊界線積分</div>
+        <p>$C:\mathbf{r}(t) = (2\cos t,\,2\sin t,\,0),\ 0\le t\le 2\pi$。<br>
+        $\mathbf{r}'(t) = (-2\sin t,\,2\cos t,\,0)$。<br>
+        $\mathbf{F}$ 在 $C$ 上（$z=0$）：$\mathbf{F} = (0,\,2\cos t,\,4\sin^2 t)$。<br>
+        $\mathbf{F}\cdot\mathbf{r}' = 0\cdot(-2\sin t) + (2\cos t)(2\cos t) + (4\sin^2 t)(0) = 4\cos^2 t$。<br>
+        $\displaystyle\oint_C\mathbf{F}\cdot d\mathbf{r} = \int_0^{2\pi} 4\cos^2 t\,dt = 4\pi$。</p>
+      </div>
+      <div class="ex-answer">兩邊都得到 <strong>$4\pi$</strong>，Stokes 定理驗證成功！注意方法 1 用「上向」 $\mathbf{N}$，方法 2 的邊界採「逆時針」方向；兩者正是右手定則配對。</div>
+    </div>
+  </div>
+
+  <!-- §15.8.3 旋度物理意義 -->
+  <div id="sec-15-8-3" class="subsection">
+    <h3>15.8.3 物理直觀：curl 是「旋轉率」</h3>
+    <p>把 Stokes 用到一個很小的圓盤 $S_\alpha$（半徑 $\alpha$、中心 $P$、法向 $\mathbf{N}$）取極限：</p>
+    <div class="eq-card">
+      <div class="eq-label">旋度是單位面積的旋轉量</div>
+      <div class="eq-formula">$\displaystyle (\mathrm{curl}\,\mathbf{F})\cdot\mathbf{N} = \lim_{\alpha\to 0}\dfrac{1}{\pi\alpha^2}\oint_{C_\alpha}\mathbf{F}\cdot d\mathbf{r}$</div>
+      <div class="eq-sub">「在 $P$ 點繞 $\mathbf{N}$ 軸的<strong>每單位面積</strong>環流量」 = (旋度 F)·N。當 旋度 F 與 N 同向時，旋轉最強。</div>
+    </div>
+
+    <p>所以 Stokes 定理可以這樣讀：「曲面 $S$ 上每一點的<em>局部旋轉</em>取平均（曲面積分），等於它的邊界 $C$ 上<em>總體流量</em>（線積分）」 — 局部與整體互通。</p>
+
+    <h4>整章地圖：從基本定理一路推廣</h4>
+    <table class="conv-table" style="font-size:.83rem;">
+      <thead><tr><th>定理</th><th>左邊（邊界）</th><th>右邊（內部）</th><th>維度</th></tr></thead>
+      <tbody>
+        <tr><td>微積分基本定理</td><td>$f(b) - f(a)$</td><td>$\int_a^b f'(x)\,dx$</td><td>$0\text{D} \to 1\text{D}$</td></tr>
+        <tr><td>線積分基本定理 (定理 15.5)</td><td>$f(B) - f(A)$</td><td>$\int_C \nabla f\cdot d\mathbf{r}$</td><td>$0\text{D} \to 1\text{D}$</td></tr>
+        <tr><td>Green 定理 (定理 15.8)</td><td>$\oint_C M\,dx + N\,dy$</td><td>$\iint_R (N_x - M_y)\,dA$</td><td>$1\text{D} \to 2\text{D}$</td></tr>
+        <tr><td>Stokes 定理 (定理 15.13)</td><td>$\oint_C \mathbf{F}\cdot d\mathbf{r}$</td><td>$\iint_S (\mathrm{curl}\,\mathbf{F})\cdot\mathbf{N}\,dS$</td><td>$1\text{D} \to 2\text{D}$（在 3D 中）</td></tr>
+        <tr><td>散度定理 (定理 15.12)</td><td>$\iint_S \mathbf{F}\cdot\mathbf{N}\,dS$</td><td>$\iiint_Q \mathrm{div}\,\mathbf{F}\,dV$</td><td>$2\text{D} \to 3\text{D}$</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:.92rem;color:var(--muted);">共同模式：「邊界上的某種<strong>累積量</strong>」=「內部的<strong>某種導數</strong>的整體積分」。這是「<em>Stokes 定理的廣義版本</em>」在不同維度的化身。</p>
+
+    <h3>概念測驗 15.8</h3>
+
+    <div class="quiz-card" id="quiz-15-8-1">
+      <span class="quiz-tag">Q15-8-1 · 右手定則</span>
+      <div class="quiz-q">若 $S$ 由法向量 $\mathbf{N} = \mathbf{k}$ 定向（朝上），邊界 $C$ 的正方向在 $xy$ 平面上是？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">順時針（從上看）</button>
+        <button class="quiz-opt"><strong>逆時針</strong>（從上看 / 從 $\mathbf{N}$ 那一側看）</button>
+        <button class="quiz-opt">隨便哪個方向都可以</button>
+        <button class="quiz-opt">與 $\mathbf{N}$ 平行</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-card" id="quiz-15-8-2">
+      <span class="quiz-tag">Q15-8-2 · 三大定理共通模式</span>
+      <div class="quiz-q">下列哪一個敘述<strong>正確</strong>地描述 Green、Stokes、散度三定理的共通結構？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">三者都是把「曲線積分」轉成「點值」。</button>
+        <button class="quiz-opt"><strong>「邊界上的某種累積」= 「內部上的某種導數積分」</strong>，差別只在維度與算子（curl, div）。</button>
+        <button class="quiz-opt">三者都要求 $\mathbf{F}$ 保守。</button>
+        <button class="quiz-opt">三者都只適用在 2D。</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-card" id="quiz-15-8-3">
+      <span class="quiz-tag">Q15-8-3 · 旋度 F = 0 ⇒ ?</span>
+      <div class="quiz-q">若在某開區域上 $\mathrm{curl}\,\mathbf{F} = \mathbf{0}$，下列何者<strong>正確</strong>？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">該區域內任何閉曲面 $S$ 的 $\iint_S\mathrm{curl}\,\mathbf{F}\cdot\mathbf{N}\,dS = 0$ ⇒ 由 Stokes，任何邊界 $C$ 的 $\oint_C\mathbf{F}\cdot d\mathbf{r} = 0$ ⇒ $\mathbf{F}$ 保守（在單連通區域上）。</button>
+        <button class="quiz-opt">$\mathbf{F} = \mathbf{0}$。</button>
+        <button class="quiz-opt">$\mathrm{div}\,\mathbf{F} = 0$。</button>
+        <button class="quiz-opt">沒有任何意義。</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+  </div>
+</section>
+
+<section id="sec-ref">
+  <div class="section-number">速查 · 公式速查表</div>
+  <h2>第 15.5–15.8 節公式速查</h2>
+  <p>把後四節要記住的公式、定理、運算子整理在一頁。本表延續 <a href="vector_analysis.html#sec-ref" style="color:var(--accent2);">15.1–15.4 速查表</a>，可串接整章使用。</p>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">15.5</span>參數曲面</div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">參數曲面（定義 15.8）</span>
+        <span class="ref-card-name-en">r(u,v) over D</span>
+      </div>
+      <div class="ref-card-eq">$\mathbf{r}(u,v) = x(u,v)\,\mathbf{i} + y(u,v)\,\mathbf{j} + z(u,v)\,\mathbf{k},\quad (u,v)\in D$</div>
+      <p class="ref-note">$z = f(x,y)$ 的自然參數化為 $\mathbf{r}(x,y) = x\,\mathbf{i} + y\,\mathbf{j} + f(x,y)\,\mathbf{k}$。</p>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">法向量（定義 15.9）</span>
+        <span class="ref-card-name-en">N = r_u × r_v</span>
+      </div>
+      <div class="ref-card-eq">$\mathbf{N} = \mathbf{r}_u\times\mathbf{r}_v = \begin{vmatrix}\mathbf{i}&\mathbf{j}&\mathbf{k}\\ x_u&y_u&z_u\\ x_v&y_v&z_v\end{vmatrix}$</div>
+      <p class="ref-note">$\mathbf{N}\ne\mathbf{0}$ 處可定義切平面；$\mathbf{N}=\mathbf{0}$ 處不光滑（如圓錐尖端）。</p>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">表面面積（定義 15.10）</span>
+        <span class="ref-card-name-en">∫∫_D ‖r_u × r_v‖ dA</span>
+      </div>
+      <div class="ref-card-eq">$\mathrm{Area}(S) = \displaystyle\iint_D \|\mathbf{r}_u\times\mathbf{r}_v\|\,dA$</div>
+      <p class="ref-note">特例：$z = f(x,y)$ ⇒ $\|\cdot\| = \sqrt{1 + f_x^2 + f_y^2}$；旋轉面 ⇒ $2\pi\int f\sqrt{1+(f')^2}\,du$。</p>
+    </div>
+  </div>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">15.6</span>表面積分</div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">純量表面積分 (定理 15.10)</span>
+        <span class="ref-card-name-en">∫∫_S f dS</span>
+      </div>
+      <div class="ref-card-eq">$\displaystyle\iint_S f\,dS = \iint_R f(x,y,g(x,y))\sqrt{1+g_x^2+g_y^2}\,dA = \iint_D f(\mathbf{r}(u,v))\|\mathbf{r}_u\times\mathbf{r}_v\|\,dA$</div>
+      <p class="ref-note">對定向<strong>無關</strong>。$f\equiv 1$ 即面積。</p>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">通量積分（定義 15.11 + 定理 15.11）</span>
+        <span class="ref-card-name-en">通量 $\iint_S F\cdot N\,dS$</span>
+      </div>
+      <div class="ref-card-eq">$\displaystyle\iint_S\mathbf{F}\cdot\mathbf{N}\,dS = \iint_R\mathbf{F}\cdot(-g_x,\,-g_y,\,1)\,dA$ (上向)</div>
+      <p class="ref-note">參數形式：$\iint_D \mathbf{F}(\mathbf{r}(u,v))\cdot(\mathbf{r}_u\times\mathbf{r}_v)\,dA$。方向反轉 ⇒ 通量變號。</p>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">Gauss 定律（電磁學）</span>
+        <span class="ref-card-name-en">例題 6 結論</span>
+      </div>
+      <div class="ref-card-eq">$\displaystyle\iint_S \mathbf{E}\cdot\mathbf{N}\,dS = 4\pi k q$</div>
+      <p class="ref-note">$E$ 場通過<strong>任何</strong>包圍電荷 $q$ 的閉曲面，總通量都是 $4\pi k q$ — 與曲面形狀、半徑無關。</p>
+    </div>
+  </div>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">15.7</span>散度定理</div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">散度定理 (定理 15.12)</span>
+        <span class="ref-card-name-en">散度定理 / Gauss 定理</span>
+      </div>
+      <div class="ref-card-eq">$\displaystyle\iint_S\mathbf{F}\cdot\mathbf{N}\,dS = \iiint_Q \mathrm{div}\,\mathbf{F}\,dV$</div>
+      <p class="ref-note">前提：$Q$ 立體有限、$S$ 為其閉曲面外向定向、$\mathbf{F}$ 在 $Q$ 上一階偏導連續。</p>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">散度 F 的物理意義</span>
+        <span class="ref-card-name-en">源點 / 匯點 / 不可壓縮</span>
+      </div>
+      <div class="ref-card-eq">$\displaystyle\mathrm{div}\,\mathbf{F}(P) = \lim_{\alpha\to 0}\dfrac{1}{V(S_\alpha)}\iint_{S_\alpha}\mathbf{F}\cdot\mathbf{N}\,dS$</div>
+      <p class="ref-note">$> 0$ source；$< 0$ sink；$= 0$ incompressible。</p>
+    </div>
+  </div>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">15.8</span>Stokes 定理</div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">Stokes 定理 (定理 15.13)</span>
+        <span class="ref-card-name-en">Stokes 定理</span>
+      </div>
+      <div class="ref-card-eq">$\displaystyle\oint_C\mathbf{F}\cdot d\mathbf{r} = \iint_S(\mathrm{curl}\,\mathbf{F})\cdot\mathbf{N}\,dS$</div>
+      <p class="ref-note">前提：$S$ 定向曲面、$C$ 為邊界、右手定則（$\mathbf{N}$ 與 $C$ 的方向相容）。當 $S\subset xy$ 平面、$\mathbf{N}=\mathbf{k}$ ⇒ 退化為 Green 定理。</p>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">旋度 F 的物理意義</span>
+        <span class="ref-card-name-en">單位面積旋轉量</span>
+      </div>
+      <div class="ref-card-eq">$\displaystyle(\mathrm{curl}\,\mathbf{F})\cdot\mathbf{N} = \lim_{\alpha\to 0}\dfrac{1}{\pi\alpha^2}\oint_{C_\alpha}\mathbf{F}\cdot d\mathbf{r}$</div>
+      <p class="ref-note">curl 方向 = 旋轉軸；長度 = 旋轉強度。fluid 沿 $C$ 環流的「微觀繞圈率」。</p>
+    </div>
+  </div>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">MAP</span>整章五大定理</div>
+    <table class="conv-table" style="font-size:.83rem;">
+      <thead><tr><th>定理</th><th>邊界 (low-dim)</th><th>內部 (high-dim)</th><th>所在節</th></tr></thead>
+      <tbody>
+        <tr><td>線積分基本定理</td><td>$f(B) - f(A)$</td><td>$\int_C \nabla f\cdot d\mathbf{r}$</td><td><a href="vector_analysis.html#sec-15-3" style="color:var(--accent2);">§15.3</a></td></tr>
+        <tr><td>Green 定理</td><td>$\oint_C M\,dx + N\,dy$</td><td>$\iint_R (N_x - M_y)\,dA$</td><td><a href="vector_analysis.html#sec-15-4" style="color:var(--accent2);">§15.4</a></td></tr>
+        <tr><td>Stokes 定理</td><td>$\oint_C \mathbf{F}\cdot d\mathbf{r}$</td><td>$\iint_S (\mathrm{curl}\,\mathbf{F})\cdot\mathbf{N}\,dS$</td><td>§15.8</td></tr>
+        <tr><td>散度定理</td><td>$\iint_S \mathbf{F}\cdot\mathbf{N}\,dS$</td><td>$\iiint_Q \mathrm{div}\,\mathbf{F}\,dV$</td><td>§15.7</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:.92rem;color:var(--muted);margin-top:.6rem;">同一個 idea，「邊界累積 = 內部導數的整體積分」，在 1D、2D、3D 都有對應版本。這正是 Stokes 定理的廣義內容。</p>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  第 15 章向量分析 · 15.5–15.8 互動講義 · 使用 MathJax + Plotly.js · <a href="vector_analysis.html" style="color:var(--accent2);">← 回 15.1–15.4</a>
+</footer>
+
+<script>
+/* ============================================================
+   全域工具（與 vector_analysis.html 對應，少量擴充 3D 設定）
+   ============================================================ */
+const PLOT_CONFIG_2D = { displayModeBar:false, responsive:true };
+const PLOT_CONFIG_3D = { displayModeBar:false, responsive:true };
+
+function plotLayout2D(opts={}){
+  return Object.assign({
+    paper_bgcolor:'#fbf7ed',
+    plot_bgcolor:'#fbf7ed',
+    margin:{l:42,r:14,t:14,b:38},
+    font:{family:"'JetBrains Mono', monospace", size:11, color:'#1a1a2e'},
+    xaxis:{zerolinecolor:'#bbb', gridcolor:'#e3dccc', linecolor:'#888', mirror:true, title:{text:'x', standoff:6}},
+    yaxis:{zerolinecolor:'#bbb', gridcolor:'#e3dccc', linecolor:'#888', mirror:true, scaleanchor:'x', scaleratio:1, title:{text:'y', standoff:6}},
+    showlegend:false,
+    hovermode:'closest'
+  }, opts);
+}
+function plotLayout3D(opts={}){
+  return Object.assign({
+    paper_bgcolor:'#1a1a2e',
+    plot_bgcolor:'#1a1a2e',
+    margin:{l:0,r:0,t:0,b:0},
+    font:{family:"'JetBrains Mono', monospace", size:11, color:'#e8e6df'},
+    scene:{
+      xaxis:{title:'x', backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#e74c3c'},
+      yaxis:{title:'y', backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#27ae60'},
+      zaxis:{title:'z', backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#2980b9'},
+      camera:{eye:{x:1.7,y:1.7,z:1.4}},
+      aspectmode:'cube'
+    },
+    showlegend:false
+  }, opts);
+}
+
+// 通用 quiz 工具
+function makeChoiceQuiz(cardId, correctIndex, hints){
+  const card = document.getElementById(cardId); if(!card) return;
+  const opts = card.querySelectorAll('.quiz-opt');
+  const fb = card.querySelector('.quiz-feedback');
+  opts.forEach((opt,i)=>{
+    opt.addEventListener('click',()=>{
+      opts.forEach(o=>o.classList.remove('correct','wrong'));
+      if(i===correctIndex){
+        opt.classList.add('correct');
+        fb.className='quiz-feedback show ok';
+        fb.innerHTML = hints && hints.ok ? hints.ok : '✓ 正確！';
+      } else {
+        opt.classList.add('wrong');
+        fb.className='quiz-feedback show no';
+        fb.innerHTML = (hints && hints.wrong && hints.wrong[i]) ? hints.wrong[i] : '再想想。';
+      }
+      if(window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([fb]);
+    });
+  });
+}
+
+// 3D 向量（單條線段 + cone 箭頭頭）trace 產生器
+function makeVectorTrace(start, end, color){
+  const lx=[start[0], end[0]], ly=[start[1], end[1]], lz=[start[2], end[2]];
+  return {
+    type:'scatter3d', mode:'lines', x:lx, y:ly, z:lz,
+    line:{color:color, width:6}, hoverinfo:'skip', showlegend:false
+  };
+}
+function makeConeTip(p, v, color, sizeref=0.4){
+  return {
+    type:'cone', x:[p[0]], y:[p[1]], z:[p[2]],
+    u:[v[0]], v:[v[1]], w:[v[2]],
+    colorscale:[[0,color],[1,color]], showscale:false, sizemode:'absolute', sizeref:sizeref, anchor:'tail', hoverinfo:'skip'
+  };
+}
+
+/* ============================================================
+   SIDE-NAV SCROLLSPY
+   ============================================================ */
+(function(){
+  const items = document.querySelectorAll('.side-nav .sn-item');
+  const sectionIds = Array.from(items).map(a => a.getAttribute('href').slice(1));
+  if (typeof IntersectionObserver === 'undefined') return;
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        const id = en.target.id;
+        items.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-30% 0px -55% 0px', threshold: 0 });
+  sectionIds.forEach(id => { const el = document.getElementById(id); if (el) observer.observe(el); });
+})();
+
+/* ============================================================
+   §15.5 示範 F — 6 種參數曲面 + 切平面探針
+   ============================================================ */
+(function(){
+  const host = document.getElementById('plot-15-5-f'); if(!host) return;
+
+  // 每個曲面的 r, r_u, r_v, u/v range, area target
+  const SURFACES = {
+    cylinder: {
+      r:(u,v)=>[3*Math.cos(u), 3*Math.sin(u), v],
+      ru:(u,v)=>[-3*Math.sin(u), 3*Math.cos(u), 0],
+      rv:(u,v)=>[0, 0, 1],
+      umin:0, umax:2*Math.PI, vmin:0, vmax:4,
+      // 半徑 3、高 4 ⇒ 側面積 2π·3·4 = 24π
+      areaTarget:24*Math.PI, targetLabel:'24π ≈ 75.40',
+      camera:{eye:{x:1.4,y:1.4,z:0.9}}, viewBounds:[-4,4,-4,4,0,4]
+    },
+    cone: {
+      r:(u,v)=>[u*Math.cos(v), u*Math.sin(v), u],
+      ru:(u,v)=>[Math.cos(v), Math.sin(v), 1],
+      rv:(u,v)=>[-u*Math.sin(v), u*Math.cos(v), 0],
+      umin:0, umax:3, vmin:0, vmax:2*Math.PI,
+      // ‖ru×rv‖ = u√2，∫₀^{2π}∫₀³ u√2 du dv = 9π√2
+      areaTarget:9*Math.PI*Math.SQRT2, targetLabel:'9π√2 ≈ 39.98',
+      camera:{eye:{x:1.4,y:1.4,z:1.0}}, viewBounds:[-3,3,-3,3,0,3]
+    },
+    sphere: {
+      r:(u,v)=>[Math.sin(u)*Math.cos(v), Math.sin(u)*Math.sin(v), Math.cos(u)],
+      ru:(u,v)=>[Math.cos(u)*Math.cos(v), Math.cos(u)*Math.sin(v), -Math.sin(u)],
+      rv:(u,v)=>[-Math.sin(u)*Math.sin(v), Math.sin(u)*Math.cos(v), 0],
+      umin:0, umax:Math.PI, vmin:0, vmax:2*Math.PI,
+      // 4π
+      areaTarget:4*Math.PI, targetLabel:'4π ≈ 12.566',
+      camera:{eye:{x:1.5,y:1.5,z:1.1}}, viewBounds:[-1.2,1.2,-1.2,1.2,-1.2,1.2]
+    },
+    paraboloid: {
+      r:(u,v)=>[u, v, u*u+v*v],
+      ru:(u,v)=>[1, 0, 2*u],
+      rv:(u,v)=>[0, 1, 2*v],
+      umin:-2, umax:2, vmin:-2, vmax:2,
+      // ∫∫ √(1+4u²+4v²) du dv 在 [-2,2]² 上以極座標於 disk r≤2√2 內近似（這是方形非圓盤，不轉極座標）
+      // 用數值積分填入（在 init 中）
+      areaTarget:null, targetLabel:'(數值積分)',
+      camera:{eye:{x:1.5,y:1.5,z:0.9}}, viewBounds:[-2.3,2.3,-2.3,2.3,0,8]
+    },
+    torus: {
+      // 大半徑 R=2, 小半徑 r=1，總面積 = (2π R)(2π r) = 8π²
+      r:(u,v)=>[(2+Math.cos(u))*Math.cos(v), (2+Math.cos(u))*Math.sin(v), Math.sin(u)],
+      ru:(u,v)=>[-Math.sin(u)*Math.cos(v), -Math.sin(u)*Math.sin(v), Math.cos(u)],
+      rv:(u,v)=>[-(2+Math.cos(u))*Math.sin(v), (2+Math.cos(u))*Math.cos(v), 0],
+      umin:0, umax:2*Math.PI, vmin:0, vmax:2*Math.PI,
+      areaTarget:8*Math.PI*Math.PI, targetLabel:'8π² ≈ 78.96',
+      camera:{eye:{x:1.6,y:1.6,z:1.2}}, viewBounds:[-3.3,3.3,-3.3,3.3,-1.2,1.2]
+    },
+    helicoid: {
+      r:(u,v)=>[u*Math.cos(v), u*Math.sin(v), 0.5*v],
+      ru:(u,v)=>[Math.cos(v), Math.sin(v), 0],
+      rv:(u,v)=>[-u*Math.sin(v), u*Math.cos(v), 0.5],
+      umin:0, umax:2, vmin:0, vmax:4*Math.PI,
+      areaTarget:null, targetLabel:'(數值積分)',
+      camera:{eye:{x:1.4,y:1.4,z:0.6}}, viewBounds:[-2.2,2.2,-2.2,2.2,0,2*Math.PI]
+    }
+  };
+
+  // 數值算面積
+  function numericArea(surf, Nu=120, Nv=120){
+    const du = (surf.umax-surf.umin)/Nu, dv = (surf.vmax-surf.vmin)/Nv;
+    let acc=0;
+    for(let i=0;i<Nu;i++){
+      for(let j=0;j<Nv;j++){
+        const u = surf.umin + du*(i+0.5);
+        const v = surf.vmin + dv*(j+0.5);
+        const ru = surf.ru(u,v), rv = surf.rv(u,v);
+        const cx = ru[1]*rv[2]-ru[2]*rv[1];
+        const cy = ru[2]*rv[0]-ru[0]*rv[2];
+        const cz = ru[0]*rv[1]-ru[1]*rv[0];
+        acc += Math.sqrt(cx*cx+cy*cy+cz*cz) * du * dv;
+      }
+    }
+    return acc;
+  }
+
+  // 在 init 階段補齊 numeric targets
+  for(const key of ['paraboloid','helicoid']){
+    const s = SURFACES[key];
+    if(s.areaTarget == null){
+      s.areaTarget = numericArea(s);
+      s.targetLabel = `≈ ${s.areaTarget.toFixed(4)}`;
+    }
+  }
+
+  const DEFAULT_F_STATE = {surf:'cylinder', u01:0.4, v01:0.3, scan:1.0, tan:false};
+  let state = {...DEFAULT_F_STATE};
+
+  function uVal(surf){ return surf.umin + (surf.umax-surf.umin)*state.u01; }
+  function vVal(surf){ return surf.vmin + (surf.vmax-surf.vmin)*state.v01; }
+
+  function buildSurface(surf, scanFrac){
+    const Nu=46, Nv=46;
+    const uMaxScan = surf.umin + (surf.umax-surf.umin)*scanFrac;
+    const xs=[], ys=[], zs=[];
+    for(let i=0;i<Nu;i++){
+      const row1=[], row2=[], row3=[];
+      const u = surf.umin + (uMaxScan-surf.umin)*(i/(Nu-1));
+      for(let j=0;j<Nv;j++){
+        const v = surf.vmin + (surf.vmax-surf.vmin)*(j/(Nv-1));
+        const p = surf.r(u,v);
+        row1.push(p[0]); row2.push(p[1]); row3.push(p[2]);
+      }
+      xs.push(row1); ys.push(row2); zs.push(row3);
+    }
+    return {x:xs, y:ys, z:zs};
+  }
+
+  function syncControls(){
+    document.getElementById('dF-surf').value = state.surf;
+    document.getElementById('dF-u').value = state.u01;
+    document.getElementById('dF-v').value = state.v01;
+    document.getElementById('dF-scan').value = state.scan;
+    document.getElementById('dF-scanV').textContent = `${(state.scan*100).toFixed(0)}%`;
+    document.getElementById('dF-tan').classList.toggle('off', !state.tan);
+  }
+
+  function render(){
+    syncControls();
+    const surf = SURFACES[state.surf];
+    const traces = [];
+    // 主曲面
+    const sf = buildSurface(surf, state.scan);
+    traces.push({
+      type:'surface', x:sf.x, y:sf.y, z:sf.z,
+      colorscale:[[0,'#5e3473'],[0.5,'#9b59b6'],[1,'#d8a3e8']],
+      showscale:false, opacity:0.78, hoverinfo:'skip',
+      contours:{x:{show:false},y:{show:false},z:{show:false}}
+    });
+    // 探針點
+    const u0 = uVal(surf), v0 = vVal(surf);
+    const P = surf.r(u0, v0);
+    const ru = surf.ru(u0, v0), rv = surf.rv(u0, v0);
+    const N = [ru[1]*rv[2]-ru[2]*rv[1], ru[2]*rv[0]-ru[0]*rv[2], ru[0]*rv[1]-ru[1]*rv[0]];
+    const Nmag = Math.sqrt(N[0]*N[0]+N[1]*N[1]+N[2]*N[2]);
+
+    // 三條向量（從 P 出發）— 用合適長度
+    const scaleVec = 0.7;
+    function endpoint(v){ return [P[0]+v[0]*scaleVec, P[1]+v[1]*scaleVec, P[2]+v[2]*scaleVec]; }
+    traces.push(makeVectorTrace(P, endpoint(ru), '#e74c3c'));
+    traces.push(makeConeTip(endpoint(ru), ru, '#e74c3c', 0.18));
+    traces.push(makeVectorTrace(P, endpoint(rv), '#27ae60'));
+    traces.push(makeConeTip(endpoint(rv), rv, '#27ae60', 0.18));
+    const Nscale = Nmag>0 ? 0.9/Math.max(Nmag,0.5) : 0;
+    const Nend = [P[0]+N[0]*Nscale, P[1]+N[1]*Nscale, P[2]+N[2]*Nscale];
+    traces.push(makeVectorTrace(P, Nend, '#5dade2'));
+    traces.push(makeConeTip(Nend, N, '#5dade2', 0.22));
+    // P 本身
+    traces.push({type:'scatter3d', mode:'markers', x:[P[0]], y:[P[1]], z:[P[2]],
+      marker:{size:5, color:'#f1c40f'}, hoverinfo:'skip', showlegend:false});
+
+    // 切平面（透明黃色四邊形 mesh3d）
+    if(state.tan && Nmag>1e-6){
+      // 在 P 周圍以 ru, rv 為兩邊張一塊矩形
+      const s = 1.0;
+      const A = [P[0]-ru[0]*s-rv[0]*s, P[1]-ru[1]*s-rv[1]*s, P[2]-ru[2]*s-rv[2]*s];
+      const B = [P[0]+ru[0]*s-rv[0]*s, P[1]+ru[1]*s-rv[1]*s, P[2]+ru[2]*s-rv[2]*s];
+      const C = [P[0]+ru[0]*s+rv[0]*s, P[1]+ru[1]*s+rv[1]*s, P[2]+ru[2]*s+rv[2]*s];
+      const D = [P[0]-ru[0]*s+rv[0]*s, P[1]-ru[1]*s+rv[1]*s, P[2]-ru[2]*s+rv[2]*s];
+      traces.push({
+        type:'mesh3d',
+        x:[A[0],B[0],C[0],D[0]], y:[A[1],B[1],C[1],D[1]], z:[A[2],B[2],C[2],D[2]],
+        i:[0,0], j:[1,2], k:[2,3],
+        color:'#f1c40f', opacity:0.32, hoverinfo:'skip', showlegend:false
+      });
+    }
+
+    const v = surf.viewBounds;
+    Plotly.react(host, traces, plotLayout3D({
+      scene:{
+        xaxis:{title:'x', range:[v[0],v[1]], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#e74c3c'},
+        yaxis:{title:'y', range:[v[2],v[3]], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#27ae60'},
+        zaxis:{title:'z', range:[v[4],v[5]], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#2980b9'},
+        camera:surf.camera,
+        aspectmode:'cube'
+      }
+    }), PLOT_CONFIG_3D);
+
+    // 更新 info-card
+    function fmt(arr){ return `(${arr[0].toFixed(2)}, ${arr[1].toFixed(2)}, ${arr[2].toFixed(2)})`; }
+    document.getElementById('dF-uV').textContent = `u₀ = ${u0.toFixed(3)}`;
+    document.getElementById('dF-vV').textContent = `v₀ = ${v0.toFixed(3)}`;
+    document.getElementById('dF-P').textContent = fmt(P);
+    document.getElementById('dF-ru').textContent = fmt(ru);
+    document.getElementById('dF-rv').textContent = fmt(rv);
+    document.getElementById('dF-N').textContent = fmt(N);
+    document.getElementById('dF-Nmag').textContent = Nmag.toFixed(3);
+
+    // 累積面積（從 umin 到 uMaxScan 的部分面積）
+    const uMaxScan = surf.umin + (surf.umax-surf.umin)*state.scan;
+    const partialArea = numericArea({
+      ...surf, umin:surf.umin, umax:uMaxScan
+    }, 60, 60);
+    document.getElementById('dF-area').textContent = partialArea.toFixed(4);
+    document.getElementById('dF-tgt').textContent = surf.targetLabel;
+    const pct = state.scan * 100;
+    document.getElementById('dF-fill').style.width = pct + '%';
+    document.getElementById('dF-pct').textContent = pct.toFixed(0) + '%';
+  }
+
+  document.getElementById('dF-u').addEventListener('input', e=>{ state.u01 = parseFloat(e.target.value); render(); });
+  document.getElementById('dF-v').addEventListener('input', e=>{ state.v01 = parseFloat(e.target.value); render(); });
+  document.getElementById('dF-scan').addEventListener('input', e=>{
+    state.scan = parseFloat(e.target.value);
+    document.getElementById('dF-scanV').textContent = `${(state.scan*100).toFixed(0)}%`;
+    render();
+  });
+	  document.getElementById('dF-surf').addEventListener('change', e=>{ state.surf = e.target.value; render(); });
+	  const tanBtn = document.getElementById('dF-tan');
+	  tanBtn.classList.add('off');
+	  tanBtn.addEventListener('click', ()=>{ state.tan = !state.tan; tanBtn.classList.toggle('off', !state.tan); render(); });
+	  document.getElementById('dF-reset').addEventListener('click', ()=>{
+	    state = {...DEFAULT_F_STATE};
+	    render();
+	  });
+
+  render();
+})();
+/* ============================================================
+   §15.6 示範 H — 表面積分 / 通量同步動畫
+   ============================================================ */
+(function(){
+  const host = document.getElementById('plot-15-6-h'); if(!host) return;
+
+  // 場景：r(u,v) 與 f / F·N、target
+  const SCENES = {
+    ex2: {
+      label:'例題 2', kind:'純量 ∫∫ f dS',
+      fF:'f = x + z', S:'圓柱片 y²+z²=9, 0≤x≤4',
+      target: 12*Math.PI + 36, targetLabel:'12π+36 ≈ 73.700',
+      umin:0, umax:4, vmin:0, vmax:Math.PI/2,  // u=x, v=θ
+      r:(u,v)=>[u, 3*Math.cos(v), 3*Math.sin(v)],
+      dS:(u,v)=>3,
+      value:(u,v)=>{ const p=[u,3*Math.cos(v),3*Math.sin(v)]; return p[0] + p[2]; },
+      camera:{eye:{x:1.6,y:1.5,z:1.0}}, viewBounds:[0,4.4,-3.4,3.4,-0.2,3.4]
+    },
+    ex6: {
+      label:'例題 6', kind:'通量 ∫∫ F·N dS',
+      fF:'F = kq r/‖r‖³ (k=q=1, a=1)', S:'單位球面',
+      target: 4*Math.PI, targetLabel:'4πkq = 4π ≈ 12.566',
+      umin:0, umax:Math.PI, vmin:0, vmax:2*Math.PI, // u=phi, v=theta
+      r:(u,v)=>[Math.sin(u)*Math.cos(v), Math.sin(u)*Math.sin(v), Math.cos(u)],
+      // dS for unit sphere = sin u du dv，F·N = 1（半徑 1 時）
+      dS:(u,v)=>Math.sin(u),
+      value:(u,v)=>1.0,
+      camera:{eye:{x:1.5,y:1.5,z:1.1}}, viewBounds:[-1.2,1.2,-1.2,1.2,-1.2,1.2]
+    },
+    zflux: {
+      label:'F=zk upper hemisphere', kind:'通量 ∫∫ F·N dS',
+      fF:'F = z k', S:'上半球 z=√(1-x²-y²)',
+      target: 2*Math.PI/3, targetLabel:'2π/3 ≈ 2.094',
+      umin:0, umax:Math.PI/2, vmin:0, vmax:2*Math.PI, // u=phi 0..π/2 上半球
+      r:(u,v)=>[Math.sin(u)*Math.cos(v), Math.sin(u)*Math.sin(v), Math.cos(u)],
+      // 上半球 F=zk，N=r（單位球面外向），F·N = z·z = z² = cos²u
+      // dS = sin u du dv
+      dS:(u,v)=>Math.sin(u),
+      value:(u,v)=>{ const z=Math.cos(u); return z*z; },
+      camera:{eye:{x:1.5,y:1.5,z:1.1}}, viewBounds:[-1.2,1.2,-1.2,1.2,-0.2,1.2]
+    }
+  };
+
+  let state = {scene:'ex2', t:0, playing:false, speed:1.0};
+  let animId=null, lastTime=0;
+  // 預先排序所有 patches（按 u 主序、v 次序）：每個 patch 對應 (i,j)
+  let patches=null;
+
+  function buildPatches(){
+    const s = SCENES[state.scene];
+    const Nu=22, Nv=22;
+    const du = (s.umax-s.umin)/Nu, dv = (s.vmax-s.vmin)/Nv;
+    const pts = [];
+    for(let i=0;i<Nu;i++){
+      for(let j=0;j<Nv;j++){
+        const u = s.umin + du*(i+0.5);
+        const v = s.vmin + dv*(j+0.5);
+        const p = s.r(u, v);
+        const w = s.value(u, v) * s.dS(u, v) * du * dv;
+        pts.push({u, v, x:p[0], y:p[1], z:p[2], w, val:s.value(u,v)});
+      }
+    }
+    patches = {pts, du, dv};
+  }
+
+  function init(){
+    const s = SCENES[state.scene];
+    document.getElementById('dH-kind').textContent = s.kind;
+    document.getElementById('dH-fF').textContent = s.fF;
+    document.getElementById('dH-S').textContent = s.S;
+    document.getElementById('dH-tgt').textContent = s.targetLabel;
+    buildPatches();
+    drawFull();
+    update(0);
+  }
+
+  function drawFull(){
+    const s = SCENES[state.scene];
+    // 主曲面（半透明）
+    const Nu=46, Nv=46;
+    const xs=[], ys=[], zs=[];
+    for(let i=0;i<Nu;i++){
+      const r1=[], r2=[], r3=[];
+      const u = s.umin + (s.umax-s.umin)*(i/(Nu-1));
+      for(let j=0;j<Nv;j++){
+        const v = s.vmin + (s.vmax-s.vmin)*(j/(Nv-1));
+        const p = s.r(u,v);
+        r1.push(p[0]); r2.push(p[1]); r3.push(p[2]);
+      }
+      xs.push(r1); ys.push(r2); zs.push(r3);
+    }
+    const surface = {
+      type:'surface', x:xs, y:ys, z:zs,
+      colorscale:[[0,'#3b3b50'],[1,'#5e3473']],
+      opacity:0.25, showscale:false, hoverinfo:'skip',
+      contours:{x:{show:false},y:{show:false},z:{show:false}}
+    };
+    // 累積點（依進度動）
+    const sampled = {
+      type:'scatter3d', mode:'markers', x:[], y:[], z:[],
+      marker:{size:5, color:[], colorscale:'Viridis', cmin:0, cmax:1, showscale:false},
+      hoverinfo:'skip'
+    };
+    const v=s.viewBounds;
+    Plotly.react(host, [surface, sampled], plotLayout3D({
+      scene:{
+        xaxis:{title:'x', range:[v[0],v[1]], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#e74c3c'},
+        yaxis:{title:'y', range:[v[2],v[3]], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#27ae60'},
+        zaxis:{title:'z', range:[v[4],v[5]], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#2980b9'},
+        camera:s.camera, aspectmode:'cube'
+      }
+    }), PLOT_CONFIG_3D);
+  }
+
+  function update(t){
+    state.t = Math.max(0, Math.min(1, t));
+    if(!patches) buildPatches();
+    const n = Math.floor(patches.pts.length * state.t);
+    const xs=[], ys=[], zs=[], cs=[];
+    let acc=0, maxV=1e-9;
+    const s = SCENES[state.scene];
+    for(let i=0;i<patches.pts.length;i++) if(Math.abs(patches.pts[i].val)>maxV) maxV=Math.abs(patches.pts[i].val);
+    for(let i=0;i<n;i++){
+      const p = patches.pts[i];
+      xs.push(p.x); ys.push(p.y); zs.push(p.z);
+      cs.push(p.val / maxV);
+      acc += p.w;
+    }
+    Plotly.restyle(host, {x:[xs], y:[ys], z:[zs], 'marker.color':[cs]}, [1]);
+    document.getElementById('dH-t').textContent = `進度 ${(state.t*100).toFixed(0)}%`;
+    document.getElementById('dH-acc').textContent = acc.toFixed(4);
+    const pct = state.t * 100;
+    document.getElementById('dH-fill').style.width = pct + '%';
+    document.getElementById('dH-pct').textContent = pct.toFixed(0) + '%';
+  }
+
+  function animate(ts){
+    if(!lastTime) lastTime = ts;
+    const dt = (ts-lastTime)/1000; lastTime = ts;
+    const newT = state.t + state.speed * 0.32 * dt;
+    if(newT >= 1){ update(1); stop(); return; }
+    update(newT);
+    animId = requestAnimationFrame(animate);
+  }
+  function play(){ if(state.playing) return; state.playing=true; lastTime=0; document.getElementById('dH-play').textContent='⏸ 暫停'; document.getElementById('dH-play').classList.add('active'); animId=requestAnimationFrame(animate); }
+  function stop(){ state.playing=false; cancelAnimationFrame(animId); document.getElementById('dH-play').textContent='▶ 播放'; document.getElementById('dH-play').classList.remove('active'); }
+  function reset(){ stop(); update(0); }
+  document.getElementById('dH-play').addEventListener('click', ()=>{ state.playing? stop() : play(); });
+  document.getElementById('dH-reset').addEventListener('click', reset);
+  document.getElementById('dH-scene').addEventListener('change', e=>{ stop(); state.scene = e.target.value; init(); });
+  document.getElementById('dH-speed').addEventListener('input', e=>{ state.speed = parseFloat(e.target.value); document.getElementById('dH-speedV').textContent = state.speed.toFixed(1)+'×'; });
+
+  init();
+})();
+/* ============================================================
+   §15.7 示範 I — 散度定理 邊界 ↔ 體積 同步動畫
+   ============================================================ */
+(function(){
+  const hL = document.getElementById('plot-15-7-iL');
+  const hR = document.getElementById('plot-15-7-iR');
+  if(!hL || !hR) return;
+
+  // 三個情境
+  const SCENES = {
+    ex1: {
+      label:'四面體', F:'x i + y² j + z k', div:'2 + 2y',
+      divFn:(x,y,z)=>2 + 2*y,
+      target: 63/2, targetLabel:'63/2 = 31.500',
+      // 立體 Q: x,y,z ≥ 0, 2x+2y+z ≤ 6
+      inQ:(x,y,z)=>x>=0 && y>=0 && z>=0 && 2*x+2*y+z<=6,
+      // 邊界面 (S 共 4 個三角片)：產生每個 patch 的中心位置與 F·N·dA
+      buildBoundaryPatches: buildTetrahedronBoundary,
+      view:[-0.5, 3.5, -0.5, 3.5, -0.5, 6.5],
+      // 內部 sample 範圍
+      qBox:[0, 3, 0, 3, 0, 6]
+    },
+    ex2: {
+      label:'拋物面 + 圓盤', F:'2z i + x j + y² k', div:'0',
+      divFn:(x,y,z)=>0,
+      target: 0, targetLabel:'0',
+      inQ:(x,y,z)=>z>=0 && z<=4-x*x-y*y && x*x+y*y<=4,
+      buildBoundaryPatches: buildParaboloidBoundary,
+      view:[-2.4, 2.4, -2.4, 2.4, -0.4, 4.4],
+      qBox:[-2, 2, -2, 2, 0, 4]
+    },
+    ex4: {
+      label:'球 r=2', F:'2x³ i + 2y³ j + 2z³ k', div:'6(x² + y² + z²)',
+      divFn:(x,y,z)=>6*(x*x + y*y + z*z),
+      target: 768*Math.PI/5, targetLabel:'768π/5 ≈ 482.549',
+      inQ:(x,y,z)=>x*x+y*y+z*z<=4,
+      buildBoundaryPatches: buildSphereBoundary,
+      view:[-2.4, 2.4, -2.4, 2.4, -2.4, 2.4],
+      qBox:[-2, 2, -2, 2, -2, 2]
+    }
+  };
+
+  function tetraDivField(p){ return [p[0], p[1]*p[1], p[2]]; }
+  function parabolDivField(p){ return [2*p[2], p[0], p[1]*p[1]]; }
+  function sphereDivField(p){ return [2*p[0]*p[0]*p[0], 2*p[1]*p[1]*p[1], 2*p[2]*p[2]*p[2]]; }
+  const FIELD_FN = { ex1: tetraDivField, ex2: parabolDivField, ex4: sphereDivField };
+
+  // 四面體邊界：4 個三角形面（座標平面 x=0, y=0, z=0 + 斜面 2x+2y+z=6）
+  function buildTetrahedronBoundary(){
+    const patches = [];
+    // 通量 = F · N dS。用每個三角形的中點規則細分。
+    // (1) x=0 面 (-N = -x̂)：F=(0, y², z), -i 法 → F·N = 0; flux = 0 trivially
+    // (2) y=0 面 (-N = -ŷ)：F=(x, 0, z), F·N = 0
+    // (3) z=0 面 (-N = -ẑ)：F=(x, y², 0), F·N = 0
+    // 共 3 個座標面通量都是 0。但動畫上仍要顯示它們。
+    // (4) 斜面 2x+2y+z=6 (N向外 = (2,2,1)/3，dS = 3 dA on xy projection R = {x+y≤3})
+    const F = tetraDivField;
+    // 為三個座標面取 sample（顯示但不貢獻通量）
+    function sampleTriangleXY(z0, axis){
+      // 三角形：在 axis 平面 (x=0 / y=0 / z=0) 上
+      // x=0 面: 三角 y+z/2≤3 (因 2y+z≤6) y∈[0,3], z∈[0,6-2y]
+      // y=0 面: 三角 x+z/2≤3, x∈[0,3], z∈[0,6-2x]
+      // z=0 面: 三角 x+y≤3, x∈[0,3], y∈[0,3-x]
+      const N=18;
+      const ps=[];
+      if(axis==='x0'){
+        const du=3/N, dv=6/N;
+        for(let i=0;i<N;i++) for(let j=0;j<N;j++){
+          const y=du*(i+0.5), z=dv*(j+0.5);
+          if(2*y+z<=6){
+            ps.push({x:0, y, z, w:0, val:0});
+          }
+        }
+      } else if(axis==='y0'){
+        const du=3/N, dv=6/N;
+        for(let i=0;i<N;i++) for(let j=0;j<N;j++){
+          const x=du*(i+0.5), z=dv*(j+0.5);
+          if(2*x+z<=6){
+            ps.push({x, y:0, z, w:0, val:0});
+          }
+        }
+      } else { // z0
+        const du=3/N;
+        for(let i=0;i<N;i++) for(let j=0;j<N;j++){
+          const x=du*(i+0.5), y=du*(j+0.5);
+          if(x+y<=3){
+            ps.push({x, y, z:0, w:0, val:0});
+          }
+        }
+      }
+      return ps;
+    }
+    patches.push(...sampleTriangleXY(0,'x0'));
+    patches.push(...sampleTriangleXY(0,'y0'));
+    patches.push(...sampleTriangleXY(0,'z0'));
+    // 斜面：z = 6-2x-2y, 在 R={x≥0,y≥0,x+y≤3} 投影; ∇G = (2,2,1)
+    // 用三角形映射 x=3a, y=3(1-a)b；雅可比 = 9(1-a)，比方格裁切更穩定。
+    const N=80;
+    const da = 1/N, db = 1/N;
+    for(let i=0;i<N;i++){
+      for(let j=0;j<N;j++){
+        const a=da*(i+0.5), b=db*(j+0.5);
+        const x=3*a, y=3*(1-a)*b;
+        const z = 6 - 2*x - 2*y;
+        const jac = 9*(1-a);
+        const M = x, Ny = y*y, P = z;
+        const fn = 2*M + 2*Ny + P; // F · (2,2,1)
+        patches.push({x, y, z, w: fn*jac*da*db, val: fn});
+      }
+    }
+    return patches;
+  }
+
+  function buildParaboloidBoundary(){
+    const patches = [];
+    // 下盤 (z=0, x²+y²≤4)；N=-k 向下
+    // F·N = -P = -y² where P = y² → contrib = -y² dA
+    const N1=28; const dxy = 4/N1;
+    for(let i=0;i<N1;i++){
+      for(let j=0;j<N1;j++){
+        const x=-2+dxy*(i+0.5), y=-2+dxy*(j+0.5);
+        if(x*x+y*y<=4){
+          const val = -y*y; // F·N for downward at z=0 with F=(2z,x,y²)→F·(0,0,-1) = -y²
+          patches.push({x, y, z:0, w:val*dxy*dxy, val});
+        }
+      }
+    }
+    // 拋物面 z = 4 - x² - y², 上向 N = (-g_x, -g_y, 1) = (2x, 2y, 1)
+    // F·N dA = (2z)(2x) + (x)(2y) + (y²)(1) = 4xz + 2xy + y² with z = 4-x²-y²
+    const N2=28; const dxy2 = 4/N2;
+    for(let i=0;i<N2;i++){
+      for(let j=0;j<N2;j++){
+        const x=-2+dxy2*(i+0.5), y=-2+dxy2*(j+0.5);
+        if(x*x+y*y<=4){
+          const z = 4 - x*x - y*y;
+          const val = 4*x*z + 2*x*y + y*y;
+          patches.push({x, y, z, w:val*dxy2*dxy2, val});
+        }
+      }
+    }
+    return patches;
+  }
+
+  function buildSphereBoundary(){
+    const patches = [];
+    // 球面 r=2，參數 u=phi∈[0,π], v=θ∈[0,2π]
+    // F = (2x³, 2y³, 2z³)，N 為單位向外 = r/2，F·N = (2x³·x + 2y³·y + 2z³·z)/2 = x⁴+y⁴+z⁴
+    // dS = a² sin u du dv = 4 sin u du dv (a=2)
+    const Nu=48, Nv=72;
+    const du = Math.PI/Nu, dv = 2*Math.PI/Nv;
+    for(let i=0;i<Nu;i++){
+      for(let j=0;j<Nv;j++){
+        const u=du*(i+0.5), v=dv*(j+0.5);
+        const x = 2*Math.sin(u)*Math.cos(v);
+        const y = 2*Math.sin(u)*Math.sin(v);
+        const z = 2*Math.cos(u);
+        const val = x*x*x*x + y*y*y*y + z*z*z*z;
+        const dS = 4*Math.sin(u)*du*dv;
+        patches.push({x, y, z, w: val*dS, val});
+      }
+    }
+    return patches;
+  }
+
+  // 建立 Q 內部 sample points
+  function buildVolumeSamples(scene){
+    const s = SCENES[scene];
+    if(scene === 'ex1'){
+      const N=28;
+      const samples = [];
+      const da=1/N, db=1/N, dc=1/N;
+      for(let i=0;i<N;i++){
+        for(let j=0;j<N;j++){
+          for(let k=0;k<N;k++){
+            const a=da*(i+0.5), b=db*(j+0.5), c=dc*(k+0.5);
+            const x=3*a;
+            const y=3*(1-a)*b;
+            const z=6*(1-a)*(1-b)*c;
+            const jac=54*(1-a)*(1-a)*(1-b);
+            const val=s.divFn(x,y,z);
+            samples.push({x, y, z, w:val*jac*da*db*dc, val});
+          }
+        }
+      }
+      return samples;
+    }
+    if(scene === 'ex4'){
+      const Nr=20, Np=24, Nt=36;
+      const samples = [];
+      const dr=2/Nr, dp=Math.PI/Np, dt=2*Math.PI/Nt;
+      for(let i=0;i<Nr;i++){
+        const r0=i*dr, r1=(i+1)*dr, rho=(r0+r1)/2;
+        // 例題 4 has 散度 F = 6rho^2, so the radial part is integrated exactly over each shell.
+        const radialWeight = (6/5)*(Math.pow(r1,5)-Math.pow(r0,5));
+        for(let j=0;j<Np;j++){
+          const p0=j*dp, p1=(j+1)*dp, phi=(p0+p1)/2;
+          const polarWeight = Math.cos(p0)-Math.cos(p1);
+          for(let k=0;k<Nt;k++){
+            const th=dt*(k+0.5);
+            const x=rho*Math.sin(phi)*Math.cos(th);
+            const y=rho*Math.sin(phi)*Math.sin(th);
+            const z=rho*Math.cos(phi);
+            const val=s.divFn(x,y,z);
+            samples.push({x, y, z, w:radialWeight*polarWeight*dt, val});
+          }
+        }
+      }
+      return samples;
+    }
+    const N=42; // fallback grid; currently used by the zero-divergence paraboloid scene
+    const samples = [];
+    const dx = (s.qBox[1]-s.qBox[0])/N;
+    const dy = (s.qBox[3]-s.qBox[2])/N;
+    const dz = (s.qBox[5]-s.qBox[4])/N;
+    const dV = dx*dy*dz;
+    for(let i=0;i<N;i++){
+      for(let j=0;j<N;j++){
+        for(let k=0;k<N;k++){
+          const x = s.qBox[0]+dx*(i+0.5);
+          const y = s.qBox[2]+dy*(j+0.5);
+          const z = s.qBox[4]+dz*(k+0.5);
+          if(s.inQ(x,y,z)){
+            samples.push({x, y, z, w: s.divFn(x,y,z)*dV, val: s.divFn(x,y,z)});
+          }
+        }
+      }
+    }
+    return samples;
+  }
+
+  let state = {scene:'ex1', t:0, playing:false, speed:1.0};
+  let animId=null, lastTime=0;
+  let bdPatches=null, volSamples=null;
+
+  function init(){
+    const s = SCENES[state.scene];
+    document.getElementById('dI-F').textContent = s.F;
+    document.getElementById('dI-div').textContent = s.div;
+    document.getElementById('dI-Q').textContent = s.label;
+    document.getElementById('dI-tgt').textContent = s.targetLabel;
+    bdPatches = s.buildBoundaryPatches();
+    volSamples = buildVolumeSamples(state.scene);
+    drawLeft(); drawRight();
+    update(0);
+  }
+
+  function drawLeft(){
+    const s = SCENES[state.scene];
+    // 邊界曲面骨架（取一些 trace 顯示）
+    const traces = [];
+    if(state.scene==='ex1'){
+      // 四面體 4 個三角形
+      const V0=[0,0,0], V1=[3,0,0], V2=[0,3,0], V3=[0,0,6];
+      const tris = [[V0,V1,V2],[V0,V1,V3],[V0,V2,V3],[V1,V2,V3]];
+      const xs=[], ys=[], zs=[];
+      const ii=[], jj=[], kk=[];
+      tris.forEach((t,idx)=>{
+        const base = idx*3;
+        for(let p of t){ xs.push(p[0]); ys.push(p[1]); zs.push(p[2]); }
+        ii.push(base); jj.push(base+1); kk.push(base+2);
+      });
+      traces.push({type:'mesh3d', x:xs, y:ys, z:zs, i:ii, j:jj, k:kk,
+        color:'#9b59b6', opacity:0.18, hoverinfo:'skip', flatshading:true});
+    } else if(state.scene==='ex2'){
+      // 拋物面
+      const Nu=36, Nv=36;
+      const xs=[], ys=[], zs=[];
+      for(let i=0;i<Nu;i++){
+        const row1=[], row2=[], row3=[];
+        const u = -2 + 4*(i/(Nu-1));
+        for(let j=0;j<Nv;j++){
+          const v = -2 + 4*(j/(Nv-1));
+          if(u*u+v*v<=4){ row1.push(u); row2.push(v); row3.push(4-u*u-v*v); }
+          else { row1.push(null); row2.push(null); row3.push(null); }
+        }
+        xs.push(row1); ys.push(row2); zs.push(row3);
+      }
+      traces.push({type:'surface', x:xs, y:ys, z:zs, colorscale:[[0,'#5e3473'],[1,'#9b59b6']],
+        opacity:0.18, showscale:false, hoverinfo:'skip',
+        contours:{x:{show:false},y:{show:false},z:{show:false}}});
+      // 底盤
+      const Nd=20; const xs2=[], ys2=[], zs2=[];
+      for(let i=0;i<Nd;i++){
+        const row1=[], row2=[], row3=[];
+        const u = -2 + 4*(i/(Nd-1));
+        for(let j=0;j<Nd;j++){
+          const v = -2 + 4*(j/(Nd-1));
+          if(u*u+v*v<=4){ row1.push(u); row2.push(v); row3.push(0); }
+          else { row1.push(null); row2.push(null); row3.push(null); }
+        }
+        xs2.push(row1); ys2.push(row2); zs2.push(row3);
+      }
+      traces.push({type:'surface', x:xs2, y:ys2, z:zs2,
+        colorscale:[[0,'#c39bd3'],[1,'#c39bd3']], opacity:0.18, showscale:false, hoverinfo:'skip',
+        contours:{x:{show:false},y:{show:false},z:{show:false}}});
+    } else if(state.scene==='ex4'){
+      // 球面
+      const Nu=36, Nv=36;
+      const xs=[], ys=[], zs=[];
+      for(let i=0;i<Nu;i++){
+        const row1=[], row2=[], row3=[];
+        const u = Math.PI*(i/(Nu-1));
+        for(let j=0;j<Nv;j++){
+          const v = 2*Math.PI*(j/(Nv-1));
+          row1.push(2*Math.sin(u)*Math.cos(v));
+          row2.push(2*Math.sin(u)*Math.sin(v));
+          row3.push(2*Math.cos(u));
+        }
+        xs.push(row1); ys.push(row2); zs.push(row3);
+      }
+      traces.push({type:'surface', x:xs, y:ys, z:zs, colorscale:[[0,'#5e3473'],[1,'#9b59b6']],
+        opacity:0.18, showscale:false, hoverinfo:'skip',
+        contours:{x:{show:false},y:{show:false},z:{show:false}}});
+    }
+    // 沿邊界亮起的 patch markers
+    traces.push({type:'scatter3d', mode:'markers',
+      x:[], y:[], z:[],
+      marker:{size:3, color:[], colorscale:[[0,'#3498db'],[0.5,'#f1c40f'],[1,'#e74c3c']], cmin:-5, cmax:5, showscale:false},
+      hoverinfo:'skip'});
+    const v = SCENES[state.scene].view;
+    Plotly.react(hL, traces, plotLayout3D({
+      scene:{
+        xaxis:{title:'x', range:[v[0],v[1]], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#e74c3c'},
+        yaxis:{title:'y', range:[v[2],v[3]], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#27ae60'},
+        zaxis:{title:'z', range:[v[4],v[5]], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#2980b9'},
+        camera:{eye:{x:1.6,y:1.6,z:1.0}}, aspectmode:'cube'
+      }
+    }), PLOT_CONFIG_3D);
+  }
+
+  function drawRight(){
+    const s = SCENES[state.scene];
+    // 內部 sample 散點（會在 update 中改 x/y/z）
+    const traces = [{
+      type:'scatter3d', mode:'markers',
+      x:[], y:[], z:[],
+      marker:{size:2, color:[], colorscale:[[0,'#3498db'],[0.5,'#f1c40f'],[1,'#e74c3c']], cmin:-5, cmax:30, showscale:true,
+        colorbar:{title:{text:'散度 F',side:'right'},thickness:8,len:0.45,x:1.02}},
+      hoverinfo:'skip'
+    }];
+    const v = s.view;
+    Plotly.react(hR, traces, plotLayout3D({
+      scene:{
+        xaxis:{title:'x', range:[v[0],v[1]], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#e74c3c'},
+        yaxis:{title:'y', range:[v[2],v[3]], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#27ae60'},
+        zaxis:{title:'z', range:[v[4],v[5]], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#2980b9'},
+        camera:{eye:{x:1.6,y:1.6,z:1.0}}, aspectmode:'cube'
+      }
+    }), PLOT_CONFIG_3D);
+  }
+
+  function update(t){
+    state.t = Math.max(0, Math.min(1, t));
+    const s = SCENES[state.scene];
+    // 左邊：累積邊界 patches
+    const nB = Math.floor(bdPatches.length * state.t);
+    const xs=[], ys=[], zs=[], cs=[];
+    let accL=0;
+    let maxAbsVal=1e-9;
+    for(let i=0;i<bdPatches.length;i++) if(Math.abs(bdPatches[i].val)>maxAbsVal) maxAbsVal=Math.abs(bdPatches[i].val);
+    for(let i=0;i<nB;i++){
+      const p=bdPatches[i];
+      xs.push(p.x); ys.push(p.y); zs.push(p.z);
+      cs.push(p.val/maxAbsVal);
+      accL += p.w;
+    }
+    Plotly.restyle(hL, {x:[xs], y:[ys], z:[zs], 'marker.color':[cs]}, [hL.data.length-1]);
+    document.getElementById('dI-accL').textContent = accL.toFixed(4);
+    const tgtAbs = Math.max(Math.abs(s.target), 1);
+    const pctL = state.t * 100;
+    document.getElementById('dI-fillL').style.width = pctL + '%';
+    document.getElementById('dI-pctL').textContent = pctL.toFixed(0) + '%';
+
+    // 右邊：累積體積 sample
+    const nV = Math.floor(volSamples.length * state.t);
+    const vx=[], vy=[], vz=[], vc=[];
+    let accR=0;
+    for(let i=0;i<nV;i++){
+      const p=volSamples[i];
+      vx.push(p.x); vy.push(p.y); vz.push(p.z);
+      vc.push(p.val);
+      accR += p.w;
+    }
+    Plotly.restyle(hR, {x:[vx], y:[vy], z:[vz], 'marker.color':[vc]}, [0]);
+    document.getElementById('dI-accR').textContent = accR.toFixed(4);
+    const pctR = state.t * 100;
+    document.getElementById('dI-fillR').style.width = pctR + '%';
+    document.getElementById('dI-pctR').textContent = pctR.toFixed(0) + '%';
+
+    // verify banner
+    const banner = document.getElementById('dI-banner');
+    const banText = document.getElementById('dI-banText');
+    if(state.t<0.001){
+      banner.className='verify-banner pending';
+      banner.querySelector('.vb-icon').textContent='⏳';
+      banText.textContent='尚未播放';
+    } else if(state.t<0.99){
+      banner.className='verify-banner pending';
+      banner.querySelector('.vb-icon').textContent='⏳';
+      banText.textContent='動畫進行中…';
+    } else {
+      const err = Math.abs(accL - accR);
+      const tol = Math.max(0.05, 0.0025*tgtAbs);
+      if(err < tol){
+        banner.className='verify-banner ok';
+        banner.querySelector('.vb-icon').textContent='✓';
+        banText.textContent=`散度定理通過：左 ${accL.toFixed(4)}，右 ${accR.toFixed(4)}，誤差 ${err.toFixed(4)}`;
+      } else {
+        banner.className='verify-banner no';
+        banner.querySelector('.vb-icon').textContent='⚠';
+        banText.textContent=`左 ${accL.toFixed(4)}，右 ${accR.toFixed(4)}，誤差 ${err.toFixed(4)}（離散化所致）`;
+      }
+    }
+  }
+
+  function animate(ts){
+    if(!lastTime) lastTime = ts;
+    const dt = (ts-lastTime)/1000; lastTime = ts;
+    const newT = state.t + state.speed * 0.25 * dt;
+    if(newT>=1){ update(1); stop(); return; }
+    update(newT);
+    animId = requestAnimationFrame(animate);
+  }
+  function play(){ if(state.playing) return; state.playing=true; lastTime=0; document.getElementById('dI-play').textContent='⏸ 暫停'; document.getElementById('dI-play').classList.add('active'); animId=requestAnimationFrame(animate); }
+  function stop(){ state.playing=false; cancelAnimationFrame(animId); document.getElementById('dI-play').textContent='▶ 播放'; document.getElementById('dI-play').classList.remove('active'); }
+  function reset(){ stop(); update(0); }
+  document.getElementById('dI-play').addEventListener('click', ()=>{ state.playing? stop() : play(); });
+  document.getElementById('dI-reset').addEventListener('click', reset);
+  document.getElementById('dI-scene').addEventListener('change', e=>{ stop(); state.scene = e.target.value; init(); });
+  document.getElementById('dI-speed').addEventListener('input', e=>{ state.speed = parseFloat(e.target.value); document.getElementById('dI-speedV').textContent = state.speed.toFixed(1)+'×'; });
+
+  init();
+})();
+/* ============================================================
+   §15.8 示範 J — Stokes 定理 邊界 ↔ 曲面 同步動畫
+   ============================================================ */
+(function(){
+  const hL = document.getElementById('plot-15-8-jL');
+  const hR = document.getElementById('plot-15-8-jR');
+  if(!hL || !hR) return;
+
+  // 兩個情境
+  const SCENES = {
+    ex1: {
+      label:'三角形 in plane 2x+2y+z=6', F:'-y² i + z j + x k', curl:'-i - j + 2y k', S:'平面三角形',
+      target: -9, targetLabel:'−9',
+      // 三角形邊界: (3,0,0) → (0,3,0) → (0,0,6) → back
+      // s∈[0,1]: 三段，s∈[0, 1/3], [1/3, 2/3], [2/3, 1]
+      boundary:(s)=>{
+        // s ∈ [0,1] 分三段；每段 u ∈ [0,1]，u = 3·(s − segStart)
+        // dp 是 dr/ds（全域參數 s 的導數），= (dr/du) · (du/ds) = (dr/du) · 3
+        if(s<1/3){
+          const u = s*3;
+          return {p:[3-3*u, 3*u, 0], dp:[-9, 9, 0]};
+        } else if(s<2/3){
+          const u = (s-1/3)*3;
+          return {p:[0, 3-3*u, 6*u], dp:[0, -9, 18]};
+        } else {
+          const u = (s-2/3)*3;
+          return {p:[3*u, 0, 6-6*u], dp:[9, 0, -18]};
+        }
+      },
+      Ffn:(p)=>[-p[1]*p[1], p[2], p[0]],
+      // 曲面 sample（R 為三角形 x+y≤3 in xy plane）
+      buildSurface:()=>{
+        const pts=[];
+        const N=80; const da=1/N, db=1/N;
+        for(let i=0;i<N;i++) for(let j=0;j<N;j++){
+          const a=da*(i+0.5), b=db*(j+0.5);
+          const x=3*a, y=3*(1-a)*b;
+          const z = 6 - 2*x - 2*y;
+          const jac = 9*(1-a);
+          // 旋度 F · N dA = (-1, -1, 2y) · (2, 2, 1) dA = (2y - 4) dA
+          const val = 2*y - 4;
+          pts.push({x, y, z, w: val*jac*da*db, val});
+        }
+        return pts;
+      },
+      drawSurface:(holder)=>{
+        const V1=[3,0,0], V2=[0,3,0], V3=[0,0,6];
+        return {type:'mesh3d',
+          x:[V1[0],V2[0],V3[0]], y:[V1[1],V2[1],V3[1]], z:[V1[2],V2[2],V3[2]],
+          i:[0], j:[1], k:[2], color:'#9b59b6', opacity:0.28, hoverinfo:'skip', flatshading:true};
+      },
+      view:[-0.5, 3.5, -0.5, 3.5, -0.5, 6.5]
+    },
+    ex2: {
+      label:'拋物面 z = 4-x²-y², z≥0', F:'2z i + x j + y² k', curl:'2y i + 2 j + k', S:'拋物面上半',
+      target: 4*Math.PI, targetLabel:'4π ≈ 12.566',
+      boundary:(s)=>{
+        const t = 2*Math.PI*s;
+        return {p:[2*Math.cos(t), 2*Math.sin(t), 0], dp:[-2*Math.sin(t)*2*Math.PI, 2*Math.cos(t)*2*Math.PI, 0], speed:1};
+      },
+      Ffn:(p)=>[2*p[2], p[0], p[1]*p[1]],
+      buildSurface:()=>{
+        const pts=[];
+        const N=28; const dxy=4/N;
+        for(let i=0;i<N;i++) for(let j=0;j<N;j++){
+          const x=-2+dxy*(i+0.5), y=-2+dxy*(j+0.5);
+          if(x*x+y*y<=4){
+            const z = 4 - x*x - y*y;
+            // 旋度 F · N dA = (2y, 2, 1) · (2x, 2y, 1) dA = 4xy + 4y + 1
+            const val = 4*x*y + 4*y + 1;
+            pts.push({x, y, z, w: val*dxy*dxy, val});
+          }
+        }
+        return pts;
+      },
+      drawSurface:()=>{
+        const N=36;
+        const xs=[], ys=[], zs=[];
+        for(let i=0;i<N;i++){
+          const r1=[], r2=[], r3=[];
+          const u=-2+4*(i/(N-1));
+          for(let j=0;j<N;j++){
+            const v=-2+4*(j/(N-1));
+            if(u*u+v*v<=4){ r1.push(u); r2.push(v); r3.push(4-u*u-v*v); }
+            else { r1.push(null); r2.push(null); r3.push(null); }
+          }
+          xs.push(r1); ys.push(r2); zs.push(r3);
+        }
+        return {type:'surface', x:xs, y:ys, z:zs,
+          colorscale:[[0,'#5e3473'],[1,'#9b59b6']], opacity:0.28, showscale:false, hoverinfo:'skip',
+          contours:{x:{show:false},y:{show:false},z:{show:false}}};
+      },
+      view:[-2.4, 2.4, -2.4, 2.4, -0.4, 4.4]
+    }
+  };
+
+  let state = {scene:'ex1', t:0, playing:false, speed:1.0};
+  let animId=null, lastTime=0;
+  let surfacePatches=null;
+
+  // 累積邊界線積分 ∮ F · dr from 0 to s_end
+  function bdAcc(s_end){
+    const s = SCENES[state.scene];
+    const N=600;
+    let acc=0;
+    for(let i=0;i<N;i++){
+      const u = s_end*((i+0.5)/N);
+      const b = s.boundary(u);
+      const F = s.Ffn(b.p);
+      const dot = F[0]*b.dp[0] + F[1]*b.dp[1] + F[2]*b.dp[2];
+      acc += dot * s_end/N;
+    }
+    return acc;
+  }
+
+  function init(){
+    const s = SCENES[state.scene];
+    document.getElementById('dJ-F').textContent = s.F;
+    document.getElementById('dJ-curl').textContent = s.curl;
+    document.getElementById('dJ-S').textContent = s.S;
+    document.getElementById('dJ-tgt').textContent = s.targetLabel;
+    surfacePatches = s.buildSurface();
+    drawLeft(); drawRight();
+    update(0);
+  }
+
+  function drawLeft(){
+    const s = SCENES[state.scene];
+    // 邊界完整曲線
+    const N=400;
+    const xs=[], ys=[], zs=[];
+    for(let i=0;i<=N;i++){
+      const b = s.boundary(i/N);
+      xs.push(b.p[0]); ys.push(b.p[1]); zs.push(b.p[2]);
+    }
+    const traces = [s.drawSurface()];
+    traces.push({type:'scatter3d', mode:'lines', x:xs, y:ys, z:zs,
+      line:{color:'#1a6b4a', width:4}, hoverinfo:'skip'});
+    traces.push({type:'scatter3d', mode:'lines', x:[xs[0]], y:[ys[0]], z:[zs[0]],
+      line:{color:'#c0392b', width:7}, hoverinfo:'skip'}); // traveled
+    traces.push({type:'scatter3d', mode:'markers', x:[xs[0]], y:[ys[0]], z:[zs[0]],
+      marker:{size:7, color:'#c0392b', line:{color:'#fff', width:1}}, hoverinfo:'skip'});
+    const v = s.view;
+    Plotly.react(hL, traces, plotLayout3D({
+      scene:{
+        xaxis:{title:'x', range:[v[0],v[1]], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#e74c3c'},
+        yaxis:{title:'y', range:[v[2],v[3]], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#27ae60'},
+        zaxis:{title:'z', range:[v[4],v[5]], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#2980b9'},
+        camera:{eye:{x:1.6,y:1.6,z:1.0}}, aspectmode:'cube'
+      }
+    }), PLOT_CONFIG_3D);
+  }
+
+  function drawRight(){
+    const s = SCENES[state.scene];
+    const traces = [s.drawSurface()];
+    traces.push({type:'scatter3d', mode:'markers',
+      x:[], y:[], z:[],
+      marker:{size:3, color:[], colorscale:[[0,'#3498db'],[0.5,'#f1c40f'],[1,'#e74c3c']], cmin:-4, cmax:4, showscale:true,
+        colorbar:{title:{text:'旋度 F·N',side:'right'},thickness:8,len:0.45,x:1.02}},
+      hoverinfo:'skip'});
+    const v = s.view;
+    Plotly.react(hR, traces, plotLayout3D({
+      scene:{
+        xaxis:{title:'x', range:[v[0],v[1]], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#e74c3c'},
+        yaxis:{title:'y', range:[v[2],v[3]], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#27ae60'},
+        zaxis:{title:'z', range:[v[4],v[5]], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#2980b9'},
+        camera:{eye:{x:1.6,y:1.6,z:1.0}}, aspectmode:'cube'
+      }
+    }), PLOT_CONFIG_3D);
+  }
+
+  function update(t){
+    state.t = Math.max(0, Math.min(1, t));
+    const s = SCENES[state.scene];
+    // 左：邊界 marker 與走過部分
+    const N=400;
+    const xs=[], ys=[], zs=[];
+    const steps = Math.max(2, Math.round(N*state.t));
+    for(let i=0;i<=steps;i++){
+      const b = s.boundary(state.t*(i/steps));
+      xs.push(b.p[0]); ys.push(b.p[1]); zs.push(b.p[2]);
+    }
+    Plotly.restyle(hL, {x:[xs], y:[ys], z:[zs]}, [2]);
+    const cur = s.boundary(state.t);
+    Plotly.restyle(hL, {x:[[cur.p[0]]], y:[[cur.p[1]]], z:[[cur.p[2]]]}, [3]);
+    // 左累積
+    const accL = bdAcc(state.t);
+    document.getElementById('dJ-accL').textContent = accL.toFixed(4);
+    const tgtAbs = Math.max(Math.abs(s.target), 1);
+    const pctL = state.t * 100;
+    document.getElementById('dJ-fillL').style.width = pctL + '%';
+    document.getElementById('dJ-pctL').textContent = pctL.toFixed(0) + '%';
+
+    // 右：曲面 sample
+    const nS = Math.floor(surfacePatches.length * state.t);
+    const vx=[], vy=[], vz=[], vc=[];
+    let accR=0;
+    for(let i=0;i<nS;i++){
+      const p=surfacePatches[i];
+      vx.push(p.x); vy.push(p.y); vz.push(p.z);
+      vc.push(p.val);
+      accR += p.w;
+    }
+    Plotly.restyle(hR, {x:[vx], y:[vy], z:[vz], 'marker.color':[vc]}, [1]);
+    document.getElementById('dJ-accR').textContent = accR.toFixed(4);
+    const pctR = state.t * 100;
+    document.getElementById('dJ-fillR').style.width = pctR + '%';
+    document.getElementById('dJ-pctR').textContent = pctR.toFixed(0) + '%';
+
+    const banner = document.getElementById('dJ-banner');
+    const banText = document.getElementById('dJ-banText');
+    if(state.t<0.001){
+      banner.className='verify-banner pending';
+      banner.querySelector('.vb-icon').textContent='⏳';
+      banText.textContent='尚未播放';
+    } else if(state.t<0.99){
+      banner.className='verify-banner pending';
+      banner.querySelector('.vb-icon').textContent='⏳';
+      banText.textContent='動畫進行中…';
+    } else {
+      const err = Math.abs(accL - accR);
+      const tol = Math.max(0.05, 0.0025*tgtAbs);
+      if(err < tol){
+        banner.className='verify-banner ok';
+        banner.querySelector('.vb-icon').textContent='✓';
+        banText.textContent=`Stokes 定理通過：左 ${accL.toFixed(4)}，右 ${accR.toFixed(4)}，誤差 ${err.toFixed(4)}`;
+      } else {
+        banner.className='verify-banner no';
+        banner.querySelector('.vb-icon').textContent='⚠';
+        banText.textContent=`左 ${accL.toFixed(4)}，右 ${accR.toFixed(4)}，誤差 ${err.toFixed(4)}（離散化所致）`;
+      }
+    }
+  }
+
+  function animate(ts){
+    if(!lastTime) lastTime = ts;
+    const dt = (ts-lastTime)/1000; lastTime = ts;
+    const newT = state.t + state.speed * 0.3 * dt;
+    if(newT>=1){ update(1); stop(); return; }
+    update(newT);
+    animId = requestAnimationFrame(animate);
+  }
+  function play(){ if(state.playing) return; state.playing=true; lastTime=0; document.getElementById('dJ-play').textContent='⏸ 暫停'; document.getElementById('dJ-play').classList.add('active'); animId=requestAnimationFrame(animate); }
+  function stop(){ state.playing=false; cancelAnimationFrame(animId); document.getElementById('dJ-play').textContent='▶ 播放'; document.getElementById('dJ-play').classList.remove('active'); }
+  function reset(){ stop(); update(0); }
+  document.getElementById('dJ-play').addEventListener('click', ()=>{ state.playing? stop() : play(); });
+  document.getElementById('dJ-reset').addEventListener('click', reset);
+  document.getElementById('dJ-scene').addEventListener('change', e=>{ stop(); state.scene = e.target.value; init(); });
+  document.getElementById('dJ-speed').addEventListener('input', e=>{ state.speed = parseFloat(e.target.value); document.getElementById('dJ-speedV').textContent = state.speed.toFixed(1)+'×'; });
+
+  init();
+})();
+/* ============================================================
+   QUIZZES — Ch 15.5 ~ 15.8
+   ============================================================ */
+(function(){
+  // 15.5
+  makeChoiceQuiz('quiz-15-5-1', 0, {
+    ok:'✓ 正確！$x^2 + y^2 = \\cos^2 v + \\sin^2 v = 1$（半徑 1 的圓）；$z = u$ 自由變動 ⇒ <strong>沿 $z$ 軸無限延伸的圓柱面</strong>。',
+    wrong:[
+      '',
+      '球面需要 $x^2 + y^2 + z^2 = $ 常數，與 $z = u$ 自由變動矛盾。',
+      '圓錐需要 $\\|r\\| = $ 線性增長，此處 $\\|r\\|^2 = 1 + u^2$ 並非從原點出發的線性錐。',
+      '拋物面需要 $z = x^2 + y^2$，但此處 $z = u$ 與 $x^2 + y^2 = 1$ 為常數，不是拋物面。'
+    ]
+  });
+  makeChoiceQuiz('quiz-15-5-2', 0, {
+    ok:'✓ 正確！$\\mathbf{r}_u = (1, 0, v)$，$\\mathbf{r}_v = (0, 1, u)$。在 $(1,1)$ 為 $(1,0,1)$ 與 $(0,1,1)$。外積 $= (0\\cdot 1 - 1\\cdot 1, 1\\cdot 0 - 1\\cdot 1, 1\\cdot 1 - 0\\cdot 0) = (-1, -1, 1)$。',
+    wrong:[
+      '請套外積公式並小心 $\\mathbf{j}$ 分量的符號。',
+      '$\\mathbf{r}_u\\times\\mathbf{r}_v$ 通常不會出現 $(1,-1,0)$ 這種形式；行列式展開要謹慎。',
+      '$(0,0,1)$ 只在 $\\mathbf{r}_u = (1,0,0),\\,\\mathbf{r}_v = (0,1,0)$ 時才成立（即平坦 xy 面），這裡不是。',
+      ''
+    ]
+  });
+  makeChoiceQuiz('quiz-15-5-3', 1, {
+    ok:'✓ 正確！$\\mathbf{r}_u\\times\\mathbf{r}_v = \\mathbf{0}$ 表示兩個切向量平行或其中一個為零 ⇒ 無法張出二維切平面、也無法定義單位法向量 ⇒ <strong>該點不光滑</strong>。圓錐尖端、自交曲面、退化參數化都會出現這個現象。',
+    wrong:[
+      '剛好相反！外積<strong>非零</strong>才是光滑。',
+      '',
+      '連續不足以保證光滑；需要 $\\mathbf{r}_u\\times\\mathbf{r}_v\\ne\\mathbf{0}$。',
+      '外積為零的是奇點，不是「最平坦」的點。最平坦處反而通常 $\\|\\mathbf{r}_u\\times\\mathbf{r}_v\\|$ 較大（如平面）。'
+    ]
+  });
+
+  // 15.6
+  makeChoiceQuiz('quiz-15-6-1', 1, {
+    ok:'✓ 正確！純量 $\\iint_S f\\,dS$ 與「面積元素」$dS$ 是正值，跟方向無關；通量 $\\iint_S\\mathbf{F}\\cdot\\mathbf{N}\\,dS$ 因 $\\mathbf{N}$ 翻轉而變號。',
+    wrong:[
+      '兩者對「光滑」的需求相同（都需要分段光滑可定義 $dS$）；本題重點不在光滑。',
+      '',
+      '兩種積分都<strong>可以</strong>用 $z = g(x,y)$ 或 parametric 形式，無此限制。',
+      '兩者的<strong>意義</strong>非常不同 — 純量是「在曲面上累積數值」，通量是「穿越曲面的向量流量」。'
+    ]
+  });
+  makeChoiceQuiz('quiz-15-6-2', 1, {
+    ok:'✓ 正確！$\\mathbf{r}_x = (1,0,g_x),\\,\\mathbf{r}_y = (0,1,g_y)$ ⇒ $\\mathbf{r}_x\\times\\mathbf{r}_y = (-g_x,\\,-g_y,\\,1)$ ⇒ $\\|\\cdot\\| = \\sqrt{1 + g_x^2 + g_y^2}$。這正是 §14.5 表面面積公式的根。',
+    wrong:[
+      '少了「$+1$」項與外面的根號。',
+      '',
+      '這只是首項展開，不是 $\\|\\cdot\\|$。完整為 $\\sqrt{1 + g_x^2 + g_y^2}$。',
+      '$g_x g_y$ 是混合項，不會單獨出現在 $\\|\\mathbf{r}_x\\times\\mathbf{r}_y\\|$ 中。'
+    ]
+  });
+  makeChoiceQuiz('quiz-15-6-3', 1, {
+    ok:'✓ 正確！例題 6 中通量結果<strong>與球半徑無關</strong>暗示這個值由「源量」決定，而不是曲面細節。Gauss 定律進一步將此推廣到任何包含電荷的閉曲面。',
+    wrong:[
+      'Gauss 定律證明適用於<strong>任何</strong>閉曲面（不只球面）— 由散度定理或 4π 立體角論證。',
+      '',
+      '反平方場 $\\mathbf{F} = kq\\mathbf{r}/\\|\\mathbf{r}\\|^3$ <strong>確實是保守</strong>（位能 $-kq/\\|\\mathbf{r}\\|$），但通過<strong>閉曲面</strong>仍可有通量（因為原點是奇異點，不能直接套散度定理）。',
+      '通量與半徑無關，跟「平方反比」這個特定形式有關，並非單純的縮放效應。'
+    ]
+  });
+
+  // 15.7
+  makeChoiceQuiz('quiz-15-7-1', 1, {
+    ok:'✓ 正確！散度定理約定 $\\mathbf{N}$ <strong>指向外</strong>，這樣才能與「淨流出量」物理意義一致。',
+    wrong:[
+      '若用內向 $\\mathbf{N}$，公式變成 $-\\iiint_Q \\mathrm{div}\\,\\mathbf{F}\\,dV$（多一個負號）。',
+      '',
+      '$\\mathbf{N}$ 是曲面的「外法」，與 $z$ 軸方向<strong>不一定</strong>一致（例如球面上每點 $\\mathbf{N}$ 都不同）。',
+      '定向會影響公式符號，不能隨便選。'
+    ]
+  });
+  makeChoiceQuiz('quiz-15-7-2', 2, {
+    ok:'✓ 正確！$\\mathrm{div}\\,(-y, x, 0) = \\partial(-y)/\\partial x + \\partial(x)/\\partial y + 0 = 0 + 0 + 0 = 0$ ⇒ <strong>不可壓縮場 (incompressible)</strong>。注意：div 與 curl 不同 — 此場 curl 非零（其實是 $2\\,\\mathbf{k}$）。',
+    wrong:[
+      'div = 2 對應「源」，但 div = 0 此例不是源。',
+      'div = $-2$ 對應「匯」，但此例 div = 0。',
+      '',
+      '$\\partial(-y)/\\partial x = 0$ 與 $\\partial x/\\partial y = 0$ 都是定值，div 是常數 0，不隨點而變。'
+    ]
+  });
+  makeChoiceQuiz('quiz-15-7-3', 0, {
+    ok:'✓ 正確！多片曲面合成的 $S$（如盒子的 6 個面、四面體的 4 個面）如果直接算每面 flux 加總會很繁瑣；散度定理把它<strong>一次性化為一個體積分</strong>。',
+    wrong:[
+      '',
+      '散度定理<strong>需要</strong> $S$ 封閉。若不封閉就不能用。',
+      '反平方場在原點奇異，<strong>無法</strong>直接用散度定理（需先扣除小球，得 Gauss 定律）— 此選項描述的反而是定理「失效」的情況。',
+      '散度 F 太複雜時，把 表面通量 直接算可能<strong>更</strong>快。本題問散度定理「顯著節省時間」的情境。'
+    ]
+  });
+
+  // 15.8
+  makeChoiceQuiz('quiz-15-8-1', 1, {
+    ok:'✓ 正確！右手定則：拇指沿 $\\mathbf{N} = \\mathbf{k}$（朝上），其餘四指彎曲指向 $C$ 的正方向 — 即「從上看是<strong>逆時針</strong>」。',
+    wrong:[
+      '與右手定則相反 — 順時針是 $\\mathbf{N} = -\\mathbf{k}$ 下的正方向。',
+      '',
+      '定向會影響積分符號，不能任選。',
+      '$C$ 是<strong>邊界曲線</strong>，必然繞在曲面邊上，不會與 $\\mathbf{N}$ 平行。'
+    ]
+  });
+  makeChoiceQuiz('quiz-15-8-2', 1, {
+    ok:'✓ 正確！「邊界累積 = 內部導數的整體積分」是 Stokes / Green / 散度三定理乃至「廣義 Stokes 定理」的共通核心。Green 用 $(N_x - M_y)$，Stokes 用 旋度 F，散度定理用 散度 F，都是 邊界 ↔ 內部 的轉換。',
+    wrong:[
+      '只有線積分基本定理是「曲線 → 點」，三大定理是「邊界 → 內部」。',
+      '',
+      '保守只是 旋度 F = 0 / div = 0 的特例，並非定理的要求。',
+      'Green 在 2D；Stokes 在 3D 中的曲面；散度定理在 3D 立體 — 三維皆有。'
+    ]
+  });
+  makeChoiceQuiz('quiz-15-8-3', 0, {
+    ok:'✓ 正確！單連通開區域上「旋度 F = 0 ⇒ F 保守」是 §15.3 定理 15.7 與 Stokes 的合力推論。Stokes 把 curl = 0 直接連到任何閉曲線積分為 0，再由等價條件得到保守性。',
+    wrong:[
+      '旋度 F = 0 不蘊含 F = 0（例如 $\\mathbf{F} = \\nabla f$ 的任何位能函數都會給非零的 F 但 curl 為 0）。',
+      'curl 與 div 是<strong>獨立</strong>的算子。例如 $\\mathbf{F} = (x, y, z)$ 的 curl = 0 但 div = 3。',
+      '完全有意義 — 這是 §15.3 與 Stokes 的核心結論。'
+    ]
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>連續性、偏導數、方向導數與可微性</title>
+<script>
+  MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1a2e;--paper:#f7f3eb;--accent:#c0392b;--accent2:#2c3e7a;--accent3:#1a6b4a;
+  --muted:#8a8578;--card:#fffdf7;--card-border:#e8e2d6;--highlight:#fff3cd;
+  --code-bg:#2d2d3f;--code-fg:#e8e6df;
+  --x-axis:#e74c3c;--y-axis:#27ae60;--z-axis:#2980b9;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.9;font-size:17px;}
+
+/* Hero */
+.hero{min-height:62vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem;position:relative;overflow:hidden;background:linear-gradient(170deg,#1a1a2e 0%,#2c3e7a 40%,#1a6b4a 100%);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.06) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.04) 0%,transparent 40%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);}
+.hero-content{position:relative;z-index:1;max-width:860px;}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;color:#fff;letter-spacing:.04em;line-height:1.3;margin-bottom:1rem;}
+.hero h1 .green{color:#2ecc71;}
+.hero h1 .blue{color:#5dade2;}
+.hero h1 .yellow{color:#f1c40f;}
+.hero h1 .red{color:#e74c3c;}
+.hero .subtitle{font-size:clamp(.95rem,2.2vw,1.2rem);color:rgba(255,255,255,.65);font-weight:300;margin-bottom:2rem;}
+.hero .big-formula{color:#2ecc71;background:rgba(0,0,0,.3);padding:.8rem 2rem;border-radius:12px;display:inline-block;border:1px solid rgba(255,255,255,.1);margin-bottom:2rem;backdrop-filter:blur(4px);font-size:1.0rem;}
+.scroll-hint{color:rgba(255,255,255,.4);font-size:.9rem;animation:bounce 2s infinite;}
+.scroll-hint span{display:block;font-size:1.4rem;margin-top:.3rem;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+/* Layout */
+.container{max-width:1180px;margin:0 auto;padding:3rem 1.5rem;}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.5rem;}
+h2{font-family:'Noto Serif TC',serif;font-size:1.65rem;font-weight:700;color:var(--ink);margin-bottom:1.2rem;line-height:1.4;}
+h3{font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:700;color:var(--accent2);margin:1.4rem 0 .8rem;}
+h4{font-family:'Noto Serif TC',serif;font-size:1.0rem;font-weight:700;color:var(--accent3);margin:1.0rem 0 .5rem;}
+section{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--card-border);}
+section:last-of-type{border-bottom:none;}
+p{margin-bottom:1rem;}
+.subsection{margin:2rem 0;}
+
+/* Side navigation */
+.side-nav{position:fixed;top:50%;right:1rem;transform:translateY(-50%);background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.45rem .5rem;font-size:.74rem;font-family:'JetBrains Mono',monospace;box-shadow:0 4px 18px rgba(0,0,0,.08);z-index:50;display:flex;flex-direction:column;gap:.1rem;max-width:220px;}
+.side-nav .sn-title{font-size:.66rem;color:var(--muted);letter-spacing:.1em;padding:.2rem .55rem .35rem;border-bottom:1px solid var(--card-border);margin-bottom:.25rem;}
+.side-nav .sn-item{display:block;padding:.28rem .55rem;color:var(--muted);text-decoration:none;border-left:2px solid transparent;border-radius:4px;transition:all .15s;line-height:1.3;}
+.side-nav .sn-item.sn-sub{padding-left:1.1rem;font-size:.7rem;color:#a8a496;}
+.side-nav .sn-item:hover{color:var(--ink);background:var(--highlight);}
+.side-nav .sn-item.active{color:var(--accent3);border-left-color:var(--accent3);background:rgba(26,107,74,.06);font-weight:600;}
+@media(max-width:1280px){.side-nav{display:none;}}
+
+/* Info card / equation card */
+.info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.info-card .ic-title{font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem;}
+.info-card .ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.83rem;padding:.2rem 0;align-items:center;}
+.info-card .ic-label{color:var(--muted);}
+.info-card .ic-value{color:var(--ink);font-weight:600;}
+
+.eq-card{background:var(--code-bg);border-radius:10px;padding:.95rem 1.1rem;color:#fff;}
+.eq-card .eq-label{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#2ecc71;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;}
+.eq-card .eq-formula{font-size:1.0rem;color:#fff;text-align:center;}
+.eq-card .eq-sub{font-size:.78rem;color:rgba(255,255,255,.55);margin-top:.4rem;text-align:center;}
+
+/* Reference section */
+.ref-group{margin:1.5rem 0 2rem;}
+.ref-group-title{font-family:'Noto Serif TC',serif;font-size:1.12rem;font-weight:700;color:var(--accent2);padding-bottom:.4rem;border-bottom:2px solid var(--accent2);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;}
+.ref-group-title .rg-badge{font-size:.7rem;font-weight:600;color:#fff;background:var(--accent2);padding:2px 8px;border-radius:3px;font-family:'JetBrains Mono',monospace;}
+.ref-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:1rem 1.2rem;margin-bottom:.9rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.ref-card-header{display:flex;align-items:baseline;gap:.8rem;margin-bottom:.5rem;flex-wrap:wrap;}
+.ref-card-name{font-family:'Noto Serif TC',serif;font-weight:700;font-size:1.02rem;color:var(--ink);}
+.ref-card-name-en{font-size:.8rem;color:var(--muted);font-weight:400;}
+.ref-card-eq{background:var(--code-bg);color:#fff;border-radius:8px;padding:.65rem 1rem;text-align:center;font-size:.95rem;margin-bottom:.55rem;}
+.ref-note{font-size:.85rem;color:var(--muted);margin-top:.5rem;padding-left:.8rem;border-left:3px solid var(--card-border);}
+
+/* Conversion table */
+.conv-table{width:100%;border-collapse:collapse;font-size:.88rem;margin:.8rem 0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.conv-table th{background:var(--accent2);color:#fff;padding:.6rem .8rem;text-align:center;font-weight:600;font-size:.82rem;}
+.conv-table td{padding:.6rem .8rem;text-align:center;border-bottom:1px solid var(--card-border);font-size:.88rem;}
+.conv-table td:first-child{font-family:'Noto Sans TC',sans-serif;color:var(--accent2);font-weight:600;text-align:left;}
+.conv-table tr:last-child td{border-bottom:none;}
+.conv-table tr:nth-child(even){background:rgba(0,0,0,.015);}
+.conv-table .ck{color:var(--accent3);font-weight:700;font-size:1.1rem;}
+.conv-table .xx{color:var(--accent);font-weight:700;font-size:1.1rem;}
+
+/* Info box (definitions / theorems) */
+.info-box{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1.1rem 1.4rem;margin:1.3rem 0;position:relative;}
+.info-box .info-label{position:absolute;top:-11px;left:14px;background:var(--accent2);color:#fff;font-size:.74rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.05em;}
+.info-box.warm{background:#fef5e7;border-color:#d68910;}
+.info-box.warm .info-label{background:#d68910;}
+.info-box.green{background:#eaf5ee;border-color:var(--accent3);}
+.info-box.green .info-label{background:var(--accent3);}
+.info-box.red{background:#fdebeb;border-color:var(--accent);}
+.info-box.red .info-label{background:var(--accent);}
+
+/* Pill */
+.pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:4px;margin:0 .15rem;vertical-align:1px;}
+.pill-x{background:rgba(231,76,60,.12);color:var(--x-axis);border:1px solid rgba(231,76,60,.3);}
+.pill-y{background:rgba(39,174,96,.12);color:var(--y-axis);border:1px solid rgba(39,174,96,.3);}
+.pill-z{background:rgba(41,128,185,.12);color:var(--z-axis);border:1px solid rgba(41,128,185,.3);}
+.pill-blue{background:rgba(44,62,122,.13);color:var(--accent2);border:1px solid rgba(44,62,122,.3);}
+.pill-green{background:rgba(26,107,74,.13);color:var(--accent3);border:1px solid rgba(26,107,74,.3);}
+.pill-red{background:rgba(192,57,43,.13);color:var(--accent);border:1px solid rgba(192,57,43,.3);}
+
+/* Step block */
+.step-block{background:#fffaf0;border-left:4px solid var(--accent3);border-radius:8px;padding:.9rem 1.2rem;margin:.7rem 0;}
+.step-block .step-num{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);font-weight:700;letter-spacing:.1em;margin-bottom:.3rem;}
+
+/* Lecture example */
+.lecture-example{background:var(--card);border:1px solid var(--card-border);border-left:5px solid var(--accent3);border-radius:10px;padding:1rem 1.2rem;margin:1rem 0;box-shadow:0 2px 10px rgba(0,0,0,.04);}
+.lecture-example .ex-tag{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--accent3);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.35rem;}
+.lecture-example .ex-title{font-family:'Noto Serif TC',serif;font-weight:700;color:var(--ink);margin-bottom:.65rem;background:#f5f7fb;border:1px solid #dfe5f0;border-radius:8px;padding:.65rem .85rem;}
+.lecture-example .ex-title::before{content:"題目";display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#fff;background:var(--accent2);border-radius:4px;padding:1px 7px;margin-right:.55rem;letter-spacing:.06em;}
+.lecture-example .ex-method{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;background:rgba(26,107,74,.12);color:var(--accent3);border:1px solid rgba(26,107,74,.35);border-radius:4px;padding:1px 7px;margin:.1rem .25rem .1rem 0;}
+.lecture-example .ex-method.warn{background:rgba(192,57,43,.10);color:var(--accent);border-color:rgba(192,57,43,.35);}
+.lecture-example .ex-method.thm{background:rgba(44,62,122,.10);color:var(--accent2);border-color:rgba(44,62,122,.35);}
+.lecture-example .step-block:first-of-type{margin-top:1.8rem;position:relative;}
+.lecture-example .step-block:first-of-type::before{content:"解題";position:absolute;top:-1.35rem;left:0;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#fff;background:var(--accent3);border-radius:4px;padding:1px 7px;letter-spacing:.06em;}
+.lecture-example .ex-answer{background:#f3fbf6;border:1px solid #cdebd9;border-radius:8px;padding:.65rem .85rem;margin-top:.65rem;font-size:.92rem;}
+.lecture-example .ex-answer::before{content:"答案";display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#fff;background:var(--accent3);border-radius:4px;padding:1px 7px;font-weight:700;margin-right:.5rem;letter-spacing:.06em;}
+.lecture-example.cf{border-left-color:var(--accent);}
+.lecture-example.cf .ex-tag{color:var(--accent);}
+
+/* Property list */
+.prop-list{counter-reset:prop;list-style:none;padding:0;margin:1rem 0;}
+.prop-list li{counter-increment:prop;background:var(--card);border:1px solid var(--card-border);border-radius:8px;padding:.7rem 1rem .7rem 3rem;margin-bottom:.55rem;position:relative;font-size:.95rem;box-shadow:0 1px 3px rgba(0,0,0,.03);}
+.prop-list li::before{content:counter(prop);position:absolute;left:.85rem;top:50%;transform:translateY(-50%);width:1.7rem;height:1.7rem;background:var(--accent3);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.85rem;}
+
+/* Dual contrast cards */
+.dual-card{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:1rem 0;}
+@media(max-width:600px){.dual-card{grid-template-columns:1fr;}}
+.dual-card .dc{padding:.9rem 1.1rem;border-radius:10px;}
+.dual-card .dc-real{background:#fff5e6;border:1px solid #f0c674;}
+.dual-card .dc-vec{background:#e8f0ff;border:1px solid #7a96d3;}
+.dual-card .dc-title{font-weight:700;font-size:.85rem;margin-bottom:.4rem;}
+.dual-card .dc-real .dc-title{color:#a06800;}
+.dual-card .dc-vec .dc-title{color:#1f3a7a;}
+
+/* Concept map SVG wrapper */
+.concept-map{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:1rem;margin:1.2rem 0;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+.concept-map svg{width:100%;height:auto;display:block;}
+.concept-map .cm-caption{font-size:.82rem;color:var(--muted);text-align:center;margin-top:.6rem;font-style:italic;}
+
+/* Footer */
+footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border);}
+footer a{color:var(--accent2);text-decoration:none;}
+footer a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<!-- Side navigation -->
+<nav class="side-nav" id="sideNav">
+  <div class="sn-title">多變數微分</div>
+  <a class="sn-item" href="#sec-1">§1 概念地圖</a>
+  <a class="sn-item" href="#sec-2">§2 四個正式定義</a>
+  <a class="sn-item sn-sub" href="#sec-2-1">  · 連續性</a>
+  <a class="sn-item sn-sub" href="#sec-2-2">  · 偏導數</a>
+  <a class="sn-item sn-sub" href="#sec-2-3">  · 方向導數</a>
+  <a class="sn-item sn-sub" href="#sec-2-4">  · 可微性</a>
+  <a class="sn-item" href="#sec-3">§3 反例：哪些蘊涵不成立</a>
+  <a class="sn-item sn-sub" href="#sec-3-1">  · 例題 1 連續⇏偏導</a>
+  <a class="sn-item sn-sub" href="#sec-3-2">  · 例題 2 偏導⇏連續</a>
+  <a class="sn-item sn-sub" href="#sec-3-3">  · 例題 3 偏導⇏方向導</a>
+  <a class="sn-item sn-sub" href="#sec-3-4">  · 例題 4 偏導⇏可微</a>
+  <a class="sn-item sn-sub" href="#sec-3-5">  · 例題 5 方向導⇏可微</a>
+  <a class="sn-item sn-sub" href="#sec-3-6">  · 例題 6 方向導⇏連續</a>
+  <a class="sn-item" href="#sec-4">§4 正向蘊涵</a>
+  <a class="sn-item sn-sub" href="#sec-4-1">  · 定理 A · 可微⇒…</a>
+  <a class="sn-item sn-sub" href="#sec-4-2">  · 定理 B · 偏導連續⇒可微</a>
+  <a class="sn-item" href="#sec-5">§5 進階反例 例題 9</a>
+  <a class="sn-item" href="#sec-ref">§6 速查與結語</a>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <h1>多變數微分四角關係：<span class="green">連續</span>、<span class="yellow">偏導</span>、<span class="blue">方向導</span>、<span class="red">可微</span></h1>
+    <div class="subtitle">連續、偏導、方向導與可微 — 4 個正式定義 × 9 個例題（含 2 條核心定理）</div>
+    <div class="big-formula">$\displaystyle\lim_{(x,y)\to(x_0,y_0)} f(x,y),\ \ f_x,\ f_y,\ \ D_{\vec u} f,\ \ f(x{+}\Delta x,y{+}\Delta y)=f(x,y)+f_x\Delta x+f_y\Delta y+\varepsilon_1\Delta x+\varepsilon_2\Delta y$</div>
+    <div class="scroll-hint">向下捲動 開始閱讀<span>↓</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ============================================================ -->
+<!-- §1 概念地圖                                                    -->
+<!-- ============================================================ -->
+<section id="sec-1">
+  <div class="section-number">第 1 節 · 概念地圖</div>
+  <h2>四個概念之間的蘊涵關係：誰能推出誰？</h2>
+
+  <p>本講義主角是定義在 $f:\mathbb{R}^2 \to \mathbb{R}$ 上的四個概念：<span class="pill pill-blue">連續</span>、<span class="pill pill-green">偏導數存在</span>、<span class="pill pill-y">方向導數對所有單位向量都存在</span>、<span class="pill pill-red">可微</span>。一變數時鏈條較強（可微 $\Rightarrow$ 連續，且導數即為唯一的「方向導」）；但<strong>一旦進到兩變數</strong>，它們之間絕大多數的「蘊涵關係」都會破裂，必須用<strong>反例</strong>來看清楚邊界。</p>
+
+  <p>下面這張圖把<strong>成立</strong>的方向（綠色實線箭頭，標 <span class="pill pill-green">定理</span>）與<strong>不成立</strong>的方向（紅色虛線箭頭，標反例 <span class="pill pill-red">Ex</span> 編號）一次列出。所有反例都建構在原點 $(0,0)$ 上，是常見的多變數病態案例。</p>
+
+  <!-- SVG concept map -->
+  <div class="concept-map">
+    <svg viewBox="0 0 880 540" xmlns="http://www.w3.org/2000/svg" aria-label="概念蘊涵關係圖">
+      <!-- arrowheads -->
+      <defs>
+        <marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#1a6b4a"/>
+        </marker>
+        <marker id="arr-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#c0392b"/>
+        </marker>
+      </defs>
+
+      <!-- Node: 偏導連續 (top) -->
+      <g>
+        <rect x="320" y="20" width="240" height="62" rx="10" fill="#fef5e7" stroke="#d68910" stroke-width="2"/>
+        <text x="440" y="46" text-anchor="middle" font-family="'Noto Serif TC',serif" font-size="17" font-weight="700" fill="#a06800">偏導 f<tspan font-size="12" dy="4">x</tspan><tspan dy="-4">, f</tspan><tspan font-size="12" dy="4">y</tspan><tspan dy="-4"> 連續</tspan></text>
+        <text x="440" y="68" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="12" fill="#a06800">偏導數連續</text>
+      </g>
+
+      <!-- Node: 可微 (center) -->
+      <g>
+        <rect x="350" y="220" width="180" height="62" rx="10" fill="#fdebeb" stroke="#c0392b" stroke-width="2.5"/>
+        <text x="440" y="246" text-anchor="middle" font-family="'Noto Serif TC',serif" font-size="18" font-weight="700" fill="#c0392b">可微</text>
+        <text x="440" y="268" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="12" fill="#c0392b">可微</text>
+      </g>
+
+      <!-- Node: 連續 (bottom-left) -->
+      <g>
+        <rect x="50" y="430" width="200" height="62" rx="10" fill="#eef2ff" stroke="#2c3e7a" stroke-width="2"/>
+        <text x="150" y="456" text-anchor="middle" font-family="'Noto Serif TC',serif" font-size="17" font-weight="700" fill="#2c3e7a">連續</text>
+        <text x="150" y="478" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="12" fill="#2c3e7a">連續</text>
+      </g>
+
+      <!-- Node: 偏導存在 (bottom-center) -->
+      <g>
+        <rect x="335" y="430" width="210" height="62" rx="10" fill="#eaf5ee" stroke="#1a6b4a" stroke-width="2"/>
+        <text x="440" y="456" text-anchor="middle" font-family="'Noto Serif TC',serif" font-size="17" font-weight="700" fill="#1a6b4a">偏導 f<tspan font-size="12" dy="4">x</tspan><tspan dy="-4">, f</tspan><tspan font-size="12" dy="4">y</tspan><tspan dy="-4"> 存在</tspan></text>
+        <text x="440" y="478" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="12" fill="#1a6b4a">偏導存在</text>
+      </g>
+
+      <!-- Node: 方向導存在 (bottom-right) -->
+      <g>
+        <rect x="625" y="430" width="225" height="62" rx="10" fill="#fff3cd" stroke="#d68910" stroke-width="2"/>
+        <text x="737" y="456" text-anchor="middle" font-family="'Noto Serif TC',serif" font-size="16" font-weight="700" fill="#a06800">方向導 D<tspan font-size="11" dy="4">u</tspan><tspan dy="-4"> f 對全 u 存在</tspan></text>
+        <text x="737" y="478" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="12" fill="#a06800">所有方向導存在</text>
+      </g>
+
+      <!-- Arrow: 偏導連續 ⇒ 可微 (down green, 定理 B) -->
+      <line x1="425" y1="84" x2="425" y2="217" stroke="#1a6b4a" stroke-width="2.5" marker-end="url(#arr-green)"/>
+      <text x="395" y="155" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="13" fill="#1a6b4a" font-weight="700">✓ 定理 B</text>
+      <text x="395" y="172" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="11" fill="#1a6b4a">(例題 8)</text>
+
+      <!-- Arrow: 可微 ⇏ 偏導連續 (up red, 例題 9) -->
+      <line x1="455" y1="217" x2="455" y2="84" stroke="#c0392b" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arr-red)"/>
+      <text x="485" y="155" font-family="'JetBrains Mono',monospace" font-size="13" fill="#c0392b" font-weight="700">✗ 例題 9</text>
+
+      <!-- Arrow: 可微 ⇒ 連續 (down-left green, 定理 A) -->
+      <line x1="370" y1="282" x2="195" y2="427" stroke="#1a6b4a" stroke-width="2.5" marker-end="url(#arr-green)"/>
+      <text x="225" y="345" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="13" fill="#1a6b4a" font-weight="700">✓ 定理 A</text>
+
+      <!-- Arrow: 連續 ⇏ 可微 (up-right red, 例題 1) -->
+      <line x1="225" y1="427" x2="400" y2="282" stroke="#c0392b" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arr-red)"/>
+      <text x="280" y="380" font-family="'JetBrains Mono',monospace" font-size="13" fill="#c0392b" font-weight="700">✗ 例題 1</text>
+      <text x="280" y="395" font-family="'JetBrains Mono',monospace" font-size="10" fill="#c0392b">(因 fx 不存在)</text>
+
+      <!-- Arrow: 可微 ⇒ 偏導存在 (down green, 定理 A) -->
+      <line x1="425" y1="282" x2="425" y2="427" stroke="#1a6b4a" stroke-width="2.5" marker-end="url(#arr-green)"/>
+      <text x="395" y="358" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="13" fill="#1a6b4a" font-weight="700">✓ 定理 A</text>
+
+      <!-- Arrow: 偏導存在 ⇏ 可微 (up red, 例題 4) -->
+      <line x1="455" y1="427" x2="455" y2="282" stroke="#c0392b" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arr-red)"/>
+      <text x="485" y="358" font-family="'JetBrains Mono',monospace" font-size="13" fill="#c0392b" font-weight="700">✗ 例題 4</text>
+
+      <!-- Arrow: 可微 ⇒ 方向導存在 (down-right green, 定理 A) -->
+      <line x1="510" y1="282" x2="685" y2="427" stroke="#1a6b4a" stroke-width="2.5" marker-end="url(#arr-green)"/>
+      <text x="650" y="345" font-family="'JetBrains Mono',monospace" font-size="13" fill="#1a6b4a" font-weight="700">✓ 定理 A</text>
+
+      <!-- Arrow: 方向導存在 ⇏ 可微 (up-left red, 例題 5) -->
+      <line x1="655" y1="427" x2="480" y2="282" stroke="#c0392b" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arr-red)"/>
+      <text x="600" y="380" font-family="'JetBrains Mono',monospace" font-size="13" fill="#c0392b" font-weight="700">✗ 例題 5</text>
+
+      <!-- Arrow: 偏導存在 ⇏ 連續 (left red, 例題 2) -->
+      <line x1="335" y1="450" x2="255" y2="450" stroke="#c0392b" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arr-red)"/>
+      <text x="295" y="442" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="12" fill="#c0392b" font-weight="700">✗ 例題 2</text>
+
+      <!-- Arrow: 偏導存在 ⇏ 方向導存在 (right red, 例題 3) -->
+      <line x1="545" y1="473" x2="625" y2="473" stroke="#c0392b" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arr-red)"/>
+      <text x="585" y="490" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="12" fill="#c0392b" font-weight="700">✗ 例題 3</text>
+
+      <!-- Arrow: 方向導存在 ⇏ 連續 (long bottom red, 例題 6) -->
+      <path d="M 625 480 Q 440 535 255 480" stroke="#c0392b" stroke-width="2" stroke-dasharray="6,4" fill="none" marker-end="url(#arr-red)"/>
+      <text x="440" y="528" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="12" fill="#c0392b" font-weight="700">✗ 例題 6 （方向導 ⇏ 連續）</text>
+    </svg>
+    <div class="cm-caption">綠色實線 = 蘊涵成立（定理）；紅色虛線 = 蘊涵不成立（反例）。所有反例的具體函數見 §3、§5。</div>
+  </div>
+
+  <h3>1.1 完整的 8 條蘊涵真假表</h3>
+  <p>下表把上圖所有指向關係寫成「假設 ⇒ 結論」的形式。<span class="pill pill-green">✓</span> 表示<strong>恆成立</strong>，<span class="pill pill-red">✗</span> 表示<strong>有反例</strong>。「方向導存在 ⇒ 偏導存在」是平凡成立（取 $\vec u = \langle 1,0\rangle$ 與 $\vec u = \langle 0,1\rangle$ 即得 $f_x, f_y$），列在表中以求完整。</p>
+
+  <table class="conv-table">
+    <thead>
+      <tr><th style="width:46%;">蘊涵關係</th><th style="width:18%;">真假</th><th>證據</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>連續 $\Rightarrow$ 偏導 $f_x, f_y$ 存在</td><td><span class="xx">✗</span></td><td>例題 1：$f(x,y)=|x|$</td></tr>
+      <tr><td>偏導 $f_x, f_y$ 存在 $\Rightarrow$ 連續</td><td><span class="xx">✗</span></td><td>例題 2：$f=\dfrac{xy}{x^2+y^2}$</td></tr>
+      <tr><td>偏導 $f_x, f_y$ 存在 $\Rightarrow$ 方向導 $D_{\vec u} f$ 對全 $\vec u$ 存在</td><td><span class="xx">✗</span></td><td>例題 3（同 例題 2 函數）</td></tr>
+      <tr><td>偏導 $f_x, f_y$ 存在 $\Rightarrow$ 可微</td><td><span class="xx">✗</span></td><td>例題 4（同 例題 2 函數）</td></tr>
+      <tr><td>方向導 $D_{\vec u} f$ 對全 $\vec u$ 存在 $\Rightarrow$ 偏導存在</td><td><span class="ck">✓</span></td><td>取 $\vec u = \langle 1,0\rangle, \langle 0,1\rangle$（定義即得）</td></tr>
+      <tr><td>方向導 $D_{\vec u} f$ 對全 $\vec u$ 存在 $\Rightarrow$ 可微</td><td><span class="xx">✗</span></td><td>例題 5：$f=\dfrac{x^3}{x^2+y^2}$</td></tr>
+      <tr><td>方向導 $D_{\vec u} f$ 對全 $\vec u$ 存在 $\Rightarrow$ 連續</td><td><span class="xx">✗</span></td><td>例題 6：$f=\dfrac{x^2 y}{x^4+y^2}$</td></tr>
+      <tr><td><strong>可微 $\Rightarrow$ 連續、偏導存在、方向導對全 $\vec u$ 存在</strong></td><td><span class="ck">✓</span></td><td><strong>定理 A</strong>（例題 7）</td></tr>
+      <tr><td><strong>偏導 $f_x, f_y$ 連續 $\Rightarrow$ 可微</strong></td><td><span class="ck">✓</span></td><td><strong>定理 B</strong>（例題 8）</td></tr>
+      <tr><td>可微 $\Rightarrow$ 偏導 $f_x, f_y$ 連續</td><td><span class="xx">✗</span></td><td>例題 9：$f=(x^2+y^2)\sin\frac{1}{\sqrt{x^2+y^2}}$</td></tr>
+    </tbody>
+  </table>
+
+  <div class="info-box green">
+    <span class="info-label">重點</span>
+    <p style="margin:.4rem 0;">在多變數的世界裡，<strong>「可微」是最強的條件</strong>：可微 $\Rightarrow$ 連續、$\Rightarrow$ 偏導存在、$\Rightarrow$ 方向導對所有 $\vec u$ 存在。但反過來只有<strong>「偏導連續」這個更強的條件</strong>能反推可微（定理 B），其它逆向都失敗。</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- §2 四個正式定義                                                -->
+<!-- ============================================================ -->
+<section id="sec-2">
+  <div class="section-number">第 2 節 · 四個正式定義</div>
+  <h2>把四個概念寫成嚴格的極限式</h2>
+
+  <p>以下統一假設 $f : \mathbb{R}^2 \to \mathbb{R}$ 是定義在某個開集合上的兩變數實值函數，並令 $(x_0, y_0) \in \mathbb{R}^2$ 為討論點。</p>
+
+  <!-- §2.1 連續 -->
+  <div id="sec-2-1" class="subsection">
+    <h3>2.1 連續性</h3>
+    <div class="info-box warm">
+      <span class="info-label">定義 1</span>
+      <strong>連續（在一點連續）</strong>
+      <p style="margin:.55rem 0 .3rem;">若</p>
+      <div style="text-align:center;">$$\lim_{(x,y) \to (x_0, y_0)} f(x,y) \;=\; f(x_0, y_0),$$</div>
+      <p style="margin:.3rem 0;">則稱 $f$ 在 $(x_0, y_0)$ <strong>連續</strong>。</p>
+    </div>
+    <p>關鍵：兩變數的「極限存在」要求<strong>沿任何路徑趨近 $(x_0, y_0)$ 都得到同一個值</strong>。任何兩條路徑得出不同極限，就足以否決連續性。</p>
+  </div>
+
+  <!-- §2.2 偏導 -->
+  <div id="sec-2-2" class="subsection">
+    <h3>2.2 偏導數</h3>
+    <div class="info-box warm">
+      <span class="info-label">定義 2</span>
+      <strong>$f$ 對 $x$、對 $y$ 的偏導數</strong>
+      <p style="margin:.55rem 0 .3rem;">分別定義為</p>
+      <div style="text-align:center;">$$f_x(x,y) \;\equiv\; \lim_{\Delta x \to 0} \dfrac{f(x+\Delta x,\, y) - f(x,y)}{\Delta x}, \qquad f_y(x,y) \;\equiv\; \lim_{\Delta y \to 0} \dfrac{f(x,\, y+\Delta y) - f(x,y)}{\Delta y},$$</div>
+      <p style="margin:.3rem 0;">前提是右側極限<strong>存在</strong>。</p>
+    </div>
+    <p>幾何上，$f_x(x_0, y_0)$ 是把 $y$ 固定在 $y_0$、只讓 $x$ 變動所得單變數曲線在 $x_0$ 處的切線斜率；$f_y$ 同理。<strong>偏導只看坐標軸方向</strong> — 這是它與「方向導數」最大的差別。</p>
+  </div>
+
+  <!-- §2.3 方向導 -->
+  <div id="sec-2-3" class="subsection">
+    <h3>2.3 方向導數</h3>
+    <div class="info-box warm">
+      <span class="info-label">定義 3</span>
+      <strong>沿單位向量 $\vec{u}$ 的方向導數</strong>
+      <p style="margin:.55rem 0 .3rem;">設 $\vec{u} = \langle a, b \rangle$ 為單位向量（$a^2 + b^2 = 1$）。$f$ 在 $\vec{u}$ 方向的方向導數定義為</p>
+      <div style="text-align:center;">$$D_{\vec u} f(x,y) \;=\; \lim_{t \to 0} \dfrac{f(x + t a,\, y + t b) - f(x,y)}{t},$$</div>
+      <p style="margin:.3rem 0;">前提是右側極限存在。</p>
+    </div>
+    <p>取 $\vec u = \langle 1, 0\rangle$ 即得 $f_x$，取 $\vec u = \langle 0, 1\rangle$ 即得 $f_y$。所以「方向導對所有 $\vec u$ 存在」蘊涵「偏導存在」，但反之不成立（見 例題 3）。</p>
+  </div>
+
+  <!-- §2.4 可微 -->
+  <div id="sec-2-4" class="subsection">
+    <h3>2.4 可微性</h3>
+    <div class="info-box warm">
+      <span class="info-label">定義 4</span>
+      <strong>$f$ 在 $(x, y)$ 可微</strong>
+      <p style="margin:.55rem 0 .3rem;">若存在 $\varepsilon_1, \varepsilon_2$（依賴於 $\Delta x, \Delta y$），滿足</p>
+      <div style="text-align:center;">$$\varepsilon_1, \varepsilon_2 \to 0 \quad \text{當 } \Delta x, \Delta y \to 0,$$</div>
+      <p style="margin:.3rem 0;">且</p>
+      <div style="text-align:center;">$$f(x+\Delta x,\, y+\Delta y) \;=\; f(x,y) + f_x(x,y)\,\Delta x + f_y(x,y)\,\Delta y + \varepsilon_1\,\Delta x + \varepsilon_2\,\Delta y,$$</div>
+      <p style="margin:.3rem 0;">則稱 $f$ 在 $(x, y)$ <strong>可微</strong>。</p>
+    </div>
+    <p>直觀：可微 = 可被「一個切平面」很好地近似。把切平面上的線性主部 $f_x \Delta x + f_y \Delta y$ 拿掉之後，剩下的誤差 $\varepsilon_1 \Delta x + \varepsilon_2 \Delta y$ 必須比 $\sqrt{(\Delta x)^2 + (\Delta y)^2}$ 衰減得更快（因為 $\varepsilon_1, \varepsilon_2 \to 0$）。<strong>注意可微性的定義內就引用了 $f_x, f_y$，所以可微的前提是偏導存在。</strong></p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- §3 反例                                                        -->
+<!-- ============================================================ -->
+<section id="sec-3">
+  <div class="section-number">第 3 節 · 反例</div>
+  <h2>哪些蘊涵不成立？六個反例</h2>
+
+  <p>本節依序給出六個經典反例，把兩個方向之間的「期望蘊涵」一一打破。每個反例的函數都定義在 $\mathbb{R}^2$ 上、在原點附近呈現病態行為，建議搭配 §1 的概念地圖一起閱讀。</p>
+
+  <!-- 例題 1 -->
+  <div id="sec-3-1" class="subsection">
+    <div class="lecture-example cf">
+      <div class="ex-tag">例題 1 · 連續 ⇏ $f_x, f_y$ 存在</div>
+      <div class="ex-title">令 $f(x,y)=|x|$。說明 $f$ 在 $(0,0)$ 連續，但 $f_x(0,0)$ 不存在。</div>
+      <span class="ex-method warn">反例</span>
+      <p>令 $f(x,y) = |x|$。</p>
+
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 連續性</div>
+        <p>$|x|$ 對 $x$ 連續，與 $y$ 無關，所以 $f$ 在原點 $(0,0)$（事實上整個 $\mathbb{R}^2$）連續。</p>
+      </div>
+
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 偏導 $f_x(0,0)$ 不存在</div>
+        <p>依定義</p>
+        <div style="text-align:center;">$$f_x(0,0) = \lim_{\Delta x \to 0} \dfrac{f(\Delta x, 0) - f(0,0)}{\Delta x} = \lim_{\Delta x \to 0} \dfrac{|\Delta x| - 0}{\Delta x} = \lim_{\Delta x \to 0} \dfrac{|\Delta x|}{\Delta x}.$$</div>
+        <p>右極限為 $+1$（$\Delta x > 0$ 時），左極限為 $-1$（$\Delta x < 0$ 時），兩者不相等，故 $f_x(0,0)$ <strong>不存在</strong>。</p>
+      </div>
+
+      <div class="ex-answer">
+        <strong>結論：</strong> $f$ 在 $(0,0)$ 連續，但 $f_x(0,0)$ 不存在 $\Rightarrow$ 「連續 $\Rightarrow$ 偏導存在」<strong>不成立</strong>。
+      </div>
+    </div>
+  </div>
+
+  <!-- 例題 2 -->
+  <div id="sec-3-2" class="subsection">
+    <div class="lecture-example cf">
+      <div class="ex-tag">例題 2 · $f_x, f_y$ 存在 ⇏ 連續</div>
+      <div class="ex-title">令 $f(x,y)=\begin{cases}\dfrac{xy}{x^2+y^2},&(x,y)\ne(0,0)\\0,&(x,y)=(0,0)\end{cases}$。說明 $f_x(0,0),f_y(0,0)$ 存在，但 $f$ 在 $(0,0)$ 不連續。</div>
+      <span class="ex-method warn">反例</span>
+      <p>令</p>
+      <div style="text-align:center;">$$f(x,y) = \begin{cases} \dfrac{xy}{x^2 + y^2}, & (x,y) \ne (0,0) \\[4pt] 0, & (x,y) = (0,0) \end{cases}.$$</div>
+
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 計算 $f_x(0,0)$ 與 $f_y(0,0)$</div>
+        <p>沿 $x$ 軸（即 $y=0$）：$f(\Delta x, 0) = \dfrac{\Delta x \cdot 0}{(\Delta x)^2} = 0$，所以</p>
+        <div style="text-align:center;">$$f_x(0,0) = \lim_{\Delta x \to 0} \dfrac{f(\Delta x, 0) - f(0,0)}{\Delta x} = \lim_{\Delta x \to 0} \dfrac{0 - 0}{\Delta x} = 0.$$</div>
+        <p>同理 $f_y(0,0) = 0$。所以兩個偏導<strong>都存在且皆為 $0$</strong>。</p>
+      </div>
+
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 沿 $y = mx$ 路徑檢驗連續性</div>
+        <p>當 $(x, y) \to (0, 0)$ 沿直線 $y = mx$（$x \ne 0$）：</p>
+        <div style="text-align:center;">$$f(x, mx) = \dfrac{x \cdot mx}{x^2 + (mx)^2} = \dfrac{m x^2}{(1 + m^2)\, x^2} = \dfrac{m}{1 + m^2}.$$</div>
+        <p>此值<strong>與斜率 $m$ 有關</strong>（例如 $m = 1$ 時為 $1/2$，$m = 0$ 時為 $0$），代表沿不同直線得到不同的「極限值」，所以</p>
+        <div style="text-align:center;">$$\lim_{(x,y) \to (0,0)} f(x,y) \ \text{不存在}.$$</div>
+        <p>故 $f$ 在 $(0,0)$ <strong>不連續</strong>。</p>
+      </div>
+
+      <div class="ex-answer">
+        <strong>結論：</strong> $f_x(0,0) = f_y(0,0) = 0$ 都存在，但 $f$ 在 $(0,0)$ 不連續 $\Rightarrow$ 「偏導存在 $\Rightarrow$ 連續」<strong>不成立</strong>。
+      </div>
+    </div>
+  </div>
+
+  <!-- 例題 3 -->
+  <div id="sec-3-3" class="subsection">
+    <div class="lecture-example cf">
+      <div class="ex-tag">例題 3 · $f_x, f_y$ exist ⇏ $D_{\vec u} f$ exists for all $\vec u$</div>
+      <div class="ex-title">沿用 $f(x,y)=\begin{cases}\dfrac{xy}{x^2+y^2},&(x,y)\ne(0,0)\\0,&(x,y)=(0,0)\end{cases}$。說明 $f_x(0,0),f_y(0,0)$ 存在，但某些方向導數 $D_{\vec u}f(0,0)$ 不存在。</div>
+      <span class="ex-method warn">反例</span>
+      <p>仍然令</p>
+      <div style="text-align:center;">$$f(x,y) = \begin{cases} \dfrac{xy}{x^2 + y^2}, & (x,y) \ne (0,0) \\[4pt] 0, & (x,y) = (0,0) \end{cases}.$$</div>
+      <p>由 例題 2 已知 $f_x(0,0) = f_y(0,0) = 0$。</p>
+
+      <div class="step-block">
+        <div class="step-num">步驟 · 方向導 $D_{\vec u} f(0,0)$ 沿 $ab \ne 0$ 不存在</div>
+        <p>取單位向量 $\vec u = \langle a, b \rangle$，$\|\vec u\| = 1$（即 $a^2 + b^2 = 1$），且 $ab \ne 0$。</p>
+        <div style="text-align:center;">$$D_{\vec u} f(0,0) = \lim_{t \to 0} \dfrac{f(ta, tb) - f(0,0)}{t} = \lim_{t \to 0} \dfrac{1}{t} \cdot \dfrac{(ta)(tb)}{(ta)^2 + (tb)^2}.$$</div>
+        <p>把分子分母化簡：$(ta)(tb) = t^2 ab$，$(ta)^2 + (tb)^2 = t^2 (a^2 + b^2) = t^2$，故</p>
+        <div style="text-align:center;">$$D_{\vec u} f(0,0) = \lim_{t \to 0} \dfrac{1}{t} \cdot \dfrac{t^2 ab}{t^2} = \lim_{t \to 0} \dfrac{ab}{t}.$$</div>
+        <p>當 $ab \ne 0$，$\dfrac{ab}{t} \to \pm\infty$（隨 $t$ 趨於 $0^+$ 或 $0^-$ 而異號），故極限<strong>不存在</strong>。</p>
+      </div>
+
+      <div class="ex-answer">
+        <strong>結論：</strong> 沿坐標軸方向（$\vec u = \langle 1, 0\rangle$ 或 $\langle 0, 1\rangle$）時方向導等於 $f_x$ 或 $f_y$，皆為 $0$；但對任何非坐標軸方向（$ab \ne 0$）方向導不存在。所以「偏導存在 $\Rightarrow$ 方向導對<strong>所有</strong> $\vec u$ 存在」<strong>不成立</strong>。
+      </div>
+    </div>
+  </div>
+
+  <!-- 例題 4 -->
+  <div id="sec-3-4" class="subsection">
+    <div class="lecture-example cf">
+      <div class="ex-tag">例題 4 · $f_x, f_y$ 存在 ⇏ 可微</div>
+      <div class="ex-title">沿用 $f(x,y)=\begin{cases}\dfrac{xy}{x^2+y^2},&(x,y)\ne(0,0)\\0,&(x,y)=(0,0)\end{cases}$。說明 $f_x(0,0),f_y(0,0)$ 存在，但 $f$ 在 $(0,0)$ 不可微。</div>
+      <span class="ex-method warn">反例</span>
+      <span class="ex-method thm">利用 定理 A 反推</span>
+      <p>仍然令</p>
+      <div style="text-align:center;">$$f(x,y) = \begin{cases} \dfrac{xy}{x^2 + y^2}, & (x,y) \ne (0,0) \\[4pt] 0, & (x,y) = (0,0) \end{cases}.$$</div>
+
+      <div class="step-block">
+        <div class="step-num">步驟 · 由「不連續」反推「不可微」</div>
+        <p>由 例題 2：$f_x(0,0) = f_y(0,0) = 0$ 都存在，但 $f$ 在 $(0,0)$ 不連續。</p>
+        <p>而 定理 A（即 例題 7）告訴我們「可微 $\Rightarrow$ 連續」。對其取逆否命題：</p>
+        <div style="text-align:center;">$$\text{不連續} \;\Longrightarrow\; \text{不可微}.$$</div>
+        <p>所以 $f$ 在 $(0,0)$ <strong>不可微</strong>。</p>
+      </div>
+
+      <div class="ex-answer">
+        <strong>結論：</strong> 偏導 $f_x(0,0) = f_y(0,0) = 0$ 雖然存在，$f$ 卻不可微 $\Rightarrow$ 「偏導存在 $\Rightarrow$ 可微」<strong>不成立</strong>。
+      </div>
+    </div>
+  </div>
+
+  <!-- 例題 5 -->
+  <div id="sec-3-5" class="subsection">
+    <div class="lecture-example cf">
+      <div class="ex-tag">例題 5 · 所有 $\vec u$ 的 $D_{\vec u} f$ 存在 ⇏ 可微</div>
+      <div class="ex-title">令 $f(x,y)=\begin{cases}\dfrac{x^3}{x^2+y^2},&(x,y)\ne(0,0)\\0,&(x,y)=(0,0)\end{cases}$。說明所有方向導數 $D_{\vec u}f(0,0)$ 都存在，但 $f$ 在 $(0,0)$ 不可微。</div>
+      <span class="ex-method warn">反例</span>
+      <p>令</p>
+      <div style="text-align:center;">$$f(x,y) = \begin{cases} \dfrac{x^3}{x^2 + y^2}, & (x,y) \ne (0,0) \\[4pt] 0, & (x,y) = (0,0) \end{cases}.$$</div>
+
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 計算 $D_{\vec u} f(0,0)$</div>
+        <p>取 $\vec u = \langle a, b \rangle$，$\|\vec u\| = 1$，即 $a^2 + b^2 = 1$。</p>
+        <div style="text-align:center;">$$D_{\vec u} f(0,0) = \lim_{t \to 0} \dfrac{f(ta, tb) - 0}{t} = \lim_{t \to 0} \dfrac{1}{t} \cdot \dfrac{(ta)^3}{(ta)^2 + (tb)^2} = \lim_{t \to 0} \dfrac{1}{t} \cdot \dfrac{t^3 a^3}{t^2 (a^2 + b^2)} = \lim_{t \to 0} \dfrac{t \cdot a^3}{t} = a^3.$$</div>
+        <p>所以 $D_{\vec u} f(0,0) = a^3$ <strong>對所有單位向量 $\vec u$ 都存在</strong>。特別地：</p>
+        <ul style="margin:.4rem 0 .8rem 1.2rem;">
+          <li>取 $\vec u = \langle 1, 0\rangle$：$f_x(0,0) = D_{\langle 1, 0\rangle} f(0,0) = 1^3 = 1$。</li>
+          <li>取 $\vec u = \langle 0, 1\rangle$：$f_y(0,0) = D_{\langle 0, 1\rangle} f(0,0) = 0^3 = 0$。</li>
+        </ul>
+      </div>
+
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 假設可微 ⇒ 矛盾</div>
+        <p>若 $f$ 在 $(0,0)$ 可微，則對任一 $\vec u = \langle a, b\rangle$（$a^2 + b^2 = 1$）必有</p>
+        <div style="text-align:center;">$$D_{\vec u} f(0,0) \;=\; f_x(0,0)\, a + f_y(0,0)\, b \;=\; 1 \cdot a + 0 \cdot b \;=\; a.$$</div>
+        <p>但由步驟 1，$D_{\vec u} f(0,0) = a^3$。要求</p>
+        <div style="text-align:center;">$$a^3 = a \quad\Longleftrightarrow\quad a(a^2 - 1) = 0 \quad\Longleftrightarrow\quad a \in \{0,\, 1,\, -1\}.$$</div>
+        <p>對其它單位向量（如 $\vec u = \langle \tfrac{1}{\sqrt 2}, \tfrac{1}{\sqrt 2}\rangle$，$a = \tfrac{1}{\sqrt 2}$）就<strong>不滿足</strong>，矛盾。所以 $f$ 在 $(0,0)$ <strong>不可微</strong>。</p>
+      </div>
+
+      <div class="ex-answer">
+        <strong>結論：</strong> 方向導 $D_{\vec u} f(0,0) = a^3$ 對<strong>所有</strong> $\vec u$ 存在，$f$ 仍然不可微 $\Rightarrow$ 「方向導對全 $\vec u$ 存在 $\Rightarrow$ 可微」<strong>不成立</strong>。
+        <br><span style="font-size:.86em;color:var(--muted);">（順帶一提：此 $f$ 在 $(0,0)$ <strong>連續</strong>，因為 $\big|\tfrac{x^3}{x^2+y^2}\big| \le |x| \to 0$。所以本例同時說明「方向導對全 $\vec u$ 存在 + 連續」也仍不蘊涵可微。）</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 例題 6 -->
+  <div id="sec-3-6" class="subsection">
+    <div class="lecture-example cf">
+      <div class="ex-tag">例題 6 · 所有 $\vec u$ 的 $D_{\vec u} f$ 存在 ⇏ 連續</div>
+      <div class="ex-title">令 $f(x,y)=\begin{cases}\dfrac{x^2y}{x^4+y^2},&(x,y)\ne(0,0)\\0,&(x,y)=(0,0)\end{cases}$。說明所有方向導數 $D_{\vec u}f(0,0)$ 都存在，但 $f$ 在 $(0,0)$ 不連續。</div>
+      <span class="ex-method warn">反例</span>
+      <p>令</p>
+      <div style="text-align:center;">$$f(x,y) = \begin{cases} \dfrac{x^2 y}{x^4 + y^2}, & (x,y) \ne (0,0) \\[4pt] 0, & (x,y) = (0,0) \end{cases}.$$</div>
+
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 計算 $D_{\vec u} f(0,0)$</div>
+        <p>取 $\vec u = \langle a, b \rangle$，$\|\vec u\| = 1$。</p>
+        <div style="text-align:center;">$$D_{\vec u} f(0,0) = \lim_{t \to 0} \dfrac{f(ta, tb) - 0}{t} = \lim_{t \to 0} \dfrac{1}{t} \cdot \dfrac{(ta)^2 (tb)}{(ta)^4 + (tb)^2} = \lim_{t \to 0} \dfrac{1}{t} \cdot \dfrac{t^3 a^2 b}{t^4 a^4 + t^2 b^2} = \lim_{t \to 0} \dfrac{a^2 b}{t^2 a^4 + b^2}.$$</div>
+        <p>分情況：</p>
+        <ul style="margin:.4rem 0 .8rem 1.2rem;">
+          <li>$b \ne 0$：$\displaystyle\lim_{t \to 0} \dfrac{a^2 b}{t^2 a^4 + b^2} = \dfrac{a^2 b}{b^2} = \dfrac{a^2}{b}$。</li>
+          <li>$b = 0$（即 $\vec u = \langle \pm 1, 0\rangle$）：$f(ta, 0) = \dfrac{(ta)^2 \cdot 0}{\ldots} = 0$，所以 $D_{\vec u} f(0,0) = 0$。</li>
+        </ul>
+        <p>故方向導對<strong>所有單位向量 $\vec u$ 都存在</strong>，數值為</p>
+        <div style="text-align:center;">$$D_{\vec u} f(0,0) = \begin{cases} \dfrac{a^2}{b}, & b \ne 0 \\[4pt] 0, & b = 0 \end{cases}.$$</div>
+      </div>
+
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 沿不同路徑趨近原點 ⇒ 不連續</div>
+        <p>沿坐標軸 $y = 0$：$f(x, 0) = \dfrac{x^2 \cdot 0}{x^4 + 0} = 0 \to 0$。</p>
+        <p>沿拋物線 $y = x^2$（$x \ne 0$）：</p>
+        <div style="text-align:center;">$$f(x, x^2) = \dfrac{x^2 \cdot x^2}{x^4 + (x^2)^2} = \dfrac{x^4}{x^4 + x^4} = \dfrac{1}{2}.$$</div>
+        <p>當 $x \to 0$，沿軸路徑得 $0$、沿拋物線路徑得 $\tfrac{1}{2}$，兩條路徑得到不同極限值，故</p>
+        <div style="text-align:center;">$$\lim_{(x,y) \to (0,0)} f(x,y) \text{ 不存在},$$</div>
+        <p>$f$ 在 $(0,0)$ <strong>不連續</strong>。</p>
+      </div>
+
+      <div class="ex-answer">
+        <strong>結論：</strong> 方向導對所有 $\vec u$ 都存在，但 $f$ 不連續 $\Rightarrow$ 「方向導對全 $\vec u$ 存在 $\Rightarrow$ 連續」<strong>不成立</strong>。
+        <br><span style="font-size:.86em;color:var(--muted);">注意拋物線路徑 $y = x^2$ 不是直線，所以「只沿直線檢驗」不足以證明連續，這正是兩變數極限的微妙之處。</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- §4 正向蘊涵                                                    -->
+<!-- ============================================================ -->
+<section id="sec-4">
+  <div class="section-number">第 4 節 · 正向蘊涵</div>
+  <h2>哪些蘊涵恆成立？兩條核心定理</h2>
+
+  <p>反例這麼多，看似四個概念互不相關。但其實有<strong>兩條保底的正向蘊涵</strong>，它們把「可微」放在中央：可微推出其它三件事；偏導連續又推回可微。這兩條合起來就是多變數微分學的骨幹。</p>
+
+  <!-- §4.1 定理 A -->
+  <div id="sec-4-1" class="subsection">
+    <h3>4.1 定理 A · 可微 ⇒ 連續、偏導存在、方向導對全 $\vec u$ 存在</h3>
+
+    <div class="info-box">
+      <span class="info-label">定理 A</span>
+      <strong>可微的三個必要條件</strong>
+      <p style="margin:.55rem 0 .3rem;">若 $f$ 在 $(x, y)$ <strong>可微</strong>，則</p>
+      <ol style="margin:.3rem 0 .3rem 1.4rem;">
+        <li>$f$ 在 $(x, y)$ <strong>連續</strong>；</li>
+        <li>偏導 $f_x(x, y),\, f_y(x, y)$ <strong>存在</strong>；</li>
+        <li>對<strong>所有單位向量 $\vec u$</strong>，方向導 $D_{\vec u} f(x, y)$ 存在，且</li>
+      </ol>
+      <div style="text-align:center;">$$D_{\vec u} f(x, y) \;=\; f_x(x, y)\, a + f_y(x, y)\, b, \qquad \vec u = \langle a, b \rangle.$$</div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 7 · 定理應用</div>
+      <div class="ex-title">若 $f$ 在 $(x,y)$ 可微，說明 $f$ 在該點連續，且 $f_x,f_y,D_{\vec u}f$ 對所有單位向量 $\vec u$ 都存在。</div>
+      <span class="ex-method thm">教科書定理</span>
+      <p>此處使用「可微 $\Rightarrow$ 連續，且 $f_x, f_y, D_{\vec u} f$ 存在」這個標準定理；它的逆命題不成立 — 反例見 §3 的例題 1、例題 2、例題 4。</p>
+      <div class="ex-answer" style="background:#eef2ff;">
+        <strong>常用方式：</strong> 定理 A 在反推時格外好用 — 想證明某 $f$ 在某點<strong>不可微</strong>，常常透過驗證它在該點<strong>不連續</strong>（如例題 4）或某個<strong>方向導不存在</strong>來達成。
+      </div>
+    </div>
+  </div>
+
+  <!-- §4.2 定理 B -->
+  <div id="sec-4-2" class="subsection">
+    <h3>4.2 定理 B · 偏導 $f_x, f_y$ 連續 ⇒ 可微</h3>
+
+    <div class="info-box">
+      <span class="info-label">定理 B</span>
+      <strong>可微的充分條件（最常用的判別法）</strong>
+      <p style="margin:.55rem 0 .3rem;">若 $f_x, f_y$ <strong>在 $(x, y)$ 的某鄰域內存在且在 $(x, y)$ 連續</strong>，則 $f$ 在 $(x, y)$ <strong>可微</strong>。</p>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 8 · 定理應用</div>
+      <div class="ex-title">若 $f_x,f_y$ 在 $(x,y)$ 的某鄰域存在且在 $(x,y)$ 連續，說明 $f$ 在 $(x,y)$ 可微。</div>
+      <span class="ex-method thm">教科書定理</span>
+      <p>此處使用「$f_x, f_y$ 存在且連續 $\Rightarrow$ 可微」這個標準定理。它的逆命題不成立 — 反例就是下節的例題 9。</p>
+      <div class="ex-answer" style="background:#eef2ff;">
+        <strong>實務意義：</strong> 大部分初等函數（多項式、$\sin, \cos, e^x$、$\ln$ 等的<strong>合成、四則</strong>，且分母不為零之處）的偏導本身就是初等函數因此連續，所以它們在開區域上自動可微。定理 B 是日常計算「不必驗 $\varepsilon$」就能知道可微的依據。
+      </div>
+    </div>
+
+    <div class="dual-card">
+      <div class="dc dc-real">
+        <div class="dc-title">定理 A：必要條件</div>
+        <p style="margin:0;font-size:.9rem;">可微 ⇒ 連續、偏導存在、方向導存在。<br>用法：<strong>反推不可微</strong>（找不連續或方向導不存在的點）。</p>
+      </div>
+      <div class="dc dc-vec">
+        <div class="dc-title">定理 B：充分條件</div>
+        <p style="margin:0;font-size:.9rem;">偏導連續 ⇒ 可微。<br>用法：<strong>正向證可微</strong>（驗證偏導本身連續即可）。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- §5 進階反例 例題 9                                                -->
+<!-- ============================================================ -->
+<section id="sec-5">
+  <div class="section-number">第 5 節 · 進階反例</div>
+  <h2>例題 9：可微 ⇏ 偏導連續</h2>
+
+  <p>這是全篇最精緻的反例，也是 定理 B 的逆命題不成立的直接證據。它示範了：一個函數可以<strong>真的可微</strong>（用 $\varepsilon$ 構造驗證），但是它的偏導 $f_x, f_y$ 在<strong>該點本身不連續</strong>。換言之，「可微」未必能保證「偏導是連續函數」。</p>
+
+  <div class="lecture-example cf">
+    <div class="ex-tag">例題 9 · 可微 ⇏ $f_x, f_y$ 連續</div>
+    <div class="ex-title">令 $f(x,y)=\begin{cases}(x^2+y^2)\sin\dfrac{1}{\sqrt{x^2+y^2}},&(x,y)\ne(0,0)\\0,&(x,y)=(0,0)\end{cases}$。證明 $f$ 在 $(0,0)$ 可微，但 $f_x,f_y$ 在 $(0,0)$ 不連續。</div>
+    <span class="ex-method warn">反例</span>
+    <span class="ex-method thm">$\varepsilon$ 構造法</span>
+    <p>令</p>
+    <div style="text-align:center;">$$f(x,y) = \begin{cases} (x^2 + y^2)\, \sin\!\dfrac{1}{\sqrt{x^2 + y^2}}, & (x,y) \ne (0,0) \\[4pt] 0, & (x,y) = (0,0) \end{cases}.$$</div>
+
+    <div class="step-block">
+      <div class="step-num">步驟 1 · 計算 $f_x(0,0), f_y(0,0)$</div>
+      <p>沿 $x$ 軸（$y = 0$）：$f(\Delta x, 0) = (\Delta x)^2 \sin\!\dfrac{1}{|\Delta x|}$，所以</p>
+      <div style="text-align:center;">$$f_x(0,0) = \lim_{\Delta x \to 0} \dfrac{(\Delta x)^2 \sin\!\frac{1}{|\Delta x|} - 0}{\Delta x} = \lim_{\Delta x \to 0} \Delta x \cdot \sin\!\dfrac{1}{|\Delta x|} = 0.$$</div>
+      <p>（因為 $\big|\sin\!\tfrac{1}{|\Delta x|}\big| \le 1$，整體被 $|\Delta x|$ 夾擠至 $0$。）</p>
+      <p>同理 $f_y(0,0) = 0$。</p>
+    </div>
+
+    <div class="step-block">
+      <div class="step-num">步驟 2 · 對 $(x, y) \ne (0, 0)$ 計算偏導</div>
+      <p>令 $r = \sqrt{x^2 + y^2}$，把 $f = r^2 \sin\!\tfrac{1}{r}$ 對 $x$ 偏微分：</p>
+      <div style="text-align:center;">$$\dfrac{\partial f}{\partial x} = 2x\, \sin\!\dfrac{1}{\sqrt{x^2 + y^2}} \;-\; \dfrac{x \cos\!\dfrac{1}{\sqrt{x^2 + y^2}}}{\sqrt{x^2 + y^2}}.$$</div>
+      <p>同理</p>
+      <div style="text-align:center;">$$\dfrac{\partial f}{\partial y} = 2y\, \sin\!\dfrac{1}{\sqrt{x^2 + y^2}} \;-\; \dfrac{y \cos\!\dfrac{1}{\sqrt{x^2 + y^2}}}{\sqrt{x^2 + y^2}}.$$</div>
+    </div>
+
+    <div class="step-block">
+      <div class="step-num">步驟 3 · $\partial f/\partial x$ 在 $(0, 0)$ 不連續</div>
+      <p>沿 $x$ 軸取極限（即把 $y = 0$ 代入並讓 $x \to 0$）：</p>
+      <div style="text-align:center;">$$\dfrac{\partial f}{\partial x}(x, 0) \;=\; 2x\, \sin\!\dfrac{1}{|x|} \;-\; \dfrac{x}{|x|}\, \cos\!\dfrac{1}{|x|}.$$</div>
+      <p>當 $x \to 0$，第一項 $2x\sin\!\tfrac{1}{|x|} \to 0$（被 $|2x|$ 夾擠）；但第二項 $\dfrac{x}{|x|}\, \cos\!\tfrac{1}{|x|} = \pm \cos\!\tfrac{1}{|x|}$ 在 $\pm 1$ 之間<strong>振盪</strong>，沒有極限。所以</p>
+      <div style="text-align:center;">$$\lim_{(x,y) \to (0,0)} \dfrac{\partial f}{\partial x}(x,y) \ \text{不存在},$$</div>
+      <p>從而 $\partial f/\partial x$ 在 $(0, 0)$ <strong>不連續</strong>。同理 $\partial f / \partial y$ 在 $(0, 0)$ 也不連續。</p>
+    </div>
+
+    <div class="step-block">
+      <div class="step-num">步驟 4 · 驗證 $f$ 在 $(0, 0)$ 可微（$\varepsilon$ 構造）</div>
+      <p>令</p>
+      <div style="text-align:center;">$$\varepsilon_1 \;=\; \Delta x\, \sin\!\dfrac{1}{\sqrt{(\Delta x)^2 + (\Delta y)^2}}, \qquad \varepsilon_2 \;=\; \Delta y\, \sin\!\dfrac{1}{\sqrt{(\Delta x)^2 + (\Delta y)^2}}.$$</div>
+      <p><strong>(i) $\varepsilon_1, \varepsilon_2 \to 0$：</strong> $|\sin| \le 1$，所以 $|\varepsilon_1| \le |\Delta x| \to 0$，同理 $\varepsilon_2 \to 0$。</p>
+      <p><strong>(ii) 等式成立：</strong> 因 $f(0,0) = f_x(0,0) = f_y(0,0) = 0$，由 定義 4 待證的等式右側為</p>
+      <div style="text-align:center;">$$0 + 0 \cdot \Delta x + 0 \cdot \Delta y + \varepsilon_1 \Delta x + \varepsilon_2 \Delta y \;=\; \big[(\Delta x)^2 + (\Delta y)^2\big]\, \sin\!\dfrac{1}{\sqrt{(\Delta x)^2 + (\Delta y)^2}}.$$</div>
+      <p>而左側</p>
+      <div style="text-align:center;">$$f(0 + \Delta x,\, 0 + \Delta y) \;=\; \big[(\Delta x)^2 + (\Delta y)^2\big]\, \sin\!\dfrac{1}{\sqrt{(\Delta x)^2 + (\Delta y)^2}}.$$</div>
+      <p>兩側相等，所以等式成立。</p>
+      <p>(i) + (ii) ⇒ 由 定義 4，$f$ 在 $(0, 0)$ <strong>可微</strong>。</p>
+    </div>
+
+    <div class="ex-answer">
+      <strong>結論：</strong> $f$ 在 $(0, 0)$ <strong>可微</strong>（步驟 4），但 $f_x, f_y$ 在 $(0, 0)$ <strong>不連續</strong>（步驟 3）$\Rightarrow$ 「可微 $\Rightarrow$ 偏導連續」<strong>不成立</strong>，亦即 定理 B 的逆命題不成立。
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- §6 速查與結語                                                  -->
+<!-- ============================================================ -->
+<section id="sec-ref">
+  <div class="section-number">第 6 節 · 速查與結語</div>
+  <h2>定義 / 定理 / 反例 一頁速查</h2>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">定義</span>四個定義</div>
+
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">定義 1 · 連續</span><span class="ref-card-name-en">在 $(x_0, y_0)$ 連續</span></div>
+      <div class="ref-card-eq">$\displaystyle\lim_{(x,y) \to (x_0, y_0)} f(x,y) = f(x_0, y_0)$</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">定義 2 · 偏導數</span><span class="ref-card-name-en">偏導數</span></div>
+      <div class="ref-card-eq">$f_x = \displaystyle\lim_{\Delta x \to 0} \dfrac{f(x+\Delta x, y) - f(x, y)}{\Delta x}$，$\;f_y$ 同理</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">定義 3 · 方向導數</span><span class="ref-card-name-en">方向導數（$\vec u = \langle a,b\rangle$, $\|\vec u\|=1$）</span></div>
+      <div class="ref-card-eq">$D_{\vec u} f(x,y) = \displaystyle\lim_{t \to 0} \dfrac{f(x+ta,\, y+tb) - f(x,y)}{t}$</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">定義 4 · 可微</span><span class="ref-card-name-en">可微</span></div>
+      <div class="ref-card-eq">$\exists\, \varepsilon_1, \varepsilon_2 \to 0\ \text{s.t.}\ f(x{+}\Delta x, y{+}\Delta y) = f(x,y) + f_x \Delta x + f_y \Delta y + \varepsilon_1 \Delta x + \varepsilon_2 \Delta y$</div>
+    </div>
+  </div>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">定理</span>兩條核心定理</div>
+
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">定理 A · 可微 ⇒ ⋯</span><span class="ref-card-name-en">可微 ⇒ 連續、偏導與方向導存在</span></div>
+      <div class="ref-card-eq">可微 $\Rightarrow$ 連續 $\wedge$ $f_x, f_y$ 存在 $\wedge$ $D_{\vec u} f = f_x a + f_y b$ 對所有 $\vec u$ 存在</div>
+      <div class="ref-note">逆命題不成立。反例：例題 1（連續但偏導不存在）、例題 2（偏導存在但不連續）、例題 4（偏導存在但不可微）。</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">定理 B · 偏導連續 ⇒ 可微</span><span class="ref-card-name-en">$f_x, f_y$ 連續 ⇒ 可微</span></div>
+      <div class="ref-card-eq">$f_x, f_y$ 在某鄰域存在且在該點連續 $\Rightarrow$ $f$ 在該點可微</div>
+      <div class="ref-note">逆命題不成立。反例：例題 9（$f = (x^2+y^2)\sin\tfrac{1}{\sqrt{x^2+y^2}}$ 可微但 $f_x, f_y$ 在原點不連續）。</div>
+    </div>
+  </div>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">CF</span>反例函數對照</div>
+
+    <table class="conv-table">
+      <thead><tr><th style="width:18%;">編號</th><th style="width:42%;">函數（在原點外）</th><th>用途</th></tr></thead>
+      <tbody>
+        <tr><td>例題 1</td><td>$f = |x|$</td><td>連續但偏導不存在</td></tr>
+        <tr><td>例題 2 / 3 / 4</td><td>$f = \dfrac{xy}{x^2+y^2}$</td><td>偏導存在 ⇏ 連續 / 方向導 / 可微</td></tr>
+        <tr><td>例題 5</td><td>$f = \dfrac{x^3}{x^2+y^2}$</td><td>方向導存在 ⇏ 可微</td></tr>
+        <tr><td>例題 6</td><td>$f = \dfrac{x^2 y}{x^4+y^2}$</td><td>方向導存在 ⇏ 連續</td></tr>
+        <tr><td>例題 9</td><td>$f = (x^2+y^2)\sin\dfrac{1}{\sqrt{x^2+y^2}}$</td><td>可微 ⇏ 偏導連續</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">流程</span>判別流程</div>
+    <ol class="prop-list">
+      <li>看 $f$ 在 $(x_0, y_0)$ 是否<strong>連續</strong>：若不連續 ⇒ <span class="pill pill-red">不可微</span>（定理 A 的逆否）。</li>
+      <li>計算 $f_x, f_y$ 並檢查是否<strong>在 $(x_0, y_0)$ 鄰域連續</strong>：若是 ⇒ <span class="pill pill-green">可微</span>（定理 B）。</li>
+      <li>若 $f_x, f_y$ 存在但不連續，須回到 定義 4 構造 $\varepsilon_1, \varepsilon_2$ 親自驗證（如 例題 9）。</li>
+      <li>檢驗某個方向 $\vec u$ 的方向導 $D_{\vec u} f$ 是否符合線性公式 $f_x a + f_y b$：若<strong>不符</strong> ⇒ <span class="pill pill-red">不可微</span>（如 例題 5）。</li>
+    </ol>
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">一句話總結</span>
+    <p style="margin:.4rem 0;"><strong>多變數的「可微」遠強於「偏導存在」</strong>；要證可微，最方便的工具是 定理 B（偏導連續 ⇒ 可微）；要否決可微，最方便的工具是 定理 A 的逆否（不連續 ⇒ 不可微）或方向導不滿足線性公式。</p>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  本文改寫自原講義（2022）— 內容包含 4 個正式定義與 9 個範例，依教學順序重新編排為繁體中文。所有數學推導皆依原講義整理。<br>
+  風格沿用同資料夾下 <a href="multivariable_calculus.html">multivariable_calculus.html</a> 的版型。
+</footer>
+
+</body>
+</html>

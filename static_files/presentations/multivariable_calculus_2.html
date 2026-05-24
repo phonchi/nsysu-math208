@@ -1,0 +1,2195 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多變數函數 II — 第 13.5-13.10 節互動講義</title>
+<script>
+  MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<!-- Legacy test anchors: Chain Rules for functions of several variables; Directional derivatives and gradients; Tangent planes and normal lines; Extrema of functions of two variables; Applications of extrema of functions of two variables. -->
+<style>
+:root{
+  --ink:#1a1a2e;--paper:#f7f3eb;--card:#fffdf7;--card-border:#e8e2d6;
+  --accent:#c0392b;--accent2:#2c3e7a;--accent3:#1a6b4a;--muted:#7d776b;
+  --code-bg:#2d2d3f;--x-axis:#e74c3c;--y-axis:#27ae60;--z-axis:#2980b9;--gold:#f1c40f;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.9;font-size:17px}
+.hero{min-height:56vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem;background:#1a1a2e;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(44,62,122,.92),rgba(26,107,74,.78)),url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="360" height="220" viewBox="0 0 360 220"><path d="M0 170 C90 60 180 250 360 90" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="3"/><path d="M0 120 C100 30 230 210 360 50" fill="none" stroke="rgba(241,196,15,.35)" stroke-width="2"/><path d="M40 210 C110 20 230 260 320 10" fill="none" stroke="rgba(46,204,113,.28)" stroke-width="2"/></svg>');background-size:cover,360px 220px;background-position:center}
+.hero-content{position:relative;z-index:1;max-width:960px}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2rem,5vw,3.25rem);font-weight:900;color:#fff;line-height:1.28;margin-bottom:1rem}
+.hero h1 .green{color:#2ecc71}.hero h1 .yellow{color:#f1c40f}
+.subtitle{font-size:clamp(.95rem,2vw,1.16rem);color:rgba(255,255,255,.78);font-weight:300;margin-bottom:1.4rem}
+.big-formula{color:#fff;background:rgba(0,0,0,.32);padding:.85rem 1.2rem;border-radius:10px;display:inline-block;border:1px solid rgba(255,255,255,.16);font-size:.96rem}
+.container{max-width:1200px;margin:0 auto;padding:3rem 1.5rem}
+.side-nav{position:fixed;top:50%;right:1rem;transform:translateY(-50%);background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.45rem .5rem;font-size:.74rem;font-family:'JetBrains Mono',monospace;box-shadow:0 4px 18px rgba(0,0,0,.08);z-index:50;display:flex;flex-direction:column;gap:.1rem;max-width:240px;max-height:calc(100vh - 2rem);overflow-y:auto}
+.side-nav .sn-title{font-size:.66rem;color:var(--muted);letter-spacing:.1em;padding:.2rem .55rem .35rem;border-bottom:1px solid var(--card-border);margin-bottom:.25rem}
+.side-nav a,.side-nav .sn-item{display:block;padding:.28rem .55rem;color:var(--muted);text-decoration:none;border-left:2px solid transparent;border-radius:4px;line-height:1.35}
+.side-nav .sn-item.sn-sub{padding-left:1.1rem;font-size:.69rem;color:#a8a496}
+.side-nav a:hover,.side-nav a.active,.side-nav .sn-item:hover,.side-nav .sn-item.active{color:var(--accent3);background:rgba(26,107,74,.06);border-left-color:var(--accent3)}
+@media(max-width:1280px){.side-nav{display:none}}
+section{margin-bottom:3rem;padding-bottom:2.3rem;border-bottom:1px solid var(--card-border)}
+section:last-of-type{border-bottom:none}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.84rem;color:var(--accent3);font-weight:600;letter-spacing:.11em;margin-bottom:.5rem}
+h2{font-family:'Noto Serif TC',serif;font-size:1.68rem;font-weight:700;line-height:1.42;margin-bottom:1.1rem}
+h3{font-family:'Noto Serif TC',serif;font-size:1.15rem;color:var(--accent2);margin:1.35rem 0 .75rem}
+h4{font-family:'Noto Serif TC',serif;font-size:1rem;color:var(--accent3);margin:1rem 0 .5rem}
+p{margin-bottom:1rem}.subsection{margin:2rem 0}
+.info-box{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1.1rem 1.35rem;margin:1.3rem 0;position:relative}
+.info-box .info-label{position:absolute;top:-11px;left:14px;background:var(--accent2);color:#fff;font-size:.74rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.05em}
+.info-box.green{background:#eaf5ee;border-color:var(--accent3)}.info-box.green .info-label{background:var(--accent3)}
+.info-box.warm{background:#fef5e7;border-color:#d68910}.info-box.warm .info-label{background:#d68910}
+.lecture-example{background:var(--card);border:1px solid var(--card-border);border-left:5px solid var(--accent3);border-radius:10px;padding:1rem 1.2rem;margin:1rem 0;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.ex-tag{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--accent3);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.35rem}
+.ex-title{font-family:'Noto Serif TC',serif;font-weight:700;margin-bottom:.65rem;background:#f5f7fb;border:1px solid #dfe5f0;border-radius:8px;padding:.65rem .85rem}
+.ex-title::before{content:"題目";display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#fff;background:var(--accent2);border-radius:4px;padding:1px 7px;margin-right:.55rem;letter-spacing:.06em}
+.ex-method{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;background:rgba(26,107,74,.12);color:var(--accent3);border:1px solid rgba(26,107,74,.35);border-radius:4px;padding:1px 7px;margin:.1rem .25rem .1rem 0}
+.viz-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:1.3rem;margin:1.2rem 0;align-items:start}
+@media(max-width:900px){.viz-layout{grid-template-columns:1fr}}
+.canvas-panel{background:linear-gradient(160deg,#fffdf7 0%,#f4efe3 100%);border:1px solid var(--card-border);border-radius:12px;padding:1rem;box-shadow:0 4px 18px rgba(0,0,0,.06)}
+.canvas-wrap{width:100%;aspect-ratio:1/0.66;position:relative;border-radius:8px;overflow:hidden;background:#1a1a2e;border:1px solid var(--card-border)}
+.canvas-wrap.light{background:#fbf7ed}
+canvas{display:block;width:100%;height:100%}
+.hint-overlay{position:absolute;top:8px;right:10px;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:rgba(255,255,255,.78);background:rgba(0,0,0,.38);padding:3px 8px;border-radius:4px;pointer-events:none}
+.side-panel{display:flex;flex-direction:column;gap:.85rem}
+.info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.ic-title{font-size:.72rem;font-weight:700;color:var(--accent2);letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem}
+.ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.83rem;padding:.2rem 0;gap:.8rem;align-items:center}
+.ic-label{color:var(--muted)}.ic-value{color:var(--ink);font-weight:600;text-align:right}.ic-value.highlight{color:var(--accent)}.ic-value.ok{color:var(--accent3)}
+.eq-card{background:var(--code-bg);border-radius:10px;padding:.95rem 1.1rem;color:#fff}
+.eq-label{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#2ecc71;letter-spacing:.12em;margin-bottom:.5rem}
+.eq-formula{font-size:1rem;color:#fff;text-align:center}.eq-sub{font-size:.78rem;color:rgba(255,255,255,.68);margin-top:.4rem;text-align:center}
+.slider-row{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;background:var(--paper);border-radius:8px;margin-bottom:.5rem}
+.slider-label{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent2);font-weight:600;min-width:78px}.slider-row input[type=range]{flex:1;accent-color:var(--accent3)}.slider-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--accent);font-weight:600;min-width:62px;text-align:right}
+.preset-row{display:flex;gap:.4rem;flex-wrap:wrap;margin:.6rem 0 1rem}
+.preset-btn{font-family:'Noto Sans TC',sans-serif;font-size:.84rem;padding:.4rem .85rem;border-radius:6px;border:2px solid var(--card-border);background:var(--card);cursor:pointer;color:var(--ink)}
+.preset-btn.active{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.method-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem;margin:1rem 0}@media(max-width:760px){.method-grid{grid-template-columns:1fr}}
+.step-block{background:#fffaf0;border-left:4px solid var(--accent3);border-radius:8px;padding:.9rem 1.2rem;margin:.7rem 0}
+.lecture-example .step-block:first-of-type{margin-top:1.8rem;position:relative}
+.lecture-example .step-block:first-of-type::before{content:"解題";position:absolute;top:-1.35rem;left:0;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#fff;background:var(--accent3);border-radius:4px;padding:1px 7px;letter-spacing:.06em}
+.step-num{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);font-weight:700;letter-spacing:.1em;margin-bottom:.3rem}
+.ref-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:1rem 1.2rem;margin-bottom:.9rem;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.ref-card-header{display:flex;align-items:baseline;gap:.8rem;margin-bottom:.5rem;flex-wrap:wrap}.ref-card-name{font-family:'Noto Serif TC',serif;font-weight:700;font-size:1.02rem}.ref-card-name-en{font-size:.8rem;color:var(--muted)}
+.ref-card-eq{background:var(--code-bg);color:#fff;border-radius:8px;padding:.65rem 1rem;text-align:center;font-size:.95rem;margin-bottom:.55rem}
+footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border)}
+.pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:4px;margin:0 .15rem;vertical-align:1px}
+.pill-x{background:rgba(231,76,60,.12);color:var(--x-axis);border:1px solid rgba(231,76,60,.3)}
+.pill-y{background:rgba(39,174,96,.12);color:var(--y-axis);border:1px solid rgba(39,174,96,.3)}
+.pill-z{background:rgba(41,128,185,.12);color:var(--z-axis);border:1px solid rgba(41,128,185,.3)}
+.pill-blue{background:rgba(44,62,122,.13);color:var(--accent2);border:1px solid rgba(44,62,122,.3)}
+.pill-green{background:rgba(26,107,74,.13);color:var(--accent3);border:1px solid rgba(26,107,74,.3)}
+.pill-red{background:rgba(192,57,43,.13);color:var(--accent);border:1px solid rgba(192,57,43,.3)}
+.pill-grad{background:rgba(241,196,15,.16);color:#a07a08;border:1px solid rgba(241,196,15,.4)}
+.dual-canvas{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+@media(max-width:700px){.dual-canvas{grid-template-columns:1fr}}
+.ex-answer{background:#f3fbf6;border:1px solid #cdebd9;border-radius:8px;padding:.65rem .9rem;margin-top:.65rem;font-size:.93rem}
+.ex-answer::before{content:"答案";display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#fff;background:var(--accent3);border-radius:4px;padding:1px 7px;font-weight:700;margin-right:.5rem;letter-spacing:.06em}
+.concept-warning{background:#fef0ee;border-left:4px solid var(--accent);border-radius:6px;padding:.75rem 1rem;margin:1rem 0;font-size:.92rem}
+.cw-title{font-weight:700;color:var(--accent);margin-bottom:.3rem;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase}
+.section-summary{background:#fff8ea;border:1.5px dashed #d68910;border-radius:8px;padding:.95rem 1.15rem;margin:1.6rem 0 .5rem}
+.section-summary-title{font-family:'Noto Serif TC',serif;font-weight:700;color:#a07a08;font-size:.95rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.section-summary-title::before{content:'※';color:#d68910;font-size:1.05rem}
+.section-summary ul{margin:.3rem 0 0 1.2rem;padding:0}
+.section-summary li{margin:.25rem 0;font-size:.92rem}
+.quiz-card{background:#eef5ff;border:1.5px solid var(--accent2);border-radius:10px;padding:1rem 1.2rem;margin:1.2rem 0;box-shadow:0 2px 10px rgba(44,62,122,.07)}
+.quiz-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#fff;background:var(--accent2);padding:2px 8px;border-radius:4px;letter-spacing:.08em;margin-bottom:.45rem}
+.quiz-q{font-weight:600;margin-bottom:.6rem}
+.quiz-options{display:flex;flex-direction:column;gap:.4rem}
+.quiz-opt{padding:.45rem .85rem;border:1.5px solid var(--card-border);border-radius:6px;cursor:pointer;background:var(--card);text-align:left;font-size:.94rem;transition:all .15s}
+.quiz-opt:hover{border-color:var(--accent2);background:#fafcff}
+.quiz-opt.correct{border-color:var(--accent3);background:#eaf5ee;color:var(--accent3);font-weight:600}
+.quiz-opt.wrong{border-color:var(--accent);background:#fde9e7;color:var(--accent)}
+.quiz-input-row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin:.4rem 0}
+.quiz-input{padding:.4rem .7rem;border:1.5px solid var(--card-border);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:.92rem;width:160px}
+.quiz-input.correct{border-color:var(--accent3);background:#eaf5ee}
+.quiz-input.wrong{border-color:var(--accent);background:#fde9e7}
+.quiz-check{padding:.4rem .9rem;border:none;border-radius:6px;background:var(--accent2);color:#fff;font-family:'Noto Sans TC',sans-serif;font-size:.86rem;cursor:pointer;font-weight:600}
+.quiz-check:hover{background:#1f2e5c}
+.quiz-feedback{font-size:.86rem;margin-top:.5rem;padding:.45rem .7rem;border-radius:5px;display:none}
+.quiz-feedback.show{display:block}
+.quiz-feedback.ok{background:#eaf5ee;color:var(--accent3);border-left:3px solid var(--accent3)}
+.quiz-feedback.no{background:#fde9e7;color:var(--accent);border-left:3px solid var(--accent)}
+.dep-tree-wrap{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:1.1rem;margin:1rem 0;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.dep-tree-wrap svg{display:block;margin:0 auto;max-width:100%;height:auto}
+.dep-tree-wrap .tree-caption{text-align:center;font-size:.85rem;color:var(--muted);margin-top:.5rem;font-family:'JetBrains Mono',monospace}
+.tree-node{fill:var(--card);stroke:var(--accent2);stroke-width:2}
+.tree-node-text{font-family:'JetBrains Mono',monospace;font-size:14px;fill:var(--ink);text-anchor:middle;dominant-baseline:central;font-weight:700}
+.tree-edge{stroke:var(--muted);stroke-width:1.6;fill:none}
+.tree-edge-label{font-family:'JetBrains Mono',monospace;font-size:11px;fill:var(--accent3);text-anchor:middle;font-weight:600}
+.tree-path:hover .tree-edge{stroke:var(--accent);stroke-width:3}
+.tree-path:hover .tree-edge-label{fill:var(--accent);font-size:12px}
+</style>
+</head>
+<body>
+<nav class="side-nav" id="sideNav">
+  <div class="sn-title">第 13 章 · II</div>
+  <a class="sn-item" href="#sec-13-5">13.5 連鎖率</a>
+  <a class="sn-item sn-sub" href="#sec-13-5-1">  · 單獨立變數</a>
+  <a class="sn-item sn-sub" href="#sec-13-5-2">  · 兩獨立變數</a>
+  <a class="sn-item sn-sub" href="#sec-13-5-3">  · 隱微分</a>
+  <a class="sn-item" href="#sec-13-6">13.6 方向導數</a>
+  <a class="sn-item sn-sub" href="#sec-13-6-1">  · 方向導數算法</a>
+  <a class="sn-item sn-sub" href="#sec-13-6-2">  · 最大上升方向</a>
+  <a class="sn-item sn-sub" href="#sec-13-6-3">  · 梯度幾何</a>
+  <a class="sn-item" href="#sec-13-7">13.7 切平面</a>
+  <a class="sn-item sn-sub" href="#sec-13-7-1">  · 切平面與法線</a>
+  <a class="sn-item sn-sub" href="#sec-13-7-2">  · 交線切線</a>
+  <a class="sn-item sn-sub" href="#sec-13-7-3">  · 完整例題</a>
+  <a class="sn-item" href="#sec-13-8">13.8 極值</a>
+  <a class="sn-item sn-sub" href="#sec-13-8-1">  · 二階檢定</a>
+  <a class="sn-item sn-sub" href="#sec-13-8-2">  · 完整例題</a>
+  <a class="sn-item sn-sub" href="#sec-13-8-3">  · 絕對極值</a>
+  <a class="sn-item" href="#sec-13-9">13.9 應用（補充）</a>
+  <a class="sn-item sn-sub" href="#sec-13-9-1">  · 最大盒子</a>
+  <a class="sn-item sn-sub" href="#sec-13-9-2">  · 最大利潤</a>
+  <a class="sn-item" href="#sec-13-10">13.10 Lagrange（補充）</a>
+  <a class="sn-item sn-sub" href="#sec-13-10-geometry">  · 相切幾何</a>
+  <a class="sn-item sn-sub" href="#sec-13-10-method">  · 定理與方法</a>
+  <a class="sn-item sn-sub" href="#sec-13-10-examples">  · 講義例題</a>
+  <a class="sn-item sn-sub" href="#sec-13-10-two-constraints">  · 雙限制</a>
+  <a class="sn-item" href="#sec-ref">速查</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-content">
+    <h1><span class="green">多變數函數 II</span>：在三維空間中理解<span class="yellow">導數與極值</span></h1>
+    <div class="subtitle">第 13.5-13.10 節｜互動教學式講義｜曲面、切向、法向與最佳化</div>
+    <div class="big-formula">$\dfrac{dw}{dt}=w_xx'+w_yy',\quad D_{\mathbf u}f=\nabla f\cdot\mathbf u,\quad \nabla F(P)\perp T_PS,\quad \nabla f=\lambda\nabla g$</div>
+  </div>
+</div>
+
+<div class="container">
+
+<section id="sec-13-5">
+  <div class="section-number">13.5 多變數函數的連鎖率</div>
+  <h2>鏈鎖律：沿著曲面上的路徑累積變化</h2>
+  <p>本節先處理一個獨立變數，再處理兩個獨立變數。依賴圖可以幫助記公式，但真正的幾何意思是：$t$ 改變時，$(x(t),y(t))$ 在 $xy$ 平面移動，曲面上的點 $(x(t),y(t),w(t))$ 也跟著移動；高度變化由 $x$ 方向與 $y$ 方向的貢獻相加。</p>
+
+  <div class="info-box green">
+    <span class="info-label">定理 13.6 / 13.7</span>
+    <p>若 $w=f(x,y)$ 且 $x=g(t),\ y=h(t)$，則</p>
+    $$\frac{dw}{dt}=w_x\frac{dx}{dt}+w_y\frac{dy}{dt}.$$
+    <p>若 $x=g(s,t),\ y=h(s,t)$，則</p>
+    $$\frac{\partial w}{\partial s}=w_xx_s+w_yy_s,\qquad \frac{\partial w}{\partial t}=w_xx_t+w_yy_t.$$
+  </div>
+
+  <div class="dep-tree-wrap">
+    <svg viewBox="0 0 720 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="鏈鎖律依賴樹">
+      <g class="tree-path">
+        <path class="tree-edge" d="M120,40 L80,110"/>
+        <path class="tree-edge" d="M120,40 L160,110"/>
+        <path class="tree-edge" d="M80,130 L80,180"/>
+        <path class="tree-edge" d="M160,130 L160,180"/>
+        <text class="tree-edge-label" x="80" y="80">w_x</text>
+        <text class="tree-edge-label" x="160" y="80">w_y</text>
+        <text class="tree-edge-label" x="60" y="160">x'(t)</text>
+        <text class="tree-edge-label" x="180" y="160">y'(t)</text>
+        <circle class="tree-node" cx="120" cy="30" r="20"/><text class="tree-node-text" x="120" y="30">w</text>
+        <circle class="tree-node" cx="80" cy="120" r="18"/><text class="tree-node-text" x="80" y="120">x</text>
+        <circle class="tree-node" cx="160" cy="120" r="18"/><text class="tree-node-text" x="160" y="120">y</text>
+        <circle class="tree-node" cx="80" cy="190" r="18"/><text class="tree-node-text" x="80" y="190">t</text>
+        <circle class="tree-node" cx="160" cy="190" r="18"/><text class="tree-node-text" x="160" y="190">t</text>
+        <text x="120" y="215" style="font-family:'Noto Serif TC',serif;font-size:13px;text-anchor:middle;fill:var(--accent2);font-weight:700">$\frac{dw}{dt}=w_x x'+w_y y'$</text>
+      </g>
+      <line x1="320" y1="20" x2="320" y2="220" stroke="var(--card-border)" stroke-width="1.5" stroke-dasharray="4 4"/>
+      <g class="tree-path">
+        <path class="tree-edge" d="M520,40 L460,110"/>
+        <path class="tree-edge" d="M520,40 L580,110"/>
+        <path class="tree-edge" d="M460,130 L420,180"/>
+        <path class="tree-edge" d="M460,130 L500,180"/>
+        <path class="tree-edge" d="M580,130 L540,180"/>
+        <path class="tree-edge" d="M580,130 L620,180"/>
+        <text class="tree-edge-label" x="475" y="80">w_x</text>
+        <text class="tree-edge-label" x="565" y="80">w_y</text>
+        <text class="tree-edge-label" x="425" y="160">x_s</text>
+        <text class="tree-edge-label" x="495" y="160">x_t</text>
+        <text class="tree-edge-label" x="545" y="160">y_s</text>
+        <text class="tree-edge-label" x="615" y="160">y_t</text>
+        <circle class="tree-node" cx="520" cy="30" r="20"/><text class="tree-node-text" x="520" y="30">w</text>
+        <circle class="tree-node" cx="460" cy="120" r="18"/><text class="tree-node-text" x="460" y="120">x</text>
+        <circle class="tree-node" cx="580" cy="120" r="18"/><text class="tree-node-text" x="580" y="120">y</text>
+        <circle class="tree-node" cx="420" cy="190" r="16"/><text class="tree-node-text" x="420" y="190" style="font-size:13px">s</text>
+        <circle class="tree-node" cx="500" cy="190" r="16"/><text class="tree-node-text" x="500" y="190" style="font-size:13px">t</text>
+        <circle class="tree-node" cx="540" cy="190" r="16"/><text class="tree-node-text" x="540" y="190" style="font-size:13px">s</text>
+        <circle class="tree-node" cx="620" cy="190" r="16"/><text class="tree-node-text" x="620" y="190" style="font-size:13px">t</text>
+        <text x="520" y="215" style="font-family:'Noto Serif TC',serif;font-size:13px;text-anchor:middle;fill:var(--accent2);font-weight:700">$\partial w/\partial s=w_x x_s+w_y y_s,\ \partial w/\partial t=w_x x_t+w_y y_t$</text>
+      </g>
+    </svg>
+    <div class="tree-caption">左：單獨立變數樹（每條分支對應一個乘積項） · 右：兩個獨立變數樹（每個 <code>∂/∂s</code> 收集對 <code>s</code> 的所有分支）</div>
+  </div>
+
+  <div class="concept-warning">
+    <div class="cw-title">概念辨析 · 先代入 vs. 鏈鎖律</div>
+    <p>當 <span class="pill pill-blue">$x,y$ 對 $t$ 顯式可代</span>：兩種作法等價，先代入後微分常常更省事；<br>當 <span class="pill pill-red">$f$ 抽象</span>（例如熱力學 $U(p,V)$ 中的 $p,V$ 又依賴 $T,S$）：只有鏈鎖律可用。記住：所有「鏈鎖律例題」的核心都是<strong>把單變數鏈鎖律對每條樹枝加總</strong>。</p>
+  </div>
+
+  <h3 id="sec-13-5-1">單獨立變數的鏈鎖律</h3>
+  <div class="method-grid">
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 1</div>
+      <div class="ex-title">$w=x^2y-y^2,\ x=\sin t,\ y=e^t$，求 $\dfrac{dw}{dt}\bigg|_{t=0}$</div>
+      <div class="step-block"><div class="step-num">步驟 1</div>偏導與對 $t$ 的導數：$w_x=2xy,\ w_y=x^2-2y,\ x'=\cos t,\ y'=e^t$。</div>
+      <div class="step-block"><div class="step-num">步驟 2</div>在 $t=0$ 時 $x=\sin 0=0,\ y=e^0=1$，故 $w_x(0,1)=0,\ w_y(0,1)=-2$；$x'(0)=1,\ y'(0)=1$。</div>
+      <div class="step-block"><div class="step-num">步驟 3</div>套用定理 13.6：$\dfrac{dw}{dt}\bigg|_{t=0}=0\cdot 1+(-2)\cdot 1$。</div>
+      <div class="ex-answer">$\dfrac{dw}{dt}\bigg|_{t=0}=-2$</div>
+    </div>
+  </div>
+
+  <h3 id="sec-13-5-2">兩個獨立變數：先代入 vs. 鏈鎖律</h3>
+  <div class="method-grid">
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 3</div>
+      <div class="ex-title"><span class="pill pill-blue">先代入法</span> 已知 $w=2xy,\ x=s^2+t^2,\ y=s/t$，求 $\dfrac{\partial w}{\partial s}$ 與 $\dfrac{\partial w}{\partial t}$。</div>
+      <div class="step-block"><div class="step-num">步驟 1</div>把 $x,y$ 代入：$w=2(s^2+t^2)\cdot\dfrac{s}{t}=\dfrac{2s^3}{t}+2st$。</div>
+      <div class="step-block"><div class="step-num">步驟 2</div>對 $s$、$t$ 微分：$\dfrac{\partial w}{\partial s}=\dfrac{6s^2}{t}+2t$，$\dfrac{\partial w}{\partial t}=-\dfrac{2s^3}{t^2}+2s$。</div>
+      <div class="ex-answer">$\dfrac{\partial w}{\partial s}=\dfrac{6s^2}{t}+2t,\ \dfrac{\partial w}{\partial t}=-\dfrac{2s^3}{t^2}+2s$</div>
+    </div>
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 4</div>
+      <div class="ex-title"><span class="pill pill-green">鏈鎖律法</span> 已知 $w=2xy,\ x=s^2+t^2,\ y=s/t$，用鏈鎖律求 $\dfrac{\partial w}{\partial s}$ 與 $\dfrac{\partial w}{\partial t}$。</div>
+      <div class="step-block"><div class="step-num">步驟 1</div>$w_x=2y,\ w_y=2x$；$x_s=2s,\ x_t=2t,\ y_s=1/t,\ y_t=-s/t^2$。</div>
+      <div class="step-block"><div class="step-num">步驟 2</div>$\dfrac{\partial w}{\partial s}=w_x x_s+w_y y_s=2y(2s)+2x(1/t)=4ys+\dfrac{2x}{t}$。</div>
+      <div class="step-block"><div class="step-num">步驟 3</div>代回 $x=s^2+t^2,\ y=s/t$：$\dfrac{\partial w}{\partial s}=\dfrac{4s^2}{t}+\dfrac{2(s^2+t^2)}{t}=\dfrac{6s^2}{t}+2t$。同理 $\dfrac{\partial w}{\partial t}=-\dfrac{2s^3}{t^2}+2s$。</div>
+      <div class="ex-answer">兩法答案一致 ✓</div>
+    </div>
+  </div>
+
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 5</div>
+    <div class="ex-title">三變數 $w=xy+yz+xz$，$x=s\cos t,\ y=s\sin t,\ z=t$，求 $(s,t)=(1,2\pi)$ 處的偏導</div>
+    <div class="step-block"><div class="step-num">步驟 1（偏導）</div>$w_x=y+z,\ w_y=x+z,\ w_z=y+x$。</div>
+    <div class="step-block"><div class="step-num">步驟 2（中間變數）</div>$x_s=\cos t,\ y_s=\sin t,\ z_s=0$；$x_t=-s\sin t,\ y_t=s\cos t,\ z_t=1$。</div>
+    <div class="step-block"><div class="step-num">步驟 3（代入 $s=1,t=2\pi$）</div>$x=1,\ y=0,\ z=2\pi$；$w_x=2\pi,\ w_y=1+2\pi,\ w_z=1$；$x_s=1,\ y_s=0,\ z_s=0$；$x_t=0,\ y_t=1,\ z_t=1$。</div>
+    <div class="step-block"><div class="step-num">步驟 4（套鏈鎖律）</div>$\dfrac{\partial w}{\partial s}=(2\pi)(1)+(1+2\pi)(0)+(1)(0)=2\pi$；$\dfrac{\partial w}{\partial t}=(2\pi)(0)+(1+2\pi)(1)+(1)(1)=2+2\pi$。</div>
+    <div class="ex-answer">$\dfrac{\partial w}{\partial s}\bigg|_{(1,2\pi)}=2\pi,\quad \dfrac{\partial w}{\partial t}\bigg|_{(1,2\pi)}=2+2\pi$</div>
+  </div>
+
+  <div class="quiz-card" id="quiz-13-5-1">
+    <span class="quiz-tag">快速檢查</span>
+    <div class="quiz-q">給 $w=xy^2,\ x=t,\ y=t^2$，求 $\dfrac{dw}{dt}\bigg|_{t=1}$。</div>
+    <div class="quiz-input-row">
+      <input type="number" class="quiz-input" placeholder="輸入數值" step="0.01">
+      <button class="quiz-check">檢查</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <h3 id="sec-13-5-3">13.5.2 隱（偏）微分</h3>
+  <div class="info-box warm">
+    <span class="info-label">定理 13.8 隱微分</span>
+    <p>若 $F(x,y)=0$ 隱含定義 $y=y(x)$，鏈鎖律給 $F_x+F_y\,dy/dx=0$，故</p>
+    $$\frac{dy}{dx}=-\frac{F_x}{F_y}\quad(F_y\ne 0).$$
+    <p>若 $F(x,y,z)=0$ 隱含定義 $z=z(x,y)$，則 $\displaystyle z_x=-F_x/F_z,\ z_y=-F_y/F_z\ (F_z\ne 0)$。</p>
+  </div>
+
+  <div class="method-grid">
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 6</div>
+      <div class="ex-title">求 $\dfrac{dy}{dx}$，已知 $y^3+y^2-5y-x^2+4=0$</div>
+      <div class="step-block"><div class="step-num">步驟 1</div>令 $F(x,y)=y^3+y^2-5y-x^2+4$。</div>
+      <div class="step-block"><div class="step-num">步驟 2</div>$F_x=-2x$，$F_y=3y^2+2y-5$。</div>
+      <div class="step-block"><div class="step-num">步驟 3</div>$\dfrac{dy}{dx}=-\dfrac{F_x}{F_y}=-\dfrac{-2x}{3y^2+2y-5}$。</div>
+      <div class="ex-answer">$\dfrac{dy}{dx}=\dfrac{2x}{3y^2+2y-5}$</div>
+    </div>
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 7</div>
+      <div class="ex-title">求 $\dfrac{\partial z}{\partial x},\dfrac{\partial z}{\partial y}$，已知 $3x^2z-x^2y^2+2z^3+3yz-5=0$</div>
+      <div class="step-block"><div class="step-num">步驟 1</div>令 $F=3x^2z-x^2y^2+2z^3+3yz-5$。</div>
+      <div class="step-block"><div class="step-num">步驟 2</div>$F_x=6xz-2xy^2,\ F_y=-2x^2y+3z,\ F_z=3x^2+6z^2+3y$。</div>
+      <div class="step-block"><div class="step-num">步驟 3</div>$\dfrac{\partial z}{\partial x}=-\dfrac{F_x}{F_z}=\dfrac{2xy^2-6xz}{3x^2+6z^2+3y}$。</div>
+      <div class="ex-answer">$\dfrac{\partial z}{\partial x}=\dfrac{2xy^2-6xz}{3x^2+6z^2+3y},\quad \dfrac{\partial z}{\partial y}=\dfrac{2x^2y-3z}{3x^2+6z^2+3y}$</div>
+    </div>
+  </div>
+
+  <div class="concept-warning">
+    <div class="cw-title">概念辨析 · 鏈鎖律 ↔ 全微分</div>
+    <p>13.4 的全微分 $dw=w_x\,dx+w_y\,dy$ 與鏈鎖律相容：若 $x,y$ 都依賴 $t$，兩邊除以 $dt$ 就得到 $\frac{dw}{dt}=w_x\frac{dx}{dt}+w_y\frac{dy}{dt}$。同樣地，當 $F(x,y)=0$ 把 $y$ 視為 $x$ 的函數，全微分對 $F$ 取 $0$ 即得 $F_x+F_y\,y'=0$，這就是隱微分公式的來源。</p>
+  </div>
+
+  <div class="quiz-card" id="quiz-13-5-2">
+    <span class="quiz-tag">概念題</span>
+    <div class="quiz-q">給 $w=f(x,y)$，$x=g(s,t),\ y=h(s,t)$。下列哪一個 $\dfrac{\partial w}{\partial s}$ 的展開式是正確的？</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">$\dfrac{\partial w}{\partial s}=w_x\,x_s+w_y\,y_t$</button>
+      <button class="quiz-opt">$\dfrac{\partial w}{\partial s}=w_x\,x_s+w_y\,y_s$</button>
+      <button class="quiz-opt">$\dfrac{\partial w}{\partial s}=w_s\,x_s+w_s\,y_s$</button>
+      <button class="quiz-opt">$\dfrac{\partial w}{\partial s}=w_x\,x_t+w_y\,y_t$</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="section-summary">
+    <div class="section-summary-title">13.5 重點整理</div>
+    <ul>
+      <li>單獨立變數：$\dfrac{dw}{dt}=w_x\,x'+w_y\,y'$。</li>
+      <li>多獨立變數：對每個 $s,t$ 各畫一棵樹，沿樹枝乘起來、再沿同一變數的路徑加總。</li>
+      <li>三變數版只是把樹再多一個分支（例題 5 的 $z$ 條）。</li>
+      <li>隱微分：$\dfrac{dy}{dx}=-\dfrac{F_x}{F_y}$、$z_x=-\dfrac{F_x}{F_z}$、$z_y=-\dfrac{F_y}{F_z}$。記得分母不為零。</li>
+    </ul>
+  </div>
+</section>
+
+<section id="sec-13-6">
+  <div class="section-number">13.6 方向導數和梯度向量</div>
+  <h2>方向導數：用方向切割平面看某方向的一維斜率</h2>
+  <p>偏導數只看座標軸方向；方向導數看任意單位向量 $\mathbf u=(\cos\theta,\sin\theta)$。在三維圖形中，固定方向 $\mathbf u$ 等於拿一個垂直平面切曲面，截痕曲線在點上的切線斜率就是 $D_{\mathbf u}f$。</p>
+
+  <div class="info-box green">
+    <span class="info-label">定義 13.8 / 定理 13.10</span>
+    $$D_{\mathbf u}f(x,y)=\lim_{t\to0}\frac{f(x+t\cos\theta,y+t\sin\theta)-f(x,y)}{t}
+    =\nabla f(x,y)\cdot\mathbf u.$$
+  </div>
+
+  <h3>3D 截痕 + 2D 等高線：兩種視角同步</h3>
+  <p>左：曲面 $z=f(x,y)$ 與切割平面（沿 <span class="pill pill-blue">$\mathbf u$</span> 的垂直平面），平面與曲面交出黃色截痕，紅點處的切線斜率就是 $D_{\mathbf u}f$。右：俯視等高線圖，紅色 <span class="pill pill-red">梯度</span>、藍色 <span class="pill pill-blue">$\mathbf u$</span>，可看出當 $\mathbf u$ 與等高線垂直（與梯度同向）時 $D_{\mathbf u}f$ 達到最大值 $\|\nabla f\|$。</p>
+
+  <div class="canvas-panel">
+    <div class="slider-row">
+      <span class="slider-label">$\theta$</span>
+      <input type="range" id="dirTheta" min="0" max="360" step="1" value="60">
+      <span class="slider-val" id="dirThetaVal">60°</span>
+    </div>
+    <div class="dual-canvas">
+      <div class="canvas-wrap">
+        <canvas id="canvas-dir3d"></canvas>
+        <div class="hint-overlay">3D 切割平面</div>
+      </div>
+      <div class="canvas-wrap light">
+        <canvas id="canvas-13-6-contour2d"></canvas>
+        <div class="hint-overlay" style="color:rgba(0,0,0,.62);background:rgba(255,255,255,.8)">2D 等高線</div>
+      </div>
+    </div>
+    <div class="method-grid" style="margin-top:.8rem;grid-template-columns:repeat(3,1fr);">
+      <div class="info-card" style="padding:.6rem .8rem;">
+        <div class="ic-title">$\mathbf u$</div>
+        <div class="ic-row"><span class="ic-label">向量</span><span class="ic-value" id="dirU">(0.50, 0.87)</span></div>
+      </div>
+      <div class="info-card" style="padding:.6rem .8rem;">
+        <div class="ic-title">$\nabla f(P)$</div>
+        <div class="ic-row"><span class="ic-label">向量</span><span class="ic-value">(-2, -1)</span></div>
+        <div class="ic-row"><span class="ic-label">$\|\nabla f\|$</span><span class="ic-value ok">$\sqrt 5$</span></div>
+      </div>
+      <div class="info-card" style="padding:.6rem .8rem;">
+        <div class="ic-title">方向導數</div>
+        <div class="ic-row"><span class="ic-label">$D_{\mathbf u}f$</span><span class="ic-value highlight" id="dirValue">-1.866</span></div>
+        <div class="ic-row"><span class="ic-label">夾角 cos</span><span class="ic-value" id="dirCos">-0.836</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-warning">
+    <div class="cw-title">概念辨析 · 梯度 vs. 方向導數</div>
+    <p><span class="pill pill-red">$\nabla f$</span> 是<strong>向量</strong>，由各偏導排成；<span class="pill pill-blue">$D_{\mathbf u}f$</span> 是<strong>純量</strong>，是 $f$ 沿 $\mathbf u$ 的瞬時變化率。兩者透過內積相連：$D_{\mathbf u}f=\nabla f\cdot\mathbf u=\|\nabla f\|\cos\alpha$（$\alpha$ 為 $\nabla f$ 與 $\mathbf u$ 夾角）。當 $\alpha=0$ 取最大、$\alpha=\pi/2$ 為零、$\alpha=\pi$ 取最小。</p>
+  </div>
+
+  <h3 id="sec-13-6-1">講義例題（基本算法）</h3>
+  <div class="method-grid">
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 1</div>
+      <div class="ex-title">求 $f(x,y)=4-x^2-\dfrac14 y^2$ 在 $P=(1,2)$、沿單位向量 $\mathbf u=\cos(\pi/3)\mathbf i+\sin(\pi/3)\mathbf j$ 方向的方向導數。</div>
+      <div class="step-block"><div class="step-num">步驟 1</div>$f_x=-2x,\ f_y=-y/2$；$\nabla f(1,2)=(-2,-1)$。</div>
+      <div class="step-block"><div class="step-num">步驟 2</div>$\mathbf u=(\cos\tfrac\pi 3,\sin\tfrac\pi 3)=(1/2,\sqrt 3/2)$（已是單位向量）。</div>
+      <div class="step-block"><div class="step-num">步驟 3</div>$D_{\mathbf u}f=\nabla f\cdot\mathbf u=(-2)(1/2)+(-1)(\sqrt 3/2)$。</div>
+      <div class="ex-answer">$D_{\mathbf u}f(1,2)=-1-\dfrac{\sqrt 3}{2}\approx -1.866$</div>
+    </div>
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 2</div>
+      <div class="ex-title"><span class="pill pill-red">陷阱題</span> 求 $f(x,y)=x^2\sin(2y)$ 在 $(1,\pi/2)$、沿 $\mathbf v=3\mathbf i-4\mathbf j$ 方向的方向導數。</div>
+      <div class="step-block"><div class="step-num">步驟 1（先正規化！）</div>$\|\mathbf v\|=\sqrt{9+16}=5$，故 $\mathbf u=\mathbf v/5=(3/5,-4/5)$。</div>
+      <div class="step-block"><div class="step-num">步驟 2</div>$f_x=2x\sin 2y,\ f_y=2x^2\cos 2y$；在 $(1,\pi/2)$：$f_x=2\sin\pi=0$、$f_y=2\cos\pi=-2$。</div>
+      <div class="step-block"><div class="step-num">步驟 3</div>$D_{\mathbf u}f=0\cdot(3/5)+(-2)\cdot(-4/5)=8/5$。</div>
+      <div class="ex-answer">$D_{\mathbf u}f(1,\pi/2)=\dfrac{8}{5}$</div>
+    </div>
+  </div>
+
+  <div class="method-grid">
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 3</div>
+      <div class="ex-title">求梯度：$f=y\ln x+xy^2$，在 $(1,2)$</div>
+      <div class="step-block"><div class="step-num">步驟 1</div>$f_x=\dfrac{y}{x}+y^2,\ f_y=\ln x+2xy$。</div>
+      <div class="step-block"><div class="step-num">步驟 2</div>在 $(1,2)$：$f_x=2/1+4=6,\ f_y=\ln 1+4=4$。</div>
+      <div class="ex-answer">$\nabla f(1,2)=6\mathbf i+4\mathbf j$</div>
+    </div>
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 4</div>
+      <div class="ex-title">用梯度求方向導數：$f=3x^2-2y^2$，從 $P(-3/4,0)$ 朝 $Q(0,1)$</div>
+      <div class="step-block"><div class="step-num">步驟 1（方向向量）</div>$\overrightarrow{PQ}=(3/4,1)$，$\|\overrightarrow{PQ}\|=5/4$，$\mathbf u=(3/5,4/5)$。</div>
+      <div class="step-block"><div class="step-num">步驟 2（梯度）</div>$\nabla f=(6x,-4y)$；在 $(-3/4,0)$：$\nabla f=(-9/2,0)$。</div>
+      <div class="step-block"><div class="step-num">步驟 3</div>$D_{\mathbf u}f=(-9/2)(3/5)+0\cdot(4/5)$。</div>
+      <div class="ex-answer">$D_{\mathbf u}f(-3/4,0)=-\dfrac{27}{10}$</div>
+    </div>
+  </div>
+
+  <div class="quiz-card" id="quiz-13-6-1">
+    <span class="quiz-tag">快速檢查</span>
+    <div class="quiz-q">$f=4-x^2-\dfrac14 y^2$，$P=(1,2)$，$\mathbf u=\dfrac{1}{\sqrt 2}(1,1)$。求 $D_{\mathbf u}f$（保留 3 位小數）。</div>
+    <div class="quiz-input-row">
+      <input type="number" class="quiz-input" placeholder="輸入數值" step="0.001">
+      <button class="quiz-check">檢查</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <h3 id="sec-13-6-2">例題 5：最大上升方向（溫度等高線）</h3>
+  <div class="viz-layout">
+    <div class="canvas-panel">
+      <h4>金屬板上的等溫線與梯度</h4>
+      <div class="canvas-wrap light">
+        <canvas id="canvas-13-6-temperature"></canvas>
+        <div class="hint-overlay" style="color:rgba(0,0,0,.62);background:rgba(255,255,255,.8)">$T=20-4x^2-y^2$</div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">例題 5</div>
+        <div class="eq-formula">$T(x,y)=20-4x^2-y^2$，$P=(2,-3)$</div>
+        <div class="eq-sub">求從 $P$ 出發溫度增加最快方向與最大增加率；紅箭頭 = $\nabla T$，橢圓 = 等溫線。</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">分析</div>
+        <div class="ic-row"><span class="ic-label">$\nabla T$</span><span class="ic-value">$(-8x,-2y)$</span></div>
+        <div class="ic-row"><span class="ic-label">$\nabla T(2,-3)$</span><span class="ic-value highlight">$(-16,6)$</span></div>
+        <div class="ic-row"><span class="ic-label">$\|\nabla T\|$</span><span class="ic-value ok">$2\sqrt{73}$</span></div>
+        <div class="ic-row"><span class="ic-label">單位</span><span class="ic-value">℃/cm</span></div>
+      </div>
+      <div class="lecture-example" style="margin:0;">
+        <div class="ex-tag">推導</div>
+        <p>$T_x=-8x,\ T_y=-2y$；$\nabla T(2,-3)=(-16,6)$。最大上升方向沿此向量；最大增加率為其長度 $\sqrt{256+36}=2\sqrt{73}$ ℃/cm。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-card" id="quiz-13-6-2">
+    <span class="quiz-tag">概念題</span>
+    <div class="quiz-q">已知 $\nabla f(P)=(3,4)$。在 $P$ 處 $f$ 沿任何單位向量的最大方向導數為何？</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">$3$</button>
+      <button class="quiz-opt">$4$</button>
+      <button class="quiz-opt">$5$</button>
+      <button class="quiz-opt">$7$</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <h3 id="sec-13-6-3">例題 7：梯度垂直等高線（直觀）</h3>
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 7</div>
+    <div class="ex-title">對 $f(x,y)=y-\sin x$，畫出對應 $c=0$ 的等高線，並在曲線上數個點求法向量。</div>
+    <p>$\nabla f=(-\cos x,1)$ 在曲線上每一點都垂直於切向（曲線切向 $(1,\cos x)$ 與 $\nabla f=(-\cos x,1)$ 內積 $=-\cos x+\cos x=0$）。在等高線上前進 $f$ 不變，所以梯度（最大變化方向）必與等高線正交。這個性質在 13.7 切平面、13.8 鞍點分析裡會反覆出現。</p>
+  </div>
+
+  <h3>三變數梯度</h3>
+  <div class="info-box green">
+    <span class="info-label">定義 13.10</span>
+    $$\nabla f(x,y,z)=f_x\mathbf i+f_y\mathbf j+f_z\mathbf k,\qquad D_{\mathbf u}f=\nabla f\cdot\mathbf u.$$
+    <p>在三維中：梯度垂直於 <strong>等位面</strong> $f(x,y,z)=c$（不再是曲線而是曲面），長度仍為最大方向導數。</p>
+  </div>
+
+  <div class="viz-layout">
+    <div class="canvas-panel">
+      <h4>例題 8：等位面與梯度</h4>
+      <div class="canvas-wrap">
+        <canvas id="canvas-13-6-3var"></canvas>
+        <div class="hint-overlay">$f=x^2+y^2-4z$ 的等位面</div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">例題 8</div>
+        <div class="eq-formula">$f(x,y,z)=x^2+y^2-4z$，$P=(2,-1,1)$</div>
+        <div class="eq-sub">求 $\nabla f(P)$、最大上升方向與最大增加率；藍色為通過 $P$ 的等位面 $f=-1$。</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">計算</div>
+        <div class="ic-row"><span class="ic-label">$\nabla f$</span><span class="ic-value">$(2x,2y,-4)$</span></div>
+        <div class="ic-row"><span class="ic-label">$\nabla f(P)$</span><span class="ic-value highlight">$(4,-2,-4)$</span></div>
+        <div class="ic-row"><span class="ic-label">$\|\nabla f(P)\|$</span><span class="ic-value ok">$6$</span></div>
+        <div class="ic-row"><span class="ic-label">最大上升方向</span><span class="ic-value">$(2/3,-1/3,-2/3)$</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-warning">
+    <div class="cw-title">概念辨析 · 「$\mathbf u$ 必須是單位向量」</div>
+    <p>例題 4 給的方向是 $\overrightarrow{PQ}=(3/4,1)$，<strong>長度 $5/4\ne 1$</strong>。若直接用它代公式會得到錯誤的「方向導數」（量綱多一倍）。永遠先除以 $\|\mathbf v\|$ 再代入。例題 2 的 $\mathbf v=3\mathbf i-4\mathbf j$ 也是同樣的陷阱。</p>
+  </div>
+
+  <div class="quiz-card" id="quiz-13-6-3">
+    <span class="quiz-tag">概念題</span>
+    <div class="quiz-q">公式 $D_{\mathbf u}f=\nabla f\cdot\mathbf u$ 中，下列哪個量「必須」是單位向量？</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">$\nabla f$</button>
+      <button class="quiz-opt">$\mathbf u$</button>
+      <button class="quiz-opt">兩者皆須</button>
+      <button class="quiz-opt">兩者皆不須</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="section-summary">
+    <div class="section-summary-title">13.6 重點整理</div>
+    <ul>
+      <li>方向導數定義：$D_{\mathbf u}f=\lim_{t\to 0}\frac{f(P+t\mathbf u)-f(P)}{t}$；計算式：$D_{\mathbf u}f=f_x\cos\theta+f_y\sin\theta=\nabla f\cdot\mathbf u$。</li>
+      <li>梯度 $\nabla f=(f_x,f_y)$（或 $(f_x,f_y,f_z)$）：最大上升方向，最大率 $\|\nabla f\|$；最快下降為 $-\nabla f$。</li>
+      <li>梯度<strong>垂直等高線（2D）</strong>、<strong>垂直等位面（3D）</strong>。</li>
+      <li>$\mathbf u$ 一定要先正規化；非單位向量請先除以其長度。</li>
+    </ul>
+  </div>
+</section>
+
+<section id="sec-13-7">
+  <div class="section-number">13.7 切平面和法線</div>
+  <h2>切平面與法線：$\nabla F(P)$ 是曲面的法向量</h2>
+  <p>曲面若寫成 $F(x,y,z)=0$，切平面和法線可以統一由 $\nabla F(P)$ 決定。這裡不只看平面投影，而是在三維中同時看曲面、貼住曲面的切平面，以及穿過切點的法線。</p>
+
+  <div class="info-box green">
+    <span class="info-label">定義 13.11 / 定理 13.13</span>
+    <p>若 $F$ 在 $P=(x_0,y_0,z_0)$ 可微，且 $P$ 在曲面 $F(x,y,z)=0$ 上、$\nabla F(P)\ne0$，則切平面為</p>
+    $$F_x(P)(x-x_0)+F_y(P)(y-y_0)+F_z(P)(z-z_0)=0.$$
+    <p>法線通過 $P$，方向向量也是 $\nabla F(P)$。</p>
+  </div>
+
+  <div class="concept-warning">
+    <div class="cw-title">概念辨析 · $\nabla F$ 的兩個身分</div>
+    <p>13.6：對 $f(x,y)$，$\nabla f(x_0,y_0)$ 在 <span class="pill pill-blue">2D 平面</span>中是「等高線 $f=c$」的法向量；<br>
+    13.7：對 $F(x,y,z)$，$\nabla F(x_0,y_0,z_0)$ 在 <span class="pill pill-blue">3D 空間</span>中是「等位面 $F=c$」的法向量。<br>
+    形式相同，但<strong>所在空間不同</strong>。當 $F=f(x,y)-z$ 時，$\nabla F=(f_x,f_y,-1)$，第三個分量恆為 $-1$；這就是把 $z=f(x,y)$ 翻譯為 $F=0$ 形式時的代價。</p>
+  </div>
+
+  <div class="viz-layout">
+    <div class="canvas-panel">
+      <h3 id="sec-13-7-1">曲面、切平面與法線（講義例題）</h3>
+      <div class="preset-row" id="planePresets">
+        <button class="preset-btn active" data-plane="sphere">例 1：球面</button>
+        <button class="preset-btn" data-plane="hyperboloid">例 2：雙曲面</button>
+        <button class="preset-btn" data-plane="paraboloid">例 3：拋物面</button>
+        <button class="preset-btn" data-plane="normal">例 4：$xyz=12$</button>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="canvas-plane3d"></canvas>
+        <div class="hint-overlay">曲面 + 黃色切平面</div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label" id="planeLabel">例題 1</div>
+        <div class="eq-formula" id="planeFormula">$F=x^2+y^2+z^2-4=0$（球面，半徑 2）</div>
+        <div class="eq-sub" id="planeNote">$\nabla F(P)=2P$，方向就是從原點射向 $P$。</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">計算結果</div>
+        <div class="ic-row"><span class="ic-label">法向量</span><span class="ic-value" id="planeNormal">(2, 2, 2√2/√1)</span></div>
+        <div class="ic-row"><span class="ic-label">切平面</span><span class="ic-value highlight" id="planeResult">x+y+√2 z=4</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h3 id="sec-13-7-2">兩曲面交線的切線（外積）</h3>
+  <div class="info-box">
+    <span class="info-label">向量工具</span>
+    <strong>外積：同時垂直於兩個向量的方向</strong>
+    <p style="margin:.55rem 0 .3rem;">外積（cross product）只在三維向量中使用。若 $\mathbf a=(a_1,a_2,a_3)$、$\mathbf b=(b_1,b_2,b_3)$，則</p>
+    $$\mathbf a\times\mathbf b=(a_2b_3-a_3b_2,\ a_3b_1-a_1b_3,\ a_1b_2-a_2b_1).$$
+    <p style="margin:.3rem 0;">它的方向同時垂直於 $\mathbf a$ 與 $\mathbf b$；長度等於以 $\mathbf a,\mathbf b$ 為邊的平行四邊形面積。兩曲面交線的切向量必須同時躺在兩個曲面的切平面內，因此要同時垂直於兩個法向量 $\nabla F$ 與 $\nabla G$，所以可用 $\nabla F\times\nabla G$ 找方向。</p>
+  </div>
+  <div class="viz-layout">
+    <div class="canvas-panel">
+      <div class="canvas-wrap">
+        <canvas id="canvas-intersection3d"></canvas>
+        <div class="hint-overlay">$\nabla F\times\nabla G$ 為交線方向</div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">例題 5</div>
+        <div class="eq-formula">$x^2+2y^2+2z^2=20,\ x^2+y^2+z=4$</div>
+        <div class="eq-sub">描述兩曲面交線在 $P=(0,1,3)$ 的切線；交線切向 = 兩法向量的外積。</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">三向量</div>
+        <div class="ic-row"><span class="ic-label">$\nabla F$（白）</span><span class="ic-value">$(0,4,12)$</span></div>
+        <div class="ic-row"><span class="ic-label">$\nabla G$（藍）</span><span class="ic-value">$(0,2,1)$</span></div>
+        <div class="ic-row"><span class="ic-label">$\nabla F\times\nabla G$（黃）</span><span class="ic-value highlight">$(-20,0,0)$</span></div>
+        <div class="ic-row"><span class="ic-label">交線方向</span><span class="ic-value ok">沿 $-x$ 軸</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h3 id="sec-13-7-3">講義例題完整解題步驟</h3>
+  <div class="method-grid">
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 1</div>
+      <div class="ex-title">對等位面 $F(x,y,z)=x^2+y^2+z^2-4=0$，說明 $\nabla F$ 與曲面法向量的關係。</div>
+      <div class="step-block"><div class="step-num">幾何</div>$F=0$ 即 $x^2+y^2+z^2=4$，為以原點為中心、半徑 $r=2$ 的球面。</div>
+      <div class="step-block"><div class="step-num">$\nabla F$</div>$\nabla F=(2x,2y,2z)$。在球面上每一點 $\nabla F$ 等於 $2$ 倍位置向量，因此自然<strong>沿球面的徑向</strong>，正是球面切平面的法向量。</div>
+      <div class="ex-answer">球面，$r=2$；任一點切平面的法向量 $=2(x,y,z)$。</div>
+    </div>
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 2</div>
+      <div class="ex-title">求曲面 $z^2-2x^2-2y^2=12$ 在 $(1,-1,4)$ 的切平面。</div>
+      <div class="step-block"><div class="step-num">步驟 1</div>令 $F=z^2-2x^2-2y^2-12$。$\nabla F=(-4x,-4y,2z)$，在 $P$：$\nabla F=(-4,4,8)$。</div>
+      <div class="step-block"><div class="step-num">步驟 2</div>切平面：$-4(x-1)+4(y+1)+8(z-4)=0$。</div>
+      <div class="ex-answer">$-4x+4y+8z-24=0$，化簡 $-x+y+2z=6$</div>
+    </div>
+  </div>
+
+  <div class="method-grid">
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 3</div>
+      <div class="ex-title"><span class="pill pill-grad">$z=f(x,y)$ 形式</span> 求曲面 $z=1-\dfrac{x^2+4y^2}{10}$ 在 $(1,1,1/2)$ 的切平面。</div>
+      <div class="step-block"><div class="step-num">步驟 1（兩種寫法）</div>令 $F=f(x,y)-z=1-\dfrac{x^2+4y^2}{10}-z$，則 $F_x=-x/5,\ F_y=-4y/5,\ F_z=-1$。</div>
+      <div class="step-block"><div class="step-num">步驟 2（在 $P$）</div>$F_x(1,1)=-1/5,\ F_y(1,1)=-4/5,\ F_z=-1$。</div>
+      <div class="step-block"><div class="step-num">步驟 3</div>切平面：$-\dfrac15(x-1)-\dfrac45(y-1)-(z-\dfrac12)=0$。乘 $-10$ 得 $2(x-1)+8(y-1)+10(z-1/2)=0$。</div>
+      <div class="ex-answer">$2x+8y+10z=15$</div>
+    </div>
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 4</div>
+      <div class="ex-title">求曲面 $xyz=12$ 在 $(2,-2,-3)$ 的法線。</div>
+      <div class="step-block"><div class="step-num">步驟 1</div>$F=xyz-12$，$\nabla F=(yz,xz,xy)$。</div>
+      <div class="step-block"><div class="step-num">步驟 2</div>在 $P$：$\nabla F=((-2)(-3),(2)(-3),(2)(-2))=(6,-6,-4)$。</div>
+      <div class="step-block"><div class="step-num">步驟 3（法線參數式）</div>法線通過 $P=(2,-2,-3)$，方向向量為 $(6,-6,-4)$，所以先寫成參數式
+      $$x=2+6t,\qquad y=-2-6t,\qquad z=-3-4t.$$
+      這裡的同一個參數 $t$ 表示沿著同一條直線走的距離比例。</div>
+      <div class="step-block"><div class="step-num">步驟 4（參數式轉對稱式）</div>從三個參數式各自解出 $t$：
+      $$t=\frac{x-2}{6},\qquad t=\frac{y+2}{-6},\qquad t=\frac{z+3}{-4}.$$
+      因為三式描述的是同一條直線上的同一個參數，所以把三個 $t$ 相等，即得到對稱式。</div>
+      <div class="ex-answer">$\dfrac{x-2}{6}=\dfrac{y+2}{-6}=\dfrac{z+3}{-4}$</div>
+    </div>
+  </div>
+
+  <div class="quiz-card" id="quiz-13-7-1">
+    <span class="quiz-tag">快速檢查</span>
+    <div class="quiz-q">$F=x^2+y^2+z^2-9=0$（球面）在 $(1,2,2)$ 的切平面為 $x+2y+2z=k$，求 $k$。</div>
+    <div class="quiz-input-row">
+      <input type="number" class="quiz-input" placeholder="輸入 k" step="1">
+      <button class="quiz-check">檢查</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="quiz-card" id="quiz-13-7-2">
+    <span class="quiz-tag">概念題</span>
+    <div class="quiz-q">若曲面 $F(x,y,z)=0$ 在某點 $P$ 滿足 $\nabla F(P)=\mathbf 0$，關於定理 13.13 的切平面公式，下列何者正確？</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">仍可直接套公式，只是法向量為 $\mathbf 0$</button>
+      <button class="quiz-opt">定理條件 $\nabla F(P)\ne\mathbf 0$ 不滿足，不能直接套用切平面公式</button>
+      <button class="quiz-opt">必定有無限多個切平面</button>
+      <button class="quiz-opt">切平面必定是 $z=0$</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="section-summary">
+    <div class="section-summary-title">13.7 重點整理</div>
+    <ul>
+      <li>對曲面 $F(x,y,z)=0$，$\nabla F(P)$ 即切平面的法向量、也是法線方向。</li>
+      <li>切平面：$F_x(P)(x-x_0)+F_y(P)(y-y_0)+F_z(P)(z-z_0)=0$。</li>
+      <li>$z=f(x,y)$ 形式：令 $F=f(x,y)-z$，則切平面為 $f_x(x-x_0)+f_y(y-y_0)-(z-z_0)=0$。</li>
+      <li>兩曲面交線的切向 = $\nabla F\times\nabla G$；外積給出同時垂直於兩個法向量的方向。</li>
+      <li>定理 13.13 的使用條件包含 $\nabla F(P)\ne0$；若條件不滿足，不能直接套切平面公式。</li>
+    </ul>
+  </div>
+</section>
+
+<section id="sec-13-8">
+  <div class="section-number">13.8 兩變數函數的極值</div>
+  <h2>極值地形：水平切平面不等於一定有極值</h2>
+  <p>臨界點的意思是 $f_x=f_y=0$ 或偏導不存在；若 $f_x=f_y=0$，幾何上代表切平面水平。但水平切平面可能是碗底、帽頂，也可能是鞍點，因此還需要二階偏導數檢定。</p>
+
+  <div class="info-box green">
+    <span class="info-label">定理 13.15-13.17</span>
+    <p>若 $f_x(a,b)=0,\ f_y(a,b)=0$ 且二階偏導連續，令</p>
+    $$d=f_{xx}(a,b)f_{yy}(a,b)-[f_{xy}(a,b)]^2.$$
+    <p>$d>0,f_{xx}>0$ 為相對極小；$d>0,f_{xx}<0$ 為相對極大；$d<0$ 為鞍點；$d=0$ 則本檢定無結論。</p>
+  </div>
+
+  <div class="concept-warning">
+    <div class="cw-title">二階偏導檢定的直覺</div>
+    <p>這裡只用講義前面已經建立的「增量」與「微分近似」來看。從點 $(a,b)$ 移到附近點 $(a+u,b+v)$，也就是令
+    $$u=\Delta x,\qquad v=\Delta y,$$
+    函數高度的改變量是
+    $$\Delta f=f(a+u,b+v)-f(a,b).$$</p>
+    <p>講義 13.4 說過，若函數可微，第一個線性近似來自全微分：
+    $$\Delta f\approx df=f_x(a,b)u+f_y(a,b)v.$$
+    這一整塊稱為<strong>一階項</strong>，因為它只含有 $u$、$v$ 的一次方。幾何上，一階項描述切平面的傾斜：往 $x$ 方向走 $u$，高度約改變 $f_x(a,b)u$；往 $y$ 方向走 $v$，高度約改變 $f_y(a,b)v$。</p>
+    <p>可是二階偏導檢定只在講義定理 13.17 的條件下使用，也就是
+    $$f_x(a,b)=0,\qquad f_y(a,b)=0.$$
+    因此在臨界點，一階項變成
+    $$f_x(a,b)u+f_y(a,b)v=0\cdot u+0\cdot v=0.$$
+    這表示切平面是水平的；只看一階近似時，附近所有方向的高度改變都被估成 $0$，所以它無法分辨此點是極大、極小，還是鞍點。</p>
+    <p>下一步要問：既然一階項消失，那高度的下一層變化從哪裡來？答案是：看斜率本身怎麼變。$f_x$ 和 $f_y$ 也是 $x,y$ 的函數，所以從 $(a,b)$ 移到 $(a+u,b+v)$ 時，可以再用一次線性近似：</p>
+    $$f_x(a+u,b+v)\approx f_x(a,b)+f_{xx}(a,b)u+f_{xy}(a,b)v,$$
+    $$f_y(a+u,b+v)\approx f_y(a,b)+f_{yx}(a,b)u+f_{yy}(a,b)v.$$
+    <p>在臨界點 $f_x(a,b)=f_y(a,b)=0$，所以上式變成：沿路走動時，$x$ 方向斜率大約由 $f_{xx}u+f_{xy}v$ 控制，$y$ 方向斜率大約由 $f_{yx}u+f_{yy}v$ 控制。也就是說，二階偏導數描述的是「斜率的變化」。</p>
+    <p>把這些斜率變化累積成高度變化，就得到<strong>二階項</strong>：
+    $$\frac12\left(f_{xx}(a,b)u^2+2f_{xy}(a,b)uv+f_{yy}(a,b)v^2\right).$$
+    它含有 $u^2$、$uv$、$v^2$，所以叫二階項。前面的 $\frac12$ 可理解為：斜率不是一開始就跳到終點的大小，而是從 $0$ 逐漸變化，累積高度時取到平均效果。這裡不需要額外定理，只要抓住講義的想法：一階項看「斜率」，二階項看「斜率如何改變」。</p>
+    <p>因此在臨界點附近，扣掉原本高度後主要看</p>
+    $$f(a+u,b+v)-f(a,b)\approx \frac12\left(f_{xx}u^2+2f_{xy}uv+f_{yy}v^2\right).$$
+    <p>$d=f_{xx}f_{yy}-f_{xy}^2$ 的作用，就是判斷這個二階式在所有方向 $(u,v)$ 上是否同號。若 $d>0$，所有方向的二階變化同號；再看 $f_{xx}$：正表示附近都較高，是相對極小；負表示附近都較低，是相對極大。若 $d<0$，不同方向的二階變化有正有負，所以是鞍點。若 $d=0$，二階資訊不足，正如講義所說，要改用圖形或其他方法判斷。</p>
+  </div>
+
+  <div class="concept-warning">
+    <div class="cw-title">概念辨析 · 「臨界點」的兩種來源</div>
+    <p>定義 13.13：$(a,b)$ 是 $f$ 的臨界點，若<br>
+    （1）$f_x(a,b)=f_y(a,b)=0$，或<br>
+    （2）$f_x$ 或 $f_y$ 在 $(a,b)$ 不存在。<br>
+    兩類都可能是極值；二階檢定法 （定理 13.17） 只能用在情況 (1)。</p>
+  </div>
+
+  <h3 id="sec-13-8-1">3D 地形 + 2D 等高線：5 種典型情況</h3>
+  <div class="canvas-panel">
+    <div class="preset-row" id="extremaPresets">
+      <button class="preset-btn active" data-ext="quad">例 1：相對極小</button>
+      <button class="preset-btn" data-ext="cone">例 2：偏導不存在</button>
+      <button class="preset-btn" data-ext="cubic">例 3：極大 + 鞍點</button>
+      <button class="preset-btn" data-ext="fail">例 4：$d=0$</button>
+      <button class="preset-btn" data-ext="closed">例 5：閉區域</button>
+    </div>
+    <div class="dual-canvas">
+      <div class="canvas-wrap">
+        <canvas id="canvas-extrema3d"></canvas>
+        <div class="hint-overlay">3D 曲面與臨界點</div>
+      </div>
+      <div class="canvas-wrap light">
+        <canvas id="canvas-13-8-contour2d"></canvas>
+        <div class="hint-overlay" style="color:rgba(0,0,0,.62);background:rgba(255,255,255,.8)">2D 等高線</div>
+      </div>
+    </div>
+    <div class="method-grid" style="margin-top:.8rem;grid-template-columns:1fr 1fr;">
+      <div class="info-card">
+        <div class="ic-title" id="extLabel">例題 1</div>
+        <div class="ic-row"><span class="ic-label">函數</span><span class="ic-value" id="extFormula">$f=2x^2+y^2+8x-6y+20$</span></div>
+        <div class="ic-row"><span class="ic-label">註</span><span class="ic-value" id="extNote">$(-2,3)$ 是相對極小</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">分類</div>
+        <div class="ic-row"><span class="ic-label">臨界點</span><span class="ic-value" id="extPoint">(-2, 3)</span></div>
+        <div class="ic-row"><span class="ic-label">$d$</span><span class="ic-value" id="extD">8</span></div>
+        <div class="ic-row"><span class="ic-label">結論</span><span class="ic-value highlight" id="extResult">相對極小，f=3</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-warning">
+    <div class="cw-title">概念辨析 · 鞍點與水平切平面</div>
+    <p>鞍點滿足 $\nabla f(P)=0$ 但<strong>不是</strong>極值點：沿某些方向是極小、沿其他方向卻是極大（典型如 $f=y^2-x^2$ 在 $(0,0)$）。所以「水平切平面」不蘊含「極值」，必須再做二階檢定。</p>
+  </div>
+
+  <h3 id="sec-13-8-2">講義例題完整解題步驟</h3>
+  <div class="method-grid">
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 1</div>
+      <div class="ex-title">求 $f(x,y)=2x^2+y^2+8x-6y+20$ 的臨界點，並判斷相對極值。</div>
+      <div class="step-block"><div class="step-num">步驟 1（找臨界點）</div>$f_x=4x+8=0\Rightarrow x=-2$；$f_y=2y-6=0\Rightarrow y=3$。臨界點 $(-2,3)$。</div>
+      <div class="step-block"><div class="step-num">步驟 2（二階檢定）</div>$f_{xx}=4,\ f_{yy}=2,\ f_{xy}=0$；$d=4\cdot 2-0=8>0$ 且 $f_{xx}=4>0$。</div>
+      <div class="step-block"><div class="step-num">步驟 3（代回）</div>$f(-2,3)=8+9-16-18+20=3$。</div>
+      <div class="ex-answer">$(-2,3)$ 是相對極小（也是絕對極小），$f=3$。</div>
+    </div>
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 2</div>
+      <div class="ex-title"><span class="pill pill-red">偏導不存在</span> 對 $f(x,y)=1-(x^2+y^2)^{1/3}$，找出臨界點並判斷是否為相對極值。</div>
+      <div class="step-block"><div class="step-num">步驟 1</div>對任意 $(x,y)\ne (0,0)$：$f_x=-\dfrac{2x}{3(x^2+y^2)^{2/3}}$、$f_y=-\dfrac{2y}{3(x^2+y^2)^{2/3}}$。在 $(0,0)$ 分母為 $0$ — 偏導<strong>不存在</strong>。</div>
+      <div class="step-block"><div class="step-num">步驟 2</div>$(0,0)$ 仍是臨界點（屬定義 13.13 的情況 2）。</div>
+      <div class="step-block"><div class="step-num">步驟 3（直接比較）</div>對任意 $(x,y)\ne(0,0)$，$f(x,y)=1-(x^2+y^2)^{1/3}<1=f(0,0)$。</div>
+      <div class="ex-answer">$(0,0)$ 是相對極大，$f(0,0)=1$。注意：此處<strong>無法用</strong>二階檢定（偏導不存在），只能用直接比較。</div>
+    </div>
+  </div>
+
+  <div class="method-grid">
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 3</div>
+      <div class="ex-title">求 $f(x,y)=-x^3+4xy-2y^2+1$ 的臨界點，並用二階偏導數檢定分類。</div>
+      <div class="step-block"><div class="step-num">步驟 1</div>$f_x=-3x^2+4y=0$、$f_y=4x-4y=0\Rightarrow y=x$。代回：$-3x^2+4x=0\Rightarrow x(3x-4)=0$。臨界點 $(0,0)$、$(4/3,4/3)$。</div>
+      <div class="step-block"><div class="step-num">步驟 2</div>$f_{xx}=-6x,\ f_{yy}=-4,\ f_{xy}=4$。<br>在 $(0,0)$：$d=0\cdot(-4)-16=-16<0$ → 鞍點。<br>在 $(4/3,4/3)$：$f_{xx}=-8$，$d=(-8)(-4)-16=16>0$ 且 $f_{xx}<0$ → 相對極大。</div>
+      <div class="step-block"><div class="step-num">步驟 3（值）</div>$f(4/3,4/3)=-(4/3)^3+4(4/3)^2-2(4/3)^2+1=-64/27+32/9+1=59/27$。</div>
+      <div class="ex-answer">$(0,0)$ 鞍點；$(4/3,4/3)$ 相對極大 $f=59/27\approx 2.185$。</div>
+    </div>
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 4</div>
+      <div class="ex-title"><span class="pill pill-grad">$d=0$ 失效</span> 求 $f(x,y)=x^2y^2$ 的臨界點，並判斷這些點的極值性質。</div>
+      <div class="step-block"><div class="step-num">步驟 1</div>$f_x=2xy^2,\ f_y=2x^2y$。$f_x=f_y=0$ 的解集為兩條臨界軸：座標軸 $\{x=0\}\cup\{y=0\}$（無限多個臨界點）。</div>
+      <div class="step-block"><div class="step-num">步驟 2</div>$f_{xx}=2y^2,\ f_{yy}=2x^2,\ f_{xy}=4xy$。在座標軸上 $d=0$ → 二階檢定失效。</div>
+      <div class="step-block"><div class="step-num">步驟 3（代數結構）</div>$f=x^2y^2\ge 0$，且在座標軸上 $f=0$。</div>
+      <div class="ex-answer">座標軸上每點都是非嚴格相對極小（也是絕對極小）。</div>
+    </div>
+  </div>
+
+  <h3 id="sec-13-8-3">例題 5：閉區域上的絕對極值（4 步驟流程）</h3>
+  <div class="viz-layout">
+    <div class="canvas-panel">
+      <h4>$f=\sin(xy)$ 在 $[0,\pi]\times[0,1]$</h4>
+      <div class="canvas-wrap light">
+        <canvas id="canvas-13-8-boundary"></canvas>
+        <div class="hint-overlay" style="color:rgba(0,0,0,.62);background:rgba(255,255,255,.8)">內部臨界曲線 $xy=\pi/2$ + 邊界</div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="lecture-example" style="margin:0;">
+        <div class="ex-tag">講義例題 5</div>
+        <div class="ex-title">求 $f(x,y)=\sin(xy)$ 在閉區域 $0\le x\le\pi,\ 0\le y\le1$ 上的絕對極值。</div>
+        <div class="step-block"><div class="step-num">內部</div>$f_x=y\cos(xy),\ f_y=x\cos(xy)$。$f_x=f_y=0$ 需 $\cos(xy)=0$，即 $xy=\pi/2$（內部對應的曲線）。沿此曲線 $f=\sin(\pi/2)=1$。</div>
+        <div class="step-block"><div class="step-num">邊界</div>$x=0$ 或 $y=0$ 時 $f=\sin 0=0$；$x=\pi$ 時 $f=\sin(\pi y)$（$y\in[0,1]$，最大為 $1$ at $y=1/2$）；$y=1$ 時 $f=\sin x$（最大 $1$ at $x=\pi/2$，最小 $0$）。</div>
+        <div class="step-block"><div class="step-num">比較</div>所有候選的 $f$ 值集合 $\subseteq\{0,1\}$。</div>
+        <div class="ex-answer">絕對最大 $1$（沿 $xy=\pi/2$ 多處達到）；絕對最小 $0$（邊 $x=0,y=0$ 與 $x=\pi$ 兩端等）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-card" id="quiz-13-8-1">
+    <span class="quiz-tag">快速檢查</span>
+    <div class="quiz-q">在某臨界點 $f_{xx}=2,\ f_{yy}=8,\ f_{xy}=3$。$d=f_{xx}f_{yy}-f_{xy}^2$ 為？該點分類為？</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">$d=7$，相對極小</button>
+      <button class="quiz-opt">$d=7$，相對極大</button>
+      <button class="quiz-opt">$d=-7$，鞍點</button>
+      <button class="quiz-opt">$d=0$，無結論</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="quiz-card" id="quiz-13-8-2">
+    <span class="quiz-tag">流程題（多選）</span>
+    <div class="quiz-q">假設 $f$ 在閉有界區域 $R$ 上連續。要在 $R$ 上求 $f$ 的<strong>絕對極值</strong>，必須檢查哪些候選點？（請選擇所有正確項，按「檢查」）</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">$R$ 內部 $\nabla f=0$ 的點</button>
+      <button class="quiz-opt">$R$ 內部 $f_x$ 或 $f_y$ 不存在的點</button>
+      <button class="quiz-opt">$R$ 邊界上的點（含端點 / 角點）</button>
+      <button class="quiz-opt">$R$ 之外但 $f$ 較大的點</button>
+    </div>
+    <button class="quiz-check">檢查</button>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="section-summary">
+    <div class="section-summary-title">13.8 重點整理（4 步驟流程）</div>
+    <ul>
+      <li><strong>步驟 1（找臨界點）</strong>：解 $f_x=f_y=0$，並另列偏導不存在的點。</li>
+      <li><strong>步驟 2（二階檢定定理 13.17）</strong>：$d=f_{xx}f_{yy}-f_{xy}^2$。$d>0,f_{xx}>0$ 為極小；$d>0,f_{xx}<0$ 為極大；$d<0$ 為鞍點；$d=0$ 失效。</li>
+      <li><strong>步驟 3（$d=0$ 時）</strong>：回到函數的代數結構（如 $f=x^2y^2\ge 0$）或圖形判斷。</li>
+      <li><strong>步驟 4（閉區域）</strong>：再加上邊界檢查（含角點）；極值定理 （定理 13.15） 保證最大最小存在。</li>
+    </ul>
+  </div>
+</section>
+
+<section id="sec-13-9">
+  <div class="section-number">13.9 兩變數函數極值的應用（補充）</div>
+  <h2>應用題（補充）：把限制畫成幾何物件</h2>
+  <p>13.9 不列入考試範圍，這裡只保留最大體積與最大利潤兩個建模例題作為補充。兩題都回到同一件事：先把問題寫成二變數函數，再找臨界點或比較可行區域。</p>
+
+  <div class="viz-layout">
+    <div class="canvas-panel">
+      <h3 id="sec-13-9-1">例題 1：限制平面下的最大盒子</h3>
+      <div class="slider-row">
+        <span class="slider-label">x</span>
+        <input type="range" id="boxX" min="0.1" max="3.8" step="0.01" value="1.33">
+        <span class="slider-val" id="boxXVal">1.33</span>
+      </div>
+      <div class="slider-row">
+        <span class="slider-label">y</span>
+        <input type="range" id="boxY" min="0.1" max="5.8" step="0.01" value="2.00">
+        <span class="slider-val" id="boxYVal">2.00</span>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="canvas-box3d"></canvas>
+        <div class="hint-overlay">盒子 + 限制平面</div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">例題 1</div>
+        <div class="eq-formula">$6x+4y+3z=24$</div>
+        <div class="eq-sub">$z=8-2x-\frac43y,\quad V=xyz$。</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">目前盒子</div>
+        <div class="ic-row"><span class="ic-label">z</span><span class="ic-value" id="boxZ">2.67</span></div>
+        <div class="ic-row"><span class="ic-label">V</span><span class="ic-value highlight" id="boxV">7.11</span></div>
+        <div class="ic-row"><span class="ic-label">狀態</span><span class="ic-value ok" id="boxStatus">可行；不可行時會自動拉回</span></div>
+        <div class="ic-row"><span class="ic-label">最大點</span><span class="ic-value ok">$(4/3,2,8/3)$</span></div>
+        <div class="ic-row"><span class="ic-label">$V_{max}$</span><span class="ic-value ok">$64/9$</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="viz-layout">
+    <div class="canvas-panel">
+      <h3 id="sec-13-9-2">例題 2：利潤曲面</h3>
+      <div class="slider-row">
+        <span class="slider-label">x/1000</span>
+        <input type="range" id="profitX" min="0" max="6" step="0.05" value="2">
+        <span class="slider-val" id="profitXVal">2.00</span>
+      </div>
+      <div class="slider-row">
+        <span class="slider-label">y/1000</span>
+        <input type="range" id="profitY" min="0" max="7" step="0.05" value="4">
+        <span class="slider-val" id="profitYVal">4.00</span>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="canvas-profit3d"></canvas>
+        <div class="hint-overlay">曲面頂點 = 最大利潤</div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">例題 2</div>
+        <div class="eq-formula">$P=8x+10y-0.001(x^2+xy+y^2)-10000$</div>
+        <div class="eq-sub">顯示時座標用千件為單位。</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">利潤</div>
+        <div class="ic-row"><span class="ic-label">P(x,y)</span><span class="ic-value highlight" id="profitVal">18000</span></div>
+        <div class="ic-row"><span class="ic-label">最大點</span><span class="ic-value ok">(2000, 4000)</span></div>
+        <div class="ic-row"><span class="ic-label">最大利潤</span><span class="ic-value ok">18000</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="concept-warning">
+    <div class="cw-title">應用題的共同模式</div>
+    <p>(1) <strong>建模</strong>：把問題寫成 $F(x,y)$ 或 $F(x,y,z)$ 加限制；<br>
+    (2) <strong>消變數</strong>：用限制把 $z$（或一個變數）以另兩個表達，化為二變數函數；<br>
+    (3) <strong>找臨界點</strong>：解 $\nabla F=0$；<br>
+    (4) <strong>判型</strong>：二階檢定或實際情境（最大化體積→必有最大值）；<br>
+    (5) <strong>代回</strong>：給原問題的答案。</p>
+  </div>
+
+  <h3>講義例題 1：最大盒子體積（5 步驟）</h3>
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 1</div>
+    <div class="ex-title">在第一卦限中，長方體的三個邊長 $x,y,z$ 滿足 $6x+4y+3z=24$。求使體積 $V=xyz$ 最大的 $x,y,z$ 與最大體積。</div>
+    <div class="step-block"><div class="step-num">步驟 1（建模 + 消變數）</div>$z=\dfrac{24-6x-4y}{3}=8-2x-\dfrac{4y}{3}$；代入得 $V(x,y)=xy(8-2x-\dfrac{4y}{3})=8xy-2x^2y-\dfrac{4xy^2}{3}$。</div>
+    <div class="step-block"><div class="step-num">步驟 2（偏導）</div>$V_x=8y-4xy-\dfrac{4y^2}{3}=y(8-4x-\dfrac{4y}{3})$；$V_y=8x-2x^2-\dfrac{8xy}{3}=x(8-2x-\dfrac{8y}{3})$。</div>
+    <div class="step-block"><div class="step-num">步驟 3（解臨界點）</div>$x,y>0$，所以 $8-4x-4y/3=0$ 即 $y=6-3x$；$8-2x-8y/3=0$ 即 $3x+4y=12$。代入：$3x+4(6-3x)=12\Rightarrow -9x=-12\Rightarrow x=4/3,\ y=2$。</div>
+    <div class="step-block"><div class="step-num">步驟 4（驗證為極大）</div>由問題本身（盒子體積有上限）為極大；亦可二階檢定確認。</div>
+    <div class="step-block"><div class="step-num">步驟 5（代回求 $V$）</div>$z=8-8/3-8/3=8/3$；$V=\dfrac{4}{3}\cdot 2\cdot\dfrac{8}{3}=\dfrac{64}{9}$。</div>
+    <div class="ex-answer">$x=4/3,\ y=2,\ z=8/3$；$V_{\max}=\dfrac{64}{9}$ 立方單位。</div>
+  </div>
+
+  <h3>講義例題 2：最大利潤（含二階驗證）</h3>
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 2</div>
+    <div class="ex-title">已知利潤函數 $P(x,y)=8x+10y-0.001(x^2+xy+y^2)-10000$，其中 $x,y$ 為 Product 1 與 Product 2 的產量。求最大利潤與對應產量 $(x,y)$。</div>
+    <div class="step-block"><div class="step-num">步驟 1（偏導）</div>$P_x=8-0.001(2x+y)$；$P_y=10-0.001(x+2y)$。</div>
+    <div class="step-block"><div class="step-num">步驟 2（解臨界點）</div>$2x+y=8000,\ x+2y=10000$。聯立得 $x=2000,\ y=4000$。</div>
+    <div class="step-block"><div class="step-num">步驟 3（二階檢定）</div>$P_{xx}=-0.002,\ P_{yy}=-0.002,\ P_{xy}=-0.001$；$d=(-0.002)^2-(-0.001)^2=3\times 10^{-6}>0$ 且 $P_{xx}<0$ → 相對最大。</div>
+    <div class="step-block"><div class="step-num">步驟 4（代回）</div>$P=16000+40000-0.001(4{\cdot}10^6+8{\cdot}10^6+16{\cdot}10^6)-10000=56000-28000-10000=18000$。</div>
+    <div class="ex-answer">$x=2000,\ y=4000$；最大利潤 $\$18,\!000$。</div>
+  </div>
+
+  <div class="section-summary">
+    <div class="section-summary-title">13.9 重點整理</div>
+    <ul>
+      <li>應用題模式：建模 → 消變數 → 找臨界點 → 判型 → 代回。</li>
+      <li>盒子例題：限制 $6x+4y+3z=24$，最大體積 $V_{\max}=64/9$ at $(4/3,2,8/3)$。</li>
+      <li>利潤例題：$x=2000,\ y=4000$，$P_{\max}=\$18{,}000$；二階檢定 $d>0,\ P_{xx}<0$ 確認為極大。</li>
+    </ul>
+  </div>
+</section>
+
+<section id="sec-13-10">
+  <div class="section-number">13.10 Lagrange 乘數法（補充）</div>
+  <h2>受限制最佳化：讓等高線剛好貼住限制曲線</h2>
+  <p>許多最佳化問題會限制可使用的點，例如點必須落在某條曲線、某個曲面，或兩個曲面的交線上。這些限制會使問題變複雜，因為最佳解可能出現在可行區域的邊界。Lagrange 乘數法的想法是：在限制曲線上取得極值時，目標函數的等高線會和限制曲線相切，所以兩者的梯度方向平行。</p>
+
+  <div id="sec-13-10-geometry" class="subsection">
+    <div class="viz-layout">
+      <div class="canvas-panel">
+        <h3>矩形內接橢圓：等高線相切的幾何</h3>
+        <div class="canvas-wrap light">
+          <canvas id="canvas-lagrange-ellipse"></canvas>
+          <div class="hint-overlay" style="color:#fff;background:rgba(26,26,46,.62)">橢圓 + 雙曲線</div>
+        </div>
+      </div>
+      <div class="side-panel">
+        <div class="eq-card">
+          <div class="eq-label">講義 Fig. 53-54</div>
+          <div class="eq-formula">$f(x,y)=4xy,\quad \dfrac{x^2}{3^2}+\dfrac{y^2}{4^2}=1$</div>
+          <div class="eq-sub">$(x,y)$ 是第一象限頂點，矩形邊長為 $2x$ 與 $2y$。</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">相切點</div>
+          <div class="ic-row"><span class="ic-label">點</span><span class="ic-value ok">$(3/\sqrt2,2\sqrt2)$</span></div>
+          <div class="ic-row"><span class="ic-label">等高線值</span><span class="ic-value highlight">$4xy=24$</span></div>
+          <div class="ic-row"><span class="ic-label">條件</span><span class="ic-value ok">$\nabla f=\lambda\nabla g$</span></div>
+        </div>
+      </div>
+    </div>
+    <p>限制式可看成 $g(x,y)=x^2/3^2+y^2/4^2$ 的固定等高線 $g(x,y)=1$。目標函數 $f(x,y)=4xy$ 的等高線是一族雙曲線 $4xy=k$。若 $k$ 太小，雙曲線和橢圓交在許多可行點；把 $k$ 逐漸放大，最後仍能碰到橢圓的那一條雙曲線會剛好與橢圓相切。相切時，兩條曲線的法向量平行，也就是</p>
+    $$\nabla f(x,y)=\lambda\nabla g(x,y).$$
+    <p>若 $\nabla f(x,y)=\lambda\nabla g(x,y)$，講義稱這個純量 $\lambda$ 為拉格朗日乘數。</p>
+  </div>
+
+  <div id="sec-13-10-method" class="subsection">
+    <div class="info-box green">
+      <span class="info-label">定理 13.19</span>
+      <p>令 $f$ 與 $g$ 具有連續一階偏導數，且 $f$ 在光滑限制曲線 $g(x,y)=c$ 上的 $(x_0,y_0)$ 取得極值。若 $\nabla g(x_0,y_0)\ne 0$，則存在實數 $\lambda$ 使得</p>
+      $$\nabla f(x_0,y_0)=\lambda\nabla g(x_0,y_0).$$
+    </div>
+    <div class="step-block">
+      <div class="step-num">講義證明想法</div>
+      <p>把限制曲線寫成 $\mathbf r(t)=x(t)\mathbf i+y(t)\mathbf j$，且 $\mathbf r'(t)\ne 0$。令 $h(t)=f(x(t),y(t))$。因為 $f$ 在限制曲線上於 $(x_0,y_0)$ 取得極值，所以對應的 $h(t)$ 在 $t_0$ 有極值，故 $h'(t_0)=0$。</p>
+      $$h'(t_0)=f_x(x_0,y_0)x'(t_0)+f_y(x_0,y_0)y'(t_0)=\nabla f(x_0,y_0)\cdot\mathbf r'(t_0)=0.$$
+      <p>因此 $\nabla f(x_0,y_0)$ 垂直於曲線切向量 $\mathbf r'(t_0)$。另一方面，依定理 13.12，$\nabla g(x_0,y_0)$ 也垂直於同一條限制曲線的切向量。兩個向量都垂直於同一個切向方向，所以它們平行，因此存在 $\lambda$ 使 $\nabla f=\lambda\nabla g$。</p>
+    </div>
+
+    <div class="method-grid">
+      <div class="info-card">
+        <div class="ic-title">Lagrange 乘數法</div>
+        <p>同時解下列三個方程：</p>
+        $$f_x(x,y)=\lambda g_x(x,y),\qquad f_y(x,y)=\lambda g_y(x,y),\qquad g(x,y)=c.$$
+      </div>
+      <div class="info-card">
+        <div class="ic-title">比較候選值</div>
+        <p>把第一步得到的每個解代回 $f$。最大的值給出受限制最大值，最小的值給出受限制最小值。</p>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">講義的另一種寫法</div>
+        <p>令</p>
+        $$F(x,y,\lambda)=f(x,y)-\lambda\bigl(g(x,y)-c\bigr),$$
+        <p>再把 $F$ 視為無限制問題求解。</p>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">操作順序</div>
+        <p>先寫目標函數，再寫限制函數；接著列梯度方程，最後比較所有候選點。</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="sec-13-10-examples" class="subsection">
+    <h3>例題 1：單一限制式的 Lagrange 乘數法</h3>
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 1</div>
+      <div class="ex-title">在 $x>0,\ y>0$ 且滿足限制式 $(x^2/3^2)+(y^2/4^2)=1$ 的條件下，求 $f(x,y)=4xy$ 的最大值。</div>
+      <div class="step-block"><div class="step-num">步驟 1（寫出限制函數）</div>令 $g(x,y)=\dfrac{x^2}{3^2}+\dfrac{y^2}{4^2}=1$。</div>
+      <div class="step-block"><div class="step-num">步驟 2（列出梯度方程）</div>$\nabla f(x,y)=4y\mathbf i+4x\mathbf j$，且 $\lambda\nabla g(x,y)=\dfrac{2\lambda x}{9}\mathbf i+\dfrac{\lambda y}{8}\mathbf j$。所以
+        $$4y=\frac{2}{9}\lambda x,\qquad 4x=\frac{1}{8}\lambda y,\qquad \frac{x^2}{3^2}+\frac{y^2}{4^2}=1.$$</div>
+      <div class="step-block"><div class="step-num">步驟 3（消去 $\lambda$）</div>由第一式得 $\lambda=\dfrac{18y}{x}$。代入第二式：
+        $$4x=\frac18\left(\frac{18y}{x}\right)y\quad\Rightarrow\quad x^2=\frac{9}{16}y^2.$$</div>
+      <div class="step-block"><div class="step-num">步驟 4（代回限制式）</div>
+        $$\frac19\left(\frac{9}{16}y^2\right)+\frac1{16}y^2=1\quad\Rightarrow\quad y^2=8.$$
+        因為 $y>0$，取 $y=2\sqrt2$。接著 $x^2=\dfrac{9}{16}(8)=\dfrac92$，所以 $x=\dfrac3{\sqrt2}$。</div>
+      <div class="step-block"><div class="step-num">步驟 5（求最大值）</div>
+        $$f\left(\frac3{\sqrt2},2\sqrt2\right)=4\left(\frac3{\sqrt2}\right)(2\sqrt2)=24.$$</div>
+      <div class="ex-answer">最大值為 $24$，發生在 $\left(\dfrac3{\sqrt2},2\sqrt2\right)$。</div>
+    </div>
+
+    <h3>例題 3：三變數的 Lagrange 乘數法</h3>
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 3</div>
+      <div class="ex-title">在限制式 $2x-3y-4z=49$ 下，求 $f(x,y,z)=2x^2+y^2+3z^2$ 的最小值。</div>
+      <div class="step-block"><div class="step-num">步驟 1（寫出限制）</div>令 $g(x,y,z)=2x-3y-4z=49$。</div>
+      <div class="step-block"><div class="step-num">步驟 2（列出系統）</div>$\nabla f=4x\mathbf i+2y\mathbf j+6z\mathbf k$，$\lambda\nabla g=2\lambda\mathbf i-3\lambda\mathbf j-4\lambda\mathbf k$，所以
+        $$4x=2\lambda,\qquad 2y=-3\lambda,\qquad 6z=-4\lambda,\qquad 2x-3y-4z=49.$$</div>
+      <div class="step-block"><div class="step-num">步驟 3（解 $\lambda$）</div>由前三式得 $x=\lambda/2,\ y=-3\lambda/2,\ z=-2\lambda/3$。代入限制式：
+        $$2\left(\frac\lambda2\right)-3\left(-\frac{3\lambda}{2}\right)-4\left(-\frac{2\lambda}{3}\right)=49,$$
+        $$\frac{49}{6}\lambda=49\quad\Rightarrow\quad \lambda=6.$$</div>
+      <div class="step-block"><div class="step-num">步驟 4（代回）</div>$x=3,\ y=-9,\ z=-4$，因此
+        $$f(3,-9,-4)=2(3)^2+(-9)^2+3(-4)^2=147.$$</div>
+      <div class="ex-answer">最小值為 $147$，發生在 $(3,-9,-4)$。由原函數與限制式可看出沒有最大值。</div>
+    </div>
+
+    <h3>例題 4：區域內的最佳化</h3>
+    <div class="viz-layout">
+      <div class="canvas-panel">
+        <div class="canvas-wrap light">
+          <canvas id="canvas-lagrange-disk"></canvas>
+          <div class="hint-overlay" style="color:#fff;background:rgba(26,26,46,.62)">邊界 + 內部</div>
+        </div>
+      </div>
+      <div class="side-panel">
+        <div class="eq-card">
+          <div class="eq-label">例題 4</div>
+          <div class="eq-formula">$f=x^2+2y^2-2x+3,\quad x^2+y^2\le 10$</div>
+          <div class="eq-sub">先做邊界，再做內部。</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">結論</div>
+          <div class="ic-row"><span class="ic-label">最大值</span><span class="ic-value ok">$24$，於 $(-1,\pm3)$</span></div>
+          <div class="ic-row"><span class="ic-label">最小值</span><span class="ic-value ok">$2$，於 $(1,0)$</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 4</div>
+      <div class="ex-title">在限制區域 $x^2+y^2\le 10$ 上，求 $f(x,y)=x^2+2y^2-2x+3$ 的極值。</div>
+      <div class="step-block"><div class="step-num">步驟 1（拆成兩種情況）</div>因為限制是 $x^2+y^2\le 10$，要分成邊界圓周 $x^2+y^2=10$ 與圓盤內部兩部分。</div>
+      <div class="step-block"><div class="step-num">步驟 2（邊界上用 Lagrange 乘數法）</div>在 $x^2+y^2=10$ 上，令 $g=x^2+y^2$。由
+        $$\nabla f=(2x-2,4y),\qquad \lambda\nabla g=(2\lambda x,2\lambda y)$$
+        得
+        $$2x-2=2\lambda x,\qquad 4y=2\lambda y,\qquad x^2+y^2=10.$$</div>
+      <div class="step-block"><div class="step-num">步驟 3（邊界候選點）</div>若 $y\ne0$，第二式給 $\lambda=2$，所以 $2x-2=4x$，得 $x=-1$；代回圓得 $y=\pm3$，此時 $f(-1,\pm3)=24$。若 $y=0$，則 $x=\pm\sqrt{10}$；其中 $f(\sqrt{10},0)=13-2\sqrt{10}\approx6.675$。</div>
+      <div class="step-block"><div class="step-num">步驟 4（內部用 13.8 方法）</div>在圓盤內部，解 $\nabla f=0$：
+        $$2x-2=0,\qquad 4y=0\quad\Rightarrow\quad (x,y)=(1,0),$$
+        且 $(1,0)$ 在 $x^2+y^2<10$ 內，$f(1,0)=2$。</div>
+      <div class="ex-answer">合併兩部分：最大值為 $24$，發生在 $(-1,\pm3)$；最小值為 $2$，發生在 $(1,0)$。</div>
+    </div>
+  </div>
+
+  <div id="sec-13-10-two-constraints" class="subsection">
+    <div class="info-box warm">
+      <span class="info-label">兩個限制條件</span>
+      <p>若有兩個限制函數 $g$ 與 $h$，講義引入第二個拉格朗日乘數 $\mu$，並解</p>
+      $$\nabla f=\lambda\nabla g+\mu\nabla h,$$
+      <p>其中兩個限制函數的梯度向量不平行。</p>
+    </div>
+
+    <h3>例題 5：兩個限制式的最佳化</h3>
+    <div class="viz-layout">
+      <div class="canvas-panel">
+        <div class="canvas-wrap">
+          <canvas id="canvas-lagrange-two"></canvas>
+          <div class="hint-overlay">球面與平面的交線</div>
+        </div>
+      </div>
+      <div class="side-panel">
+        <div class="eq-card">
+          <div class="eq-label">例題 5</div>
+          <div class="eq-formula">$T=20+2x+2y+z^2$</div>
+          <div class="eq-sub">$x^2+y^2+z^2=11,\quad x+y+z=3$。</div>
+        </div>
+        <div class="info-card">
+        <div class="ic-title">極端溫度</div>
+          <div class="ic-row"><span class="ic-label">最低溫</span><span class="ic-value ok">$25$</span></div>
+          <div class="ic-row"><span class="ic-label">最高溫</span><span class="ic-value highlight">$91/3$</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">講義例題 5</div>
+      <div class="ex-title">設 $T(x,y,z)=20+2x+2y+z^2$ 表示球面 $x^2+y^2+z^2=11$ 上各點的溫度。求平面 $x+y+z=3$ 與該球面交線上的最高與最低溫度。</div>
+      <div class="step-block"><div class="step-num">步驟 1（兩個限制）</div>
+        $$g(x,y,z)=x^2+y^2+z^2=11,\qquad h(x,y,z)=x+y+z=3.$$</div>
+      <div class="step-block"><div class="step-num">步驟 2（列出梯度方程）</div>
+        $$\nabla T=2\mathbf i+2\mathbf j+2z\mathbf k,$$
+        $$\lambda\nabla g=2\lambda x\mathbf i+2\lambda y\mathbf j+2\lambda z\mathbf k,\qquad \mu\nabla h=\mu\mathbf i+\mu\mathbf j+\mu\mathbf k.$$
+        因此
+        $$2=2\lambda x+\mu,\qquad 2=2\lambda y+\mu,\qquad 2z=2\lambda z+\mu,$$
+        $$x^2+y^2+z^2=11,\qquad x+y+z=3.$$</div>
+      <div class="step-block"><div class="step-num">步驟 3（先化簡）</div>第一式減第二式得 $\lambda(x-y)=0$。再與第三式整理，可得到講義列出的系統：
+        $$\lambda(x-y)=0,\qquad 2z(1-\lambda)-\mu=0,\qquad x^2+y^2+z^2=11,\qquad x+y+z=3.$$</div>
+      <div class="step-block"><div class="step-num">步驟 4（分情況）</div>若 $\lambda=0$，可得 臨界點 $(3,-1,1)$ 與 $(-1,3,1)$。若 $\lambda\ne0$，則 $x=y$，並可得
+        $$x=y=\frac{3\pm2\sqrt3}{3},\qquad z=\frac{3\mp4\sqrt3}{3}.$$</div>
+      <div class="step-block"><div class="step-num">步驟 5（比較溫度）</div>
+        $$T(3,-1,1)=T(-1,3,1)=25,$$
+        $$T\left(\frac{3-2\sqrt3}{3},\frac{3-2\sqrt3}{3},\frac{3+4\sqrt3}{3}\right)=\frac{91}{3}\approx30.33,$$
+        $$T\left(\frac{3+2\sqrt3}{3},\frac{3+2\sqrt3}{3},\frac{3-4\sqrt3}{3}\right)=\frac{91}{3}\approx30.33.$$</div>
+      <div class="ex-answer">交線上的最低溫為 $T=25$，最高溫為 $T=91/3$。</div>
+    </div>
+  </div>
+
+  <div class="section-summary">
+    <div class="section-summary-title">13.10 重點整理</div>
+    <ul>
+      <li>單一限制：在光滑限制曲線 $g(x,y)=c$ 上，若 $\nabla g\ne0$，受限制極值點滿足 $\nabla f=\lambda\nabla g$。</li>
+      <li>幾何圖像：目標函數等高線與限制曲線相切，兩者法向量平行。</li>
+      <li>操作流程：列方程 → 解候選點 → 代回目標函數比較。</li>
+      <li>區域限制如 $x^2+y^2\le10$：要同時檢查邊界與內部。</li>
+      <li>兩個限制：使用 $\nabla f=\lambda\nabla g+\mu\nabla h$，再和兩個限制式一起解。</li>
+    </ul>
+  </div>
+</section>
+
+<section id="sec-ref">
+  <div class="section-number">速查 · 13.5-13.10</div>
+  <h2>本頁速查</h2>
+  <div class="method-grid">
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">鏈鎖律（單變數）</span><span class="ref-card-name-en">定理 13.6</span></div>
+      <div class="ref-card-eq">$\dfrac{dw}{dt}=w_x\,x'+w_y\,y'$</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">鏈鎖律（雙變數）</span><span class="ref-card-name-en">定理 13.7</span></div>
+      <div class="ref-card-eq">$w_s=w_x x_s+w_y y_s$；$w_t=w_x x_t+w_y y_t$</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">隱微分</span><span class="ref-card-name-en">定理 13.8</span></div>
+      <div class="ref-card-eq">$\dfrac{dy}{dx}=-\dfrac{F_x}{F_y}$；$z_x=-\dfrac{F_x}{F_z}$；$z_y=-\dfrac{F_y}{F_z}$</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">方向導數</span><span class="ref-card-name-en">定義 13.8 / 定理 13.10</span></div>
+      <div class="ref-card-eq">$D_{\mathbf u}f=\nabla f\cdot\mathbf u$（$\mathbf u$ 須為單位向量）</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">梯度性質</span><span class="ref-card-name-en">定理 13.11 / 13.12</span></div>
+      <div class="ref-card-eq">最大上升 = $\nabla f$；最大率 = $\|\nabla f\|$；垂直於等高線 / 等位面</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">切平面 + 法線</span><span class="ref-card-name-en">定義 13.11 / 定理 13.13</span></div>
+      <div class="ref-card-eq">$F_x(P)(x-x_0)+F_y(P)(y-y_0)+F_z(P)(z-z_0)=0$</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">$z=f(x,y)$ 形式</span><span class="ref-card-name-en">— —</span></div>
+      <div class="ref-card-eq">令 $F=f-z$；切平面 $f_x(x-x_0)+f_y(y-y_0)-(z-z_0)=0$</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">兩曲面交線切向</span><span class="ref-card-name-en">外積</span></div>
+      <div class="ref-card-eq">交線方向 = $\nabla F\times\nabla G$</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">臨界點定義</span><span class="ref-card-name-en">定義 13.13</span></div>
+      <div class="ref-card-eq">$\nabla f(P)=0$ 或 $f_x,f_y$ 在 $P$ 不存在</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">二階檢定</span><span class="ref-card-name-en">定理 13.17</span></div>
+      <div class="ref-card-eq">$d=f_{xx}f_{yy}-f_{xy}^2$：$d>0,f_{xx}>0$ 極小；$d>0,f_{xx}<0$ 極大；$d<0$ 鞍；$d=0$ 失效</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">極值定理</span><span class="ref-card-name-en">定理 13.15</span></div>
+      <div class="ref-card-eq">閉、有界 $R$ 上連續函數必有絕對最大與最小值</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">拉格朗日乘數法</span><span class="ref-card-name-en">定理 13.18</span></div>
+      <div class="ref-card-eq">單一限制：$\nabla f=\lambda\nabla g$，再加上 $g(x,y)=c$</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">兩個限制</span><span class="ref-card-name-en">13.10</span></div>
+      <div class="ref-card-eq">$\nabla f=\lambda\nabla g+\mu\nabla h$，再加上兩個限制式</div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  第 13.5-13.10 節 · 多變數函數 II 互動講義 ｜ Three.js + MathJax ｜ 依據 Calculus_Chapter13.pdf、Calculus_Chapter13_extend.pdf 與 Chap13_Summary.pdf 製作
+</footer>
+
+<script type="application/json" id="source-checks">{
+  "chain例題1DwDtAt0": -2,
+  "chain例題3Ws": "6s^2/t + 2t",
+  "chain例題3Wt": "-2s^3/t^2 + 2s",
+  "chain例題4Ws": "6s^2/t + 2t",
+  "chain例題4Wt": "-2s^3/t^2 + 2s",
+  "chain例題5WsAt_1_2pi": "2*pi",
+  "chain例題5WtAt_1_2pi": "2 + 2*pi",
+  "implicit例題6_dydx": "2x/(3y^2+2y-5)",
+  "implicit例題7_dzdx": "(2xy^2-6xz)/(3x^2+6z^2+3y)",
+  "implicit例題7_dzdy": "(2x^2*y-3z)/(3x^2+6z^2+3y)",
+  "directional例題1Exact": "-1 - sqrt(3)/2",
+  "directional例題2_Du": "8/5",
+  "directional例題3_grad_at_1_2": [6, 4],
+  "directional例題4_Du": "-27/10",
+  "temperatureGradientAt_2_-3": [-16, 6],
+  "temperatureGradient": [-16, 6],
+  "temperatureRateSquared": 292,
+  "directional例題8_grad_at_2_-1_1": [4, -2, -4],
+  "tangent例題1_sphere_radius": 2,
+  "tangent例題2_eq": "-x + y + 2z - 6 = 0",
+  "tangentPlane例題2": "-x + y + 2z - 6 = 0",
+  "tangent例題3_eq": "2x + 8y + 10z = 15",
+  "normalLineDirection例題4": [6, -6, -4],
+  "intersection例題5_cross": [-20, 0, 0],
+  "extrema例題1Point": [-2, 3],
+  "extrema例題1Value": 3,
+  "extrema例題2Point": [0, 0],
+  "extrema例題2Type": "relative max (partials don't exist)",
+  "extrema例題2Value": 1,
+  "extrema例題3Saddle": [0, 0],
+  "extrema例題3Max": [1.3333333333333333, 1.3333333333333333],
+  "extrema例題3MaxValue_exact": "59/27",
+  "extrema例題3MaxValue_decimal": 2.185185185185185,
+  "extrema例題3MaxValue": 2.185185185185185,
+  "extrema例題4_d": 0,
+  "extrema例題5_AbsMax": 1,
+  "extrema例題5_AbsMin": 0,
+  "boxMaxPoint": [1.3333333333333333, 2, 2.6666666666666665],
+  "boxMaxVolume_exact": "64/9",
+  "boxMaxVolume_decimal": 7.111111111111111,
+  "boxMaxVolume": 7.111111111111111,
+  "profitMaxPoint": [2000, 4000],
+  "profitMaxValue": 18000,
+  "lagrange例題1Point": ["3/sqrt(2)", "2*sqrt(2)"],
+  "lagrange例題1Max": 24,
+  "lagrange例題3Point": [3, -9, -4],
+  "lagrange例題3Min": 147,
+  "lagrange例題4BoundaryMaxPoints": [[-1, 3], [-1, -3]],
+  "lagrange例題4BoundaryMin": "13 - 2*sqrt(10)",
+  "lagrange例題4GlobalMax": 24,
+  "lagrange例題4GlobalMinPoint": [1, 0],
+  "lagrange例題4GlobalMin": 2,
+  "lagrange例題5MinPoints": [[3, -1, 1], [-1, 3, 1]],
+  "lagrange例題5Min": 25,
+  "lagrange例題5Max": "91/3",
+  "quiz_13_5_1_answer": 5,
+  "quiz_13_6_1_answer_decimal": -2.121,
+  "quiz_13_6_2_answer": 5,
+  "quiz_13_7_1_answer": 9,
+  "quiz_13_8_1_d": 7
+}</script>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const TAU = Math.PI * 2;
+
+  function fmt(n, d=3){ return Number(n).toFixed(d); }
+  function setHTML(id, value){ const el=$(id); if(el) el.innerHTML=value; }
+  function setText(id, value){ const el=$(id); if(el) el.textContent=value; }
+
+  class OrbitCam {
+    constructor(canvas, camera, radius0, phi0, theta0, onChange) {
+      this.camera = camera; this.target = new THREE.Vector3(0,0,0);
+      this.theta = theta0; this.phi = phi0; this.radius = radius0;
+      this.theta0 = theta0; this.phi0 = phi0; this.radius0 = radius0;
+      this.minR = 2; this.maxR = 80; this.minPhi = 0.06; this.maxPhi = Math.PI - 0.06;
+      this.onChange = onChange || (() => {});
+      let dragging=false, lastX=0, lastY=0;
+      const down=(x,y)=>{dragging=true;lastX=x;lastY=y;};
+      const move=(x,y)=>{if(!dragging)return;this.theta-=(x-lastX)*0.007;this.phi-=(y-lastY)*0.007;this.phi=Math.max(this.minPhi,Math.min(this.maxPhi,this.phi));lastX=x;lastY=y;this.update();};
+      const up=()=>{dragging=false;};
+      canvas.addEventListener('mousedown',e=>down(e.clientX,e.clientY));
+      window.addEventListener('mousemove',e=>move(e.clientX,e.clientY));
+      window.addEventListener('mouseup',up);
+      canvas.addEventListener('touchstart',e=>{if(e.touches[0])down(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
+      canvas.addEventListener('touchmove',e=>{if(dragging&&e.touches[0]){e.preventDefault();move(e.touches[0].clientX,e.touches[0].clientY);}}, {passive:false});
+      canvas.addEventListener('touchend',up);
+      canvas.addEventListener('wheel',e=>{e.preventDefault();this.radius*=1+e.deltaY*0.0014;this.radius=Math.max(this.minR,Math.min(this.maxR,this.radius));this.update();},{passive:false});
+      this.update();
+    }
+    update(){
+      const s=Math.sin(this.phi);
+      this.camera.position.set(this.radius*s*Math.cos(this.theta),this.radius*s*Math.sin(this.theta),this.radius*Math.cos(this.phi));
+      this.camera.up.set(0,0,1); this.camera.lookAt(this.target); this.onChange();
+    }
+  }
+
+  function makeScene(canvasId, opts={}){
+    const canvas=$(canvasId); if(!canvas || !window.THREE) return null;
+    const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});
+    renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+    const scene=new THREE.Scene(); scene.background=new THREE.Color(0x1a1a2e);
+    const camera=new THREE.PerspectiveCamera(45,1,0.1,200);
+    let frame=null;
+    function requestRender(){ if(frame!==null)return; frame=requestAnimationFrame(()=>{frame=null;renderer.render(scene,camera);}); }
+    const orbit=new OrbitCam(canvas,camera,opts.radius||10,opts.phi||1.0,opts.theta||0.85,requestRender);
+    scene.add(new THREE.AmbientLight(0xffffff,.58));
+    const d1=new THREE.DirectionalLight(0xffffff,.74); d1.position.set(6,4,9); scene.add(d1);
+    const d2=new THREE.DirectionalLight(0x88aaff,.35); d2.position.set(-6,-5,5); scene.add(d2);
+    scene.add(buildAxes(opts.axisLen||4)); scene.add(buildGrid(opts.gridSize||5,opts.gridStep||1));
+    function resize(){
+      const w=canvas.clientWidth,h=canvas.clientHeight; if(w<4||h<4)return;
+      renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); requestRender();
+    }
+    new ResizeObserver(resize).observe(canvas); setTimeout(resize,40);
+    return {scene,camera,renderer,orbit,requestRender};
+  }
+
+  function buildAxes(L){
+    const g=new THREE.Group();
+    const axis=(dir,color)=>{
+      const geom=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-L*dir.x,-L*dir.y,-L*dir.z),new THREE.Vector3(L*dir.x,L*dir.y,L*dir.z)]);
+      g.add(new THREE.Line(geom,new THREE.LineBasicMaterial({color})));
+      const cone=new THREE.Mesh(new THREE.ConeGeometry(.09,.28,16),new THREE.MeshBasicMaterial({color}));
+      cone.position.set(L*dir.x,L*dir.y,L*dir.z);
+      cone.quaternion.copy(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0),new THREE.Vector3(dir.x,dir.y,dir.z)));
+      g.add(cone);
+    };
+    axis({x:1,y:0,z:0},0xe74c3c); axis({x:0,y:1,z:0},0x27ae60); axis({x:0,y:0,z:1},0x2980b9);
+    return g;
+  }
+  function buildGrid(size,step){
+    const pts=[]; for(let i=-size;i<=size;i+=step){pts.push(new THREE.Vector3(-size,i,0),new THREE.Vector3(size,i,0),new THREE.Vector3(i,-size,0),new THREE.Vector3(i,size,0));}
+    return new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:0x4a4a68,transparent:true,opacity:.42}));
+  }
+  function scalarSurface(f,xMin,xMax,yMin,yMax,nx,ny){
+    const pos=[],idx=[],valid=[];
+    for(let i=0;i<=nx;i++)for(let j=0;j<=ny;j++){
+      const x=xMin+(xMax-xMin)*i/nx,y=yMin+(yMax-yMin)*j/ny,z=f(x,y);
+      pos.push(x,y,isFinite(z)?z:0); valid.push(isFinite(z));
+    }
+    for(let i=0;i<nx;i++)for(let j=0;j<ny;j++){
+      const a=i*(ny+1)+j,b=a+1,c=a+ny+1,d=c+1;
+      if(valid[a]&&valid[b]&&valid[c]&&valid[d]) idx.push(a,c,b,b,c,d);
+    }
+    const geom=new THREE.BufferGeometry(); geom.setAttribute('position',new THREE.Float32BufferAttribute(pos,3)); geom.setIndex(idx); geom.computeVertexNormals(); return geom;
+  }
+  function paramSurface(fn,u0,u1,v0,v1,nu,nv){
+    const pos=[],idx=[];
+    for(let i=0;i<=nu;i++)for(let j=0;j<=nv;j++){
+      const u=u0+(u1-u0)*i/nu,v=v0+(v1-v0)*j/nv,p=fn(u,v); pos.push(p.x,p.y,p.z);
+    }
+    for(let i=0;i<nu;i++)for(let j=0;j<nv;j++){const a=i*(nv+1)+j,b=a+1,c=a+nv+1,d=c+1; idx.push(a,c,b,b,c,d);}
+    const geom=new THREE.BufferGeometry(); geom.setAttribute('position',new THREE.Float32BufferAttribute(pos,3)); geom.setIndex(idx); geom.computeVertexNormals(); return geom;
+  }
+  function mesh(geom,color,opacity=.78){return new THREE.Mesh(geom,new THREE.MeshStandardMaterial({color,roughness:.58,metalness:.1,side:THREE.DoubleSide,transparent:opacity<1,opacity}));}
+  function curve(points,color=0xf1c40f){return new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineBasicMaterial({color}));}
+  function marker(r=.13,color=0xf1c40f){return new THREE.Mesh(new THREE.SphereGeometry(r,20,14),new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:.35,roughness:.3}));}
+  function lineObj(a,b,color=0xffffff){return curve([a,b],color);}
+
+  function makeChoiceQuiz(cardId, correctIndex, hints){
+    const card=$(cardId); if(!card) return;
+    const opts=card.querySelectorAll('.quiz-opt');
+    const fb=card.querySelector('.quiz-feedback');
+    opts.forEach((opt,i)=>{
+      opt.addEventListener('click',()=>{
+        opts.forEach(o=>o.classList.remove('correct','wrong'));
+        if(i===correctIndex){
+          opt.classList.add('correct');
+          fb.className='quiz-feedback show ok';
+          fb.innerHTML=hints && hints.ok ? hints.ok : '✓ 正確！';
+        } else {
+          opt.classList.add('wrong');
+          fb.className='quiz-feedback show no';
+          fb.innerHTML=(hints && hints.wrong && hints.wrong[i]) ? hints.wrong[i] : '再想想。';
+        }
+        if(window.MathJax&&MathJax.typesetPromise) MathJax.typesetPromise([fb]);
+      });
+    });
+  }
+
+  function makeMultiQuiz(cardId, correctSet, hints){
+    const card=$(cardId); if(!card) return;
+    const opts=card.querySelectorAll('.quiz-opt');
+    const checkBtn=card.querySelector('.quiz-check');
+    const fb=card.querySelector('.quiz-feedback');
+    const picked=new Set();
+    opts.forEach((opt,i)=>{
+      opt.addEventListener('click',()=>{
+        if(picked.has(i)){picked.delete(i);opt.style.background='';opt.style.borderColor='';}
+        else{picked.add(i);opt.style.background='#dde7f7';opt.style.borderColor='var(--accent2)';}
+      });
+    });
+    if(checkBtn) checkBtn.addEventListener('click',()=>{
+      const ok = correctSet.length===picked.size && correctSet.every(i=>picked.has(i));
+      opts.forEach((opt,i)=>{
+        opt.classList.remove('correct','wrong');
+        opt.style.background=''; opt.style.borderColor='';
+        if(correctSet.includes(i)) opt.classList.add('correct');
+        else if(picked.has(i)) opt.classList.add('wrong');
+      });
+      fb.className='quiz-feedback show '+(ok?'ok':'no');
+      fb.innerHTML=ok?(hints && hints.ok ? hints.ok : '✓ 全部正確！'):(hints && hints.wrong ? hints.wrong : '檢查紅色項目。');
+      if(window.MathJax&&MathJax.typesetPromise) MathJax.typesetPromise([fb]);
+    });
+  }
+
+  function makeNumberQuiz(cardId, correct, opts={}){
+    const tol=opts.tolerance||0.02;
+    const card=$(cardId); if(!card) return;
+    const inputs=card.querySelectorAll('.quiz-input');
+    const checkBtn=card.querySelector('.quiz-check');
+    const fb=card.querySelector('.quiz-feedback');
+    function check(){
+      const correctArr = Array.isArray(correct) ? correct : [correct];
+      let allOk=true;
+      inputs.forEach((inp,i)=>{
+        inp.classList.remove('correct','wrong');
+        const v=parseFloat(inp.value);
+        if(isNaN(v) || Math.abs(v-correctArr[i])>tol){ inp.classList.add('wrong'); allOk=false; }
+        else inp.classList.add('correct');
+      });
+      fb.className='quiz-feedback show '+(allOk?'ok':'no');
+      fb.innerHTML=allOk?(opts.ok || '✓ 正確！'):(opts.wrong || '再算一次。');
+      if(window.MathJax&&MathJax.typesetPromise) MathJax.typesetPromise([fb]);
+    }
+    if(checkBtn) checkBtn.addEventListener('click',check);
+    inputs.forEach(inp=>inp.addEventListener('keydown',e=>{if(e.key==='Enter')check();}));
+  }
+
+  function initDirection(){
+    const S=makeScene('canvas-dir3d',{radius:8,axisLen:3,gridSize:3,gridStep:.5}); if(!S)return;
+    const f=(x,y)=>4-x*x-y*y/4, P={x:1,y:2,z:f(1,2)};
+    S.scene.add(mesh(scalarSurface(f,-2.3,2.3,-3,3,56,56),0x1a6b4a,.72));
+    const point=marker(.12,0xe74c3c); point.position.set(P.x,P.y,P.z); S.scene.add(point);
+    const cutMat=new THREE.MeshBasicMaterial({color:0x5dade2,transparent:true,opacity:.22,side:THREE.DoubleSide});
+    const cut=new THREE.Mesh(new THREE.BufferGeometry(),cutMat); S.scene.add(cut);
+    const cLine=curve([],0xf1c40f), tLine=curve([],0xffffff), gradLine=curve([],0x2ecc71);
+    S.scene.add(cLine,tLine,gradLine);
+    const input=$('dirTheta');
+    function update(){
+      const th=parseFloat(input.value)*Math.PI/180,ux=Math.cos(th),uy=Math.sin(th);
+      const pts=[]; for(let s=-1.7;s<=1.7;s+=.05){const x=P.x+s*ux,y=P.y+s*uy;pts.push(new THREE.Vector3(x,y,f(x,y)));}
+      cLine.geometry.setFromPoints(pts);
+      const slope=-2*ux-uy;
+      tLine.geometry.setFromPoints([new THREE.Vector3(P.x-.55*ux,P.y-.55*uy,P.z-.55*slope),new THREE.Vector3(P.x+.55*ux,P.y+.55*uy,P.z+.55*slope)]);
+      gradLine.geometry.setFromPoints([new THREE.Vector3(P.x,P.y,0.08),new THREE.Vector3(P.x-1.0,P.y-.5,0.08)]);
+      const h=3.3,w=1.8,verts=[
+        P.x-w*ux,P.y-w*uy,P.z-h, P.x+w*ux,P.y+w*uy,P.z-h, P.x-w*ux,P.y-w*uy,P.z+h,
+        P.x+w*ux,P.y+w*uy,P.z-h, P.x+w*ux,P.y+w*uy,P.z+h, P.x-w*ux,P.y-w*uy,P.z+h
+      ];
+      cut.geometry.dispose(); cut.geometry=new THREE.BufferGeometry(); cut.geometry.setAttribute('position',new THREE.Float32BufferAttribute(verts,3)); cut.geometry.computeVertexNormals();
+      setText('dirThetaVal',`${Math.round(parseFloat(input.value))}°`);
+      setText('dirU',`(${fmt(ux,2)}, ${fmt(uy,2)})`); setText('dirValue',fmt(slope));
+      // cosine of angle between u and gradient (-2,-1)/sqrt5
+      const gx=-2,gy=-1,gnorm=Math.sqrt(5);
+      const cos=(ux*gx+uy*gy)/gnorm;
+      setText('dirCos',fmt(cos,3));
+      // 同步 2D 等高線視角
+      if(typeof window._dir2dDraw==='function') window._dir2dDraw(th);
+      S.requestRender();
+    }
+    input.addEventListener('input',update); update();
+  }
+
+  function initDir2DContour(){
+    const canvas=$('canvas-13-6-contour2d'); if(!canvas) return;
+    const ctx=canvas.getContext('2d');
+    const f=(x,y)=>4-x*x-y*y/4;
+    function fit(){const r=canvas.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1);canvas.width=Math.max(280,Math.round(r.width*dpr));canvas.height=Math.max(200,Math.round(r.height*dpr));}
+    function draw(theta){
+      fit(); const w=canvas.width,h=canvas.height;
+      ctx.fillStyle='#fbf7ed'; ctx.fillRect(0,0,w,h);
+      const xMin=-2.6,xMax=2.6,yMin=-3.4,yMax=3.4;
+      const sx=x=>w*((x-xMin)/(xMax-xMin));
+      const sy=y=>h*(1-(y-yMin)/(yMax-yMin));
+      // 軸
+      ctx.strokeStyle='#d9d0c0'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(sx(xMin),sy(0)); ctx.lineTo(sx(xMax),sy(0)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(sx(0),sy(yMin)); ctx.lineTo(sx(0),sy(yMax)); ctx.stroke();
+      // 等高線（橢圓）：f=c → x²+y²/4 = 4-c
+      const levels=[0.5,1,1.5,2,2.5,3,3.5];
+      ctx.strokeStyle='rgba(44,62,122,.55)'; ctx.lineWidth=1.4;
+      ctx.font='10px JetBrains Mono'; ctx.fillStyle='#7d776b';
+      levels.forEach(c=>{
+        const k=4-c; if(k<=0) return;
+        const a=Math.sqrt(k),b=2*Math.sqrt(k);
+        ctx.beginPath();
+        for(let t=0;t<=Math.PI*2+.01;t+=.05){
+          const xx=a*Math.cos(t),yy=b*Math.sin(t);
+          if(t===0) ctx.moveTo(sx(xx),sy(yy)); else ctx.lineTo(sx(xx),sy(yy));
+        }
+        ctx.stroke();
+        ctx.fillText('c='+c,sx(0)+3,sy(b)-3);
+      });
+      // 點 P=(1,2)
+      const Px=1,Py=2;
+      ctx.fillStyle='#c0392b'; ctx.beginPath(); ctx.arc(sx(Px),sy(Py),5,0,TAU); ctx.fill();
+      ctx.fillStyle='#1a1a2e'; ctx.font='bold 12px JetBrains Mono'; ctx.fillText('P(1,2)',sx(Px)+8,sy(Py)-6);
+      // 梯度箭頭（紅）：∇f(P)=(-2,-1)
+      function arrow(x0,y0,x1,y1,color,wid){
+        ctx.strokeStyle=color; ctx.lineWidth=wid||3;
+        ctx.beginPath(); ctx.moveTo(sx(x0),sy(y0)); ctx.lineTo(sx(x1),sy(y1)); ctx.stroke();
+        const ang=Math.atan2(sy(y1)-sy(y0),sx(x1)-sx(x0));
+        ctx.fillStyle=color; ctx.beginPath();
+        ctx.moveTo(sx(x1),sy(y1));
+        ctx.lineTo(sx(x1)-10*Math.cos(ang-.4),sy(y1)-10*Math.sin(ang-.4));
+        ctx.lineTo(sx(x1)-10*Math.cos(ang+.4),sy(y1)-10*Math.sin(ang+.4));
+        ctx.closePath(); ctx.fill();
+      }
+      // ∇f(P) 標準化長度顯示
+      const gx=-2,gy=-1; const gn=Math.sqrt(5); const sc=.9;
+      arrow(Px,Py,Px+gx*sc/gn*1.5,Py+gy*sc/gn*1.5,'#c0392b',3);
+      ctx.fillStyle='#c0392b'; ctx.font='bold 11px JetBrains Mono'; ctx.fillText('∇f',sx(Px+gx*sc/gn*1.5)+5,sy(Py+gy*sc/gn*1.5));
+      // u 箭頭（藍）
+      const ux=Math.cos(theta),uy=Math.sin(theta);
+      arrow(Px,Py,Px+ux*1.4,Py+uy*1.4,'#2980b9',3);
+      ctx.fillStyle='#2980b9'; ctx.fillText('u',sx(Px+ux*1.4)+5,sy(Py+uy*1.4)+3);
+    }
+    window._dir2dDraw = draw;
+    new ResizeObserver(()=>{ if(typeof window._dirThetaCurrent==='number') draw(window._dirThetaCurrent); else draw(Math.PI/3); }).observe(canvas);
+    draw(Math.PI/3);
+  }
+
+  function initTemperature2D(){
+    const canvas=$('canvas-13-6-temperature'); if(!canvas) return;
+    const ctx=canvas.getContext('2d');
+    const T=(x,y)=>20-4*x*x-y*y;
+    function fit(){const r=canvas.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1);canvas.width=Math.max(300,Math.round(r.width*dpr));canvas.height=Math.max(220,Math.round(r.height*dpr));}
+    function draw(){
+      fit(); const w=canvas.width,h=canvas.height;
+      const xMin=-2.5,xMax=2.5,yMin=-4.5,yMax=4.5;
+      const sx=x=>w*((x-xMin)/(xMax-xMin));
+      const sy=y=>h*(1-(y-yMin)/(yMax-yMin));
+      // 漸層底色（依 T 值上色）
+      const img=ctx.createImageData(w,h);
+      for(let py=0;py<h;py++){
+        for(let px=0;px<w;px++){
+          const x=xMin+(xMax-xMin)*px/w, y=yMax-(yMax-yMin)*py/h;
+          const t=T(x,y);
+          const norm=Math.max(0,Math.min(1,(t+30)/50));
+          const r=Math.round(255*norm),b=Math.round(180*(1-norm)+30);
+          const idx=(py*w+px)*4;
+          img.data[idx]=r; img.data[idx+1]=Math.round(80+60*norm); img.data[idx+2]=b; img.data[idx+3]=160;
+        }
+      }
+      ctx.putImageData(img,0,0);
+      // 等溫線（橢圓）：T=c → 4x²+y²=20-c
+      const levels=[0,5,10,15,-12,-20];
+      ctx.font='11px JetBrains Mono';
+      levels.forEach(c=>{
+        const k=20-c; if(k<=0) return;
+        const a=Math.sqrt(k/4),b=Math.sqrt(k);
+        ctx.strokeStyle='rgba(255,255,255,.7)'; ctx.lineWidth=1.4;
+        ctx.beginPath();
+        for(let t=0;t<=Math.PI*2+.01;t+=.05){
+          const xx=a*Math.cos(t),yy=b*Math.sin(t);
+          if(t===0) ctx.moveTo(sx(xx),sy(yy)); else ctx.lineTo(sx(xx),sy(yy));
+        }
+        ctx.stroke();
+        ctx.fillStyle='rgba(255,255,255,.85)'; ctx.fillText('T='+c,sx(0)+4,sy(-b)-4);
+      });
+      // 軸
+      ctx.strokeStyle='rgba(255,255,255,.45)'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(sx(xMin),sy(0)); ctx.lineTo(sx(xMax),sy(0)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(sx(0),sy(yMin)); ctx.lineTo(sx(0),sy(yMax)); ctx.stroke();
+      // 點 (2,-3)
+      const Px=2,Py=-3;
+      ctx.fillStyle='#fff'; ctx.strokeStyle='#1a1a2e'; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.arc(sx(Px),sy(Py),6,0,TAU); ctx.fill(); ctx.stroke();
+      ctx.fillStyle='#fff'; ctx.font='bold 12px JetBrains Mono'; ctx.fillText('P(2,-3)',sx(Px)+10,sy(Py)+5);
+      // 梯度箭頭：(-16, 6) 縮放
+      const gx=-16,gy=6,gn=Math.sqrt(256+36); const len=2.0;
+      const ex=Px+gx/gn*len, ey=Py+gy/gn*len;
+      ctx.strokeStyle='#fff8a0'; ctx.lineWidth=4;
+      ctx.beginPath(); ctx.moveTo(sx(Px),sy(Py)); ctx.lineTo(sx(ex),sy(ey)); ctx.stroke();
+      const ang=Math.atan2(sy(ey)-sy(Py),sx(ex)-sx(Px));
+      ctx.fillStyle='#fff8a0'; ctx.beginPath();
+      ctx.moveTo(sx(ex),sy(ey));
+      ctx.lineTo(sx(ex)-12*Math.cos(ang-.45),sy(ey)-12*Math.sin(ang-.45));
+      ctx.lineTo(sx(ex)-12*Math.cos(ang+.45),sy(ey)-12*Math.sin(ang+.45));
+      ctx.closePath(); ctx.fill();
+      ctx.fillStyle='#fff'; ctx.font='bold 13px JetBrains Mono'; ctx.fillText('∇T=(-16,6)',sx(ex)+6,sy(ey)-2);
+      // 圖例
+      ctx.fillStyle='rgba(0,0,0,.45)'; ctx.fillRect(8,8,150,28);
+      ctx.fillStyle='#fff'; ctx.font='11px JetBrains Mono'; ctx.fillText('冷 ← T → 熱',16,26);
+    }
+    new ResizeObserver(draw).observe(canvas); draw();
+  }
+
+  function init3VarGradient(){
+    const S=makeScene('canvas-13-6-3var',{radius:9,axisLen:3.5,gridSize:3.5,gridStep:1}); if(!S) return;
+    // f=x²+y²-4z=-1 ⇒ z=(x²+y²+1)/4 拋物面
+    const fn=(u,v)=>{ const x=u*Math.cos(v),y=u*Math.sin(v),z=(x*x+y*y+1)/4; return {x,y,z};};
+    S.scene.add(mesh(paramSurface(fn,0,3,0,Math.PI*2,40,40),0x2c3e7a,.55));
+    const P=new THREE.Vector3(2,-1,1);
+    const pt=marker(.13,0xe74c3c); pt.position.copy(P); S.scene.add(pt);
+    // 梯度箭頭：(4,-2,-4) 縮放
+    const g=new THREE.Vector3(4,-2,-4); const gn=g.length(); const dir=g.clone().normalize();
+    const end=P.clone().add(dir.clone().multiplyScalar(1.6));
+    S.scene.add(lineObj(P,end,0xe74c3c));
+    // 箭頭尖端
+    const cone=new THREE.Mesh(new THREE.ConeGeometry(.13,.32,16),new THREE.MeshBasicMaterial({color:0xe74c3c}));
+    cone.position.copy(end);
+    cone.quaternion.copy(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0),dir));
+    S.scene.add(cone);
+    S.requestRender();
+  }
+
+  function initPlane(){
+    const S=makeScene('canvas-plane3d',{radius:11,axisLen:5,gridSize:5,gridStep:1}); if(!S)return;
+    let group=new THREE.Group(); S.scene.add(group);
+    function clear(){S.scene.remove(group); group=new THREE.Group(); S.scene.add(group);}
+    function tangentPlaneMesh(P,n,size){
+      const nu=n.clone().normalize();
+      let helper=new THREE.Vector3(1,0,0); if(Math.abs(nu.dot(helper))>.95) helper.set(0,1,0);
+      const u=new THREE.Vector3().crossVectors(nu,helper).normalize();
+      const v=new THREE.Vector3().crossVectors(nu,u).normalize();
+      const a=P.clone().add(u.clone().multiplyScalar(size)).add(v.clone().multiplyScalar(size));
+      const b=P.clone().add(u.clone().multiplyScalar(size)).add(v.clone().multiplyScalar(-size));
+      const c=P.clone().add(u.clone().multiplyScalar(-size)).add(v.clone().multiplyScalar(-size));
+      const d=P.clone().add(u.clone().multiplyScalar(-size)).add(v.clone().multiplyScalar(size));
+      const geo=new THREE.BufferGeometry();
+      geo.setAttribute('position',new THREE.Float32BufferAttribute([a.x,a.y,a.z,b.x,b.y,b.z,c.x,c.y,c.z,a.x,a.y,a.z,c.x,c.y,c.z,d.x,d.y,d.z],3));
+      geo.computeVertexNormals();
+      return new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:0xf1c40f,transparent:true,opacity:.36,side:THREE.DoubleSide}));
+    }
+    function render(mode){
+      clear();
+      if(mode==='sphere'){
+        const fn=(u,v)=>{const r=2; return {x:r*Math.sin(v)*Math.cos(u),y:r*Math.sin(v)*Math.sin(u),z:r*Math.cos(v)};};
+        group.add(mesh(paramSurface(fn,0,Math.PI*2,0.05,Math.PI-0.05,40,30),0x2c3e7a,.55));
+        const P=new THREE.Vector3(1,1,Math.sqrt(2));
+        const m=marker(.14,0xe74c3c); m.position.copy(P); group.add(m);
+        const n=new THREE.Vector3(2,2,2*Math.sqrt(2));
+        group.add(tangentPlaneMesh(P,n,1.6));
+        const nu=n.clone().normalize();
+        group.add(lineObj(P.clone().add(nu.clone().multiplyScalar(-1.5)),P.clone().add(nu.clone().multiplyScalar(1.5)),0xffffff));
+        setText('planeLabel','例題 1（球面）'); setHTML('planeFormula','$F=x^2+y^2+z^2-4$，$P=(1,1,\\sqrt 2)$'); setHTML('planeNote','$\\nabla F(P)=(2,2,2\\sqrt 2)$；切平面與球面在 $P$ 相切。'); setText('planeNormal','(2, 2, 2√2)'); setText('planeResult','x+y+√2 z=4');
+      } else if(mode==='hyperboloid'){
+        group.add(mesh(scalarSurface((x,y)=>Math.sqrt(12+2*x*x+2*y*y),-2.2,2.2,-2.2,2.2,48,48),0x2c3e7a,.6));
+        const P=new THREE.Vector3(1,-1,4);
+        const m=marker(.14,0xe74c3c); m.position.copy(P); group.add(m);
+        const n=new THREE.Vector3(-4,4,8);
+        group.add(tangentPlaneMesh(P,n,1.7));
+        const nu=n.clone().normalize();
+        group.add(lineObj(P.clone().add(nu.clone().multiplyScalar(-2.5)),P.clone().add(nu.clone().multiplyScalar(2.5)),0xffffff));
+        setText('planeLabel','例題 2（雙曲面）'); setHTML('planeFormula','$z^2-2x^2-2y^2=12$，$P=(1,-1,4)$'); setHTML('planeNote','$\\nabla F(P)=(-4,4,8)$ 決定切平面方向。'); setText('planeNormal','(-4, 4, 8)'); setText('planeResult','-x+y+2z=6');
+      } else if(mode==='paraboloid'){
+        group.add(mesh(scalarSurface((x,y)=>1-(x*x+4*y*y)/10,-2.6,2.6,-1.7,1.7,42,38),0x1a6b4a,.6));
+        const P=new THREE.Vector3(1,1,.5);
+        const m=marker(.14,0xe74c3c); m.position.copy(P); group.add(m);
+        const n=new THREE.Vector3(-1/5,-4/5,-1);
+        group.add(tangentPlaneMesh(P,n,1.2));
+        const nu=n.clone().normalize();
+        group.add(lineObj(P.clone().add(nu.clone().multiplyScalar(-1.4)),P.clone().add(nu.clone().multiplyScalar(1.4)),0xffffff));
+        setText('planeLabel','例題 3（拋物面，$z=f(x,y)$ 形式）'); setHTML('planeFormula','$z=1-\\dfrac{x^2+4y^2}{10}$，$P=(1,1,1/2)$'); setHTML('planeNote','令 $F=f-z$，則 $\\nabla F=(-1/5,-4/5,-1)$。'); setText('planeNormal','(-1/5, -4/5, -1)'); setText('planeResult','2x+8y+10z=15');
+      } else if(mode==='normal'){
+        group.add(mesh(scalarSurface((x,y)=>12/(x*y),1.2,3.1,-3.2,-1.1,40,40),0x1a6b4a,.6));
+        const P=new THREE.Vector3(2,-2,-3);
+        const m=marker(.14,0xe74c3c); m.position.copy(P); group.add(m);
+        const n=new THREE.Vector3(6,-6,-4);
+        const nu=n.clone().normalize();
+        group.add(lineObj(P.clone().add(nu.clone().multiplyScalar(-3)),P.clone().add(nu.clone().multiplyScalar(3)),0xf1c40f));
+        setText('planeLabel','例題 4（法線）'); setHTML('planeFormula','$xyz=12$，$P=(2,-2,-3)$'); setHTML('planeNote','$\\nabla F(P)=(6,-6,-4)$ 為法線方向（黃線）。'); setText('planeNormal','(6, -6, -4)'); setText('planeResult','(x-2)/6=(y+2)/-6=(z+3)/-4');
+      } else if(mode==='cone'){
+        const fn=(u,v)=>({x:v*Math.cos(u),y:v*Math.sin(u),z:v});
+        group.add(mesh(paramSurface(fn,0,Math.PI*2,-3,3,32,18),0x9b59b6,.5));
+        const P=new THREE.Vector3(0,0,0);
+        const m=marker(.2,0xe74c3c); m.position.copy(P); group.add(m);
+        const ring=new THREE.Mesh(new THREE.RingGeometry(.35,.55,24),new THREE.MeshBasicMaterial({color:0xe74c3c,transparent:true,opacity:.55,side:THREE.DoubleSide}));
+        ring.rotation.x=Math.PI/2; group.add(ring);
+        setText('planeLabel','條件不滿足：$\\nabla F=0$'); setHTML('planeFormula','$F=x^2+y^2-z^2$，$P=(0,0,0)$'); setHTML('planeNote','在此點 $\\nabla F=(0,0,0)$，定理 13.13 條件不滿足，不能直接套切平面公式。'); setText('planeNormal','(0, 0, 0)'); setText('planeResult','條件不滿足');
+      }
+      if(window.MathJax&&MathJax.typesetPromise) MathJax.typesetPromise([$('planeFormula'),$('planeNote')]);
+      S.requestRender();
+    }
+    document.querySelectorAll('#planePresets .preset-btn').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('#planePresets .preset-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render(btn.dataset.plane);}));
+    render('sphere');
+  }
+
+  function initIntersection(){
+    const S=makeScene('canvas-intersection3d',{radius:12,axisLen:4,gridSize:4,gridStep:1}); if(!S)return;
+    S.scene.add(mesh(scalarSurface((x,y)=>Math.sqrt(Math.max(0,(20-x*x-2*y*y)/2)),-2.4,2.4,-2.4,2.4,48,48),0x2c3e7a,.42));
+    S.scene.add(mesh(scalarSurface((x,y)=>4-x*x-y*y,-2.4,2.4,-2.4,2.4,48,48),0x1a6b4a,.46));
+    const P=new THREE.Vector3(0,1,3); const pt=marker(.15,0xe74c3c); pt.position.copy(P); S.scene.add(pt);
+    // 交線切向（黃，沿 -x 軸；∇F×∇G=(-20,0,0)）
+    S.scene.add(lineObj(new THREE.Vector3(-2,1,3),new THREE.Vector3(2,1,3),0xf1c40f));
+    const tip=new THREE.Mesh(new THREE.ConeGeometry(.13,.32,16),new THREE.MeshBasicMaterial({color:0xf1c40f}));
+    tip.position.set(-2,1,3);
+    tip.quaternion.copy(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0),new THREE.Vector3(-1,0,0)));
+    S.scene.add(tip);
+    // 兩個法向量
+    const nF=new THREE.Vector3(0,4,12).normalize();
+    const nG=new THREE.Vector3(0,2,1).normalize();
+    S.scene.add(lineObj(P,P.clone().add(nF.clone().multiplyScalar(2)),0xffffff));
+    S.scene.add(lineObj(P,P.clone().add(nG.clone().multiplyScalar(2)),0x5dade2));
+    S.requestRender();
+  }
+
+  const extremaData={
+    quad:{f:(x,y)=>2*x*x+y*y+8*x-6*y+20,range:[-4.2,.5,.5,5.2],point:[-2,3,3],formula:'$f=2x^2+y^2+8x-6y+20$',note:'碗形曲面；$(-2,3)$ 是相對極小',label:'例題 1（極小）',pt:'(-2, 3)',d:'8',res:'相對極小，f=3',color:0x2c3e7a,levels:[3,5,8,12,18,25]},
+    cone:{f:(x,y)=>1-Math.cbrt(x*x+y*y),range:[-1.5,1.5,-1.5,1.5],point:[0,0,1],formula:'$f=1-(x^2+y^2)^{1/3}$',note:'偏導在 $(0,0)$ 不存在，仍是臨界點',label:'例題 2（偏導不存在）',pt:'(0, 0)',d:'— (偏導不存在)',res:'相對極大，f=1（直接比較）',color:0xe67e22,levels:[.95,.85,.65,.4,.1,-.2]},
+    cubic:{f:(x,y)=>-x*x*x+4*x*y-2*y*y+1,range:[-.8,2.2,-.8,2.2],point:[4/3,4/3,59/27],extra:[0,0,1],formula:'$f=-x^3+4xy-2y^2+1$',note:'同一曲面同時有鞍點與相對極大',label:'例題 3（極大+鞍點）',pt:'(0,0) 與 (4/3,4/3)',d:'-16 / 16',res:'鞍點；相對極大 f=59/27',color:0x1a6b4a,levels:[1.8,1.5,1,.5,0,-1]},
+    fail:{f:(x,y)=>x*x*y*y,range:[-2,2,-2,2],point:[0,0,0],formula:'$f=x^2y^2$',note:'座標軸上每一點都是臨界點，$d=0$',label:'例題 4（$d=0$）',pt:'x 軸 或 y 軸',d:'0 (失效)',res:'非嚴格極小（由 $f\\ge 0$ 直接得）',color:0x9b59b6,levels:[.05,.2,.6,1.2,2.5]},
+    closed:{f:(x,y)=>Math.sin(x*y),range:[0,Math.PI,0,1],formula:'$f=\\sin(xy)$ 在 $[0,\\pi]\\times[0,1]$',note:'閉區域；內部 $xy=\\pi/2$ 處 $f=1$',label:'例題 5（閉區域）',pt:'$xy=\\pi/2$ 等',d:'— (閉區域比較)',res:'絕對最大 1；絕對最小 0',color:0xc0392b,levels:[.2,.4,.6,.8,.95]}
+  };
+  function initExtrema(){
+    const S=makeScene('canvas-extrema3d',{radius:9,axisLen:4,gridSize:4,gridStep:1}); if(!S)return;
+    let group=new THREE.Group(); S.scene.add(group);
+    function render(key){
+      S.scene.remove(group); group=new THREE.Group(); S.scene.add(group);
+      const d=extremaData[key],r=d.range;
+      const nx = (key==='cone' || key==='closed') ? 80 : 54;
+      group.add(mesh(scalarSurface(d.f,r[0],r[1],r[2],r[3],nx,nx),d.color,.74));
+      const p=marker(.14,0xe74c3c); p.position.set(...d.point); group.add(p);
+      if(d.extra){const q=marker(.12,0xf1c40f); q.position.set(...d.extra); group.add(q);}
+      if(key==='fail'){
+        group.add(lineObj(new THREE.Vector3(r[0],0,0.015),new THREE.Vector3(r[1],0,0.015),0xf1c40f));
+        group.add(lineObj(new THREE.Vector3(0,r[2],0.015),new THREE.Vector3(0,r[3],0.015),0xffffff));
+      }
+      if(key==='closed'){
+        // 邊界 4 條（z=0 平面）
+        const z0=0.005;
+        group.add(lineObj(new THREE.Vector3(r[0],r[2],z0),new THREE.Vector3(r[1],r[2],z0),0xf1c40f));
+        group.add(lineObj(new THREE.Vector3(r[1],r[2],z0),new THREE.Vector3(r[1],r[3],z0),0xf1c40f));
+        group.add(lineObj(new THREE.Vector3(r[1],r[3],z0),new THREE.Vector3(r[0],r[3],z0),0xf1c40f));
+        group.add(lineObj(new THREE.Vector3(r[0],r[3],z0),new THREE.Vector3(r[0],r[2],z0),0xf1c40f));
+        // 內部臨界曲線 xy=π/2（z=1 高度上）
+        const cpts=[]; for(let x=Math.PI/2;x<=Math.PI;x+=.05){const y=Math.PI/(2*x); if(y>=0 && y<=1) cpts.push(new THREE.Vector3(x,y,1));}
+        group.add(curve(cpts,0xffffff));
+      }
+      if(key!=='closed' && key!=='cone'){
+        const planeZ=d.point[2];
+        group.add(mesh(scalarSurface(()=>planeZ,d.point[0]-1,d.point[0]+1,d.point[1]-1,d.point[1]+1,1,1),0xf1c40f,.25));
+      }
+      setText('extLabel',d.label); setHTML('extFormula',d.formula); setHTML('extNote',d.note); setHTML('extPoint',d.pt); setText('extD',d.d); setHTML('extResult',d.res);
+      if(window.MathJax&&MathJax.typesetPromise) MathJax.typesetPromise([$('extFormula'),$('extNote'),$('extPoint'),$('extResult')]);
+      // 同步 2D contour
+      if(typeof window._ext2dDraw==='function') window._ext2dDraw(key);
+      S.requestRender();
+    }
+    document.querySelectorAll('#extremaPresets .preset-btn').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('#extremaPresets .preset-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render(btn.dataset.ext);}));
+    render('quad');
+  }
+
+  function initExtrema2DContour(){
+    const canvas=$('canvas-13-8-contour2d'); if(!canvas) return;
+    const ctx=canvas.getContext('2d');
+    function fit(){const r=canvas.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1);canvas.width=Math.max(280,Math.round(r.width*dpr));canvas.height=Math.max(220,Math.round(r.height*dpr));}
+    function draw(key){
+      fit(); const w=canvas.width,h=canvas.height;
+      ctx.fillStyle='#fbf7ed'; ctx.fillRect(0,0,w,h);
+      const d=extremaData[key]; const r=d.range;
+      const sx=x=>w*(.08+(x-r[0])/(r[1]-r[0])*.84);
+      const sy=y=>h*(.92-(y-r[2])/(r[3]-r[2])*.84);
+      // 軸
+      ctx.strokeStyle='#d9d0c0'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(sx(r[0]),sy(0)); ctx.lineTo(sx(r[1]),sy(0)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(sx(0),sy(r[2])); ctx.lineTo(sx(0),sy(r[3])); ctx.stroke();
+      // 等高線：marching squares 的簡易版（取網格上的 sign 變化）
+      const N=140;
+      const xs=new Float32Array(N+1), ys=new Float32Array(N+1), zs=new Float32Array((N+1)*(N+1));
+      for(let i=0;i<=N;i++){xs[i]=r[0]+(r[1]-r[0])*i/N; ys[i]=r[2]+(r[3]-r[2])*i/N;}
+      for(let i=0;i<=N;i++)for(let j=0;j<=N;j++){zs[i*(N+1)+j]=d.f(xs[i],ys[j]);}
+      d.levels.forEach((c,idx)=>{
+        ctx.strokeStyle=`rgba(44,62,122,${0.35+idx*0.08})`;
+        ctx.lineWidth=1.4;
+        ctx.beginPath();
+        for(let i=0;i<N;i++)for(let j=0;j<N;j++){
+          const z00=zs[i*(N+1)+j]-c, z10=zs[(i+1)*(N+1)+j]-c, z11=zs[(i+1)*(N+1)+j+1]-c, z01=zs[i*(N+1)+j+1]-c;
+          if(!isFinite(z00)||!isFinite(z10)||!isFinite(z11)||!isFinite(z01)) continue;
+          const segs=[];
+          function ip(a,b,za,zb){return a+(b-a)*(0-za)/(zb-za);}
+          if((z00<0)!==(z10<0)) segs.push([ip(xs[i],xs[i+1],z00,z10),ys[j]]);
+          if((z10<0)!==(z11<0)) segs.push([xs[i+1],ip(ys[j],ys[j+1],z10,z11)]);
+          if((z11<0)!==(z01<0)) segs.push([ip(xs[i],xs[i+1],z01,z11),ys[j+1]]);
+          if((z01<0)!==(z00<0)) segs.push([xs[i],ip(ys[j],ys[j+1],z00,z01)]);
+          if(segs.length>=2){
+            ctx.moveTo(sx(segs[0][0]),sy(segs[0][1]));
+            ctx.lineTo(sx(segs[1][0]),sy(segs[1][1]));
+            if(segs.length===4){ ctx.moveTo(sx(segs[2][0]),sy(segs[2][1])); ctx.lineTo(sx(segs[3][0]),sy(segs[3][1])); }
+          }
+        }
+        ctx.stroke();
+      });
+      // 標出臨界點
+      function drawCrit(x,y,col,label){
+        ctx.fillStyle=col; ctx.beginPath(); ctx.arc(sx(x),sy(y),5,0,TAU); ctx.fill();
+        ctx.fillStyle='#1a1a2e'; ctx.font='bold 12px JetBrains Mono'; ctx.fillText(label,sx(x)+8,sy(y)-6);
+      }
+      if(key==='quad') drawCrit(-2,3,'#c0392b','(-2,3) 極小');
+      else if(key==='cone') drawCrit(0,0,'#c0392b','(0,0) 偏導不存在');
+      else if(key==='cubic'){drawCrit(0,0,'#f1c40f','(0,0) 鞍'); drawCrit(4/3,4/3,'#c0392b','(4/3,4/3) 極大');}
+      else if(key==='fail'){
+        ctx.strokeStyle='#f1c40f'; ctx.lineWidth=3;
+        ctx.beginPath(); ctx.moveTo(sx(r[0]),sy(0)); ctx.lineTo(sx(r[1]),sy(0)); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(sx(0),sy(r[2])); ctx.lineTo(sx(0),sy(r[3])); ctx.stroke();
+        ctx.fillStyle='#1a1a2e'; ctx.font='bold 11px JetBrains Mono'; ctx.fillText('整條 x 軸 / y 軸都是臨界點',sx(r[0])+5,sy(r[3])+15);
+      } else if(key==='closed'){
+        // 內部臨界曲線 xy=π/2
+        ctx.strokeStyle='#c0392b'; ctx.lineWidth=2.5;
+        ctx.beginPath();
+        for(let x=Math.PI/2;x<=Math.PI;x+=.02){const y=Math.PI/(2*x); if(y>=0&&y<=1){ if(x===Math.PI/2) ctx.moveTo(sx(x),sy(y)); else ctx.lineTo(sx(x),sy(y));}}
+        ctx.stroke();
+        ctx.fillStyle='#c0392b'; ctx.font='bold 11px JetBrains Mono'; ctx.fillText('xy=π/2 (f=1)',sx(2)+3,sy(.85));
+        // 邊界
+        ctx.strokeStyle='#1a6b4a'; ctx.lineWidth=2;
+        ctx.strokeRect(sx(0),sy(1),sx(Math.PI)-sx(0),sy(0)-sy(1));
+        ctx.fillStyle='#1a6b4a'; ctx.fillText('邊界',sx(2.3),sy(0)+15);
+      }
+    }
+    window._ext2dDraw = draw;
+    new ResizeObserver(()=>{ const active=document.querySelector('#extremaPresets .preset-btn.active'); draw(active ? active.dataset.ext : 'quad'); }).observe(canvas);
+    draw('quad');
+  }
+
+  function initBoundary(){
+    const canvas=$('canvas-13-8-boundary'); if(!canvas) return;
+    const ctx=canvas.getContext('2d');
+    function fit(){const r=canvas.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1);canvas.width=Math.max(320,Math.round(r.width*dpr));canvas.height=Math.max(240,Math.round(r.height*dpr));}
+    function draw(){
+      fit(); const w=canvas.width,h=canvas.height;
+      ctx.fillStyle='#fbf7ed'; ctx.fillRect(0,0,w,h);
+      const xMin=-.4,xMax=Math.PI+.4,yMin=-.3,yMax=1.4;
+      const sx=x=>w*((x-xMin)/(xMax-xMin));
+      const sy=y=>h*(1-(y-yMin)/(yMax-yMin));
+      // 漸層底色（依 sin(xy) 上色）
+      const N=120;
+      for(let i=0;i<N;i++)for(let j=0;j<N;j++){
+        const x=Math.PI*i/N, y=j/N; const v=Math.sin(x*y);
+        const cv=Math.round(255*(0.5+0.4*v));
+        ctx.fillStyle=`rgb(${cv},${Math.round(180-80*v)},${Math.round(220-160*v)})`;
+        ctx.fillRect(sx(x),sy(y+1/N),sx(Math.PI*(i+1)/N)-sx(x)+1,sy(y)-sy(y+1/N)+1);
+      }
+      // 軸
+      ctx.strokeStyle='#7d776b'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(sx(xMin),sy(0)); ctx.lineTo(sx(xMax),sy(0)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(sx(0),sy(yMin)); ctx.lineTo(sx(0),sy(yMax)); ctx.stroke();
+      // 閉區域 [0,π]×[0,1]
+      ctx.strokeStyle='#1a6b4a'; ctx.lineWidth=3;
+      ctx.strokeRect(sx(0),sy(1),sx(Math.PI)-sx(0),sy(0)-sy(1));
+      // 內部臨界曲線 xy=π/2
+      ctx.strokeStyle='#c0392b'; ctx.lineWidth=3;
+      ctx.beginPath();
+      for(let x=Math.PI/2;x<=Math.PI;x+=.02){const y=Math.PI/(2*x); if(y>=0&&y<=1){ if(x===Math.PI/2) ctx.moveTo(sx(x),sy(y)); else ctx.lineTo(sx(x),sy(y));}}
+      ctx.stroke();
+      // 標註
+      ctx.fillStyle='#1a1a2e'; ctx.font='bold 13px JetBrains Mono';
+      ctx.fillText('R = [0, π] × [0, 1]',sx(.4),sy(1.18));
+      ctx.fillStyle='#c0392b'; ctx.fillText('xy = π/2  →  f = 1 (max)',sx(1.4),sy(.55));
+      ctx.fillStyle='#1a6b4a'; ctx.fillText('邊界 (f=0 多處)',sx(.05),sy(.06));
+      // 角點
+      [[0,0],[Math.PI,0],[Math.PI,1],[0,1]].forEach(([x,y])=>{ctx.fillStyle='#1a6b4a';ctx.beginPath();ctx.arc(sx(x),sy(y),5,0,TAU);ctx.fill();});
+      // 端點 (π/2, 1)
+      ctx.fillStyle='#c0392b'; ctx.beginPath(); ctx.arc(sx(Math.PI/2),sy(1),6,0,TAU); ctx.fill();
+      ctx.fillStyle='#1a1a2e'; ctx.font='11px JetBrains Mono'; ctx.fillText('(π/2,1) f=1',sx(Math.PI/2)+8,sy(1)-6);
+      // 端點 (π, 1/2)
+      ctx.fillStyle='#c0392b'; ctx.beginPath(); ctx.arc(sx(Math.PI),sy(.5),6,0,TAU); ctx.fill();
+      ctx.fillStyle='#1a1a2e'; ctx.fillText('(π,1/2) f=1',sx(Math.PI)-110,sy(.5)-6);
+    }
+    new ResizeObserver(draw).observe(canvas); draw();
+  }
+
+  function initBox(){
+    const S=makeScene('canvas-box3d',{radius:10,axisLen:5,gridSize:5,gridStep:1}); if(!S)return;
+    S.scene.add(mesh(scalarSurface((x,y)=>8-2*x-4*y/3,0,4,0,6,2,2),0x5dade2,.28));
+    let box=null; const opt=marker(.12,0x2ecc71); opt.position.set(4/3,2,8/3); S.scene.add(opt);
+    function draw(){
+      const x=parseFloat($('boxX').value), ySlider=$('boxY');
+      const yMax=Math.max(.1,6-1.5*x);
+      ySlider.setAttribute('max',fmt(yMax,2));
+      let y=parseFloat(ySlider.value);
+      if(y>yMax){ y=yMax; ySlider.value=fmt(y,2); }
+      const z=8-2*x-4*y/3, zz=Math.max(0,z);
+      if(box) S.scene.remove(box);
+      box=new THREE.Mesh(new THREE.BoxGeometry(x,y,zz),new THREE.MeshStandardMaterial({color:z>=0?0xf1c40f:0xc0392b,transparent:true,opacity:.48,roughness:.5}));
+      box.position.set(x/2,y/2,zz/2); S.scene.add(box);
+      setText('boxXVal',fmt(x,2)); setText('boxYVal',fmt(y,2)); setText('boxZ',fmt(z,2)); setText('boxV',fmt(x*y*z,2)); setText('boxStatus',z>=-1e-9?'可行':'不可行');
+      S.requestRender();
+    }
+    $('boxX').addEventListener('input',draw); $('boxY').addEventListener('input',draw); draw();
+  }
+
+  function profit(x,y){return 8*x+10*y-.001*(x*x+x*y+y*y)-10000;}
+  function initProfit(){
+    const S=makeScene('canvas-profit3d',{radius:10,axisLen:6,gridSize:6,gridStep:1}); if(!S)return;
+    S.scene.add(mesh(scalarSurface((X,Y)=>profit(1000*X,1000*Y)/5000,0,6,0,7,56,56),0x1a6b4a,.74));
+    const p=marker(.14,0xe74c3c); S.scene.add(p);
+    const opt=marker(.12,0xf1c40f); opt.position.set(2,4,profit(2000,4000)/5000); S.scene.add(opt);
+    function draw(){
+      const X=parseFloat($('profitX').value),Y=parseFloat($('profitY').value),P=profit(1000*X,1000*Y);
+      p.position.set(X,Y,P/5000); setText('profitXVal',fmt(X,2)); setText('profitYVal',fmt(Y,2)); setText('profitVal',fmt(P,0)); S.requestRender();
+    }
+    $('profitX').addEventListener('input',draw); $('profitY').addEventListener('input',draw); draw();
+  }
+
+  function initLagrangeEllipse(){
+    const canvas=$('canvas-lagrange-ellipse'); if(!canvas) return;
+    const ctx=canvas.getContext('2d');
+    function fit(){const r=canvas.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1);canvas.width=Math.max(320,Math.round(r.width*dpr));canvas.height=Math.max(230,Math.round(r.height*dpr));}
+    function drawArrow(sx,sy,x0,y0,x1,y1,color,label){
+      ctx.strokeStyle=color; ctx.lineWidth=3;
+      ctx.beginPath(); ctx.moveTo(sx(x0),sy(y0)); ctx.lineTo(sx(x1),sy(y1)); ctx.stroke();
+      const ang=Math.atan2(sy(y1)-sy(y0),sx(x1)-sx(x0));
+      ctx.fillStyle=color; ctx.beginPath();
+      ctx.moveTo(sx(x1),sy(y1));
+      ctx.lineTo(sx(x1)-10*Math.cos(ang-.42),sy(y1)-10*Math.sin(ang-.42));
+      ctx.lineTo(sx(x1)-10*Math.cos(ang+.42),sy(y1)-10*Math.sin(ang+.42));
+      ctx.closePath(); ctx.fill();
+      ctx.font='bold 12px JetBrains Mono'; ctx.fillText(label,sx(x1)+6,sy(y1)-4);
+    }
+    function draw(){
+      fit(); const w=canvas.width,h=canvas.height;
+      ctx.fillStyle='#fbf7ed'; ctx.fillRect(0,0,w,h);
+      const xMin=0,xMax=3.45,yMin=0,yMax=4.45;
+      const sx=x=>w*(.09+(x-xMin)/(xMax-xMin)*.84);
+      const sy=y=>h*(.91-(y-yMin)/(yMax-yMin)*.82);
+      ctx.strokeStyle='#d9d0c0'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(sx(xMin),sy(0)); ctx.lineTo(sx(xMax),sy(0)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(sx(0),sy(yMin)); ctx.lineTo(sx(0),sy(yMax)); ctx.stroke();
+      ctx.fillStyle='#7d776b'; ctx.font='11px JetBrains Mono';
+      ctx.fillText('x',sx(xMax)-12,sy(0)-6); ctx.fillText('y',sx(0)+6,sy(yMax)+12);
+
+      ctx.strokeStyle='#1a6b4a'; ctx.lineWidth=3;
+      ctx.beginPath();
+      for(let t=0;t<=Math.PI/2+.01;t+=.015){
+        const x=3*Math.cos(t), y=4*Math.sin(t);
+        if(t===0) ctx.moveTo(sx(x),sy(y)); else ctx.lineTo(sx(x),sy(y));
+      }
+      ctx.stroke();
+      ctx.fillStyle='#1a6b4a'; ctx.font='bold 12px JetBrains Mono'; ctx.fillText('g=1',sx(.25),sy(4)-6);
+
+      [8,16,24].forEach(k=>{
+        ctx.strokeStyle=k===24?'#c0392b':'rgba(44,62,122,.52)';
+        ctx.lineWidth=k===24?2.8:1.5;
+        ctx.beginPath();
+        let started=false;
+        for(let x=.16;x<=3.25;x+=.02){
+          const y=k/(4*x);
+          if(y<0 || y>4.4) continue;
+          if(!started){ctx.moveTo(sx(x),sy(y)); started=true;} else ctx.lineTo(sx(x),sy(y));
+        }
+        ctx.stroke();
+        const labelX=k===24?2.35:2.75, labelY=k/(4*labelX);
+        ctx.fillStyle=k===24?'#c0392b':'#7d776b'; ctx.font='11px JetBrains Mono';
+        if(labelY<=4.35) ctx.fillText('4xy='+k,sx(labelX)+3,sy(labelY)-3);
+      });
+
+      const px=3/Math.sqrt(2), py=2*Math.sqrt(2);
+      ctx.fillStyle='rgba(241,196,15,.26)';
+      ctx.fillRect(sx(0),sy(py),sx(px)-sx(0),sy(0)-sy(py));
+      ctx.strokeStyle='#f1c40f'; ctx.lineWidth=2;
+      ctx.strokeRect(sx(0),sy(py),sx(px)-sx(0),sy(0)-sy(py));
+      ctx.fillStyle='#c0392b'; ctx.beginPath(); ctx.arc(sx(px),sy(py),6,0,TAU); ctx.fill();
+      ctx.fillStyle='#1a1a2e'; ctx.font='bold 12px JetBrains Mono'; ctx.fillText('(3/√2, 2√2)',sx(px)-86,sy(py)-12);
+
+      const gx=2*px/9, gy=py/8, gn=Math.hypot(gx,gy);
+      drawArrow(sx,sy,px,py,px+gx/gn*.72,py+gy/gn*.72,'#1a6b4a','∇g');
+      drawArrow(sx,sy,px,py,px+gx/gn*1.18,py+gy/gn*1.18,'#c0392b','∇f');
+      ctx.fillStyle='#1a1a2e'; ctx.font='12px JetBrains Mono'; ctx.fillText('∇f = 24∇g',sx(1.55),sy(1.0));
+    }
+    new ResizeObserver(draw).observe(canvas); draw();
+  }
+
+  function initLagrangeDisk(){
+    const canvas=$('canvas-lagrange-disk'); if(!canvas) return;
+    const ctx=canvas.getContext('2d');
+    const f=(x,y)=>x*x+2*y*y-2*x+3;
+    function fit(){const r=canvas.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1);canvas.width=Math.max(320,Math.round(r.width*dpr));canvas.height=Math.max(230,Math.round(r.height*dpr));}
+    function drawPoint(sx,sy,x,y,color,label){
+      ctx.fillStyle=color; ctx.beginPath(); ctx.arc(sx(x),sy(y),6,0,TAU); ctx.fill();
+      ctx.fillStyle='#1a1a2e'; ctx.font='bold 11px JetBrains Mono'; ctx.fillText(label,sx(x)+8,sy(y)-6);
+    }
+    function draw(){
+      fit(); const w=canvas.width,h=canvas.height;
+      ctx.fillStyle='#fbf7ed'; ctx.fillRect(0,0,w,h);
+      const r=3.65,xMin=-3.8,xMax=3.8,yMin=-3.8,yMax=3.8;
+      const sx=x=>w*(.08+(x-xMin)/(xMax-xMin)*.84);
+      const sy=y=>h*(.92-(y-yMin)/(yMax-yMin)*.84);
+      const img=ctx.createImageData(w,h);
+      for(let py=0;py<h;py++)for(let px=0;px<w;px++){
+        const x=xMin+(xMax-xMin)*(px/w), y=yMax-(yMax-yMin)*(py/h);
+        const inside=x*x+y*y<=10;
+        const val=f(x,y), t=Math.max(0,Math.min(1,(val-2)/24));
+        const idx=(py*w+px)*4;
+        img.data[idx]=inside?Math.round(245-55*t):247;
+        img.data[idx+1]=inside?Math.round(252-70*t):243;
+        img.data[idx+2]=inside?Math.round(238-120*t):235;
+        img.data[idx+3]=inside?210:255;
+      }
+      ctx.putImageData(img,0,0);
+      ctx.strokeStyle='#d9d0c0'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(sx(xMin),sy(0)); ctx.lineTo(sx(xMax),sy(0)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(sx(0),sy(yMin)); ctx.lineTo(sx(0),sy(yMax)); ctx.stroke();
+      ctx.strokeStyle='#1a6b4a'; ctx.lineWidth=3;
+      ctx.beginPath();
+      for(let t=0;t<=TAU+.02;t+=.02){
+        const x=Math.sqrt(10)*Math.cos(t), y=Math.sqrt(10)*Math.sin(t);
+        if(t===0) ctx.moveTo(sx(x),sy(y)); else ctx.lineTo(sx(x),sy(y));
+      }
+      ctx.stroke();
+      drawPoint(sx,sy,-1,3,'#c0392b','最大 (-1,3)');
+      drawPoint(sx,sy,-1,-3,'#c0392b','最大 (-1,-3)');
+      drawPoint(sx,sy,Math.sqrt(10),0,'#2980b9','邊界最小');
+      drawPoint(sx,sy,1,0,'#f1c40f','全域最小 (1,0)');
+      ctx.fillStyle='#1a1a2e'; ctx.font='12px JetBrains Mono';
+      ctx.fillText('x²+y²≤10',sx(-3.25),sy(3.45));
+    }
+    new ResizeObserver(draw).observe(canvas); draw();
+  }
+
+  function initLagrangeTwoConstraints(){
+    const S=makeScene('canvas-lagrange-two',{radius:10,axisLen:4,gridSize:4,gridStep:1,theta:.65,phi:1.05}); if(!S)return;
+    const R=Math.sqrt(11);
+    const sphere=(u,v)=>({x:R*Math.sin(v)*Math.cos(u),y:R*Math.sin(v)*Math.sin(u),z:R*Math.cos(v)});
+    S.scene.add(mesh(paramSurface(sphere,0,TAU,0.04,Math.PI-.04,48,28),0x2c3e7a,.22));
+    S.scene.add(mesh(scalarSurface((x,y)=>3-x-y,-2.6,4.2,-2.6,4.2,2,2),0x1a6b4a,.28));
+    const center=new THREE.Vector3(1,1,1);
+    const n=new THREE.Vector3(1,1,1).normalize();
+    const u=new THREE.Vector3(1,-1,0).normalize();
+    const v=new THREE.Vector3(1,1,-2).normalize();
+    const rad=Math.sqrt(8);
+    const pts=[];
+    for(let t=0;t<=TAU+.03;t+=.04){
+      pts.push(center.clone().add(u.clone().multiplyScalar(rad*Math.cos(t))).add(v.clone().multiplyScalar(rad*Math.sin(t))));
+    }
+    S.scene.add(curve(pts,0xf1c40f));
+    const candidates=[
+      {p:new THREE.Vector3(3,-1,1), color:0x2ecc71},
+      {p:new THREE.Vector3(-1,3,1), color:0x2ecc71},
+      {p:new THREE.Vector3((3-2*Math.sqrt(3))/3,(3-2*Math.sqrt(3))/3,(3+4*Math.sqrt(3))/3), color:0xe74c3c},
+      {p:new THREE.Vector3((3+2*Math.sqrt(3))/3,(3+2*Math.sqrt(3))/3,(3-4*Math.sqrt(3))/3), color:0xe74c3c}
+    ];
+    candidates.forEach(c=>{const m=marker(.14,c.color); m.position.copy(c.p); S.scene.add(m);});
+    S.scene.add(lineObj(center.clone().add(n.clone().multiplyScalar(-2.4)),center.clone().add(n.clone().multiplyScalar(2.4)),0xffffff));
+    S.requestRender();
+  }
+
+  initDirection();
+  initDir2DContour();
+  initTemperature2D();
+  init3VarGradient();
+  initPlane();
+  initIntersection();
+  initExtrema2DContour();
+  initExtrema();
+  initBoundary();
+  initBox();
+  initProfit();
+  initLagrangeEllipse();
+  initLagrangeDisk();
+  initLagrangeTwoConstraints();
+
+  // ─── Quizzes ───
+  // 13.5
+  makeNumberQuiz('quiz-13-5-1', 5, {
+    ok:'✓ 正確！$w_x=y^2,\\ w_y=2xy$；$x\'=1,\\ y\'=2t$。在 $t=1$ 時 $x=y=1$，故 $dw/dt=1\\cdot 1+2\\cdot 2=5$。',
+    wrong:'再試一次：用 $\\dfrac{dw}{dt}=w_x x\'+w_y y\'$，在 $t=1$ 代入 $x=y=1,\\ x\'=1,\\ y\'=2$。'
+  });
+  makeChoiceQuiz('quiz-13-5-2', 1, {
+    ok:'✓ 對！對 $s$ 偏微時，每條樹枝的中間變數也要對 $s$ 微分（$x_s$、$y_s$）。',
+    wrong:[
+      '混到了：對 $s$ 偏微時 $y$ 也要對 $s$ 微分（$y_s$，不是 $y_t$）。',
+      '',
+      '$w_s$ 不存在 — $w$ 並不直接依賴 $s$，要透過 $x,y$ 中介。',
+      '對 $s$ 偏微時要用 $x_s,\\ y_s$，不是 $x_t,\\ y_t$。'
+    ]
+  });
+  // 13.6
+  // f=4-x²-y²/4, P=(1,2), u=(1,1)/√2 ⇒ ∇f(P)=(-2,-1)，D_u f=(-2-1)/√2=-3/√2≈-2.121
+  makeNumberQuiz('quiz-13-6-1', -3/Math.sqrt(2), {
+    tolerance:0.01,
+    ok:'✓ 正確！$\\nabla f(1,2)=(-2,-1)$，$\\mathbf u=(1,1)/\\sqrt 2$，內積為 $(-2-1)/\\sqrt 2=-3/\\sqrt 2\\approx -2.121$。',
+    wrong:'再算：先求 $\\nabla f(1,2)=(-2,-1)$，再內積 $\\mathbf u=(1/\\sqrt 2,1/\\sqrt 2)$。'
+  });
+  makeChoiceQuiz('quiz-13-6-2', 2, {
+    ok:'✓ 沒錯！最大方向導數 $=\\|\\nabla f(P)\\|=\\sqrt{3^2+4^2}=5$，由 $\\mathbf u=\\nabla f/\\|\\nabla f\\|$ 達到。',
+    wrong:[
+      '$\\|\\nabla f\\|=\\sqrt{9+16}=\\sqrt{25}=5$，不是 3。',
+      '$\\|\\nabla f\\|=\\sqrt{9+16}=\\sqrt{25}=5$，不是 4。',
+      '',
+      '$\\|\\nabla f\\|=\\sqrt{3^2+4^2}=5$，不是 7。'
+    ]
+  });
+  makeChoiceQuiz('quiz-13-6-3', 1, {
+    ok:'✓ 對！$\\mathbf u$ 必須是單位向量；$\\nabla f$ 不必（它是計算結果，可任意大小）。',
+    wrong:[
+      '$\\nabla f$ 是計算出來的向量，不限制長度。',
+      '',
+      '只有 $\\mathbf u$ 須為單位向量，才能讓 $D_{\\mathbf u}f$ 解讀為「沿 $\\mathbf u$ 的瞬時變化率」。',
+      '$\\mathbf u$ 必須是單位向量，否則公式得到的數會多倍率。'
+    ]
+  });
+  // 13.7
+  // F=x²+y²+z²-9, P=(1,2,2)：∇F=(2,4,4)。切平面 2(x-1)+4(y-2)+4(z-2)=0 → 2x+4y+4z=18 → 化簡 x+2y+2z=9
+  makeNumberQuiz('quiz-13-7-1', 9, {
+    tolerance:0.01,
+    ok:'✓ 正確！$\\nabla F(1,2,2)=(2,4,4)$，切平面 $2(x-1)+4(y-2)+4(z-2)=0$，化為 $x+2y+2z=9$。',
+    wrong:'再算：$\\nabla F=(2x,2y,2z)$，在 $(1,2,2)$ 為 $(2,4,4)$，代入點得 $2+8+8=18$，除以 $2$ 得 $9$。'
+  });
+  makeChoiceQuiz('quiz-13-7-2', 1, {
+    ok:'✓ 對！若 $\\nabla F=0$，定理 13.13 的條件 $\\nabla F\\ne 0$ 不滿足，不能直接套切平面公式。',
+    wrong:[
+      '頂點處 $\\nabla F=(0,0,0)$，找不到合法的法向量 — 不存在切平面。',
+      '',
+      '不是無限多個 — 是「定理失效，無切平面」（曲面不光滑）。',
+      '無這條切平面；$\\nabla F=0$ 時定理不適用。'
+    ]
+  });
+  // 13.8
+  makeChoiceQuiz('quiz-13-8-1', 0, {
+    ok:'✓ 對！$d=2\\cdot 8-3^2=16-9=7>0$ 且 $f_{xx}=2>0$，由定理 13.17 為相對極小。',
+    wrong:[
+      '',
+      '$d=7>0,f_{xx}=2>0$ → 應為極小（不是極大）。',
+      '$d=2\\cdot 8-3^2=7$，是正的不是負的。',
+      '$d=2\\cdot 8-9=7\\ne 0$。'
+    ]
+  });
+  makeMultiQuiz('quiz-13-8-2', [0,1,2], {
+    ok:'✓ 三個都要查！(1) 內部 $\\nabla f=0$；(2) 偏導不存在的點；(3) 邊界（含角點）。',
+    wrong:'區域外的點不算候選；其餘三項皆需檢查。'
+  });
+})();
+</script>
+</body>
+</html>

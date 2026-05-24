@@ -1,0 +1,2570 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>向量分析 — 第 15.1–15.4 節</title>
+<script>
+  MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1a2e;--paper:#f7f3eb;--accent:#c0392b;--accent2:#2c3e7a;--accent3:#1a6b4a;
+  --muted:#8a8578;--card:#fffdf7;--card-border:#e8e2d6;--highlight:#fff3cd;
+  --code-bg:#2d2d3f;--code-fg:#e8e6df;
+  --x-axis:#e74c3c;--y-axis:#27ae60;--z-axis:#2980b9;
+  --field-arrow:#2c3e7a;--field-mag:#c0392b;--curve-path:#1a6b4a;
+  --conservative:#1a6b4a;--non-conservative:#c0392b;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.9;font-size:17px;}
+
+/* Hero */
+.hero{min-height:62vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem;position:relative;overflow:hidden;background:linear-gradient(170deg,#1a1a2e 0%,#2c3e7a 40%,#1a6b4a 100%);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.06) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.04) 0%,transparent 40%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);}
+.hero-content{position:relative;z-index:1;max-width:920px;}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;color:#fff;letter-spacing:.04em;line-height:1.3;margin-bottom:1rem;}
+.hero h1 .green{color:#2ecc71;}
+.hero h1 .blue{color:#5dade2;}
+.hero h1 .yellow{color:#f1c40f;}
+.hero .subtitle{font-size:clamp(.95rem,2.2vw,1.2rem);color:rgba(255,255,255,.65);font-weight:300;margin-bottom:2rem;}
+.hero .big-formula{color:#2ecc71;background:rgba(0,0,0,.3);padding:.8rem 2rem;border-radius:12px;display:inline-block;border:1px solid rgba(255,255,255,.1);margin-bottom:2rem;backdrop-filter:blur(4px);font-size:1.05rem;}
+.scroll-hint{color:rgba(255,255,255,.4);font-size:.9rem;animation:bounce 2s infinite;}
+.scroll-hint span{display:block;font-size:1.4rem;margin-top:.3rem;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+/* Layout */
+.container{max-width:1180px;margin:0 auto;padding:3rem 1.5rem;}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.5rem;}
+h2{font-family:'Noto Serif TC',serif;font-size:1.65rem;font-weight:700;color:var(--ink);margin-bottom:1.2rem;line-height:1.4;}
+h3{font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:700;color:var(--accent2);margin:1.4rem 0 .8rem;}
+h4{font-family:'Noto Serif TC',serif;font-size:1.0rem;font-weight:700;color:var(--accent3);margin:1.0rem 0 .5rem;}
+section{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--card-border);}
+section:last-of-type{border-bottom:none;}
+p{margin-bottom:1rem;}
+.subsection{margin:2rem 0;}
+
+/* Viz layout: plot + side panel */
+.viz-layout{display:grid;grid-template-columns:1fr 320px;gap:1.3rem;margin:1.2rem 0;align-items:start;}
+@media(max-width:900px){.viz-layout{grid-template-columns:1fr;}}
+
+/* Plot panel */
+.canvas3d-panel{background:linear-gradient(160deg,#fffdf7 0%,#f4efe3 100%);border:1px solid var(--card-border);border-radius:12px;padding:1rem;box-shadow:0 4px 18px rgba(0,0,0,.06);position:relative;}
+.canvas3d-panel .canvas-wrap{width:100%;aspect-ratio:1/0.78;position:relative;border-radius:8px;overflow:hidden;background:#fbf7ed;}
+.canvas3d-panel.dark .canvas-wrap{background:#1a1a2e;}
+.canvas3d-panel .plot-host{width:100%;height:100%;}
+.hint-overlay{position:absolute;top:8px;right:10px;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:rgba(0,0,0,.5);background:rgba(255,255,255,.7);padding:3px 8px;border-radius:4px;pointer-events:none;z-index:2;}
+.canvas3d-panel.dark .hint-overlay{color:rgba(255,255,255,.55);background:rgba(0,0,0,.35);}
+.t-display{position:absolute;top:8px;left:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#a07a08;background:rgba(255,255,255,.85);padding:4px 10px;border-radius:4px;pointer-events:none;font-weight:600;border:1px solid #f1c40f;z-index:2;}
+
+/* Dual plot side-by-side (Green's theorem) */
+.dual-plot{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+@media(max-width:760px){.dual-plot{grid-template-columns:1fr;}}
+.plot-subtitle{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--accent2);font-weight:600;text-align:center;margin-bottom:.45rem;padding:.25rem .5rem;background:#eef2ff;border-radius:5px;}
+
+/* Side navigation */
+.side-nav{position:fixed;top:50%;right:1rem;transform:translateY(-50%);background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.45rem .5rem;font-size:.74rem;font-family:'JetBrains Mono',monospace;box-shadow:0 4px 18px rgba(0,0,0,.08);z-index:50;display:flex;flex-direction:column;gap:.1rem;max-width:220px;max-height:88vh;overflow-y:auto;}
+.side-nav .sn-title{font-size:.66rem;color:var(--muted);letter-spacing:.1em;padding:.2rem .55rem .35rem;border-bottom:1px solid var(--card-border);margin-bottom:.25rem;}
+.side-nav .sn-item{display:block;padding:.26rem .55rem;color:var(--muted);text-decoration:none;border-left:2px solid transparent;border-radius:4px;transition:all .15s;line-height:1.3;}
+.side-nav .sn-item.sn-sub{padding-left:1.1rem;font-size:.7rem;color:#a8a496;}
+.side-nav .sn-item:hover{color:var(--ink);background:var(--highlight);}
+.side-nav .sn-item.active{color:var(--accent3);border-left-color:var(--accent3);background:rgba(26,107,74,.06);font-weight:600;}
+@media(max-width:1280px){.side-nav{display:none;}}
+
+/* Axis legend */
+.axis-legend{display:flex;gap:1rem;justify-content:center;margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.8rem;flex-wrap:wrap;}
+.axis-legend span{display:inline-flex;align-items:center;gap:.3rem;}
+.axis-legend span::before{content:'';display:inline-block;width:14px;height:3px;border-radius:2px;}
+.axis-legend .ax-x::before{background:var(--x-axis);}
+.axis-legend .ax-y::before{background:var(--y-axis);}
+.axis-legend .ax-z::before{background:var(--z-axis);}
+.axis-legend .ax-field::before{background:var(--field-arrow);}
+.axis-legend .ax-path::before{background:var(--curve-path);}
+.axis-legend .ax-cons::before{background:var(--conservative);}
+.axis-legend .ax-noncons::before{background:var(--non-conservative);}
+
+/* Controls */
+.controls-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--card-border);}
+.btn{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:600;padding:.45rem 1rem;border-radius:6px;border:none;cursor:pointer;transition:all .2s;}
+.btn-play{background:var(--accent3);color:#fff;}
+.btn-play:hover{background:#22845c;}
+.btn-play.active{background:var(--accent);}
+.btn-reset{background:var(--card-border);color:var(--ink);}
+.btn-reset:hover{background:#ccc;}
+.btn-toggle{background:var(--accent2);color:#fff;}
+.btn-toggle:hover{background:#1f2e5f;}
+.btn-toggle.off{background:#bbb;color:#555;}
+
+/* Slider row */
+.slider-row{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;background:var(--paper);border-radius:8px;margin-bottom:.5rem;}
+.slider-row .slider-label{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent2);font-weight:600;min-width:62px;}
+.slider-row input[type="range"]{flex:1;accent-color:var(--accent3);height:5px;cursor:pointer;}
+.slider-row .slider-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--accent);font-weight:600;min-width:72px;text-align:right;}
+
+/* Selector dropdown */
+.field-select{font-family:'JetBrains Mono',monospace;font-size:.82rem;padding:.4rem .7rem;border-radius:6px;border:1.5px solid var(--card-border);background:var(--card);color:var(--ink);cursor:pointer;width:100%;}
+.field-select:focus{outline:none;border-color:var(--accent2);}
+
+/* Side panel */
+.side-panel{display:flex;flex-direction:column;gap:.85rem;}
+
+.info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.info-card .ic-title{font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem;}
+.info-card .ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.82rem;padding:.18rem 0;align-items:center;gap:.4rem;}
+.info-card .ic-label{color:var(--muted);}
+.info-card .ic-value{color:var(--ink);font-weight:600;text-align:right;}
+.info-card .ic-value.highlight{color:var(--accent);}
+.info-card .ic-value.ok{color:var(--accent3);}
+.info-card .ic-value.bad{color:var(--accent);}
+.info-card .ic-value.muted{color:var(--muted);font-weight:400;}
+
+.eq-card{background:var(--code-bg);border-radius:10px;padding:.95rem 1.1rem;color:#fff;}
+.eq-card .eq-label{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#2ecc71;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;}
+.eq-card .eq-formula{font-size:1.0rem;color:#fff;text-align:center;}
+.eq-card .eq-sub{font-size:.78rem;color:rgba(255,255,255,.55);margin-top:.4rem;text-align:center;}
+
+/* Accumulation bar (for line integral animations) */
+.accum-bar{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.7rem .9rem;}
+.accum-bar .ab-label{font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.4rem;display:flex;justify-content:space-between;}
+.accum-bar .ab-track{width:100%;height:18px;background:#f0eadc;border-radius:9px;overflow:hidden;position:relative;border:1px solid var(--card-border);}
+.accum-bar .ab-fill{height:100%;background:linear-gradient(90deg,#1a6b4a,#27ae60);transition:width .08s linear;border-radius:9px;}
+.accum-bar .ab-fill.neg{background:linear-gradient(90deg,#c0392b,#e74c3c);}
+.accum-bar .ab-val{font-family:'JetBrains Mono',monospace;font-size:.95rem;font-weight:700;color:var(--accent3);text-align:center;margin-top:.35rem;}
+.accum-bar .ab-target{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);text-align:center;margin-top:.1rem;}
+
+/* Reference section */
+.ref-group{margin:1.5rem 0 2rem;}
+.ref-group-title{font-family:'Noto Serif TC',serif;font-size:1.12rem;font-weight:700;color:var(--accent2);padding-bottom:.4rem;border-bottom:2px solid var(--accent2);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;}
+.ref-group-title .rg-badge{font-size:.7rem;font-weight:600;color:#fff;background:var(--accent2);padding:2px 8px;border-radius:3px;font-family:'JetBrains Mono',monospace;}
+.ref-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:1rem 1.2rem;margin-bottom:.9rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.ref-card-header{display:flex;align-items:baseline;gap:.8rem;margin-bottom:.5rem;flex-wrap:wrap;}
+.ref-card-name{font-family:'Noto Serif TC',serif;font-weight:700;font-size:1.02rem;color:var(--ink);}
+.ref-card-name-en{font-size:.8rem;color:var(--muted);font-weight:400;}
+.ref-card-eq{background:var(--code-bg);color:#fff;border-radius:8px;padding:.65rem 1rem;text-align:center;font-size:.95rem;margin-bottom:.55rem;}
+.ref-note{font-size:.85rem;color:var(--muted);margin-top:.5rem;padding-left:.8rem;border-left:3px solid var(--card-border);}
+
+/* Conversion table */
+.conv-table{width:100%;border-collapse:collapse;font-size:.88rem;margin:.8rem 0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.conv-table th{background:var(--accent2);color:#fff;padding:.6rem .8rem;text-align:center;font-weight:600;font-size:.82rem;}
+.conv-table td{padding:.6rem .8rem;text-align:center;border-bottom:1px solid var(--card-border);font-family:'JetBrains Mono',monospace;font-size:.85rem;}
+.conv-table td:first-child{font-family:'Noto Sans TC',sans-serif;color:var(--accent2);font-weight:600;text-align:left;}
+.conv-table tr:last-child td{border-bottom:none;}
+.conv-table tr:nth-child(even){background:rgba(0,0,0,.015);}
+
+/* Info box (definitions / theorems) */
+.info-box{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1.1rem 1.4rem;margin:1.3rem 0;position:relative;}
+.info-box .info-label{position:absolute;top:-11px;left:14px;background:var(--accent2);color:#fff;font-size:.74rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.05em;}
+.info-box.warm{background:#fef5e7;border-color:#d68910;}
+.info-box.warm .info-label{background:#d68910;}
+.info-box.green{background:#eaf5ee;border-color:var(--accent3);}
+.info-box.green .info-label{background:var(--accent3);}
+.info-box.red{background:#fdebeb;border-color:var(--accent);}
+.info-box.red .info-label{background:var(--accent);}
+
+/* Callout pill */
+.pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:4px;margin:0 .15rem;vertical-align:1px;}
+.pill-x{background:rgba(231,76,60,.12);color:var(--x-axis);border:1px solid rgba(231,76,60,.3);}
+.pill-y{background:rgba(39,174,96,.12);color:var(--y-axis);border:1px solid rgba(39,174,96,.3);}
+.pill-z{background:rgba(41,128,185,.12);color:var(--z-axis);border:1px solid rgba(41,128,185,.3);}
+.pill-blue{background:rgba(44,62,122,.13);color:var(--accent2);border:1px solid rgba(44,62,122,.3);}
+.pill-green{background:rgba(26,107,74,.13);color:var(--accent3);border:1px solid rgba(26,107,74,.3);}
+.pill-red{background:rgba(192,57,43,.13);color:var(--accent);border:1px solid rgba(192,57,43,.3);}
+
+/* Toggle group */
+.toggle-group{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.5rem;}
+.tg-btn{font-family:'JetBrains Mono',monospace;font-size:.72rem;padding:.25rem .6rem;border-radius:4px;border:1px solid var(--card-border);background:var(--paper);cursor:pointer;transition:all .2s;}
+.tg-btn.active{background:var(--accent3);color:#fff;border-color:var(--accent3);}
+
+/* Step block */
+.step-block{background:#fffaf0;border-left:4px solid var(--accent3);border-radius:8px;padding:.9rem 1.2rem;margin:.7rem 0;}
+.step-block .step-num{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);font-weight:700;letter-spacing:.1em;margin-bottom:.3rem;}
+.lecture-example{background:var(--card);border:1px solid var(--card-border);border-left:5px solid var(--accent3);border-radius:10px;padding:1rem 1.2rem;margin:1rem 0;box-shadow:0 2px 10px rgba(0,0,0,.04);}
+.lecture-example .ex-tag{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--accent3);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.35rem;}
+.lecture-example .ex-title{font-family:'Noto Serif TC',serif;font-weight:700;color:var(--ink);margin-bottom:.65rem;background:#f5f7fb;border:1px solid #dfe5f0;border-radius:8px;padding:.65rem .85rem;}
+.lecture-example .ex-title::before{content:"題目";display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#fff;background:var(--accent2);border-radius:4px;padding:1px 7px;margin-right:.55rem;letter-spacing:.06em;}
+.lecture-example .ex-method{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;background:rgba(26,107,74,.12);color:var(--accent3);border:1px solid rgba(26,107,74,.35);border-radius:4px;padding:1px 7px;margin:.1rem .25rem .1rem 0;}
+.lecture-example .step-block:first-of-type{margin-top:1.8rem;position:relative;}
+.lecture-example .step-block:first-of-type::before{content:"解題";position:absolute;top:-1.35rem;left:0;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#fff;background:var(--accent3);border-radius:4px;padding:1px 7px;letter-spacing:.06em;}
+.lecture-example .ex-answer{background:#f3fbf6;border:1px solid #cdebd9;border-radius:8px;padding:.65rem .85rem;margin-top:.65rem;font-size:.95rem;}
+.lecture-example .ex-answer::before{content:"答案";display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#fff;background:var(--accent3);border-radius:4px;padding:1px 7px;font-weight:700;margin-right:.5rem;letter-spacing:.06em;}
+.method-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem;margin:1rem 0;}
+@media(max-width:720px){.method-grid{grid-template-columns:1fr;}}
+
+/* Property list */
+.prop-list{counter-reset:prop;list-style:none;padding:0;margin:1rem 0;}
+.prop-list li{counter-increment:prop;background:var(--card);border:1px solid var(--card-border);border-radius:8px;padding:.7rem 1rem .7rem 3rem;margin-bottom:.55rem;position:relative;font-size:.95rem;box-shadow:0 1px 3px rgba(0,0,0,.03);}
+.prop-list li::before{content:counter(prop);position:absolute;left:.85rem;top:50%;transform:translateY(-50%);width:1.7rem;height:1.7rem;background:var(--accent3);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.85rem;}
+
+/* Dual contrast cards */
+.dual-card{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:1rem 0;}
+@media(max-width:600px){.dual-card{grid-template-columns:1fr;}}
+.dual-card .dc{padding:.9rem 1.1rem;border-radius:10px;}
+.dual-card .dc-real{background:#fff5e6;border:1px solid #f0c674;}
+.dual-card .dc-vec{background:#e8f0ff;border:1px solid #7a96d3;}
+.dual-card .dc-cons{background:#eaf5ee;border:1px solid #6fbf91;}
+.dual-card .dc-noncons{background:#fde9e7;border:1px solid #e08580;}
+.dual-card .dc-title{font-weight:700;font-size:.88rem;margin-bottom:.4rem;}
+.dual-card .dc-real .dc-title{color:#a06800;}
+.dual-card .dc-vec .dc-title{color:#1f3a7a;}
+.dual-card .dc-cons .dc-title{color:var(--accent3);}
+.dual-card .dc-noncons .dc-title{color:var(--accent);}
+
+footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border);}
+
+/* Quiz */
+.quiz-card{background:#eef5ff;border:1.5px solid var(--accent2);border-radius:10px;padding:1rem 1.2rem;margin:1.2rem 0;box-shadow:0 2px 10px rgba(44,62,122,.07);}
+.quiz-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#fff;background:var(--accent2);padding:2px 8px;border-radius:4px;letter-spacing:.08em;margin-bottom:.45rem;}
+.quiz-q{font-weight:600;margin-bottom:.6rem;}
+.quiz-options{display:flex;flex-direction:column;gap:.4rem;}
+.quiz-opt{padding:.45rem .85rem;border:1.5px solid var(--card-border);border-radius:6px;cursor:pointer;background:var(--card);text-align:left;font-size:.94rem;transition:all .15s;font-family:inherit;}
+.quiz-opt:hover{border-color:var(--accent2);background:#fafcff;}
+.quiz-opt.correct{border-color:var(--accent3);background:#eaf5ee;color:var(--accent3);font-weight:600;}
+.quiz-opt.wrong{border-color:var(--accent);background:#fde9e7;color:var(--accent);}
+.quiz-feedback{font-size:.86rem;margin-top:.5rem;padding:.45rem .7rem;border-radius:5px;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.ok{background:#eaf5ee;color:var(--accent3);border-left:3px solid var(--accent3);}
+.quiz-feedback.no{background:#fde9e7;color:var(--accent);border-left:3px solid var(--accent);}
+
+/* Verify banner (for animations) */
+.verify-banner{display:flex;align-items:center;gap:.6rem;padding:.55rem .9rem;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:600;margin-top:.6rem;}
+.verify-banner.ok{background:#eaf5ee;color:var(--accent3);border:1px solid var(--accent3);}
+.verify-banner.no{background:#fde9e7;color:var(--accent);border:1px solid var(--accent);}
+.verify-banner.pending{background:#fef5e7;color:#a06800;border:1px solid #d68910;}
+.verify-banner .vb-icon{font-size:1.1rem;}
+
+/* Theorem highlight */
+.theorem-card{background:linear-gradient(135deg,#eef2ff 0%,#e8f0ff 100%);border:2px solid var(--accent2);border-radius:12px;padding:1.2rem 1.5rem;margin:1.4rem 0;position:relative;box-shadow:0 4px 16px rgba(44,62,122,.08);}
+.theorem-card::before{content:attr(data-thm);position:absolute;top:-12px;left:18px;background:var(--accent2);color:#fff;padding:3px 11px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:700;letter-spacing:.05em;}
+.theorem-card .thm-name{font-family:'Noto Serif TC',serif;font-weight:700;font-size:1.05rem;color:var(--accent2);margin-bottom:.5rem;}
+</style>
+</head>
+<body>
+
+<!-- Side navigation -->
+<nav class="side-nav" id="sideNav">
+  <div class="sn-title">第 15 章</div>
+  <a class="sn-item" href="#sec-15-1">15.1 向量場</a>
+  <a class="sn-item sn-sub" href="#sec-15-1-1">  · 定義與範例</a>
+  <a class="sn-item sn-sub" href="#sec-15-1-2">  · 示範 A 互動箭頭</a>
+  <a class="sn-item sn-sub" href="#sec-15-1-3">  · 保守向量場</a>
+  <a class="sn-item sn-sub" href="#sec-15-1-4">  · 旋度與散度</a>
+  <a class="sn-item" href="#sec-15-2">15.2 線積分</a>
+  <a class="sn-item sn-sub" href="#sec-15-2-1">  · 純量 $\int f\,ds$</a>
+  <a class="sn-item sn-sub" href="#sec-15-2-2">  · 示範 B 累積動畫</a>
+  <a class="sn-item sn-sub" href="#sec-15-2-3">  · 向量 $\int \mathbf{F}\cdot d\mathbf{r}$</a>
+  <a class="sn-item sn-sub" href="#sec-15-2-4">  · 示範 C 螺旋功</a>
+  <a class="sn-item" href="#sec-15-3">15.3 路徑無關</a>
+  <a class="sn-item sn-sub" href="#sec-15-3-1">  · 線積分基本定理</a>
+  <a class="sn-item sn-sub" href="#sec-15-3-2">  · 示範 D 三路徑比較</a>
+  <a class="sn-item sn-sub" href="#sec-15-3-3">  · 等價條件</a>
+  <a class="sn-item" href="#sec-15-4">15.4 Green 定理</a>
+  <a class="sn-item sn-sub" href="#sec-15-4-1">  · 定理陳述</a>
+  <a class="sn-item sn-sub" href="#sec-15-4-2">  · 示範 E 邊界 ↔ 區域</a>
+  <a class="sn-item sn-sub" href="#sec-15-4-3">  · 線積分求面積</a>
+  <a class="sn-item" href="#sec-ref">速查</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <h1><span class="green">向量分析</span>：場 · 線積分 · <span class="blue">Green 定理</span></h1>
+    <div class="subtitle">第 15.1–15.4 節 — 向量場、線積分、路徑無關、Green 定理（互動版）</div>
+    <div class="big-formula">$\displaystyle \mathbf{F}=\nabla f,\quad \int_C f\,ds,\quad \int_C \mathbf{F}\cdot d\mathbf{r}=f(B)-f(A),\quad \oint_C M\,dx+N\,dy=\iint_R\!\left(\frac{\partial N}{\partial x}-\frac{\partial M}{\partial y}\right)dA$</div>
+    <div class="scroll-hint">向下捲動開始互動<span>↓</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ============================================================ -->
+<!-- §15.1 Vector Fields                                            -->
+<!-- ============================================================ -->
+<section id="sec-15-1">
+  <div class="section-number">第 15.1 節 · 向量場</div>
+  <h2>向量場：把每個點配上一個向量</h2>
+  <p>過去研究的 $f(x)$ 或 $f(x,y)$ 把點映成一個<strong>數值</strong>；而向量值函數 $\mathbf{r}(t)$ 把<strong>參數</strong>映成一個向量。本節要介紹的<strong>向量場</strong>同時保留兩者最有用的部分：把<span class="pill pill-blue">平面或空間中的每一個點</span>對應到一個<span class="pill pill-x">向量</span>，因此可以表示像力場、速度場、電場、磁場這類「每個位置都有方向 + 大小」的物理量。</p>
+
+  <!-- §15.1.1 Definition & examples -->
+  <div id="sec-15-1-1" class="subsection">
+    <h3>15.1.1 定義與物理範例</h3>
+
+    <div class="info-box">
+      <span class="info-label">定義 15.1</span>
+      <strong>向量場</strong>
+      <p style="margin:.55rem 0 .3rem;">在平面區域 $R$ 上的向量場是一個函數 $\mathbf{F}$，對 $R$ 內每個點都對應一個向量 $\mathbf{F}(x,y)$。<br>在空間區域 $Q$ 上的向量場是一個函數 $\mathbf{F}$，對 $Q$ 內每個點都對應一個向量 $\mathbf{F}(x,y,z)$。</p>
+      <p style="margin:.4rem 0 0;font-size:.92rem;color:var(--muted);">用分量寫成 $\mathbf{F}(x,y)=M(x,y)\,\mathbf{i}+N(x,y)\,\mathbf{j}$ 或 $\mathbf{F}(x,y,z)=M\,\mathbf{i}+N\,\mathbf{j}+P\,\mathbf{k}$，當每個分量函數連續時稱 $\mathbf{F}$ 連續。</p>
+    </div>
+
+    <h4>三類最重要的向量場</h4>
+    <div class="dual-card" style="grid-template-columns:1fr 1fr 1fr;">
+      <div class="dc dc-vec">
+        <div class="dc-title">梯度場</div>
+        <p style="margin:0;font-size:.9rem;">給定純量函數 $f(x,y)$，<br>$\nabla f = f_x\,\mathbf{i}+f_y\,\mathbf{j}$ 在每點指向「上升最快」的方向。講義此處的函數式與下一行梯度排版不完全一致；本頁採用與梯度式相符的 $f=x^2y+3xy^3$，因此 $\nabla f=(2xy+3y^3)\,\mathbf{i}+(x^2+9xy^2)\,\mathbf{j}$。</p>
+      </div>
+      <div class="dc dc-real">
+        <div class="dc-title">中心場 / 反平方場</div>
+        <p style="margin:0;font-size:.9rem;">$\mathbf{F}=\dfrac{k}{\|\mathbf{r}\|^2}\mathbf{u}$，方向始終指向（或背離）原點，且大小只與距離有關。Newton 重力場 $-\dfrac{Gm_1m_2}{\|\mathbf{r}\|^2}\mathbf{u}$、Coulomb 電場都屬此類。</p>
+      </div>
+      <div class="dc dc-noncons">
+        <div class="dc-title">旋轉場</div>
+        <p style="margin:0;font-size:.9rem;">想像繞 $z$ 軸轉動的輪子：每個點的速度方向<strong>切於圓周</strong>，且距軸越遠速度越大。典型表達式 $\mathbf{F}=-y\,\mathbf{i}+x\,\mathbf{j}$，整體呈<strong>逆時針</strong>渦流。</p>
+      </div>
+    </div>
+
+    <div class="info-box warm">
+      <span class="info-label">定義 15.2</span>
+      <strong>反平方場</strong>
+      <p style="margin:.55rem 0 .3rem;">設 $\mathbf{r}(t)=x(t)\,\mathbf{i}+y(t)\,\mathbf{j}+z(t)\,\mathbf{k}$ 為位置向量，若向量場可寫成
+      $$\mathbf{F}(x,y,z)=\dfrac{k}{\|\mathbf{r}\|^2}\,\mathbf{u},\quad \mathbf{u}=\dfrac{\mathbf{r}}{\|\mathbf{r}\|}$$
+      則稱 $\mathbf{F}$ 為<strong>反平方場</strong>；重力場與電場都是反平方場的例子。</p>
+    </div>
+  </div>
+
+  <!-- §15.1.2 Interactive 示範 A -->
+  <div id="sec-15-1-2" class="subsection">
+    <h3>15.1.2 互動 示範 A：六種向量場速覽</h3>
+    <p>向量場由無窮多個向量組成，圖示時的目標是<strong>挑代表性向量畫出來</strong>，看出方向與大小的<em>分布規律</em>。下面互動圖把六種典型向量場放進同一個介面，可以即時切換、調整格點密度、看 $|\mathbf{F}|$ 熱度圖，並比較 $\partial N/\partial x$ 與 $\partial M/\partial y$ 是否相等（即定理 15.1 的保守判定）。</p>
+
+    <div class="viz-layout">
+      <div class="canvas3d-panel">
+        <div class="canvas-wrap">
+          <div id="plot-15-1-a" class="plot-host"></div>
+          <div class="hint-overlay">滑鼠懸停看分量值 · 拖曳框選縮放</div>
+        </div>
+        <div class="axis-legend">
+          <span class="ax-x">x 軸</span><span class="ax-y">y 軸</span>
+          <span class="ax-field">向量場箭頭</span>
+        </div>
+        <div class="controls-bar">
+          <label for="dA-field" style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent2);font-weight:600;">場 F：</label>
+          <select class="field-select" id="dA-field" style="max-width:340px;">
+            <option value="ex2">F = 2x i + y j（例題 2）</option>
+            <option value="rot">F = −y i + x j  (逆時針旋轉)</option>
+            <option value="grad">F = 2x i + 2y j  = ∇(x² + y²) (梯度場)</option>
+            <option value="radial">F = x i + y j  (放射場)</option>
+            <option value="cw">F = y i − x j  (順時針旋轉)</option>
+            <option value="non">F = x²y i + xy j  (例題 5a, 非保守)</option>
+          </select>
+          <button class="btn btn-toggle" id="dA-heat">|F| 熱度圖</button>
+          <button class="btn btn-reset" id="dA-reset">↺ 重設</button>
+        </div>
+      </div>
+      <div class="side-panel">
+        <div class="info-card">
+          <div class="ic-title">場的數學資訊</div>
+          <div class="ic-row"><span class="ic-label">M(x,y)</span><span class="ic-value" id="dA-mForm">2x</span></div>
+          <div class="ic-row"><span class="ic-label">N(x,y)</span><span class="ic-value" id="dA-nForm">y</span></div>
+          <div class="ic-row"><span class="ic-label">∂N/∂x</span><span class="ic-value" id="dA-Nx">0</span></div>
+          <div class="ic-row"><span class="ic-label">∂M/∂y</span><span class="ic-value" id="dA-My">0</span></div>
+          <div class="ic-row"><span class="ic-label">保守？</span><span class="ic-value" id="dA-cons">是</span></div>
+          <div class="ic-row"><span class="ic-label">div F</span><span class="ic-value" id="dA-div">3</span></div>
+          <div class="ic-row"><span class="ic-label">(curl F)·k</span><span class="ic-value" id="dA-curl">0</span></div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">格點與比例</div>
+          <div class="slider-row"><span class="slider-label">密度</span><input type="range" id="dA-dens" min="7" max="17" value="11" step="2"><span class="slider-val" id="dA-densVal">11 × 11</span></div>
+          <div class="slider-row"><span class="slider-label">比例</span><input type="range" id="dA-scale" min="0.3" max="1.6" value="1.0" step="0.1"><span class="slider-val" id="dA-scaleVal">1.0×</span></div>
+        </div>
+        <div class="eq-card">
+          <div class="eq-label">平面保守場判定</div>
+          <div class="eq-formula">$\dfrac{\partial N}{\partial x}\stackrel{?}{=}\dfrac{\partial M}{\partial y}$</div>
+          <div class="eq-sub">定理 15.1：兩者相等 ⇔ F 在開圓盤上保守</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 2 · 描繪向量場</div>
+      <div class="ex-title">畫出 $\mathbf{F}(x,y)=2x\,\mathbf{i}+y\,\mathbf{j}$ 的若干代表向量。</div>
+      <span class="ex-method">取樣點法</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 取等高線觀察</div>
+        <p>令 $\|\mathbf{F}\|=c$，得 $\sqrt{4x^2+y^2}=c$，即橢圓 $\dfrac{x^2}{(c/2)^2}+\dfrac{y^2}{c^2}=1$。<br>同一條等大線上的向量「長度相同」，方向才會變。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 列幾組樣本</div>
+        <p>取 $c=1, 2, 4$ 三圈橢圓上的點代入 $\mathbf{F}=(2x,\,y)$：</p>
+        <table class="conv-table" style="margin-top:.4rem;">
+          <thead><tr><th>點 (x,y)</th><th>F = (2x, y)</th><th>‖F‖</th></tr></thead>
+          <tbody>
+            <tr><td>(1/2, 0)</td><td>(1, 0)</td><td>1</td></tr>
+            <tr><td>(0, 1)</td><td>(0, 1)</td><td>1</td></tr>
+            <tr><td>(1, 0)</td><td>(2, 0)</td><td>2</td></tr>
+            <tr><td>(0, 2)</td><td>(0, 2)</td><td>2</td></tr>
+            <tr><td>(2, 0)</td><td>(4, 0)</td><td>4</td></tr>
+            <tr><td>(1, 2√3)</td><td>(2, 2√3)</td><td>4</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="ex-answer">所有向量都<strong>外指</strong>，且在同一橢圓上等長 —— 可以看出這是 $f(x,y)=x^2+\tfrac{1}{2}y^2$ 的梯度場（例題 4 會驗證它是<strong>保守的</strong>）。</div>
+    </div>
+  </div>
+
+  <!-- §15.1.3 Conservative -->
+  <div id="sec-15-1-3" class="subsection">
+    <h3>15.1.3 保守向量場與位能函數</h3>
+    <p>例題 2 畫出的箭頭看起來「總是垂直於某條等高線」，這正是<em>梯度</em>的特徵。並非所有向量場都能寫成某個 $f$ 的梯度 —— 可以的叫做<strong>保守</strong>，那個 $f$ 叫做<strong>位能函數</strong>。</p>
+
+    <div class="info-box green">
+      <span class="info-label">定義 15.3</span>
+      <strong>保守向量場</strong>
+      <p style="margin:.55rem 0 .3rem;">若存在可微函數 $f$ 使得 $\mathbf{F}=\nabla f$，則稱向量場 $\mathbf{F}$ 為<strong>保守</strong>，並稱 $f$ 為 $\mathbf{F}$ 的位能函數。</p>
+    </div>
+
+    <div class="theorem-card" data-thm="定理 15.1">
+      <div class="thm-name">平面保守判定法</div>
+      <p>設 $M$、$N$ 在開圓盤 $R$ 上具連續一階偏導，則 $\mathbf{F}(x,y)=M\,\mathbf{i}+N\,\mathbf{j}$ 在 $R$ 上為保守的<strong>充要條件</strong>是
+      $$\dfrac{\partial N}{\partial x}=\dfrac{\partial M}{\partial y}.$$</p>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 4 · 保守向量場</div>
+      <div class="ex-title">證明：(a) $\mathbf{F}(x,y)=2x\,\mathbf{i}+y\,\mathbf{j}$ 是保守的；(b) 每個反平方場 $\mathbf{F}=\dfrac{k}{\|\mathbf{r}\|^2}\mathbf{u}$ 都是保守的。</div>
+      <span class="ex-method">直接構造位能</span>
+      <div class="step-block">
+        <div class="step-num">(a) 構造法</div>
+        <p>取 $f(x,y)=x^2+\tfrac{1}{2}y^2$，則 $f_x=2x$、$f_y=y$，正好等於 $\mathbf{F}$ 的兩個分量。所以 $\mathbf{F}=\nabla f$，由定義 $\mathbf{F}$ 是<strong>保守</strong>的。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">(b) 反平方場的位能</div>
+        <p>對 $\mathbf{F}=\dfrac{k}{\|\mathbf{r}\|^2}\mathbf{u}=\dfrac{k(x\mathbf{i}+y\mathbf{j}+z\mathbf{k})}{(x^2+y^2+z^2)^{3/2}}$，取 $f(x,y,z)=\dfrac{-k}{\sqrt{x^2+y^2+z^2}}=\dfrac{-k}{\|\mathbf{r}\|}$。<br>驗算：$f_x=\dfrac{kx}{\|\mathbf{r}\|^3}$，同樣對 $y$、$z$，所以 $\nabla f = \mathbf{F}$。</p>
+      </div>
+      <div class="ex-answer">兩者皆保守。前者位能 $f=x^2+\tfrac{1}{2}y^2$；後者位能 $f=-\dfrac{k}{\|\mathbf{r}\|}$（物理上恰是重力位能符號相反的形式）。</div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 5 · 保守場判定</div>
+      <div class="ex-title">判定下列向量場是否為保守的：<br>(a) $\mathbf{F}(x,y)=x^2y\,\mathbf{i}+xy\,\mathbf{j}$ &nbsp;&nbsp; (b) $\mathbf{F}(x,y)=2x\,\mathbf{i}+y\,\mathbf{j}$</div>
+      <span class="ex-method">定理 15.1 判定</span>
+      <div class="step-block">
+        <div class="step-num">(a) 算偏導</div>
+        <p>$M=x^2y$、$N=xy$。<br>$\dfrac{\partial M}{\partial y}=x^2$、$\dfrac{\partial N}{\partial x}=y$。<br>兩者<strong>不等</strong>（在 $x^2=y$ 的曲線上才相等，但不是整個 $R$ 上），故 $\mathbf{F}$ <strong>不</strong>保守。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">(b) 算偏導</div>
+        <p>$M=2x$、$N=y$。<br>$\dfrac{\partial M}{\partial y}=0$、$\dfrac{\partial N}{\partial x}=0$，兩者相等於整個 $\mathbb{R}^2$，故 $\mathbf{F}$ <strong>保守</strong>。</p>
+      </div>
+      <div class="ex-answer">(a) 非保守；(b) 保守，可以在上面 示範 A 切換到對應的場驗證 ∂N/∂x − ∂M/∂y 的數值符合判定。</div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 6 · 尋找位能函數</div>
+      <div class="ex-title">已知 $\mathbf{F}(x,y)=2xy\,\mathbf{i}+(x^2-y)\,\mathbf{j}$ 為保守場，找出位能函數 $f$。</div>
+      <span class="ex-method">部分積分還原</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 驗證定理 15.1</div>
+        <p>$\dfrac{\partial M}{\partial y}=2x=\dfrac{\partial N}{\partial x}$，確認保守。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 由 $f_x = 2xy$ 積分（以 x）</div>
+        <p>$f(x,y)=\displaystyle\int 2xy\,dx = x^2 y + g(y)$，其中 $g(y)$ 為僅與 $y$ 有關的待定函數。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 3 · 用 $f_y = x^2 - y$ 解 g(y)</div>
+        <p>對 $x^2 y + g(y)$ 對 $y$ 偏導：$f_y = x^2 + g'(y)$。<br>令 $x^2 + g'(y) = x^2 - y$ ⇒ $g'(y) = -y$ ⇒ $g(y) = -\dfrac{y^2}{2}+K$。</p>
+      </div>
+      <div class="ex-answer">$\boxed{f(x,y)=x^2 y - \dfrac{y^2}{2}+K}$。可驗證 $\nabla f = (2xy,\,x^2-y)=\mathbf{F}$。這個位能會在 §15.3 的例題 2 直接套用。</div>
+    </div>
+  </div>
+
+  <!-- §15.1.4 Curl & Divergence -->
+  <div id="sec-15-1-4" class="subsection">
+    <h3>15.1.4 旋度與散度：兩個微分算子</h3>
+    <p>把定理 15.1 推到三維，需要先定義<strong>旋度</strong>，它本身是一個向量場；以及純量的<strong>散度</strong>。直觀上 curl 描述「在該點繞著轉動」的強度與軸向，div 描述「在該點向外發散」的速率。</p>
+
+    <div class="info-box">
+      <span class="info-label">定義 15.4</span>
+      <strong>向量場的旋度</strong>
+      <p style="margin:.55rem 0 .3rem;">設 $\mathbf{F}(x,y,z)=M\,\mathbf{i}+N\,\mathbf{j}+P\,\mathbf{k}$，則
+      $$\mathrm{curl}\,\mathbf{F}=\nabla\times\mathbf{F}=\left(\dfrac{\partial P}{\partial y}-\dfrac{\partial N}{\partial z}\right)\mathbf{i}-\left(\dfrac{\partial P}{\partial x}-\dfrac{\partial M}{\partial z}\right)\mathbf{j}+\left(\dfrac{\partial N}{\partial x}-\dfrac{\partial M}{\partial y}\right)\mathbf{k}.$$</p>
+      <p style="margin:.4rem 0 0;font-size:.9rem;color:var(--muted);">記憶要點：i, j, k 三個分量裡，j 那一項要記得「先 P 後 M」並乘上負號，等價於下方行列式展開。若 $\mathrm{curl}\,\mathbf{F}=\mathbf{0}$，稱 $\mathbf{F}$ 為<strong>無旋的 (irrotational)</strong>。</p>
+    </div>
+
+    <div class="eq-card" style="margin:.8rem 0;">
+      <div class="eq-label">行列式記憶法</div>
+      <div class="eq-formula">$$\mathrm{curl}\,\mathbf{F}=\begin{vmatrix}\mathbf{i}&\mathbf{j}&\mathbf{k}\\[2pt]\dfrac{\partial}{\partial x}&\dfrac{\partial}{\partial y}&\dfrac{\partial}{\partial z}\\[6pt] M & N & P\end{vmatrix}$$</div>
+      <div class="eq-sub">把 ∇ 視為微分運算子，旋度 = ∇ × F，散度 = ∇ · F</div>
+    </div>
+
+    <div class="theorem-card" data-thm="定理 15.2">
+      <div class="thm-name">空間中的保守場判定</div>
+      <p>若 $M$、$N$、$P$ 在開球 $Q$ 上具連續一階偏導，則
+      $\mathbf{F}=M\,\mathbf{i}+N\,\mathbf{j}+P\,\mathbf{k}$ 保守 ⇔ $\mathrm{curl}\,\mathbf{F}=\mathbf{0}$，即
+      $$\dfrac{\partial P}{\partial y}=\dfrac{\partial N}{\partial z},\quad \dfrac{\partial P}{\partial x}=\dfrac{\partial M}{\partial z},\quad \dfrac{\partial N}{\partial x}=\dfrac{\partial M}{\partial y}.$$</p>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 7 · 向量場的旋度</div>
+      <div class="ex-title">求 $\mathbf{F}(x,y,z)=2xy\,\mathbf{i}+(x^2+z^2)\,\mathbf{j}+2yz\,\mathbf{k}$ 的旋度，並判斷是否為無旋的。</div>
+      <span class="ex-method">行列式展開</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 對應分量</div>
+        <p>$M=2xy,\ N=x^2+z^2,\ P=2yz$。<br>偏導：$M_y=2x,\ M_z=0;\ N_x=2x,\ N_z=2z;\ P_x=0,\ P_y=2z$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 代入公式</div>
+        <p>$\mathbf{i}$ 分量：$P_y-N_z = 2z - 2z = 0$。<br>$\mathbf{j}$ 分量：$-(P_x-M_z) = -(0-0) = 0$。<br>$\mathbf{k}$ 分量：$N_x-M_y = 2x - 2x = 0$。</p>
+      </div>
+      <div class="ex-answer">$\mathrm{curl}\,\mathbf{F}=\mathbf{0}$，故 $\mathbf{F}$ 是<strong>無旋的</strong>。由定理 15.2，$\mathbf{F}$ 是<strong>保守的</strong>，例題 8 接著找它的位能函數。</div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 8 · 空間中的位能函數</div>
+      <div class="ex-title">為 $\mathbf{F}(x,y,z)=2xy\,\mathbf{i}+(x^2+z^2)\,\mathbf{j}+2yz\,\mathbf{k}$ 找出位能函數 $f$。</div>
+      <span class="ex-method">逐軸積分</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 由 $f_x = 2xy$ 對 x 積分</div>
+        <p>$f = \int 2xy\,dx = x^2 y + g(y,z)$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 用 $f_y = x^2 + z^2$ 解 g</div>
+        <p>$f_y = x^2 + g_y(y,z) = x^2 + z^2$ ⇒ $g_y = z^2$ ⇒ $g(y,z) = y z^2 + h(z)$。<br>所以 $f = x^2 y + y z^2 + h(z)$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 3 · 用 $f_z = 2yz$ 解 h</div>
+        <p>$f_z = 2 y z + h'(z) = 2 y z$ ⇒ $h'(z) = 0$ ⇒ $h(z) = K$。</p>
+      </div>
+      <div class="ex-answer">$\boxed{f(x,y,z) = x^2 y + y z^2 + K}$；驗算 $\nabla f = (2xy,\,x^2+z^2,\,2yz)=\mathbf{F}$ ✓。</div>
+    </div>
+
+    <div class="info-box warm">
+      <span class="info-label">定義 15.5</span>
+      <strong>散度</strong>
+      <p style="margin:.55rem 0 .3rem;">
+      $\mathrm{div}\,\mathbf{F}(x,y) = \nabla\cdot\mathbf{F} = \dfrac{\partial M}{\partial x}+\dfrac{\partial N}{\partial y}$（平面）<br>
+      $\mathrm{div}\,\mathbf{F}(x,y,z) = \nabla\cdot\mathbf{F} = \dfrac{\partial M}{\partial x}+\dfrac{\partial N}{\partial y}+\dfrac{\partial P}{\partial z}$（空間）</p>
+      <p style="margin:.4rem 0 0;font-size:.9rem;color:var(--muted);">若 $\mathrm{div}\,\mathbf{F}=0$，稱 $\mathbf{F}$ 為<strong>無散度的</strong>。流體力學裡叫<em>不可壓縮</em>，電磁學裡叫<em>螺線型場</em>。</p>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 9 · 某點的散度</div>
+      <div class="ex-title">求 $\mathbf{F}(x,y,z)=x^3 y^2 z\,\mathbf{i}+x^2 z\,\mathbf{j}+x^2 y\,\mathbf{k}$ 在 $(2,1,-1)$ 的散度。</div>
+      <span class="ex-method">公式直代</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 列偏導</div>
+        <p>$\dfrac{\partial M}{\partial x}=3 x^2 y^2 z,\quad \dfrac{\partial N}{\partial y}=0,\quad \dfrac{\partial P}{\partial z}=0$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 代入點 (2,1,−1)</div>
+        <p>$\mathrm{div}\,\mathbf{F} = 3 x^2 y^2 z = 3 \cdot 4 \cdot 1 \cdot (-1) = -12$。</p>
+      </div>
+      <div class="ex-answer">$\mathrm{div}\,\mathbf{F}(2,1,-1) = -12$。</div>
+    </div>
+
+    <div class="theorem-card" data-thm="定理 15.3">
+      <div class="thm-name">div(curl F) = 0</div>
+      <p>若 $\mathbf{F}=M\,\mathbf{i}+N\,\mathbf{j}+P\,\mathbf{k}$ 的三個分量都具有<strong>連續二階偏導</strong>，則
+      $$\mathrm{div}(\mathrm{curl}\,\mathbf{F})=0.$$
+      證明來自 Clairaut 定理（混合偏導相等），兩兩抵消。</p>
+    </div>
+  </div>
+
+  <!-- §15.1 Quiz -->
+  <div class="subsection">
+    <h3>概念測驗 15.1</h3>
+
+    <div class="quiz-card" id="quiz-15-1-1">
+      <span class="quiz-tag">Q15-1-1 · 保守判定</span>
+      <div class="quiz-q">下列哪一個向量場是 <strong>保守的</strong>？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">$\mathbf{F}(x,y) = y\,\mathbf{i} - x\,\mathbf{j}$</button>
+        <button class="quiz-opt">$\mathbf{F}(x,y) = 2xy\,\mathbf{i} + x^2\,\mathbf{j}$</button>
+        <button class="quiz-opt">$\mathbf{F}(x,y) = -y\,\mathbf{i} + x\,\mathbf{j}$</button>
+        <button class="quiz-opt">$\mathbf{F}(x,y) = x^2 y\,\mathbf{i} + xy^2\,\mathbf{j}$</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-card" id="quiz-15-1-2">
+      <span class="quiz-tag">Q15-1-2 · 旋度計算</span>
+      <div class="quiz-q">求 $\mathbf{F}(x,y,z) = y z\,\mathbf{i} + x z\,\mathbf{j} + x y\,\mathbf{k}$ 的 curl。</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">$\mathbf{0}$</button>
+        <button class="quiz-opt">$2 x y z\,\mathbf{k}$</button>
+        <button class="quiz-opt">$(x - z)\,\mathbf{i} + (y - x)\,\mathbf{j} + (z - y)\,\mathbf{k}$</button>
+        <button class="quiz-opt">$\mathbf{i} + \mathbf{j} + \mathbf{k}$</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-card" id="quiz-15-1-3">
+      <span class="quiz-tag">Q15-1-3 · 由位能還原向量場</span>
+      <div class="quiz-q">若位能函數為 $f(x,y) = x^2 y - \dfrac{y^2}{2}$，則 $\mathbf{F} = \nabla f$ 等於？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">$\mathbf{F} = (x^2 - y)\,\mathbf{i} + (2 x y)\,\mathbf{j}$</button>
+        <button class="quiz-opt">$\mathbf{F} = 2 x y\,\mathbf{i} + (x^2 - y)\,\mathbf{j}$</button>
+        <button class="quiz-opt">$\mathbf{F} = (2 x y - 1)\,\mathbf{i} + (x^2 - 2 y)\,\mathbf{j}$</button>
+        <button class="quiz-opt">$\mathbf{F} = x^2 y\,\mathbf{i} - \tfrac{y^2}{2}\,\mathbf{j}$</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- §15.2 Line Integrals                                           -->
+<!-- ============================================================ -->
+<section id="sec-15-2">
+  <div class="section-number">第 15.2 節 · 線積分</div>
+  <h2>線積分：沿曲線累積</h2>
+  <p>到目前為止接觸的積分都「沿一段區間 $[a,b]$」或「沿一塊平面區域 $R$」。這一節要把積分的<strong>領域</strong>換成<span class="pill pill-green">一條曲線 $C$</span>，得到所謂的<strong>線積分</strong>。它有兩種類型：純量被積函數 $\int_C f\,ds$（例如求帶質量密度的細線總質量）與向量被積函數 $\int_C \mathbf{F}\cdot d\mathbf{r}$（例如算力場做的功）。</p>
+
+  <!-- §15.2.1 Piecewise smooth + scalar -->
+  <div id="sec-15-2-1" class="subsection">
+    <h3>15.2.1 分段光滑曲線與純量線積分</h3>
+
+    <div class="info-box">
+      <span class="info-label">回顧</span>
+      <strong>光滑曲線與分段光滑</strong>
+      <p style="margin:.55rem 0 .3rem;">平面曲線 $C:\mathbf{r}(t)=x(t)\,\mathbf{i}+y(t)\,\mathbf{j}$，$a\le t\le b$，<strong>光滑</strong>表示 $dx/dt,\,dy/dt$ 連續且<em>不同時為零</em>。空間曲線多一條 $dz/dt$。<br>若 $[a,b]$ 可被分割成有限段，每段都光滑，則 $C$ 為<strong>分段光滑 (piecewise smooth)</strong>。</p>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 1 · 分段光滑參數化</div>
+      <div class="ex-title">講義 Figure 4 以圖形給出一條從 $(0,0,0)$ 出發、最終抵達 $(1,2,1)$ 的分段路徑。本頁用同端點的三段折線示範參數化方法：沿 $x$ 軸到 $(1,0,0)$、再沿 $y$ 軸到 $(1,2,0)$、最後沿 $z$ 軸到 $(1,2,1)$。</div>
+      <span class="ex-method">逐段線性插值</span>
+      <div class="step-block">
+        <div class="step-num">步驟 · 三段分別寫出</div>
+        <p>$C_1:\ (0,0,0)\to(1,0,0)$　$\mathbf{r}_1(t) = t\,\mathbf{i},\ 0\le t\le 1$<br>
+        $C_2:\ (1,0,0)\to(1,2,0)$　$\mathbf{r}_2(t) = \mathbf{i} + (t-1)\,2\,\mathbf{j},\ 1\le t\le 2$<br>
+        $C_3:\ (1,2,0)\to(1,2,1)$　$\mathbf{r}_3(t) = \mathbf{i} + 2\,\mathbf{j} + (t-2)\,\mathbf{k},\ 2\le t\le 3$</p>
+      </div>
+      <div class="ex-answer">將三段分別參數化即得分段光滑曲線。<strong>反向參數化</strong>只需把 $t$ 換成 $1-t$（或對每段做相反端點）即可，方向改變對純量線積分<em>不影響</em>，但對向量線積分會<strong>變號</strong>。</div>
+    </div>
+
+    <div class="info-box">
+      <span class="info-label">定義 15.6</span>
+      <strong>線積分 — 純量</strong>
+      <p style="margin:.55rem 0 .3rem;">設 $f$ 在含光滑、<strong>有限長度</strong>曲線 $C$ 的區域上有定義，把 $C$ 分割為 $n$ 段，每段弧長為 $\Delta s_i$，取樣點 $(x_i, y_i)$（平面）或 $(x_i, y_i, z_i)$（空間）。當 $\|\Delta\|\to 0$：</p>
+      <div style="text-align:center;margin:.5rem 0;">$\displaystyle\int_C f(x,y)\,ds = \lim_{\|\Delta\|\to 0}\sum_{i=1}^n f(x_i,y_i)\,\Delta s_i$ &nbsp;&nbsp;<span class="pill pill-blue">平面</span></div>
+      <div style="text-align:center;margin:.5rem 0;">$\displaystyle\int_C f(x,y,z)\,ds = \lim_{\|\Delta\|\to 0}\sum_{i=1}^n f(x_i,y_i,z_i)\,\Delta s_i$ &nbsp;&nbsp;<span class="pill pill-z">空間</span></div>
+      <p style="margin:.4rem 0 0;font-size:.92rem;color:var(--muted);">若極限存在則稱 $f$ 沿 $C$ 可積。可證：當 $f$ 連續時，極限對所有合理的光滑參數化都得到相同的值。</p>
+    </div>
+
+    <div class="theorem-card" data-thm="定理 15.4">
+      <div class="thm-name">用定積分計算線積分</div>
+      <p>若 $f$ 連續、$C:\mathbf{r}(t)=x(t)\mathbf{i}+y(t)\mathbf{j}$（$a\le t\le b$）光滑，則
+      $$\int_C f(x,y)\,ds=\int_a^b f(x(t),y(t))\sqrt{[x'(t)]^2+[y'(t)]^2}\,dt.$$
+      空間版本 $\mathbf{r}(t)=x(t)\mathbf{i}+y(t)\mathbf{j}+z(t)\mathbf{k}$ 為
+      $$\int_C f(x,y,z)\,ds=\int_a^b f(x(t),y(t),z(t))\sqrt{[x'(t)]^2+[y'(t)]^2+[z'(t)]^2}\,dt.$$</p>
+      <p style="font-size:.92rem;margin-top:.3rem;color:var(--accent3);">特例：若 $f\equiv 1$，線積分給出曲線的<strong>弧長</strong> $\int_C ds = \int_a^b \|\mathbf{r}'(t)\|\,dt$。</p>
+    </div>
+  </div>
+
+  <!-- §15.2.2 示範 B -->
+  <div id="sec-15-2-2" class="subsection">
+    <h3>15.2.2 互動 示範 B：純量線積分累積動畫</h3>
+    <p>下面的動畫把定理 15.4 視覺化：選曲線 $C$ 與被積函數 $f$，按 ▶ 播放，紅色標記沿曲線移動；右側即時列出目前位置 $\mathbf{r}(t)$、弧長因子 $\|\mathbf{r}'(t)\|$、被積函數值 $f(\mathbf{r}(t))$ 與累積量 $\int_{t_{\min}}^t f(\mathbf{r}(s))\|\mathbf{r}'(s)\|\,ds$。進度條只表示動畫時間進度，真正的積分大小請看下方數值與目標值。</p>
+
+    <div class="viz-layout">
+      <div class="canvas3d-panel">
+        <div class="canvas-wrap">
+          <div id="plot-15-2-b" class="plot-host"></div>
+          <div class="t-display" id="dB-t">t = 0.00</div>
+        </div>
+        <div class="axis-legend">
+          <span class="ax-x">x</span><span class="ax-y">y</span><span class="ax-path">曲線 C</span>
+        </div>
+        <div class="controls-bar">
+          <label style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent2);font-weight:600;">情境：</label>
+          <select class="field-select" id="dB-scene" style="max-width:340px;">
+            <option value="ex2">例題 2 · 線段 (0,0,0)→(1,2,1)，f = x² − y + 3z</option>
+            <option value="ex4">例題 4 · r = (t, 4t^(3/2)/3, t²/2)，f = x + 2</option>
+            <option value="quarter">四分之一圓 · r=(cos t, sin t)，f = xy</option>
+            <option value="parab">拋物線 y = x²，0≤x≤1，f = x + y</option>
+          </select>
+          <button class="btn btn-play" id="dB-play">▶ 播放</button>
+          <button class="btn btn-reset" id="dB-reset">↺ 重設</button>
+        </div>
+      </div>
+      <div class="side-panel">
+        <div class="info-card">
+          <div class="ic-title">即時狀態</div>
+          <div class="ic-row"><span class="ic-label">t</span><span class="ic-value" id="dB-tv">0.000</span></div>
+          <div class="ic-row"><span class="ic-label">r(t)</span><span class="ic-value" id="dB-rv">(0, 0)</span></div>
+          <div class="ic-row"><span class="ic-label">‖r′(t)‖</span><span class="ic-value" id="dB-norm">0</span></div>
+          <div class="ic-row"><span class="ic-label">f(r(t))</span><span class="ic-value" id="dB-f">0</span></div>
+        </div>
+        <div class="accum-bar">
+          <div class="ab-label"><span>路徑進度</span><span id="dB-pct">0%</span></div>
+          <div class="ab-track"><div class="ab-fill" id="dB-fill" style="width:0%"></div></div>
+          <div class="ab-val" id="dB-acc">0.000</div>
+          <div class="ab-target">目標：<span id="dB-tgt">5√6/6 ≈ 2.041</span></div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">速度</div>
+          <div class="slider-row"><span class="slider-label">速度</span><input type="range" id="dB-speed" min="0.2" max="3" value="1" step="0.1"><span class="slider-val" id="dB-speedV">1.0×</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 2 · 計算線積分</div>
+      <div class="ex-title">求 $\displaystyle\int_C (x^2 - y + 3z)\,ds$，其中 $C$ 是從 $(0,0,0)$ 到 $(1,2,1)$ 的線段。</div>
+      <span class="ex-method">參數化 + 定理 15.4</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 參數化</div>
+        <p>$\mathbf{r}(t) = t\,\mathbf{i} + 2t\,\mathbf{j} + t\,\mathbf{k},\quad 0\le t\le 1$。<br>
+        $\mathbf{r}'(t) = (1, 2, 1)$，$\|\mathbf{r}'(t)\| = \sqrt{1+4+1} = \sqrt{6}$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 代入被積函數</div>
+        <p>$f(x,y,z) = x^2 - y + 3z$ 沿 $C$：$f(t, 2t, t) = t^2 - 2t + 3t = t^2 + t$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 3 · 整合到 1D 積分</div>
+        <p>$\displaystyle\int_C f\,ds = \int_0^1 (t^2 + t)\sqrt{6}\,dt = \sqrt{6}\left[\dfrac{t^3}{3}+\dfrac{t^2}{2}\right]_0^1 = \sqrt{6}\left(\dfrac{1}{3}+\dfrac{1}{2}\right) = \dfrac{5\sqrt{6}}{6}.$</p>
+      </div>
+      <div class="ex-answer">$\displaystyle\int_C(x^2-y+3z)\,ds = \dfrac{5\sqrt{6}}{6} \approx 2.0412$。示範 B 中可選此情境驗證數值收斂。</div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 3 · 分段路徑上的線積分</div>
+      <div class="ex-title">講義 例題 3 的重點是：分段光滑路徑的線積分可逐段相加。本頁用「線段 + 四分之一圓弧」示範同一方法：求 $\displaystyle\int_C x\,ds$，其中 $C$ 是由<strong>線段 $C_1:(0,0)\to(1,0)$</strong> 接上<strong>四分之一圓弧 $C_2$：$(1,0)\to(0,1)$</strong>（以原點為圓心）構成。</div>
+      <span class="ex-method">分段疊加</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · $C_1$ 線段</div>
+        <p>$\mathbf{r}_1(t) = t\,\mathbf{i},\ 0\le t\le 1$；$\|\mathbf{r}_1'\| = 1$。<br>$\displaystyle\int_{C_1} x\,ds = \int_0^1 t\cdot 1\,dt = \dfrac{1}{2}$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · $C_2$ 圓弧</div>
+        <p>$\mathbf{r}_2(t) = \cos t\,\mathbf{i} + \sin t\,\mathbf{j},\ 0\le t\le \pi/2$；$\|\mathbf{r}_2'\| = 1$。<br>$\displaystyle\int_{C_2} x\,ds = \int_0^{\pi/2}\cos t\,dt = 1$。</p>
+      </div>
+      <div class="ex-answer">$\displaystyle\int_C x\,ds = \dfrac{1}{2} + 1 = \dfrac{3}{2}$。</div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 4 · 空間曲線的 $ds$</div>
+      <div class="ex-title">求 $\displaystyle\int_C (x+2)\,ds$，其中 $C:\mathbf{r}(t)=t\,\mathbf{i}+\dfrac{4}{3}t^{3/2}\,\mathbf{j}+\dfrac{1}{2}t^2\,\mathbf{k},\ 0\le t\le 2$。</div>
+      <span class="ex-method">弧長微分計算</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 算 r′(t) 與 ‖r′(t)‖</div>
+        <p>$\mathbf{r}'(t) = (1,\,2t^{1/2},\,t)$；
+        $$\|\mathbf{r}'(t)\| = \sqrt{1+4t+t^2}.$$ 
+        這個根號不需要先化成完全平方；因為被積函數是 $x+2=t+2$，正好可以和 $1+4t+t^2$ 的導數配合做變數變換。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 代入並用變數變換</div>
+        <p>$x = t$，所以 $f = t+2$。<br>
+        $\displaystyle\int_C (x+2)\,ds=\int_0^2 (t+2)\sqrt{1+4t+t^2}\,dt.$<br>
+        令 $u = 1+4t+t^2$，$du = (4+2t)\,dt = 2(t+2)\,dt$，故 $(t+2)\,dt = \dfrac{1}{2}\,du$。<br>
+        $t=0$ 時 $u=1$；$t=2$ 時 $u=13$。<br>
+        積分變為 $\displaystyle\int_1^{13} \dfrac{1}{2}\sqrt{u}\,du = \dfrac{1}{2}\cdot\dfrac{2}{3}u^{3/2}\Big|_1^{13} = \dfrac{1}{3}(13\sqrt{13} - 1).$</p>
+      </div>
+      <div class="ex-answer">$\displaystyle\int_C (x+2)\,ds = \dfrac{13\sqrt{13}-1}{3}\approx 15.291$。示範 B 中可選此情境驗證。</div>
+    </div>
+  </div>
+
+  <!-- §15.2.3 Vector form -->
+  <div id="sec-15-2-3" class="subsection">
+    <h3>15.2.3 向量場的線積分：功</h3>
+    <p>力 $\mathbf{F}$ 沿路徑 $C$ 對物體做的功，只與 $\mathbf{F}$ 在<strong>切方向</strong>上的投影 $\mathbf{F}\cdot\mathbf{T}$ 有關。一小段弧長 $\Delta s_i$ 的元功 $\approx [\mathbf{F}\cdot\mathbf{T}]\,\Delta s_i$；取極限即為下面的定義。</p>
+
+    <div class="info-box warm">
+      <span class="info-label">定義 15.7</span>
+      <strong>向量場的線積分</strong>
+      <p style="margin:.55rem 0 .3rem;">設 $\mathbf{F}$ 在光滑曲線 $C:\mathbf{r}(t),\ a\le t\le b$ 上連續，定義
+      $$\int_C \mathbf{F}\cdot d\mathbf{r}=\int_C \mathbf{F}\cdot \mathbf{T}\,ds = \int_a^b \mathbf{F}(\mathbf{r}(t))\cdot \mathbf{r}'(t)\,dt.$$</p>
+      <p style="font-size:.92rem;color:var(--muted);margin:.4rem 0 0;">由 $\mathbf{T} = \mathbf{r}'(t)/\|\mathbf{r}'(t)\|$ 與 $ds = \|\mathbf{r}'(t)\|\,dt$ 即可消去分母；得到的形式直接適合計算。</p>
+    </div>
+  </div>
+
+  <!-- §15.2.4 示範 C -->
+  <div id="sec-15-2-4" class="subsection">
+    <h3>15.2.4 互動 示範 C：螺旋線上的功</h3>
+    <p>直接視覺化 例題 6：力場 $\mathbf{F}=-\tfrac{1}{2}x\,\mathbf{i}-\tfrac{1}{2}y\,\mathbf{j}+\tfrac{1}{4}\,\mathbf{k}$（始終指向 $z$ 軸並有一點向上抬）作用在沿螺旋線 $\mathbf{r}(t)=(\cos t,\sin t,t)$ 移動的粒子上，從 $(1,0,0)$ 到 $(-1,0,3\pi)$ 做的功。右側的 $F\cdot r'$ 是當下瞬間功率，累積數值是 $\int_0^t \mathbf{F}(\mathbf{r}(s))\cdot\mathbf{r}'(s)\,ds$；進度條只表示螺旋路徑已播放到哪裡。</p>
+
+    <div class="viz-layout">
+      <div class="canvas3d-panel dark">
+        <div class="canvas-wrap">
+          <div id="plot-15-2-c" class="plot-host"></div>
+          <div class="t-display" id="dC-t">t = 0.00</div>
+        </div>
+        <div class="axis-legend">
+          <span class="ax-x">x</span><span class="ax-y">y</span><span class="ax-z">z</span>
+          <span class="ax-path">螺旋路徑</span>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="dC-play">▶ 播放</button>
+          <button class="btn btn-reset" id="dC-reset">↺ 重設</button>
+        </div>
+      </div>
+      <div class="side-panel">
+        <div class="info-card">
+          <div class="ic-title">物理狀態</div>
+          <div class="ic-row"><span class="ic-label">t</span><span class="ic-value" id="dC-tv">0.000</span></div>
+          <div class="ic-row"><span class="ic-label">r(t)</span><span class="ic-value" id="dC-rv">(1, 0, 0)</span></div>
+          <div class="ic-row"><span class="ic-label">F(r)</span><span class="ic-value" id="dC-fv">(−.5, 0, .25)</span></div>
+          <div class="ic-row"><span class="ic-label">F·r′</span><span class="ic-value" id="dC-fr">0.250</span></div>
+        </div>
+        <div class="accum-bar">
+          <div class="ab-label"><span>路徑進度</span><span id="dC-pct">0%</span></div>
+          <div class="ab-track"><div class="ab-fill" id="dC-fill" style="width:0%"></div></div>
+          <div class="ab-val" id="dC-acc">0.000</div>
+          <div class="ab-target">目標：3π/4 ≈ 2.356</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">速度</div>
+          <div class="slider-row"><span class="slider-label">速度</span><input type="range" id="dC-speed" min="0.2" max="3" value="1" step="0.1"><span class="slider-val" id="dC-speedV">1.0×</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 6 · 力所做的功</div>
+      <div class="ex-title">力場 $\mathbf{F}(x,y,z)=-\tfrac{1}{2}x\,\mathbf{i}-\tfrac{1}{2}y\,\mathbf{j}+\tfrac{1}{4}\,\mathbf{k}$，粒子沿 $\mathbf{r}(t)=\cos t\,\mathbf{i}+\sin t\,\mathbf{j}+t\,\mathbf{k}$ 從 $(1,0,0)$ 到 $(-1,0,3\pi)$（即 $0\le t\le 3\pi$）。求功。</div>
+      <span class="ex-method">直接代入 定義 15.7</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 沿曲線取值</div>
+        <p>$\mathbf{F}(\mathbf{r}(t)) = (-\tfrac{1}{2}\cos t,\,-\tfrac{1}{2}\sin t,\,\tfrac{1}{4})$。<br>$\mathbf{r}'(t) = (-\sin t,\,\cos t,\,1)$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 內積</div>
+        <p>$\mathbf{F}\cdot \mathbf{r}' = \tfrac{1}{2}\sin t\cos t - \tfrac{1}{2}\sin t\cos t + \tfrac{1}{4} = \dfrac{1}{4}$。<br>前兩項剛好抵消（這是因為力的 $xy$ 分量正交於螺旋切向的 $xy$ 部分）。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 3 · 對 t 積分</div>
+        <p>$W = \displaystyle\int_0^{3\pi} \dfrac{1}{4}\,dt = \dfrac{3\pi}{4}$。</p>
+      </div>
+      <div class="ex-answer">$W = \dfrac{3\pi}{4} \approx 2.356$。示範 C 數值會從 $0$ 累積到此值。</div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 7 · 方向會影響符號</div>
+      <div class="ex-title">設 $\mathbf{F}(x,y)=y\,\mathbf{i}+x^2\,\mathbf{j}$。下面兩條曲線都是拋物線 $y=4x-x^2$ 的一段，但<strong>方向相反</strong>：(a) $C_1:\mathbf{r}_1(t)=(4-t)\,\mathbf{i}+(4t-t^2)\,\mathbf{j},\ 0\le t\le 3$，從 $(4,0)$ 走到 $(1,3)$；(b) $C_2:\mathbf{r}_2(t)=t\,\mathbf{i}+(4t-t^2)\,\mathbf{j},\ 1\le t\le 4$，從 $(1,3)$ 走到 $(4,0)$。分別求 $\int_C \mathbf{F}\cdot d\mathbf{r}$。</div>
+      <span class="ex-method">直接展開比較</span>
+      <div class="step-block">
+        <div class="step-num">(a) 沿 $C_1$（從 $(4,0)$ 走向 $(1,3)$ 方向）</div>
+        <p>$\mathbf{F}=(y,\,x^2)=(4t-t^2,\,(4-t)^2)$。$\mathbf{r}_1'(t)=(-1,\,4-2t)$。<br>
+        $\mathbf{F}\cdot\mathbf{r}_1' = -(4t-t^2)+(4-t)^2(4-2t)$。<br>
+        展開並對 $t\in[0,3]$ 積分得 $\displaystyle\int_{C_1}\mathbf{F}\cdot d\mathbf{r} = \dfrac{69}{2}$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">(b) 沿 $C_2$（從 $(1,3)$ 走向 $(4,0)$ 方向 — 反向）</div>
+        <p>$\mathbf{F}=(4t-t^2,\,t^2)$，$\mathbf{r}_2'(t)=(1,\,4-2t)$。<br>
+        $\mathbf{F}\cdot\mathbf{r}_2' = (4t-t^2)+t^2(4-2t)$。<br>
+        對 $t\in[1,4]$ 積分得 $\displaystyle\int_{C_2}\mathbf{F}\cdot d\mathbf{r} = -\dfrac{69}{2}$。</p>
+      </div>
+      <div class="ex-answer">兩個積分數值相反，恰證明<strong>方向反轉 ⇒ 積分變號</strong>。注意 (a) 和 (b) 的「方向」是相反的（端點對調）。</div>
+    </div>
+
+    <div class="info-box green">
+      <span class="info-label">微分形式</span>
+      <strong>另一種寫法：$M\,dx + N\,dy$</strong>
+      <p style="margin:.55rem 0 .3rem;">把 $\mathbf{F}\cdot d\mathbf{r}$ 展開：
+      $$\int_C \mathbf{F}\cdot d\mathbf{r} = \int_C (M\,\mathbf{i}+N\,\mathbf{j})\cdot(dx\,\mathbf{i}+dy\,\mathbf{j}) = \int_C M\,dx + N\,dy.$$
+      在三維是 $\int_C M\,dx + N\,dy + P\,dz$。Green 定理 (§15.4) 就使用這種微分形式。</p>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 8 · 圓上的微分形式</div>
+      <div class="ex-title">設 $C$ 為半徑 3 的圓 $\mathbf{r}(t)=3\cos t\,\mathbf{i}+3\sin t\,\mathbf{j},\ 0\le t\le 2\pi$。求 $\displaystyle\int_C y^3\,dx + (x^3+3xy^2)\,dy$。</div>
+      <span class="ex-method">參數化 + 三角恆等式</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 微分</div>
+        <p>$dx = -3\sin t\,dt$，$dy = 3\cos t\,dt$。<br>$y^3 = 27\sin^3 t$；$x^3 + 3xy^2 = 27\cos^3 t + 81\cos t\sin^2 t = 27\cos t\,(1+2\sin^2 t)$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 代入並合併</div>
+        <p>$y^3\,dx = -81\sin^4 t\,dt$。<br>$(x^3+3xy^2)\,dy = 27\cos t(1+2\sin^2 t)\cdot 3\cos t\,dt = 81\cos^2 t(1+2\sin^2 t)\,dt$。<br>合計：$81[\cos^2 t + 2\sin^2 t\cos^2 t - \sin^4 t]\,dt$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 3 · 三角積分</div>
+        <p>在 $[0,2\pi]$ 上：$\int\cos^2 t\,dt = \pi$，$\int 2\sin^2 t\cos^2 t\,dt = \pi/2$，$\int\sin^4 t\,dt = 3\pi/4$。<br>
+        合計 $\displaystyle 81\!\left[\pi + \dfrac{\pi}{2} - \dfrac{3\pi}{4}\right] = 81\cdot\dfrac{3\pi}{4} = \dfrac{243\pi}{4}$。</p>
+        <p style="color:var(--accent3);font-weight:600;margin-top:.3rem;">在 §15.4 例題 2 用 Green 定理可一步算出同樣的 $\dfrac{243\pi}{4}$，比這裡直接展開簡潔得多。</p>
+      </div>
+      <div class="ex-answer">$\displaystyle\int_C y^3\,dx + (x^3+3xy^2)\,dy = \dfrac{243\pi}{4}\approx 190.85$。這就是 §15.4 例題 2 的「線積分版本」。</div>
+    </div>
+
+    <!-- §15.2 Quiz -->
+    <h3>概念測驗 15.2</h3>
+
+    <div class="quiz-card" id="quiz-15-2-1">
+      <span class="quiz-tag">Q15-2-1 · ds 的表達</span>
+      <div class="quiz-q">若 $\mathbf{r}(t) = (\cos t,\,\sin t,\,t)$（螺旋線），則 $ds$ 等於？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">$dt$</button>
+        <button class="quiz-opt">$\sqrt{2}\,dt$</button>
+        <button class="quiz-opt">$\sqrt{\sin^2 t + \cos^2 t + 1}\,dt = \sqrt{2}\,dt$（同上）</button>
+        <button class="quiz-opt">$\sqrt{1 + t^2}\,dt$</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-card" id="quiz-15-2-2">
+      <span class="quiz-tag">Q15-2-2 · 方向反轉</span>
+      <div class="quiz-q">若 $\displaystyle\int_C \mathbf{F}\cdot d\mathbf{r} = 5$，那麼沿反方向 $-C$ 的 $\displaystyle\int_{-C}\mathbf{F}\cdot d\mathbf{r}$ 為？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">$5$（與方向無關）</button>
+        <button class="quiz-opt">$-5$</button>
+        <button class="quiz-opt">$0$</button>
+        <button class="quiz-opt">需要更多資訊才能判斷</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-card" id="quiz-15-2-3">
+      <span class="quiz-tag">Q15-2-3 · 純量 vs 向量線積分</span>
+      <div class="quiz-q">下列哪一個敘述「不正確」？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">$\int_C f\,ds$ 對曲線方向<strong>無關</strong>。</button>
+        <button class="quiz-opt">$\int_C \mathbf{F}\cdot d\mathbf{r}$ 等價於 $\int_C M\,dx + N\,dy$（在平面上）。</button>
+        <button class="quiz-opt">$\int_C \mathbf{F}\cdot d\mathbf{r}$ 對曲線方向<strong>無關</strong>。</button>
+        <button class="quiz-opt">$\int_C \mathbf{F}\cdot d\mathbf{r}$ 物理上代表力 $\mathbf{F}$ 沿 $C$ 做的功。</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- §15.3 Conservative Vector Fields and Independence of Path     -->
+<!-- ============================================================ -->
+<section id="sec-15-3">
+  <div class="section-number">第 15.3 節 · 保守場與路徑無關</div>
+  <h2>保守場與路徑無關：線積分的基本定理</h2>
+  <p>重力場做的功有個漂亮性質：在物體從 A 移到 B 的過程中，<strong>不論走哪條路徑</strong>，功都一樣。本節要把這個現象推廣 —— 它等價於「向量場是保守的」，並且也等價於「沿任何閉曲線積分為零」。三件事互相蘊含，合稱<strong>線積分基本定理</strong>。</p>
+
+  <!-- §15.3.1 motivating example + Theorem 15.5 -->
+  <div id="sec-15-3-1" class="subsection">
+    <h3>15.3.1 線積分基本定理</h3>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 1 · 保守場與三條路徑</div>
+      <div class="ex-title">求 $\mathbf{F}(x,y)=\tfrac{1}{2}xy\,\mathbf{i}+\tfrac{1}{4}x^2\,\mathbf{j}$ 沿下列三條從 $(0,0)$ 到 $(1,1)$ 的路徑所做的功：(a) $y=x$；(b) $x=y^2$；(c) $y=x^3$。</div>
+      <span class="ex-method">直接代入 + 對照</span>
+      <div class="step-block">
+        <div class="step-num">先確認 F 保守</div>
+        <p>$M=\tfrac{1}{2}xy,\ N=\tfrac{1}{4}x^2$，$\partial M/\partial y=\tfrac{1}{2}x=\partial N/\partial x$ ✓ 保守。位能 $f=\tfrac{1}{4}x^2 y + K$（驗 $f_x=\tfrac{1}{2}xy$、$f_y=\tfrac{1}{4}x^2$）。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">(a) y = x：$\mathbf{r}(t)=(t,t)$，$0\le t\le 1$</div>
+        <p>$\mathbf{F}=(\tfrac{1}{2}t^2,\tfrac{1}{4}t^2)$，$\mathbf{r}'=(1,1)$，$\mathbf{F}\cdot\mathbf{r}'=\tfrac{3}{4}t^2$。<br>$\int_0^1 \tfrac{3}{4}t^2\,dt = \tfrac{1}{4}.$</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">(b) x = y²：$\mathbf{r}(t)=(t^2,t)$，$0\le t\le 1$</div>
+        <p>$\mathbf{F}=(\tfrac{1}{2}t^3,\tfrac{1}{4}t^4)$，$\mathbf{r}'=(2t,1)$，$\mathbf{F}\cdot\mathbf{r}'=t^4 + \tfrac{1}{4}t^4=\tfrac{5}{4}t^4$。<br>$\int_0^1 \tfrac{5}{4}t^4\,dt=\tfrac{1}{4}.$</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">(c) y = x³：$\mathbf{r}(t)=(t,t^3)$，$0\le t\le 1$</div>
+        <p>$\mathbf{F}=(\tfrac{1}{2}t\cdot t^3,\tfrac{1}{4}t^2)=(\tfrac{1}{2}t^4,\tfrac{1}{4}t^2)$，$\mathbf{r}'=(1,3t^2)$。<br>$\mathbf{F}\cdot\mathbf{r}'=\tfrac{1}{2}t^4+\tfrac{3}{4}t^4=\tfrac{5}{4}t^4$。$\int_0^1 \tfrac{5}{4}t^4\,dt=\tfrac{1}{4}.$</p>
+      </div>
+      <div class="ex-answer">三條完全不同的路徑都給出 <strong>$\tfrac{1}{4}$</strong>，正等於 $f(1,1)-f(0,0)=\tfrac{1}{4}-0$。這正是<strong>線積分基本定理</strong>的數值預告。</div>
+    </div>
+
+    <div class="theorem-card" data-thm="定理 15.5">
+      <div class="thm-name">線積分基本定理</div>
+      <p>設分段光滑曲線 $C:\mathbf{r}(t),\ a\le t\le b$ 位於開區域 $R$ 內。若 $\mathbf{F}=M\,\mathbf{i}+N\,\mathbf{j}$ 在 $R$ 上<strong>保守</strong>（即 $\mathbf{F}=\nabla f$）且 $M,N$ 連續，則
+      $$\int_C \mathbf{F}\cdot d\mathbf{r} = \int_C \nabla f\cdot d\mathbf{r} = f(\mathbf{r}(b)) - f(\mathbf{r}(a)).$$</p>
+      <p style="font-size:.92rem;color:var(--accent2);margin-top:.3rem;">空間版本完全類似：$\int_C \nabla f\cdot d\mathbf{r}=f(B)-f(A)$。直觀：保守場做的功＝位能差，<em>跟走哪條路無關</em>。</p>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 2 · 套用線積分基本定理</div>
+      <div class="ex-title">求 $\displaystyle\int_C \mathbf{F}\cdot d\mathbf{r}$，其中 $\mathbf{F}(x,y)=2xy\,\mathbf{i}+(x^2-y)\,\mathbf{j}$，$C$ 是任何從 $(-1,4)$ 到 $(1,2)$ 的分段光滑曲線。</div>
+      <span class="ex-method">套用 §15.1 例題 6 的位能</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 確認保守 + 取位能</div>
+        <p>$\partial M/\partial y = 2x = \partial N/\partial x$ ✓ 保守。由 §15.1 例題 6 已得位能 $f(x,y) = x^2 y - \dfrac{y^2}{2}$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 直接代入端點</div>
+        <p>$f(1,2) = 1\cdot 2 - \dfrac{4}{2} = 2 - 2 = 0$。<br>
+        $f(-1,4) = (-1)^2 \cdot 4 - \dfrac{16}{2} = 4 - 8 = -4$。<br>
+        $\displaystyle\int_C \mathbf{F}\cdot d\mathbf{r} = f(1,2) - f(-1,4) = 0 - (-4) = 4$。</p>
+      </div>
+      <div class="ex-answer">$\displaystyle\int_C \mathbf{F}\cdot d\mathbf{r} = 4$。<strong>不用</strong>知道 $C$ 的具體形狀就能算出。</div>
+    </div>
+
+    <div class="theorem-card" data-thm="定理 15.6">
+      <div class="thm-name">路徑無關 ⇔ 保守</div>
+      <p>若 $\mathbf{F}$ 在<strong>開連通區域</strong>上連續，則
+      $\displaystyle\int_C \mathbf{F}\cdot d\mathbf{r}$ 路徑無關 ⇔ $\mathbf{F}$ 保守。</p>
+      <p style="font-size:.92rem;color:var(--muted);margin-top:.3rem;">「連通」表示任兩點可由區域內的分段光滑曲線連起來。「路徑無關」表示固定起點與終點時，所有合法路徑的積分值相同。</p>
+    </div>
+  </div>
+
+  <!-- §15.3.2 示範 D -->
+  <div id="sec-15-3-2" class="subsection">
+    <h3>15.3.2 互動 示範 D：三條路徑的對照</h3>
+    <p>下面互動圖固定起點 $A=(-1,4)$ 與終點 $B=(1,2)$（也就是例題 2 的端點）；提供三條<strong>外型不同</strong>的路徑：直線、上凸圓弧、下凸圓弧。同時可切換兩種向量場：<span class="pill pill-green">保守場 $\mathbf{F}=2xy\,\mathbf{i}+(x^2-y)\,\mathbf{j}$</span>（背景顯示位能 $f=x^2 y - y^2/2$ 的等高線）與<span class="pill pill-red">非保守場 $\mathbf{F}=-y\,\mathbf{i}+x\,\mathbf{j}$</span>（旋轉場）。觀察三條路徑的積分值是否一致。</p>
+
+    <div class="viz-layout">
+      <div class="canvas3d-panel">
+        <div class="canvas-wrap">
+          <div id="plot-15-3-d" class="plot-host"></div>
+          <div class="hint-overlay">綠＝保守 · 紅＝非保守 · 三色 marker 同步移動</div>
+        </div>
+        <div class="axis-legend">
+          <span class="ax-cons">保守場 F</span>
+          <span class="ax-noncons">非保守場</span>
+          <span class="ax-path">三條路徑</span>
+        </div>
+        <div class="controls-bar">
+          <label style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent2);font-weight:600;">場：</label>
+          <select class="field-select" id="dD-field" style="max-width:320px;">
+            <option value="cons">保守 F = 2xy i + (x² − y) j</option>
+            <option value="noncons">非保守 F = −y i + x j</option>
+          </select>
+          <button class="btn btn-play" id="dD-play">▶ 播放</button>
+          <button class="btn btn-reset" id="dD-reset">↺ 重設</button>
+          <button class="btn btn-toggle" id="dD-iso">等高線</button>
+        </div>
+      </div>
+      <div class="side-panel">
+        <div class="info-card">
+          <div class="ic-title">三條路徑的線積分</div>
+          <div class="ic-row"><span class="ic-label" style="color:#2c3e7a;">直線 A→B</span><span class="ic-value" id="dD-i1">0.000</span></div>
+          <div class="ic-row"><span class="ic-label" style="color:#27ae60;">上凸弧</span><span class="ic-value" id="dD-i2">0.000</span></div>
+          <div class="ic-row"><span class="ic-label" style="color:#c0392b;">下凸弧</span><span class="ic-value" id="dD-i3">0.000</span></div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">期望值（基本定理）</div>
+          <div class="ic-row"><span class="ic-label">f(B) − f(A)</span><span class="ic-value highlight" id="dD-fdiff">f(1,2) − f(−1,4) = 4</span></div>
+          <div class="ic-row"><span class="ic-label">三者誤差</span><span class="ic-value" id="dD-err">—</span></div>
+        </div>
+        <div class="verify-banner pending" id="dD-banner">
+          <span class="vb-icon">⏳</span>
+          <span id="dD-banText">尚未播放</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 4 · 三維保守力場</div>
+      <div class="ex-title">設 $\mathbf{F}(x,y,z)=e^x\cos y\,\mathbf{i}-e^x\sin y\,\mathbf{j}+2\,\mathbf{k}$。證明 $\displaystyle\int_C \mathbf{F}\cdot d\mathbf{r}$ 路徑無關，並求從 $(0,\pi/2,1)$ 到 $(1,\pi,3)$ 的功。</div>
+      <span class="ex-method">驗 curl = 0 + 找位能</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 驗 curl F = 0</div>
+        <p>$M=e^x\cos y,\ N=-e^x\sin y,\ P=2$。<br>
+        $P_y - N_z = 0 - 0 = 0$；<br>
+        $M_z - P_x = 0 - 0 = 0$；<br>
+        $N_x - M_y = -e^x\sin y - (-e^x\sin y) = 0$。<br>
+        三項皆零 ⇒ $\mathrm{curl}\,\mathbf{F}=\mathbf{0}$ ⇒ 保守。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 找位能 f</div>
+        <p>由 $f_x = e^x \cos y$：$f = e^x \cos y + g(y,z)$。<br>
+        $f_y = -e^x \sin y + g_y(y,z) = -e^x \sin y$ ⇒ $g_y = 0$ ⇒ $g = h(z)$。<br>
+        $f_z = h'(z) = 2$ ⇒ $h(z) = 2z + K$。<br>
+        $\boxed{f(x,y,z) = e^x \cos y + 2z + K}$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 3 · 代入端點</div>
+        <p>$f(1,\pi,3) = e\cos\pi + 6 = -e + 6$。<br>
+        $f(0,\pi/2,1) = e^0 \cos(\pi/2) + 2 = 0 + 2 = 2$。<br>
+        $W = f(1,\pi,3) - f(0,\pi/2,1) = (-e + 6) - 2 = 4 - e$。</p>
+      </div>
+      <div class="ex-answer">$W = 4 - e \approx 1.282$。同樣的路徑若改往返一週回到起點，由定理 15.7 必為 0。</div>
+    </div>
+  </div>
+
+  <!-- §15.3.3 Equivalent conditions -->
+  <div id="sec-15-3-3" class="subsection">
+    <h3>15.3.3 等價條件</h3>
+
+    <div class="theorem-card" data-thm="定理 15.7">
+      <div class="thm-name">三條件等價</div>
+      <p>設 $\mathbf{F}=M\,\mathbf{i}+N\,\mathbf{j}+P\,\mathbf{k}$ 在開連通區域 $R$ 上具連續一階偏導，$C$ 為 $R$ 內分段光滑曲線。下列三條<strong>互相等價</strong>：</p>
+      <ol class="prop-list">
+        <li>$\mathbf{F}$ 保守（即 $\mathbf{F}=\nabla f$ 對某 $f$）。</li>
+        <li>$\displaystyle\int_C \mathbf{F}\cdot d\mathbf{r}$ <strong>路徑無關</strong>。</li>
+        <li>對 $R$ 內每條<strong>閉</strong>曲線 $C$，$\displaystyle\oint_C \mathbf{F}\cdot d\mathbf{r}=0$。</li>
+      </ol>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 5 · 拆解非保守為保守 + 殘餘</div>
+      <div class="ex-title">求 $\displaystyle\int_{C_1} \mathbf{F}\cdot d\mathbf{r}$，其中 $\mathbf{F}(x,y)=(y^3+1)\,\mathbf{i}+(3xy^2+1)\,\mathbf{j}$，$C_1$ 是從 $(0,0)$ 到 $(2,0)$ 的<strong>上半圓</strong>路徑（中心 $(1,0)$、半徑 $1$）。</div>
+      <span class="ex-method">分解 + 端點代入</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 拆解 F</div>
+        <p>令 $\mathbf{F}_1 = y^3\,\mathbf{i} + 3xy^2\,\mathbf{j}$ 與 $\mathbf{F}_2 = \mathbf{i} + \mathbf{j}$。則 $\mathbf{F}=\mathbf{F}_1+\mathbf{F}_2$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · F₁ 是保守</div>
+        <p>$\partial M_1/\partial y = 3y^2 = \partial N_1/\partial x$ ✓。位能 $f_1 = xy^3$。<br>
+        $\displaystyle\int_{C_1}\mathbf{F}_1\cdot d\mathbf{r} = f_1(2,0)-f_1(0,0) = 0 - 0 = 0$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 3 · F₂ 用參數化算</div>
+        <p>$C_1:\mathbf{r}(t)=(1-\cos t,\,\sin t),\ 0\le t\le \pi$（順著 $(0,0)\to(2,0)$ 走上半圓）。<br>
+        $\mathbf{r}'(t)=(\sin t,\cos t)$；$\mathbf{F}_2\cdot\mathbf{r}'=\sin t + \cos t$。<br>
+        $\displaystyle\int_0^\pi (\sin t+\cos t)\,dt = [-\cos t+\sin t]_0^\pi = (1+0)-(-1+0)=2$。</p>
+      </div>
+      <div class="ex-answer">$\displaystyle\int_{C_1}\mathbf{F}\cdot d\mathbf{r} = 0 + 2 = 2$。技巧：能拆出「保守部分」就用端點，剩下的小部分再硬算。</div>
+    </div>
+
+    <h3>概念測驗 15.3</h3>
+
+    <div class="quiz-card" id="quiz-15-3-1">
+      <span class="quiz-tag">Q15-3-1 · 等價條件</span>
+      <div class="quiz-q">下列哪一個敘述<strong>不等價於</strong>「$\mathbf{F}$ 在開連通區域 $R$ 上保守」？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">存在 $f$ 使 $\mathbf{F} = \nabla f$。</button>
+        <button class="quiz-opt">對 $R$ 內任意分段光滑曲線 $C$，$\int_C \mathbf{F}\cdot d\mathbf{r}$ 只取決於兩端點。</button>
+        <button class="quiz-opt">對 $R$ 內任意閉曲線 $C$，$\oint_C \mathbf{F}\cdot d\mathbf{r} = 0$。</button>
+        <button class="quiz-opt">$\mathbf{F}$ 在 $R$ 上連續。</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-card" id="quiz-15-3-2">
+      <span class="quiz-tag">Q15-3-2 · 套用基本定理</span>
+      <div class="quiz-q">若 $\mathbf{F}=\nabla f$ 且 $f(x,y) = x^2 + y^2$，則沿任何從 $(0,0)$ 到 $(3,4)$ 的路徑，$\int_C \mathbf{F}\cdot d\mathbf{r}$ 等於？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">$0$（因為保守場積分必為 0）</button>
+        <button class="quiz-opt">$25$</button>
+        <button class="quiz-opt">$5$（即 $\sqrt{3^2 + 4^2}$）</button>
+        <button class="quiz-opt">需要知道具體路徑才能求</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- §15.4 Green's Theorem                                          -->
+<!-- ============================================================ -->
+<section id="sec-15-4">
+  <div class="section-number">第 15.4 節 · GREEN'S 定理</div>
+  <h2>Green 定理：邊界線積分 ↔ 區域雙重積分</h2>
+  <p>Green 定理把<strong>邊界線積分</strong>和<strong>區域雙重積分</strong>畫上等號 —— 它說：在一個簡單連通的平面區域 $R$ 上，沿其邊界 $C$ 的線積分（逆時針）等於某個雙重積分。這是把<strong>1D 微積分基本定理</strong>推廣到平面的版本，也是後面 Stokes 定理（§15.8）與散度定理（§15.7）的二維特例。</p>
+
+  <!-- §15.4.1 Statement & 例題s 1-3 -->
+  <div id="sec-15-4-1" class="subsection">
+    <h3>15.4.1 定理陳述</h3>
+
+    <div class="info-box">
+      <span class="info-label">TERMS</span>
+      <strong>簡單曲線、簡單連通</strong>
+      <p style="margin:.55rem 0 .3rem;"><strong>簡單曲線</strong>：$\mathbf{r}(c)\ne\mathbf{r}(d)$，其中 $c,d\in(a,b)$ — 不自交。<br>
+      <strong>簡單連通區域 (simply connected region)</strong>：任意簡單閉曲線所圍區域都仍在 $R$ 內 — 直觀說「沒有洞」。圓盤是；圓環不是。</p>
+    </div>
+
+    <div class="theorem-card" data-thm="定理 15.8">
+      <div class="thm-name">Green 定理</div>
+      <p>設 $R$ 為簡單連通區域，其邊界 $C$ 為分段光滑、逆時針定向（即 $R$ 永遠在 $C$ 的左側）。若 $M,N$ 在含 $R$ 的開區域上具連續一階偏導，則
+      $$\oint_C M\,dx + N\,dy = \iint_R\!\left(\dfrac{\partial N}{\partial x} - \dfrac{\partial M}{\partial y}\right) dA.$$</p>
+      <p style="font-size:.92rem;color:var(--accent2);margin-top:.3rem;">當 $\mathbf{F}=M\,\mathbf{i}+N\,\mathbf{j}$ 為保守場，$\partial N/\partial x = \partial M/\partial y$ ⇒ 右邊為 0 ⇒ 與定理 15.7 第三條（閉曲線積分為 0）一致。</p>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 1 · 使用 Green 定理</div>
+      <div class="ex-title">求 $\displaystyle\int_C y^3\,dx + (x^3 + 3xy^2)\,dy$，其中 $C$ 是「(0,0) → (1,1) 沿 $y=x^3$，再從 (1,1) → (0,0) 沿 $y=x$」所圍成的閉曲線（逆時針）。</div>
+      <span class="ex-method">化簡為雙重積分</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 算 $\partial N/\partial x - \partial M/\partial y$</div>
+        <p>$M=y^3,\ N=x^3+3xy^2$。<br>
+        $\partial M/\partial y = 3y^2$；$\partial N/\partial x = 3x^2 + 3y^2$。<br>
+        差為 $3x^2 + 3y^2 - 3y^2 = 3x^2$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 確認區域 R</div>
+        <p>$y=x^3$ 與 $y=x$ 在 $0\le x\le 1$ 之間，下方為 $y=x^3$、上方為 $y=x$（因為 $x>x^3$ 當 $0<x<1$）。所以 $R = \{(x,y) : 0\le x\le 1,\ x^3 \le y \le x\}$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 3 · 雙重積分</div>
+        <p>$\displaystyle\iint_R 3x^2\,dA = \int_0^1 \int_{x^3}^{x} 3x^2 \,dy\,dx = \int_0^1 3x^2(x - x^3)\,dx = \int_0^1 (3x^3 - 3x^5)\,dx = \dfrac{3}{4} - \dfrac{1}{2} = \dfrac{1}{4}$。</p>
+      </div>
+      <div class="ex-answer">$\displaystyle\oint_C y^3\,dx + (x^3+3xy^2)\,dy = \dfrac{1}{4}$。要驗證方向：題目從 $y=x^3$（下界）走到 $y=x$（上界）再回 — 這是<strong>逆時針</strong>，$R$ 在左邊 ✓。</div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 2 · 用 Green 定理算功</div>
+      <div class="ex-title">受力 $\mathbf{F}(x,y)=y^3\,\mathbf{i}+(x^3+3xy^2)\,\mathbf{j}$。粒子沿半徑 3 的圓<strong>一週</strong>（逆時針），求 Green 定理算的功。</div>
+      <span class="ex-method">極座標雙重積分</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 由 §15.2 例題 8 已知直接算很繁瑣</div>
+        <p>$\partial N/\partial x - \partial M/\partial y = 3x^2 + 3y^2 - 3y^2 = 3x^2$。<br>
+        Green 給：$W = \displaystyle\iint_R 3x^2\,dA$，其中 $R$ 為以原點為中心、半徑 3 的圓盤。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 換極座標</div>
+        <p>$x = r\cos\theta$，$dA = r\,dr\,d\theta$：<br>
+        $\displaystyle W = \int_0^{2\pi}\!\int_0^3 3r^2\cos^2\theta\cdot r\,dr\,d\theta = 3\!\left(\int_0^{2\pi}\cos^2\theta\,d\theta\right)\!\left(\int_0^3 r^3\,dr\right).$<br>
+        $\int_0^{2\pi}\cos^2\theta\,d\theta=\pi$；$\int_0^3 r^3\,dr=\dfrac{81}{4}$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 3 · 合計</div>
+        <p>$W = 3 \cdot \pi \cdot \dfrac{81}{4} = \dfrac{243\pi}{4}$。</p>
+      </div>
+      <div class="ex-answer">$W = \dfrac{243\pi}{4} \approx 190.85$。和 §15.2 例題 8 直接展開的結果一致 — 但這裡只用了 3 行。</div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 3 · 拆出保守項</div>
+      <div class="ex-title">求 $\displaystyle\int_C y^3\,dx + 3xy^2\,dy$，其中 $C$ 是 $y = x^3$ 由 $(0,0)$ 到 $(1,1)$，再沿 $y = x$ 由 $(1,1)$ 回 $(0,0)$（與 例題 1 同一條閉曲線）。</div>
+      <span class="ex-method">看出 F 保守</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 驗保守</div>
+        <p>$M = y^3$，$N = 3xy^2$。<br>$\partial M/\partial y = 3y^2 = \partial N/\partial x$ ✓ 保守。位能 $f = xy^3$（驗 $f_x = y^3$、$f_y = 3xy^2$）。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 直接套等價條件</div>
+        <p>因為 $C$ 是<strong>閉</strong>曲線，且 $\mathbf{F}$ 在含 $R$ 的開區域上保守，由定理 15.7 第三條：</p>
+        <p style="text-align:center;">$\displaystyle\oint_C \mathbf{F}\cdot d\mathbf{r} = 0$。</p>
+        <p>或用 Green：$\partial N/\partial x - \partial M/\partial y = 0$，雙重積分自然為 0。</p>
+      </div>
+      <div class="ex-answer">$\displaystyle\oint_C y^3\,dx + 3xy^2\,dy = 0$。對照 例題 1 ($M=y^3, N=x^3+3xy^2$) 結果 $\tfrac{1}{4}$ — 差的就是非保守部分 $x^3$ 對應到的 Green 積分。</div>
+    </div>
+  </div>
+
+  <!-- §15.4.2 示範 E -->
+  <div id="sec-15-4-2" class="subsection">
+    <h3>15.4.2 互動 示範 E：邊界線積分 ↔ 區域雙重積分</h3>
+    <p>左右兩個圖同步播放動畫：左邊 marker 沿邊界 $C$ 走，累積 $\oint M\,dx + N\,dy$；右邊用固定中點格點在區域 $R$ 上累積 $\iint(\partial N/\partial x-\partial M/\partial y)\,dA$。動畫點的顯示會降採樣以保持流暢，但右側數值使用完整高解析度格點與 prefix sum 計算，因此 reset 後會得到相同掃描順序與相同終點誤差。進度條只表示動畫時間進度；Green 定理的驗證看 banner 中的左右數值差。</p>
+
+    <div class="viz-layout">
+      <div class="canvas3d-panel">
+        <div class="dual-plot">
+          <div>
+            <div class="plot-subtitle">左：邊界線積分 ∮ M dx + N dy</div>
+            <div class="canvas-wrap" style="aspect-ratio:1/1;">
+              <div id="plot-15-4-eL" class="plot-host"></div>
+            </div>
+          </div>
+          <div>
+            <div class="plot-subtitle">右：區域雙重積分 ∬(N_x − M_y) dA</div>
+            <div class="canvas-wrap" style="aspect-ratio:1/1;">
+              <div id="plot-15-4-eR" class="plot-host"></div>
+            </div>
+          </div>
+        </div>
+        <div class="controls-bar">
+          <label style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent2);font-weight:600;">情境：</label>
+          <select class="field-select" id="dE-scene" style="max-width:340px;">
+            <option value="ex1">例題 1 · y=x³ 與 y=x 圍成</option>
+            <option value="ex2">例題 2 · 半徑 3 的圓</option>
+            <option value="area">定理 15.9 · 橢圓面積 (a=2, b=1)</option>
+          </select>
+          <button class="btn btn-play" id="dE-play">▶ 播放</button>
+          <button class="btn btn-reset" id="dE-reset">↺ 重設</button>
+        </div>
+      </div>
+      <div class="side-panel">
+        <div class="info-card">
+          <div class="ic-title">公式</div>
+          <div class="ic-row"><span class="ic-label">M(x,y)</span><span class="ic-value" id="dE-M">y³</span></div>
+          <div class="ic-row"><span class="ic-label">N(x,y)</span><span class="ic-value" id="dE-N">x³ + 3xy²</span></div>
+          <div class="ic-row"><span class="ic-label">N_x − M_y</span><span class="ic-value" id="dE-diff">3x²</span></div>
+        </div>
+        <div class="accum-bar">
+          <div class="ab-label"><span>左 · 邊界進度</span><span id="dE-pctL">0%</span></div>
+          <div class="ab-track"><div class="ab-fill" id="dE-fillL" style="width:0%"></div></div>
+          <div class="ab-val" id="dE-accL">0.0000</div>
+        </div>
+        <div class="accum-bar">
+          <div class="ab-label"><span>右 · 區域進度</span><span id="dE-pctR">0%</span></div>
+          <div class="ab-track"><div class="ab-fill" id="dE-fillR" style="width:0%"></div></div>
+          <div class="ab-val" id="dE-accR">0.0000</div>
+          <div class="ab-target">目標：<span id="dE-tgt">1/4 = 0.250</span></div>
+        </div>
+        <div class="verify-banner pending" id="dE-banner">
+          <span class="vb-icon">⏳</span>
+          <span id="dE-banText">尚未播放</span>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">速度</div>
+          <div class="slider-row"><span class="slider-label">速度</span><input type="range" id="dE-speed" min="0.2" max="3" value="1" step="0.1"><span class="slider-val" id="dE-speedV">1.0×</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- §15.4.3 Area + Alt forms -->
+  <div id="sec-15-4-3" class="subsection">
+    <h3>15.4.3 線積分求面積</h3>
+    <p>把 Green 定理「反過來用」：選擇 $M, N$ 使 $\partial N/\partial x - \partial M/\partial y = 1$，則 $\oint_C M\,dx + N\,dy = \iint_R dA = $ 區域面積。最常用的選擇是 $M = -y/2,\ N = x/2$。</p>
+
+    <div class="theorem-card" data-thm="定理 15.9">
+      <div class="thm-name">線積分求面積</div>
+      <p>若 $R$ 是由分段光滑簡單閉曲線 $C$（逆時針）圍成的區域，則
+      $$\mathrm{Area}(R) = \dfrac{1}{2}\oint_C (x\,dy - y\,dx).$$</p>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">例題 5 · 橢圓面積</div>
+      <div class="ex-title">用線積分公式求橢圓 $\dfrac{x^2}{a^2} + \dfrac{y^2}{b^2} = 1$ 的面積。</div>
+      <span class="ex-method">套用定理 15.9</span>
+      <div class="step-block">
+        <div class="step-num">步驟 1 · 參數化邊界</div>
+        <p>$\mathbf{r}(t) = a\cos t\,\mathbf{i} + b\sin t\,\mathbf{j},\ 0\le t\le 2\pi$ — 逆時針一週。<br>
+        $dx = -a\sin t\,dt$，$dy = b\cos t\,dt$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 2 · 代入公式</div>
+        <p>$x\,dy - y\,dx = (a\cos t)(b\cos t\,dt) - (b\sin t)(-a\sin t\,dt) = ab(\cos^2 t + \sin^2 t)\,dt = ab\,dt$。</p>
+      </div>
+      <div class="step-block">
+        <div class="step-num">步驟 3 · 整合</div>
+        <p>$\mathrm{Area} = \dfrac{1}{2}\int_0^{2\pi} ab\,dt = \dfrac{1}{2}\cdot 2\pi ab = \pi ab$。</p>
+      </div>
+      <div class="ex-answer">橢圓面積為 $\pi a b$（圓 $a=b=r$ 時退化為 $\pi r^2$）。</div>
+    </div>
+
+    <div class="info-box green">
+      <span class="info-label">向量形式 · 預告</span>
+      <strong>Green 定理的兩種向量形式</strong>
+      <p style="margin:.55rem 0 .3rem;">設 $\mathbf{F}=M\,\mathbf{i}+N\,\mathbf{j}$，把 $\mathbf{F}$ 推廣到 3D（$P=0$），則：</p>
+      <div class="dual-card">
+        <div class="dc dc-vec">
+          <div class="dc-title">旋度形式 — 預告 Stokes</div>
+          $\displaystyle\oint_C \mathbf{F}\cdot d\mathbf{r} = \iint_R (\mathrm{curl}\,\mathbf{F})\cdot\mathbf{k}\,dA$
+        </div>
+        <div class="dc dc-real">
+          <div class="dc-title">散度形式 — 預告散度定理</div>
+          $\displaystyle\oint_C \mathbf{F}\cdot \mathbf{N}\,ds = \iint_R \mathrm{div}\,\mathbf{F}\,dA$
+        </div>
+      </div>
+      <p style="margin:.5rem 0 0;font-size:.9rem;color:var(--muted);">這兩個寫法分別會在 §15.8 Stokes 定理（推到 3D 曲面）與 §15.7 散度定理（推到 3D 區域）變得更一般。</p>
+    </div>
+
+    <h3>概念測驗 15.4</h3>
+
+    <div class="quiz-card" id="quiz-15-4-1">
+      <span class="quiz-tag">Q15-4-1 · 適用條件</span>
+      <div class="quiz-q">使用 Green 定理時，下列哪一個條件<strong>非必要</strong>？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">$R$ 為簡單連通區域（沒有「洞」）。</button>
+        <button class="quiz-opt">$C$ 為分段光滑簡單閉曲線並逆時針定向（$R$ 在左側）。</button>
+        <button class="quiz-opt">$M, N$ 具連續一階偏導。</button>
+        <button class="quiz-opt">$\mathbf{F} = M\,\mathbf{i} + N\,\mathbf{j}$ 必須為保守場。</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-card" id="quiz-15-4-2">
+      <span class="quiz-tag">Q15-4-2 · 應用 Green</span>
+      <div class="quiz-q">若 $M = 0$、$N = x$，沿任意逆時針簡單閉曲線 $C$，$\oint_C N\,dy = \oint_C x\,dy$ 等於？</div>
+      <div class="quiz-options">
+        <button class="quiz-opt">$0$（因為 $\partial N/\partial x = 1$ 是常數）</button>
+        <button class="quiz-opt">$\iint_R 1\,dA = \mathrm{Area}(R)$</button>
+        <button class="quiz-opt">$2\,\mathrm{Area}(R)$</button>
+        <button class="quiz-opt">需要更多資訊</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- Reference                                                      -->
+<!-- ============================================================ -->
+<section id="sec-ref">
+  <div class="section-number">速查 · 公式速查表</div>
+  <h2>第 15.1–15.4 節公式速查</h2>
+  <p>把本章前四節要記住的<strong>公式、定理、運算子</strong>整理成一頁。第一次看可能不熟，多回來查幾次就熟了。</p>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">15.1</span>向量場與三個微分算子</div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">梯度</span>
+        <span class="ref-card-name-en">∇f</span>
+      </div>
+      <div class="ref-card-eq">$\nabla f = f_x\,\mathbf{i} + f_y\,\mathbf{j} + f_z\,\mathbf{k}$</div>
+      <p class="ref-note">純量函數 → 向量場。在每點指向 $f$ 上升最快的方向。</p>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">旋度</span>
+        <span class="ref-card-name-en">∇ × F</span>
+      </div>
+      <div class="ref-card-eq">$\nabla\times\mathbf{F} = \begin{vmatrix}\mathbf{i}&\mathbf{j}&\mathbf{k}\\ \partial_x&\partial_y&\partial_z\\ M & N & P\end{vmatrix}$</div>
+      <p class="ref-note">向量場 → 向量場。curl F = 0 ⇔ F 保守（在開球上，§15.1 定理 15.2）。</p>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">散度</span>
+        <span class="ref-card-name-en">∇ · F</span>
+      </div>
+      <div class="ref-card-eq">$\nabla\cdot\mathbf{F} = \dfrac{\partial M}{\partial x} + \dfrac{\partial N}{\partial y} + \dfrac{\partial P}{\partial z}$</div>
+      <p class="ref-note">向量場 → 純量。div F = 0 ⇔ F 不可壓縮 / 無散度。恆等式：div(curl F) = 0（定理 15.3）。</p>
+    </div>
+
+    <table class="conv-table">
+      <thead><tr><th>對象</th><th>輸入</th><th>輸出</th></tr></thead>
+      <tbody>
+        <tr><td>梯度 ∇f</td><td>純量場 f</td><td>向量場</td></tr>
+        <tr><td>旋度 ∇×F</td><td>向量場 F</td><td>向量場</td></tr>
+        <tr><td>散度 ∇·F</td><td>向量場 F</td><td>純量場</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">15.2</span>線積分計算公式</div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">純量線積分 (定理 15.4)</span>
+        <span class="ref-card-name-en">∫_C f ds</span>
+      </div>
+      <div class="ref-card-eq">$\displaystyle\int_C f\,ds = \int_a^b f(\mathbf{r}(t))\,\|\mathbf{r}'(t)\|\,dt$</div>
+      <p class="ref-note">對方向<strong>無關</strong>。$f\equiv 1$ 時給弧長。$\|\mathbf{r}'\| = \sqrt{x'^2 + y'^2 + z'^2}$。</p>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">向量線積分（定義 15.7）</span>
+        <span class="ref-card-name-en">∫_C F·dr</span>
+      </div>
+      <div class="ref-card-eq">$\displaystyle\int_C \mathbf{F}\cdot d\mathbf{r} = \int_a^b \mathbf{F}(\mathbf{r}(t))\cdot \mathbf{r}'(t)\,dt = \int_C M\,dx + N\,dy + P\,dz$</div>
+      <p class="ref-note">方向<strong>會影響符號</strong>：$\int_{-C} = -\int_C$。物理意義：力 F 沿 C 做的功。</p>
+    </div>
+  </div>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">15.3</span>路徑無關三等價</div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">基本定理 (定理 15.5)</span>
+        <span class="ref-card-name-en">線積分基本定理</span>
+      </div>
+      <div class="ref-card-eq">$\displaystyle\int_C \nabla f\cdot d\mathbf{r} = f(B) - f(A)$</div>
+      <p class="ref-note">F 保守 ⇒ 線積分只取決於兩端點。</p>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">三等價 (定理 15.7)</span>
+        <span class="ref-card-name-en">等價條件</span>
+      </div>
+      <ol class="prop-list" style="margin:.5rem 0;">
+        <li>F 保守（即 F = ∇f）</li>
+        <li>$\int_C \mathbf{F}\cdot d\mathbf{r}$ 路徑無關</li>
+        <li>對任何閉曲線 $\oint_C \mathbf{F}\cdot d\mathbf{r} = 0$</li>
+      </ol>
+      <p class="ref-note">前提：F 在開連通區域上具連續一階偏導。</p>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">保守判定法</span>
+        <span class="ref-card-name-en">保守場判定</span>
+      </div>
+      <div class="ref-card-eq">平面 (定理 15.1)：$\dfrac{\partial N}{\partial x} = \dfrac{\partial M}{\partial y}$<br>空間 (定理 15.2)：$\mathrm{curl}\,\mathbf{F} = \mathbf{0}$</div>
+      <p class="ref-note">區域必須<strong>開且簡單連通</strong>（否則只有「F 保守 ⇒ curl = 0」一方向）。</p>
+    </div>
+  </div>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">15.4</span>Green 定理（線 ↔ 面）</div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">Green 定理 (定理 15.8)</span>
+        <span class="ref-card-name-en">Green 定理</span>
+      </div>
+      <div class="ref-card-eq">$\displaystyle\oint_C M\,dx + N\,dy = \iint_R\!\left(\dfrac{\partial N}{\partial x} - \dfrac{\partial M}{\partial y}\right)dA$</div>
+      <p class="ref-note">前提：R 簡單連通，C 分段光滑、逆時針（R 在左側），M、N 一階偏導連續。</p>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">線積分求面積 (定理 15.9)</span>
+        <span class="ref-card-name-en">面積公式</span>
+      </div>
+      <div class="ref-card-eq">$\displaystyle\mathrm{Area}(R) = \dfrac{1}{2}\oint_C (x\,dy - y\,dx)$</div>
+      <p class="ref-note">取 M = −y/2、N = x/2，∂N/∂x − ∂M/∂y = 1。橢圓 (a,b)：$\pi ab$。</p>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header">
+        <span class="ref-card-name">向量形式（預告）</span>
+        <span class="ref-card-name-en">向量形式</span>
+      </div>
+      <div class="ref-card-eq">
+        旋度形式：$\displaystyle\oint_C \mathbf{F}\cdot d\mathbf{r} = \iint_R (\mathrm{curl}\,\mathbf{F})\cdot \mathbf{k}\,dA$<br>
+        散度形式：$\displaystyle\oint_C \mathbf{F}\cdot \mathbf{N}\,ds = \iint_R \mathrm{div}\,\mathbf{F}\,dA$
+      </div>
+      <p class="ref-note">旋度形式是 Stokes 定理（§15.8）在平面上的特例；散度形式是散度定理（§15.7）的二維版本。</p>
+    </div>
+  </div>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">CHEAT</span>四節觀念地圖</div>
+    <table class="conv-table" style="font-size:.83rem;">
+      <thead><tr><th>主題</th><th>關鍵物件</th><th>核心關係</th></tr></thead>
+      <tbody>
+        <tr><td>15.1 向量場</td><td>F、∇f、curl F、div F</td><td>F = ∇f ⇔ F 保守</td></tr>
+        <tr><td>15.2 線積分</td><td>∫f ds、∫F·dr</td><td>把曲線參數化轉成 1D 定積分</td></tr>
+        <tr><td>15.3 路徑無關</td><td>位能 f(B) − f(A)</td><td>保守 ⇔ 路徑無關 ⇔ ∮ = 0</td></tr>
+        <tr><td>15.4 Green</td><td>邊界 C、區域 R</td><td>∮_C = ∬_R(N_x − M_y)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  第 15 章向量分析 · 15.1–15.4 互動講義 · 使用 MathJax + Plotly.js
+</footer>
+
+<script>
+/* ============================================================
+   全域工具
+   ============================================================ */
+const PLOT_CONFIG_2D = { displayModeBar:false, responsive:true, staticPlot:false };
+const PLOT_CONFIG_3D = { displayModeBar:false, responsive:true };
+
+function plotLayout2D(opts={}){
+  return Object.assign({
+    paper_bgcolor:'#fbf7ed',
+    plot_bgcolor:'#fbf7ed',
+    margin:{l:42,r:14,t:14,b:38},
+    font:{family:"'JetBrains Mono', monospace", size:11, color:'#1a1a2e'},
+    xaxis:{zerolinecolor:'#bbb', gridcolor:'#e3dccc', linecolor:'#888', mirror:true, title:{text:'x', standoff:6}},
+    yaxis:{zerolinecolor:'#bbb', gridcolor:'#e3dccc', linecolor:'#888', mirror:true, scaleanchor:'x', scaleratio:1, title:{text:'y', standoff:6}},
+    showlegend:false,
+    hovermode:'closest'
+  }, opts);
+}
+function plotLayout3D(opts={}){
+  return Object.assign({
+    paper_bgcolor:'#1a1a2e',
+    plot_bgcolor:'#1a1a2e',
+    margin:{l:0,r:0,t:0,b:0},
+    font:{family:"'JetBrains Mono', monospace", size:11, color:'#e8e6df'},
+    scene:{
+      xaxis:{title:'x', backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#e74c3c'},
+      yaxis:{title:'y', backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#27ae60'},
+      zaxis:{title:'z', backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#2980b9'},
+      camera:{eye:{x:1.7,y:1.7,z:1.4}},
+      aspectmode:'cube'
+    },
+    showlegend:false
+  }, opts);
+}
+
+function setTimeProgress(fillId, pctId, ratio){
+  const clamped = Math.max(0, Math.min(1, ratio));
+  const pctText = (100 * clamped).toFixed(0) + '%';
+  const fill = document.getElementById(fillId);
+  const pct = document.getElementById(pctId);
+  if(fill) fill.style.width = `${100 * clamped}%`;
+  if(pct) pct.textContent = pctText;
+}
+
+function setVerifyBanner(bannerId, kind, icon, text){
+  const banner = document.getElementById(bannerId);
+  if(!banner) return;
+  banner.className = `verify-banner ${kind}`;
+  const iconEl = banner.querySelector('.vb-icon');
+  const textEl = banner.querySelector('[id$="banText"]');
+  if(iconEl) iconEl.textContent = icon;
+  if(textEl) textEl.textContent = text;
+}
+
+// 把 (M(x,y), N(x,y)) 在 grid 上取樣，回傳箭頭 trace（lines + arrowheads）
+function buildArrowTraces(M, N, opts={}){
+  const xmin=opts.xmin??-3, xmax=opts.xmax??3, ymin=opts.ymin??-3, ymax=opts.ymax??3;
+  const nx=opts.nx??11, ny=opts.ny??11;
+  const scale=opts.scale??1.0;
+  const color=opts.color||'#2c3e7a';
+  const lineX=[], lineY=[];
+  const headX=[], headY=[];
+  // 找最大 |F|
+  let maxMag = 0;
+  const samples = [];
+  for(let i=0;i<nx;i++){
+    for(let j=0;j<ny;j++){
+      const x = xmin + (xmax-xmin)*(i/(nx-1));
+      const y = ymin + (ymax-ymin)*(j/(ny-1));
+      const m = M(x,y), n = N(x,y);
+      if(!isFinite(m)||!isFinite(n)) continue;
+      const mag = Math.hypot(m,n);
+      if(mag>maxMag) maxMag = mag;
+      samples.push({x,y,m,n,mag});
+    }
+  }
+  if(maxMag===0) maxMag=1;
+  const cell = Math.min((xmax-xmin)/(nx-1),(ymax-ymin)/(ny-1));
+  const normLen = cell * 0.85 * scale;
+  for(const s of samples){
+    const k = (s.mag/maxMag) * normLen;
+    const dx = (s.m/s.mag) * k;
+    const dy = (s.n/s.mag) * k;
+    const x0 = s.x - dx/2, y0 = s.y - dy/2;
+    const x1 = s.x + dx/2, y1 = s.y + dy/2;
+    lineX.push(x0, x1, null);
+    lineY.push(y0, y1, null);
+    // 箭頭頭兩條短斜線
+    const ang = Math.atan2(dy,dx);
+    const hs = Math.hypot(dx,dy)*0.30;
+    const a1 = ang + Math.PI - 0.45;
+    const a2 = ang + Math.PI + 0.45;
+    headX.push(x1, x1+hs*Math.cos(a1), null, x1, x1+hs*Math.cos(a2), null);
+    headY.push(y1, y1+hs*Math.sin(a1), null, y1, y1+hs*Math.sin(a2), null);
+  }
+  return [{
+    type:'scatter', mode:'lines', x:lineX, y:lineY,
+    line:{color:color, width:1.6}, hoverinfo:'skip', showlegend:false
+  },{
+    type:'scatter', mode:'lines', x:headX, y:headY,
+    line:{color:color, width:1.6}, hoverinfo:'skip', showlegend:false
+  }];
+}
+
+// 在 grid 上產生 |F| heatmap z[][]
+function buildMagHeatmap(M, N, opts={}){
+  const xmin=opts.xmin??-3, xmax=opts.xmax??3, ymin=opts.ymin??-3, ymax=opts.ymax??3;
+  const nx=opts.nx??60, ny=opts.ny??60;
+  const xs=[], ys=[], zs=[];
+  for(let i=0;i<nx;i++) xs.push(xmin + (xmax-xmin)*(i/(nx-1)));
+  for(let j=0;j<ny;j++) ys.push(ymin + (ymax-ymin)*(j/(ny-1)));
+  for(let j=0;j<ny;j++){
+    const row=[];
+    for(let i=0;i<nx;i++){
+      const m = M(xs[i], ys[j]); const n = N(xs[i], ys[j]);
+      row.push(isFinite(m)&&isFinite(n)?Math.hypot(m,n):0);
+    }
+    zs.push(row);
+  }
+  return { x:xs, y:ys, z:zs };
+}
+
+// Quiz 工具
+function makeChoiceQuiz(cardId, correctIndex, hints){
+  const card = document.getElementById(cardId); if(!card) return;
+  const opts = card.querySelectorAll('.quiz-opt');
+  const fb = card.querySelector('.quiz-feedback');
+  opts.forEach((opt,i)=>{
+    opt.addEventListener('click',()=>{
+      opts.forEach(o=>o.classList.remove('correct','wrong'));
+      if(i===correctIndex){
+        opt.classList.add('correct');
+        fb.className='quiz-feedback show ok';
+        fb.innerHTML = hints && hints.ok ? hints.ok : '✓ 正確！';
+      } else {
+        opt.classList.add('wrong');
+        fb.className='quiz-feedback show no';
+        fb.innerHTML = (hints && hints.wrong && hints.wrong[i]) ? hints.wrong[i] : '再想想。';
+      }
+      if(window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([fb]);
+    });
+  });
+}
+
+/* ============================================================
+   SIDE-NAV SCROLLSPY
+   ============================================================ */
+(function(){
+  const items = document.querySelectorAll('.side-nav .sn-item');
+  const sectionIds = Array.from(items).map(a => a.getAttribute('href').slice(1));
+  if (typeof IntersectionObserver === 'undefined') return;
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        const id = en.target.id;
+        items.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-30% 0px -55% 0px', threshold: 0 });
+  sectionIds.forEach(id => { const el = document.getElementById(id); if (el) observer.observe(el); });
+})();
+
+/* ============================================================
+   §15.1 示範 A — 互動向量場箭頭圖
+   ============================================================ */
+(function(){
+  const host = document.getElementById('plot-15-1-a'); if(!host) return;
+  const FIELDS = {
+    ex2:    {label:'F = 2x i + y j',          M:(x,y)=>2*x,    N:(x,y)=>y,        Nx:'0',    My:'0',    div:'3',         curl:'0',         cons:true,  range:3},
+    rot:    {label:'F = −y i + x j',           M:(x,y)=>-y,     N:(x,y)=>x,        Nx:'1',    My:'-1',   div:'0',         curl:'2',         cons:false, range:3},
+    grad:   {label:'F = 2x i + 2y j',          M:(x,y)=>2*x,    N:(x,y)=>2*y,      Nx:'0',    My:'0',    div:'4',         curl:'0',         cons:true,  range:3},
+    radial: {label:'F = x i + y j',            M:(x,y)=>x,      N:(x,y)=>y,        Nx:'0',    My:'0',    div:'2',         curl:'0',         cons:true,  range:3},
+    cw:     {label:'F = y i − x j',            M:(x,y)=>y,      N:(x,y)=>-x,       Nx:'-1',   My:'1',    div:'0',         curl:'-2',        cons:false, range:3},
+    non:    {label:'F = x²y i + xy j',         M:(x,y)=>x*x*y,  N:(x,y)=>x*y,      Nx:'y',    My:'x²',   div:'2xy + x',   curl:'y − x²',    cons:false, range:3}
+  };
+  const formForms = {
+    ex2:    {M:'2x', N:'y'},
+    rot:    {M:'−y', N:'x'},
+    grad:   {M:'2x', N:'2y'},
+    radial: {M:'x',  N:'y'},
+    cw:     {M:'y',  N:'−x'},
+    non:    {M:'x²y',N:'xy'}
+  };
+  const DEFAULT_STATE = {field:'ex2', density:11, scale:1.0, heat:false};
+  let state = {...DEFAULT_STATE};
+
+  function render(){
+    const f = FIELDS[state.field];
+    const traces = [];
+    if(state.heat){
+      const heat = buildMagHeatmap(f.M, f.N, {xmin:-f.range,xmax:f.range,ymin:-f.range,ymax:f.range,nx:60,ny:60});
+      traces.push({type:'heatmap', x:heat.x, y:heat.y, z:heat.z,
+        colorscale:[[0,'#fbf7ed'],[0.3,'#ffe0b3'],[0.7,'#f1948a'],[1,'#c0392b']],
+        showscale:false, hoverinfo:'skip', zsmooth:'best'});
+    }
+    const arrows = buildArrowTraces(f.M, f.N, {
+      xmin:-f.range, xmax:f.range, ymin:-f.range, ymax:f.range,
+      nx:state.density, ny:state.density, scale:state.scale,
+      color: f.cons ? '#1a6b4a' : '#c0392b'
+    });
+    traces.push(...arrows);
+    // hover sample layer (透明圓點，提供 hover 顯示分量)
+    const hx=[], hy=[], ht=[];
+    for(let i=0;i<21;i++) for(let j=0;j<21;j++){
+      const x = -f.range + 2*f.range*(i/20);
+      const y = -f.range + 2*f.range*(j/20);
+      hx.push(x); hy.push(y);
+      const m = f.M(x,y), n = f.N(x,y);
+      ht.push(`(x,y)=(${x.toFixed(2)}, ${y.toFixed(2)})<br>M=${m.toFixed(2)}, N=${n.toFixed(2)}<br>|F|=${Math.hypot(m,n).toFixed(2)}`);
+    }
+    traces.push({type:'scatter', mode:'markers', x:hx, y:hy,
+      marker:{size:14, color:'rgba(0,0,0,0)'}, text:ht, hovertemplate:'%{text}<extra></extra>'});
+
+    Plotly.react(host, traces, plotLayout2D({
+      xaxis:{range:[-f.range,f.range], zerolinecolor:'#bbb', gridcolor:'#e3dccc', linecolor:'#888', mirror:true, title:{text:'x'}},
+      yaxis:{range:[-f.range,f.range], zerolinecolor:'#bbb', gridcolor:'#e3dccc', linecolor:'#888', mirror:true, scaleanchor:'x', scaleratio:1, title:{text:'y'}}
+    }), PLOT_CONFIG_2D);
+
+    // 更新側欄資訊
+    document.getElementById('dA-mForm').textContent = formForms[state.field].M;
+    document.getElementById('dA-nForm').textContent = formForms[state.field].N;
+    document.getElementById('dA-Nx').textContent = f.Nx;
+    document.getElementById('dA-My').textContent = f.My;
+    const consEl = document.getElementById('dA-cons');
+    consEl.textContent = f.cons ? '是 (∂N/∂x = ∂M/∂y)' : '否 (∂N/∂x ≠ ∂M/∂y)';
+    consEl.className = 'ic-value ' + (f.cons?'ok':'bad');
+    document.getElementById('dA-div').textContent = f.div;
+    document.getElementById('dA-curl').textContent = f.curl;
+  }
+
+  document.getElementById('dA-field').addEventListener('change', e=>{state.field=e.target.value; render();});
+  const dens = document.getElementById('dA-dens');
+  dens.addEventListener('input', e=>{state.density=parseInt(e.target.value); document.getElementById('dA-densVal').textContent=`${state.density} × ${state.density}`; render();});
+  const sc = document.getElementById('dA-scale');
+  sc.addEventListener('input', e=>{state.scale=parseFloat(e.target.value); document.getElementById('dA-scaleVal').textContent=`${state.scale.toFixed(1)}×`; render();});
+  const heatBtn = document.getElementById('dA-heat');
+  heatBtn.classList.add('off');
+  heatBtn.addEventListener('click', ()=>{state.heat=!state.heat; heatBtn.classList.toggle('off', !state.heat); render();});
+  function reset(){
+    state = {...DEFAULT_STATE};
+    document.getElementById('dA-field').value = state.field;
+    dens.value = String(state.density);
+    document.getElementById('dA-densVal').textContent = `${state.density} × ${state.density}`;
+    sc.value = String(state.scale);
+    document.getElementById('dA-scaleVal').textContent = `${state.scale.toFixed(1)}×`;
+    heatBtn.classList.toggle('off', !state.heat);
+    render();
+  }
+  document.getElementById('dA-reset').addEventListener('click', reset);
+
+  render();
+})();
+/* ============================================================
+   §15.2 示範 B — 純量線積分累積動畫
+   ============================================================ */
+(function(){
+  const host = document.getElementById('plot-15-2-b'); if(!host) return;
+  // 場景：定義曲線、f、積分target
+  const SCENES = {
+    ex2: {
+      label:'例題 2 (3D 投影到 xy)',
+      r:(t)=>({x:t, y:2*t}), z:(t)=>t, deriv:[1,2,1],
+      f:(x,y,z)=>x*x - y + 3*z,
+      tmin:0, tmax:1, target: 5*Math.sqrt(6)/6, targetLabel:'5√6/6 ≈ 2.041',
+      view2d:[-0.1, 1.3, -0.2, 2.3]
+    },
+    ex4: {
+      label:'例題 4 (3D 投影到 xy)',
+      r:(t)=>({x:t, y:(4/3)*Math.pow(t,1.5)}), z:(t)=>0.5*t*t, deriv:null /*動態*/,
+      derivFn:(t)=>[1, 2*Math.sqrt(t), t],
+      f:(x,y,z)=>x+2,
+      tmin:0, tmax:2, target:(13*Math.sqrt(13)-1)/3, targetLabel:'(13√13 − 1)/3 ≈ 15.291',
+      view2d:[-0.1, 2.3, -0.1, 4.0]
+    },
+    quarter: {
+      label:'四分之一圓 (純 2D)',
+      r:(t)=>({x:Math.cos(t), y:Math.sin(t)}), z:(t)=>0, deriv:null,
+      derivFn:(t)=>[-Math.sin(t), Math.cos(t), 0],
+      f:(x,y,z)=>x*y,
+      tmin:0, tmax:Math.PI/2, target:0.5, targetLabel:'1/2 = 0.500',
+      view2d:[-0.1, 1.2, -0.1, 1.2]
+    },
+    parab: {
+      label:'拋物線 y = x² (純 2D)',
+      r:(t)=>({x:t, y:t*t}), z:(t)=>0, deriv:null,
+      derivFn:(t)=>[1, 2*t, 0],
+      f:(x,y,z)=>x+y,
+      tmin:0, tmax:1, target:null /* 數值積分 */,
+      view2d:[-0.1, 1.1, -0.1, 1.1]
+    }
+  };
+  // 對 parab 的target：∫₀¹ (t+t²)√(1+4t²) dt，數值積分
+  (function(){
+    const sc = SCENES.parab;
+    const N = 4000;
+    let acc=0;
+    for(let i=0;i<N;i++){
+      const t = sc.tmin + (sc.tmax-sc.tmin)*((i+0.5)/N);
+      const d = sc.derivFn(t);
+      const speed = Math.hypot(d[0], d[1], d[2]);
+      const r = sc.r(t);
+      acc += sc.f(r.x, r.y, sc.z(t)) * speed * (sc.tmax-sc.tmin)/N;
+    }
+    sc.target = acc;
+    sc.targetLabel = `≈ ${acc.toFixed(4)}`;
+  })();
+
+  let state = {scene:'ex2', t:0, playing:false, speed:1.0};
+  let animId = null, lastTime = 0;
+  function sceneObj(){ return SCENES[state.scene]; }
+  function r(t){ return sceneObj().r(t); }
+  function deriv(t){
+    const s = sceneObj();
+    return s.derivFn ? s.derivFn(t) : s.deriv;
+  }
+
+  function initPlot(){
+    const sc = sceneObj();
+    const ts = [];
+    const xs = [], ys = [];
+    const N = 200;
+    for(let i=0;i<=N;i++){
+      const t = sc.tmin + (sc.tmax - sc.tmin) * (i/N);
+      ts.push(t); const p = sc.r(t); xs.push(p.x); ys.push(p.y);
+    }
+    const curve = {type:'scatter', mode:'lines', x:xs, y:ys, line:{color:'#1a6b4a', width:3}, hoverinfo:'skip'};
+    const marker = {type:'scatter', mode:'markers', x:[xs[0]], y:[ys[0]],
+                    marker:{size:14, color:'#c0392b', line:{color:'#fff', width:2}}, hoverinfo:'skip'};
+    const traveled = {type:'scatter', mode:'lines', x:[xs[0]], y:[ys[0]],
+                      line:{color:'#c0392b', width:4}, hoverinfo:'skip'};
+    Plotly.react(host, [curve, traveled, marker], plotLayout2D({
+      xaxis:{range:[sc.view2d[0], sc.view2d[1]], title:{text:'x'}, gridcolor:'#e3dccc'},
+      yaxis:{range:[sc.view2d[2], sc.view2d[3]], title:{text:'y'}, gridcolor:'#e3dccc', scaleanchor:undefined}
+    }), PLOT_CONFIG_2D);
+    document.getElementById('dB-tgt').textContent = sc.targetLabel;
+  }
+
+  function update(t){
+    const sc = sceneObj();
+    state.t = Math.max(sc.tmin, Math.min(sc.tmax, t));
+    const p = sc.r(state.t);
+    const N = 200;
+    // re-draw traveled portion
+    const xs=[], ys=[];
+    const steps = Math.max(2, Math.round(N * (state.t - sc.tmin) / (sc.tmax - sc.tmin)));
+    for(let i=0;i<=steps;i++){
+      const tt = sc.tmin + (state.t - sc.tmin)*(i/steps);
+      const pp = sc.r(tt); xs.push(pp.x); ys.push(pp.y);
+    }
+    // numerically integrate ∫_{tmin}^{t} f(r(s)) ||r'(s)|| ds (Simpson-ish midpoint)
+    let acc=0;
+    const M = 200;
+    for(let i=0;i<M;i++){
+      const tt = sc.tmin + (state.t - sc.tmin) * ((i+0.5)/M);
+      const d = sc.derivFn ? sc.derivFn(tt) : sc.deriv;
+      const speed = Math.hypot(d[0], d[1], d[2]);
+      const pp = sc.r(tt);
+      acc += sc.f(pp.x, pp.y, sc.z(tt)) * speed * (state.t - sc.tmin)/M;
+    }
+    Plotly.restyle(host, {x:[xs], y:[ys]}, [1]);
+    Plotly.restyle(host, {x:[[p.x]], y:[[p.y]]}, [2]);
+    // info
+    document.getElementById('dB-t').textContent = `t = ${state.t.toFixed(3)}`;
+    document.getElementById('dB-tv').textContent = state.t.toFixed(3);
+    document.getElementById('dB-rv').textContent = `(${p.x.toFixed(2)}, ${p.y.toFixed(2)})`;
+    const d = sc.derivFn ? sc.derivFn(state.t) : sc.deriv;
+    const speed = Math.hypot(d[0], d[1], d[2]);
+    document.getElementById('dB-norm').textContent = speed.toFixed(3);
+    document.getElementById('dB-f').textContent = sc.f(p.x, p.y, sc.z(state.t)).toFixed(3);
+    document.getElementById('dB-acc').textContent = acc.toFixed(4);
+    setTimeProgress('dB-fill', 'dB-pct', (state.t - sc.tmin) / (sc.tmax - sc.tmin));
+  }
+
+  function animate(ts){
+    if(!lastTime) lastTime = ts;
+    const dt = (ts - lastTime)/1000;
+    lastTime = ts;
+    const sc = sceneObj();
+    const newT = state.t + state.speed * (sc.tmax - sc.tmin) * 0.35 * dt;
+    if(newT >= sc.tmax){ update(sc.tmax); stop(); return; }
+    update(newT);
+    animId = requestAnimationFrame(animate);
+  }
+  function play(){ if(state.playing) return; state.playing=true; lastTime=0; document.getElementById('dB-play').textContent='⏸ 暫停'; document.getElementById('dB-play').classList.add('active'); animId=requestAnimationFrame(animate); }
+  function stop(){ state.playing=false; cancelAnimationFrame(animId); document.getElementById('dB-play').textContent='▶ 播放'; document.getElementById('dB-play').classList.remove('active'); }
+  function reset(){ stop(); const sc=sceneObj(); update(sc.tmin); }
+
+  document.getElementById('dB-play').addEventListener('click', ()=>{ state.playing ? stop() : play(); });
+  document.getElementById('dB-reset').addEventListener('click', reset);
+  document.getElementById('dB-scene').addEventListener('change', e=>{ stop(); state.scene = e.target.value; initPlot(); update(sceneObj().tmin); });
+  document.getElementById('dB-speed').addEventListener('input', e=>{ state.speed = parseFloat(e.target.value); document.getElementById('dB-speedV').textContent = state.speed.toFixed(1)+'×'; });
+
+  initPlot();
+  update(0);
+})();
+
+/* ============================================================
+   §15.2 示範 C — 螺旋功累積動畫
+   ============================================================ */
+(function(){
+  const host = document.getElementById('plot-15-2-c'); if(!host) return;
+  const tmin=0, tmax=3*Math.PI;
+  // helix r(t) = (cos t, sin t, t); F = (-x/2, -y/2, 1/4)
+  function r(t){ return {x:Math.cos(t), y:Math.sin(t), z:t}; }
+  function rp(t){ return {x:-Math.sin(t), y:Math.cos(t), z:1}; }
+  function F(p){ return {x:-0.5*p.x, y:-0.5*p.y, z:0.25}; }
+  let state = {t:0, playing:false, speed:1.0};
+  let animId=null, lastTime=0;
+  const target = 3*Math.PI/4;
+
+  function initPlot(){
+    const N=320;
+    const xs=[], ys=[], zs=[];
+    for(let i=0;i<=N;i++){
+      const t = tmin + (tmax-tmin)*(i/N);
+      const p = r(t); xs.push(p.x); ys.push(p.y); zs.push(p.z);
+    }
+    const curve = {type:'scatter3d', mode:'lines', x:xs, y:ys, z:zs, line:{color:'#5dade2', width:5}, hoverinfo:'skip'};
+    const traveled = {type:'scatter3d', mode:'lines', x:[xs[0]], y:[ys[0]], z:[zs[0]], line:{color:'#f1c40f', width:7}, hoverinfo:'skip'};
+    const marker = {type:'scatter3d', mode:'markers', x:[xs[0]], y:[ys[0]], z:[zs[0]],
+                    marker:{size:6, color:'#e74c3c'}, hoverinfo:'skip'};
+    // 沿 helix 取一些力場箭頭（用 cone）
+    const ax=[], ay=[], az=[], ux=[], uy=[], uz=[];
+    const Ncone=20;
+    for(let i=0;i<Ncone;i++){
+      const t = tmin + (tmax-tmin)*((i+0.5)/Ncone);
+      const p = r(t); const f = F(p);
+      ax.push(p.x); ay.push(p.y); az.push(p.z);
+      ux.push(f.x); uy.push(f.y); uz.push(f.z);
+    }
+    const cones = {type:'cone', x:ax, y:ay, z:az, u:ux, v:uy, w:uz,
+      colorscale:[[0,'#f39c12'],[1,'#f39c12']], showscale:false, sizemode:'absolute', sizeref:0.45, anchor:'tail', hoverinfo:'skip'};
+    Plotly.react(host, [curve, traveled, marker, cones], plotLayout3D({
+      scene:{
+        xaxis:{title:'x', range:[-1.5,1.5], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#e74c3c'},
+        yaxis:{title:'y', range:[-1.5,1.5], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#27ae60'},
+        zaxis:{title:'z', range:[0, 3*Math.PI], backgroundcolor:'#1a1a2e', gridcolor:'#3b3b50', zerolinecolor:'#666', color:'#2980b9'},
+        camera:{eye:{x:1.7, y:1.6, z:0.6}},
+        aspectmode:'manual', aspectratio:{x:1,y:1,z:2}
+      }
+    }), PLOT_CONFIG_3D);
+  }
+
+  function update(t){
+    state.t = Math.max(tmin, Math.min(tmax, t));
+    const p = r(state.t), f = F(p), v = rp(state.t);
+    const dot = f.x*v.x + f.y*v.y + f.z*v.z; // ≡ 0.25
+    // traveled portion
+    const N = Math.max(2, Math.round(320 * (state.t - tmin)/(tmax - tmin)));
+    const xs=[], ys=[], zs=[];
+    for(let i=0;i<=N;i++){
+      const tt = tmin + (state.t - tmin)*(i/N);
+      const pp = r(tt); xs.push(pp.x); ys.push(pp.y); zs.push(pp.z);
+    }
+    Plotly.restyle(host, {x:[xs], y:[ys], z:[zs]}, [1]);
+    Plotly.restyle(host, {x:[[p.x]], y:[[p.y]], z:[[p.z]]}, [2]);
+    const acc = state.t * 0.25; // ∫₀^t 0.25 dt
+    document.getElementById('dC-t').textContent = `t = ${state.t.toFixed(2)}`;
+    document.getElementById('dC-tv').textContent = state.t.toFixed(3);
+    document.getElementById('dC-rv').textContent = `(${p.x.toFixed(2)}, ${p.y.toFixed(2)}, ${p.z.toFixed(2)})`;
+    document.getElementById('dC-fv').textContent = `(${f.x.toFixed(2)}, ${f.y.toFixed(2)}, ${f.z.toFixed(2)})`;
+    document.getElementById('dC-fr').textContent = dot.toFixed(3);
+    document.getElementById('dC-acc').textContent = acc.toFixed(4);
+    setTimeProgress('dC-fill', 'dC-pct', (state.t - tmin) / (tmax - tmin));
+  }
+
+  function animate(ts){
+    if(!lastTime) lastTime = ts;
+    const dt = (ts - lastTime)/1000; lastTime = ts;
+    const newT = state.t + state.speed * (tmax - tmin) * 0.18 * dt;
+    if(newT >= tmax){ update(tmax); stop(); return; }
+    update(newT);
+    animId = requestAnimationFrame(animate);
+  }
+  function play(){ if(state.playing) return; state.playing=true; lastTime=0; document.getElementById('dC-play').textContent='⏸ 暫停'; document.getElementById('dC-play').classList.add('active'); animId=requestAnimationFrame(animate); }
+  function stop(){ state.playing=false; cancelAnimationFrame(animId); document.getElementById('dC-play').textContent='▶ 播放'; document.getElementById('dC-play').classList.remove('active'); }
+  function reset(){ stop(); update(tmin); }
+  document.getElementById('dC-play').addEventListener('click', ()=>{ state.playing ? stop() : play(); });
+  document.getElementById('dC-reset').addEventListener('click', reset);
+  document.getElementById('dC-speed').addEventListener('input', e=>{ state.speed = parseFloat(e.target.value); document.getElementById('dC-speedV').textContent = state.speed.toFixed(1)+'×'; });
+
+  initPlot();
+  update(0);
+})();
+/* ============================================================
+   §15.3 示範 D — 三條路徑、兩種場 (路徑無關互動)
+   ============================================================ */
+(function(){
+  const host = document.getElementById('plot-15-3-d'); if(!host) return;
+  // 起點 A=(-1, 4)、終點 B=(1, 2)
+  const A={x:-1, y:4}, B={x:1, y:2};
+  // 兩種場
+  const FIELDS = {
+    cons: {
+      label:'F = 2xy i + (x² − y) j',
+      M:(x,y)=>2*x*y, N:(x,y)=>x*x - y,
+      potF:(x,y)=>x*x*y - 0.5*y*y,
+      cons:true,
+      expected: null /* 4 */
+    },
+    noncons: {
+      label:'F = −y i + x j',
+      M:(x,y)=>-y, N:(x,y)=>x,
+      potF:null,
+      cons:false,
+      expected:null
+    }
+  };
+  FIELDS.cons.expected = FIELDS.cons.potF(B.x,B.y) - FIELDS.cons.potF(A.x,A.y); // 0 - (-4) = 4
+
+  // 三條路徑 r_i(t), t∈[0,1]
+  const PATHS = [
+    { // 直線 A→B
+      name:'直線', color:'#2c3e7a',
+      r:(t)=>({x:A.x+(B.x-A.x)*t, y:A.y+(B.y-A.y)*t}),
+      rp:(t)=>({x:B.x-A.x, y:B.y-A.y})
+    },
+    { // 上凸弧 (bezier 經 (0, 5.5))
+      name:'上凸弧', color:'#27ae60',
+      r:(t)=>{
+        const mt=1-t;
+        return {x: mt*mt*A.x + 2*mt*t*0 + t*t*B.x,
+                y: mt*mt*A.y + 2*mt*t*5.5 + t*t*B.y};
+      },
+      rp:(t)=>{
+        return {x: 2*(1-t)*(0-A.x) + 2*t*(B.x-0),
+                y: 2*(1-t)*(5.5-A.y) + 2*t*(B.y-5.5)};
+      }
+    },
+    { // 下凸弧 (bezier 經 (0, 1))
+      name:'下凸弧', color:'#c0392b',
+      r:(t)=>{
+        const mt=1-t;
+        return {x: mt*mt*A.x + 2*mt*t*0 + t*t*B.x,
+                y: mt*mt*A.y + 2*mt*t*1 + t*t*B.y};
+      },
+      rp:(t)=>({x: 2*(1-t)*(0-A.x) + 2*t*(B.x-0),
+                y: 2*(1-t)*(1-A.y) + 2*t*(B.y-1)})
+    }
+  ];
+
+  let state = {field:'cons', t:0, playing:false, iso:false};
+  let animId=null, lastTime=0;
+  function field(){ return FIELDS[state.field]; }
+
+  // 數值積分 ∫_{0}^{tend} F(r(s))·r'(s) ds for path i
+  function lineInt(i, tend){
+    const f = field();
+    const N=200;
+    let acc=0;
+    for(let k=0;k<N;k++){
+      const s = tend*((k+0.5)/N);
+      const p = PATHS[i].r(s);
+      const v = PATHS[i].rp(s);
+      acc += (f.M(p.x,p.y)*v.x + f.N(p.x,p.y)*v.y) * tend/N;
+    }
+    return acc;
+  }
+
+  function buildBgTraces(){
+    const f = field();
+    const traces = [];
+    if(state.iso && f.potF){
+      // 等高線：位能 f
+      const xs=[], ys=[];
+      const Nx=80, Ny=80;
+      const xmin=-3, xmax=3, ymin=-1, ymax=6;
+      for(let i=0;i<Nx;i++) xs.push(xmin + (xmax-xmin)*(i/(Nx-1)));
+      for(let j=0;j<Ny;j++) ys.push(ymin + (ymax-ymin)*(j/(Ny-1)));
+      const z=[];
+      for(let j=0;j<Ny;j++){
+        const row=[];
+        for(let i=0;i<Nx;i++) row.push(f.potF(xs[i],ys[j]));
+        z.push(row);
+      }
+      traces.push({type:'contour', x:xs, y:ys, z:z,
+        contours:{coloring:'lines', showlabels:true, labelfont:{size:10, color:'#888'}},
+        colorscale:[[0,'#2c3e7a'],[1,'#1a6b4a']], showscale:false, hoverinfo:'skip',
+        line:{width:1.2}, opacity:0.55});
+    }
+    // 場的箭頭（稀疏）
+    const arrows = buildArrowTraces(f.M, f.N,
+      {xmin:-2.6, xmax:2.6, ymin:-0.6, ymax:5.4, nx:11, ny:11, scale:0.7,
+       color: f.cons ? '#1a6b4a' : '#c0392b'});
+    traces.push(...arrows);
+    return traces;
+  }
+
+  function initPlot(){
+    const traces = buildBgTraces();
+    // 三條完整路徑（背景）
+    PATHS.forEach((p, i)=>{
+      const xs=[], ys=[];
+      for(let k=0;k<=100;k++){ const t=k/100; const pt=p.r(t); xs.push(pt.x); ys.push(pt.y); }
+      traces.push({type:'scatter', mode:'lines', x:xs, y:ys, line:{color:p.color, width:2, dash:'dot'}, hoverinfo:'skip'});
+    });
+    // 已走過的部分（粗線，會在 update 時改長度）
+    PATHS.forEach((p, i)=>{
+      const pt=p.r(0);
+      traces.push({type:'scatter', mode:'lines', x:[pt.x], y:[pt.y], line:{color:p.color, width:5}, hoverinfo:'skip'});
+    });
+    // 三個 marker
+    PATHS.forEach((p, i)=>{
+      const pt=p.r(0);
+      traces.push({type:'scatter', mode:'markers', x:[pt.x], y:[pt.y],
+        marker:{size:12, color:p.color, line:{color:'#fff', width:2}}, hoverinfo:'skip'});
+    });
+    // 起點與終點
+    traces.push({type:'scatter', mode:'markers+text', x:[A.x,B.x], y:[A.y,B.y],
+      marker:{size:14, color:'#1a1a2e', symbol:'star'},
+      text:['A','B'], textposition:'top center', textfont:{size:14, color:'#1a1a2e'}, hoverinfo:'skip'});
+
+    Plotly.react(host, traces, plotLayout2D({
+      xaxis:{range:[-2.8, 2.8], title:{text:'x'}},
+      yaxis:{range:[-0.8, 5.5], title:{text:'y'}, scaleanchor:undefined}
+    }), PLOT_CONFIG_2D);
+  }
+
+  // 取得不同 trace 索引（path 線/markers 在最後幾個）
+  function indices(){
+    const bg = (state.iso && field().potF ? 1 : 0) + 2; // contour(可選) + arrow lines + arrow heads
+    return {
+      fullStart: bg,                 // 完整路徑（共 3）
+      traveledStart: bg+3,           // 走過路徑（共 3）
+      markersStart: bg+6,            // marker（共 3）
+      endpoints: bg+9                // 起終點 star
+    };
+  }
+
+  function update(t){
+    state.t = Math.max(0, Math.min(1, t));
+    const idx = indices();
+    PATHS.forEach((p, i)=>{
+      const xs=[], ys=[];
+      const steps = Math.max(2, Math.round(120*state.t));
+      for(let k=0;k<=steps;k++){ const tt = state.t*(k/steps); const pt=p.r(tt); xs.push(pt.x); ys.push(pt.y); }
+      Plotly.restyle(host, {x:[xs], y:[ys]}, [idx.traveledStart + i]);
+      const pt = p.r(state.t);
+      Plotly.restyle(host, {x:[[pt.x]], y:[[pt.y]]}, [idx.markersStart + i]);
+    });
+    // 即時積分
+    const vals = [0,1,2].map(i=>lineInt(i, state.t));
+    document.getElementById('dD-i1').textContent = vals[0].toFixed(4);
+    document.getElementById('dD-i2').textContent = vals[1].toFixed(4);
+    document.getElementById('dD-i3').textContent = vals[2].toFixed(4);
+    const f = field();
+    if(f.cons){
+      document.getElementById('dD-fdiff').textContent = `f(B) − f(A) = ${f.expected.toFixed(4)}`;
+    } else {
+      document.getElementById('dD-fdiff').textContent = '不存在位能（非保守）';
+    }
+    const max=Math.max(...vals), min=Math.min(...vals);
+    const spread = max - min;
+    document.getElementById('dD-err').textContent = spread.toFixed(4);
+    document.getElementById('dD-err').className = 'ic-value ' + (spread<1e-3?'ok':'bad');
+    const banner = document.getElementById('dD-banner');
+    const banText = document.getElementById('dD-banText');
+    if(state.t === 0){
+      setVerifyBanner('dD-banner', 'pending', '⏳', '尚未播放');
+    } else if(state.t < 0.99){
+      setVerifyBanner('dD-banner', 'pending', '⏳', '動畫進行中…');
+    } else if(f.cons){
+      if(spread < 1e-2){
+        setVerifyBanner('dD-banner', 'ok', '✓', '保守場：三條路徑全部 ≈ f(B) − f(A)');
+      } else {
+        setVerifyBanner('dD-banner', 'no', '⚠', '保守場應該一致，但數值偏離（請檢查）');
+      }
+    } else {
+      setVerifyBanner('dD-banner', 'no', '✗', '非保守場：三條路徑數值不一致！');
+    }
+  }
+
+  function animate(ts){
+    if(!lastTime) lastTime = ts;
+    const dt = (ts - lastTime)/1000; lastTime = ts;
+    const newT = state.t + 0.45 * dt;
+    if(newT >= 1){ update(1); stop(); return; }
+    update(newT);
+    animId = requestAnimationFrame(animate);
+  }
+  function play(){ if(state.playing) return; state.playing=true; lastTime=0; document.getElementById('dD-play').textContent='⏸ 暫停'; document.getElementById('dD-play').classList.add('active'); animId=requestAnimationFrame(animate); }
+  function stop(){ state.playing=false; cancelAnimationFrame(animId); document.getElementById('dD-play').textContent='▶ 播放'; document.getElementById('dD-play').classList.remove('active'); }
+  function reset(){ stop(); initPlot(); update(0); }
+  document.getElementById('dD-play').addEventListener('click', ()=>{ state.playing? stop() : play(); });
+  document.getElementById('dD-reset').addEventListener('click', reset);
+  document.getElementById('dD-field').addEventListener('change', e=>{
+    stop(); state.field = e.target.value; initPlot(); update(0);
+  });
+  const isoBtn = document.getElementById('dD-iso');
+  isoBtn.classList.add('off');
+  isoBtn.addEventListener('click', ()=>{
+    state.iso = !state.iso; isoBtn.classList.toggle('off', !state.iso); initPlot(); update(state.t);
+  });
+
+  initPlot();
+  update(0);
+})();
+/* ============================================================
+   §15.4 示範 E — Green 定理 邊界 vs 區域 同步動畫
+   ============================================================ */
+(function(){
+  const hL = document.getElementById('plot-15-4-eL');
+  const hR = document.getElementById('plot-15-4-eR');
+  if(!hL || !hR) return;
+
+  // 三個情境
+  const SCENES = {
+    ex1: {
+      label:'例題 1',
+      M:(x,y)=>y*y*y, N:(x,y)=>x*x*x + 3*x*y*y,
+      diffStr:'3x²', diff:(x,y)=>3*x*x,
+      mStr:'y³', nStr:'x³ + 3xy²',
+      // 邊界：先沿 y=x³ 從 (0,0)→(1,1)，再沿 y=x 從 (1,1)→(0,0) (逆時針)
+      boundary:(s)=>{
+        // s in [0,1]：兩段，s∈[0,0.5] 為 y=x³，s∈[0.5,1] 為 y=x（往回）
+        if(s<0.5){ const u=2*s; return {x:u, y:u*u*u}; }
+        else { const u=2*(s-0.5); return {x:1-u, y:1-u}; }
+      },
+      // 邊界一週的微分（用於計算 ∮）
+      bdDeriv:(s)=>{
+        if(s<0.5){ const u=2*s; return {dx:2, dy:2*3*u*u}; } // d/ds (u, u³) where u=2s → (2, 6u²)
+        else { const u=2*(s-0.5); return {dx:-2, dy:-2}; }
+      },
+      // R 區域：點是否在內
+      inR:(x,y)=>x>=0 && x<=1 && y>=x*x*x && y<=x,
+      view:[-0.15, 1.15, -0.15, 1.15],
+      target: 1/4,
+      targetLabel:'1/4 = 0.250'
+    },
+    ex2: {
+      label:'例題 2',
+      M:(x,y)=>y*y*y, N:(x,y)=>x*x*x + 3*x*y*y,
+      diffStr:'3x²', diff:(x,y)=>3*x*x,
+      mStr:'y³', nStr:'x³ + 3xy²',
+      boundary:(s)=>({x:3*Math.cos(2*Math.PI*s), y:3*Math.sin(2*Math.PI*s)}),
+      bdDeriv:(s)=>({dx:-3*2*Math.PI*Math.sin(2*Math.PI*s), dy:3*2*Math.PI*Math.cos(2*Math.PI*s)}),
+      inR:(x,y)=>x*x+y*y<=9,
+      view:[-3.6, 3.6, -3.6, 3.6],
+      target: 243*Math.PI/4,
+      targetLabel:'243π/4 ≈ 190.85'
+    },
+    area: {
+      label:'定理 15.9（橢圓 a=2,b=1）',
+      M:(x,y)=>-y/2, N:(x,y)=>x/2,
+      diffStr:'1', diff:(x,y)=>1,
+      mStr:'−y/2', nStr:'x/2',
+      boundary:(s)=>({x:2*Math.cos(2*Math.PI*s), y:1*Math.sin(2*Math.PI*s)}),
+      bdDeriv:(s)=>({dx:-2*2*Math.PI*Math.sin(2*Math.PI*s), dy:1*2*Math.PI*Math.cos(2*Math.PI*s)}),
+      inR:(x,y)=>(x*x/4 + y*y) <= 1,
+      view:[-2.5, 2.5, -1.5, 1.5],
+      target: 2*Math.PI,
+      targetLabel:'πab = 2π ≈ 6.283'
+    }
+  };
+
+  let state = {scene:'ex1', t:0, playing:false, speed:1.0};
+  let animId=null, lastTime=0;
+  function sc(){ return SCENES[state.scene]; }
+
+  function buildLeft(){
+    const s = sc();
+    // 邊界完整路徑
+    const N=400;
+    const xs=[], ys=[];
+    for(let i=0;i<=N;i++){ const p=s.boundary(i/N); xs.push(p.x); ys.push(p.y); }
+    // 邊界上的場箭頭 (沿邊界稀疏取)
+    const ax=[], ay=[], adx=[], ady=[];
+    const Na=30;
+    for(let i=0;i<Na;i++){
+      const u=(i+0.5)/Na;
+      const p=s.boundary(u);
+      ax.push(p.x); ay.push(p.y);
+      const mag = Math.hypot(s.M(p.x,p.y), s.N(p.x,p.y));
+      const scl = mag>0 ? Math.min(0.45, mag/40) : 0;
+      adx.push(p.x + s.M(p.x,p.y)*scl);
+      ady.push(p.y + s.N(p.x,p.y)*scl);
+    }
+    // 線段（場箭頭）
+    const arrowX=[], arrowY=[];
+    for(let i=0;i<ax.length;i++){
+      arrowX.push(ax[i], adx[i], null);
+      arrowY.push(ay[i], ady[i], null);
+    }
+    const traces = [
+      {type:'scatter', mode:'lines', x:xs, y:ys, line:{color:'#1a6b4a', width:3}, hoverinfo:'skip'},
+      {type:'scatter', mode:'lines', x:arrowX, y:arrowY, line:{color:'#2c3e7a', width:1.2}, hoverinfo:'skip'},
+      {type:'scatter', mode:'lines', x:[xs[0]], y:[ys[0]], line:{color:'#c0392b', width:5}, hoverinfo:'skip'}, // traveled
+      {type:'scatter', mode:'markers', x:[xs[0]], y:[ys[0]], marker:{size:14, color:'#c0392b', line:{color:'#fff', width:2}}, hoverinfo:'skip'}
+    ];
+    Plotly.react(hL, traces, plotLayout2D({
+      xaxis:{range:[s.view[0],s.view[1]], title:{text:'x'}},
+      yaxis:{range:[s.view[2],s.view[3]], title:{text:'y'}, scaleanchor:undefined}
+    }), PLOT_CONFIG_2D);
+  }
+
+  function buildRight(){
+    const s = sc();
+    // 用 heatmap 顯示 N_x - M_y 在 R 內的值（外面塗灰）
+    const Nh=80;
+    const xs=[], ys=[];
+    for(let i=0;i<Nh;i++) xs.push(s.view[0] + (s.view[1]-s.view[0])*(i/(Nh-1)));
+    for(let j=0;j<Nh;j++) ys.push(s.view[2] + (s.view[3]-s.view[2])*(j/(Nh-1)));
+    const z=[];
+    for(let j=0;j<Nh;j++){
+      const row=[];
+      for(let i=0;i<Nh;i++){
+        const x=xs[i], y=ys[j];
+        row.push(s.inR(x,y) ? s.diff(x,y) : null);
+      }
+      z.push(row);
+    }
+    // 邊界輪廓
+    const bN=200, bx=[], by=[];
+    for(let i=0;i<=bN;i++){ const p=s.boundary(i/bN); bx.push(p.x); by.push(p.y); }
+    // 「掃過區域」標記（會在 update 中改 markers）
+    const traces=[
+      {type:'heatmap', x:xs, y:ys, z:z, colorscale:[[0,'#fef5e7'],[0.5,'#f39c12'],[1,'#c0392b']], showscale:true,
+        colorbar:{title:{text:'N_x−M_y',side:'right'},thickness:8,len:0.6,x:1.02},
+        connectgaps:false, hoverinfo:'skip', zsmooth:'best'},
+      {type:'scatter', mode:'lines', x:bx, y:by, line:{color:'#1a6b4a', width:3}, hoverinfo:'skip'},
+      {type:'scatter', mode:'markers', x:[], y:[], marker:{size:6, color:'#1a6b4a', opacity:0.45}, hoverinfo:'skip'} // 掃過點集
+    ];
+    Plotly.react(hR, traces, plotLayout2D({
+      xaxis:{range:[s.view[0],s.view[1]], title:{text:'x'}},
+      yaxis:{range:[s.view[2],s.view[3]], title:{text:'y'}, scaleanchor:undefined},
+      margin:{l:42,r:60,t:14,b:38}
+    }), PLOT_CONFIG_2D);
+  }
+
+  // 累積 ∮ M dx + N dy from 0 to s_end
+  function lineAcc(send){
+    const s = sc();
+    const N=400;
+    let acc=0;
+    for(let i=0;i<N;i++){
+      const u=send*((i+0.5)/N);
+      const p=s.boundary(u);
+      const d=s.bdDeriv(u);
+      acc += (s.M(p.x,p.y)*d.dx + s.N(p.x,p.y)*d.dy) * send/N;
+    }
+    return acc;
+  }
+  // 區域雙重積分：把 R 切成固定中點格子，每格貢獻 (N_x − M_y)·dA。
+  // 數值用完整格點 prefix sum；視覺標記只降採樣，避免大量 marker 造成卡頓。
+  let greenSamples = null;
+  function buildGreenSamples(){
+    const s = sc();
+    const pts = [];
+    const Ng=360;
+    const dx=(s.view[1]-s.view[0])/Ng;
+    const dy=(s.view[3]-s.view[2])/Ng;
+    const dA = dx*dy;
+    for(let j=0;j<Ng;j++){
+      for(let i=0;i<Ng;i++){
+        const x=s.view[0] + dx*(i+0.5);
+        const y=s.view[2] + dy*(j+0.5);
+        if(s.inR(x,y)){
+          const v=s.diff(x,y);
+          pts.push({x, y, w: v*dA});
+        }
+      }
+    }
+    const prefixW = [0];
+    for(const pt of pts) prefixW.push(prefixW[prefixW.length - 1] + pt.w);
+    const stride = Math.max(1, Math.ceil(pts.length / 4500));
+    const visualPts = [];
+    for(let i=0;i<pts.length;i+=stride){
+      visualPts.push({x:pts[i].x, y:pts[i].y, srcIndex:i+1});
+    }
+    if(pts.length) {
+      const last = pts[pts.length - 1];
+      visualPts.push({x:last.x, y:last.y, srcIndex:pts.length});
+    }
+    greenSamples = {pts, prefixW, visualPts, totalW: prefixW[prefixW.length - 1]};
+  }
+
+  function update(t){
+    const s = sc();
+    state.t = Math.max(0, Math.min(1, t));
+    // 左邊：marker 沿邊界
+    const N=400;
+    const xs=[], ys=[];
+    const steps = Math.max(2, Math.round(N * state.t));
+    for(let i=0;i<=steps;i++){ const p=s.boundary(state.t*(i/steps)); xs.push(p.x); ys.push(p.y); }
+    Plotly.restyle(hL, {x:[xs], y:[ys]}, [2]);
+    const cur = s.boundary(state.t);
+    Plotly.restyle(hL, {x:[[cur.x]], y:[[cur.y]]}, [3]);
+    // 左累積
+    const accL = lineAcc(state.t);
+    document.getElementById('dE-accL').textContent = accL.toFixed(4);
+    const targetVal = s.target;
+    setTimeProgress('dE-fillL', 'dE-pctL', state.t);
+
+    // 右邊：根據 state.t 顯示scale的固定格點樣本
+    if(!greenSamples) buildGreenSamples();
+    const nShow = Math.floor(greenSamples.pts.length * state.t);
+    const sx=[], sy=[];
+    for(const pt of greenSamples.visualPts){
+      if(pt.srcIndex <= nShow){ sx.push(pt.x); sy.push(pt.y); }
+    }
+    const accR = greenSamples.prefixW[nShow] || 0;
+    Plotly.restyle(hR, {x:[sx], y:[sy]}, [2]);
+    document.getElementById('dE-accR').textContent = accR.toFixed(4);
+    setTimeProgress('dE-fillR', 'dE-pctR', state.t);
+
+    // 驗證 banner
+    if(state.t===0){
+      setVerifyBanner('dE-banner', 'pending', '⏳', '尚未播放');
+    } else if(state.t<0.99){
+      setVerifyBanner('dE-banner', 'pending', '⏳', '動畫進行中…');
+    } else {
+      const err = Math.abs(accL - accR);
+      const tol = Math.max(0.003, 0.0001*Math.abs(targetVal));
+      if(err < tol){
+        setVerifyBanner('dE-banner', 'ok', '✓', `Green 定理驗證：左右差 = ${err.toFixed(4)}`);
+      } else {
+        setVerifyBanner('dE-banner', 'no', '⚠', `左右差 = ${err.toFixed(4)}（請提高解析度或檢查公式）`);
+      }
+    }
+  }
+
+  function animate(ts){
+    if(!lastTime) lastTime = ts;
+    const dt = (ts-lastTime)/1000; lastTime = ts;
+    const newT = state.t + state.speed * 0.3 * dt;
+    if(newT >= 1){ update(1); stop(); return; }
+    update(newT);
+    animId = requestAnimationFrame(animate);
+  }
+  function play(){ if(state.playing) return; state.playing=true; lastTime=0; document.getElementById('dE-play').textContent='⏸ 暫停'; document.getElementById('dE-play').classList.add('active'); animId=requestAnimationFrame(animate); }
+  function stop(){ state.playing=false; cancelAnimationFrame(animId); document.getElementById('dE-play').textContent='▶ 播放'; document.getElementById('dE-play').classList.remove('active'); }
+  function reset(){ stop(); greenSamples=null; init(); update(0); }
+
+  function init(){
+    const s = sc();
+    document.getElementById('dE-M').textContent = s.mStr;
+    document.getElementById('dE-N').textContent = s.nStr;
+    document.getElementById('dE-diff').textContent = s.diffStr;
+    document.getElementById('dE-tgt').textContent = s.targetLabel;
+    greenSamples = null;
+    buildLeft(); buildRight();
+  }
+
+  document.getElementById('dE-play').addEventListener('click', ()=>{ state.playing ? stop() : play(); });
+  document.getElementById('dE-reset').addEventListener('click', reset);
+  document.getElementById('dE-scene').addEventListener('change', e=>{ stop(); state.scene = e.target.value; init(); update(0); });
+  document.getElementById('dE-speed').addEventListener('input', e=>{ state.speed = parseFloat(e.target.value); document.getElementById('dE-speedV').textContent = state.speed.toFixed(1)+'×'; });
+
+  init(); update(0);
+})();
+/* ============================================================
+   QUIZZES — Ch 15.1 ~ 15.4
+   ============================================================ */
+(function(){
+  // 15.1
+  makeChoiceQuiz('quiz-15-1-1', 1, {
+    ok:'✓ 正確！對 $\\mathbf{F}=2xy\\,\\mathbf{i}+x^2\\,\\mathbf{j}$：$\\partial M/\\partial y=2x=\\partial N/\\partial x$，符合定理 15.1，故為<strong>保守</strong>（位能 $f=x^2 y$）。',
+    wrong:[
+      '$\\partial M/\\partial y = 1$，$\\partial N/\\partial x = -1$。不相等 → 非保守（這是<strong>順時針旋轉場</strong>）。',
+      '',
+      '$\\partial M/\\partial y = -1$，$\\partial N/\\partial x = 1$。不相等 → 非保守（典型的<strong>逆時針旋轉場</strong>）。',
+      '$\\partial M/\\partial y = x^2$，$\\partial N/\\partial x = y^2$。一般不相等 → 非保守。'
+    ]
+  });
+  makeChoiceQuiz('quiz-15-1-2', 0, {
+    ok:'✓ 正確！對 $\\mathbf{F}=yz\\,\\mathbf{i}+xz\\,\\mathbf{j}+xy\\,\\mathbf{k}$：$P_y=x=N_z$、$M_z=y=P_x$、$N_x=z=M_y$，三差皆 0，故 $\\mathrm{curl}\\,\\mathbf{F}=\\mathbf{0}$（這個場是 $\\nabla(xyz)$ 的梯度，保守）。',
+    wrong:[
+      '不是。三個分量都是 $xy$、$yz$、$xz$ 的乘積，分量間相互的偏導都會等價抵消。',
+      '展開內積：$P_y - N_z = x - x = 0$，並非 $2xyz$。',
+      '請逐項計算 $P_y - N_z,\\ M_z - P_x,\\ N_x - M_y$，會發現三個都是 0。'
+    ]
+  });
+  makeChoiceQuiz('quiz-15-1-3', 1, {
+    ok:'✓ 正確！$\\nabla f = (f_x, f_y) = (2xy,\\ x^2 - y)$。這正是 §15.1 例題 6 的結果。',
+    wrong:[
+      '$f_x = 2xy$ 不是 $x^2 - y$。注意「對 $x$ 偏微分」表示其他變數視為常數。',
+      '',
+      '答案不需要加 $-1$ 或 $-2y$；$f_x = 2xy$，$f_y = x^2 - y$。',
+      '$\\nabla f$ 應該是把 $f$ 對<strong>每個變數</strong>分別微分，不是「拆」原式。'
+    ]
+  });
+
+  // 15.2
+  makeChoiceQuiz('quiz-15-2-1', 1, {
+    ok:'✓ 正確！$\\mathbf{r}\'(t)=(-\\sin t, \\cos t, 1)$，$\\|\\mathbf{r}\'\\| = \\sqrt{\\sin^2 t + \\cos^2 t + 1} = \\sqrt{2}$。<br>注意：選項三的計算結果完全相同，但寫法繞了一圈；最簡為 $\\sqrt{2}\\,dt$。',
+    wrong:[
+      '少算了 $z$ 分量的 $1^2$。$\\|\\mathbf{r}\'\\|^2 = \\sin^2 t + \\cos^2 t + 1 = 2$。',
+      '',
+      '寫法雖然中間步驟正確，但題目要求<strong>最簡</strong>答案 $\\sqrt{2}\\,dt$。',
+      '螺旋線的弧長微分是常數 $\\sqrt{2}\\,dt$，與 $t$ 無關（因為 $\\sin^2+\\cos^2=1$）。'
+    ]
+  });
+  makeChoiceQuiz('quiz-15-2-2', 1, {
+    ok:'✓ 正確！向量線積分 $\\int_C \\mathbf{F}\\cdot d\\mathbf{r}$ 在方向反轉時變號（單位切向 $\\mathbf{T} \\to -\\mathbf{T}$），所以答案為 $-5$。',
+    wrong:[
+      '向量線積分對方向<strong>不</strong>無關。只有純量線積分 $\\int_C f\\,ds$ 才方向無關。',
+      '',
+      '若 F 沿正向積分為 5，反向必為 −5，加起來才會是 0（環狀路徑非閉合）。',
+      '對任意 $\\mathbf{F}$，$\\int_{-C}\\mathbf{F}\\cdot d\\mathbf{r} = -\\int_C\\mathbf{F}\\cdot d\\mathbf{r}$ 是普適規則。'
+    ]
+  });
+  makeChoiceQuiz('quiz-15-2-3', 2, {
+    ok:'✓ 正確！「向量線積分對曲線方向無關」是<strong>錯</strong>的——反向會變號。其他三條都正確。',
+    wrong:[
+      '$\\int_C f\\,ds$ 對方向<strong>確實</strong>無關（弧長是純正值）。',
+      '$\\mathbf{F}\\cdot d\\mathbf{r} = M\\,dx + N\\,dy$ 是<strong>正確</strong>的恆等寫法。',
+      '',
+      '$\\int_C \\mathbf{F}\\cdot d\\mathbf{r}$ <strong>正是</strong>力沿曲線做的功的定義。'
+    ]
+  });
+
+  // 15.3
+  makeChoiceQuiz('quiz-15-3-1', 3, {
+    ok:'✓ 正確！「$\\mathbf{F}$ 連續」只是<strong>基本前提</strong>，不等價於保守。其他三條（存在位能、路徑無關、閉曲線積分為 0）<em>都是</em>定理 15.7 的等價條件。',
+    wrong:[
+      '這是「保守」的<strong>定義</strong>，當然等價。',
+      '這是定理 15.6 的內容，等價。',
+      '這是定理 15.7 第三條，等價。',
+      ''
+    ]
+  });
+  makeChoiceQuiz('quiz-15-3-2', 1, {
+    ok:'✓ 正確！由定理 15.5：$\\int_C \\nabla f\\cdot d\\mathbf{r} = f(B) - f(A) = (3^2 + 4^2) - (0^2 + 0^2) = 25$。<br>注意：與路徑無關，所以答案<strong>不依賴</strong>實際曲線。',
+    wrong:[
+      '只有「沿閉曲線（即 $A = B$）」才為 0。本題端點不同。',
+      '',
+      '請把端點代入 <strong>$f$</strong>（即 $x^2 + y^2$），而不是計算「兩點距離」。',
+      '正因為 F 保守，<strong>路徑無關</strong>。只需端點即可。'
+    ]
+  });
+
+  // 15.4
+  makeChoiceQuiz('quiz-15-4-1', 3, {
+    ok:'✓ 正確！Green 定理對「保守」沒要求 — 它對任何 $C^1$ 的 $M, N$ 都成立。事實上 Green 定理常用來計算<strong>非保守</strong>場的閉曲線積分（如 例題 2）。',
+    wrong:[
+      '簡單連通是<strong>必要</strong>條件 (R 不能有洞)。',
+      '逆時針定向（R 在左）是<strong>必要</strong>條件，否則符號要翻。',
+      '$M, N$ 連續可微是<strong>必要</strong>條件（不然 Fubini / 換序積分都不成立）。',
+      ''
+    ]
+  });
+  makeChoiceQuiz('quiz-15-4-2', 1, {
+    ok:'✓ 正確！$M=0, N=x$：$\\partial N/\\partial x - \\partial M/\\partial y = 1 - 0 = 1$。Green 給 $\\oint_C x\\,dy = \\iint_R 1\\,dA = \\mathrm{Area}(R)$。',
+    wrong:[
+      '$\\partial N/\\partial x = 1$ 是常數，但「常數」不代表積分為 0，常數 1 積出來是面積。',
+      '',
+      '$\\partial N/\\partial x - \\partial M/\\partial y = 1$，不是 2。<br>定理 15.9 的 $1/2$ 係數是用<strong>對稱的 (x dy − y dx)</strong> 來消因子，不是這裡的情況。',
+      'Green 定理本身已給足夠資訊，不需要更多。'
+    ]
+  });
+})();
+</script>
+</body>
+</html>

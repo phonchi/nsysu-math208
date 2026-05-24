@@ -1,0 +1,2619 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多重積分 II — 第 14.5–14.8 節互動講義</title>
+<script>
+  MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1a2e;--paper:#f7f3eb;--accent:#c0392b;--accent2:#2c3e7a;--accent3:#1a6b4a;
+  --muted:#8a8578;--card:#fffdf7;--card-border:#e8e2d6;--highlight:#fff3cd;
+  --code-bg:#2d2d3f;--code-fg:#e8e6df;
+  --x-axis:#e74c3c;--y-axis:#27ae60;--z-axis:#2980b9;
+  --tile:#f1c40f;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.9;font-size:17px;}
+
+.hero{min-height:58vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem;position:relative;overflow:hidden;background:linear-gradient(170deg,#1a1a2e 0%,#2c3e7a 40%,#7a3030 100%);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.07) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.04) 0%,transparent 40%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);}
+.hero-content{position:relative;z-index:1;max-width:880px;}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;color:#fff;letter-spacing:.04em;line-height:1.3;margin-bottom:1rem;}
+.hero h1 .yellow{color:#f1c40f;} .hero h1 .green{color:#2ecc71;} .hero h1 .blue{color:#5dade2;}
+.hero .subtitle{font-size:clamp(.95rem,2.2vw,1.2rem);color:rgba(255,255,255,.65);font-weight:300;margin-bottom:2rem;}
+.hero .big-formula{color:#f1c40f;background:rgba(0,0,0,.3);padding:.8rem 2rem;border-radius:12px;display:inline-block;border:1px solid rgba(255,255,255,.1);margin-bottom:2rem;backdrop-filter:blur(4px);font-size:1.05rem;}
+.scroll-hint{color:rgba(255,255,255,.4);font-size:.9rem;animation:bounce 2s infinite;}
+.scroll-hint span{display:block;font-size:1.4rem;margin-top:.3rem;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+.container{max-width:1180px;margin:0 auto;padding:3rem 1.5rem;}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.5rem;}
+h2{font-family:'Noto Serif TC',serif;font-size:1.65rem;font-weight:700;color:var(--ink);margin-bottom:1.2rem;line-height:1.4;}
+h3{font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:700;color:var(--accent2);margin:1.4rem 0 .8rem;}
+h4{font-family:'Noto Serif TC',serif;font-size:1.0rem;font-weight:700;color:var(--accent3);margin:1.0rem 0 .5rem;}
+section{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--card-border);}
+section:last-of-type{border-bottom:none;}
+p{margin-bottom:1rem;}
+.subsection{margin:2rem 0;}
+
+.viz-layout{display:grid;grid-template-columns:1fr 320px;gap:1.3rem;margin:1.2rem 0;align-items:start;}
+@media(max-width:900px){.viz-layout{grid-template-columns:1fr;}}
+
+.canvas3d-panel{background:linear-gradient(160deg,#fffdf7 0%,#f4efe3 100%);border:1px solid var(--card-border);border-radius:12px;padding:1rem;box-shadow:0 4px 18px rgba(0,0,0,.06);position:relative;}
+.canvas3d-panel .canvas-wrap{width:100%;aspect-ratio:1/0.78;position:relative;border-radius:8px;overflow:hidden;background:#1a1a2e;}
+.canvas3d-panel canvas{display:block;width:100%!important;height:100%!important;}
+.canvas-notice{position:absolute;left:.8rem;right:.8rem;bottom:.8rem;background:rgba(255,253,247,.94);color:var(--ink);border-left:4px solid var(--accent);border-radius:8px;padding:.62rem .82rem;font-size:.84rem;line-height:1.55;box-shadow:0 4px 14px rgba(0,0,0,.16);z-index:4;}
+.canvas-notice strong{display:block;color:var(--accent);margin-bottom:.15rem;}
+.canvas-notice span{display:block;color:var(--muted);}
+.canvas3d-panel.canvas-2d .canvas-wrap{background:#fbf7ed;border:1px solid var(--card-border);}
+.canvas3d-panel.canvas-2d .hint-overlay{color:rgba(0,0,0,.4);background:rgba(255,255,255,.6);}
+.hint-overlay{position:absolute;top:8px;right:10px;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:rgba(255,255,255,.55);background:rgba(0,0,0,.25);padding:3px 8px;border-radius:4px;pointer-events:none;}
+
+.dual-canvas{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+@media(max-width:700px){.dual-canvas{grid-template-columns:1fr;}}
+
+.side-nav{position:fixed;top:50%;right:1rem;transform:translateY(-50%);background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.45rem .5rem;font-size:.74rem;font-family:'JetBrains Mono',monospace;box-shadow:0 4px 18px rgba(0,0,0,.08);z-index:50;display:flex;flex-direction:column;gap:.1rem;max-width:240px;max-height:calc(100vh - 2rem);overflow-y:auto;}
+.side-nav .sn-title{font-size:.66rem;color:var(--muted);letter-spacing:.1em;padding:.2rem .55rem .35rem;border-bottom:1px solid var(--card-border);margin-bottom:.25rem;}
+.side-nav .sn-item{display:block;padding:.28rem .55rem;color:var(--muted);text-decoration:none;border-left:2px solid transparent;border-radius:4px;transition:all .15s;line-height:1.3;}
+.side-nav .sn-item.sn-sub{padding-left:1.1rem;font-size:.7rem;color:#a8a496;}
+.side-nav .sn-item:hover{color:var(--ink);background:var(--highlight);}
+@media(max-width:1280px){.side-nav{display:none;}}
+
+.axis-legend{display:flex;gap:1rem;justify-content:center;margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;flex-wrap:wrap;}
+.axis-legend span{display:inline-flex;align-items:center;gap:.3rem;}
+.axis-legend span::before{content:'';display:inline-block;width:14px;height:3px;border-radius:2px;}
+.axis-legend .ax-x::before{background:var(--x-axis);}
+.axis-legend .ax-y::before{background:var(--y-axis);}
+.axis-legend .ax-z::before{background:var(--z-axis);}
+.axis-legend .ax-tile::before{background:var(--tile);}
+
+.controls-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--card-border);}
+.btn{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;padding:.4rem .9rem;border-radius:6px;border:none;cursor:pointer;transition:all .2s;}
+.btn-toggle{background:var(--accent2);color:#fff;}
+.btn-toggle:hover{background:#1f2e5f;}
+.btn-toggle.off{background:#bbb;color:#555;}
+.btn-reset{background:var(--card-border);color:var(--ink);}
+
+.slider-row{display:flex;align-items:center;gap:.55rem;padding:.4rem .7rem;background:var(--paper);border-radius:8px;margin-bottom:.45rem;}
+.slider-row .slider-label{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--accent2);font-weight:600;min-width:52px;}
+.slider-row input[type="range"]{flex:1;accent-color:var(--accent3);height:5px;cursor:pointer;}
+.slider-row .slider-val{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);font-weight:600;min-width:60px;text-align:right;}
+
+.side-panel{display:flex;flex-direction:column;gap:.85rem;}
+.info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.info-card .ic-title{font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem;}
+.info-card .ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.82rem;padding:.2rem 0;align-items:center;}
+.info-card .ic-label{color:var(--muted);}
+.info-card .ic-value{color:var(--ink);font-weight:600;}
+.info-card .ic-value.highlight{color:var(--accent);}
+.info-card .ic-value.ok{color:var(--accent3);}
+
+.eq-card{background:var(--code-bg);border-radius:10px;padding:.95rem 1.1rem;color:#fff;}
+.eq-card .eq-label{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#2ecc71;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;}
+.eq-card .eq-formula{font-size:1.0rem;color:#fff;text-align:center;}
+.eq-card .eq-sub{font-size:.78rem;color:rgba(255,255,255,.55);margin-top:.4rem;text-align:center;}
+
+.preset-row{display:flex;gap:.4rem;flex-wrap:wrap;margin:.6rem 0 1rem;}
+.preset-btn{font-family:'JetBrains Mono',monospace;font-size:.76rem;padding:.4rem .8rem;border-radius:6px;border:2px solid var(--card-border);background:var(--card);cursor:pointer;transition:all .2s;color:var(--ink);}
+.preset-btn:hover{border-color:var(--accent2);}
+.preset-btn.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
+
+.info-box{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1.1rem 1.4rem;margin:1.3rem 0;position:relative;}
+.info-box .info-label{position:absolute;top:-11px;left:14px;background:var(--accent2);color:#fff;font-size:.74rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.05em;}
+.info-box.warm{background:#fef5e7;border-color:#d68910;}
+.info-box.warm .info-label{background:#d68910;}
+.info-box.green{background:#eaf5ee;border-color:var(--accent3);}
+.info-box.green .info-label{background:var(--accent3);}
+.info-box.red{background:#fdebeb;border-color:var(--accent);}
+.info-box.red .info-label{background:var(--accent);}
+
+.pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.74rem;font-weight:600;padding:2px 9px;border-radius:4px;margin:0 .15rem;vertical-align:1px;}
+.pill-x{background:rgba(231,76,60,.12);color:var(--x-axis);border:1px solid rgba(231,76,60,.3);}
+.pill-z{background:rgba(41,128,185,.12);color:var(--z-axis);border:1px solid rgba(41,128,185,.3);}
+.pill-blue{background:rgba(44,62,122,.13);color:var(--accent2);border:1px solid rgba(44,62,122,.3);}
+.pill-green{background:rgba(26,107,74,.13);color:var(--accent3);border:1px solid rgba(26,107,74,.3);}
+.pill-yellow{background:rgba(241,196,15,.18);color:#a07a08;border:1px solid rgba(241,196,15,.5);}
+
+.lecture-example{background:var(--card);border:1px solid var(--card-border);border-left:5px solid var(--accent3);border-radius:10px;padding:1rem 1.2rem;margin:1rem 0;box-shadow:0 2px 10px rgba(0,0,0,.04);}
+.lecture-example .ex-tag{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--accent3);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.35rem;}
+.lecture-example .ex-title{font-family:'Noto Serif TC',serif;font-weight:700;color:var(--ink);margin-bottom:.65rem;background:#f5f7fb;border:1px solid #dfe5f0;border-radius:8px;padding:.65rem .85rem;}
+.lecture-example .ex-title::before{content:"題目";display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#fff;background:var(--accent2);border-radius:4px;padding:1px 7px;margin-right:.55rem;letter-spacing:.06em;}
+.lecture-example .ex-method{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;background:rgba(26,107,74,.12);color:var(--accent3);border:1px solid rgba(26,107,74,.35);border-radius:4px;padding:1px 7px;margin:.1rem .25rem .1rem 0;}
+.lecture-example .ex-answer{background:#f3fbf6;border:1px solid #cdebd9;border-radius:8px;padding:.65rem .85rem;margin-top:.65rem;font-size:.92rem;}
+.lecture-example .ex-answer::before{content:"答案";display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#fff;background:var(--accent3);border-radius:4px;padding:1px 7px;font-weight:700;margin-right:.5rem;letter-spacing:.06em;}
+.step-block{background:#fffaf0;border-left:4px solid var(--accent3);border-radius:8px;padding:.85rem 1.1rem;margin:.7rem 0;}
+.step-num{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);font-weight:700;letter-spacing:.1em;margin-bottom:.3rem;}
+.lecture-example .step-block:first-of-type{margin-top:1.5rem;position:relative;}
+.lecture-example .step-block:first-of-type::before{content:"解題";position:absolute;top:-1.2rem;left:0;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#fff;background:var(--accent3);border-radius:4px;padding:1px 7px;letter-spacing:.06em;}
+.concept-warning{background:#fef0ee;border-left:4px solid var(--accent);border-radius:6px;padding:.75rem 1rem;margin:1rem 0;font-size:.92rem;}
+.cw-title{font-weight:700;color:var(--accent);margin-bottom:.3rem;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;}
+.section-summary{background:#fff8ea;border:1.5px dashed #d68910;border-radius:8px;padding:.95rem 1.15rem;margin:1.6rem 0 .5rem;}
+.section-summary-title{font-family:'Noto Serif TC',serif;font-weight:700;color:#a07a08;font-size:.95rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem;}
+.section-summary-title::before{content:'※';color:#d68910;font-size:1.05rem;}
+.section-summary ul{margin:.3rem 0 0 1.2rem;padding:0;}
+.section-summary li{margin:.25rem 0;font-size:.92rem;}
+.ref-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:1rem 1.2rem;margin-bottom:.9rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.ref-card-header{display:flex;align-items:baseline;gap:.8rem;margin-bottom:.5rem;flex-wrap:wrap;}
+.ref-card-name{font-family:'Noto Serif TC',serif;font-weight:700;font-size:1.02rem;}
+.ref-card-name-en{font-size:.8rem;color:var(--muted);}
+.ref-card-eq{background:var(--code-bg);color:#fff;border-radius:8px;padding:.65rem 1rem;text-align:center;font-size:.95rem;margin-bottom:.55rem;}
+.ref-card-note{font-size:.85rem;color:var(--muted);margin-top:.3rem;}
+.quiz-input-row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin:.4rem 0;}
+.quiz-input{padding:.4rem .7rem;border:1.5px solid var(--card-border);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:.92rem;width:160px;}
+.quiz-input.correct{border-color:var(--accent3);background:#eaf5ee;}
+.quiz-input.wrong{border-color:var(--accent);background:#fde9e7;}
+.quiz-check{padding:.4rem .9rem;border:none;border-radius:6px;background:var(--accent2);color:#fff;font-family:'Noto Sans TC',sans-serif;font-size:.86rem;cursor:pointer;font-weight:600;}
+.quiz-check:hover{background:#1f2e5c;}
+
+.conv-table{width:100%;border-collapse:collapse;font-size:.88rem;margin:.8rem 0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.conv-table th{background:var(--accent2);color:#fff;padding:.6rem .8rem;text-align:center;font-weight:600;font-size:.82rem;}
+.conv-table td{padding:.55rem .8rem;text-align:center;border-bottom:1px solid var(--card-border);font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.conv-table td:first-child{font-family:'Noto Sans TC',sans-serif;color:var(--accent2);font-weight:600;text-align:left;}
+.conv-table tr:nth-child(even){background:rgba(0,0,0,.015);}
+
+.quiz-card{background:#eef5ff;border:1.5px solid var(--accent2);border-radius:10px;padding:1rem 1.2rem;margin:1.2rem 0;box-shadow:0 2px 10px rgba(44,62,122,.07);}
+.quiz-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#fff;background:var(--accent2);padding:2px 8px;border-radius:4px;letter-spacing:.08em;margin-bottom:.45rem;}
+.quiz-q{font-weight:600;margin-bottom:.6rem;}
+.quiz-options{display:flex;flex-direction:column;gap:.4rem;}
+.quiz-opt{padding:.45rem .85rem;border:1.5px solid var(--card-border);border-radius:6px;cursor:pointer;background:var(--card);text-align:left;font-size:.94rem;transition:all .15s;font-family:inherit;}
+.quiz-opt:hover{border-color:var(--accent2);background:#fafcff;}
+.quiz-opt.correct{border-color:var(--accent3);background:#eaf5ee;color:var(--accent3);font-weight:600;}
+.quiz-opt.wrong{border-color:var(--accent);background:#fde9e7;color:var(--accent);}
+.quiz-feedback{font-size:.86rem;margin-top:.5rem;padding:.45rem .7rem;border-radius:5px;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.ok{background:#eaf5ee;color:var(--accent3);border-left:3px solid var(--accent3);}
+.quiz-feedback.no{background:#fde9e7;color:var(--accent);border-left:3px solid var(--accent);}
+
+footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border);}
+</style>
+</head>
+<body>
+
+<nav class="side-nav">
+  <div class="sn-title">第 14.5–14.8 節</div>
+  <a class="sn-item" href="#sec-14-5">14.5 曲面面積</a>
+  <a class="sn-item sn-sub" href="#sec-14-5-1">  · 公式與切片</a>
+  <a class="sn-item sn-sub" href="#sec-14-5-2">  · dS / dA 視覺</a>
+  <a class="sn-item sn-sub" href="#sec-14-5-3">  · 延伸例題</a>
+  <a class="sn-item" href="#sec-14-6">14.6 三重積分</a>
+  <a class="sn-item sn-sub" href="#sec-14-6-1">  · 定義與性質</a>
+  <a class="sn-item sn-sub" href="#sec-14-6-2">  · Fubini 例題</a>
+  <a class="sn-item sn-sub" href="#sec-14-6-3">  · xy 投影</a>
+  <a class="sn-item" href="#sec-14-7">14.7 柱與球座標</a>
+  <a class="sn-item sn-sub" href="#sec-14-7-1">  · 圓柱座標</a>
+  <a class="sn-item sn-sub" href="#sec-14-7-2">  · 球面座標</a>
+  <a class="sn-item sn-sub" href="#sec-14-7-3">  · dV 對比</a>
+  <a class="sn-item" href="#sec-14-8">14.8 雅可比變數變換（補充）</a>
+  <a class="sn-item sn-sub" href="#sec-14-8-1">  · 雅可比</a>
+  <a class="sn-item sn-sub" href="#sec-14-8-2">  · 變數變換例題</a>
+  <a class="sn-item" href="#sec-ref">速查</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+	    <h1><span class="yellow">多重積分</span>：從<span class="green">面積</span>到<span class="blue">體積</span>，從直角到柱與球</h1>
+	    <div class="subtitle">第 14.5–14.8 節 · 曲面面積 · 三重積分 · 圓柱 / 球面座標 · 雅可比（補充）</div>
+	    <div class="subtitle" style="font-size:.82rem;margin-top:-1.2rem;margin-bottom:1.1rem;">主章節依 Calculus_Chapter14.pdf；雅可比變數變換列為補充章節。</div>
+	    <div class="big-formula">$\displaystyle S=\!\!\iint_R\!\!\sqrt{1+f_x^2+f_y^2}\,dA,\quad \iiint_Q f\,dV,\quad dV = r\,dr\,d\theta\,dz = \rho^2\sin\phi\,d\rho\,d\phi\,d\theta$</div>
+    <div class="scroll-hint">向下捲動開始互動<span>↓</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ============================================================ -->
+<!-- §14.5 曲面面積                                                -->
+<!-- ============================================================ -->
+<section id="sec-14-5">
+  <div class="section-number">第 14.5 節 · 曲面面積</div>
+  <h2>從投影面積 $dA$ 到傾斜面積 $dS$</h2>
+  <p>給定一個定義在閉區域 $R$ 上的可微函數 $z=f(x,y)$，由其圖形 $S$ 在 $R$ 之上覆出的部分稱為一個<strong>曲面 (surface)</strong>。把 $S$ 分割成許多<span class="pill pill-yellow">小傾斜片</span>並把每片貼到該點切平面上的<em>平行四邊形</em>，便能用兩條切向量 $(1,0,f_x)$ 與 $(0,1,f_y)$ 算出面積：</p>
+  <div style="text-align:center;">$$\|(1,0,f_x)\times(0,1,f_y)\|=\sqrt{1+f_x^2+f_y^2}$$</div>
+
+  <div class="info-box warm">
+    <span class="info-label">定義 14.3</span>
+    <strong>曲面面積 (Surface area)</strong>
+    <p style="margin:.55rem 0 .3rem;">假設 $f$ 與其偏導數都在 $xy$ 平面中的閉區域 $R$ 上連續。由 $z=f(x,y)$ 的圖形在 $R$ 之上所定出的曲面 $S$ 之面積為</p>
+    <div style="text-align:center;margin:.4rem 0;">$$S=\iint_R dS=\iint_R\sqrt{1+\left[f_x(x,y)\right]^2+\left[f_y(x,y)\right]^2}\,dA$$</div>
+    <p style="margin:.3rem 0;">特別地：若 $f_x=f_y=0$ (水平片)，則 $dS=dA$；若 $f$ 越「陡」($f_x,f_y$ 越大)，$dS$ 越大於投影面積 $dA$。</p>
+  </div>
+
+  <h4 id="sec-14-5-1">互動：切平面平行四邊形貼合曲面</h4>
+  <p>每個黃色平行四邊形是「在某點切平面上、投影回 $R$ 對應 $du\,dv$」的小片，面積 $\sqrt{1+f_x^2+f_y^2}\,du\,dv$。把切片數量拉高，總和就會收斂到 $\iint_R \sqrt{1+f_x^2+f_y^2}\,dA$。</p>
+
+  <div class="preset-row" id="saPresets">
+    <button class="preset-btn active" data-id="parab">$z=x^2+y^2$</button>
+    <button class="preset-btn" data-id="plane">$z=2x+y$</button>
+    <button class="preset-btn" data-id="saddle">$z=x^2-y^2$</button>
+    <button class="preset-btn" data-id="hemi">$z=\sqrt{4-x^2-y^2}$</button>
+    <button class="preset-btn" data-id="bump">$z=e^{-(x^2+y^2)/2}$</button>
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="canvas3d-panel">
+        <div class="canvas-wrap">
+          <canvas id="canvas-surfarea"></canvas>
+          <div class="hint-overlay">拖曳旋轉 · 滾輪縮放</div>
+        </div>
+        <div class="axis-legend">
+          <span class="ax-x">x</span><span class="ax-y">y</span><span class="ax-z">z</span>
+          <span class="ax-tile">切平面平行四邊形</span>
+          <span style="color:var(--accent3);">● 定義域 R</span>
+        </div>
+        <div class="controls-bar">
+          <span style="font-size:.78rem;color:var(--muted);">切片解析度</span>
+          <input type="range" id="saSegSlider" min="2" max="20" step="1" value="8" style="flex:1;max-width:200px;accent-color:#f1c40f;">
+          <span class="slider-val" id="saSegVal" style="min-width:60px;">8×8</span>
+          <button class="btn btn-toggle" id="btnSaSurf">曲面</button>
+          <button class="btn btn-toggle" id="btnSaTiles">切片</button>
+          <button class="btn btn-toggle" id="btnSaDom">$R$</button>
+          <button class="btn btn-reset" onclick="scenes.surfarea.resetCam()">↺</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">目前曲面</div>
+        <div class="eq-formula" id="sa-eq">$z=x^2+y^2$</div>
+        <div class="eq-sub">$dS=\sqrt{1+f_x^2+f_y^2}\,dA$</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">面積比較</div>
+        <div class="ic-row"><span class="ic-label">解析度</span><span class="ic-value" id="sa-segs">8×8</span></div>
+        <div class="ic-row"><span class="ic-label">投影區域 $|R|$</span><span class="ic-value" id="sa-dom">16.000</span></div>
+        <div class="ic-row"><span class="ic-label">切片總和</span><span class="ic-value highlight" id="sa-rect">—</span></div>
+        <div class="ic-row"><span class="ic-label">高解析度近似 $S$</span><span class="ic-value ok" id="sa-exact">—</span></div>
+        <div class="ic-row"><span class="ic-label">誤差</span><span class="ic-value" id="sa-err">—</span></div>
+      </div>
+      <div class="info-box green" style="margin:0;padding:.8rem 1rem;">
+        <span class="info-label">觀察</span>
+        <div style="font-size:.85rem;line-height:1.65;">把切片數加大，「切片總和」會逼近「高解析度近似 $S$」。對線性函數 $z=2x+y$，因 $f_x,f_y$ 為常數，每片面積相同，<strong>任何解析度都會穩定在同一值</strong>。</div>
+      </div>
+    </div>
+  </div>
+
+  <h4 id="sec-14-5-2">診斷視覺：傾斜角 $\gamma$ 如何決定 $dS/dA$</h4>
+  <p>把曲面在某點的局部切平面想像成「對 $xy$ 平面斜傾斜角度 $\gamma$ 的薄片」。當 $\gamma=0$ 時切平面水平，$dS=dA$；$\gamma$ 越大切平面越陡，相同投影 $dA$ 對應的真實面積 $dS$ 就越大，倍率為 <strong>$\sec\gamma$</strong>。事實上若 $f_x,f_y$ 已給定，$\sqrt{1+f_x^2+f_y^2}=\sec\gamma$（其中 $\tan\gamma=\sqrt{f_x^2+f_y^2}$）。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="canvas3d-panel canvas-2d">
+        <div class="canvas-wrap">
+          <canvas id="canvas-14-5-ds"></canvas>
+          <div class="hint-overlay">投影 $dA$ vs 真實 $dS$（側視圖）</div>
+        </div>
+        <div class="controls-bar">
+          <span style="font-size:.78rem;color:var(--muted);">傾斜角 γ</span>
+          <input type="range" id="dsGamma" min="0" max="80" step="1" value="30" style="flex:1;max-width:240px;accent-color:#f1c40f;">
+          <span class="slider-val" id="dsGammaVal">30°</span>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">RELATION</div>
+        <div class="eq-formula">$dS = \sec\gamma\cdot dA$</div>
+        <div class="eq-sub">$\sqrt{1+f_x^2+f_y^2}=\sec\gamma$</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">當前比例</div>
+        <div class="ic-row"><span class="ic-label">$\gamma$</span><span class="ic-value" id="dsGammaInfo">30°</span></div>
+        <div class="ic-row"><span class="ic-label">$\tan\gamma=\|\nabla f\|$</span><span class="ic-value" id="dsTan">0.577</span></div>
+        <div class="ic-row"><span class="ic-label">$\sec\gamma=dS/dA$</span><span class="ic-value highlight" id="dsSec">1.155</span></div>
+        <div class="ic-row"><span class="ic-label">投影 $dA$</span><span class="ic-value">1.000</span></div>
+        <div class="ic-row"><span class="ic-label">真實 $dS$</span><span class="ic-value ok" id="dsVal">1.155</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h4 id="sec-14-5-3">曲面面積延伸例題</h4>
+  <p>以下例題用來練習講義的曲面面積公式；每題完整條件已列在題目標題中。</p>
+
+  <div class="lecture-example">
+    <div class="ex-tag">延伸例題 · 半球面積</div>
+    <div class="ex-title">$z=\sqrt{4-x^2-y^2}$ 在圓盤 $R: x^2+y^2\le 1.8^2$ 之上的曲面面積</div>
+    <div class="step-block"><div class="step-num">步驟 1（求偏導與被積函數）</div>對 $z=\sqrt{4-x^2-y^2}$，$f_x=\dfrac{-x}{\sqrt{4-x^2-y^2}}$，$f_y=\dfrac{-y}{\sqrt{4-x^2-y^2}}$，故 $1+f_x^2+f_y^2=\dfrac{(4-x^2-y^2)+x^2+y^2}{4-x^2-y^2}=\dfrac{4}{4-x^2-y^2}.$</div>
+    <div class="step-block"><div class="step-num">步驟 2（換為極座標）</div>圓盤適用極座標 $x=r\cos\theta,\ y=r\sin\theta$，$dA=r\,dr\,d\theta$：$$S=\iint_R \dfrac{2}{\sqrt{4-r^2}}\cdot r\,dr\,d\theta=\int_0^{2\pi}\!\int_0^{1.8}\dfrac{2r}{\sqrt{4-r^2}}\,dr\,d\theta.$$</div>
+    <div class="step-block"><div class="step-num">步驟 3（內層代換 $u=4-r^2$）</div>$du=-2r\,dr$，$r=0\to u=4$、$r=1.8\to u=0.76$：$\displaystyle\int_0^{1.8}\dfrac{2r}{\sqrt{4-r^2}}dr=\bigl[-2\sqrt{4-r^2}\bigr]_0^{1.8}=2(2-\sqrt{0.76}).$</div>
+    <div class="step-block"><div class="step-num">步驟 4（外層）</div>$\displaystyle S=\int_0^{2\pi}2(2-\sqrt{0.76})\,d\theta=4\pi(2-\sqrt{0.76}).$</div>
+    <div class="ex-answer">$S=4\pi(2-\sqrt{0.76})\approx 14.18$。切換上方互動到 $z=\sqrt{4-x^2-y^2}$ 預設並提高切片數可驗證。</div>
+  </div>
+
+  <div class="lecture-example">
+    <div class="ex-tag">延伸例題 · 平面在矩形之上</div>
+    <div class="ex-title">$z=x+2y$ 在矩形 $R:[0,1]\times[0,2]$ 之上的曲面面積</div>
+    <div class="step-block"><div class="step-num">步驟 1（偏導）</div>$f_x=1,\ f_y=2$，皆為常數。</div>
+    <div class="step-block"><div class="step-num">步驟 2（被積函數為常數）</div>$\sqrt{1+1+4}=\sqrt{6}$。所以 $S=\iint_R \sqrt{6}\,dA=\sqrt{6}\cdot |R|$。</div>
+    <div class="step-block"><div class="step-num">步驟 3（投影面積）</div>$|R|=1\times 2=2$，故 $S=2\sqrt{6}\approx 4.899$。</div>
+    <div class="ex-answer">$S=2\sqrt{6}\approx 4.899$。<strong>觀察</strong>：對線性函數 $f$，$\sqrt{1+f_x^2+f_y^2}$ 是<em>常數</em>，所以「Riemann 切片總和 = 精確值」<u>無關切片數</u>（上方互動切換到 $z=2x+y$ 任意 $N$ 都剛好命中）。</div>
+  </div>
+
+  <div class="lecture-example">
+    <div class="ex-tag">延伸例題 · 拋物面在第一象限圓盤</div>
+    <div class="ex-title">$z=x^2+y^2$ 在 $R:x^2+y^2\le 1,\ x\ge 0,\ y\ge 0$ 之上的曲面面積</div>
+    <div class="step-block"><div class="step-num">步驟 1（偏導）</div>$f_x=2x,\ f_y=2y$，故 $1+f_x^2+f_y^2=1+4x^2+4y^2=1+4r^2$（極座標）。</div>
+    <div class="step-block"><div class="step-num">步驟 2（極座標化）</div>第一象限 $\theta\in[0,\pi/2]$；$$S=\int_0^{\pi/2}\!\int_0^1 \sqrt{1+4r^2}\cdot r\,dr\,d\theta.$$</div>
+    <div class="step-block"><div class="step-num">步驟 3（內層代換 $u=1+4r^2$）</div>$du=8r\,dr$，$r=0\to u=1$、$r=1\to u=5$：$\displaystyle\int_0^1\sqrt{1+4r^2}\cdot r\,dr=\dfrac{1}{8}\!\int_1^5\sqrt{u}\,du=\dfrac{1}{8}\cdot\dfrac{2}{3}\bigl[u^{3/2}\bigr]_1^5=\dfrac{5\sqrt{5}-1}{12}.$</div>
+    <div class="step-block"><div class="step-num">步驟 4（外層）</div>$\displaystyle S=\int_0^{\pi/2}\dfrac{5\sqrt{5}-1}{12}\,d\theta=\dfrac{\pi(5\sqrt{5}-1)}{24}.$</div>
+    <div class="ex-answer">$S=\dfrac{\pi(5\sqrt 5-1)}{24}\approx 1.331$。整圓盤面積為此值的 4 倍 $\approx 5.33$。</div>
+  </div>
+
+  <div class="concept-warning">
+    <div class="cw-title">概念辨析 · 別把 $f$ 與 $f_x,f_y$ 混淆</div>
+    <p>(1) <strong>被積函數含 $f_x,f_y$ 不是 $f$</strong>：$\sqrt{1+f_x^2+f_y^2}$，常見錯誤是寫成 $\sqrt{1+f^2}$。<br>
+    (2) <strong>$dS\ge dA$ 永遠成立</strong>：因 $\sqrt{1+f_x^2+f_y^2}\ge 1$。等號當且僅當切平面水平。<br>
+    (3) <strong>$f$ 須在 $R$ 一階可微</strong>：邊界尖角處（如 $z=|x|$）公式失效，要分片處理。<br>
+    (4) <strong>「上半分支」的便利</strong>：寫 $z=f(x,y)$ 是<em>單值</em>函數；若曲面是球面 $x^2+y^2+z^2=4$ 整顆，要分上下半分支各積一次。</p>
+  </div>
+
+  <div class="quiz-card" id="q-145">
+    <span class="quiz-tag">概念題</span>
+    <div class="quiz-q">關於圖形 $z=f(x,y)$ 在區域 $R$ 上的曲面面積元素 $dS$，下列敘述何者正確？</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">所有曲面都滿足 $dS=dA$</button>
+      <button class="quiz-opt">$dS=\sqrt{1+f_x^2+f_y^2}\,dA$，當 $f_x=f_y=0$ 時 $dS=dA$</button>
+      <button class="quiz-opt">$dS$ 永遠小於 $dA$</button>
+      <button class="quiz-opt">$dS=\sqrt{1+f_x^2+f_y^2}$，與 $dA$ 無關</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="quiz-card" id="q-145b">
+    <span class="quiz-tag">數字題</span>
+    <div class="quiz-q">求平面 $z=3x+4y$ 在矩形 $[0,1]\times[0,1]$ 上的曲面面積。（提示：被積函數為常數）</div>
+    <div class="quiz-input-row">
+      <input type="number" class="quiz-input" placeholder="輸入數值" step="0.001">
+      <button class="quiz-check">檢查</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="section-summary">
+    <div class="section-summary-title">14.5 重點整理</div>
+    <ul>
+      <li>曲面面積公式：$S=\iint_R\sqrt{1+f_x^2+f_y^2}\,dA$，因子來自切向量 $(1,0,f_x)\times(0,1,f_y)$ 的模。</li>
+      <li>幾何意義：$\sqrt{1+f_x^2+f_y^2}=\sec\gamma$ 是切平面對 $xy$ 平面的傾斜倍率，所以 $dS\ge dA$。</li>
+      <li>對「線性函數 $f=ax+by+c$」，被積函數為常數 $\sqrt{1+a^2+b^2}$，面積 = 此常數 × 投影區域面積。</li>
+      <li>圓盤型 $R$ 通常極座標化最簡：$dA=r\,dr\,d\theta$ 並換 $f_x,f_y$ 為極座標。</li>
+      <li>球面要分上 / 下半分支處理；$f_x,f_y$ 在分支邊界（如赤道）會發散，靠變數變換或極限處理。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- §14.6 三重積分                                                -->
+<!-- ============================================================ -->
+<section id="sec-14-6">
+  <div class="section-number">第 14.6 節 · 三重積分</div>
+  <h2>把區域切成 Riemann 切片，總和 $\to$ 三重積分</h2>
+
+  <div id="sec-14-6-1" class="subsection">
+    <h3>14.6.1 定義與性質</h3>
+    <div class="info-box warm">
+      <span class="info-label">定義 14.4</span>
+      <strong>三重積分 (Triple integral)</strong>
+      <p style="margin:.55rem 0 .3rem;">設 $f$ 在區域 $Q\subset\mathbb{R}^3$ 連續，把 $Q$ 切成 $n$ 個內部互不相交的小立體 $\Delta V_i$，$\|\Delta\|$ 為最大直徑。若極限</p>
+      <div style="text-align:center;margin:.4rem 0;">$$\iiint_Q f(x,y,z)\,dV=\lim_{\|\Delta\|\to 0}\sum_{i=1}^n f(x_i,y_i,z_i)\,\Delta V_i$$</div>
+      <p style="margin:.3rem 0;">存在，便稱 $f$ 在 $Q$ 上可積分。特別地，<strong>$Q$ 的體積</strong> $\displaystyle V(Q)=\iiint_Q dV$。</p>
+    </div>
+
+    <div class="info-box green">
+      <span class="info-label">定理 14.4 · Fubini (三維)</span>
+      <p style="margin:.55rem 0 .3rem;">若 $f$ 在 $Q$ 連續，且 $Q$ 由 $a\le x\le b,\ h_1(x)\le y\le h_2(x),\ g_1(x,y)\le z\le g_2(x,y)$ 描述，其中 $h_1,h_2,g_1,g_2$ 連續，則</p>
+      <div style="text-align:center;margin:.3rem 0;">$$\iiint_Q f\,dV=\int_a^b\!\int_{h_1(x)}^{h_2(x)}\!\int_{g_1(x,y)}^{g_2(x,y)} f(x,y,z)\,dz\,dy\,dx.$$</div>
+      <p style="margin:.3rem 0;">同樣可以交換順序，但須先把對應變數的範圍重新寫好。一般策略：<strong>先看內層、再看中間、最後看外層</strong>是否「依賴更外面的變數」。</p>
+    </div>
+
+    <h4>互動：Riemann 切片逼近立體區域</h4>
+    <p>藍色曲面顯示真實邊界；紅色切片顯示 Riemann 近似。圓形投影用扇形柱、三角投影用三角柱，避免把平滑曲面誤畫成方格鋸齒；$N$ 越大，切片總體積越逼近 $\iiint_Q dV$。</p>
+
+    <div class="preset-row" id="trPresets">
+      <button class="preset-btn" data-id="cube">立方體 $[0,2]^3$</button>
+      <button class="preset-btn active" data-id="parab">$0\le z\le 4-x^2-y^2$</button>
+      <button class="preset-btn" data-id="tetra">四面體 $x+y+z\le 2$</button>
+      <button class="preset-btn" data-id="hemi">半球 $x^2+y^2+z^2\le 4$</button>
+    </div>
+
+    <div class="viz-layout">
+      <div>
+        <div class="canvas3d-panel">
+          <div class="canvas-wrap">
+            <canvas id="canvas-triple"></canvas>
+            <div class="hint-overlay">拖曳旋轉 · 滾輪縮放</div>
+          </div>
+          <div class="axis-legend">
+            <span class="ax-x">x</span><span class="ax-y">y</span><span class="ax-z">z</span>
+            <span style="color:#5dade2;">■ 立體頂面</span>
+            <span style="color:#c0392b;">■ Riemann 切片</span>
+          </div>
+          <div class="controls-bar">
+            <span style="font-size:.78rem;color:var(--muted);">N (每邊切片)</span>
+            <input type="range" id="trN" min="3" max="22" step="1" value="8" style="flex:1;max-width:200px;accent-color:#c0392b;">
+            <button class="btn btn-toggle" id="btnTrSolid">立體</button>
+            <button class="btn btn-toggle" id="btnTrBoxes">切片</button>
+            <button class="btn btn-reset" onclick="scenes.triple.resetCam()">↺</button>
+          </div>
+        </div>
+      </div>
+      <div class="side-panel">
+        <div class="eq-card">
+          <div class="eq-label">目前立體</div>
+          <div class="eq-formula" id="tr-name">$0\le z\le 4-x^2-y^2$</div>
+          <div class="eq-sub" id="tr-flabel">f=1 (體積)</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">Riemann 切片近似</div>
+          <div class="ic-row"><span class="ic-label">分割</span><span class="ic-value" id="tr-N">8×8×8</span></div>
+          <div class="ic-row"><span class="ic-label">切片數</span><span class="ic-value" id="tr-count">—</span></div>
+          <div class="ic-row"><span class="ic-label">$\sum f\Delta V$</span><span class="ic-value highlight" id="tr-approx">—</span></div>
+          <div class="ic-row"><span class="ic-label">精確體積</span><span class="ic-value ok" id="tr-exact">—</span></div>
+          <div class="ic-row"><span class="ic-label">誤差</span><span class="ic-value" id="tr-err">—</span></div>
+        </div>
+        <div class="info-box green" style="margin:0;padding:.8rem 1rem;">
+          <span class="info-label">提醒</span>
+          <div style="font-size:.85rem;line-height:1.65;">$\iiint_Q dV$ 等於 $Q$ 的體積；本節先專注在把三維區域 $Q$ 正確寫成三層積分。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="sec-14-6-2" class="subsection">
+    <h3>14.6.2 經典例題與技法</h3>
+
+    <div class="lecture-example">
+      <div class="ex-tag">延伸例題 · 拋物面下方體積</div>
+      <div class="ex-title">$Q$：$0\le z\le 4-x^2-y^2$，求 $V=\iiint_Q dV$</div>
+      <div class="step-block"><div class="step-num">步驟 1（投影到 xy）</div>$z\ge 0$ 要求 $4-x^2-y^2\ge 0$，即 $D:x^2+y^2\le 4$（半徑 2 圓盤）。</div>
+      <div class="step-block"><div class="step-num">步驟 2（先對 z 積）</div>$\displaystyle\int_0^{4-x^2-y^2}dz=4-x^2-y^2$。剩下對 $(x,y)$ 在圓盤上積分。</div>
+      <div class="step-block"><div class="step-num">步驟 3（極座標化）</div>$\displaystyle V=\iint_D (4-r^2)\,r\,dr\,d\theta=\int_0^{2\pi}\!\int_0^2 (4-r^2)\,r\,dr\,d\theta.$</div>
+      <div class="step-block"><div class="step-num">步驟 4（內層 + 外層）</div>$\displaystyle\int_0^2(4r-r^3)\,dr=[2r^2-\tfrac{r^4}{4}]_0^2=8-4=4$；$\displaystyle V=\int_0^{2\pi}4\,d\theta=8\pi.$</div>
+      <div class="ex-answer">$V=8\pi\approx 25.133$。上方互動切到 "z=x²+y² 與 z=4" 預設並把 $N$ 拉大可看 Riemann 和逼近 $8\pi$。</div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">延伸例題 · 拋物面下方加權體積</div>
+      <div class="ex-title">求 $\displaystyle\iiint_E z\,dV$，$E:0\le z\le 1-x^2-y^2$</div>
+      <div class="step-block"><div class="step-num">步驟 1（區域投影）</div>$z\ge 0\Rightarrow x^2+y^2\le 1$，$D$ 為單位圓盤。</div>
+      <div class="step-block"><div class="step-num">步驟 2（先對 z 積）</div>$\displaystyle\int_0^{1-x^2-y^2}z\,dz=\tfrac{(1-x^2-y^2)^2}{2}.$</div>
+      <div class="step-block"><div class="step-num">步驟 3（極座標化）</div>$\displaystyle\iint_D \tfrac{(1-r^2)^2}{2}\,r\,dr\,d\theta=\int_0^{2\pi}\!\int_0^1 \tfrac{(1-r^2)^2}{2}\,r\,dr\,d\theta.$</div>
+      <div class="step-block"><div class="step-num">步驟 4（內層代換 $u=1-r^2$）</div>$du=-2r\,dr$：$\displaystyle\int_0^1 (1-r^2)^2 r\,dr=\tfrac{1}{2}\!\int_0^1 u^2\,du=\tfrac{1}{6}.$</div>
+      <div class="step-block"><div class="step-num">步驟 5（外層）</div>$\displaystyle\iiint_E z\,dV=\int_0^{2\pi}\tfrac{1}{12}\,d\theta=\tfrac{\pi}{6}.$</div>
+      <div class="ex-answer">$\displaystyle\iiint_E z\,dV=\dfrac{\pi}{6}\approx 0.524$。教學重點：「先對最容易範圍的變數積」— 這裡 $z$ 範圍最簡單（$0$ 到 $1-x^2-y^2$）。</div>
+    </div>
+  </div>
+
+  <h4 id="sec-14-6-3">診斷視覺：第一型區域 $\to$ 投影到 xy 平面</h4>
+  <p>三維區域 $E$ 寫成 第一型 形式 $\{(x,y,z): (x,y)\in D,\ z_1(x,y)\le z\le z_2(x,y)\}$ 時，投影到 $xy$ 平面是 $D$。下圖示意「$xy$ 平面上方、拋物面 $z=4-x^2-y^2$ 下方」這個三維區域與其 $xy$ 投影 $D:x^2+y^2\le 4$ 的關係。</p>
+  <div class="canvas3d-panel canvas-2d" style="max-width:560px;">
+    <div class="canvas-wrap" style="aspect-ratio:1.4/1;">
+      <canvas id="canvas-14-6-projection"></canvas>
+      <div class="hint-overlay">側視：z 與 xy 投影 D</div>
+    </div>
+    <div class="controls-bar">
+      <span style="font-size:.78rem;color:var(--muted);">x 切片位置</span>
+      <input type="range" id="proj14_6X" min="-1.95" max="1.95" step="0.05" value="0" style="flex:1;max-width:200px;accent-color:#5dade2;">
+      <span class="slider-val" id="proj14_6XVal">0.00</span>
+    </div>
+  </div>
+
+  <div class="concept-warning">
+    <div class="cw-title">概念辨析 · 第一型/II/III 與「先積誰」</div>
+    <p>(1) <strong>第一型（投影到 xy）</strong>：$z$ 介於 $z_1(x,y)$ 與 $z_2(x,y)$，$(x,y)\in D\subset xy$。最常用。<br>
+    (2) <strong>第一型I（投影到 yz）</strong>：$x$ 介於 $x_1(y,z)$ 與 $x_2(y,z)$，$(y,z)\in D\subset yz$。<br>
+    (3) <strong>第一型II（投影到 xz）</strong>：$y$ 介於 $y_1(x,z)$ 與 $y_2(x,z)$，$(x,z)\in D\subset xz$。<br>
+    (4) <strong>策略</strong>：選那個讓「最內層上下限是<em>常數</em>或最簡單」的 type。上方拋物面例題的 $z\in[0,4-x^2-y^2]$ 就比反過來「$x\in[\dots]$ 上下含 $z$」簡單。<br>
+    (5) <strong>$dV\ne dA$</strong>：$dV=dz\,dA=dx\,dy\,dz$；別把 $dA$ 當成 $dV$。</p>
+  </div>
+
+  <div class="quiz-card" id="q-146">
+    <span class="quiz-tag">概念題</span>
+    <div class="quiz-q">想把 $\displaystyle\iiint_Q f\,dz\,dy\,dx$ 改成 $\,dx\,dy\,dz$ 順序，下列何者正確？</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">直接互換 $dx\leftrightarrow dz$ 即可，上下限不變</button>
+      <button class="quiz-opt">必須先確認 $f$ 在 $Q$ 上連續，再用 Fubini 即可任意換序，但上下限不可動</button>
+      <button class="quiz-opt">$f$ 連續時可換序，但要重新表達 $Q$，把每個變數的上下限以新「外層變數」描述</button>
+      <button class="quiz-opt">三重積分不能換序</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="quiz-card" id="q-146b">
+    <span class="quiz-tag">數字題</span>
+    <div class="quiz-q">求立方體 $[0,1]^3$ 上的 $\displaystyle\iiint_Q xyz\,dV$。（提示：三重積分可拆成 $\int x\,dx\cdot\int y\,dy\cdot\int z\,dz$，因為被積函數可分離）</div>
+    <div class="quiz-input-row">
+      <input type="number" class="quiz-input" placeholder="輸入數值（小數）" step="0.001">
+      <button class="quiz-check">檢查</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="section-summary">
+    <div class="section-summary-title">14.6 重點整理</div>
+    <ul>
+      <li>三重積分 $\iiint_Q f\,dV$ = Riemann 和 $\sum f(x_i,y_i,z_i)\,\Delta V_i$ 的極限；$f=1$ 給出體積。</li>
+      <li>Fubini（三維）：$f$ 連續且 $Q$ 為 第一型 時可寫成三層重複積分 $\int\!\int\!\int f\,dz\,dy\,dx$。</li>
+      <li>選 第一型/II/III 的關鍵：讓「最內層」的上下限最簡（最好是常數或<em>單一</em>外層變數的函數）。</li>
+      <li>換序不只是換 $d$ — 必須重新描述 $Q$ 的不等式，把每個變數的上下限用「新外層變數」表示。</li>
+      <li>圓盤投影 $D$ 用極座標：$\iiint_E f\,dV=\int\!\int_D\bigl(\int_{z_1}^{z_2}f\,dz\bigr)r\,dr\,d\theta$。</li>
+      <li>本頁聚焦 14.6 的三重積分設定與體積計算。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- §14.7 柱與球座標                                              -->
+<!-- ============================================================ -->
+<section id="sec-14-7">
+  <div class="section-number">第 14.7 節 · 圓柱與球面座標的三重積分</div>
+  <h2>用對稱挑座標：$dV$ 的真實樣貌</h2>
+
+  <div id="sec-14-7-1" class="subsection">
+    <h3>14.7.1 圓柱座標：$dV=r\,dr\,d\theta\,dz$</h3>
+    <p>圓柱座標 $(r,\theta,z)$ 與直角座標的轉換：</p>
+    <div style="text-align:center;">$$x=r\cos\theta,\quad y=r\sin\theta,\quad z=z.$$</div>
+    <p>把厚度為 $dr,\,d\theta,\,dz$ 的小元素圍出一塊<span class="pill pill-yellow">楔形殼</span>。它的兩個 $z$ 面是「<strong>環形扇形</strong>」，在 $r$ 方向長度 $dr$、在 $\theta$ 方向圓弧長 $r\,d\theta$，所以底面積 $\approx r\,dr\,d\theta$，乘上高 $dz$ 得</p>
+    <div style="text-align:center;">$$dV\approx r\,dr\,d\theta\,dz.$$</div>
+
+    <div class="info-box green">
+      <span class="info-label">14.7.1 公式 · 圓柱座標三重積分</span>
+      <div style="text-align:center;margin:.3rem 0;">$$\iiint_Q f\,dV=\int_{\theta_1}^{\theta_2}\!\!\int_{g_1(\theta)}^{g_2(\theta)}\!\!\int_{h_1(r\cos\theta,r\sin\theta)}^{h_2(r\cos\theta,r\sin\theta)} f(r\cos\theta,r\sin\theta,z)\,r\,dz\,dr\,d\theta.$$</div>
+      <p style="margin:.3rem 0;">注意末端那個額外的 <strong>$r$</strong>：來自雅可比 $\partial(x,y,z)/\partial(r,\theta,z)=r$。</p>
+    </div>
+
+    <h4>互動：拖動 $(r,\theta,z)$ 與 $(dr,d\theta,dz)$ 觀察 $dV$</h4>
+
+    <div class="viz-layout">
+      <div>
+        <div class="canvas3d-panel">
+          <div class="canvas-wrap">
+            <canvas id="canvas-cyl"></canvas>
+            <div class="hint-overlay">拖曳旋轉 · 滾輪縮放</div>
+          </div>
+          <div class="axis-legend">
+            <span class="ax-x">x</span><span class="ax-y">y</span><span class="ax-z">z</span>
+            <span class="ax-tile">楔形殼 $dV$</span>
+          </div>
+          <div class="controls-bar" style="flex-direction:column;align-items:stretch;border-top:none;padding-top:0;margin-top:.5rem;">
+            <div class="slider-row"><span class="slider-label">r</span><input type="range" id="cyl-rs" min="0.3" max="3" step="0.05" value="2"></div>
+            <div class="slider-row"><span class="slider-label">θ</span><input type="range" id="cyl-ths" min="0" max="6.0" step="0.05" value="1.05"></div>
+            <div class="slider-row"><span class="slider-label">z</span><input type="range" id="cyl-zs" min="-2" max="2" step="0.05" value="1.5"></div>
+            <div class="slider-row"><span class="slider-label">dr</span><input type="range" id="cyl-drs" min="0.1" max="1.2" step="0.05" value="0.5"></div>
+            <div class="slider-row"><span class="slider-label">dθ</span><input type="range" id="cyl-dths" min="0.1" max="1.5" step="0.05" value="0.5"></div>
+            <div class="slider-row"><span class="slider-label">dz</span><input type="range" id="cyl-dzs" min="0.1" max="1.5" step="0.05" value="0.6"></div>
+          </div>
+        </div>
+      </div>
+      <div class="side-panel">
+        <div class="eq-card">
+          <div class="eq-label">VOLUME ELEMENT</div>
+          <div class="eq-formula">$dV \approx r\,dr\,d\theta\,dz$</div>
+          <div class="eq-sub">$|J|=r$（雅可比）</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">當下楔形殼</div>
+          <div class="ic-row"><span class="ic-label">r</span><span class="ic-value" id="cyl-r">2.00</span></div>
+          <div class="ic-row"><span class="ic-label">θ</span><span class="ic-value" id="cyl-th">60°</span></div>
+          <div class="ic-row"><span class="ic-label">z</span><span class="ic-value" id="cyl-z">1.50</span></div>
+          <div class="ic-row"><span class="ic-label">dr</span><span class="ic-value" id="cyl-dr">0.50</span></div>
+          <div class="ic-row"><span class="ic-label">dθ</span><span class="ic-value" id="cyl-dth">29°</span></div>
+          <div class="ic-row"><span class="ic-label">dz</span><span class="ic-value" id="cyl-dz">0.60</span></div>
+          <div class="ic-row"><span class="ic-label">$r\,dr\,d\theta\,dz$</span><span class="ic-value highlight" id="cyl-dV">—</span></div>
+          <div class="ic-row"><span class="ic-label">精確楔形體積</span><span class="ic-value ok" id="cyl-dVe">—</span></div>
+        </div>
+        <div class="info-box green" style="margin:0;padding:.8rem 1rem;">
+          <span class="info-label">適用</span>
+          <div style="font-size:.85rem;line-height:1.65;">區域具<strong>圓柱對稱</strong> (繞 $z$ 軸對稱) 時最簡。例如圓柱、圓錐、繞軸旋轉體、${x^2+y^2}$ 出現在被積函數時。</div>
+        </div>
+      </div>
+    </div>
+
+    <h4>圓柱座標例題</h4>
+
+    <div class="lecture-example">
+      <div class="ex-tag">延伸例題 · 圓柱上的加權積分</div>
+      <div class="ex-title">求 $\displaystyle\iiint_E z\,dV$，$E:x^2+y^2\le 4,\ 0\le z\le 3$（半徑 2、高 3 圓柱）</div>
+      <div class="step-block"><div class="step-num">步驟 1（描述區域）</div>$E$ 在圓柱座標：$0\le r\le 2,\ 0\le\theta\le 2\pi,\ 0\le z\le 3$。$dV=r\,dr\,d\theta\,dz$。</div>
+      <div class="step-block"><div class="step-num">步驟 2（變數分離）</div>被積函數 $z$ 與 $r,\theta$ 無關 — 三層積分可拆：$$\iiint_E z\,dV=\!\!\int_0^{2\pi}\!\!\int_0^2\!\!\int_0^3 z\cdot r\,dz\,dr\,d\theta=\!\!\int_0^{2\pi}\!d\theta\!\int_0^2 r\,dr\!\int_0^3 z\,dz.$$</div>
+      <div class="step-block"><div class="step-num">步驟 3（三層獨立計算）</div>$\int_0^{2\pi}d\theta=2\pi$；$\int_0^2 r\,dr=2$；$\int_0^3 z\,dz=\tfrac{9}{2}$。乘起來：$2\pi\cdot 2\cdot\tfrac{9}{2}=18\pi.$</div>
+      <div class="ex-answer">$\displaystyle\iiint_E z\,dV=18\pi\approx 56.55$。<strong>觀察</strong>：被積函數可分離，三層積分等於三個一維積分相乘。</div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">延伸例題 · 圓錐與平面圍成的體積</div>
+      <div class="ex-title">求圓錐 $z=\sqrt{x^2+y^2}$ 與平面 $z=2$ 圍成立體 $E$ 的體積</div>
+      <div class="step-block"><div class="step-num">步驟 1（圓柱座標化）</div>圓錐 $z=\sqrt{x^2+y^2}=r$；上界平面 $z=2$。底面為圓盤 $r\le 2$（由 $r=2$ 解出）。$E$：$0\le\theta\le 2\pi,\ 0\le r\le 2,\ r\le z\le 2$。</div>
+      <div class="step-block"><div class="step-num">步驟 2（最內層 $z$）</div>$\displaystyle\int_r^2 dz=2-r$。</div>
+      <div class="step-block"><div class="step-num">步驟 3（中層 $r$）</div>$\displaystyle\int_0^2 r(2-r)\,dr=\bigl[r^2-\tfrac{r^3}{3}\bigr]_0^2=4-\tfrac{8}{3}=\tfrac{4}{3}.$</div>
+      <div class="step-block"><div class="step-num">步驟 4（外層 $\theta$）</div>$\displaystyle V=\int_0^{2\pi}\tfrac{4}{3}\,d\theta=\tfrac{8\pi}{3}.$</div>
+      <div class="ex-answer">$V=\dfrac{8\pi}{3}\approx 8.378$。可比對直角座標 $\int\!\int_D (2-\sqrt{x^2+y^2})\,dA$，會麻煩許多。</div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">延伸例題 · 圓錐上的加權積分</div>
+      <div class="ex-title">求 $\displaystyle\iiint_E (x^2+y^2)\,dV$，其中 $E$ 為圓錐 $z=\sqrt{x^2+y^2}$ 與平面 $z=2$ 圍成的立體區域。</div>
+      <div class="step-block"><div class="step-num">步驟 1（圓柱座標）</div>$x^2+y^2=r^2$，被積函數 $r^2\cdot r=r^3$（含 $dV$ 中的 $r$）。$E$：$0\le\theta\le 2\pi,\ 0\le r\le 2,\ r\le z\le 2$。</div>
+      <div class="step-block"><div class="step-num">步驟 2（最內層）</div>$\displaystyle\int_r^2 r^3\,dz=r^3(2-r).$</div>
+      <div class="step-block"><div class="step-num">步驟 3（中層）</div>$\displaystyle\int_0^2 r^3(2-r)\,dr=\bigl[\tfrac{r^4}{2}-\tfrac{r^5}{5}\bigr]_0^2=8-\tfrac{32}{5}=\tfrac{8}{5}.$</div>
+      <div class="step-block"><div class="step-num">步驟 4（外層）</div>$\displaystyle\iiint_E(x^2+y^2)\,dV=\int_0^{2\pi}\tfrac{8}{5}d\theta=\tfrac{16\pi}{5}.$</div>
+      <div class="ex-answer">$\displaystyle\iiint_E(x^2+y^2)\,dV=\dfrac{16\pi}{5}\approx 10.05$。教學重點：被積函數含 $x^2+y^2$ 時，圓柱座標會把它直接化為 $r^2$。</div>
+    </div>
+  </div>
+
+  <div id="sec-14-7-2" class="subsection">
+    <h3>14.7.2 球面座標：$dV=\rho^2\sin\phi\,d\rho\,d\phi\,d\theta$</h3>
+    <p>球面座標 $(\rho,\phi,\theta)$ 中，$\rho\ge0$ 為徑距、$\phi\in[0,\pi]$ 為從正 $z$ 軸量下的極角、$\theta\in[0,2\pi)$ 為 $xy$ 平面方位角：</p>
+    <div style="text-align:center;">$$x=\rho\sin\phi\cos\theta,\ y=\rho\sin\phi\sin\theta,\ z=\rho\cos\phi.$$</div>
+    <p>把 $d\rho,d\phi,d\theta$ 各取一小段，產生的「<strong>球殼楔形</strong>」近似一個盒子，邊長分別為 $d\rho$、$\rho\,d\phi$、$\rho\sin\phi\,d\theta$，故</p>
+    <div style="text-align:center;">$$dV\approx \rho^2\sin\phi\,d\rho\,d\phi\,d\theta.$$</div>
+    <p>因子 $\sin\phi$ 是因為「同 $\rho$ 的緯線圈」周長為 $2\pi\rho\sin\phi$，赤道 ($\phi=\pi/2$) 最大、兩極 ($\phi=0,\pi$) 為零。</p>
+
+    <div class="info-box green">
+      <span class="info-label">14.7.2 公式 · 球面座標三重積分</span>
+      <div style="text-align:center;margin:.3rem 0;">$$\iiint_Q f\,dV=\int_{\theta_1}^{\theta_2}\!\!\int_{\phi_1}^{\phi_2}\!\!\int_{\rho_1}^{\rho_2} f(\rho\sin\phi\cos\theta,\rho\sin\phi\sin\theta,\rho\cos\phi)\,\rho^2\sin\phi\,d\rho\,d\phi\,d\theta.$$</div>
+    </div>
+
+    <div class="viz-layout">
+      <div>
+        <div class="canvas3d-panel">
+          <div class="canvas-wrap">
+            <canvas id="canvas-sph"></canvas>
+            <div class="hint-overlay">拖曳旋轉 · 滾輪縮放</div>
+          </div>
+          <div class="axis-legend">
+            <span class="ax-x">x</span><span class="ax-y">y</span><span class="ax-z">z</span>
+            <span class="ax-tile">球楔 $dV$</span>
+          </div>
+          <div class="controls-bar" style="flex-direction:column;align-items:stretch;border-top:none;padding-top:0;margin-top:.5rem;">
+            <div class="slider-row"><span class="slider-label">ρ</span><input type="range" id="sph-rhos" min="0.5" max="3.5" step="0.05" value="2.5"></div>
+            <div class="slider-row"><span class="slider-label">φ</span><input type="range" id="sph-phis" min="0.1" max="3.0" step="0.05" value="1.05"></div>
+            <div class="slider-row"><span class="slider-label">θ</span><input type="range" id="sph-ths" min="0" max="6.0" step="0.05" value="0.78"></div>
+            <div class="slider-row"><span class="slider-label">dρ</span><input type="range" id="sph-drhos" min="0.1" max="1.0" step="0.05" value="0.5"></div>
+            <div class="slider-row"><span class="slider-label">dφ</span><input type="range" id="sph-dphis" min="0.1" max="1.2" step="0.05" value="0.5"></div>
+            <div class="slider-row"><span class="slider-label">dθ</span><input type="range" id="sph-dths" min="0.1" max="1.5" step="0.05" value="0.5"></div>
+          </div>
+        </div>
+      </div>
+      <div class="side-panel">
+        <div class="eq-card">
+          <div class="eq-label">VOLUME ELEMENT</div>
+          <div class="eq-formula">$dV \approx \rho^2\sin\phi\,d\rho\,d\phi\,d\theta$</div>
+          <div class="eq-sub">$|J|=\rho^2\sin\phi$</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">當下球楔</div>
+          <div class="ic-row"><span class="ic-label">ρ</span><span class="ic-value" id="sph-rho">2.50</span></div>
+          <div class="ic-row"><span class="ic-label">φ</span><span class="ic-value" id="sph-phi">60°</span></div>
+          <div class="ic-row"><span class="ic-label">θ</span><span class="ic-value" id="sph-th">45°</span></div>
+          <div class="ic-row"><span class="ic-label">dρ</span><span class="ic-value" id="sph-drho">0.50</span></div>
+          <div class="ic-row"><span class="ic-label">dφ</span><span class="ic-value" id="sph-dphi">29°</span></div>
+          <div class="ic-row"><span class="ic-label">dθ</span><span class="ic-value" id="sph-dth">29°</span></div>
+          <div class="ic-row"><span class="ic-label">$\rho^2\sin\phi\,d\rho d\phi d\theta$</span><span class="ic-value highlight" id="sph-dV">—</span></div>
+          <div class="ic-row"><span class="ic-label">精確球楔</span><span class="ic-value ok" id="sph-dVe">—</span></div>
+        </div>
+        <div class="info-box green" style="margin:0;padding:.8rem 1rem;">
+          <span class="info-label">適用</span>
+          <div style="font-size:.85rem;line-height:1.65;">區域具<strong>球對稱</strong>時最簡（球體、球殼、上半球、錐體 $\phi\le\phi_0$）；被積函數含 $x^2+y^2+z^2$ 時用球座標通常變成 $\rho^2$。</div>
+        </div>
+      </div>
+    </div>
+
+    <h4>球面座標例題</h4>
+
+    <div class="lecture-example">
+      <div class="ex-tag">延伸例題 · 球體積（從定義）</div>
+      <div class="ex-title">用球面座標證明半徑 $a$ 的球體積為 $V=\dfrac{4\pi a^3}{3}$</div>
+      <div class="step-block"><div class="step-num">步驟 1（描述球）</div>$E:0\le\rho\le a,\ 0\le\phi\le\pi,\ 0\le\theta\le 2\pi$；$dV=\rho^2\sin\phi\,d\rho\,d\phi\,d\theta$。</div>
+      <div class="step-block"><div class="step-num">步驟 2（三層分離）</div>$f=1$，三層完全分離：$$V=\!\int_0^{2\pi}\!d\theta\!\int_0^\pi\!\sin\phi\,d\phi\!\int_0^a\rho^2\,d\rho.$$</div>
+      <div class="step-block"><div class="step-num">步驟 3（三層計算）</div>$\int_0^{2\pi}d\theta=2\pi$；$\int_0^\pi\sin\phi\,d\phi=2$；$\int_0^a\rho^2\,d\rho=\tfrac{a^3}{3}$。乘起來：$2\pi\cdot 2\cdot\tfrac{a^3}{3}=\dfrac{4\pi a^3}{3}.$</div>
+      <div class="ex-answer">$V=\dfrac{4\pi a^3}{3}$。<strong>注意</strong>：$\phi$ 範圍 $[0,\pi]$（不是 $[0,2\pi]$！），覆蓋從北極到南極一次。</div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">延伸例題 · 含 $e^{(x^2+y^2+z^2)^{3/2}}$ 的單位球積分</div>
+      <div class="ex-title">求 $\displaystyle\iiint_E e^{(x^2+y^2+z^2)^{3/2}}\,dV$，$E$ 為單位球 $\rho\le 1$</div>
+      <div class="step-block"><div class="step-num">步驟 1（球座標化）</div>$x^2+y^2+z^2=\rho^2\Rightarrow (x^2+y^2+z^2)^{3/2}=\rho^3$。被積函數變成 $e^{\rho^3}\cdot\rho^2\sin\phi$。</div>
+      <div class="step-block"><div class="step-num">步驟 2（三層拆開）</div>$\displaystyle\!\int_0^{2\pi}\!d\theta\!\int_0^\pi\sin\phi\,d\phi\!\int_0^1 e^{\rho^3}\rho^2\,d\rho.$</div>
+      <div class="step-block"><div class="step-num">步驟 3（內層代換 $u=\rho^3$）</div>$du=3\rho^2 d\rho$，$\rho=0\to u=0$、$\rho=1\to u=1$：$\displaystyle\int_0^1 e^{\rho^3}\rho^2\,d\rho=\tfrac{1}{3}\!\int_0^1 e^u du=\tfrac{e-1}{3}.$</div>
+      <div class="step-block"><div class="step-num">步驟 4（合成）</div>$\displaystyle\iiint_E e^{\rho^3}\,dV=2\pi\cdot 2\cdot\tfrac{e-1}{3}=\dfrac{4\pi(e-1)}{3}.$</div>
+      <div class="ex-answer">$\displaystyle\iiint_E e^{(x^2+y^2+z^2)^{3/2}}\,dV=\dfrac{4\pi(e-1)}{3}\approx 7.198$。教學重點：用球座標把 $(x^2+y^2+z^2)^k$ 換成 $\rho^{2k}$，常常解開原本不可解的 $e^{\rho^2}$ 等指數。</div>
+    </div>
+
+    <div class="lecture-example">
+      <div class="ex-tag">延伸例題 · 球與圓錐的交集</div>
+      <div class="ex-title">求單位球 $\rho\le 1$ 與圓錐 $z\ge\sqrt{x^2+y^2}$ 上方所夾區域 $E$ 的體積</div>
+      <div class="step-block"><div class="step-num">步驟 1（圓錐 $\to$ 球座標）</div>$z=\sqrt{x^2+y^2}\Leftrightarrow\rho\cos\phi=\rho\sin\phi\Leftrightarrow\tan\phi=1\Leftrightarrow\phi=\tfrac{\pi}{4}$。「圓錐上方」對應 $\phi\le\pi/4$。</div>
+      <div class="step-block"><div class="step-num">步驟 2（描述 $E$）</div>$E:0\le\rho\le 1,\ 0\le\phi\le\pi/4,\ 0\le\theta\le 2\pi$。</div>
+      <div class="step-block"><div class="step-num">步驟 3（三層分離）</div>$\displaystyle V=\!\int_0^{2\pi}\!d\theta\!\int_0^{\pi/4}\!\sin\phi\,d\phi\!\int_0^1\rho^2\,d\rho=2\pi\cdot\bigl[1-\tfrac{\sqrt 2}{2}\bigr]\cdot\tfrac{1}{3}.$</div>
+      <div class="step-block"><div class="step-num">步驟 4（化簡）</div>$\displaystyle V=\dfrac{2\pi}{3}\Bigl(1-\tfrac{\sqrt 2}{2}\Bigr)=\dfrac{\pi(2-\sqrt 2)}{3}.$</div>
+      <div class="ex-answer">$V=\dfrac{\pi(2-\sqrt 2)}{3}\approx 0.613$。「冰淇淋」幾何：底為球面、上端是圓錐尖。換用其他座標都會非常複雜。</div>
+    </div>
+
+    <div class="concept-warning">
+      <div class="cw-title">概念辨析 · 三套座標的常見陷阱</div>
+      <p>(1) <strong>圓柱座標 $r$ 是平面投影距離</strong>，不是 三維 距離。三維 距離是球座標的 $\rho$。<br>
+      (2) <strong>球面座標 $\phi$ 是極角（從 +z 軸量起）</strong>，不是仰角（從 xy 平面量起）。範圍 $[0,\pi]$。「赤道」$\phi=\pi/2$ 而非 $0$。<br>
+      (3) <strong>$\theta$ 在圓柱與球面座標都是 xy 平面方位角</strong>，範圍 $[0,2\pi)$。<br>
+      (4) <strong>三種 $dV$ 不能混用</strong>：直角 $dx\,dy\,dz$、圓柱 $r\,dr\,d\theta\,dz$、球面 $\rho^2\sin\phi\,d\rho\,d\phi\,d\theta$。漏掉 $r$ 或 $\rho^2\sin\phi$ 是最常見錯誤。<br>
+      (5) <strong>$\sin\phi$ 永遠正</strong>（因 $\phi\in[0,\pi]$），所以 $|J|=\rho^2\sin\phi$ 不需取絕對值。</p>
+    </div>
+
+    <h4 id="sec-14-7-3">診斷視覺：dV 的圓柱 vs 球面對比</h4>
+    <p>同樣是「徑向 × 角向 × 厚度」的小體積，圓柱座標乘上 $r$，球面座標乘上 $\rho^2\sin\phi$。下面雙圖固定小角度與小厚度，展示 $r$ 或 $\rho,\phi$ 變化時體積元素的相對大小。</p>
+    <div class="dual-canvas">
+      <div class="canvas3d-panel canvas-2d">
+        <div class="canvas-wrap" style="aspect-ratio:1/1;">
+          <canvas id="canvas-14-7-cyl-elem"></canvas>
+          <div class="hint-overlay">圓柱：底面 $r\,dr\,d\theta$</div>
+        </div>
+      </div>
+      <div class="canvas3d-panel canvas-2d">
+        <div class="canvas-wrap" style="aspect-ratio:1/1;">
+          <canvas id="canvas-14-7-sph-elem"></canvas>
+          <div class="hint-overlay">球面：截面 $\rho^2\sin\phi\,d\rho\,d\phi$</div>
+        </div>
+      </div>
+    </div>
+    <div class="slider-row" style="margin-top:.5rem;">
+      <span class="slider-label">圓柱 r</span>
+      <input type="range" id="dvR" min="0.2" max="2.5" step="0.05" value="1.5">
+      <span class="slider-val" id="dvRVal">1.50</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">球面 ρ</span>
+      <input type="range" id="dvRho" min="0.2" max="2.5" step="0.05" value="1.5">
+      <span class="slider-val" id="dvRhoVal">1.50</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">球面 φ</span>
+      <input type="range" id="dvPhi" min="0.1" max="3.04" step="0.02" value="1.5708">
+      <span class="slider-val" id="dvPhiVal">90°</span>
+    </div>
+    <div class="info-card" style="margin-top:.5rem;">
+      <div class="ic-title">當前體積元素值（取 $\Delta r=\Delta\rho=\Delta\theta=\Delta\phi=\Delta z=0.1$）</div>
+      <div class="ic-row"><span class="ic-label">圓柱 $r\,\Delta r\,\Delta\theta\,\Delta z$</span><span class="ic-value highlight" id="dvCylVal">—</span></div>
+      <div class="ic-row"><span class="ic-label">球面 $\rho^2\sin\phi\,\Delta\rho\,\Delta\phi\,\Delta\theta$</span><span class="ic-value ok" id="dvSphVal">—</span></div>
+      <div class="ic-row"><span class="ic-label">$\sin\phi$ 因子</span><span class="ic-value" id="dvSinPhi">—</span></div>
+    </div>
+
+    <h4>三套座標的 $dV$ 速查</h4>
+    <table class="conv-table">
+      <thead><tr><th>座標</th><th>變數轉換</th><th>$dV$</th><th>適用區域</th></tr></thead>
+      <tbody>
+        <tr><td>直角</td><td>$(x,y,z)$</td><td>$dx\,dy\,dz$</td><td>盒形、平面切割</td></tr>
+        <tr><td>圓柱</td><td>$x=r\cos\theta,\ y=r\sin\theta,\ z=z$</td><td>$r\,dr\,d\theta\,dz$</td><td>繞 $z$ 軸旋轉對稱</td></tr>
+        <tr><td>球面</td><td>$x=\rho\sin\phi\cos\theta,\dots$</td><td>$\rho^2\sin\phi\,d\rho\,d\phi\,d\theta$</td><td>球對稱、錐</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="quiz-card" id="q-147">
+    <span class="quiz-tag">概念檢查</span>
+    <div class="quiz-q">把 $\iiint_Q f\,dV$ 改寫為圓柱座標時，$dV$ 應寫成？</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">$dr\,d\theta\,dz$</button>
+      <button class="quiz-opt">$r\,dr\,d\theta\,dz$</button>
+      <button class="quiz-opt">$r^2\sin\theta\,dr\,d\theta\,dz$</button>
+      <button class="quiz-opt">$r\,d\theta\,dz$</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="quiz-card" id="q-148">
+    <span class="quiz-tag">概念題</span>
+    <div class="quiz-q">球面座標中 $dV$ 為何含 $\sin\phi$？</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">純粹是慣例</button>
+      <button class="quiz-opt">為了讓 $\rho$ 維度正確</button>
+      <button class="quiz-opt">緯線圈周長 $\propto \sin\phi$；雅可比展開後 $|J|=\rho^2\sin\phi$</button>
+      <button class="quiz-opt">與 $\theta$ 範圍 $[0,2\pi)$ 有關</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="quiz-card" id="q-147b">
+    <span class="quiz-tag">數字題</span>
+    <div class="quiz-q">求半球 $E:0\le z,\ x^2+y^2+z^2\le 1$ 的體積。（提示：用球面座標 $\phi\in[0,\pi/2]$）</div>
+    <div class="quiz-input-row">
+      <input type="number" class="quiz-input" placeholder="輸入數值" step="0.001">
+      <button class="quiz-check">檢查</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="section-summary">
+    <div class="section-summary-title">14.7 重點整理</div>
+    <ul>
+      <li><strong>圓柱座標</strong>：$x=r\cos\theta,\ y=r\sin\theta,\ z=z$；$dV=r\,dr\,d\theta\,dz$（雅可比 $|J|=r$）。</li>
+      <li><strong>球面座標</strong>：$x=\rho\sin\phi\cos\theta,\ y=\rho\sin\phi\sin\theta,\ z=\rho\cos\phi$；$dV=\rho^2\sin\phi\,d\rho\,d\phi\,d\theta$。</li>
+      <li>$\phi\in[0,\pi]$ 從 +z 軸量起；$\theta\in[0,2\pi)$ 是 xy 平面方位角。常見錯誤是把 $\phi$ 當仰角。</li>
+      <li>選用準則：圓柱對稱（含 $\sqrt{x^2+y^2}$、繞 $z$ 軸旋轉體）→ 圓柱；球對稱、含 $x^2+y^2+z^2$ → 球面。</li>
+      <li>「最內層先固定範圍」原則：圓柱 z 從 $z_1(r,\theta)$ 到 $z_2(r,\theta)$；球面 $\rho$ 從 $\rho_1(\phi,\theta)$ 到 $\rho_2(\phi,\theta)$。</li>
+      <li>當被積函數可分離（如 $f(\rho)\cdot g(\phi)\cdot h(\theta)$），三層積分可拆成三個一維積分相乘。</li>
+      <li>常用值：球體積 $\tfrac{4}{3}\pi a^3$、圓錐體積 $\tfrac{1}{3}\pi r^2 h$、半球體積 $\tfrac{2}{3}\pi a^3$。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- §14.8 雅可比（補充）                                          -->
+<!-- ============================================================ -->
+<section id="sec-14-8">
+  <div class="section-number">14.8 變數變換：雅可比矩陣（補充）</div>
+  <h2>14.8 $|J|$ 是面積放大率（補充）</h2>
+  <p>本節對應講義的雅可比變數變換內容，但在本頁列為補充章節；主線仍以 14.5 曲面面積、14.6 三重積分、14.7 圓柱與球面座標為準。</p>
+  <h3 id="sec-14-8-1">14.8.1 雅可比</h3>
+  <p>給定 $T:(u,v)\mapsto(x,y)=(g(u,v),h(u,v))$，雅可比為</p>
+  <div style="text-align:center;">$$\dfrac{\partial(x,y)}{\partial(u,v)}=\det\!\begin{pmatrix}\partial x/\partial u & \partial x/\partial v\\ \partial y/\partial u & \partial y/\partial v\end{pmatrix}=\dfrac{\partial x}{\partial u}\dfrac{\partial y}{\partial v}-\dfrac{\partial y}{\partial u}\dfrac{\partial x}{\partial v}.$$</div>
+
+  <div class="info-box warm">
+    <span class="info-label">定理 14.5 · 二重積分變數變換</span>
+    <p style="margin:.55rem 0 .3rem;">若 $T$ 在 $S$ 內為一對一且具連續一階偏導，$f$ 在 $R=T(S)$ 連續且 $\partial(x,y)/\partial(u,v)\ne 0$，則</p>
+    <div style="text-align:center;">$$\iint_R f(x,y)\,dx\,dy=\iint_S f(g(u,v),h(u,v))\left|\dfrac{\partial(x,y)}{\partial(u,v)}\right|du\,dv.$$</div>
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">幾何意義</span>
+    <div style="font-size:.92rem;">把 $(u,v)$ 平面上的小矩形 $du\,dv$ 經過 $T$ 送到 $(x,y)$ 平面，會變形為一個近似的<strong>平行四邊形</strong>，面積為 $|J|\,du\,dv$。換言之 $|J|$ 是<em>局部面積放大率</em>。</div>
+  </div>
+
+  <h4>互動：左圖一個 $du\,dv$ 矩形 → 右圖被 $T$ 映成的彎曲小片</h4>
+
+  <div class="preset-row" id="jacPresets">
+    <button class="preset-btn active" data-id="polar">極座標</button>
+    <button class="preset-btn" data-id="affine">線性 $2u+v,\ u+3v$</button>
+    <button class="preset-btn" data-id="shear">$u+v^2,\ v$</button>
+    <button class="preset-btn" data-id="rotscl">橢圓 $2u\cos v,3u\sin v$</button>
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="dual-canvas">
+        <div class="canvas3d-panel canvas-2d">
+          <div class="canvas-wrap">
+            <canvas id="canvas-uv"></canvas>
+            <div class="hint-overlay" id="jac-uvlabel">$(u,v)$ 平面</div>
+          </div>
+        </div>
+        <div class="canvas3d-panel canvas-2d">
+          <div class="canvas-wrap">
+            <canvas id="canvas-xy"></canvas>
+            <div class="hint-overlay">$(x,y)$ 平面 (映像)</div>
+          </div>
+        </div>
+      </div>
+      <div class="controls-bar" style="flex-direction:column;align-items:stretch;border-top:none;padding-top:0;margin-top:.5rem;">
+        <div class="slider-row"><span class="slider-label">u₀</span><input type="range" id="jac-us" min="0.05" max="2" step="0.02" value="0.5"></div>
+        <div class="slider-row"><span class="slider-label">v₀</span><input type="range" id="jac-vs" min="0" max="3.14" step="0.02" value="0.78"></div>
+        <div class="slider-row"><span class="slider-label">格線</span><input type="range" id="jac-lines" min="4" max="16" step="1" value="8"></div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">目前變換</div>
+        <div class="eq-formula" id="jac-name">極座標 x=r cosθ, y=r sinθ</div>
+        <div class="eq-sub" id="jac-Jstr">$|J|=r$</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">在 $(u_0,v_0)$ 處</div>
+        <div class="ic-row"><span class="ic-label">$|J(u_0,v_0)|$</span><span class="ic-value highlight" id="jac-J">—</span></div>
+        <div class="ic-row"><span class="ic-label">$dS=du\,dv$</span><span class="ic-value" id="jac-dS">—</span></div>
+        <div class="ic-row"><span class="ic-label">$dA\approx|J|\,dS$</span><span class="ic-value ok" id="jac-dA">—</span></div>
+      </div>
+      <div class="info-box red" style="margin:0;padding:.8rem 1rem;">
+        <span class="info-label">注意</span>
+        <div style="font-size:.85rem;line-height:1.65;">使用變換時：(1) 在 $S$ 上 $T$ 必須一對一；(2) $|J|\ne 0$；(3) 別忘了取 <strong>絕對值</strong>。極座標即此理：$dx\,dy=r\,dr\,d\theta$。</div>
+      </div>
+    </div>
+  </div>
+
+  <h4>診斷視覺：$|J(u,v)|$ 熱力圖</h4>
+  <p>下圖是「在 uv 平面用顏色顯示 $|J(u,v)|$ 大小」。藍 = 變換把 uv 區域<em>縮小</em>送到 xy（小 $|J|$）；紅 = 變換把 uv 區域<em>放大</em>送到 xy（大 $|J|$）。對極座標 $|J|=r$，原點處 $|J|=0$（藍），離原點越遠越紅；對線性 $|J|=$常數時整片均勻一色。</p>
+  <div class="canvas3d-panel canvas-2d" style="max-width:520px;">
+    <div class="canvas-wrap" style="aspect-ratio:1/1;">
+      <canvas id="canvas-14-8-jacobian"></canvas>
+      <div class="hint-overlay">$(u,v)$ 平面上的 $|J|$ 熱力圖</div>
+    </div>
+  </div>
+
+  <h3 id="sec-14-8-2">14.8.2 經典例題與技法</h3>
+
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 1 · 直角座標到極座標</div>
+    <div class="ex-title">求變數變換 $x=r\cos\theta,\ y=r\sin\theta$ 的雅可比。</div>
+    <div class="step-block"><div class="step-num">步驟 1（列偏導數）</div>$$\frac{\partial x}{\partial r}=\cos\theta,\quad \frac{\partial x}{\partial\theta}=-r\sin\theta,\quad \frac{\partial y}{\partial r}=\sin\theta,\quad \frac{\partial y}{\partial\theta}=r\cos\theta.$$</div>
+    <div class="step-block"><div class="step-num">步驟 2（排成行列式）</div>$$\frac{\partial(x,y)}{\partial(r,\theta)}=\det\begin{pmatrix}\cos\theta&-r\sin\theta\\[2pt]\sin\theta&r\cos\theta\end{pmatrix}.$$</div>
+    <div class="step-block"><div class="step-num">步驟 3（化簡）</div>$$\frac{\partial(x,y)}{\partial(r,\theta)}=r\cos^2\theta+r\sin^2\theta=r.$$</div>
+    <div class="ex-answer">因此極座標換元時 $dx\,dy=r\,dr\,d\theta$。</div>
+  </div>
+
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 2 · 找出使區域變矩形的變換</div>
+    <div class="ex-title">$R$ 由 $x-2y=0,\ x-2y=-4,\ x+y=4,\ x+y=1$ 圍成。找一個把矩形區域 $S$ 送到 $R$ 的變換 $T$。</div>
+    <div class="step-block"><div class="step-num">步驟 1（把邊界當新變數）</div>令 $$u=x-2y,\qquad v=x+y.$$ 這樣四條邊界變成 $u=0,\ u=-4,\ v=4,\ v=1$。</div>
+    <div class="step-block"><div class="step-num">步驟 2（寫出 $S$）</div>因此 $S$ 是 $uv$ 平面中的矩形：$$-4\le u\le 0,\qquad 1\le v\le 4.$$</div>
+    <div class="step-block"><div class="step-num">步驟 3（反解成 $x,y$）</div>由 $u=x-2y,\ v=x+y$ 得 $$y=\frac{v-u}{3},\qquad x=\frac{u+2v}{3}.$$</div>
+    <div class="ex-answer">所需變換為 $$T(u,v)=\left(\frac{u+2v}{3},\,\frac{v-u}{3}\right),\quad -4\le u\le0,\ 1\le v\le4.$$</div>
+  </div>
+
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 3 · 用變數變換簡化區域</div>
+    <div class="ex-title">同例題 2 的區域 $R$，計算 $\displaystyle\iint_R 3xy\,dA$。</div>
+    <div class="step-block"><div class="step-num">步驟 1（沿用例題 2 的變換）</div>$$x=\frac{u+2v}{3},\qquad y=\frac{v-u}{3},\qquad S:\ -4\le u\le0,\ 1\le v\le4.$$</div>
+    <div class="step-block"><div class="step-num">步驟 2（算雅可比）</div>$$\frac{\partial(x,y)}{\partial(u,v)}=\det\begin{pmatrix}1/3&2/3\\[2pt]-1/3&1/3\end{pmatrix}=\frac{1}{9}+\frac{2}{9}=\frac13.$$</div>
+    <div class="step-block"><div class="step-num">步驟 3（換被積函數）</div>$$3xy\left|\frac{\partial(x,y)}{\partial(u,v)}\right|=3\left(\frac{u+2v}{3}\right)\left(\frac{v-u}{3}\right)\frac13=\frac{(u+2v)(v-u)}{9}.$$</div>
+    <div class="step-block"><div class="step-num">步驟 4（積分）</div>$$\iint_R3xy\,dA=\int_{-4}^{0}\int_{1}^{4}\frac{(u+2v)(v-u)}{9}\,dv\,du=\frac{122}{9}.$$</div>
+    <div class="ex-answer">$\displaystyle\iint_R3xy\,dA=\frac{122}{9}$。</div>
+  </div>
+
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 4 · 用變數變換簡化被積函數</div>
+    <div class="ex-title">$R$ 是頂點 $(0,1),(1,2),(2,1),(1,0)$ 的正方形。計算 $\displaystyle\iint_R (x+y)^2\sin^2(x-y)\,dA$。</div>
+    <div class="step-block"><div class="step-num">步驟 1（選變數）</div>令 $$u=x+y,\qquad v=x-y.$$ 四個頂點分別對應到 $(u,v)=(1,-1),(3,-1),(3,1),(1,1)$，所以 $$S:\ 1\le u\le3,\ -1\le v\le1.$$</div>
+    <div class="step-block"><div class="step-num">步驟 2（反解與雅可比）</div>$$x=\frac{u+v}{2},\qquad y=\frac{u-v}{2},\qquad \left|\frac{\partial(x,y)}{\partial(u,v)}\right|=\left|\det\begin{pmatrix}1/2&1/2\\[2pt]1/2&-1/2\end{pmatrix}\right|=\frac12.$$</div>
+    <div class="step-block"><div class="step-num">步驟 3（換被積函數）</div>$$(x+y)^2\sin^2(x-y)=u^2\sin^2 v.$$</div>
+    <div class="step-block"><div class="step-num">步驟 4（積分）</div>$$\iint_R (x+y)^2\sin^2(x-y)\,dA=\frac12\int_1^3u^2\,du\int_{-1}^{1}\sin^2v\,dv.$$</div>
+    <div class="step-block"><div class="step-num">步驟 5（化簡）</div>$$\frac12\cdot\frac{26}{3}\left(1-\frac{\sin2}{2}\right)=\frac{13}{3}-\frac{13\sin2}{6}.$$</div>
+    <div class="ex-answer">$\displaystyle\iint_R (x+y)^2\sin^2(x-y)\,dA=\frac{13}{3}-\frac{13\sin2}{6}$。</div>
+  </div>
+
+  <div class="concept-warning">
+    <div class="cw-title">概念辨析 · $|J|$ 的方向、大小、絕對值</div>
+    <p>(1) <strong>哪個變數對哪個</strong>：$\partial(x,y)/\partial(u,v)$（從 $u,v$ 變到 $x,y$ 的「放大率」）；倒過來 $\partial(u,v)/\partial(x,y)=1/J$。換變數時公式裡用前者。<br>
+    (2) <strong>絕對值不可漏</strong>：面積放大率 $|J|\ge 0$，符號代表方向（順 / 反向旋轉），積分要正向；漏取絕對值會在某些變換出現符號錯誤。<br>
+    (3) <strong>$|J|=0$ 表示變換不可逆</strong>：在該點切向量退化（如極座標的原點 $r=0$）；要嘛從區域內排除單點，要嘛單獨檢驗極限。<br>
+    (4) <strong>邊界對應</strong>：必須確認變換在 $S$ 內為一對一。極座標 $\theta\in[0,2\pi)$（不含 $2\pi$），否則同一點被覆蓋兩次。<br>
+    (5) <strong>線性變換 $|J|=$常數</strong>：相應於 $A=\begin{pmatrix}a&b\\c&d\end{pmatrix}$，$|J|=|ad-bc|$。線性變換把<em>方形</em>變<em>平行四邊形</em>，整個區域的面積比例就是 $|J|$。</p>
+  </div>
+
+  <div class="quiz-card" id="q-148b">
+    <span class="quiz-tag">概念題</span>
+    <div class="quiz-q">在二維變數變換 $T(u,v)=(x,y)=(g(u,v),h(u,v))$ 中，雅可比的絕對值 $|J|=\left|\dfrac{\partial(x,y)}{\partial(u,v)}\right|$ 的幾何意義是？</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">變換的旋轉角度</button>
+      <button class="quiz-opt">兩個區域的長度比</button>
+      <button class="quiz-opt">在 $(u,v)$ 處 $du\,dv$ 變到 $(x,y)$ 平面後的<strong>面積放大率</strong></button>
+      <button class="quiz-opt">與面積無關，只是行列式</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="quiz-card" id="q-148c">
+    <span class="quiz-tag">數字題</span>
+    <div class="quiz-q">求變換 $u=x+y,\ v=x-y$ 對應的 $\bigl|\partial(x,y)/\partial(u,v)\bigr|$。（提示：先反解 $x,y$ 再算行列式，或用倒數規則 $|\partial(x,y)/\partial(u,v)|=1/|\partial(u,v)/\partial(x,y)|$）</div>
+    <div class="quiz-input-row">
+      <input type="number" class="quiz-input" placeholder="輸入數值" step="0.01">
+      <button class="quiz-check">檢查</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="section-summary">
+    <div class="section-summary-title">14.8 雅可比重點整理（補充）</div>
+    <ul>
+      <li>變換公式：$\iint_R f(x,y)\,dx\,dy=\iint_S f(g(u,v),h(u,v))\,|\partial(x,y)/\partial(u,v)|\,du\,dv$。</li>
+      <li>$|J|$ 的幾何意義：$(u,v)$ 處 $du\,dv$ 經 $T$ 後在 $(x,y)$ 的對應面積為 $|J|\,du\,dv$（局部面積放大率）。</li>
+      <li>三件事同步換：上下限（$R\to S$）、被積函數（$f(x,y)\to f(g,h)$）、$dx\,dy\to|J|\,du\,dv$。</li>
+      <li>常見變換：極座標 $|J|=r$；線性 $|J|=|\det A|$ 為常數；雙曲線族 $u=y/x,\ v=xy$ 把彎邊變直邊。</li>
+      <li>使用前要驗：(a) $T$ 在 $S$ 內一對一；(b) $|J|\ne 0$；(c) 取絕對值。</li>
+      <li>策略：選變換時看「<em>能讓區域的不等式變最簡</em>」，常常是把曲邊界變成直邊界（方形 / 矩形）。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 本頁速查                                                      -->
+<!-- ============================================================ -->
+<section id="sec-ref">
+  <div class="section-number">速查 · 14.5–14.8</div>
+  <h2>本頁速查</h2>
+  <p>把所有公式、定理、決策表收在一起，方便回顧或考前複習。</p>
+
+  <div class="ref-card">
+    <div class="ref-card-header"><span class="ref-card-name">曲面面積</span><span class="ref-card-name-en">定義 14.3</span></div>
+    <div class="ref-card-eq">$\displaystyle S=\iint_R\sqrt{1+f_x^2+f_y^2}\,dA$</div>
+    <div class="ref-card-note">$\sqrt{1+f_x^2+f_y^2}=\sec\gamma$（切平面對 xy 的傾斜倍率），故 $dS\ge dA$。</div>
+  </div>
+
+  <div class="ref-card">
+    <div class="ref-card-header"><span class="ref-card-name">三重積分定義</span><span class="ref-card-name-en">定義 14.4</span></div>
+    <div class="ref-card-eq">$\displaystyle\iiint_Q f\,dV=\lim_{\|\Delta\|\to 0}\sum_i f(x_i,y_i,z_i)\,\Delta V_i$</div>
+    <div class="ref-card-note">特別地 $V(Q)=\iiint_Q dV$；本頁聚焦三重積分設定與體積計算。</div>
+  </div>
+
+  <div class="ref-card">
+    <div class="ref-card-header"><span class="ref-card-name">Fubini（三維） / 第一型區域</span><span class="ref-card-name-en">定理 14.4</span></div>
+    <div class="ref-card-eq">$\displaystyle\iiint_Q f\,dV=\int_a^b\!\!\int_{h_1(x)}^{h_2(x)}\!\!\int_{g_1(x,y)}^{g_2(x,y)} f\,dz\,dy\,dx$</div>
+    <div class="ref-card-note">換序時要重新表達 $Q$ 的不等式；策略：讓最內層的上下限最簡。</div>
+  </div>
+
+  <div class="ref-card">
+    <div class="ref-card-header"><span class="ref-card-name">圓柱座標</span><span class="ref-card-name-en">14.7.1 公式</span></div>
+    <div class="ref-card-eq">$x=r\cos\theta,\ y=r\sin\theta,\ z=z;\quad dV=r\,dr\,d\theta\,dz$</div>
+    <div class="ref-card-note">$|J|=r$；$r$ 是 xy 平面投影距離，不是 三維 距離。</div>
+  </div>
+
+  <div class="ref-card">
+    <div class="ref-card-header"><span class="ref-card-name">球面座標</span><span class="ref-card-name-en">14.7.2 公式</span></div>
+    <div class="ref-card-eq">$x=\rho\sin\phi\cos\theta,\ y=\rho\sin\phi\sin\theta,\ z=\rho\cos\phi$</div>
+    <div class="ref-card-eq">$dV=\rho^2\sin\phi\,d\rho\,d\phi\,d\theta$</div>
+    <div class="ref-card-note">$\phi\in[0,\pi]$ 從 +z 軸量；赤道 $\phi=\pi/2$。$|J|=\rho^2\sin\phi\ge 0$，無需取絕對值。</div>
+  </div>
+
+  <div class="ref-card">
+    <div class="ref-card-header"><span class="ref-card-name">雅可比矩陣 / 行列式</span><span class="ref-card-name-en">定義 14.5</span></div>
+    <div class="ref-card-eq">$\displaystyle\dfrac{\partial(x,y)}{\partial(u,v)}=\det\!\begin{pmatrix}\partial x/\partial u & \partial x/\partial v\\ \partial y/\partial u & \partial y/\partial v\end{pmatrix}$</div>
+    <div class="ref-card-note">幾何意義：在 $(u,v)$ 處 $du\,dv$ 經 $T$ 映到 $(x,y)$ 後的面積放大率。</div>
+  </div>
+
+  <div class="ref-card">
+    <div class="ref-card-header"><span class="ref-card-name">二重積分變數變換</span><span class="ref-card-name-en">定理 14.5</span></div>
+    <div class="ref-card-eq">$\displaystyle\iint_R f(x,y)\,dx\,dy=\iint_S f(g(u,v),h(u,v))\left|\dfrac{\partial(x,y)}{\partial(u,v)}\right|du\,dv$</div>
+    <div class="ref-card-note">三件事同步換：上下限、被積函數、$dx\,dy\to|J|\,du\,dv$。要絕對值！</div>
+  </div>
+
+  <div class="ref-card">
+    <div class="ref-card-header"><span class="ref-card-name">$dV$ 三套座標</span><span class="ref-card-name-en">總整理</span></div>
+    <table class="conv-table">
+      <thead><tr><th>座標</th><th>$dV$</th><th>適用</th></tr></thead>
+      <tbody>
+        <tr><td>直角</td><td>$dx\,dy\,dz$</td><td>盒形、平面切割</td></tr>
+        <tr><td>圓柱</td><td>$r\,dr\,d\theta\,dz$</td><td>繞 $z$ 軸對稱、含 $\sqrt{x^2+y^2}$</td></tr>
+        <tr><td>球面</td><td>$\rho^2\sin\phi\,d\rho\,d\phi\,d\theta$</td><td>球對稱、含 $x^2+y^2+z^2$</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ref-card">
+    <div class="ref-card-header"><span class="ref-card-name">何時用何座標 — 決策表</span><span class="ref-card-name-en">判斷</span></div>
+    <table class="conv-table">
+      <thead><tr><th>看到這個</th><th>建議</th><th>備註</th></tr></thead>
+      <tbody>
+        <tr><td>盒型 / 矩形長方體 $Q$</td><td>直角座標</td><td>不需任何雅可比因子</td></tr>
+        <tr><td>圓柱、圓盤、圓錐、繞 $z$ 軸旋轉體</td><td>圓柱座標</td><td>$|J|=r$；底面 $D$ 換 $(r,\theta)$ 即可</td></tr>
+        <tr><td>球體、球殼、球與圓錐相交</td><td>球面座標</td><td>$|J|=\rho^2\sin\phi$</td></tr>
+        <tr><td>$f$ 含 $x^2+y^2$（不含 $z^2$）</td><td>圓柱</td><td>$x^2+y^2=r^2$</td></tr>
+        <tr><td>$f$ 含 $x^2+y^2+z^2$</td><td>球面</td><td>$x^2+y^2+z^2=\rho^2$</td></tr>
+        <tr><td>$f$ 含 $\sqrt{x^2+y^2+z^2}$</td><td>球面</td><td>$\sqrt{\dots}=\rho$</td></tr>
+        <tr><td>區域邊界含 $y/x=$ 常數、$xy=$ 常數</td><td>$u=y/x,\ v=xy$</td><td>把雙曲線變直線</td></tr>
+        <tr><td>區域邊界含 $x+y,\ x-y$</td><td>$u=x+y,\ v=x-y$</td><td>把菱形變方形</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ref-card">
+    <div class="ref-card-header"><span class="ref-card-name">常用體積公式</span><span class="ref-card-name-en">常用</span></div>
+    <div class="ref-card-eq">球 $V=\dfrac{4\pi a^3}{3}$；半球 $\dfrac{2\pi a^3}{3}$；圓柱 $\pi r^2 h$；圓錐 $\dfrac{1}{3}\pi r^2 h$</div>
+  </div>
+</section>
+
+<footer>
+  微積分 · 第 14.5–14.8 節 · 多重積分互動講義 · 風格與 multiple_integration.html (14.1–14.3) 一致
+</footer>
+
+</div>
+
+<script>
+/* ============================================================
+   多重積分 II — 整合 IIFE
+   原本分散於 scenes-helpers.js + scenes-14-5/6/7/8.js
+   ============================================================ */
+(function(){
+window.scenes = window.scenes || {};
+
+/* ----- shared OrbitCam class ----- */
+class OrbitCam {
+  constructor(canvas, camera, radius0, phi0, theta0, onChange){
+    this.camera=camera; this.target=new THREE.Vector3(0,0,0);
+    this.theta=theta0; this.phi=phi0; this.radius=radius0;
+    this.theta0=theta0; this.phi0=phi0; this.radius0=radius0;
+    this.onChange=onChange;
+    this.dragging=false; this.lastX=0; this.lastY=0;
+    canvas.addEventListener('pointerdown', e=>{this.dragging=true; this.lastX=e.clientX; this.lastY=e.clientY; canvas.setPointerCapture(e.pointerId);});
+    canvas.addEventListener('pointermove', e=>{
+      if(!this.dragging) return;
+      const dx=e.clientX-this.lastX, dy=e.clientY-this.lastY;
+      this.lastX=e.clientX; this.lastY=e.clientY;
+      this.theta-=dx*0.008;
+      this.phi=Math.max(0.05, Math.min(Math.PI-0.05, this.phi-dy*0.008));
+      this.update(); this.onChange();
+    });
+    canvas.addEventListener('pointerup',  ()=>{this.dragging=false;});
+    canvas.addEventListener('pointercancel', ()=>{this.dragging=false;});
+    canvas.addEventListener('wheel', e=>{
+      e.preventDefault();
+      this.radius=Math.max(2, Math.min(60, this.radius*(1+e.deltaY*0.0015)));
+      this.update(); this.onChange();
+    }, {passive:false});
+    this.update();
+  }
+  update(){
+    const x=this.target.x + this.radius*Math.sin(this.phi)*Math.cos(this.theta);
+    const y=this.target.y + this.radius*Math.sin(this.phi)*Math.sin(this.theta);
+    const z=this.target.z + this.radius*Math.cos(this.phi);
+    this.camera.position.set(x,y,z);
+    this.camera.up.set(0,0,1);
+    this.camera.lookAt(this.target);
+  }
+  reset(){ this.theta=this.theta0; this.phi=this.phi0; this.radius=this.radius0; this.update(); this.onChange(); }
+}
+
+function buildAxes(L){
+  const g=new THREE.Group();
+  const mk=(dir,col)=>{
+    const mat=new THREE.LineBasicMaterial({color:col});
+    const geom=new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(-L*dir.x,-L*dir.y,-L*dir.z),
+      new THREE.Vector3( L*dir.x, L*dir.y, L*dir.z),
+    ]);
+    g.add(new THREE.Line(geom,mat));
+    const cone=new THREE.Mesh(new THREE.ConeGeometry(0.1,0.3,16), new THREE.MeshBasicMaterial({color:col}));
+    cone.position.set(L*dir.x,L*dir.y,L*dir.z);
+    const q=new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0), new THREE.Vector3(dir.x,dir.y,dir.z));
+    cone.quaternion.copy(q); g.add(cone);
+  };
+  mk({x:1,y:0,z:0},0xe74c3c);
+  mk({x:0,y:1,z:0},0x27ae60);
+  mk({x:0,y:0,z:1},0x2980b9);
+  return g;
+}
+
+function buildGrid(size, step){
+  const g=new THREE.Group();
+  const mat=new THREE.LineBasicMaterial({color:0x4a4a68, transparent:true, opacity:0.45});
+  const pts=[];
+  for(let i=-size;i<=size;i+=step){
+    pts.push(new THREE.Vector3(-size,i,0), new THREE.Vector3(size,i,0));
+    pts.push(new THREE.Vector3(i,-size,0), new THREE.Vector3(i,size,0));
+  }
+  g.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), mat));
+  return g;
+}
+
+function showCanvasNotice(canvas, title, detail=''){
+  if(!canvas || !canvas.parentElement) return;
+  let notice=canvas.parentElement.querySelector('.canvas-notice');
+  if(!notice){
+    notice=document.createElement('div');
+    notice.className='canvas-notice';
+    canvas.parentElement.appendChild(notice);
+  }
+  notice.innerHTML=`<strong>${title}</strong>${detail?`<span>${detail}</span>`:''}`;
+}
+
+function clearCanvasNotice(canvas){
+  if(!canvas || !canvas.parentElement) return;
+  const notice=canvas.parentElement.querySelector('.canvas-notice');
+  if(notice) notice.remove();
+}
+
+function makeScene(canvasId, opts={}){
+  const canvas=document.getElementById(canvasId);
+  if(!canvas){ console.warn('canvas missing', canvasId); return null; }
+  if(!window.THREE){
+    showCanvasNotice(canvas,'Three.js 載入失敗','三維 曲面與立體視覺需要 three.min.js；請確認網路或 CDN 可正常載入後重新整理。');
+    return null;
+  }
+  let renderer;
+  try{
+    renderer=new THREE.WebGLRenderer({canvas, antialias:true, alpha:false});
+  }catch(err){
+    showCanvasNotice(canvas,'WebGL 建立失敗','此瀏覽器或環境無法建立 三維 renderer；請開啟硬體加速或改用支援 WebGL 的瀏覽器。');
+    return null;
+  }
+  clearCanvasNotice(canvas);
+  renderer.setPixelRatio(Math.min(2, window.devicePixelRatio||1));
+  const scene=new THREE.Scene();
+  scene.background=new THREE.Color(0x1a1a2e);
+  const camera=new THREE.PerspectiveCamera(45,1,0.1,200);
+
+  let needRender=true;
+  function requestRender(){ needRender=true; }
+  function resize(){
+    const r=canvas.getBoundingClientRect();
+    if(r.width<2||r.height<2) return;
+    renderer.setSize(r.width, r.height, false);
+    camera.aspect=r.width/r.height; camera.updateProjectionMatrix();
+    requestRender();
+  }
+  new ResizeObserver(resize).observe(canvas);
+  resize();
+
+  const orbit=new OrbitCam(canvas, camera, opts.radius||12, opts.phi||1.05, opts.theta||0.9, requestRender);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+  const d1=new THREE.DirectionalLight(0xffffff,0.7); d1.position.set(5,5,8); scene.add(d1);
+  const d2=new THREE.DirectionalLight(0x88aaff,0.35); d2.position.set(-5,-3,4); scene.add(d2);
+
+  const axes=buildAxes(opts.axisLen||4); scene.add(axes);
+  const grid=buildGrid(opts.gridSize||5, opts.gridStep||1); scene.add(grid);
+
+  function loop(){
+    if(needRender){ renderer.render(scene,camera); needRender=false; }
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  return { canvas, renderer, scene, camera, orbit, requestRender, resetCam: ()=>orbit.reset() };
+}
+
+function paramSurface(fn, uMin, uMax, vMin, vMax, uS, vS){
+  const geom=new THREE.BufferGeometry();
+  const positions=[], indices=[];
+  for(let i=0;i<=uS;i++){
+    const u=uMin+(uMax-uMin)*i/uS;
+    for(let j=0;j<=vS;j++){
+      const v=vMin+(vMax-vMin)*j/vS;
+      const p=fn(u,v); positions.push(p.x,p.y,p.z);
+    }
+  }
+  for(let i=0;i<uS;i++){
+    for(let j=0;j<vS;j++){
+      const a=i*(vS+1)+j, b=a+1, c=a+(vS+1), d=c+1;
+      indices.push(a,c,b,b,c,d);
+    }
+  }
+  geom.setAttribute('position', new THREE.Float32BufferAttribute(positions,3));
+  geom.setIndex(indices); geom.computeVertexNormals();
+  return geom;
+}
+
+function diskGraphSurface(f, radius, radialSeg=48, thetaSeg=128){
+  return paramSurface((r,t)=>new THREE.Vector3(r*Math.cos(t), r*Math.sin(t), f(r*Math.cos(t), r*Math.sin(t))),
+    0, radius, 0, Math.PI*2, radialSeg, thetaSeg);
+}
+
+function scalarSurface(f, xMin, xMax, yMin, yMax, sx, sy){
+  const geom=new THREE.BufferGeometry();
+  const positions=[], indices=[], valid=[];
+  for(let i=0;i<=sx;i++){
+    const x=xMin+(xMax-xMin)*i/sx;
+    for(let j=0;j<=sy;j++){
+      const y=yMin+(yMax-yMin)*j/sy;
+      const z=f(x,y);
+      const ok=Number.isFinite(z);
+      positions.push(x,y, ok?z:0); valid.push(ok);
+    }
+  }
+  for(let i=0;i<sx;i++){
+    for(let j=0;j<sy;j++){
+      const a=i*(sy+1)+j, b=a+1, c=a+(sy+1), d=c+1;
+      if(valid[a]&&valid[b]&&valid[c]&&valid[d]) indices.push(a,c,b,b,c,d);
+    }
+  }
+  geom.setAttribute('position', new THREE.Float32BufferAttribute(positions,3));
+  geom.setIndex(indices); geom.computeVertexNormals();
+  return geom;
+}
+
+function makeSurfaceMesh(geom, color, opacity=0.78){
+  const mat=new THREE.MeshStandardMaterial({color, roughness:0.55, metalness:0.15,
+    side:THREE.DoubleSide, transparent:opacity<1, opacity, flatShading:false});
+  return new THREE.Mesh(geom, mat);
+}
+
+function make2DScene(canvasId, opts={}){
+  const canvas=document.getElementById(canvasId);
+  if(!canvas) return null;
+  const ctx=canvas.getContext('2d');
+  const xRange=opts.xRange||[-4,4], yRange=opts.yRange||[-4,4];
+  const padding=opts.padding||30;
+  let W=300, H=300;
+  function resize(){
+    const r=canvas.getBoundingClientRect();
+    if(r.width<2) return;
+    const dpr=Math.min(2, window.devicePixelRatio||1);
+    canvas.width=Math.round(r.width*dpr); canvas.height=Math.round(r.height*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    W=r.width; H=r.height;
+  }
+  new ResizeObserver(resize).observe(canvas); resize();
+  const pxX=x=>padding+(x-xRange[0])/(xRange[1]-xRange[0])*(W-2*padding);
+  const pxY=y=>H-padding-(y-yRange[0])/(yRange[1]-yRange[0])*(H-2*padding);
+  function clear(bg='#fbf7ed'){ ctx.fillStyle=bg; ctx.fillRect(0,0,W,H); }
+  function drawAxes(){
+    ctx.strokeStyle='#cdc6b6'; ctx.lineWidth=1;
+    for(let x=Math.ceil(xRange[0]); x<=xRange[1]; x++){
+      ctx.beginPath(); ctx.moveTo(pxX(x),pxY(yRange[0])); ctx.lineTo(pxX(x),pxY(yRange[1])); ctx.stroke();
+    }
+    for(let y=Math.ceil(yRange[0]); y<=yRange[1]; y++){
+      ctx.beginPath(); ctx.moveTo(pxX(xRange[0]),pxY(y)); ctx.lineTo(pxX(xRange[1]),pxY(y)); ctx.stroke();
+    }
+    ctx.strokeStyle='#888'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(pxX(xRange[0]),pxY(0)); ctx.lineTo(pxX(xRange[1]),pxY(0)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pxX(0),pxY(yRange[0])); ctx.lineTo(pxX(0),pxY(yRange[1])); ctx.stroke();
+    ctx.fillStyle='#888'; ctx.font="11px JetBrains Mono, monospace";
+    ctx.fillText('x', pxX(xRange[1])-8, pxY(0)-5);
+    ctx.fillText('y', pxX(0)+5, pxY(yRange[1])+12);
+  }
+  function setRange(nextX, nextY){
+    xRange[0]=nextX[0]; xRange[1]=nextX[1];
+    yRange[0]=nextY[0]; yRange[1]=nextY[1];
+  }
+  return {canvas, ctx, get W(){return W;}, get H(){return H;}, get dpr(){return Math.min(2, window.devicePixelRatio||1);}, pxX, pxY, xRange, yRange, setRange, clear, drawAxes};
+}
+
+function bindToggle(id, initial, onChange){
+  const b=document.getElementById(id); if(!b) return;
+  let on=initial; if(!on) b.classList.add('off');
+  b.addEventListener('click', ()=>{ on=!on; b.classList.toggle('off', !on); onChange(on); });
+  return ()=>on;
+}
+
+/* 通用 quiz：與前篇 multiple_integration.html 統一 */
+function makeChoiceQuiz(cardId, correctIndex, hints){
+  const card=document.getElementById(cardId); if(!card) return;
+  const opts=card.querySelectorAll('.quiz-opt');
+  const fb=card.querySelector('.quiz-feedback');
+  opts.forEach((opt,i)=>{
+    opt.addEventListener('click',()=>{
+      opts.forEach(o=>o.classList.remove('correct','wrong'));
+      if(i===correctIndex){
+        opt.classList.add('correct');
+        fb.className='quiz-feedback show ok';
+        fb.innerHTML=hints && hints.ok ? hints.ok : '✓ 正確！';
+      } else {
+        opt.classList.add('wrong');
+        fb.className='quiz-feedback show no';
+        fb.innerHTML=(hints && hints.wrong && hints.wrong[i]) ? hints.wrong[i] : '再想想。';
+      }
+      if(window.MathJax&&MathJax.typesetPromise) MathJax.typesetPromise([fb]);
+    });
+  });
+}
+
+function makeNumberQuiz(cardId, correct, opts={}){
+  const tol=opts.tolerance||0.02;
+  const card=document.getElementById(cardId); if(!card) return;
+  const inputs=card.querySelectorAll('.quiz-input');
+  const checkBtn=card.querySelector('.quiz-check');
+  const fb=card.querySelector('.quiz-feedback');
+  function check(){
+    const correctArr = Array.isArray(correct) ? correct : [correct];
+    let allOk=true;
+    inputs.forEach((inp,i)=>{
+      inp.classList.remove('correct','wrong');
+      const v=parseFloat(inp.value);
+      if(isNaN(v) || Math.abs(v-correctArr[i])>tol){ inp.classList.add('wrong'); allOk=false; }
+      else inp.classList.add('correct');
+    });
+    fb.className='quiz-feedback show '+(allOk?'ok':'no');
+    fb.innerHTML=allOk?(opts.ok || '✓ 正確！'):(opts.wrong || '再算一次。');
+    if(window.MathJax&&MathJax.typesetPromise) MathJax.typesetPromise([fb]);
+  }
+  if(checkBtn) checkBtn.addEventListener('click',check);
+  inputs.forEach(inp=>inp.addEventListener('keydown',e=>{if(e.key==='Enter')check();}));
+}
+
+/* ============================================================
+   §14.5 曲面面積 — Tangent parallelograms approximating dS
+   ============================================================ */
+(function(){
+  const S = makeScene('canvas-surfarea', {radius:12, phi:1.0, theta:0.9, axisLen:4, gridSize:5});
+  if(!S) return; scenes.surfarea = S;
+
+  const PRESETS = {
+    parab:  {tex:'$z=x^2+y^2$',         f:(x,y)=>x*x+y*y,       fx:(x,y)=>2*x,   fy:(x,y)=>2*y,   range:[-2,2,-2,2], color:0x5dade2},
+    plane:  {tex:'$z=2x+y$',             f:(x,y)=>2*x+y,         fx:(x,y)=>2,     fy:(x,y)=>1,     range:[-2,2,-2,2], color:0x9b59b6},
+    saddle: {tex:'$z=x^2-y^2$',         f:(x,y)=>x*x-y*y,       fx:(x,y)=>2*x,   fy:(x,y)=>-2*y,  range:[-2,2,-2,2], color:0xf39c12},
+    hemi:   {tex:'$z=\\sqrt{4-x^2-y^2}$',f:(x,y)=>{const r=4-x*x-y*y; return r<=0?NaN:Math.sqrt(r);},
+              fx:(x,y)=>{const r=4-x*x-y*y; return r<=0?0:-x/Math.sqrt(r);},
+              fy:(x,y)=>{const r=4-x*x-y*y; return r<=0?0:-y/Math.sqrt(r);},
+              range:[-1.8,1.8,-1.8,1.8], color:0x2ecc71, disk:1.8},
+    bump:   {tex:'$z=e^{-(x^2+y^2)/2}$', f:(x,y)=>Math.exp(-(x*x+y*y)/2),
+              fx:(x,y)=>-x*Math.exp(-(x*x+y*y)/2), fy:(x,y)=>-y*Math.exp(-(x*x+y*y)/2),
+              range:[-2,2,-2,2], color:0xe67e22},
+  };
+
+  let currentId='parab';
+  let segs=8;
+  let surfMesh=null, tilesGroup=null, domMesh=null;
+  let showSurf=true, showTiles=true, showDom=true;
+
+  function clearScene(){
+    [surfMesh,tilesGroup,domMesh].forEach(o=>{ if(o){ S.scene.remove(o); o.traverse?.(c=>{c.geometry?.dispose(); c.material?.dispose();}); } });
+    surfMesh=tilesGroup=domMesh=null;
+  }
+
+  function inDomain(p, x, y){
+    if(p.disk){ return x*x+y*y<=p.disk*p.disk; }
+    return true;
+  }
+
+	  function buildAll(){
+	    clearScene();
+	    const p=PRESETS[currentId];
+	    const [a,b,c,d]=p.range;
+	    if(showSurf){
+	      const geom = p.disk ? diskGraphSurface(p.f, p.disk, 48, 128) : scalarSurface(p.f, a,b,c,d, 60,60);
+	      surfMesh = makeSurfaceMesh(geom, p.color, 0.55);
+	      S.scene.add(surfMesh);
+	    }
+    if(showDom){
+      let geom;
+      if(p.disk){ geom = new THREE.CircleGeometry(p.disk, 96); }
+      else      { geom = new THREE.PlaneGeometry(b-a, d-c, 1, 1); geom.translate((a+b)/2,(c+d)/2,0); }
+      domMesh = new THREE.Mesh(geom, new THREE.MeshBasicMaterial({color:0x1a6b4a, transparent:true, opacity:0.18, side:THREE.DoubleSide}));
+      S.scene.add(domMesh);
+    }
+    const grp = new THREE.Group();
+	    const tileMat = new THREE.MeshStandardMaterial({color:0xf1c40f, transparent:true, opacity:0.55, side:THREE.DoubleSide,
+	      emissive:0xf1c40f, emissiveIntensity:0.05, roughness:0.6});
+	    const tileEdgeMat = new THREE.LineBasicMaterial({color:0xb7950b});
+	    let rectSum=0, count=0;
+	    if(p.disk){
+	      const dr=p.disk/segs, dth=2*Math.PI/(segs*4);
+	      for(let i=0;i<segs;i++){
+	        for(let j=0;j<segs*4;j++){
+	          const r1=i*dr, r2=(i+1)*dr, th1=j*dth, th2=(j+1)*dth;
+	          const r=(i+0.5)*dr, th=(j+0.5)*dth;
+	          const xc=r*Math.cos(th), yc=r*Math.sin(th);
+	          const z=p.f(xc,yc); if(!Number.isFinite(z)) continue;
+	          const fx=p.fx(xc,yc), fy=p.fy(xc,yc);
+	          const factor=Math.sqrt(1+fx*fx+fy*fy);
+	          rectSum += factor*r*dr*dth; count++;
+	          if(showTiles){
+	            const verts=[];
+	            [[r1,th1],[r2,th1],[r2,th2],[r1,th2]].forEach(([rr,aa])=>{
+	              const x=rr*Math.cos(aa), y=rr*Math.sin(aa), zz=p.f(x,y);
+	              verts.push(new THREE.Vector3(x,y,Number.isFinite(zz)?zz:0));
+	            });
+	            const g=new THREE.BufferGeometry();
+	            const pos=[]; [verts[0],verts[1],verts[2], verts[0],verts[2],verts[3]].forEach(P=>pos.push(P.x,P.y,P.z));
+	            g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3)); g.computeVertexNormals();
+	            grp.add(new THREE.Mesh(g,tileMat));
+	            grp.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([verts[0],verts[1],verts[2],verts[3],verts[0]]),tileEdgeMat));
+	          }
+	        }
+	      }
+	    } else {
+	      const du=(b-a)/segs, dv=(d-c)/segs;
+	      for(let i=0;i<segs;i++){
+	        for(let j=0;j<segs;j++){
+	          const xc=a+(i+0.5)*du, yc=c+(j+0.5)*dv;
+	          if(!inDomain(p,xc,yc)) continue;
+	          const z=p.f(xc,yc); if(!Number.isFinite(z)) continue;
+	          const fx=p.fx(xc,yc), fy=p.fy(xc,yc);
+	          const factor = Math.sqrt(1+fx*fx+fy*fy);
+	          rectSum += factor*du*dv; count++;
+	          if(showTiles){
+	            const u = new THREE.Vector3(du,0,fx*du).multiplyScalar(0.5);
+	            const v = new THREE.Vector3(0,dv,fy*dv).multiplyScalar(0.5);
+	            const center = new THREE.Vector3(xc,yc,z);
+	            const verts=[
+	              center.clone().sub(u).sub(v),
+	              center.clone().add(u).sub(v),
+	              center.clone().add(u).add(v),
+	              center.clone().sub(u).add(v),
+	            ];
+	            const g=new THREE.BufferGeometry();
+	            const pos=[];
+	            [verts[0],verts[1],verts[2], verts[0],verts[2],verts[3]].forEach(P=>pos.push(P.x,P.y,P.z));
+	            g.setAttribute('position', new THREE.Float32BufferAttribute(pos,3));
+	            g.computeVertexNormals();
+	            grp.add(new THREE.Mesh(g, tileMat));
+	            const eg=new THREE.BufferGeometry().setFromPoints([verts[0],verts[1],verts[2],verts[3],verts[0]]);
+	            grp.add(new THREE.Line(eg, tileEdgeMat));
+	          }
+	        }
+	      }
+	    }
+    if(showTiles) S.scene.add(grp); else grp.children.forEach(c=>{c.geometry?.dispose();});
+    tilesGroup = showTiles ? grp : null;
+
+	    const N=120; const ddu=(b-a)/N, ddv=(d-c)/N;
+	    let exact=0, domA=0;
+	    if(p.disk){
+	      domA=Math.PI*p.disk*p.disk;
+	      const Nr=160, Nt=320, dr=p.disk/Nr, dth=2*Math.PI/Nt;
+	      for(let i=0;i<Nr;i++) for(let j=0;j<Nt;j++){
+	        const r=(i+0.5)*dr, th=(j+0.5)*dth;
+	        const x=r*Math.cos(th), y=r*Math.sin(th);
+	        const fx=p.fx(x,y), fy=p.fy(x,y);
+	        exact += Math.sqrt(1+fx*fx+fy*fy)*r*dr*dth;
+	      }
+	    } else {
+	      for(let i=0;i<N;i++) for(let j=0;j<N;j++){
+	        const xc=a+(i+0.5)*ddu, yc=c+(j+0.5)*ddv;
+	        if(!inDomain(p,xc,yc)) continue;
+	        domA += ddu*ddv;
+	        const fx=p.fx(xc,yc), fy=p.fy(xc,yc);
+	        if(!Number.isFinite(fx)||!Number.isFinite(fy)) continue;
+	        exact += Math.sqrt(1+fx*fx+fy*fy)*ddu*ddv;
+	      }
+	    }
+
+    document.getElementById('sa-segs').textContent = `${segs}×${segs}`;
+    document.getElementById('saSegVal').textContent = `${segs}×${segs}`;
+    document.getElementById('sa-dom').textContent = domA.toFixed(3);
+    document.getElementById('sa-rect').textContent = rectSum.toFixed(3);
+    document.getElementById('sa-exact').textContent = exact.toFixed(3);
+    const err = Math.abs(rectSum-exact);
+    document.getElementById('sa-err').textContent = err.toFixed(4);
+    const eq = document.getElementById('sa-eq');
+    eq.innerHTML = p.tex;
+    if(window.MathJax?.typesetPromise) MathJax.typesetPromise([eq]);
+
+    S.requestRender();
+  }
+
+  document.querySelectorAll('#saPresets .preset-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      document.querySelectorAll('#saPresets .preset-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active'); currentId=b.dataset.id; buildAll();
+    });
+  });
+  document.getElementById('saSegSlider').addEventListener('input', e=>{ segs=+e.target.value; buildAll(); });
+  bindToggle('btnSaSurf', true, v=>{ showSurf=v; buildAll(); });
+  bindToggle('btnSaTiles', true, v=>{ showTiles=v; buildAll(); });
+  bindToggle('btnSaDom', true, v=>{ showDom=v; buildAll(); });
+
+  buildAll();
+})();
+
+/* ============================================================
+   §14.6 三重積分 — Riemann box approximation
+   ============================================================ */
+(function(){
+  const S = makeScene('canvas-triple', {radius:14, phi:1.0, theta:0.95, axisLen:4, gridSize:5});
+  if(!S) return; scenes.triple = S;
+
+  const SOLIDS = {
+    cube:  {label:'立方體 $[0,2]^3$', kind:'box', exact:8, color:0x5dade2},
+    parab: {label:'$0\\le z\\le 4-x^2-y^2$', kind:'polar', radius:2, exact:8*Math.PI, color:0x5dade2,
+            heightR:r=>Math.max(0,4-r*r)},
+    tetra: {label:'四面體 $x+y+z\\le 2$', kind:'simplex', exact:4/3, color:0x5dade2,
+            heightXY:(x,y)=>Math.max(0,2-x-y)},
+    hemi:  {label:'半球 $x^2+y^2+z^2\\le 4,\\,z\\ge 0$', kind:'polar', radius:2, exact:(2/3)*Math.PI*8, color:0x5dade2,
+            heightR:r=>Math.sqrt(Math.max(0,4-r*r))},
+  };
+
+  let currentId='parab', N=8, showSolid=true, showBoxes=true;
+  let solidMesh=null, boxesMesh=null;
+
+  function clearGroup(){
+    if(solidMesh){ S.scene.remove(solidMesh); solidMesh.geometry?.dispose(); solidMesh.material?.dispose(); solidMesh=null;}
+    if(boxesMesh){ S.scene.remove(boxesMesh); boxesMesh.geometry?.dispose(); boxesMesh.material?.dispose(); boxesMesh=null;}
+  }
+
+  function build(){
+    clearGroup();
+    const sol=SOLIDS[currentId];
+    if(showSolid){
+      let geom;
+      if(currentId==='cube'){
+        geom=new THREE.BoxGeometry(2,2,2); geom.translate(1,1,1);
+      } else if(currentId==='parab'){
+        geom=scalarSurface((x,y)=>{const r=x*x+y*y; return r<=4?4-r:NaN;}, -2,2,-2,2, 50,50);
+      } else if(currentId==='tetra'){
+        const pts=[[0,0,0],[2,0,0],[0,2,0],[0,0,2]];
+        geom=new THREE.BufferGeometry();
+        const tris=[[0,2,1],[0,1,3],[0,3,2],[1,2,3]];
+        const pos=[];
+        tris.forEach(t=>t.forEach(k=>{pos.push(...pts[k]);}));
+        geom.setAttribute('position', new THREE.Float32BufferAttribute(pos,3)); geom.computeVertexNormals();
+      } else if(currentId==='hemi'){
+        geom=new THREE.SphereGeometry(2, 36, 18, 0, Math.PI*2, 0, Math.PI/2);
+      }
+      solidMesh = new THREE.Mesh(geom, new THREE.MeshStandardMaterial({color:sol.color, roughness:0.5, metalness:0.1, transparent:true, opacity:0.32, side:THREE.DoubleSide}));
+      S.scene.add(solidMesh);
+    }
+    let count=0, sum=0, partitionLabel=`${N}×${N}`;
+    const positions=[], normals=[];
+
+    function pushFace(points, normal){
+      const tris=[points[0],points[1],points[2], points[0],points[2],points[3]];
+      tris.forEach(p=>positions.push(p[0],p[1],p[2]));
+      for(let k=0;k<6;k++) normals.push(normal[0],normal[1],normal[2]);
+    }
+
+    function addCuboid(x1,x2,y1,y2,z1,z2){
+      const v=[
+        [x1,y1,z1],[x2,y1,z1],[x2,y2,z1],[x1,y2,z1],
+        [x1,y1,z2],[x2,y1,z2],[x2,y2,z2],[x1,y2,z2],
+      ];
+      pushFace([v[0],v[3],v[2],v[1]],[0,0,-1]);
+      pushFace([v[4],v[5],v[6],v[7]],[0,0,1]);
+      pushFace([v[0],v[1],v[5],v[4]],[0,-1,0]);
+      pushFace([v[3],v[7],v[6],v[2]],[0,1,0]);
+      pushFace([v[1],v[2],v[6],v[5]],[1,0,0]);
+      pushFace([v[0],v[4],v[7],v[3]],[-1,0,0]);
+    }
+
+    function addPolarColumn(r1,r2,t1,t2,h){
+      if(h<=1e-6) return;
+      const seg=Math.max(3, Math.ceil((t2-t1)*16));
+      const p=(r,t,z)=>[r*Math.cos(t), r*Math.sin(t), z];
+      for(let s=0;s<seg;s++){
+        const a=t1+(t2-t1)*s/seg, b=t1+(t2-t1)*(s+1)/seg;
+        pushFace([p(r1,a,0),p(r2,a,0),p(r2,b,0),p(r1,b,0)],[0,0,-1]);
+        pushFace([p(r1,a,h),p(r1,b,h),p(r2,b,h),p(r2,a,h)],[0,0,1]);
+        pushFace([p(r2,a,0),p(r2,a,h),p(r2,b,h),p(r2,b,0)],[Math.cos((a+b)/2),Math.sin((a+b)/2),0]);
+        if(r1>1e-5) pushFace([p(r1,a,0),p(r1,b,0),p(r1,b,h),p(r1,a,h)],[-Math.cos((a+b)/2),-Math.sin((a+b)/2),0]);
+      }
+      pushFace([p(r1,t1,0),p(r1,t1,h),p(r2,t1,h),p(r2,t1,0)],[-Math.sin(t1),Math.cos(t1),0]);
+      pushFace([p(r1,t2,0),p(r2,t2,0),p(r2,t2,h),p(r1,t2,h)],[Math.sin(t2),-Math.cos(t2),0]);
+    }
+
+    function addTriPrism(a,b,c,h){
+      if(h<=1e-6) return;
+      const A=[a[0],a[1],0], B=[b[0],b[1],0], C=[c[0],c[1],0];
+      const At=[a[0],a[1],h], Bt=[b[0],b[1],h], Ct=[c[0],c[1],h];
+      positions.push(...A,...C,...B, ...At,...Bt,...Ct);
+      for(let k=0;k<3;k++) normals.push(0,0,-1);
+      for(let k=0;k<3;k++) normals.push(0,0,1);
+      pushFace([A,B,Bt,At],[0,-1,0]);
+      pushFace([B,C,Ct,Bt],[1,1,0]);
+      pushFace([C,A,At,Ct],[-1,0,0]);
+    }
+
+    if(sol.kind==='box'){
+      partitionLabel=`${N}×${N}×${N}`;
+      const d=2/N;
+      for(let i=0;i<N;i++) for(let j=0;j<N;j++) for(let k=0;k<N;k++){
+        const gap=d*0.08;
+        if(showBoxes) addCuboid(i*d+gap,(i+1)*d-gap,j*d+gap,(j+1)*d-gap,k*d+gap,(k+1)*d-gap);
+        count++; sum+=d*d*d;
+      }
+    } else if(sol.kind==='polar'){
+      const Nr=N, Nt=Math.max(24,N*4), dr=sol.radius/Nr, dth=2*Math.PI/Nt;
+      partitionLabel=`${Nr} 徑向 × ${Nt} 角向`;
+      for(let i=0;i<Nr;i++) for(let j=0;j<Nt;j++){
+        const r1=i*dr, r2=(i+1)*dr, rm=(i+0.5)*dr;
+        const t1=j*dth, t2=(j+1)*dth;
+        const h=sol.heightR(rm);
+        const area=0.5*(r2*r2-r1*r1)*dth;
+        if(showBoxes) addPolarColumn(r1,r2,t1,t2,h);
+        count++; sum+=area*h;
+      }
+    } else if(sol.kind==='simplex'){
+      const s=2/N;
+      partitionLabel=`三角網格 N=${N}`;
+      const triArea=(s*s)/2;
+      function handleTri(a,b,c){
+        const cx=(a[0]+b[0]+c[0])/3, cy=(a[1]+b[1]+c[1])/3;
+        const h=sol.heightXY(cx,cy);
+        if(showBoxes) addTriPrism(a,b,c,h);
+        count++; sum+=triArea*h;
+      }
+      for(let i=0;i<N;i++) for(let j=0;j<N-i;j++){
+        const a=[i*s,j*s], b=[(i+1)*s,j*s], c=[i*s,(j+1)*s];
+        handleTri(a,b,c);
+        if(i+j<N-1){
+          const d=[(i+1)*s,(j+1)*s];
+          handleTri(b,d,c);
+        }
+      }
+    }
+
+    if(showBoxes && positions.length){
+      const g=new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(positions,3));
+      g.setAttribute('normal',   new THREE.Float32BufferAttribute(normals,3));
+      boxesMesh = new THREE.Mesh(g, new THREE.MeshStandardMaterial({color:0xc0392b, roughness:0.52, metalness:0.08, transparent:true, opacity:0.66, side:THREE.DoubleSide, flatShading:false}));
+      S.scene.add(boxesMesh);
+    }
+
+    document.getElementById('tr-N').textContent = partitionLabel;
+    document.getElementById('tr-count').textContent = count.toString();
+    document.getElementById('tr-approx').textContent = sum.toFixed(3);
+    document.getElementById('tr-exact').textContent = sol.exact.toFixed(3);
+    document.getElementById('tr-err').textContent = Math.abs(sum-sol.exact).toFixed(3);
+    const lbl=document.getElementById('tr-name'); lbl.innerHTML=sol.label;
+    if(window.MathJax?.typesetPromise) MathJax.typesetPromise([lbl]);
+    S.requestRender();
+  }
+
+  document.querySelectorAll('#trPresets .preset-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      document.querySelectorAll('#trPresets .preset-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active'); currentId=b.dataset.id; build();
+    });
+  });
+  document.getElementById('trN').addEventListener('input', e=>{ N=+e.target.value; build(); });
+  bindToggle('btnTrSolid', true, v=>{ showSolid=v; build(); });
+  bindToggle('btnTrBoxes', true, v=>{ showBoxes=v; build(); });
+  build();
+})();
+
+/* ============================================================
+   §14.7 圓柱 + 球面座標 dV elements
+   ============================================================ */
+(function(){
+  const S = makeScene('canvas-cyl', {radius:11, phi:1.0, theta:0.9, axisLen:3.5, gridSize:4});
+  if(!S) return; scenes.cyl = S;
+
+  let wedge=null, axisRing=null;
+  function clear(){
+    [wedge, axisRing].forEach(o=>{ if(o){ S.scene.remove(o); o.traverse?.(c=>{c.geometry?.dispose(); c.material?.dispose();});}});
+    wedge=axisRing=null;
+  }
+
+  function buildWedge(r,th,z, dr,dth,dz){
+    clear();
+    const r1=Math.min(Math.max(0.01,r), 3.95), r2=Math.min(4, r1+dr);
+    const drEff=r2-r1;
+    const t1=th, t2=th+dth;
+    const z1=z, z2=z+dz;
+    const grp = new THREE.Group();
+    const matFace = new THREE.MeshStandardMaterial({color:0xf1c40f, transparent:true, opacity:0.65, side:THREE.DoubleSide,
+      emissive:0xf1c40f, emissiveIntensity:0.06, roughness:0.55, flatShading:false});
+    function annular(zVal){
+	      const N=64;
+      const pos=[];
+      for(let i=0;i<N;i++){
+        const a1=t1+(t2-t1)*i/N, a2=t1+(t2-t1)*(i+1)/N;
+        const p=(rr,aa)=>[rr*Math.cos(aa), rr*Math.sin(aa), zVal];
+        pos.push(...p(r1,a1),...p(r2,a1),...p(r2,a2));
+        pos.push(...p(r1,a1),...p(r2,a2),...p(r1,a2));
+      }
+      const g=new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(pos,3));
+      g.computeVertexNormals();
+      grp.add(new THREE.Mesh(g, matFace));
+    }
+    annular(z1); annular(z2);
+    function band(rr){
+	      const N=64;
+      const pos=[];
+      for(let i=0;i<N;i++){
+        const a1=t1+(t2-t1)*i/N, a2=t1+(t2-t1)*(i+1)/N;
+        const p=(aa,zz)=>[rr*Math.cos(aa), rr*Math.sin(aa), zz];
+        pos.push(...p(a1,z1),...p(a2,z1),...p(a2,z2));
+        pos.push(...p(a1,z1),...p(a2,z2),...p(a1,z2));
+      }
+      const g=new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(pos,3));
+      g.computeVertexNormals();
+      grp.add(new THREE.Mesh(g, matFace));
+    }
+    band(r2); if(r1>0.02) band(r1);
+    function radial(aa){
+      const p=(rr,zz)=>[rr*Math.cos(aa), rr*Math.sin(aa), zz];
+      const pos=[ ...p(r1,z1), ...p(r2,z1), ...p(r2,z2), ...p(r1,z1), ...p(r2,z2), ...p(r1,z2) ];
+      const g=new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(pos,3));
+      g.computeVertexNormals();
+      grp.add(new THREE.Mesh(g, matFace));
+    }
+    radial(t1); radial(t2);
+    S.scene.add(grp); wedge=grp;
+    const refMat = new THREE.LineDashedMaterial({color:0xc0392b, dashSize:0.1, gapSize:0.08});
+    const N=64;
+    const pts=[];
+    for(let i=0;i<=N;i++){const a=i/N*2*Math.PI; pts.push(new THREE.Vector3(r1*Math.cos(a), r1*Math.sin(a), 0));}
+    const refGeom=new THREE.BufferGeometry().setFromPoints(pts);
+    const ring=new THREE.Line(refGeom, refMat); ring.computeLineDistances();
+    S.scene.add(ring); axisRing=ring;
+
+    const dV=r1*drEff*dth*dz;
+    const exact = ((r2*r2 - r1*r1)/2) * dth * dz;
+    document.getElementById('cyl-r').textContent = r1.toFixed(2);
+    document.getElementById('cyl-th').textContent = (th*180/Math.PI).toFixed(0)+'°';
+    document.getElementById('cyl-z').textContent = z1.toFixed(2);
+    document.getElementById('cyl-dr').textContent = drEff.toFixed(2);
+    document.getElementById('cyl-dth').textContent = (dth*180/Math.PI).toFixed(0)+'°';
+    document.getElementById('cyl-dz').textContent = dz.toFixed(2);
+    document.getElementById('cyl-dV').textContent = dV.toFixed(3);
+    document.getElementById('cyl-dVe').textContent = exact.toFixed(3);
+    S.requestRender();
+  }
+
+  const get=id=>+document.getElementById(id).value;
+  function refresh(){
+    buildWedge(get('cyl-rs'), get('cyl-ths'), get('cyl-zs'),
+                get('cyl-drs'), get('cyl-dths'), get('cyl-dzs'));
+  }
+  ['cyl-rs','cyl-ths','cyl-zs','cyl-drs','cyl-dths','cyl-dzs'].forEach(id=>{
+    document.getElementById(id).addEventListener('input', refresh);
+  });
+  refresh();
+})();
+
+(function(){
+  const S = makeScene('canvas-sph', {radius:10, phi:1.0, theta:0.85, axisLen:3.5, gridSize:4});
+  if(!S) return; scenes.sph = S;
+
+  let wedge=null, ref=null;
+  function clear(){
+    [wedge,ref].forEach(o=>{ if(o){ S.scene.remove(o); o.traverse?.(c=>{c.geometry?.dispose(); c.material?.dispose();});}});
+    wedge=ref=null;
+  }
+
+  function sphPt(rho, phi, theta){
+    return [rho*Math.sin(phi)*Math.cos(theta), rho*Math.sin(phi)*Math.sin(theta), rho*Math.cos(phi)];
+  }
+
+  function build(rho,phi,theta, drho,dphi,dth){
+    clear();
+    const r1=Math.min(Math.max(0.05,rho), 3.95), r2=Math.min(4, r1+drho);
+    const drhoEff=r2-r1;
+    const p1=Math.max(0.02,phi), p2=Math.min(Math.PI-0.02, phi+dphi);
+    const dphiEff=p2-p1;
+    const t1=theta, t2=theta+dth;
+    const grp=new THREE.Group();
+    const mat=new THREE.MeshStandardMaterial({color:0xf1c40f, transparent:true, opacity:0.65, side:THREE.DoubleSide,
+      emissive:0xf1c40f, emissiveIntensity:0.06, roughness:0.55, flatShading:false});
+	    const NU=24, NV=24;
+    function mesh(getPt){
+      const pos=[];
+      for(let i=0;i<NU;i++){
+        for(let j=0;j<NV;j++){
+          const a=getPt(i/NU,j/NV), b=getPt((i+1)/NU,j/NV), c=getPt((i+1)/NU,(j+1)/NV), d=getPt(i/NU,(j+1)/NV);
+          pos.push(...a,...b,...c,...a,...c,...d);
+        }
+      }
+      const g=new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(pos,3));
+      g.computeVertexNormals();
+      grp.add(new THREE.Mesh(g, mat));
+    }
+    if(r1>0.06) mesh((u,v)=>sphPt(r1, p1+(p2-p1)*u, t1+(t2-t1)*v));
+    mesh((u,v)=>sphPt(r2, p1+(p2-p1)*u, t1+(t2-t1)*v));
+    mesh((u,v)=>sphPt(r1+(r2-r1)*u, p1, t1+(t2-t1)*v));
+    mesh((u,v)=>sphPt(r1+(r2-r1)*u, p2, t1+(t2-t1)*v));
+    mesh((u,v)=>sphPt(r1+(r2-r1)*u, p1+(p2-p1)*v, t1));
+    mesh((u,v)=>sphPt(r1+(r2-r1)*u, p1+(p2-p1)*v, t2));
+    S.scene.add(grp); wedge=grp;
+
+	    const sphereGeom = new THREE.SphereGeometry(r1, 64, 32);
+    const sphMat = new THREE.MeshBasicMaterial({color:0xc0392b, wireframe:true, transparent:true, opacity:0.12});
+    const refSphere=new THREE.Mesh(sphereGeom, sphMat);
+    S.scene.add(refSphere); ref=refSphere;
+
+    const dV = r1*r1 * Math.sin(p1) * drhoEff*dphiEff*dth;
+    const exact = ((r2**3 - r1**3)/3) * (Math.cos(p1) - Math.cos(p2)) * (t2 - t1);
+    document.getElementById('sph-rho').textContent = r1.toFixed(2);
+    document.getElementById('sph-phi').textContent = (p1*180/Math.PI).toFixed(0)+'°';
+    document.getElementById('sph-th').textContent = (t1*180/Math.PI).toFixed(0)+'°';
+    document.getElementById('sph-drho').textContent = drhoEff.toFixed(2);
+    document.getElementById('sph-dphi').textContent = (dphiEff*180/Math.PI).toFixed(0)+'°';
+    document.getElementById('sph-dth').textContent = (dth*180/Math.PI).toFixed(0)+'°';
+    document.getElementById('sph-dV').textContent = dV.toFixed(3);
+    document.getElementById('sph-dVe').textContent = exact.toFixed(3);
+    S.requestRender();
+  }
+
+  const get=id=>+document.getElementById(id).value;
+  function refresh(){
+    build(get('sph-rhos'), get('sph-phis'), get('sph-ths'),
+          get('sph-drhos'), get('sph-dphis'), get('sph-dths'));
+  }
+  ['sph-rhos','sph-phis','sph-ths','sph-drhos','sph-dphis','sph-dths'].forEach(id=>{
+    document.getElementById(id).addEventListener('input', refresh);
+  });
+  refresh();
+})();
+
+/* ============================================================
+   §14.8 雅可比 — uv→xy mapping
+   ============================================================ */
+(function(){
+  const UV = make2DScene('canvas-uv', {xRange:[-3.4,3.4], yRange:[-3.4,3.4], padding:24});
+  const XY = make2DScene('canvas-xy', {xRange:[-3.4,3.4], yRange:[-3.4,3.4], padding:24});
+  if(!UV||!XY) return;
+  scenes.jacUV = UV; scenes.jacXY = XY;
+
+  const MAPS = {
+    polar: {
+      name:'極座標 $x=r\\cos\\theta,\\ y=r\\sin\\theta$',
+      Jstr:'$|J|=r$',
+      uLabel:'r', vLabel:'θ',
+      uRange:[0, 2.5], vRange:[0, 2*Math.PI],
+      f:(u,v)=>[u*Math.cos(v), u*Math.sin(v)],
+      J:(u,v)=>u,
+    },
+	    affine: {
+	      name:'線性 $x=2u+v,\\ y=u+3v$',
+	      Jstr:'$|J|=5$',
+	      uLabel:'u', vLabel:'v',
+	      uRange:[-1.2, 1.2], vRange:[-1.2, 1.2],
+	      xyRange:[[-4.2,4.2],[-5.2,5.2]],
+	      f:(u,v)=>[2*u+v, u+3*v],
+	      J:(u,v)=>5,
+	    },
+    shear: {
+      name:'非線性 $x=u+v^2,\\ y=v$',
+	      Jstr:'$|J|=1$ (固定！)',
+	      uLabel:'u', vLabel:'v',
+	      uRange:[-2, 2], vRange:[-1.6, 1.6],
+	      xyRange:[[-2.5,5],[-2,2]],
+	      f:(u,v)=>[u+v*v, v],
+	      J:(u,v)=>1,
+	    },
+    rotscl: {
+      name:'橢圓 $x=2u\\cos v,\\ y=3u\\sin v$',
+	      Jstr:'$|J|=6u$',
+	      uLabel:'u', vLabel:'v',
+	      uRange:[0, 1.4], vRange:[0, 2*Math.PI],
+	      xyRange:[[-3.2,3.2],[-4.8,4.8]],
+	      f:(u,v)=>[2*u*Math.cos(v), 3*u*Math.sin(v)],
+	      J:(u,v)=>6*u,
+	    },
+  };
+
+	  let currentId='polar', u0=0.5, v0=0.78, lines=8;
+
+	  function clampCell(){
+	    const m=MAPS[currentId];
+	    const du=(m.uRange[1]-m.uRange[0])/lines;
+	    const dv=(m.vRange[1]-m.vRange[0])/lines;
+	    u0=Math.min(Math.max(u0, m.uRange[0]), m.uRange[1]-du);
+	    v0=Math.min(Math.max(v0, m.vRange[0]), m.vRange[1]-dv);
+	    document.getElementById('jac-us').value=u0;
+	    document.getElementById('jac-vs').value=v0;
+	  }
+
+	  function adjustSliderRanges(){
+	    const m=MAPS[currentId];
+	    const uS=document.getElementById('jac-us');
+	    const vS=document.getElementById('jac-vs');
+	    UV.setRange(m.uRange, m.vRange);
+	    const xyRange=m.xyRange||[[-3,3],[-3,3]];
+	    XY.setRange(xyRange[0], xyRange[1]);
+	    uS.min=m.uRange[0]; uS.max=m.uRange[1];
+	    vS.min=m.vRange[0]; vS.max=m.vRange[1];
+	    uS.step = (m.uRange[1]-m.uRange[0])/100;
+	    vS.step = (m.vRange[1]-m.vRange[0])/200;
+	    clampCell();
+	  }
+
+  function drawUV(){
+    const m=MAPS[currentId];
+    UV.clear('#fbf7ed'); UV.drawAxes();
+    const ctx=UV.ctx;
+    ctx.fillStyle='#888'; ctx.font='12px JetBrains Mono, monospace';
+    ctx.fillText(m.uLabel, UV.pxX(m.uRange[1]*0.92), UV.pxY(0)-6);
+    ctx.fillText(m.vLabel, UV.pxX(0)+5, UV.pxY(m.vRange[1]*0.92)+12);
+    ctx.strokeStyle='rgba(44,62,122,.35)'; ctx.lineWidth=1;
+    for(let i=0;i<=lines;i++){
+      const u=m.uRange[0]+(m.uRange[1]-m.uRange[0])*i/lines;
+      ctx.beginPath();
+      ctx.moveTo(UV.pxX(u), UV.pxY(m.vRange[0]));
+      ctx.lineTo(UV.pxX(u), UV.pxY(m.vRange[1]));
+      ctx.stroke();
+      const v=m.vRange[0]+(m.vRange[1]-m.vRange[0])*i/lines;
+      ctx.beginPath();
+      ctx.moveTo(UV.pxX(m.uRange[0]), UV.pxY(v));
+      ctx.lineTo(UV.pxX(m.uRange[1]), UV.pxY(v));
+      ctx.stroke();
+    }
+    ctx.strokeStyle='#1a6b4a'; ctx.lineWidth=2;
+    ctx.strokeRect(UV.pxX(m.uRange[0]), UV.pxY(m.vRange[1]),
+       UV.pxX(m.uRange[1])-UV.pxX(m.uRange[0]),
+       UV.pxY(m.vRange[0])-UV.pxY(m.vRange[1]));
+    const du=(m.uRange[1]-m.uRange[0])/lines;
+    const dv=(m.vRange[1]-m.vRange[0])/lines;
+    ctx.fillStyle='rgba(241,196,15,.55)';
+    ctx.strokeStyle='#b7950b'; ctx.lineWidth=2;
+    const x1=UV.pxX(u0), x2=UV.pxX(u0+du);
+    const y1=UV.pxY(v0+dv), y2=UV.pxY(v0);
+    ctx.fillRect(x1,y1, x2-x1, y2-y1);
+    ctx.strokeRect(x1,y1, x2-x1, y2-y1);
+    ctx.fillStyle='#c0392b';
+    ctx.beginPath(); ctx.arc(UV.pxX(u0+du/2), UV.pxY(v0+dv/2), 5, 0, Math.PI*2); ctx.fill();
+    return {du, dv};
+  }
+
+  function drawXY({du,dv}){
+    const m=MAPS[currentId];
+    XY.clear('#fbf7ed'); XY.drawAxes();
+    const ctx=XY.ctx;
+    const N=80;
+    ctx.strokeStyle='rgba(44,62,122,.35)'; ctx.lineWidth=1;
+    for(let i=0;i<=lines;i++){
+      const u=m.uRange[0]+(m.uRange[1]-m.uRange[0])*i/lines;
+      ctx.beginPath();
+      for(let j=0;j<=N;j++){
+        const v=m.vRange[0]+(m.vRange[1]-m.vRange[0])*j/N;
+        const [x,y]=m.f(u,v);
+        if(j===0) ctx.moveTo(XY.pxX(x), XY.pxY(y));
+        else      ctx.lineTo(XY.pxX(x), XY.pxY(y));
+      }
+      ctx.stroke();
+    }
+    for(let i=0;i<=lines;i++){
+      const v=m.vRange[0]+(m.vRange[1]-m.vRange[0])*i/lines;
+      ctx.beginPath();
+      for(let j=0;j<=N;j++){
+        const u=m.uRange[0]+(m.uRange[1]-m.uRange[0])*j/N;
+        const [x,y]=m.f(u,v);
+        if(j===0) ctx.moveTo(XY.pxX(x), XY.pxY(y));
+        else      ctx.lineTo(XY.pxX(x), XY.pxY(y));
+      }
+      ctx.stroke();
+    }
+    ctx.fillStyle='rgba(241,196,15,.55)'; ctx.strokeStyle='#b7950b'; ctx.lineWidth=2;
+    function curveBetween(uA,vA,uB,vB,n){
+      const arr=[];
+      for(let k=0;k<=n;k++){
+        const t=k/n;
+        arr.push(m.f(uA+(uB-uA)*t, vA+(vB-vA)*t));
+      }
+      return arr;
+    }
+    const path=[];
+    path.push(...curveBetween(u0,v0, u0+du,v0, 16));
+    path.push(...curveBetween(u0+du,v0, u0+du,v0+dv, 16));
+    path.push(...curveBetween(u0+du,v0+dv, u0,v0+dv, 16));
+    path.push(...curveBetween(u0,v0+dv, u0,v0, 16));
+    ctx.beginPath();
+    path.forEach((p,i)=>{ if(i===0) ctx.moveTo(XY.pxX(p[0]),XY.pxY(p[1])); else ctx.lineTo(XY.pxX(p[0]),XY.pxY(p[1])); });
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    const [cx,cy]=m.f(u0+du/2, v0+dv/2);
+    ctx.fillStyle='#c0392b';
+    ctx.beginPath(); ctx.arc(XY.pxX(cx), XY.pxY(cy), 5, 0, Math.PI*2); ctx.fill();
+  }
+
+	  function drawAll(){
+	    const m=MAPS[currentId];
+	    clampCell();
+	    document.getElementById('jac-uvlabel').innerHTML = `(${m.uLabel}, ${m.vLabel}) 平面`;
+    const eqName=document.getElementById('jac-name');
+    const eqJ=document.getElementById('jac-Jstr');
+    eqName.innerHTML=m.name; eqJ.innerHTML=m.Jstr;
+    if(window.MathJax?.typesetPromise) MathJax.typesetPromise([eqName, eqJ]);
+
+    const r=drawUV();
+    drawXY(r);
+
+    const J=Math.abs(m.J(u0+r.du/2,v0+r.dv/2));
+    const dS=r.du*r.dv;
+    document.getElementById('jac-J').textContent = J.toFixed(3);
+    document.getElementById('jac-dS').textContent = dS.toFixed(4);
+    document.getElementById('jac-dA').textContent = (J*dS).toFixed(4);
+  }
+
+  document.querySelectorAll('#jacPresets .preset-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      document.querySelectorAll('#jacPresets .preset-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      currentId=b.dataset.id; adjustSliderRanges(); drawAll();
+    });
+  });
+  document.getElementById('jac-us').addEventListener('input', e=>{ u0=+e.target.value; drawAll(); });
+  document.getElementById('jac-vs').addEventListener('input', e=>{ v0=+e.target.value; drawAll(); });
+  document.getElementById('jac-lines').addEventListener('input', e=>{ lines=+e.target.value; drawAll(); });
+
+  adjustSliderRanges();
+  drawAll();
+  new ResizeObserver(()=>drawAll()).observe(UV.canvas);
+  new ResizeObserver(()=>drawAll()).observe(XY.canvas);
+
+  /* expose redraw for jacobian heatmap below */
+  window.__jacRedrawAll = drawAll;
+  window.__jacGetState  = ()=>({MAPS, currentId, u0, v0, lines});
+})();
+
+/* ============================================================
+   §14.5 診斷圖：dS = sec γ · dA
+   ============================================================ */
+(function(){
+  const canvas = document.getElementById('canvas-14-5-ds');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W=300, H=300;
+  function resize(){
+    const r=canvas.getBoundingClientRect(); if(r.width<2) return;
+    const dpr=Math.min(2,window.devicePixelRatio||1);
+    canvas.width=Math.round(r.width*dpr); canvas.height=Math.round(r.height*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    W=r.width; H=r.height;
+  }
+  new ResizeObserver(()=>{ resize(); draw(); }).observe(canvas);
+  resize();
+
+  function draw(){
+    const gammaDeg = parseFloat(document.getElementById('dsGamma').value);
+    const gamma = gammaDeg * Math.PI / 180;
+    const sec = 1/Math.cos(gamma);
+    const tan = Math.tan(gamma);
+
+    ctx.fillStyle='#fbf7ed'; ctx.fillRect(0,0,W,H);
+    /* 軸 */
+    const ox=W*0.18, oy=H*0.7;
+    ctx.strokeStyle='#bdb6a8'; ctx.lineWidth=1.2; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(0,oy); ctx.lineTo(W,oy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(ox,0); ctx.lineTo(ox,H); ctx.stroke();
+    ctx.setLineDash([]);
+    /* 軸標籤 */
+    ctx.fillStyle='#888'; ctx.font='600 11px JetBrains Mono';
+    ctx.fillText('xy 平面', W-66, oy-6);
+    ctx.fillText('z', ox+6, 14);
+
+    /* 投影 dA：藍色矩形（在 xy 平面上） */
+    const baseLen = 180;  /* 投影長度（像素）*/
+    const baseDepth = 32; /* 厚度（顯示用） */
+    ctx.fillStyle='rgba(44,62,122,.45)';
+    ctx.strokeStyle='#2c3e7a'; ctx.lineWidth=2; ctx.lineCap='round';
+    ctx.beginPath();
+    ctx.moveTo(ox, oy);
+    ctx.lineTo(ox+baseLen, oy);
+    ctx.lineTo(ox+baseLen, oy+baseDepth);
+    ctx.lineTo(ox, oy+baseDepth);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#2c3e7a'; ctx.font='700 13px JetBrains Mono';
+    ctx.fillText('dA = 1', ox+baseLen/2-26, oy+baseDepth+22);
+
+    /* 真實 dS：黃色平行四邊形（傾斜 γ） */
+    const dsLen = baseLen * sec;
+    /* 一端固定在 (ox, oy)，另一端 (ox + dsLen·cos γ, oy − dsLen·sin γ) */
+    const x2 = ox + dsLen*Math.cos(gamma);
+    const y2 = oy - dsLen*Math.sin(gamma);
+    /* 厚度：垂直於斜邊 */
+    const nx = -Math.sin(gamma) * baseDepth*0.7;
+    const ny = -Math.cos(gamma) * baseDepth*0.7;
+    ctx.fillStyle='rgba(241,196,15,.65)';
+    ctx.strokeStyle='#b7950b'; ctx.lineWidth=2; ctx.lineCap='round';
+    ctx.beginPath();
+    ctx.moveTo(ox, oy);
+    ctx.lineTo(x2, y2);
+    ctx.lineTo(x2+nx, y2+ny);
+    ctx.lineTo(ox+nx, oy+ny);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    /* dS 標籤 */
+    ctx.fillStyle='#a07a08'; ctx.font='700 13px JetBrains Mono';
+    ctx.fillText(`dS = sec γ = ${sec.toFixed(3)}`, x2+nx/2-30, y2+ny/2-8);
+
+    /* 投影虛線連接 */
+    ctx.strokeStyle='#7d776b'; ctx.setLineDash([3,3]); ctx.lineWidth=1.2;
+    ctx.beginPath(); ctx.moveTo(x2, y2); ctx.lineTo(x2, oy); ctx.stroke();
+    ctx.setLineDash([]);
+
+    /* 角度弧 γ */
+    ctx.strokeStyle='#c0392b'; ctx.lineWidth=2; ctx.lineCap='round';
+    ctx.beginPath();
+    ctx.arc(ox, oy, 36, -gamma, 0);
+    ctx.stroke();
+    ctx.fillStyle='#c0392b'; ctx.font='700 13px JetBrains Mono';
+    ctx.fillText('γ', ox+42*Math.cos(-gamma/2)-4, oy+42*Math.sin(-gamma/2)+5);
+
+    /* 切平面方向標記 */
+    ctx.strokeStyle='#1a6b4a'; ctx.lineWidth=2; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(x2, y2); ctx.stroke();
+
+    /* 法向量箭頭（垂直於切平面，紅色，長度 50） */
+    const ang = -gamma + Math.PI/2;
+    const nL = 60;
+    const nxv = Math.cos(ang)*nL, nyv = -Math.sin(ang)*nL;
+    const cx_ds = (ox+x2)/2 + nx/2, cy_ds = (oy+y2)/2 + ny/2;
+    ctx.strokeStyle='#c0392b'; ctx.lineWidth=2.4;
+    ctx.beginPath(); ctx.moveTo(cx_ds, cy_ds); ctx.lineTo(cx_ds + nxv, cy_ds + nyv); ctx.stroke();
+    /* 箭頭頭 */
+    ctx.fillStyle='#c0392b';
+    const ahx=cx_ds+nxv, ahy=cy_ds+nyv;
+    const aang=Math.atan2(nyv,nxv);
+    ctx.beginPath();
+    ctx.moveTo(ahx, ahy);
+    ctx.lineTo(ahx-10*Math.cos(aang-0.4), ahy-10*Math.sin(aang-0.4));
+    ctx.lineTo(ahx-10*Math.cos(aang+0.4), ahy-10*Math.sin(aang+0.4));
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#c0392b'; ctx.font='700 12px JetBrains Mono';
+    ctx.fillText('n', ahx+6, ahy-2);
+
+    /* side panel */
+    document.getElementById('dsGammaVal').textContent = gammaDeg+'°';
+    document.getElementById('dsGammaInfo').textContent = gammaDeg+'°';
+    document.getElementById('dsTan').textContent = tan.toFixed(3);
+    document.getElementById('dsSec').textContent = sec.toFixed(3);
+    document.getElementById('dsVal').textContent = sec.toFixed(3);
+  }
+  document.getElementById('dsGamma').addEventListener('input', draw);
+  draw();
+})();
+
+/* ============================================================
+   §14.6 診斷圖：第一型區域 → xy 投影（側視 2D）
+   ============================================================ */
+(function(){
+  const canvas = document.getElementById('canvas-14-6-projection');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W=300, H=300;
+  function resize(){
+    const r=canvas.getBoundingClientRect(); if(r.width<2) return;
+    const dpr=Math.min(2,window.devicePixelRatio||1);
+    canvas.width=Math.round(r.width*dpr); canvas.height=Math.round(r.height*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    W=r.width; H=r.height;
+  }
+  new ResizeObserver(()=>{ resize(); draw(); }).observe(canvas);
+  resize();
+  function draw(){
+    const xc = parseFloat(document.getElementById('proj14_6X').value);
+    /* 側視 (x → 橫軸, z → 縱軸)；y 維度被「壓平」顯示為投影 D */
+    /* 拋物面 z=4-x²-y² 截到 xy 平面，給定 x 時投影滿足 y∈[−√(4−x²), √(4−x²)]；側視只畫 y=0 切片 */
+    /* 在 y=0 切片：z 從 0 到 4-x² */
+    ctx.fillStyle='#fbf7ed'; ctx.fillRect(0,0,W,H);
+    const xMin=-2.6, xMax=2.6, zMin=-0.6, zMax=4.6;
+    const sx=x=>30 + (x-xMin)/(xMax-xMin)*(W-60);
+    const sy=z=>H-30 - (z-zMin)/(zMax-zMin)*(H-60);
+    /* 投影 D 在 z=0 軸上：x ∈ [-2, 2] */
+    ctx.fillStyle='rgba(26,107,74,.30)';
+    ctx.fillRect(sx(-2), sy(0)-3, sx(2)-sx(-2), 6);
+    ctx.fillStyle='#1a6b4a'; ctx.font='600 12px JetBrains Mono';
+    ctx.fillText('D 投影 (xy 平面切片)', sx(-2)-4, sy(0)+22);
+    /* 軸 */
+    ctx.strokeStyle='#bdb6a8'; ctx.lineWidth=1.2; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(0,sy(0)); ctx.lineTo(W,sy(0)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(sx(0),0); ctx.lineTo(sx(0),H); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#888'; ctx.font='600 11px JetBrains Mono';
+    ctx.fillText('x', W-22, sy(0)-6);
+    ctx.fillText('z', sx(0)+6, 14);
+    /* 上邊界 z=4-x² */
+    ctx.strokeStyle='#5dade2'; ctx.lineWidth=2.2; ctx.lineCap='round';
+    ctx.beginPath();
+    for(let x=-2; x<=2.001; x+=0.02){
+      const z=4-x*x; if(x===-2) ctx.moveTo(sx(x),sy(z)); else ctx.lineTo(sx(x),sy(z));
+    }
+    ctx.stroke();
+    ctx.fillStyle='#2980b9'; ctx.font='600 11px JetBrains Mono';
+    ctx.fillText('z = 4 - x² 上邊界', sx(-1.3), sy(2.6)-6);
+    /* 下邊界 z=0 */
+    ctx.strokeStyle='#27ae60'; ctx.lineWidth=2.2;
+    ctx.beginPath(); ctx.moveTo(sx(-2), sy(0)); ctx.lineTo(sx(2), sy(0));
+    ctx.stroke();
+    ctx.fillStyle='#1a6b4a'; ctx.fillText('z = 0 下邊界', sx(-1.9), sy(0)-8);
+    /* 區域填色 */
+    ctx.fillStyle='rgba(241,196,15,.30)';
+    ctx.beginPath();
+    ctx.moveTo(sx(-2), sy(0));
+    ctx.lineTo(sx(2), sy(0));
+    for(let x=2; x>=-2.001; x-=0.02){
+      const z=4-x*x; ctx.lineTo(sx(x),sy(z));
+    }
+    ctx.closePath(); ctx.fill();
+    /* 切片 strip 在 x = xc */
+    if (Math.abs(xc) <= 2){
+      const z1 = 0, z2 = 4-xc*xc;
+      ctx.strokeStyle='#c0392b'; ctx.lineWidth=3.2; ctx.lineCap='round';
+      ctx.beginPath(); ctx.moveTo(sx(xc), sy(z1)); ctx.lineTo(sx(xc), sy(z2)); ctx.stroke();
+      ctx.fillStyle='#c0392b'; ctx.font='700 12px JetBrains Mono';
+      ctx.fillText(`x=${xc.toFixed(2)}, z∈[0, ${z2.toFixed(2)}]`, sx(xc)+6, sy((z1+z2)/2));
+      /* 投影虛線 */
+      ctx.strokeStyle='#c0392b'; ctx.setLineDash([3,3]); ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.moveTo(sx(xc), sy(z1)); ctx.lineTo(sx(xc), sy(0)); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle='#c0392b';
+      ctx.beginPath(); ctx.arc(sx(xc), sy(0), 5, 0, Math.PI*2); ctx.fill();
+    }
+    /* 標題 */
+    ctx.fillStyle='#1a1a2e'; ctx.font='700 13px JetBrains Mono';
+    ctx.fillText('E: 0≤z≤4-x²-y² (y=0 切片)', 10, 18);
+    document.getElementById('proj14_6XVal').textContent = xc.toFixed(2);
+  }
+  document.getElementById('proj14_6X').addEventListener('input', draw);
+  draw();
+})();
+
+/* ============================================================
+   §14.7 診斷圖：圓柱 vs 球面 dV 元素對比
+   ============================================================ */
+(function(){
+  const cylC = document.getElementById('canvas-14-7-cyl-elem');
+  const sphC = document.getElementById('canvas-14-7-sph-elem');
+  if(!cylC || !sphC) return;
+  const cyl = cylC.getContext('2d');
+  const sph = sphC.getContext('2d');
+  let WC=200,HC=200,WS=200,HS=200;
+  function resizeOne(canvas, ctx, setSize){
+    const r=canvas.getBoundingClientRect(); if(r.width<2) return;
+    const dpr=Math.min(2,window.devicePixelRatio||1);
+    canvas.width=Math.round(r.width*dpr); canvas.height=Math.round(r.height*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    setSize(r.width, r.height);
+  }
+  function resize(){
+    resizeOne(cylC, cyl, (w,h)=>{WC=w;HC=h;});
+    resizeOne(sphC, sph, (w,h)=>{WS=w;HS=h;});
+  }
+  new ResizeObserver(()=>{ resize(); draw(); }).observe(cylC);
+  new ResizeObserver(()=>{ resize(); draw(); }).observe(sphC);
+  resize();
+
+  function draw(){
+    const r = parseFloat(document.getElementById('dvR').value);
+    const rho = parseFloat(document.getElementById('dvRho').value);
+    const phi = parseFloat(document.getElementById('dvPhi').value);
+    const dr = 0.1, dth = 0.1, dphi = 0.1, dz = 0.1;
+    const cylVal = r * dr * dth * dz;
+    const sphVal = rho*rho * Math.sin(phi) * dr * dphi * dth;
+
+    /* ── 左圖：圓柱底面（俯視） ── */
+    cyl.fillStyle='#fbf7ed'; cyl.fillRect(0,0,WC,HC);
+    const cx1=WC*0.5, cy1=HC*0.55;
+    const sc1=Math.min(WC,HC)*0.32;
+    /* 軸 */
+    cyl.strokeStyle='#bdb6a8'; cyl.lineWidth=1; cyl.setLineDash([4,4]);
+    cyl.beginPath(); cyl.moveTo(0,cy1); cyl.lineTo(WC,cy1); cyl.stroke();
+    cyl.beginPath(); cyl.moveTo(cx1,0); cyl.lineTo(cx1,HC); cyl.stroke();
+    cyl.setLineDash([]);
+    /* 同心圓 1, 2, 3 */
+    cyl.strokeStyle='#d8d0bd'; cyl.lineWidth=1;
+    for(let k=1;k<=3;k++){ cyl.beginPath(); cyl.arc(cx1,cy1,k*sc1*0.6,0,Math.PI*2); cyl.stroke(); }
+    /* 射線 */
+    for(let k=0;k<8;k++){
+      const a=k*Math.PI/4;
+      cyl.beginPath(); cyl.moveTo(cx1,cy1); cyl.lineTo(cx1+sc1*2.4*Math.cos(a), cy1-sc1*2.4*Math.sin(a)); cyl.stroke();
+    }
+    /* 元素底面搭配固定 dz，表示圓柱座標體積元素 */
+    const th0=Math.PI/6;
+    const r1=r*0.6*sc1, r2=(r+dr)*0.6*sc1;
+    cyl.fillStyle='rgba(241,196,15,.65)';
+    cyl.strokeStyle='#b7950b'; cyl.lineWidth=2; cyl.lineCap='round';
+    cyl.beginPath();
+	    const N=64;
+    for(let i=0;i<=N;i++){
+      const a=th0+dth*i/N;
+      const x=cx1+r1*Math.cos(a), y=cy1-r1*Math.sin(a);
+      if(i===0) cyl.moveTo(x,y); else cyl.lineTo(x,y);
+    }
+    for(let i=N;i>=0;i--){
+      const a=th0+dth*i/N;
+      const x=cx1+r2*Math.cos(a), y=cy1-r2*Math.sin(a);
+      cyl.lineTo(x,y);
+    }
+    cyl.closePath(); cyl.fill(); cyl.stroke();
+    cyl.fillStyle='#1a1a2e'; cyl.font='700 12px JetBrains Mono';
+    cyl.fillText(`r=${r.toFixed(2)}`, 10, 20);
+    cyl.fillStyle='#a07a08'; cyl.font='600 11px JetBrains Mono';
+    cyl.fillText(`r·dr·dθ·dz = ${cylVal.toFixed(4)}`, 10, HC-12);
+
+    /* ── 右圖：球面截面（含 sin φ 變化） ── */
+    sph.fillStyle='#fbf7ed'; sph.fillRect(0,0,WS,HS);
+    const cx2=WS*0.5, cy2=HS*0.55;
+    const sc2=Math.min(WS,HS)*0.32;
+    const rhoMax=2.5;
+    const rhoScale=sc2*1.6/rhoMax;
+    sph.strokeStyle='#bdb6a8'; sph.lineWidth=1; sph.setLineDash([4,4]);
+    sph.beginPath(); sph.moveTo(0,cy2); sph.lineTo(WS,cy2); sph.stroke();
+    sph.beginPath(); sph.moveTo(cx2,0); sph.lineTo(cx2,HS); sph.stroke();
+    sph.setLineDash([]);
+    /* 半球面（左右側視）：經線 + 緯線 */
+    sph.strokeStyle='#d8d0bd'; sph.lineWidth=1;
+    /* 緯線（不同 φ） */
+    for(let k=1;k<=5;k++){
+      const ph=k*Math.PI/6;
+      /* 在 r=R 球面上 φ=ph 緯線投影 = (R sin ph) 半徑的水平虛圓在 ρ-φ 平面 */
+      sph.beginPath(); sph.arc(cx2,cy2, rhoMax*rhoScale*Math.sin(ph), 0, Math.PI*2); sph.stroke();
+    }
+    /* 球邊界 */
+    sph.strokeStyle='#1a1a2e'; sph.lineWidth=1.6; sph.lineCap='round';
+    sph.beginPath(); sph.arc(cx2,cy2, rhoMax*rhoScale, 0, Math.PI*2); sph.stroke();
+    /* z 軸標記 */
+    sph.strokeStyle='#2980b9'; sph.lineWidth=1.5;
+    sph.beginPath(); sph.moveTo(cx2,cy2-rhoMax*rhoScale*1.06); sph.lineTo(cx2,cy2+rhoMax*rhoScale*1.06); sph.stroke();
+    /* 元素位置：在當前 ρ, φ */
+    /* (ρ,φ) → 在側視圖：x = ρ sin φ, z = ρ cos φ */
+    const ex = cx2 + rho*Math.sin(phi)*rhoScale;
+    const ez = cy2 - rho*Math.cos(phi)*rhoScale;
+    /* 元素橫向寬度：ρ sin φ · dθ；徑向寬度：ρ · dφ */
+    const wTan = Math.max(4, rho*Math.sin(phi)*rhoScale*dth);
+    const wRad = Math.max(4, rho*rhoScale*dphi);
+    sph.fillStyle='rgba(241,196,15,.70)';
+    sph.strokeStyle='#b7950b'; sph.lineWidth=2; sph.lineCap='round';
+    /* 旋轉到沿 (sin φ, -cos φ) 方向 */
+    sph.save();
+    sph.translate(ex, ez);
+    sph.rotate(Math.PI/2 - phi);  /* 切平面方向 */
+    sph.fillRect(-wRad/2, -wTan/2, wRad, wTan);
+    sph.strokeRect(-wRad/2, -wTan/2, wRad, wTan);
+    sph.restore();
+    /* 點 */
+    sph.fillStyle='#c0392b';
+    sph.beginPath(); sph.arc(ex, ez, 4, 0, Math.PI*2); sph.fill();
+    /* 標籤 */
+    sph.fillStyle='#1a1a2e'; sph.font='700 12px JetBrains Mono';
+    sph.fillText(`ρ=${rho.toFixed(2)}, φ=${(phi*180/Math.PI).toFixed(0)}°`, 10, 20);
+    sph.fillStyle='#a07a08'; sph.font='600 11px JetBrains Mono';
+    sph.fillText(`ρ²sinφ·dρ·dφ·dθ = ${sphVal.toFixed(4)}`, 10, HS-12);
+
+    /* side panel */
+    document.getElementById('dvRVal').textContent = r.toFixed(2);
+    document.getElementById('dvRhoVal').textContent = rho.toFixed(2);
+    document.getElementById('dvPhiVal').textContent = (phi*180/Math.PI).toFixed(0)+'°';
+    document.getElementById('dvCylVal').textContent = cylVal.toFixed(4);
+    document.getElementById('dvSphVal').textContent = sphVal.toFixed(4);
+    document.getElementById('dvSinPhi').textContent = Math.sin(phi).toFixed(3);
+  }
+  ['dvR','dvRho','dvPhi'].forEach(id=>{
+    document.getElementById(id).addEventListener('input', draw);
+  });
+  draw();
+})();
+
+/* ============================================================
+   §14.8 診斷圖：|J(u,v)| 熱力圖
+   ============================================================ */
+(function(){
+  const canvas = document.getElementById('canvas-14-8-jacobian');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W=300, H=300;
+  function resize(){
+    const r=canvas.getBoundingClientRect(); if(r.width<2) return;
+    const dpr=Math.min(2,window.devicePixelRatio||1);
+    canvas.width=Math.round(r.width*dpr); canvas.height=Math.round(r.height*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    W=r.width; H=r.height;
+  }
+  new ResizeObserver(()=>{ resize(); draw(); }).observe(canvas);
+  resize();
+
+  function colorRamp(t){
+    /* 藍(44,62,122) → 黃(241,196,15) → 紅(192,57,43) */
+    if (t < 0.5){ const u=t*2; return [Math.round(44+(241-44)*u), Math.round(62+(196-62)*u), Math.round(122+(15-122)*u)]; }
+    else { const u=(t-0.5)*2; return [Math.round(241+(192-241)*u), Math.round(196+(57-196)*u), Math.round(15+(43-15)*u)]; }
+  }
+  function draw(){
+    /* 同步當前選中的變換 */
+    const state = window.__jacGetState ? window.__jacGetState() : null;
+    if(!state) return;
+    const m = state.MAPS[state.currentId];
+    const uRange = m.uRange, vRange = m.vRange;
+    /* 採樣 |J| 取得最大值，做 normalize */
+    let JMax = 0;
+    const NS = 40;
+    for(let i=0;i<=NS;i++) for(let j=0;j<=NS;j++){
+      const u = uRange[0]+(uRange[1]-uRange[0])*i/NS;
+      const v = vRange[0]+(vRange[1]-vRange[0])*j/NS;
+      const J = Math.abs(m.J(u,v));
+      if(J>JMax) JMax=J;
+    }
+    if (JMax < 1e-9) JMax = 1;
+    /* 物理像素 imageData */
+    const dpr = Math.min(2, window.devicePixelRatio||1);
+    const phyW = canvas.width, phyH = canvas.height;
+    const padPx = 30 * dpr;
+    const pxX = u => padPx + (u-uRange[0])/(uRange[1]-uRange[0])*(phyW-2*padPx);
+    const pxY = v => phyH - padPx - (v-vRange[0])/(vRange[1]-vRange[0])*(phyH-2*padPx);
+    const ipxX = px => uRange[0] + (px-padPx)/(phyW-2*padPx)*(uRange[1]-uRange[0]);
+    const ipxY = py => vRange[0] + (phyH-padPx-py)/(phyH-2*padPx)*(vRange[1]-vRange[0]);
+
+    const img = ctx.createImageData(phyW, phyH);
+    const data = img.data;
+    const bgR=251, bgG=247, bgB=237;
+    for(let py=0; py<phyH; py++){
+      for(let px=0; px<phyW; px++){
+        const off = (py*phyW + px)*4;
+        const u = ipxX(px), v = ipxY(py);
+        const inDom = u>=uRange[0] && u<=uRange[1] && v>=vRange[0] && v<=vRange[1];
+        if(inDom){
+          const J = Math.abs(m.J(u,v));
+          const t = Math.min(1, J/JMax);
+          const [R,G,B] = colorRamp(t);
+          data[off]=R; data[off+1]=G; data[off+2]=B; data[off+3]=255;
+        } else {
+          data[off]=bgR; data[off+1]=bgG; data[off+2]=bgB; data[off+3]=255;
+        }
+      }
+    }
+    ctx.save(); ctx.setTransform(1,0,0,1,0,0); ctx.putImageData(img,0,0); ctx.restore();
+
+    /* 軸與標籤 */
+    ctx.strokeStyle='#888'; ctx.lineWidth=1.4; ctx.setLineDash([4,4]);
+    const ax_y = pxY(0)/dpr, ax_x = pxX(0)/dpr;
+    if (vRange[0]<=0 && vRange[1]>=0){ ctx.beginPath(); ctx.moveTo(0, ax_y); ctx.lineTo(W, ax_y); ctx.stroke(); }
+    if (uRange[0]<=0 && uRange[1]>=0){ ctx.beginPath(); ctx.moveTo(ax_x, 0); ctx.lineTo(ax_x, H); ctx.stroke(); }
+    ctx.setLineDash([]);
+
+    /* 邊界框 */
+    ctx.strokeStyle='#1a1a2e'; ctx.lineWidth=1.6;
+    ctx.strokeRect(pxX(uRange[0])/dpr, pxY(vRange[1])/dpr,
+                   (pxX(uRange[1])-pxX(uRange[0]))/dpr, (pxY(vRange[0])-pxY(vRange[1]))/dpr);
+
+    /* 標籤 */
+    ctx.fillStyle='#1a1a2e'; ctx.font='700 12px JetBrains Mono';
+    ctx.fillText(m.uLabel, W-22, ax_y-6);
+    ctx.fillText(m.vLabel, ax_x+6, 14);
+    ctx.fillStyle='#7d776b'; ctx.font='600 10px JetBrains Mono';
+    ctx.fillText(`|J|max ≈ ${JMax.toFixed(2)}`, 8, H-10);
+    /* legend */
+    const lx=W-90, ly=10, lw=80, lh=10;
+    const lgImg = ctx.createImageData(lw*dpr, lh*dpr);
+    for(let i=0;i<lw*dpr;i++) for(let j=0;j<lh*dpr;j++){
+      const t=i/(lw*dpr-1);
+      const [R,G,B]=colorRamp(t);
+      const off=(j*lw*dpr+i)*4;
+      lgImg.data[off]=R; lgImg.data[off+1]=G; lgImg.data[off+2]=B; lgImg.data[off+3]=255;
+    }
+    ctx.save(); ctx.setTransform(1,0,0,1,0,0); ctx.putImageData(lgImg, lx*dpr, ly*dpr); ctx.restore();
+    ctx.strokeStyle='#1a1a2e'; ctx.lineWidth=1; ctx.strokeRect(lx, ly, lw, lh);
+    ctx.fillStyle='#1a1a2e'; ctx.font='500 9px JetBrains Mono';
+    ctx.fillText('縮 |J|=0', lx-2, ly+lh+11);
+    ctx.fillText('漲', lx+lw-12, ly+lh+11);
+  }
+  document.querySelectorAll('#jacPresets .preset-btn').forEach(b=>{
+    b.addEventListener('click', ()=>setTimeout(draw, 50));
+  });
+  /* 初次 + 在 jac drawAll 之後再畫一次（確保 MAPS 已備好） */
+  setTimeout(draw, 100);
+})();
+
+/* ─── 14.5–14.8 quizzes（既有 4 個） ─── */
+makeChoiceQuiz('q-145', 1, {
+  ok:'✓ 正解：$dS=\\sqrt{1+f_x^2+f_y^2}\\,dA$，當 $f_x=f_y=0$ (水平片) 時 $dS=dA$。',
+  wrong:[
+    '只在 $f_x=f_y=0$ 時 $dS=dA$；一般曲面有額外因子。',
+    '',
+    '$\\sqrt{1+f_x^2+f_y^2}\\ge 1$，所以 $dS\\ge dA$（不會更小）。',
+    '$dS$ 與 $dA$ 用乘法關聯，不能脫離 $dA$。'
+  ]
+});
+makeChoiceQuiz('q-146', 2, {
+  ok:'✓ 正解：要保證 $f$ 在 $Q$ 連續並重新表達 $Q$ 的不等式（每個變數的上下限以新外層變數描述）。',
+  wrong:[
+    '上下限會隨外層變數變化，不能保留。',
+    '上下限通常需重寫為新的外層變數函數。',
+    '',
+    '只要 $f$ 在 $Q$ 連續就可換序。'
+  ]
+});
+makeChoiceQuiz('q-147', 1, {
+  ok:'✓ 正解：$dV=r\\,dr\\,d\\theta\\,dz$，雅可比因子是 $r$。',
+  wrong:[
+    '漏掉雅可比因子 $r$。',
+    '',
+    '那是球座標格式 $\\rho^2\\sin\\phi$。',
+    '少了 $dr$；這是面積元素不是體積。'
+  ]
+});
+makeChoiceQuiz('q-148', 2, {
+  ok:'✓ 正解：緯線圈周長正比於 $\\sin\\phi$，雅可比展開後得 $|J|=\\rho^2\\sin\\phi$。',
+  wrong:[
+    '$\\sin\\phi$ 有實際幾何意義（緯線圈周長）。',
+    '$\\rho^2$ 來自 $\\rho\\,d\\phi \\cdot \\rho\\sin\\phi\\,d\\theta$；$\\sin\\phi$ 是緯線因子。',
+    '',
+    '與 $\\theta$ 範圍無關，是緯線因子。'
+  ]
+});
+/* z=3x+4y 在 [0,1]² 上：S = √(1+9+16)·1 = √26 ≈ 5.099 */
+makeNumberQuiz('q-145b', Math.sqrt(26), {
+  tolerance:0.01,
+  ok:'✓ 正解！$\\sqrt{1+3^2+4^2}=\\sqrt{26}$，且區域面積為 $1\\times 1=1$，所以 $S=\\sqrt{26}\\approx 5.099$。',
+  wrong:'$f_x=3,\\ f_y=4$，$\\sqrt{1+9+16}=\\sqrt{26}$，乘上區域面積 $1$，得 $S=\\sqrt{26}\\approx 5.099$。'
+});
+/* ∭ xyz dV 在 [0,1]³：(∫₀¹ x dx)(∫₀¹ y dy)(∫₀¹ z dz) = (1/2)³ = 1/8 = 0.125 */
+makeNumberQuiz('q-146b', 0.125, {
+  tolerance:0.005,
+  ok:'✓ 正解！立方體上 $\\iiint xyz\\,dV=\\bigl(\\int_0^1 x\\,dx\\bigr)^3=(1/2)^3=1/8=0.125$。',
+  wrong:'被積函數可分離：$\\iiint xyz\\,dV=(\\int_0^1 x\\,dx)(\\int_0^1 y\\,dy)(\\int_0^1 z\\,dz)=\\dfrac{1}{2}\\cdot\\dfrac{1}{2}\\cdot\\dfrac{1}{2}=\\dfrac{1}{8}=0.125$。'
+});
+/* 半球體積 = (2/3)π = 2.094 */
+makeNumberQuiz('q-147b', 2*Math.PI/3, {
+  tolerance:0.01,
+  ok:'✓ 正解！$V=\\int_0^{2\\pi}d\\theta\\int_0^{\\pi/2}\\sin\\phi\\,d\\phi\\int_0^1\\rho^2 d\\rho=2\\pi\\cdot 1\\cdot\\tfrac{1}{3}=\\dfrac{2\\pi}{3}\\approx 2.094$。',
+  wrong:'三層分離：$\\int_0^{2\\pi}=2\\pi$；$\\int_0^{\\pi/2}\\sin\\phi=1$；$\\int_0^1\\rho^2=1/3$；得 $2\\pi/3\\approx 2.094$。'
+});
+makeChoiceQuiz('q-148b', 2, {
+  ok:'✓ 正解：$|J|$ 是局部面積放大率 — $du\\,dv$ 經 $T$ 後對應的 $(x,y)$ 平面面積為 $|J|\\,du\\,dv$。',
+  wrong:[
+    '$|J|$ 與旋轉角度無直接關係（雖然旋轉的雅可比是 1）。',
+    '$|J|$ 是面積比（二維），不是長度比。',
+    '',
+    '$|J|$ 的幾何意義就是面積放大率，並非「無關面積」。'
+  ]
+});
+/* u=x+y, v=x-y → |∂(u,v)/∂(x,y)| = |1·(-1)-1·1| = 2，倒數 = 0.5 */
+makeNumberQuiz('q-148c', 0.5, {
+  tolerance:0.005,
+  ok:'✓ 正解！$\\partial(u,v)/\\partial(x,y)=\\det\\begin{pmatrix}1&1\\\\1&-1\\end{pmatrix}=-2$；取絕對值倒數 $\\bigl|\\partial(x,y)/\\partial(u,v)\\bigr|=1/2$。',
+  wrong:'反解 $x=(u+v)/2,\\ y=(u-v)/2$，$\\partial(x,y)/\\partial(u,v)=\\det\\begin{pmatrix}1/2&1/2\\\\1/2&-1/2\\end{pmatrix}=-1/2$，取絕對值 = 0.5。'
+});
+
+})();
+</script>
+</body>
+</html>

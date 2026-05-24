@@ -1,0 +1,2131 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多重積分 I — 第 14.1-14.3 節互動講義</title>
+<script>
+  MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<!-- Legacy test anchors: Iterated integrals and area in the plane; Double integrals and volume; Change of variables: Polar coordinates. -->
+<style>
+:root{
+  --ink:#1a1a2e;--paper:#f7f3eb;--card:#fffdf7;--card-border:#e8e2d6;
+  --accent:#c0392b;--accent2:#2c3e7a;--accent3:#1a6b4a;--muted:#7d776b;
+  --code-bg:#2d2d3f;--x-axis:#e74c3c;--y-axis:#27ae60;--z-axis:#2980b9;--gold:#f1c40f;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.9;font-size:17px}
+.hero{min-height:56vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem;background:#1a1a2e;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(44,62,122,.92),rgba(26,107,74,.78)),url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="360" height="220" viewBox="0 0 360 220"><path d="M0 170 C90 60 180 250 360 90" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="3"/><path d="M0 120 C100 30 230 210 360 50" fill="none" stroke="rgba(241,196,15,.35)" stroke-width="2"/><path d="M40 210 C110 20 230 260 320 10" fill="none" stroke="rgba(46,204,113,.28)" stroke-width="2"/></svg>');background-size:cover,360px 220px;background-position:center}
+.hero-content{position:relative;z-index:1;max-width:960px}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2rem,5vw,3.25rem);font-weight:900;color:#fff;line-height:1.28;margin-bottom:1rem}
+.hero h1 .green{color:#2ecc71}.hero h1 .yellow{color:#f1c40f}
+.subtitle{font-size:clamp(.95rem,2vw,1.16rem);color:rgba(255,255,255,.78);font-weight:300;margin-bottom:1.4rem}
+.big-formula{color:#fff;background:rgba(0,0,0,.32);padding:.85rem 1.2rem;border-radius:10px;display:inline-block;border:1px solid rgba(255,255,255,.16);font-size:.96rem}
+.container{max-width:1200px;margin:0 auto;padding:3rem 1.5rem}
+.side-nav{position:fixed;top:50%;right:1rem;transform:translateY(-50%);background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.45rem .5rem;font-size:.74rem;font-family:'JetBrains Mono',monospace;box-shadow:0 4px 18px rgba(0,0,0,.08);z-index:50;display:flex;flex-direction:column;gap:.1rem;max-width:240px;max-height:calc(100vh - 2rem);overflow-y:auto}
+.side-nav .sn-title{font-size:.66rem;color:var(--muted);letter-spacing:.1em;padding:.2rem .55rem .35rem;border-bottom:1px solid var(--card-border);margin-bottom:.25rem}
+.side-nav a,.side-nav .sn-item{display:block;padding:.28rem .55rem;color:var(--muted);text-decoration:none;border-left:2px solid transparent;border-radius:4px;line-height:1.35}
+.side-nav .sn-item.sn-sub{padding-left:1.1rem;font-size:.69rem;color:#a8a496}
+.side-nav a:hover,.side-nav a.active,.side-nav .sn-item:hover,.side-nav .sn-item.active{color:var(--accent3);background:rgba(26,107,74,.06);border-left-color:var(--accent3)}
+@media(max-width:1280px){.side-nav{display:none}}
+section{margin-bottom:3rem;padding-bottom:2.3rem;border-bottom:1px solid var(--card-border)}
+section:last-of-type{border-bottom:none}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.84rem;color:var(--accent3);font-weight:600;letter-spacing:.11em;margin-bottom:.5rem}
+h2{font-family:'Noto Serif TC',serif;font-size:1.68rem;font-weight:700;line-height:1.42;margin-bottom:1.1rem}
+h3{font-family:'Noto Serif TC',serif;font-size:1.15rem;color:var(--accent2);margin:1.35rem 0 .75rem}
+h4{font-family:'Noto Serif TC',serif;font-size:1rem;color:var(--accent3);margin:1rem 0 .5rem}
+p{margin-bottom:1rem}.subsection{margin:2rem 0}
+.info-box{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1.1rem 1.35rem;margin:1.3rem 0;position:relative}
+.info-box .info-label{position:absolute;top:-11px;left:14px;background:var(--accent2);color:#fff;font-size:.74rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.05em}
+.info-box.green{background:#eaf5ee;border-color:var(--accent3)}.info-box.green .info-label{background:var(--accent3)}
+.info-box.warm{background:#fef5e7;border-color:#d68910}.info-box.warm .info-label{background:#d68910}
+.lecture-example{background:var(--card);border:1px solid var(--card-border);border-left:5px solid var(--accent3);border-radius:10px;padding:1rem 1.2rem;margin:1rem 0;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.ex-tag{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--accent3);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.35rem}
+.ex-title{font-family:'Noto Serif TC',serif;font-weight:700;margin-bottom:.65rem;background:#f5f7fb;border:1px solid #dfe5f0;border-radius:8px;padding:.65rem .85rem}
+.ex-title::before{content:"題目";display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#fff;background:var(--accent2);border-radius:4px;padding:1px 7px;margin-right:.55rem;letter-spacing:.06em}
+.ex-method{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;background:rgba(26,107,74,.12);color:var(--accent3);border:1px solid rgba(26,107,74,.35);border-radius:4px;padding:1px 7px;margin:.1rem .25rem .1rem 0}
+.viz-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:1.3rem;margin:1.2rem 0;align-items:start}
+@media(max-width:900px){.viz-layout{grid-template-columns:1fr}}
+.canvas-panel{background:linear-gradient(160deg,#fffdf7 0%,#f4efe3 100%);border:1px solid var(--card-border);border-radius:12px;padding:1rem;box-shadow:0 4px 18px rgba(0,0,0,.06)}
+	.canvas-wrap{width:100%;min-width:240px;aspect-ratio:1/0.66;position:relative;border-radius:8px;overflow:hidden;background:#1a1a2e;border:1px solid var(--card-border)}
+	.canvas-wrap.light{background:#fbf7ed}
+	.dual-canvas .canvas-wrap{aspect-ratio:4/3}
+	canvas{display:block;width:100%;height:100%}
+	.canvas-notice{position:absolute;left:.8rem;right:.8rem;bottom:.8rem;background:rgba(255,253,247,.94);color:var(--ink);border-left:4px solid var(--accent);border-radius:8px;padding:.62rem .82rem;font-size:.84rem;line-height:1.55;box-shadow:0 4px 14px rgba(0,0,0,.16);z-index:4}
+	.canvas-notice strong{display:block;color:var(--accent);margin-bottom:.15rem}
+	.canvas-notice span{display:block;color:var(--muted)}
+	.hint-overlay{position:absolute;top:8px;right:10px;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:rgba(255,255,255,.78);background:rgba(0,0,0,.38);padding:3px 8px;border-radius:4px;pointer-events:none}
+.side-panel{display:flex;flex-direction:column;gap:.85rem}
+.info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.ic-title{font-size:.72rem;font-weight:700;color:var(--accent2);letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem}
+.ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.83rem;padding:.2rem 0;gap:.8rem;align-items:center}
+.ic-label{color:var(--muted)}.ic-value{color:var(--ink);font-weight:600;text-align:right}.ic-value.highlight{color:var(--accent)}.ic-value.ok{color:var(--accent3)}
+.eq-card{background:var(--code-bg);border-radius:10px;padding:.95rem 1.1rem;color:#fff}
+.eq-label{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#2ecc71;letter-spacing:.12em;margin-bottom:.5rem}
+.eq-formula{font-size:1rem;color:#fff;text-align:center}.eq-sub{font-size:.78rem;color:rgba(255,255,255,.68);margin-top:.4rem;text-align:center}
+.slider-row{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;background:var(--paper);border-radius:8px;margin-bottom:.5rem}
+.slider-label{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent2);font-weight:600;min-width:78px}.slider-row input[type=range]{flex:1;accent-color:var(--accent3)}.slider-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--accent);font-weight:600;min-width:62px;text-align:right}
+.preset-row{display:flex;gap:.4rem;flex-wrap:wrap;margin:.6rem 0 1rem}
+.preset-btn{font-family:'Noto Sans TC',sans-serif;font-size:.84rem;padding:.4rem .85rem;border-radius:6px;border:2px solid var(--card-border);background:var(--card);cursor:pointer;color:var(--ink)}
+.preset-btn.active{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.toggle-row{display:flex;gap:.4rem;flex-wrap:wrap;margin:.4rem 0 .8rem;align-items:center}
+.toggle-row .toggle-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);letter-spacing:.06em;margin-right:.3rem}
+.toggle-btn{font-family:'Noto Sans TC',sans-serif;font-size:.78rem;padding:.32rem .7rem;border-radius:6px;border:1.5px solid var(--card-border);background:#f0eee5;cursor:pointer;color:var(--muted);transition:all .15s;display:inline-flex;align-items:center;gap:.32rem}
+.toggle-btn::before{content:"";width:9px;height:9px;border-radius:50%;background:#bdb6a8;display:inline-block}
+.toggle-btn.on{background:rgba(26,107,74,.12);color:var(--accent3);border-color:var(--accent3)}
+.toggle-btn.on::before{background:var(--accent3);box-shadow:0 0 4px rgba(26,107,74,.5)}
+.toggle-btn:hover{border-color:var(--accent3)}
+.method-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem;margin:1rem 0}@media(max-width:760px){.method-grid{grid-template-columns:1fr}}
+.step-block{background:#fffaf0;border-left:4px solid var(--accent3);border-radius:8px;padding:.9rem 1.2rem;margin:.7rem 0}
+.lecture-example .step-block:first-of-type{margin-top:1.8rem;position:relative}
+.lecture-example .step-block:first-of-type::before{content:"解題";position:absolute;top:-1.35rem;left:0;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#fff;background:var(--accent3);border-radius:4px;padding:1px 7px;letter-spacing:.06em}
+.step-num{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);font-weight:700;letter-spacing:.1em;margin-bottom:.3rem}
+.ref-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:1rem 1.2rem;margin-bottom:.9rem;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.ref-card-header{display:flex;align-items:baseline;gap:.8rem;margin-bottom:.5rem;flex-wrap:wrap}.ref-card-name{font-family:'Noto Serif TC',serif;font-weight:700;font-size:1.02rem}.ref-card-name-en{font-size:.8rem;color:var(--muted)}
+.ref-card-eq{background:var(--code-bg);color:#fff;border-radius:8px;padding:.65rem 1rem;text-align:center;font-size:.95rem;margin-bottom:.55rem}
+footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border)}
+.pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:4px;margin:0 .15rem;vertical-align:1px}
+.pill-x{background:rgba(231,76,60,.12);color:var(--x-axis);border:1px solid rgba(231,76,60,.3)}
+.pill-y{background:rgba(39,174,96,.12);color:var(--y-axis);border:1px solid rgba(39,174,96,.3)}
+.pill-z{background:rgba(41,128,185,.12);color:var(--z-axis);border:1px solid rgba(41,128,185,.3)}
+.pill-blue{background:rgba(44,62,122,.13);color:var(--accent2);border:1px solid rgba(44,62,122,.3)}
+.pill-green{background:rgba(26,107,74,.13);color:var(--accent3);border:1px solid rgba(26,107,74,.3)}
+.pill-red{background:rgba(192,57,43,.13);color:var(--accent);border:1px solid rgba(192,57,43,.3)}
+.pill-grad{background:rgba(241,196,15,.16);color:#a07a08;border:1px solid rgba(241,196,15,.4)}
+.dual-canvas{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+@media(max-width:700px){.dual-canvas{grid-template-columns:1fr}}
+.ex-answer{background:#f3fbf6;border:1px solid #cdebd9;border-radius:8px;padding:.65rem .9rem;margin-top:.65rem;font-size:.93rem}
+.ex-answer::before{content:"答案";display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#fff;background:var(--accent3);border-radius:4px;padding:1px 7px;font-weight:700;margin-right:.5rem;letter-spacing:.06em}
+.concept-warning{background:#fef0ee;border-left:4px solid var(--accent);border-radius:6px;padding:.75rem 1rem;margin:1rem 0;font-size:.92rem}
+.cw-title{font-weight:700;color:var(--accent);margin-bottom:.3rem;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase}
+.section-summary{background:#fff8ea;border:1.5px dashed #d68910;border-radius:8px;padding:.95rem 1.15rem;margin:1.6rem 0 .5rem}
+.section-summary-title{font-family:'Noto Serif TC',serif;font-weight:700;color:#a07a08;font-size:.95rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.section-summary-title::before{content:'※';color:#d68910;font-size:1.05rem}
+.section-summary ul{margin:.3rem 0 0 1.2rem;padding:0}
+.section-summary li{margin:.25rem 0;font-size:.92rem}
+.quiz-card{background:#eef5ff;border:1.5px solid var(--accent2);border-radius:10px;padding:1rem 1.2rem;margin:1.2rem 0;box-shadow:0 2px 10px rgba(44,62,122,.07)}
+.quiz-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#fff;background:var(--accent2);padding:2px 8px;border-radius:4px;letter-spacing:.08em;margin-bottom:.45rem}
+.quiz-q{font-weight:600;margin-bottom:.6rem}
+.quiz-options{display:flex;flex-direction:column;gap:.4rem}
+.quiz-opt{padding:.45rem .85rem;border:1.5px solid var(--card-border);border-radius:6px;cursor:pointer;background:var(--card);text-align:left;font-size:.94rem;transition:all .15s;font-family:inherit}
+.quiz-opt:hover{border-color:var(--accent2);background:#fafcff}
+.quiz-opt.correct{border-color:var(--accent3);background:#eaf5ee;color:var(--accent3);font-weight:600}
+.quiz-opt.wrong{border-color:var(--accent);background:#fde9e7;color:var(--accent)}
+.quiz-input-row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin:.4rem 0}
+.quiz-input{padding:.4rem .7rem;border:1.5px solid var(--card-border);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:.92rem;width:160px}
+.quiz-input.correct{border-color:var(--accent3);background:#eaf5ee}
+.quiz-input.wrong{border-color:var(--accent);background:#fde9e7}
+.quiz-check{padding:.4rem .9rem;border:none;border-radius:6px;background:var(--accent2);color:#fff;font-family:'Noto Sans TC',sans-serif;font-size:.86rem;cursor:pointer;font-weight:600}
+.quiz-check:hover{background:#1f2e5c}
+.quiz-feedback{font-size:.86rem;margin-top:.5rem;padding:.45rem .7rem;border-radius:5px;display:none}
+.quiz-feedback.show{display:block}
+.quiz-feedback.ok{background:#eaf5ee;color:var(--accent3);border-left:3px solid var(--accent3)}
+.quiz-feedback.no{background:#fde9e7;color:var(--accent);border-left:3px solid var(--accent)}
+</style>
+</head>
+<body>
+<nav class="side-nav" id="sideNav">
+  <div class="sn-title">第 14 章 · I</div>
+  <a class="sn-item" href="#sec-14-1">14.1 逐次積分</a>
+  <a class="sn-item sn-sub" href="#sec-14-1-1">  · Type I / II</a>
+  <a class="sn-item sn-sub" href="#sec-14-1-2">  · 基本例題</a>
+  <a class="sn-item sn-sub" href="#sec-14-1-3">  · 換序積分</a>
+  <a class="sn-item" href="#sec-14-2">14.2 雙重積分</a>
+  <a class="sn-item sn-sub" href="#sec-14-2-1">  · Riemann 和</a>
+  <a class="sn-item sn-sub" href="#sec-14-2-2">  · Fubini 切片</a>
+  <a class="sn-item sn-sub" href="#sec-14-2-3">  · 雙重積分例題</a>
+  <a class="sn-item sn-sub" href="#sec-14-2-4">  · 兩曲面體積</a>
+  <a class="sn-item" href="#sec-14-3">14.3 極座標</a>
+  <a class="sn-item sn-sub" href="#sec-14-3-1">  · 面積元素</a>
+  <a class="sn-item sn-sub" href="#sec-14-3-2">  · 極座標例題</a>
+  <a class="sn-item sn-sub" href="#sec-14-3-3">  · 環形區域</a>
+  <a class="sn-item sn-sub" href="#sec-14-3-4">  · 三瓣玫瑰</a>
+  <a class="sn-item" href="#sec-ref">速查</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-content">
+    <h1><span class="green">多重積分 I</span>：從<span class="yellow">逐次積分</span>到極座標換元</h1>
+    <div class="subtitle">第 14.1-14.3 節｜互動教學式講義｜面積、體積、Fubini 與雅可比</div>
+    <div class="big-formula">$\displaystyle\iint_R f\,dA=\int_a^b\!\!\int_{g_1(x)}^{g_2(x)}\!\!f\,dy\,dx=\int_\alpha^\beta\!\!\int_{g_1(\theta)}^{g_2(\theta)}\!\!f(r\cos\theta,r\sin\theta)\,r\,dr\,d\theta$</div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ============================================================ -->
+<!-- SECTION 14.1 -->
+<!-- ============================================================ -->
+<section id="sec-14-1">
+  <div class="section-number">14.1 逐次積分與平面區域面積</div>
+  <h2>逐次積分：先一變數、再一變數</h2>
+  <p>把多變數函數一次只對一個變數積分，就得到「<strong>逐次積分</strong>」。它的核心不是同時處理所有變數，而是先固定其他變數，把內層當成一個單變數積分；算完後得到只含外層變數的函數，再做下一層積分。<span class="pill pill-blue">關鍵</span>：外層上下限必須是常數，內層上下限可以是外層變數的函數。積分變數是 <em>虛變數</em> — $\int_0^1 x\,dx$ 與 $\int_0^1 t\,dt$ 完全相同。</p>
+
+  <div class="info-box warm">
+    <span class="info-label">從「反偏導函數」理解逐次積分</span>
+    <p>講義一開始先提醒：多變數函數也可以對某一個變數做不定積分。例如若 $f_x(x,y)=2xy$，則</p>
+    $$\int f_x(x,y)\,dx=\int 2xy\,dx=y\int 2x\,dx=x^2y+C(y).$$
+    <p>為什麼是 $C(y)$ 而不是單純的常數 $C$？因為這一步只對 $x$ 積分，$y$ 被暫時當成常數；任何只依賴 $y$ 的函數對 $x$ 微分都會變成 $0$。所以從 $f_x$ 反推 $f$ 時，只能回復出「相差一個 $x$ 看不見的函數」的結果。</p>
+    <p>逐次積分把這個想法改成定積分：先固定外層變數，對內層變數做一個有上下限的單變數積分。定積分會把不定積分中的 $C(y)$ 抵消掉，留下明確的差值。</p>
+    $$\int_{h_1(y)}^{h_2(y)} f_x(x,y)\,dx=f(h_2(y),y)-f(h_1(y),y).$$
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">逐次積分的操作方式</span>
+    <p>以 $\displaystyle\int_a^b\int_{g_1(x)}^{g_2(x)} f(x,y)\,dy\,dx$ 為例：</p>
+    <p>(1) 先看最右邊的 $dy$，所以內層先對 $y$ 積分，並把 $x$ 當常數。<br>
+    (2) 內層上下限 $g_1(x),g_2(x)$ 可以依賴 $x$，因為此時 $x$ 只是固定參數。<br>
+    (3) 代入內層上下限後，內層積分變成一個只含 $x$ 的函數 $A(x)$。<br>
+    (4) 最後再對 $x$ 從常數 $a$ 到常數 $b$ 積分，得到一個數值。</p>
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">定義 14.1 平面區域面積</span>
+    <p><span class="pill pill-blue">Type I（垂直簡單）</span>：$R:\ a\le x\le b,\ g_1(x)\le y\le g_2(x)$，</p>
+    $$A=\int_a^b\!\!\int_{g_1(x)}^{g_2(x)}\,dy\,dx.$$
+    <p><span class="pill pill-red">Type II（水平簡單）</span>：$R:\ c\le y\le d,\ h_1(y)\le x\le h_2(y)$，</p>
+    $$A=\int_c^d\!\!\int_{h_1(y)}^{h_2(y)}\,dx\,dy.$$
+    <p>許多區域兩種都可寫，計算複雜度可能差很多（例題 5 可看出）。</p>
+  </div>
+
+  <h3 id="sec-14-1-1">視覺：Type I / Type II 區域與 strip 掃描</h3>
+  <p>同一個區域，<span class="pill pill-blue">Type I</span> 用<strong>垂直 strip</strong>（先固定 $x$ 對 $y$ 積分），<span class="pill pill-red">Type II</span> 用<strong>水平 strip</strong>（先固定 $y$ 對 $x$ 積分）。下面拖 slider 看 strip 掃過區域的過程。</p>
+  <div class="canvas-panel">
+    <div class="preset-row" id="ts1Presets">
+      <button class="preset-btn active" data-rg="triangle">三角形 $0\le x\le 1,\ 0\le y\le x$</button>
+      <button class="preset-btn" data-rg="quartercircle">四分之一圓 $x^2+y^2\le 4$（$x,y\ge 0$）</button>
+      <button class="preset-btn" data-rg="parabola">$0\le x\le 2,\ x^2\le y\le 2x$</button>
+    </div>
+    <div class="preset-row" id="ts1Modes">
+      <button class="preset-btn active" data-mode="typeI">Type I（垂直 strip）</button>
+      <button class="preset-btn" data-mode="typeII">Type II（水平 strip）</button>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">strip 位置</span>
+      <input type="range" id="ts1Pos" min="0" max="1" step="0.01" value="0.5">
+      <span class="slider-val" id="ts1PosVal">0.50</span>
+    </div>
+    <div class="canvas-wrap light">
+      <canvas id="canvas-14-1-region"></canvas>
+      <div class="hint-overlay" id="ts1Hint" style="color:rgba(0,0,0,.62);background:rgba(255,255,255,.8)">strip 掃過區域</div>
+    </div>
+  </div>
+
+  <div class="concept-warning">
+    <div class="cw-title">概念辨析 · 虛變數 & 上下限規則</div>
+    <p>(1) <strong>積分變數是 dummy</strong>：$\int_0^1 x\,dx=\int_0^1 t\,dt$；變數名稱不影響值。<br>
+    (2) <strong>積分變數不能出現在自己的上下限</strong>：例如 $\int_0^x y\,dx$ 沒有清楚意義，因為 $x$ 同時是「要被積掉的變數」又是「上限」。若上限本來是固定數，應寫 $\int_0^a y\,dx$；若上限本來是外部參數 $x$，積分變數應改名，例如 $\int_0^x y\,dt$。<br>
+    (3) <strong>外層上下限必須是常數</strong>：外層積完後要得到一個數值；若外層上下限還含積分變數，就不是一個定好的定積分。<br>
+    (4) <strong>內層可以是外層的函數</strong>：$\int_a^b\int_{g_1(x)}^{g_2(x)} f\,dy\,dx$ 中，內層 $y$ 的範圍由當下固定的 $x$ 決定。</p>
+  </div>
+
+  <div class="info-box warm">
+    <span class="info-label">為什麼逐次積分可以表示面積？</span>
+    <p>若 $R$ 是 Type I 區域：$a\le x\le b,\ g_1(x)\le y\le g_2(x)$，固定一個 $x$ 後，垂直 strip 的高度就是 $g_2(x)-g_1(x)$。這個高度也可以寫成</p>
+    $$\int_{g_1(x)}^{g_2(x)}1\,dy=\int_{g_1(x)}^{g_2(x)}dy=g_2(x)-g_1(x).$$
+    <p>接著讓 $x$ 從 $a$ 掃到 $b$，把每一條極薄 strip 的「高度 $\times$ 寬度 $dx$」累加，就得到面積：</p>
+    $$A=\int_a^b\left[\int_{g_1(x)}^{g_2(x)}dy\right]dx=\int_a^b\int_{g_1(x)}^{g_2(x)}dy\,dx.$$
+    <p>Type II 區域完全類似，只是改用水平 strip：先固定 $y$，內層 $\int_{h_1(y)}^{h_2(y)}dx$ 給出水平長度，再對 $y$ 累加。</p>
+  </div>
+
+  <h3 id="sec-14-1-2">例題</h3>
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 2</div>
+    <div class="ex-title">求 $\displaystyle\int_1^2\int_1^x(2xy+3y^2)\,dy\,dx$</div>
+    <div class="step-block"><div class="step-num">步驟 1（內層對 $y$）</div>把 $x$ 視為常數：$\displaystyle\int_1^x(2xy+3y^2)\,dy=\bigl[xy^2+y^3\bigr]_{y=1}^{y=x}=(x^3+x^3)-(x+1)=2x^3-x-1$。</div>
+    <div class="step-block"><div class="step-num">步驟 2（外層對 $x$）</div>$\displaystyle\int_1^2(2x^3-x-1)\,dx=\Bigl[\tfrac{x^4}{2}-\tfrac{x^2}{2}-x\Bigr]_1^2=(8-2-2)-\bigl(\tfrac12-\tfrac12-1\bigr)=4-(-1)$。</div>
+    <div class="ex-answer">$\displaystyle\int_1^2\int_1^x(2xy+3y^2)\,dy\,dx=5$</div>
+  </div>
+
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 4</div>
+    <div class="ex-title">求 $f(x)=\sin x$ 與 $g(x)=\cos x$ 在 $[\pi/4,5\pi/4]$ 之間圍成的面積</div>
+    <div class="step-block"><div class="step-num">步驟 1（誰在上面？）</div>在 $[\pi/4,5\pi/4]$ 區間，$\sin x\ge\cos x$。所以是 Type I：$\pi/4\le x\le 5\pi/4,\ \cos x\le y\le\sin x$。</div>
+    <div class="step-block"><div class="step-num">步驟 2（內層對 $y$）</div>$\displaystyle\int_{\cos x}^{\sin x}\,dy=\sin x-\cos x$。</div>
+    <div class="step-block"><div class="step-num">步驟 3（外層對 $x$）</div>$\displaystyle\int_{\pi/4}^{5\pi/4}(\sin x-\cos x)\,dx=\bigl[-\cos x-\sin x\bigr]_{\pi/4}^{5\pi/4}=\bigl(\tfrac{\sqrt 2}{2}+\tfrac{\sqrt 2}{2}\bigr)-\bigl(-\tfrac{\sqrt 2}{2}-\tfrac{\sqrt 2}{2}\bigr)=\sqrt 2-(-\sqrt 2)$。</div>
+    <div class="ex-answer">$A=2\sqrt 2\approx 2.828$</div>
+  </div>
+
+  <div class="canvas-panel">
+    <h4>例題 4 視覺：sin x、cos x 圍成的區域（拖 slider 看垂直 strip 掃過）</h4>
+    <div class="viz-layout">
+      <div>
+        <div class="slider-row">
+          <span class="slider-label">x 位置</span>
+          <input type="range" id="ex4X" min="0.7854" max="3.927" step="0.005" value="1.5708">
+          <span class="slider-val" id="ex4XVal">π/2</span>
+        </div>
+        <div class="toggle-row" id="ex4Toggles">
+          <span class="toggle-label">顯示</span>
+          <button class="toggle-btn on" data-toggle="cumArea">累積區域 [π/4, x]</button>
+          <button class="toggle-btn on" data-toggle="strip">strip + 高度</button>
+          <button class="toggle-btn" data-toggle="play">自動播放</button>
+        </div>
+        <div class="canvas-wrap light">
+          <canvas id="canvas-14-1-example4"></canvas>
+          <div class="hint-overlay" style="color:rgba(0,0,0,.62);background:rgba(255,255,255,.8)">$\sin x$（綠）vs $\cos x$（紅）</div>
+        </div>
+      </div>
+      <div class="side-panel">
+        <div class="eq-card">
+          <div class="eq-label">strip 高度</div>
+          <div class="eq-formula">$\sin x - \cos x$</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">當前值</div>
+          <div class="ic-row"><span class="ic-label">x</span><span class="ic-value" id="ex4XInfo">π/2</span></div>
+          <div class="ic-row"><span class="ic-label">sin x − cos x</span><span class="ic-value highlight" id="ex4Hgt">1.000</span></div>
+          <div class="ic-row"><span class="ic-label">累積 ∫ from π/4</span><span class="ic-value" id="ex4Cum">0.293</span></div>
+          <div class="ic-row"><span class="ic-label">總面積</span><span class="ic-value ok">$2\sqrt 2 \approx 2.828$</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 id="sec-14-1-3">例題 5：交換積分順序</h3>
+  <p>同一個區域寫成 Type I 與 Type II 都對，但<strong>計算難度可能差很多</strong>。例題 5 比較兩種順序的設定。</p>
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 5</div>
+    <div class="ex-title">用兩種積分順序計算 $\displaystyle\int_0^2\int_{y^2}^4\,dx\,dy$（即 Type II 區域 $0\le y\le 2,\ y^2\le x\le 4$ 的面積）</div>
+    <div class="step-block"><div class="step-num">方法 A：Type II（dx dy，原式）</div>$\displaystyle\int_0^2(4-y^2)\,dy=\bigl[4y-\tfrac{y^3}{3}\bigr]_0^2=8-\tfrac{8}{3}=\tfrac{16}{3}$。</div>
+    <div class="step-block"><div class="step-num">方法 B：Type I（dy dx，先畫圖再描邊界）</div>從圖：當 $0\le x\le 4$，$y$ 介於 $0$ 與 $\sqrt x$。改寫為 $\displaystyle\int_0^4\int_0^{\sqrt x}\,dy\,dx=\int_0^4\sqrt x\,dx=\bigl[\tfrac{2x^{3/2}}{3}\bigr]_0^4=\tfrac{16}{3}$。</div>
+    <div class="ex-answer">兩法皆得 $A=\dfrac{16}{3}$；同一區域只是 strip 方向不同。</div>
+  </div>
+
+  <div class="canvas-panel">
+    <h4>視覺：同一區域、兩種切片方向（拖曳指針點觀察對偶性）</h4>
+    <div class="slider-row">
+      <span class="slider-label">x 位置</span>
+      <input type="range" id="rev5X" min="0" max="4" step="0.01" value="2">
+      <span class="slider-val" id="rev5XVal">2.00</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">y 位置</span>
+      <input type="range" id="rev5Y" min="0" max="2" step="0.01" value="1.41">
+      <span class="slider-val" id="rev5YVal">1.41</span>
+    </div>
+    <div class="toggle-row" id="rev5Toggles">
+      <span class="toggle-label">設定</span>
+      <button class="toggle-btn on" data-toggle="syncBoundary">指針鎖在邊界 y=√x</button>
+      <button class="toggle-btn on" data-toggle="cumFill">累積區域填色</button>
+    </div>
+    <div class="dual-canvas">
+      <div class="canvas-wrap light">
+        <canvas id="canvas-14-1-reverse-typeII"></canvas>
+        <div class="hint-overlay" style="color:rgba(0,0,0,.62);background:rgba(255,255,255,.8)">Type II：水平 strip</div>
+      </div>
+      <div class="canvas-wrap light">
+        <canvas id="canvas-14-1-reverse-typeI"></canvas>
+        <div class="hint-overlay" style="color:rgba(0,0,0,.62);background:rgba(255,255,255,.8)">Type I：垂直 strip</div>
+      </div>
+    </div>
+    <div class="info-card" style="margin-top:.7rem">
+      <div class="ic-title">指針 (xₚ, yₚ) 對應</div>
+      <div class="ic-row"><span class="ic-label">Type II 水平 strip</span><span class="ic-value" id="rev5IIstrip">x∈[2.00, 4.00], 長度 2.00</span></div>
+      <div class="ic-row"><span class="ic-label">Type I 垂直 strip</span><span class="ic-value" id="rev5Istrip">y∈[0, 1.41], 高 1.41</span></div>
+      <div class="ic-row"><span class="ic-label">Type II 累積 ∫₀^{yₚ}(4−t²)dt</span><span class="ic-value highlight" id="rev5IIcum">5.05</span></div>
+      <div class="ic-row"><span class="ic-label">Type I 累積 ∫₀^{xₚ}√t dt</span><span class="ic-value highlight" id="rev5Icum">1.89</span></div>
+      <div class="ic-row"><span class="ic-label">完整面積</span><span class="ic-value ok">$16/3 \approx 5.333$</span></div>
+    </div>
+  </div>
+
+  <div class="quiz-card" id="quiz-14-1-1">
+    <span class="quiz-tag">概念題</span>
+    <div class="quiz-q">在 $\displaystyle\int_a^b\int_{g_1(x)}^{g_2(x)} f(x,y)\,dy\,dx$ 中，下列何者「<strong>不允許</strong>」？</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">內層上下限是 $x$ 的函數</button>
+      <button class="quiz-opt">外層上下限是常數 $a,b$</button>
+      <button class="quiz-opt">外層上限是 $y$ 的函數</button>
+      <button class="quiz-opt">被積函數同時含 $x$ 與 $y$</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="quiz-card" id="quiz-14-1-2">
+    <span class="quiz-tag">數字題</span>
+    <div class="quiz-q">求 $\displaystyle\int_0^1\int_0^x 6xy\,dy\,dx$ 的值。</div>
+    <div class="quiz-input-row">
+      <input type="number" class="quiz-input" placeholder="輸入數值" step="0.01">
+      <button class="quiz-check">檢查</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="section-summary">
+    <div class="section-summary-title">14.1 重點整理</div>
+    <ul>
+      <li>逐次積分先做內層（把外層變數當常數），再做外層。</li>
+      <li>外層上下限必須是常數；內層上下限可以是外層變數的函數。</li>
+      <li>面積：Type I 用 $\int\int dy\,dx$，Type II 用 $\int\int dx\,dy$。</li>
+      <li>同一區域兩種寫法都對；計算難度可能差很多（例題 5），實作時先畫圖再選。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 14.2 -->
+<!-- ============================================================ -->
+<section id="sec-14-2">
+  <div class="section-number">14.2 雙重積分與體積</div>
+  <h2>從黎曼和到雙重積分</h2>
+  <p>14.1 求的是「平面區域面積」（被積函數 = 1）。把被積函數推廣為任意連續 $f(x,y)$，用<strong>黎曼和的極限</strong>定義雙重積分；幾何上，當 $f\ge 0$ 時，雙重積分 = 區域 $R$ 上方、曲面 $z=f(x,y)$ 下方的<strong>體積</strong>。</p>
+
+  <div class="info-box green">
+    <span class="info-label">定義 14.2 雙重積分</span>
+    <p>把區域 $R$ 分割成 $n$ 個小區塊，第 $i$ 塊面積 $\Delta A_i$，任取 $(x_i,y_i)$ 在塊內，</p>
+    $$\iint_R f(x,y)\,dA=\lim_{\|\Delta\|\to 0}\sum_{i=1}^{n}f(x_i,y_i)\,\Delta A_i.$$
+    <p>$\|\Delta\|=$ 最大塊的對角線長度。極限存在時稱 $f$ 在 $R$ <strong>可積</strong>；$f$ 在閉有界區域 $R$ 上連續即可積。</p>
+  </div>
+
+  <h3 id="sec-14-2-1">互動 1：Riemann 和漸進雙重積分</h3>
+  <p>對 $f(x,y)=1-\dfrac{x^2}{2}-\dfrac{y^2}{2}$ 在 $R=[0,1]\times[0,1]$，用中點規則的 $n\times n$ 分割。把 slider 拉大看小柱體變密、總和逼近確切體積 $V=\dfrac{2}{3}\approx 0.6667$。</p>
+  <div class="viz-layout">
+    <div class="canvas-panel">
+      <div class="slider-row">
+        <span class="slider-label">n</span>
+        <input type="range" id="riemannN" min="2" max="32" step="1" value="4">
+        <span class="slider-val" id="riemannNVal">4</span>
+      </div>
+      <div class="toggle-row" id="riemannToggles">
+        <span class="toggle-label">顯示</span>
+        <button class="toggle-btn on" data-toggle="surface">參考曲面</button>
+        <button class="toggle-btn on" data-toggle="boxes">中點柱體</button>
+        <button class="toggle-btn on" data-toggle="base">底面 $R$</button>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="canvas-14-2-riemann"></canvas>
+        <div class="hint-overlay">$n^2$ 個中點柱體</div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">設定</div>
+        <div class="eq-formula">$f=1-\dfrac{x^2}{2}-\dfrac{y^2}{2}$，$R=[0,1]^2$</div>
+        <div class="eq-sub">中點規則 $\sum f(x_i,y_i)\,\Delta A_i$</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">當前估計</div>
+        <div class="ic-row"><span class="ic-label">分割數</span><span class="ic-value" id="riemannGrid">4×4 = 16</span></div>
+        <div class="ic-row"><span class="ic-label">$\Delta A$</span><span class="ic-value" id="riemannDA">1/16</span></div>
+        <div class="ic-row"><span class="ic-label">$\sum f\,\Delta A$</span><span class="ic-value highlight" id="riemannSum">0.6719</span></div>
+        <div class="ic-row"><span class="ic-label">確切 V</span><span class="ic-value ok">$2/3\approx 0.6667$</span></div>
+      </div>
+      <div class="info-box warm" style="margin:0;padding:.85rem 1rem;">
+        <span class="info-label">注意</span>
+        <div style="font-size:.86rem;">$n=4$ 時 ≈ 0.6719；$n=32$ 時誤差 < 0.001。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">定理 14.1 雙重積分性質</span>
+    <p>連續 $f,g$，常數 $c$：</p>
+    $$\iint_R cf\,dA=c\iint_R f\,dA;\quad \iint_R(f\pm g)\,dA=\iint_R f\,dA\pm\iint_R g\,dA;$$
+    $$f\ge 0\Rightarrow\iint_R f\,dA\ge 0;\quad R=R_1\cup R_2\text{（不重疊）}\Rightarrow\iint_R f\,dA=\iint_{R_1}+\iint_{R_2}.$$
+  </div>
+
+  <div class="info-box">
+    <span class="info-label">定理 14.2 Fubini 定理</span>
+    <p>$f$ 在區域 $R$ 上連續：</p>
+    <p><strong>Type I</strong> $a\le x\le b,\ g_1(x)\le y\le g_2(x)$：</p>
+    $$\iint_R f\,dA=\int_a^b\!\!\int_{g_1(x)}^{g_2(x)} f(x,y)\,dy\,dx.$$
+    <p><strong>Type II</strong> $c\le y\le d,\ h_1(y)\le x\le h_2(y)$：</p>
+    $$\iint_R f\,dA=\int_c^d\!\!\int_{h_1(y)}^{h_2(y)} f(x,y)\,dx\,dy.$$
+    <p>Fubini 把雙重積分化為逐次積分，使具體計算變可能。</p>
+  </div>
+
+  <h3 id="sec-14-2-2">互動 2：Fubini 切片視覺（講義四面體）</h3>
+  <p>講義先看由平面 $z=2-x-2y$ 與三個座標平面圍成的四面體。固定 $x=x_0$ 時，$y$ 的範圍是 $0\le y\le(2-x_0)/2$，截面是平行於 $yz$ 平面的直角三角形；它的面積為 $A(x_0)=\int_0^{(2-x_0)/2}(2-x_0-2y)\,dy$。再讓 $x_0$ 從 $0$ 掃到 $2$，所有三角截面累加成四面體體積。</p>
+  <div class="viz-layout">
+    <div class="canvas-panel">
+      <div class="slider-row">
+        <span class="slider-label">$x_0$</span>
+        <input type="range" id="fubiniX" min="0" max="2" step="0.01" value="0.75">
+        <span class="slider-val" id="fubiniXVal">0.75</span>
+      </div>
+      <div class="toggle-row" id="fubiniToggles">
+        <span class="toggle-label">顯示</span>
+        <button class="toggle-btn on" data-toggle="surface">主曲面</button>
+        <button class="toggle-btn on" data-toggle="plane">切片平面</button>
+        <button class="toggle-btn on" data-toggle="section">截面 $A(x_0)$</button>
+        <button class="toggle-btn on" data-toggle="xLine">底面 $x=x_0$</button>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="canvas-14-2-fubini"></canvas>
+        <div class="hint-overlay">藍色平面 = 四面體切片 $x=x_0$</div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">講義四面體截面</div>
+        <div class="eq-formula">$z=2-x-2y,\quad 0\le x\le 2,\quad 0\le y\le\dfrac{2-x}{2}$</div>
+        <div class="eq-sub">$A(x_0)=\displaystyle\int_0^{(2-x_0)/2}(2-x_0-2y)\,dy=\dfrac{(2-x_0)^2}{4}$</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">截面值</div>
+        <div class="ic-row"><span class="ic-label">$x_0$</span><span class="ic-value" id="fubiniX0">0.75</span></div>
+        <div class="ic-row"><span class="ic-label">截面底 $\frac{2-x_0}{2}$</span><span class="ic-value" id="fubiniBase">0.6250</span></div>
+        <div class="ic-row"><span class="ic-label">截面高 $2-x_0$</span><span class="ic-value" id="fubiniHeight">1.2500</span></div>
+        <div class="ic-row"><span class="ic-label">$A(x_0)$</span><span class="ic-value highlight" id="fubiniA">0.3906</span></div>
+        <div class="ic-row"><span class="ic-label">$V=\int_0^2\!A(x)\,dx$</span><span class="ic-value ok">$2/3$</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h3 id="sec-14-2-3">例題</h3>
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 1（Riemann 近似）</div>
+    <div class="ex-title">用 $4\times 4$ 中點分割近似 $\iint_R(1-x^2/2-y^2/2)\,dA$，$R=[0,1]^2$</div>
+    <div class="step-block"><div class="step-num">步驟 1</div>$\Delta A=(1/4)^2=1/16$，16 個中點 $(x_i,y_i)=(\tfrac{2i-1}{8},\tfrac{2j-1}{8})$，$i,j\in\{1..4\}$。</div>
+    <div class="step-block"><div class="step-num">步驟 2</div>計算 $\sum_{i,j} f(x_i,y_i)\cdot\dfrac{1}{16}$。各中點的 $x_i^2+y_i^2$ 算出後加總，得 ≈ 0.6719。</div>
+    <div class="ex-answer">近似值 ≈ 0.6719；確切 $V=\dfrac{2}{3}\approx 0.6667$（誤差約 0.005）</div>
+  </div>
+
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 2（精確 Fubini）</div>
+    <div class="ex-title">$\displaystyle\iint_{[0,1]^2}\bigl(1-\tfrac{x^2}{2}-\tfrac{y^2}{2}\bigr)\,dA$</div>
+    <div class="step-block"><div class="step-num">步驟 1（內層）</div>$\displaystyle\int_0^1\bigl(1-\tfrac{x^2}{2}-\tfrac{y^2}{2}\bigr)\,dy=1-\tfrac{x^2}{2}-\tfrac{1}{6}=\tfrac{5}{6}-\tfrac{x^2}{2}$。</div>
+    <div class="step-block"><div class="step-num">步驟 2（外層）</div>$\displaystyle\int_0^1\bigl(\tfrac{5}{6}-\tfrac{x^2}{2}\bigr)\,dx=\tfrac{5}{6}-\tfrac{1}{6}=\tfrac{4}{6}=\tfrac{2}{3}$。</div>
+    <div class="ex-answer">$V=\dfrac{2}{3}$（與 Riemann 近似一致）</div>
+  </div>
+
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 3</div>
+    <div class="ex-title">求拋物面 $z=4-x^2-2y^2$ 與 $xy$ 平面之間的體積</div>
+    <div class="step-block"><div class="step-num">步驟 1（投影區域）</div>體積在 $xy$ 平面上的投影由 $z\ge 0$ 決定：$4-x^2-2y^2\ge 0$，也就是 $x^2+2y^2\le 4$。這是橢圓區域，對固定 $x$ 而言，$y$ 的上下界是 $-\sqrt{(4-x^2)/2}\le y\le\sqrt{(4-x^2)/2}$，而 $x$ 從 $-2$ 到 $2$。</div>
+    <div class="step-block"><div class="step-num">步驟 2（依講義選 $dy\,dx$）</div>因為這個投影區域同時是垂直簡單區域與水平簡單區域，講義選 $dy\,dx$：$$V=\int_{-2}^{2}\int_{-\sqrt{(4-x^2)/2}}^{\sqrt{(4-x^2)/2}}(4-x^2-2y^2)\,dy\,dx.$$ 這裡被積函數就是曲面高度 $z=4-x^2-2y^2$。</div>
+    <div class="step-block"><div class="step-num">步驟 3（先算內層）</div>令 $a=\sqrt{(4-x^2)/2}$。固定 $x$ 時，$$\int_{-a}^{a}(4-x^2-2y^2)\,dy=\left[(4-x^2)y-\frac{2y^3}{3}\right]_{-a}^{a}.$$ 因為上下界對稱，第一項給 $2(4-x^2)a$，第二項給 $\frac{4}{3}a^3$，所以內層等於 $$2(4-x^2)a-\frac{4}{3}a^3=\frac{4}{3\sqrt2}(4-x^2)^{3/2}.$$</div>
+    <div class="step-block"><div class="step-num">步驟 4（外層化成一維積分）</div>因此 $$V=\frac{4}{3\sqrt2}\int_{-2}^{2}(4-x^2)^{3/2}\,dx.$$ 講義接著用三角代換處理這個積分。</div>
+    <div class="step-block"><div class="step-num">步驟 5（三角代換）</div>設 $x=2\sin\theta$。因為 $-2\le x\le 2$，所以 $-\pi/2\le\theta\le\pi/2$；且 $dx=2\cos\theta\,d\theta$、$4-x^2=4\cos^2\theta$。因此 $$(4-x^2)^{3/2}dx=(4\cos^2\theta)^{3/2}(2\cos\theta\,d\theta)=16\cos^4\theta\,d\theta.$$</div>
+    <div class="step-block"><div class="step-num">步驟 6（計算 $\int\cos^4\theta$）</div>由偶函數對稱，$$\int_{-\pi/2}^{\pi/2}\cos^4\theta\,d\theta=2\int_0^{\pi/2}\cos^4\theta\,d\theta.$$ 又 $\cos^4\theta=\left(\frac{1+\cos2\theta}{2}\right)^2=\frac{3+4\cos2\theta+\cos4\theta}{8}$，所以 $$\int_0^{\pi/2}\cos^4\theta\,d\theta=\left[\frac{1}{8}\left(3\theta+2\sin2\theta+\frac14\sin4\theta\right)\right]_0^{\pi/2}=\frac{3\pi}{16}.$$ 因此整個對稱區間積分為 $3\pi/8$。</div>
+    <div class="ex-answer">$V=\dfrac{4}{3\sqrt2}\cdot 16\cdot\dfrac{3\pi}{8}=\dfrac{8\pi}{\sqrt2}=4\sqrt2\,\pi\approx 17.77$</div>
+  </div>
+
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 4（順序選擇）</div>
+    <div class="ex-title">求 $\displaystyle\iint_R e^{-x^2}\,dA$，$R$ 為三角形 $0\le y\le x\le 1$</div>
+    <div class="step-block"><div class="step-num"><span class="pill pill-green">先 dy dx 簡單</span></div>$\displaystyle\int_0^1\!\!\int_0^x e^{-x^2}\,dy\,dx=\int_0^1 x\,e^{-x^2}\,dx=\bigl[-\tfrac{1}{2}e^{-x^2}\bigr]_0^1=\tfrac{1}{2}(1-e^{-1})$。</div>
+    <div class="step-block"><div class="step-num"><span class="pill pill-red">先 dx dy 困難</span></div>$\displaystyle\int_0^1\!\!\int_y^1 e^{-x^2}\,dx\,dy$ 是合法換序；但內層 $\int e^{-x^2}\,dx$ <strong>沒有</strong>初等原函數，不利於用這個順序直接算出初等閉式。</div>
+	    <div class="ex-answer">$\dfrac{1}{2}(1-1/e)\approx 0.3161$。兩種順序都合法，但若要用初等積分直接算，$dy\,dx$ 明顯較適合。</div>
+  </div>
+
+  <h3 id="sec-14-2-4">例題 5：兩曲面間的體積</h3>
+  <p>兩個曲面把空間夾出一塊立體；體積 = 上面曲面與下面曲面的差，在投影區域上的雙重積分。</p>
+  <div class="viz-layout">
+    <div class="canvas-panel">
+	      <h4>例題 5：上界為拋物面 $z=1-x^2-y^2$、下界為平面 $z=1-y$</h4>
+      <div class="toggle-row" id="bivolumeToggles">
+        <span class="toggle-label">顯示</span>
+        <button class="toggle-btn on" data-toggle="paraboloid">上拋物面</button>
+        <button class="toggle-btn on" data-toggle="plane">下平面</button>
+        <button class="toggle-btn on" data-toggle="ringTube">交線投影</button>
+        <button class="toggle-btn on" data-toggle="disk">投影圓盤</button>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="canvas-14-2-bivolume"></canvas>
+        <div class="hint-overlay">藍：拋物面；金：平面｜可關閉看單一曲面</div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">例題 5 推導</div>
+        <div class="eq-formula">交線：$1-x^2-y^2=1-y$</div>
+        <div class="eq-sub">$\Rightarrow x^2+(y-\tfrac12)^2=\tfrac14$</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">投影圓盤</div>
+        <div class="ic-row"><span class="ic-label">圓心</span><span class="ic-value">$(0,1/2)$</span></div>
+        <div class="ic-row"><span class="ic-label">半徑</span><span class="ic-value">$1/2$</span></div>
+        <div class="ic-row"><span class="ic-label">$V$</span><span class="ic-value highlight">$\pi/32$</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 5 詳細解法</div>
+    <div class="ex-title">求上界 $z=1-x^2-y^2$、下界 $z=1-y$ 所夾立體的體積</div>
+    <div class="step-block"><div class="step-num">步驟 1（上減下）</div>上方曲面是 $z=1-x^2-y^2$，下方曲面是 $z=1-y$，所以每一點的垂直高度為 $$(1-x^2-y^2)-(1-y)=y-y^2-x^2.$$</div>
+    <div class="step-block"><div class="step-num">步驟 2（找投影區域）</div>兩曲面交線滿足 $1-x^2-y^2=1-y$，因此 $$x^2+y^2=y\quad\Longleftrightarrow\quad x^2+(y-\tfrac12)^2=\tfrac14.$$ 投影區域可寫成 $0\le y\le 1$，$-\sqrt{y-y^2}\le x\le\sqrt{y-y^2}$。</div>
+    <div class="step-block"><div class="step-num">步驟 3（寫成二重積分）</div>講義先寫成「拋物面下方體積」減「平面下方體積」，合併後就是直接積高度差：$$V=\int_0^1\int_{-\sqrt{y-y^2}}^{\sqrt{y-y^2}}(y-y^2-x^2)\,dx\,dy.$$</div>
+    <div class="step-block"><div class="step-num">步驟 4（先對 $x$ 積分）</div>令 $a=\sqrt{y-y^2}$。則 $$\int_{-a}^{a}(y-y^2-x^2)\,dx=\left[(y-y^2)x-\frac{x^3}{3}\right]_{-a}^{a}.$$ 因為 $a^2=y-y^2$，所以結果為 $$2(y-y^2)a-\frac{2}{3}a^3=\frac{4}{3}(y-y^2)^{3/2}.$$</div>
+    <div class="step-block"><div class="step-num">步驟 5（整理成講義形式）</div>因此 $$V=\frac{4}{3}\int_0^1(y-y^2)^{3/2}\,dy.$$ 又 $y-y^2=\dfrac{1-(2y-1)^2}{4}$，所以 $$(y-y^2)^{3/2}=\frac{1}{8}\left[1-(2y-1)^2\right]^{3/2}.$$</div>
+    <div class="step-block"><div class="step-num">步驟 6（三角代換）</div>設 $2y-1=\sin\theta$，則 $y=0\to\theta=-\pi/2$，$y=1\to\theta=\pi/2$，且 $dy=\frac12\cos\theta\,d\theta$。因此 $$V=\frac{4}{3}\cdot\frac18\int_0^1\left[1-(2y-1)^2\right]^{3/2}dy=\frac{1}{12}\int_{-\pi/2}^{\pi/2}\cos^4\theta\,d\theta=\frac{1}{6}\int_0^{\pi/2}\cos^4\theta\,d\theta.$$</div>
+    <div class="step-block"><div class="step-num">步驟 7（代入 $\cos^4$ 積分）</div>由例題 3 的計算，$\int_0^{\pi/2}\cos^4\theta\,d\theta=3\pi/16$，所以 $$V=\frac{1}{6}\cdot\frac{3\pi}{16}=\frac{\pi}{32}.$$</div>
+    <div class="ex-answer">體積 $V=\dfrac{\pi}{32}$。</div>
+  </div>
+
+	  <div class="concept-warning">
+	    <div class="cw-title">概念辨析 · 順序選擇 & Fubini 條件</div>
+	    <p>(1) <strong>Fubini 需要 $f$ 連續 + $R$ 為 第 I 型或第 II 型</strong>（或可拆為有限個）；任意區域不行。<br>
+	    (2) <strong>同一區域兩種順序計算難度可能差很多</strong> — 例題 4 的 $e^{-x^2}$ 換成 $dx\,dy$ 仍是合法表示，但內層沒有初等原函數，不利於直接計算。<br>
+	    (3) 區域是<strong>圓 / 環 / 含 $x^2+y^2$ 函數</strong>時，預先想想 14.3 的<strong>極座標</strong>是否更簡單。</p>
+	  </div>
+
+	  <div class="quiz-card" id="quiz-14-2-1">
+    <span class="quiz-tag">概念題</span>
+    <div class="quiz-q">Fubini 定理（定理 14.2）保證雙重積分可化為逐次積分的條件為何？</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">$f$ 連續 + $R$ 為 第 I 型或第 II 型 區域</button>
+      <button class="quiz-opt">$f$ 可微（$f$ 不需連續）</button>
+      <button class="quiz-opt">任意區域 $R$，無條件成立</button>
+      <button class="quiz-opt">$f$ 必須是多項式</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="quiz-card" id="quiz-14-2-2">
+    <span class="quiz-tag">數字題</span>
+    <div class="quiz-q">求 $\displaystyle\iint_R xy\,dA$，$R=[0,1]\times[0,2]$。提示：用 Fubini，內層任意一個變數先積。</div>
+    <div class="quiz-input-row">
+      <input type="number" class="quiz-input" placeholder="輸入數值" step="0.01">
+      <button class="quiz-check">檢查</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="section-summary">
+    <div class="section-summary-title">14.2 重點整理</div>
+    <ul>
+      <li>雙重積分定義：黎曼和的極限 $\iint_R f\,dA=\lim\sum f(x_i,y_i)\,\Delta A_i$。</li>
+      <li>$f\ge 0$ 時 = 體積；$f$ 連續 + $R$ 閉有界 ⇒ 可積。</li>
+      <li>Fubini（定理 14.2）：化為逐次積分；第 I 型或第 II 型 形式。</li>
+      <li>順序選擇：先畫圖判斷哪一個內層好算（例 4 是經典）。</li>
+      <li>性質可以拿出常數、拆和、分區域加總（定理 14.1）。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 14.3 -->
+<!-- ============================================================ -->
+<section id="sec-14-3">
+  <div class="section-number">14.3 變數替換：極座標</div>
+  <h2>$dA=r\,dr\,d\theta$：扇形片才是面積元素</h2>
+  <p>圓形 / 環形 / 含 $x^2+y^2$ 的區域與被積函數，在直角座標下邊界與被積函數都很麻煩；換成<strong>極座標</strong>後常常一行就化簡。但別忘了 $dA$ 不再是 $dx\,dy$，而是 <span class="pill pill-grad">$r\,dr\,d\theta$</span>—— 多出來的 $r$ 是<strong>雅可比</strong>。</p>
+
+  <h3 id="sec-14-3-1">互動 1：為什麼 $dA=r\,dr\,d\theta$？</h3>
+  <p>把區域用射線（$\theta=$ 常數）與圓弧（$r=$ 常數）切成「扇形片」。一片的面積 ≈ 徑向寬 $\Delta r$ × 弧長 $r\,\Delta\theta$，因此 $\Delta A\approx r\,\Delta r\,\Delta\theta$。$r$ 越大，同樣的 $\Delta\theta$ 對應越長的弧，面積也越大。</p>
+  <div class="canvas-panel">
+    <div class="slider-row">
+      <span class="slider-label">$r$ 中心</span>
+      <input type="range" id="daR" min="0.5" max="3.0" step="0.05" value="1.5">
+      <span class="slider-val" id="daRVal">1.50</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">$\Delta\theta$</span>
+      <input type="range" id="daDth" min="0.1" max="0.6" step="0.02" value="0.35">
+      <span class="slider-val" id="daDthVal">0.35</span>
+    </div>
+    <div class="canvas-wrap light">
+      <canvas id="canvas-14-3-da"></canvas>
+      <div class="hint-overlay" id="daHint" style="color:rgba(0,0,0,.62);background:rgba(255,255,255,.8)">扇形片面積 ≈ $r\,\Delta r\,\Delta\theta$</div>
+    </div>
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">定理 14.3 極座標換變數</span>
+    <p>$R$ 由 $0\le g_1(\theta)\le r\le g_2(\theta)$、$\alpha\le\theta\le\beta$（$\beta-\alpha\le 2\pi$）定義，$f$ 在 $R$ 連續：</p>
+    $$\iint_R f(x,y)\,dA=\int_\alpha^\beta\!\!\int_{g_1(\theta)}^{g_2(\theta)} f(r\cos\theta,r\sin\theta)\,r\,dr\,d\theta.$$
+    <p>三件事同步改變：上下限、被積函數、$dA$。</p>
+  </div>
+
+  <h3 id="sec-14-3-2">例題</h3>
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 1（區域描述）</div>
+    <div class="ex-title">用極座標描述下列區域：(a) 半徑 $2$ 的第一象限四分之一圓盤；(b) 半徑 $1$ 與 $3$ 的同心圓之間的環形區域；(c) 心臟線 $r=a(1-\cos\theta)$ 圍成的區域。</div>
+    <div class="step-block"><div class="step-num">(a) 第一象限四分之一圓盤 $r\le 2$</div>$0\le r\le 2,\ 0\le\theta\le\pi/2$。</div>
+    <div class="step-block"><div class="step-num">(b) 同心圓 $r=1$ 與 $r=3$ 之間的環形</div>$1\le r\le 3,\ 0\le\theta\le 2\pi$。</div>
+    <div class="step-block"><div class="step-num">(c) 心臟線 $r=a(1-\cos\theta)$ 圍成</div>$0\le r\le a(1-\cos\theta),\ 0\le\theta\le 2\pi$。</div>
+    <div class="ex-answer">所有「以原點為對稱中心」的圓 / 環 / 花瓣形，極座標都<strong>遠比直角座標簡潔</strong>。</div>
+  </div>
+
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 2（環形區域積分）</div>
+    <div class="ex-title">求 $\displaystyle\iint_R(x^2+y^2)\,dA$，$R$ 為環形 $1\le x^2+y^2\le 5$</div>
+    <div class="step-block"><div class="step-num">步驟 1（描述區域）</div>$x^2+y^2=r^2$，環形即 $1\le r\le\sqrt 5$，$0\le\theta\le 2\pi$。</div>
+    <div class="step-block"><div class="step-num">步驟 2（換被積函數 + dA）</div>$x=r\cos\theta,\ y=r\sin\theta$，所以 $$x^2+y^2=r^2.$$ 再乘上 $dA=r\,dr\,d\theta$ 的雅可比因子，得到被積項 $$r^2\cdot r=r^3.$$</div>
+    <div class="step-block"><div class="step-num">步驟 3（寫成極座標積分）</div>$$\iint_R(x^2+y^2)\,dA=\int_0^{2\pi}\int_1^{\sqrt5}r^3\,dr\,d\theta.$$</div>
+    <div class="step-block"><div class="step-num">步驟 4（計算）</div>$$\int_1^{\sqrt5}r^3\,dr=\left[\frac{r^4}{4}\right]_1^{\sqrt5}=\frac{25-1}{4}=6,$$ 所以 $$\int_0^{2\pi}6\,d\theta=12\pi.$$</div>
+    <div class="ex-answer">$\displaystyle\iint_R(x^2+y^2)\,dA=12\pi$</div>
+  </div>
+
+  <div class="canvas-panel">
+    <h4 id="sec-14-3-3">例題 2 視覺：環形區域（拖 slider 改變內外半徑）</h4>
+    <div class="viz-layout">
+      <div>
+        <div class="slider-row">
+          <span class="slider-label">內半徑 r₁</span>
+          <input type="range" id="annR1" min="0" max="2" step="0.01" value="1">
+          <span class="slider-val" id="annR1Val">1.00</span>
+        </div>
+        <div class="slider-row">
+          <span class="slider-label">外半徑 r₂</span>
+          <input type="range" id="annR2" min="0.5" max="3" step="0.01" value="2.236">
+          <span class="slider-val" id="annR2Val">2.24</span>
+        </div>
+        <div class="toggle-row" id="annToggles">
+          <span class="toggle-label">顯示</span>
+          <button class="toggle-btn" data-toggle="grad">被積函數熱圖 ($x^2+y^2$)</button>
+          <button class="toggle-btn on" data-toggle="polarGrid">極座標網格</button>
+          <button class="toggle-btn" data-toggle="cartGrid">直角網格</button>
+        </div>
+        <div class="canvas-wrap light">
+          <canvas id="canvas-14-3-annulus"></canvas>
+          <div class="hint-overlay" style="color:rgba(0,0,0,.62);background:rgba(255,255,255,.8)">$r_1 \le r \le r_2$</div>
+        </div>
+      </div>
+      <div class="side-panel">
+        <div class="info-card">
+          <div class="ic-title">幾何量</div>
+          <div class="ic-row"><span class="ic-label">r₁</span><span class="ic-value" id="annR1Info">1.00</span></div>
+          <div class="ic-row"><span class="ic-label">r₂</span><span class="ic-value" id="annR2Info">2.24</span></div>
+          <div class="ic-row"><span class="ic-label">環面積 π(r₂²−r₁²)</span><span class="ic-value highlight" id="annArea">12.566</span></div>
+        </div>
+        <div class="eq-card">
+          <div class="eq-label">∬_R (x² + y²) dA</div>
+          <div class="eq-formula">$=\dfrac{\pi(r_2^4 - r_1^4)}{2}$</div>
+          <div class="eq-sub" id="annInt">當前 = 37.699 (≈ 12π)</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">講義例題 2 預設</div>
+          <div class="ic-row"><span class="ic-label">r₁ = 1, r₂ = √5</span><span class="ic-value ok">12π ≈ 37.70</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 3</div>
+    <div class="ex-title">求半球面 $z=\sqrt{16-x^2-y^2}$ 與圓盤 $x^2+y^2\le 4$ 之間的體積</div>
+    <div class="step-block"><div class="step-num">步驟 1（極座標化）</div>$z=\sqrt{16-r^2}$，圓盤即 $0\le r\le 2,\ 0\le\theta\le 2\pi$。</div>
+    <div class="step-block"><div class="step-num">步驟 2（內層 — 替換 $u=16-r^2$）</div>$\displaystyle\int_0^2 r\sqrt{16-r^2}\,dr=\bigl[-\tfrac{1}{3}(16-r^2)^{3/2}\bigr]_0^2=\tfrac{1}{3}(64-12\sqrt{12})=\tfrac{1}{3}(64-24\sqrt 3)$。</div>
+    <div class="step-block"><div class="step-num">步驟 3（外層）</div>$V=\displaystyle\int_0^{2\pi}\tfrac{1}{3}(64-24\sqrt 3)\,d\theta=\tfrac{2\pi}{3}(64-24\sqrt 3)=\tfrac{16\pi}{3}(8-3\sqrt 3)$。</div>
+    <div class="ex-answer">$V=\dfrac{16\pi}{3}(8-3\sqrt 3)\approx 46.98$</div>
+  </div>
+
+  <div class="lecture-example">
+    <div class="ex-tag">講義例題 4（三瓣玫瑰）</div>
+    <div class="ex-title">求 $r=3\cos 3\theta$ 圍成的面積</div>
+    <div class="step-block"><div class="step-num">步驟 1（一瓣的範圍）</div>$r=3\cos 3\theta\ge 0$ 要求 $\cos 3\theta\ge 0$。第一瓣對應 $\theta\in[-\pi/6,\pi/6]$；由對稱性，三瓣面積 = 3 × 一瓣。</div>
+    <div class="step-block"><div class="step-num">步驟 2（一瓣面積）</div>$\displaystyle A_{\text{瓣}}=\int_{-\pi/6}^{\pi/6}\!\!\int_0^{3\cos 3\theta} r\,dr\,d\theta=\int_{-\pi/6}^{\pi/6}\tfrac{9\cos^2 3\theta}{2}\,d\theta$。</div>
+    <div class="step-block"><div class="step-num">步驟 3（用 $\cos^2=\frac{1+\cos 2u}{2}$）</div>$=\tfrac{9}{4}\int_{-\pi/6}^{\pi/6}(1+\cos 6\theta)\,d\theta=\tfrac{9}{4}\bigl[\theta+\tfrac{\sin 6\theta}{6}\bigr]_{-\pi/6}^{\pi/6}=\tfrac{9}{4}\cdot\tfrac{\pi}{3}=\tfrac{3\pi}{4}$。</div>
+    <div class="ex-answer">三瓣總面積 $A=3\cdot\dfrac{3\pi}{4}=\dfrac{9\pi}{4}\approx 7.069$</div>
+  </div>
+
+  <div class="canvas-panel">
+    <h4 id="sec-14-3-4">例題 4 動態：三瓣玫瑰 $r=3\cos 3\theta$</h4>
+    <div class="slider-row">
+      <span class="slider-label">$\theta$ 進度</span>
+      <input type="range" id="roseTh" min="0" max="6.2832" step="0.01" value="6.2832">
+      <span class="slider-val" id="roseThVal">2π</span>
+    </div>
+    <div class="toggle-row" id="roseToggles">
+      <span class="toggle-label">顯示</span>
+      <button class="toggle-btn on" data-toggle="cumArea">已掃過面積 A(θ)</button>
+      <button class="toggle-btn" data-toggle="ring">同心圓 r=1,2,3</button>
+    </div>
+    <div class="canvas-wrap light">
+      <canvas id="canvas-14-3-rose"></canvas>
+      <div class="hint-overlay" style="color:rgba(0,0,0,.62);background:rgba(255,255,255,.8)">滑桿縮短可見「正在畫」的瓣</div>
+    </div>
+  </div>
+
+  <div class="concept-warning">
+    <div class="cw-title">概念辨析 · 不要忘記 $r$ 因子！</div>
+    <p>(1) <strong>$dA=r\,dr\,d\theta$，不是 $dr\,d\theta$</strong> — 多出來的 $r$ 是 雅可比：<br>
+    $\quad J=\det\begin{pmatrix}\partial x/\partial r & \partial x/\partial\theta\\ \partial y/\partial r & \partial y/\partial\theta\end{pmatrix}=\det\begin{pmatrix}\cos\theta & -r\sin\theta\\ \sin\theta & r\cos\theta\end{pmatrix}=r$。<br>
+    (2) <strong>何時用極座標？</strong>區域是<span class="pill pill-blue">圓 / 環 / 扇形 / 花瓣</span>；被積函數含 <span class="pill pill-blue">$x^2+y^2$ 或 $e^{-(x^2+y^2)}$</span>。<br>
+    (3) 三件事同步改變：<strong>上下限</strong>、<strong>被積函數</strong>（$x\to r\cos\theta,\ y\to r\sin\theta$）、<strong>$dA$</strong>。</p>
+  </div>
+
+  <div class="quiz-card" id="quiz-14-3-1">
+    <span class="quiz-tag">概念題</span>
+    <div class="quiz-q">把 $\displaystyle\iint_R f(x,y)\,dA$ 從直角座標換為極座標時，下列何者<strong>必須</strong>改變？</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">只改上下限與被積函數，$dA$ 不變</button>
+      <button class="quiz-opt">上下限、被積函數、$dA\to r\,dr\,d\theta$（三者皆改）</button>
+      <button class="quiz-opt">只改上下限</button>
+      <button class="quiz-opt">不需要任何改變（記號不同而已）</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="quiz-card" id="quiz-14-3-2">
+    <span class="quiz-tag">數字題</span>
+    <div class="quiz-q">求 $\displaystyle\int_0^{2\pi}\!\!\int_0^2 r\,dr\,d\theta$（即半徑 $2$ 的圓盤面積）。</div>
+    <div class="quiz-input-row">
+      <input type="number" class="quiz-input" placeholder="輸入數值" step="0.01">
+      <button class="quiz-check">檢查</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="section-summary">
+    <div class="section-summary-title">14.3 重點整理</div>
+    <ul>
+      <li>$x=r\cos\theta,\ y=r\sin\theta$；$x^2+y^2=r^2$。</li>
+      <li><strong>$dA=r\,dr\,d\theta$</strong>（多的 $r$ 是 雅可比；幾何上來自扇形片）。</li>
+      <li>r-簡單區域：外層 $\theta$ 為常數、內層 $r=g_1(\theta)$ 到 $g_2(\theta)$。</li>
+      <li>適用情境：圓 / 環 / 扇形 / 花瓣，或被積函數含 $x^2+y^2$。</li>
+      <li>面積：$A=\iint_R 1\,dA=\iint_R r\,dr\,d\theta$（不要寫成 $\iint dr\,d\theta$）。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- REFERENCE -->
+<!-- ============================================================ -->
+<section id="sec-ref">
+  <div class="section-number">速查 · 14.1-14.3</div>
+  <h2>本頁速查</h2>
+  <div class="method-grid">
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">面積（Type I）</span><span class="ref-card-name-en">定義 14.1</span></div>
+      <div class="ref-card-eq">$A=\displaystyle\int_a^b\!\!\int_{g_1(x)}^{g_2(x)}\,dy\,dx$</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">面積（Type II）</span><span class="ref-card-name-en">定義 14.1</span></div>
+      <div class="ref-card-eq">$A=\displaystyle\int_c^d\!\!\int_{h_1(y)}^{h_2(y)}\,dx\,dy$</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">雙重積分定義</span><span class="ref-card-name-en">定義 14.2</span></div>
+      <div class="ref-card-eq">$\displaystyle\iint_R f\,dA=\lim_{\|\Delta\|\to 0}\sum_i f(x_i,y_i)\,\Delta A_i$</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">雙重積分性質</span><span class="ref-card-name-en">定理 14.1</span></div>
+      <div class="ref-card-eq">線性 + 比較 + 區域可加（$R=R_1\cup R_2$ 不重疊）</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">Fubini 定理</span><span class="ref-card-name-en">定理 14.2</span></div>
+      <div class="ref-card-eq">$\displaystyle\iint_R f\,dA=\int_a^b\!\!\int_{g_1(x)}^{g_2(x)} f\,dy\,dx$</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">體積</span><span class="ref-card-name-en">$f\ge 0$</span></div>
+      <div class="ref-card-eq">$V=\displaystyle\iint_R f(x,y)\,dA$</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">兩曲面間體積</span><span class="ref-card-name-en">— —</span></div>
+      <div class="ref-card-eq">$V=\displaystyle\iint_R\bigl[f_{\text{上}}-f_{\text{下}}\bigr]\,dA$</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">極座標換變數</span><span class="ref-card-name-en">定理 14.3</span></div>
+      <div class="ref-card-eq">$\displaystyle\iint_R f\,dA=\int_\alpha^\beta\!\!\int_{g_1(\theta)}^{g_2(\theta)} f(r\cos\theta,r\sin\theta)\,r\,dr\,d\theta$</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">極座標 $dA$</span><span class="ref-card-name-en">雅可比 = $r$</span></div>
+      <div class="ref-card-eq">$dA=r\,dr\,d\theta$（不要忘記 $r$！）</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">座標換算</span><span class="ref-card-name-en">— —</span></div>
+      <div class="ref-card-eq">$x=r\cos\theta,\ y=r\sin\theta,\ x^2+y^2=r^2$</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">何時用極座標</span><span class="ref-card-name-en">— —</span></div>
+      <div class="ref-card-eq">區域是<strong>圓 / 環 / 扇形 / 花瓣</strong>，或被積函數含 $x^2+y^2$、$e^{-(x^2+y^2)}$</div>
+    </div>
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">面積（極座標）</span><span class="ref-card-name-en">— —</span></div>
+      <div class="ref-card-eq">$A=\displaystyle\int_\alpha^\beta\!\!\int_0^{g(\theta)} r\,dr\,d\theta=\dfrac12\int_\alpha^\beta\bigl[g(\theta)\bigr]^2\,d\theta$</div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  第 14.1-14.3 節 · 多重積分 I 互動講義 ｜ Three.js + MathJax ｜ 依據 Calculus_Chapter14.pdf 製作
+</footer>
+
+<script type="application/json" id="source-checks">{
+  "ex_14_1_2_value": 5,
+  "ex_14_1_4_area": "2*sqrt(2)",
+  "ex_14_1_4_decimal": 2.8284271247461903,
+  "ex_14_1_5_value": "16/3",
+  "ex_14_1_5_decimal": 5.333333333333333,
+  "ex_14_2_1_riemann_n4": 0.671875,
+  "ex_14_2_2_exact": "2/3",
+  "ex_14_2_3_volume": "4*sqrt(2)*pi",
+  "ex_14_2_3_decimal": 17.771531752633464,
+  "ex_14_2_4_value_exact": "(1 - 1/e)/2",
+  "ex_14_2_4_decimal": 0.31606027941427883,
+  "ex_14_2_5_volume_exact": "pi/32",
+  "ex_14_2_5_decimal": 0.09817477042468103,
+  "ex_14_3_2_annulus": "6*pi",
+  "ex_14_3_2_decimal": 18.84955592153876,
+  "ex_14_3_3_volume_exact": "16*pi*(8 - 3*sqrt(3))/3",
+  "ex_14_3_3_decimal": 46.978917069922055,
+  "ex_14_3_4_rose_area": "9*pi/4",
+  "ex_14_3_4_decimal": 7.0685834705770345,
+  "quiz_14_1_2_answer": 0.75,
+  "quiz_14_2_2_answer": 1,
+  "quiz_14_3_2_answer_decimal": 12.566370614359172,
+  "quiz_14_3_2_answer_exact": "4*pi"
+}</script>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const TAU = Math.PI * 2;
+
+  function fmt(n, d=3){ return Number(n).toFixed(d); }
+  function setHTML(id, value){ const el=$(id); if(el) el.innerHTML=value; }
+  function setText(id, value){ const el=$(id); if(el) el.textContent=value; }
+
+  // ─── 2D Cartesian 場景工廠（DPR 正確處理 + 統一 API） ───
+  function make2DScene(canvasId, opts={}){
+    const canvas = $(canvasId);
+    const ctx = canvas.getContext('2d');
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    let baseXRange = (opts.xRange || [-5, 5]).slice();
+    let baseYRange = (opts.yRange || [-5, 5]).slice();
+    const cfg = {
+      xRange: baseXRange.slice(),
+      yRange: baseYRange.slice(),
+      padding: opts.padding ?? 28,
+      aspectLock: opts.aspectLock ?? false,
+    };
+    let W = 1, H = 1;
+    function lockAspect(){
+      cfg.xRange = baseXRange.slice();
+      cfg.yRange = baseYRange.slice();
+      if (!cfg.aspectLock) return;
+      const dataAspect = (cfg.xRange[1]-cfg.xRange[0]) / (cfg.yRange[1]-cfg.yRange[0]);
+      const innerW = Math.max(1, W - 2*cfg.padding);
+      const innerH = Math.max(1, H - 2*cfg.padding);
+      const pixelAspect = innerW / innerH;
+      if (pixelAspect > dataAspect){
+        const newW = (cfg.yRange[1]-cfg.yRange[0]) * pixelAspect;
+        const cx = (cfg.xRange[0]+cfg.xRange[1])/2;
+        cfg.xRange = [cx - newW/2, cx + newW/2];
+      } else {
+        const newH = (cfg.xRange[1]-cfg.xRange[0]) / pixelAspect;
+        const cy = (cfg.yRange[0]+cfg.yRange[1])/2;
+        cfg.yRange = [cy - newH/2, cy + newH/2];
+      }
+    }
+    function resize(){
+      const rect = canvas.getBoundingClientRect();
+      W = rect.width; H = rect.height;
+      canvas.width  = Math.round(W * dpr);
+      canvas.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      lockAspect();
+    }
+    function setView(xRange, yRange){
+      baseXRange = xRange.slice();
+      baseYRange = yRange.slice();
+      resize();
+    }
+    function tx(x){ return cfg.padding + (x - cfg.xRange[0]) / (cfg.xRange[1]-cfg.xRange[0]) * (W - 2*cfg.padding); }
+    function ty(y){ return H - cfg.padding - (y - cfg.yRange[0]) / (cfg.yRange[1]-cfg.yRange[0]) * (H - 2*cfg.padding); }
+    function clear(){
+      ctx.fillStyle = opts.bg || '#fbf7ed';
+      ctx.fillRect(0, 0, W, H);
+    }
+    function drawGrid(step=1, color='#eae3d4'){
+      ctx.strokeStyle = color; ctx.lineWidth = 1;
+      const x0 = Math.ceil(cfg.xRange[0]/step)*step;
+      for (let x = x0; x <= cfg.xRange[1]+1e-9; x += step){
+        ctx.beginPath(); ctx.moveTo(tx(x), ty(cfg.yRange[0])); ctx.lineTo(tx(x), ty(cfg.yRange[1])); ctx.stroke();
+      }
+      const y0 = Math.ceil(cfg.yRange[0]/step)*step;
+      for (let y = y0; y <= cfg.yRange[1]+1e-9; y += step){
+        ctx.beginPath(); ctx.moveTo(tx(cfg.xRange[0]), ty(y)); ctx.lineTo(tx(cfg.xRange[1]), ty(y)); ctx.stroke();
+      }
+    }
+    function drawAxes(axOpts={}){
+      const xColor = axOpts.xColor || '#7d776b';
+      const yColor = axOpts.yColor || '#7d776b';
+      ctx.strokeStyle = xColor; ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.moveTo(tx(cfg.xRange[0]), ty(0)); ctx.lineTo(tx(cfg.xRange[1])-2, ty(0)); ctx.stroke();
+      ctx.fillStyle = xColor;
+      ctx.beginPath();
+      ctx.moveTo(tx(cfg.xRange[1]), ty(0));
+      ctx.lineTo(tx(cfg.xRange[1])-9, ty(0)-5);
+      ctx.lineTo(tx(cfg.xRange[1])-9, ty(0)+5);
+      ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = yColor; ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.moveTo(tx(0), ty(cfg.yRange[0])); ctx.lineTo(tx(0), ty(cfg.yRange[1])+2); ctx.stroke();
+      ctx.fillStyle = yColor;
+      ctx.beginPath();
+      ctx.moveTo(tx(0), ty(cfg.yRange[1]));
+      ctx.lineTo(tx(0)-5, ty(cfg.yRange[1])+9);
+      ctx.lineTo(tx(0)+5, ty(cfg.yRange[1])+9);
+      ctx.closePath(); ctx.fill();
+      if (axOpts.labels !== false){
+        ctx.font = '600 12px "JetBrains Mono", monospace';
+        ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+        ctx.fillStyle = xColor; ctx.fillText(axOpts.xLabel || 'x', tx(cfg.xRange[1])-14, ty(0)-7);
+        ctx.fillStyle = yColor; ctx.fillText(axOpts.yLabel || 'y', tx(0)+8, ty(cfg.yRange[1])+13);
+      }
+    }
+    function drawTicks(step=1, color='#8a8578'){
+      ctx.fillStyle = color;
+      ctx.font = '400 10px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+      const x0 = Math.ceil(cfg.xRange[0]/step)*step;
+      for (let x = x0; x <= cfg.xRange[1]+1e-9; x += step){
+        if (Math.abs(x) < 1e-6) continue;
+        if (x < cfg.xRange[0]+0.3 || x > cfg.xRange[1]-0.3) continue;
+        ctx.fillText(formatTick(x), tx(x), ty(0)+4);
+      }
+      ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+      const y0 = Math.ceil(cfg.yRange[0]/step)*step;
+      for (let y = y0; y <= cfg.yRange[1]+1e-9; y += step){
+        if (Math.abs(y) < 1e-6) continue;
+        if (y < cfg.yRange[0]+0.3 || y > cfg.yRange[1]-0.3) continue;
+        ctx.fillText(formatTick(y), tx(0)+5, ty(y));
+      }
+    }
+    function formatTick(v){
+      const r = Math.round(v);
+      if (Math.abs(v - r) < 1e-6) return String(r);
+      return v.toFixed(1);
+    }
+    function drawCurve(points, color='#c0392b', width=2.5, opacity=1){
+      if (!points || points.length < 2) return;
+      ctx.globalAlpha = opacity;
+      ctx.strokeStyle = color; ctx.lineWidth = width;
+      ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.beginPath();
+      ctx.moveTo(tx(points[0][0]), ty(points[0][1]));
+      for (let i = 1; i < points.length; i++) ctx.lineTo(tx(points[i][0]), ty(points[i][1]));
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+    function drawDashed(p0, p1, color='#999', width=1.5, dash=[6,4]){
+      ctx.strokeStyle = color; ctx.lineWidth = width;
+      ctx.setLineDash(dash); ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(tx(p0[0]), ty(p0[1])); ctx.lineTo(tx(p1[0]), ty(p1[1]));
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    function drawExtendedLine(p, d, color='#888', width=1.2, dash=null){
+      const xmin = cfg.xRange[0], xmax = cfg.xRange[1];
+      const ymin = cfg.yRange[0], ymax = cfg.yRange[1];
+      const [px, py] = p;
+      const [dx, dy] = d;
+      if (Math.abs(dx) < 1e-12 && Math.abs(dy) < 1e-12) return;
+      let tEnter = -Infinity, tExit = Infinity;
+      const tests = [
+        [-dx, px - xmin], [dx, xmax - px],
+        [-dy, py - ymin], [dy, ymax - py],
+      ];
+      for (const [pp, qq] of tests){
+        if (Math.abs(pp) < 1e-12){ if (qq < 0) return; }
+        else {
+          const r = qq / pp;
+          if (pp < 0){ if (r > tEnter) tEnter = r; }
+          else { if (r < tExit) tExit = r; }
+        }
+      }
+      if (tEnter > tExit) return;
+      const a = [px + tEnter*dx, py + tEnter*dy];
+      const b = [px + tExit *dx, py + tExit *dy];
+      ctx.strokeStyle = color; ctx.lineWidth = width; ctx.lineCap = 'round';
+      if (dash) ctx.setLineDash(dash);
+      ctx.beginPath();
+      ctx.moveTo(tx(a[0]), ty(a[1])); ctx.lineTo(tx(b[0]), ty(b[1]));
+      ctx.stroke();
+      if (dash) ctx.setLineDash([]);
+    }
+    function drawArrow(p0, p1, color='#f1c40f', width=2.5, headSize=11){
+      const x0 = tx(p0[0]), y0 = ty(p0[1]);
+      const x1 = tx(p1[0]), y1 = ty(p1[1]);
+      const dx = x1 - x0, dy = y1 - y0;
+      const len = Math.hypot(dx, dy);
+      if (len < 1.5){
+        ctx.fillStyle = color;
+        ctx.beginPath(); ctx.arc(x1, y1, 3, 0, Math.PI*2); ctx.fill();
+        return;
+      }
+      const ux = dx/len, uy = dy/len;
+      const tx1 = x1 - ux * headSize * 0.85;
+      const ty1 = y1 - uy * headSize * 0.85;
+      ctx.strokeStyle = color; ctx.lineWidth = width; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(tx1, ty1); ctx.stroke();
+      const wArr = headSize * 0.55;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x1 - ux*headSize - uy*wArr, y1 - uy*headSize + ux*wArr);
+      ctx.lineTo(x1 - ux*headSize + uy*wArr, y1 - uy*headSize - ux*wArr);
+      ctx.closePath(); ctx.fill();
+    }
+    function drawMarker(p, color='#f1c40f', radius=5, ring=true){
+      const cxp = tx(p[0]), cyp = ty(p[1]);
+      ctx.fillStyle = color;
+      ctx.beginPath(); ctx.arc(cxp, cyp, radius, 0, Math.PI*2); ctx.fill();
+      if (ring){
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.arc(cxp, cyp, radius, 0, Math.PI*2); ctx.stroke();
+      }
+    }
+    function drawText(p, text, color='#1a1a2e', size=12, align='left', baseline='alphabetic', offset=[0,0]){
+      ctx.fillStyle = color;
+      ctx.font = `600 ${size}px "JetBrains Mono", monospace`;
+      ctx.textAlign = align; ctx.textBaseline = baseline;
+      ctx.fillText(text, tx(p[0]) + offset[0], ty(p[1]) + offset[1]);
+    }
+    let renderFn = null;
+    function render(){ if (renderFn){ resize(); renderFn(); } }
+    function setRender(fn){ renderFn = fn; render(); }
+    resize();
+    new ResizeObserver(()=>render()).observe(canvas);
+    return {
+      canvas, ctx, cfg, dpr,
+      tx, ty, get W(){return W;}, get H(){return H;},
+      clear, drawGrid, drawAxes, drawTicks, drawCurve, drawDashed, drawExtendedLine, drawArrow, drawMarker, drawText,
+      setView, setRender, render, resize,
+    };
+  }
+
+  // ─── 2D 極座標場景工廠（以原點為中心 + scale） ───
+  // opts.maxR：欲容納的最大半徑（給定後 scale 自動算成不超界）
+  // opts.scaleFill：當 maxR 給定時的填充scale（0~1，預設 0.92）
+  // opts.scaleRatio：當 maxR 未給定時的回退scale（min(W,H)·scaleRatio）
+  function makePolarScene(canvasId, opts={}){
+    const canvas = $(canvasId);
+    const ctx = canvas.getContext('2d');
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const cxRatio = opts.cxRatio ?? 0.5;
+    const cyRatio = opts.cyRatio ?? 0.5;
+    const scaleRatio = opts.scaleRatio ?? 0.32;
+    const maxR = opts.maxR;
+    const scaleFill = opts.scaleFill ?? 0.92;
+    let W = 1, H = 1, cx = 0, cy = 0, scale = 1;
+    function resize(){
+      const rect = canvas.getBoundingClientRect();
+      W = rect.width; H = rect.height;
+      canvas.width  = Math.round(W * dpr);
+      canvas.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      cx = W * cxRatio;
+      cy = H * cyRatio;
+      if (typeof maxR === 'number' && maxR > 0){
+        // 計算「不超界」的最大 scale：以中心到四邊界距離 / maxR
+        const dxMin = Math.min(cx, W - cx);
+        const dyMin = Math.min(cy, H - cy);
+        scale = Math.min(dxMin, dyMin) / maxR * scaleFill;
+      } else {
+        scale = Math.min(W, H) * scaleRatio;
+      }
+    }
+    function tx(x){ return cx + x * scale; }
+    function ty(y){ return cy - y * scale; }
+    function clear(){
+      ctx.fillStyle = opts.bg || '#fbf7ed';
+      ctx.fillRect(0, 0, W, H);
+    }
+    function drawAxes(color='#bdb6a8', dashed=true){
+      ctx.strokeStyle = color; ctx.lineWidth = 1.2;
+      if (dashed) ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(W, cy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, H); ctx.stroke();
+      if (dashed) ctx.setLineDash([]);
+    }
+    function drawCircle(r, color='#1a1a2e', width=2, fill=null){
+      ctx.strokeStyle = color; ctx.lineWidth = width;
+      ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.arc(cx, cy, r * scale, 0, Math.PI*2);
+      if (fill){ ctx.fillStyle = fill; ctx.fill(); }
+      ctx.stroke();
+    }
+    function drawConcentric(rs, color='#d8d0bd', width=1.1){
+      ctx.strokeStyle = color; ctx.lineWidth = width;
+      for (const r of rs){
+        ctx.beginPath(); ctx.arc(cx, cy, r * scale, 0, Math.PI*2); ctx.stroke();
+      }
+    }
+    function drawRays(angles, rMin=0, rMax=4.5, color='#d8d0bd', width=1){
+      ctx.strokeStyle = color; ctx.lineWidth = width;
+      for (const a of angles){
+        ctx.beginPath();
+        ctx.moveTo(cx + rMin*scale*Math.cos(a), cy - rMin*scale*Math.sin(a));
+        ctx.lineTo(cx + rMax*scale*Math.cos(a), cy - rMax*scale*Math.sin(a));
+        ctx.stroke();
+      }
+    }
+    function drawText(p, text, color='#1a1a2e', size=12, align='left', baseline='alphabetic', offset=[0,0]){
+      ctx.fillStyle = color;
+      ctx.font = `600 ${size}px "JetBrains Mono", monospace`;
+      ctx.textAlign = align; ctx.textBaseline = baseline;
+      ctx.fillText(text, tx(p[0]) + offset[0], ty(p[1]) + offset[1]);
+    }
+    let renderFn = null;
+    function render(){ if (renderFn){ resize(); renderFn(); } }
+    function setRender(fn){ renderFn = fn; render(); }
+    resize();
+    new ResizeObserver(()=>render()).observe(canvas);
+    return {
+      canvas, ctx, dpr,
+      get W(){return W;}, get H(){return H;}, get cx(){return cx;}, get cy(){return cy;}, get scale(){return scale;},
+      tx, ty,
+      clear, drawAxes, drawCircle, drawConcentric, drawRays, drawText,
+      setRender, render, resize,
+    };
+  }
+
+	  class OrbitCam {
+    constructor(canvas, camera, radius0, phi0, theta0, onChange) {
+      this.camera = camera; this.target = new THREE.Vector3(0,0,0);
+      this.theta = theta0; this.phi = phi0; this.radius = radius0;
+      this.theta0 = theta0; this.phi0 = phi0; this.radius0 = radius0;
+      this.minR = 2; this.maxR = 80; this.minPhi = 0.06; this.maxPhi = Math.PI - 0.06;
+      this.onChange = onChange || (() => {});
+      let dragging=false, lastX=0, lastY=0;
+      const down=(x,y)=>{dragging=true;lastX=x;lastY=y;};
+      const move=(x,y)=>{if(!dragging)return;this.theta-=(x-lastX)*0.007;this.phi-=(y-lastY)*0.007;this.phi=Math.max(this.minPhi,Math.min(this.maxPhi,this.phi));lastX=x;lastY=y;this.update();};
+      const up=()=>{dragging=false;};
+      canvas.addEventListener('mousedown',e=>down(e.clientX,e.clientY));
+      window.addEventListener('mousemove',e=>move(e.clientX,e.clientY));
+      window.addEventListener('mouseup',up);
+      canvas.addEventListener('touchstart',e=>{if(e.touches[0])down(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
+      canvas.addEventListener('touchmove',e=>{if(dragging&&e.touches[0]){e.preventDefault();move(e.touches[0].clientX,e.touches[0].clientY);}}, {passive:false});
+      canvas.addEventListener('touchend',up);
+      canvas.addEventListener('wheel',e=>{e.preventDefault();this.radius*=1+e.deltaY*0.0014;this.radius=Math.max(this.minR,Math.min(this.maxR,this.radius));this.update();},{passive:false});
+      this.update();
+    }
+    update(){
+      const s=Math.sin(this.phi);
+      this.camera.position.set(this.radius*s*Math.cos(this.theta),this.radius*s*Math.sin(this.theta),this.radius*Math.cos(this.phi));
+      this.camera.up.set(0,0,1); this.camera.lookAt(this.target); this.onChange();
+	    }
+	  }
+
+	  function showCanvasNotice(canvas, title, detail=''){
+	    if(!canvas || !canvas.parentElement) return;
+	    let notice=canvas.parentElement.querySelector('.canvas-notice');
+	    if(!notice){
+	      notice=document.createElement('div');
+	      notice.className='canvas-notice';
+	      canvas.parentElement.appendChild(notice);
+	    }
+	    notice.innerHTML=`<strong>${title}</strong>${detail?`<span>${detail}</span>`:''}`;
+	  }
+
+	  function clearCanvasNotice(canvas){
+	    if(!canvas || !canvas.parentElement) return;
+	    const notice=canvas.parentElement.querySelector('.canvas-notice');
+	    if(notice) notice.remove();
+	  }
+
+	  function makeScene(canvasId, opts={}){
+	    const canvas=$(canvasId);
+	    if(!canvas) return null;
+	    if(!window.THREE){
+	      showCanvasNotice(canvas,'Three.js 載入失敗','3D 曲面需要 three.min.js；請確認網路或 CDN 可正常載入，再重新整理頁面。');
+	      return null;
+	    }
+	    let renderer;
+	    try{
+	      renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});
+	    }catch(err){
+	      showCanvasNotice(canvas,'WebGL 建立失敗','此瀏覽器或環境無法建立 3D renderer；請開啟硬體加速或改用支援 WebGL 的瀏覽器。');
+	      return null;
+	    }
+	    clearCanvasNotice(canvas);
+	    renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+    const scene=new THREE.Scene(); scene.background=new THREE.Color(0x1a1a2e);
+    const camera=new THREE.PerspectiveCamera(45,1,0.1,200);
+    let frame=null;
+    function requestRender(){ if(frame!==null)return; frame=requestAnimationFrame(()=>{frame=null;renderer.render(scene,camera);}); }
+    const orbit=new OrbitCam(canvas,camera,opts.radius||10,opts.phi||1.0,opts.theta||0.85,requestRender);
+    scene.add(new THREE.AmbientLight(0xffffff,.58));
+    const d1=new THREE.DirectionalLight(0xffffff,.74); d1.position.set(6,4,9); scene.add(d1);
+    const d2=new THREE.DirectionalLight(0x88aaff,.35); d2.position.set(-6,-5,5); scene.add(d2);
+    scene.add(buildAxes(opts.axisLen||4)); scene.add(buildGrid(opts.gridSize||5,opts.gridStep||1));
+    function resize(){
+      const w=canvas.clientWidth,h=canvas.clientHeight; if(w<4||h<4)return;
+      renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); requestRender();
+    }
+    new ResizeObserver(resize).observe(canvas); setTimeout(resize,40);
+    return {scene,camera,renderer,orbit,requestRender};
+  }
+
+  function buildAxes(L){
+    const g=new THREE.Group();
+    const axis=(dir,color)=>{
+      const geom=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-L*dir.x,-L*dir.y,-L*dir.z),new THREE.Vector3(L*dir.x,L*dir.y,L*dir.z)]);
+      g.add(new THREE.Line(geom,new THREE.LineBasicMaterial({color})));
+      const cone=new THREE.Mesh(new THREE.ConeGeometry(.09,.28,16),new THREE.MeshBasicMaterial({color}));
+      cone.position.set(L*dir.x,L*dir.y,L*dir.z);
+      cone.quaternion.copy(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0),new THREE.Vector3(dir.x,dir.y,dir.z)));
+      g.add(cone);
+    };
+    axis({x:1,y:0,z:0},0xe74c3c); axis({x:0,y:1,z:0},0x27ae60); axis({x:0,y:0,z:1},0x2980b9);
+    return g;
+  }
+  function buildGrid(size,step){
+    const pts=[]; for(let i=-size;i<=size;i+=step){pts.push(new THREE.Vector3(-size,i,0),new THREE.Vector3(size,i,0),new THREE.Vector3(i,-size,0),new THREE.Vector3(i,size,0));}
+    return new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:0x4a4a68,transparent:true,opacity:.42}));
+  }
+  function scalarSurface(f,xMin,xMax,yMin,yMax,nx,ny){
+    const pos=[],idx=[],valid=[];
+    for(let i=0;i<=nx;i++)for(let j=0;j<=ny;j++){
+      const x=xMin+(xMax-xMin)*i/nx,y=yMin+(yMax-yMin)*j/ny,z=f(x,y);
+      pos.push(x,y,isFinite(z)?z:0); valid.push(isFinite(z));
+    }
+    for(let i=0;i<nx;i++)for(let j=0;j<ny;j++){
+      const a=i*(ny+1)+j,b=a+1,c=a+ny+1,d=c+1;
+      if(valid[a]&&valid[b]&&valid[c]&&valid[d]) idx.push(a,c,b,b,c,d);
+    }
+    const geom=new THREE.BufferGeometry(); geom.setAttribute('position',new THREE.Float32BufferAttribute(pos,3)); geom.setIndex(idx); geom.computeVertexNormals(); return geom;
+  }
+  function paramSurface(fn,u0,u1,v0,v1,nu,nv){
+    const pos=[],idx=[];
+    for(let i=0;i<=nu;i++)for(let j=0;j<=nv;j++){
+      const u=u0+(u1-u0)*i/nu,v=v0+(v1-v0)*j/nv,p=fn(u,v); pos.push(p.x,p.y,p.z);
+    }
+    for(let i=0;i<nu;i++)for(let j=0;j<nv;j++){const a=i*(nv+1)+j,b=a+1,c=a+nv+1,d=c+1; idx.push(a,c,b,b,c,d);}
+    const geom=new THREE.BufferGeometry(); geom.setAttribute('position',new THREE.Float32BufferAttribute(pos,3)); geom.setIndex(idx); geom.computeVertexNormals(); return geom;
+  }
+  function mesh(geom,color,opacity=.78){return new THREE.Mesh(geom,new THREE.MeshStandardMaterial({color,roughness:.58,metalness:.1,side:THREE.DoubleSide,transparent:opacity<1,opacity}));}
+  function curve(points,color=0xf1c40f){return new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineBasicMaterial({color}));}
+  function marker(r=.13,color=0xf1c40f){return new THREE.Mesh(new THREE.SphereGeometry(r,20,14),new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:.35,roughness:.3}));}
+  function lineObj(a,b,color=0xffffff){return curve([a,b],color);}
+
+  function makeChoiceQuiz(cardId, correctIndex, hints){
+    const card=$(cardId); if(!card) return;
+    const opts=card.querySelectorAll('.quiz-opt');
+    const fb=card.querySelector('.quiz-feedback');
+    opts.forEach((opt,i)=>{
+      opt.addEventListener('click',()=>{
+        opts.forEach(o=>o.classList.remove('correct','wrong'));
+        if(i===correctIndex){
+          opt.classList.add('correct');
+          fb.className='quiz-feedback show ok';
+          fb.innerHTML=hints && hints.ok ? hints.ok : '✓ 正確！';
+        } else {
+          opt.classList.add('wrong');
+          fb.className='quiz-feedback show no';
+          fb.innerHTML=(hints && hints.wrong && hints.wrong[i]) ? hints.wrong[i] : '再想想。';
+        }
+        if(window.MathJax&&MathJax.typesetPromise) MathJax.typesetPromise([fb]);
+      });
+    });
+  }
+
+  function makeNumberQuiz(cardId, correct, opts={}){
+    const tol=opts.tolerance||0.02;
+    const card=$(cardId); if(!card) return;
+    const inputs=card.querySelectorAll('.quiz-input');
+    const checkBtn=card.querySelector('.quiz-check');
+    const fb=card.querySelector('.quiz-feedback');
+    function check(){
+      const correctArr = Array.isArray(correct) ? correct : [correct];
+      let allOk=true;
+      inputs.forEach((inp,i)=>{
+        inp.classList.remove('correct','wrong');
+        const v=parseFloat(inp.value);
+        if(isNaN(v) || Math.abs(v-correctArr[i])>tol){ inp.classList.add('wrong'); allOk=false; }
+        else inp.classList.add('correct');
+      });
+      fb.className='quiz-feedback show '+(allOk?'ok':'no');
+      fb.innerHTML=allOk?(opts.ok || '✓ 正確！'):(opts.wrong || '再算一次。');
+      if(window.MathJax&&MathJax.typesetPromise) MathJax.typesetPromise([fb]);
+    }
+    if(checkBtn) checkBtn.addEventListener('click',check);
+    inputs.forEach(inp=>inp.addEventListener('keydown',e=>{if(e.key==='Enter')check();}));
+  }
+
+  // ─── 14.1 Init 函式 ───
+  function init14_1_Region(){
+    if (!$('canvas-14-1-region')) return;
+    let mode='typeI', region='triangle';
+    const regions={
+      triangle:{view:{x:[-0.15,1.25],y:[-0.15,1.15]},xRange:[0,1],yRange:[0,1],gridStep:0.5,typeI:{y1:x=>0,y2:x=>x},typeII:{x1:y=>y,x2:y=>1}},
+      quartercircle:{view:{x:[-0.3,2.4],y:[-0.3,2.4]},xRange:[0,2],yRange:[0,2],gridStep:0.5,typeI:{y1:x=>0,y2:x=>Math.sqrt(Math.max(0,4-x*x))},typeII:{x1:y=>0,x2:y=>Math.sqrt(Math.max(0,4-y*y))}},
+      parabola:{view:{x:[-0.3,2.4],y:[-0.3,4.4]},xRange:[0,2],yRange:[0,4],gridStep:1,typeI:{y1:x=>x*x,y2:x=>2*x},typeII:{x1:y=>y/2,x2:y=>Math.sqrt(y)}}
+    };
+    const S = make2DScene('canvas-14-1-region', {
+      xRange: regions[region].view.x,
+      yRange: regions[region].view.y,
+      padding: 28
+    });
+    function render(){
+      const reg = regions[region];
+      S.setView(reg.view.x, reg.view.y);
+      S.clear();
+      S.drawGrid(reg.gridStep, '#eae3d4');
+      S.drawAxes({xColor:'#7d776b', yColor:'#7d776b'});
+      // 區域填色 + 邊界線
+      const ctx = S.ctx;
+      ctx.fillStyle = 'rgba(44,62,122,.20)';
+      ctx.beginPath();
+      const N = 180;
+      if (mode === 'typeI'){
+        const [a,b] = reg.xRange;
+        ctx.moveTo(S.tx(a), S.ty(reg.typeI.y1(a)));
+        for (let i=0;i<=N;i++){const x=a+(b-a)*i/N; ctx.lineTo(S.tx(x), S.ty(reg.typeI.y2(x)));}
+        for (let i=N;i>=0;i--){const x=a+(b-a)*i/N; ctx.lineTo(S.tx(x), S.ty(reg.typeI.y1(x)));}
+      } else {
+        const [c,d] = reg.yRange;
+        ctx.moveTo(S.tx(reg.typeII.x1(c)), S.ty(c));
+        for (let i=0;i<=N;i++){const y=c+(d-c)*i/N; ctx.lineTo(S.tx(reg.typeII.x2(y)), S.ty(y));}
+        for (let i=N;i>=0;i--){const y=c+(d-c)*i/N; ctx.lineTo(S.tx(reg.typeII.x1(y)), S.ty(y));}
+      }
+      ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = '#2c3e7a'; ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.stroke();
+      // strip
+      const t = parseFloat($('ts1Pos').value);
+      let info = '';
+      if (mode === 'typeI'){
+        const [a,b] = reg.xRange; const x = a+(b-a)*t;
+        const y1 = reg.typeI.y1(x), y2 = reg.typeI.y2(x);
+        ctx.fillStyle = 'rgba(231,76,60,.55)';
+        ctx.fillRect(S.tx(x)-4, S.ty(y2), 8, S.ty(y1)-S.ty(y2));
+        ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.moveTo(S.tx(x), S.ty(y1)); ctx.lineTo(S.tx(x), S.ty(y2)); ctx.stroke();
+        S.drawText([x, y2], `x=${x.toFixed(2)}`, '#1a1a2e', 12, 'left', 'bottom', [10, -6]);
+        S.drawText([x, y2], `y∈[${y1.toFixed(2)},${y2.toFixed(2)}]`, '#1a1a2e', 12, 'left', 'top', [10, 4]);
+        info = `x=${x.toFixed(2)}, y∈[${y1.toFixed(2)}, ${y2.toFixed(2)}]`;
+      } else {
+        const [c,d] = reg.yRange; const y = c+(d-c)*t;
+        const x1 = reg.typeII.x1(y), x2 = reg.typeII.x2(y);
+        ctx.fillStyle = 'rgba(231,76,60,.55)';
+        ctx.fillRect(S.tx(x1), S.ty(y)-4, S.tx(x2)-S.tx(x1), 8);
+        ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 3; ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.moveTo(S.tx(x1), S.ty(y)); ctx.lineTo(S.tx(x2), S.ty(y)); ctx.stroke();
+        S.drawText([x2, y], `y=${y.toFixed(2)}`, '#1a1a2e', 12, 'left', 'bottom', [8, -3]);
+        S.drawText([x2, y], `x∈[${x1.toFixed(2)},${x2.toFixed(2)}]`, '#1a1a2e', 12, 'left', 'top', [8, 6]);
+        info = `y=${y.toFixed(2)}, x∈[${x1.toFixed(2)}, ${x2.toFixed(2)}]`;
+      }
+      setText('ts1Hint', info);
+    }
+    document.querySelectorAll('#ts1Presets .preset-btn').forEach(b=>b.addEventListener('click',()=>{
+      document.querySelectorAll('#ts1Presets .preset-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active'); region = b.dataset.rg; S.render();
+    }));
+    document.querySelectorAll('#ts1Modes .preset-btn').forEach(b=>b.addEventListener('click',()=>{
+      document.querySelectorAll('#ts1Modes .preset-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active'); mode = b.dataset.mode; S.render();
+    }));
+    $('ts1Pos').addEventListener('input', e=>{ setText('ts1PosVal', fmt(parseFloat(e.target.value),2)); S.render(); });
+    S.setRender(render);
+  }
+
+  function init14_1_例題4(){
+    if (!$('canvas-14-1-example4')) return;
+    const S = make2DScene('canvas-14-1-example4', {
+      xRange: [-0.3, 2*Math.PI + 0.3],
+      yRange: [-1.4, 1.4],
+      padding: 30
+    });
+    const a = Math.PI/4, b = 5*Math.PI/4;
+    function toggleOn(key){
+      const el = $('ex4Toggles').querySelector(`[data-toggle="${key}"]`);
+      return el && el.classList.contains('on');
+    }
+    function formatPi(x){
+      const map = [[Math.PI/4,'π/4'],[Math.PI/2,'π/2'],[3*Math.PI/4,'3π/4'],
+                   [Math.PI,'π'],[5*Math.PI/4,'5π/4']];
+      for (const [v,s] of map) if (Math.abs(x-v) < 0.02) return s;
+      return x.toFixed(2);
+    }
+    function fillBetween(xa, xb, fill){
+      const ctx = S.ctx, N = 200;
+      ctx.fillStyle = fill; ctx.beginPath();
+      ctx.moveTo(S.tx(xa), S.ty(Math.sin(xa)));
+      for (let i=0;i<=N;i++){ const x = xa+(xb-xa)*i/N; ctx.lineTo(S.tx(x), S.ty(Math.sin(x))); }
+      for (let i=N;i>=0;i--){ const x = xa+(xb-xa)*i/N; ctx.lineTo(S.tx(x), S.ty(Math.cos(x))); }
+      ctx.closePath(); ctx.fill();
+    }
+    function render(){
+      const x = parseFloat($('ex4X').value);
+      S.clear();
+      S.drawGrid(0.5, '#eae3d4');
+      S.drawAxes({ xColor:'#7d776b', yColor:'#7d776b' });
+      // π/4, 5π/4 虛線
+      S.drawDashed([a, -1.4],[a, 1.4], '#a07a08', 1.4, [5,4]);
+      S.drawDashed([b, -1.4],[b, 1.4], '#a07a08', 1.4, [5,4]);
+      // 整體區域（淡黃）
+      fillBetween(a, b, 'rgba(241,196,15,.30)');
+      // 累積區域（深紅）
+      if (toggleOn('cumArea')) fillBetween(a, x, 'rgba(231,76,60,.40)');
+      // sin / cos 曲線
+      const sinPts = [], cosPts = [];
+      for (let t = -0.3; t <= 2*Math.PI + 0.3; t += 0.012){ sinPts.push([t, Math.sin(t)]); cosPts.push([t, Math.cos(t)]); }
+      S.drawCurve(sinPts, '#27ae60', 2.6);
+      S.drawCurve(cosPts, '#c0392b', 2.6);
+      // strip + 高度
+      if (toggleOn('strip')){
+        const yLo = Math.cos(x), yHi = Math.sin(x);
+        S.drawDashed([x, yLo],[x, yHi], '#c0392b', 3, []);
+        S.drawMarker([x, yHi], '#27ae60', 4.5, false);
+        S.drawMarker([x, yLo], '#c0392b', 4.5, false);
+        S.drawText([x, (yHi+yLo)/2], (yHi-yLo).toFixed(2), '#c0392b', 12, 'left', 'middle', [10, 0]);
+      }
+      // 端點圓
+      S.drawMarker([a, Math.sin(a)], '#a07a08', 4.5, false);
+      S.drawMarker([a, Math.cos(a)], '#a07a08', 4.5, false);
+      S.drawMarker([b, Math.sin(b)], '#a07a08', 4.5, false);
+      S.drawMarker([b, Math.cos(b)], '#a07a08', 4.5, false);
+      // 曲線標籤
+      S.drawText([Math.PI/2, 1], 'sin x', '#27ae60', 13, 'left', 'bottom', [6, -4]);
+      S.drawText([0, 1], 'cos x', '#c0392b', 13, 'left', 'bottom', [10, -4]);
+      // π/4, 5π/4 標籤
+      S.drawText([a, -1.4], 'π/4', '#7d776b', 11, 'center', 'top', [0, 6]);
+      S.drawText([b, -1.4], '5π/4', '#7d776b', 11, 'center', 'top', [0, 6]);
+      // side panel
+      const piLabel = formatPi(x);
+      setText('ex4XVal', piLabel);
+      setText('ex4XInfo', piLabel);
+      setText('ex4Hgt', (Math.sin(x)-Math.cos(x)).toFixed(3));
+      const cum = (-Math.cos(x) - Math.sin(x)) - (-Math.cos(a) - Math.sin(a));
+      setText('ex4Cum', cum.toFixed(3));
+    }
+    $('ex4X').addEventListener('input', S.render);
+    let playing = false, lastTs = 0;
+    function animate(ts){
+      if (!playing) return;
+      if (!lastTs) lastTs = ts;
+      const dt = (ts - lastTs) / 1000;
+      lastTs = ts;
+      let v = parseFloat($('ex4X').value) + dt * 0.6;
+      if (v >= b) v = a;
+      $('ex4X').value = v;
+      S.render();
+      requestAnimationFrame(animate);
+    }
+    document.querySelectorAll('#ex4Toggles .toggle-btn').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        const key = b.dataset.toggle;
+        if (key === 'play'){
+          b.classList.toggle('on');
+          playing = b.classList.contains('on');
+          if (playing){ lastTs = 0; requestAnimationFrame(animate); }
+        } else {
+          b.classList.toggle('on');
+          S.render();
+        }
+      });
+    });
+    S.setRender(render);
+  }
+
+  function init14_1_Reverse(){
+    if (!$('canvas-14-1-reverse-typeII') || !$('canvas-14-1-reverse-typeI')) return;
+    const view = { x:[-0.4, 4.6], y:[-0.4, 2.7] };
+    const S2 = make2DScene('canvas-14-1-reverse-typeII', { xRange:view.x, yRange:view.y, padding:28 });
+    const S1 = make2DScene('canvas-14-1-reverse-typeI',  { xRange:view.x, yRange:view.y, padding:28 });
+    function toggleOn(key){
+      const el = $('rev5Toggles').querySelector(`[data-toggle="${key}"]`);
+      return el && el.classList.contains('on');
+    }
+    function drawParabRegion(S, fill){
+      const ctx = S.ctx, N = 160;
+      ctx.fillStyle = fill; ctx.beginPath();
+      ctx.moveTo(S.tx(0), S.ty(0));
+      for (let i=0;i<=N;i++){ const y = 2*i/N; ctx.lineTo(S.tx(y*y), S.ty(y)); }
+      ctx.lineTo(S.tx(4), S.ty(2));
+      ctx.lineTo(S.tx(4), S.ty(0));
+      ctx.closePath(); ctx.fill();
+    }
+    function fillTypeII(S, y0, y1, fill){
+      const ctx = S.ctx, N = 80;
+      if (y1 <= y0 + 1e-6) return;
+      ctx.fillStyle = fill; ctx.beginPath();
+      ctx.moveTo(S.tx(y0*y0), S.ty(y0));
+      for (let i=0;i<=N;i++){ const y = y0 + (y1-y0)*i/N; ctx.lineTo(S.tx(y*y), S.ty(y)); }
+      ctx.lineTo(S.tx(4), S.ty(y1));
+      ctx.lineTo(S.tx(4), S.ty(y0));
+      ctx.closePath(); ctx.fill();
+    }
+    function fillTypeI(S, x0, x1, fill){
+      const ctx = S.ctx, N = 80;
+      if (x1 <= x0 + 1e-6) return;
+      ctx.fillStyle = fill; ctx.beginPath();
+      ctx.moveTo(S.tx(x0), S.ty(0));
+      for (let i=0;i<=N;i++){ const x = x0 + (x1-x0)*i/N; ctx.lineTo(S.tx(x), S.ty(Math.sqrt(x))); }
+      ctx.lineTo(S.tx(x1), S.ty(0));
+      ctx.closePath(); ctx.fill();
+    }
+    function drawOne(S, isII, xp, yp){
+      S.clear();
+      S.drawGrid(0.5, '#eae3d4');
+      S.drawAxes({ xColor:'#7d776b', yColor:'#7d776b' });
+      S.drawTicks(1, '#8a8578');
+      // 區域填色（淡藍）
+      drawParabRegion(S, 'rgba(44,62,122,.16)');
+      // 邊界 x=y²
+      const bdry = [];
+      for (let y=0; y<=2; y+=0.02) bdry.push([y*y, y]);
+      S.drawCurve(bdry, '#1a6b4a', 2.6);
+      // 上邊界 y=2、右邊界 x=4
+      S.drawDashed([0, 2],[4, 2], '#bdb6a8', 1.4, [4,4]);
+      S.drawDashed([4, 0],[4, 2], '#bdb6a8', 1.4, [4,4]);
+      // 累積填色
+      if (toggleOn('cumFill')){
+        if (isII) fillTypeII(S, 0, yp, 'rgba(231,76,60,.40)');
+        else fillTypeI(S, 0, xp, 'rgba(231,76,60,.40)');
+      }
+      // strip
+      const ctx = S.ctx;
+      if (isII){
+        ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 3; ctx.lineCap='round';
+        ctx.beginPath(); ctx.moveTo(S.tx(yp*yp), S.ty(yp)); ctx.lineTo(S.tx(4), S.ty(yp)); ctx.stroke();
+        S.drawText([4, yp], `y=${yp.toFixed(2)}`, '#c0392b', 12, 'left', 'middle', [10, 0]);
+      } else {
+        ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 3; ctx.lineCap='round';
+        ctx.beginPath(); ctx.moveTo(S.tx(xp), S.ty(0)); ctx.lineTo(S.tx(xp), S.ty(Math.sqrt(xp))); ctx.stroke();
+        S.drawText([xp, Math.sqrt(xp)], `x=${xp.toFixed(2)}`, '#c0392b', 12, 'left', 'bottom', [6, -4]);
+      }
+      // 黃色指針 marker
+      S.drawMarker([xp, yp], '#f1c40f', 6);
+      // 標籤
+      S.drawText([0.4, 2.45], 'x=y² (即 y=√x)', '#1a6b4a', 11, 'left', 'alphabetic', [0, 0]);
+      const formula = isII ? '∫₀² ∫_{y²}^4 dx dy = 16/3' : '∫₀⁴ ∫₀^√x dy dx = 16/3';
+      S.drawText([2.0, 2.55], formula, '#1a1a2e', 12, 'left', 'alphabetic');
+      S.drawText([4, 0], '4', '#7d776b', 10, 'center', 'top', [0, 6]);
+      S.drawText([0, 2], '2', '#7d776b', 10, 'right', 'middle', [-6, 0]);
+    }
+    function renderBoth(){
+      let xp = parseFloat($('rev5X').value);
+      let yp = parseFloat($('rev5Y').value);
+      const sync = toggleOn('syncBoundary');
+      if (sync){ yp = Math.sqrt(xp); $('rev5Y').value = yp; }
+      S2.resize(); S1.resize();
+      drawOne(S2, true, xp, yp);
+      drawOne(S1, false, xp, yp);
+      setText('rev5XVal', xp.toFixed(2));
+      setText('rev5YVal', yp.toFixed(2));
+      setText('rev5IIstrip', `x∈[${(yp*yp).toFixed(2)}, 4.00], 長度 ${(4-yp*yp).toFixed(2)}`);
+      setText('rev5Istrip',  `y∈[0, ${Math.sqrt(xp).toFixed(2)}], 高 ${Math.sqrt(xp).toFixed(2)}`);
+      setText('rev5IIcum', (4*yp - yp*yp*yp/3).toFixed(2));
+      setText('rev5Icum',  (2/3 * Math.pow(xp, 1.5)).toFixed(2));
+    }
+    ['rev5X','rev5Y'].forEach(id => $(id).addEventListener('input', renderBoth));
+    document.querySelectorAll('#rev5Toggles .toggle-btn').forEach(b=>{
+      b.addEventListener('click', ()=>{ b.classList.toggle('on'); renderBoth(); });
+    });
+    S2.setRender(renderBoth);
+    S1.setRender(renderBoth);
+  }
+
+  // ─── 14.2 Init 函式 ───
+  function init14_2_Riemann(){
+    const S=makeScene('canvas-14-2-riemann',{radius:2.8,axisLen:1.4,gridSize:1.4,gridStep:.2,phi:1.05,theta:0.85}); if(!S) return;
+    const f=(x,y)=>1-x*x/2-y*y/2;
+    // 參考曲面（命名 reference）
+    const surfMesh=mesh(scalarSurface(f,0,1,0,1,50,50),0x2c3e7a,.30); S.scene.add(surfMesh);
+    // 底面 R=[0,1]²
+    const baseMesh=new THREE.Mesh(new THREE.PlaneGeometry(1,1), new THREE.MeshBasicMaterial({color:0x1a6b4a, transparent:true, opacity:0.18, side:THREE.DoubleSide}));
+    baseMesh.position.set(0.5, 0.5, 0); S.scene.add(baseMesh);
+    // 柱體 group
+    let boxesGroup=new THREE.Group(); S.scene.add(boxesGroup);
+    function rebuild(){
+      S.scene.remove(boxesGroup); boxesGroup=new THREE.Group(); S.scene.add(boxesGroup);
+      const n=parseInt($('riemannN').value);
+      const dA=1/(n*n);
+      let total=0;
+      const boxMat=new THREE.MeshStandardMaterial({color:0x1a6b4a, transparent:true, opacity:.78, roughness:.4, emissive:0x0a3a23, emissiveIntensity:0.18});
+      const edgeMat=new THREE.LineBasicMaterial({color:0xffffff, transparent:true, opacity:0.35});
+      for(let i=0;i<n;i++)for(let j=0;j<n;j++){
+        const xc=(i+0.5)/n, yc=(j+0.5)/n;
+        const fv=f(xc,yc); total+=fv*dA;
+        const geo=new THREE.BoxGeometry(1/n*0.92, 1/n*0.92, Math.max(0.002, fv));
+        const m=new THREE.Mesh(geo, boxMat);
+        m.position.set(xc, yc, fv/2);
+        boxesGroup.add(m);
+        const edges=new THREE.EdgesGeometry(geo);
+        const line=new THREE.LineSegments(edges, edgeMat);
+        line.position.copy(m.position);
+        boxesGroup.add(line);
+      }
+      // 維持 toggle 狀態
+      const tg=$('riemannToggles');
+      if(tg) boxesGroup.visible = tg.querySelector('[data-toggle="boxes"]').classList.contains('on');
+      setText('riemannNVal', n);
+      setText('riemannGrid', `${n}×${n} = ${n*n}`);
+      setText('riemannDA', n===1?'1':`1/${n*n}`);
+      setText('riemannSum', total.toFixed(4));
+      S.requestRender();
+    }
+    $('riemannN').addEventListener('input', rebuild);
+	    // Toggle binding
+	    const objMap={surface:surfMesh, base:baseMesh};
+	    document.querySelectorAll('#riemannToggles .toggle-btn').forEach(btn=>{
+	      btn.addEventListener('click', ()=>{
+	        btn.classList.toggle('on');
+	        if(btn.dataset.toggle==='boxes') boxesGroup.visible = btn.classList.contains('on');
+	        else {
+	          const obj=objMap[btn.dataset.toggle];
+	          if(obj) obj.visible = btn.classList.contains('on');
+	        }
+	        S.requestRender();
+	      });
+	    });
+    rebuild();
+  }
+
+  function init14_2_Fubini(){
+    const S=makeScene('canvas-14-2-fubini',{radius:3.8,axisLen:2.25,gridSize:2.2,gridStep:.25,phi:1.08,theta:0.78}); if(!S) return;
+    const f=(x,y)=>2-x-2*y;
+    function triMesh(points, color, opacity){
+      const g=new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(points.flatMap(p=>[p.x,p.y,p.z]),3));
+      g.setIndex([0,1,2]);
+      g.computeVertexNormals();
+      return new THREE.Mesh(g, new THREE.MeshStandardMaterial({color, transparent:opacity<1, opacity, side:THREE.DoubleSide, roughness:.55, metalness:.05}));
+    }
+    const O=new THREE.Vector3(0,0,0), X=new THREE.Vector3(2,0,0), Y=new THREE.Vector3(0,1,0), Z=new THREE.Vector3(0,0,2);
+    const surfGroup=new THREE.Group(); S.scene.add(surfGroup);
+    surfGroup.add(triMesh([X,Y,Z], 0x2c3e7a, .58));
+    surfGroup.add(triMesh([O,X,Y], 0x1a6b4a, .18));
+    surfGroup.add(triMesh([O,X,Z], 0x5dade2, .16));
+    surfGroup.add(triMesh([O,Y,Z], 0x5dade2, .16));
+    const edgePts=[O,X,X,Z,Z,O,O,Y,Y,Z,X,Y];
+    surfGroup.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(edgePts), new THREE.LineBasicMaterial({color:0xffffff, transparent:true, opacity:.72})));
+    // 三個動態 group（依 x0 重建）
+    let planeGroup=new THREE.Group(); S.scene.add(planeGroup);
+    let sectionGroup=new THREE.Group(); S.scene.add(sectionGroup);
+    let xLineGroup=new THREE.Group(); S.scene.add(xLineGroup);
+    function update(){
+      // 清理重建
+      [planeGroup, sectionGroup, xLineGroup].forEach(g=>{S.scene.remove(g);});
+      planeGroup=new THREE.Group();
+      sectionGroup=new THREE.Group();
+      xLineGroup=new THREE.Group();
+      S.scene.add(planeGroup); S.scene.add(sectionGroup); S.scene.add(xLineGroup);
+      const x0=parseFloat($('fubiniX').value);
+      const base=Math.max(0,(2-x0)/2);
+      const height=Math.max(0,2-x0);
+      const A=height*height/4;
+      // 切片平面（含邊框）
+      const pVerts=[ x0,0,0,  x0,1,0,  x0,1,2.05,  x0,0,0,  x0,1,2.05,  x0,0,2.05 ];
+      const pGeo=new THREE.BufferGeometry();
+      pGeo.setAttribute('position', new THREE.Float32BufferAttribute(pVerts,3));
+      pGeo.computeVertexNormals();
+      planeGroup.add(new THREE.Mesh(pGeo, new THREE.MeshBasicMaterial({color:0x5dade2, transparent:true, opacity:.45, side:THREE.DoubleSide})));
+      const fr=[ new THREE.Vector3(x0,0,0), new THREE.Vector3(x0,1,0), new THREE.Vector3(x0,1,2.05), new THREE.Vector3(x0,0,2.05), new THREE.Vector3(x0,0,0) ];
+      planeGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(fr), new THREE.LineBasicMaterial({color:0x2980b9, linewidth:2})));
+      // 截面三角形：0 <= y <= (2-x0)/2, 0 <= z <= 2-x0-2y
+      const A0=new THREE.Vector3(x0,0,0), B0=new THREE.Vector3(x0,base,0), C0=new THREE.Vector3(x0,0,height);
+      sectionGroup.add(triMesh([A0,B0,C0], 0xf1c40f, .68));
+      sectionGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([A0,B0,C0,A0]), new THREE.LineBasicMaterial({color:0xf9e79f, linewidth:3})));
+      const curvePts=[]; for(let y=0;y<=base+1e-9;y+=Math.max(base/50,0.002)) curvePts.push(new THREE.Vector3(x0, y, f(x0,y)));
+      if(curvePts.length>=2){
+        const tubePath=new THREE.CatmullRomCurve3(curvePts);
+        sectionGroup.add(new THREE.Mesh(new THREE.TubeGeometry(tubePath, Math.max(8,curvePts.length), 0.012, 10, false), new THREE.MeshStandardMaterial({color:0xf1c40f, roughness:0.4, emissive:0x6e5208, emissiveIntensity:0.4})));
+      }
+      // x=x0 底面紅線
+      xLineGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([ new THREE.Vector3(x0, 0, 0.002), new THREE.Vector3(x0, base, 0.002) ]), new THREE.LineBasicMaterial({color:0xc0392b, linewidth:3})));
+      // 維持 toggle visibility
+      const tg=$('fubiniToggles');
+      if(tg){
+        surfGroup.visible = tg.querySelector('[data-toggle="surface"]').classList.contains('on');
+        planeGroup.visible = tg.querySelector('[data-toggle="plane"]').classList.contains('on');
+        sectionGroup.visible = tg.querySelector('[data-toggle="section"]').classList.contains('on');
+        xLineGroup.visible = tg.querySelector('[data-toggle="xLine"]').classList.contains('on');
+      }
+      setText('fubiniXVal', x0.toFixed(2));
+      setText('fubiniX0', x0.toFixed(2));
+      setText('fubiniBase', base.toFixed(4));
+      setText('fubiniHeight', height.toFixed(4));
+      setText('fubiniA', A.toFixed(4));
+      S.requestRender();
+    }
+    $('fubiniX').addEventListener('input', update);
+    // Toggle binding
+    document.querySelectorAll('#fubiniToggles .toggle-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        btn.classList.toggle('on');
+        const on=btn.classList.contains('on');
+        const t=btn.dataset.toggle;
+        if(t==='surface') surfGroup.visible=on;
+        else if(t==='plane') planeGroup.visible=on;
+        else if(t==='section') sectionGroup.visible=on;
+        else if(t==='xLine') xLineGroup.visible=on;
+        S.requestRender();
+      });
+    });
+    update();
+  }
+
+  function init14_2_BiVolume(){
+    const S=makeScene('canvas-14-2-bivolume',{radius:2.6,axisLen:1.3,gridSize:1.3,gridStep:.2,phi:1.0,theta:1.0}); if(!S) return;
+    // 上方拋物面 z=1-x²-y²（藍）
+    const fnPar=(rho,phi)=>{const x=rho*Math.cos(phi), y=0.5+rho*Math.sin(phi); return {x,y,z:1-x*x-y*y};};
+    const paraboloidMesh=mesh(paramSurface(fnPar, 0.001, 0.5, 0, Math.PI*2, 40, 48), 0x2c3e7a, .58); S.scene.add(paraboloidMesh);
+    // 下方平面 z=1-y（金黃）
+    const fnPlane=(rho,phi)=>{const x=rho*Math.cos(phi), y=0.5+rho*Math.sin(phi); return {x,y,z:1-y};};
+    const planeMesh=mesh(paramSurface(fnPlane, 0.001, 0.5, 0, Math.PI*2, 30, 48), 0xf1c40f, .50); S.scene.add(planeMesh);
+    // 投影圓邊界 z=0（紅管）
+    const ringPts=[]; for(let phi=0;phi<=Math.PI*2+0.01;phi+=0.04) ringPts.push(new THREE.Vector3(0.5*Math.cos(phi), 0.5+0.5*Math.sin(phi), 0));
+    const ringPath=new THREE.CatmullRomCurve3(ringPts, true);
+    const ringTubeMesh=new THREE.Mesh(new THREE.TubeGeometry(ringPath, 80, 0.010, 8, true), new THREE.MeshStandardMaterial({color:0xc0392b, roughness:0.4, emissive:0x4a1410, emissiveIntensity:0.35})); S.scene.add(ringTubeMesh);
+    // 圓心 marker
+    const cMark=marker(.07, 0xe74c3c); cMark.position.set(0, 0.5, 0); S.scene.add(cMark);
+    // 投影圓盤（z=0 半透明紅）
+    const diskMesh=new THREE.Mesh(new THREE.CircleGeometry(0.5, 64), new THREE.MeshBasicMaterial({color:0xc0392b, transparent:true, opacity:0.20, side:THREE.DoubleSide}));
+    diskMesh.position.set(0, 0.5, 0); S.scene.add(diskMesh);
+    // Toggle binding
+    const objMap={paraboloid:paraboloidMesh, plane:planeMesh, ringTube:ringTubeMesh, disk:diskMesh};
+    document.querySelectorAll('#bivolumeToggles .toggle-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        btn.classList.toggle('on');
+        const on=btn.classList.contains('on');
+        const obj=objMap[btn.dataset.toggle];
+        if(obj){ obj.visible=on; }
+        S.requestRender();
+      });
+    });
+    S.requestRender();
+  }
+
+  // ─── 啟動 ───
+  init14_1_Region();
+  init14_1_例題4();
+  init14_1_Reverse();
+  init14_2_Riemann();
+  init14_2_Fubini();
+  init14_2_BiVolume();
+
+  // ─── 14.3 Init 函式 ───
+  function init14_3_DA(){
+    if (!$('canvas-14-3-da')) return;
+    const P = makePolarScene('canvas-14-3-da', { cxRatio:0.42, cyRatio:0.5, maxR:4.5, scaleFill:0.95 });
+    function render(){
+      const ctx = P.ctx;
+      P.clear();
+      P.drawAxes('#bdb6a8', true);
+      P.drawConcentric([1,2,3,4], '#c9c2b3', 1.1);
+      const rays = [];
+      for (let k=0;k<12;k++) rays.push(k*Math.PI/6);
+      P.drawRays(rays, 0, 4.5, '#d8d0bd', 1);
+      const r = parseFloat($('daR').value);
+      const dth = parseFloat($('daDth').value);
+      const dr = 0.4;
+      const th0 = Math.PI/6;
+      const Narcs = 48;
+      // 主扇形片
+      ctx.fillStyle = 'rgba(241,196,15,.65)';
+      ctx.strokeStyle = '#a07a08'; ctx.lineWidth = 2.2; ctx.lineCap='round'; ctx.lineJoin='round';
+      ctx.beginPath();
+      for (let i=0;i<=Narcs;i++){
+        const th = th0 + dth*i/Narcs;
+        const x = P.cx + (r-dr/2)*P.scale*Math.cos(th);
+        const y = P.cy - (r-dr/2)*P.scale*Math.sin(th);
+        if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      for (let i=Narcs;i>=0;i--){
+        const th = th0 + dth*i/Narcs;
+        const x = P.cx + (r+dr/2)*P.scale*Math.cos(th);
+        const y = P.cy - (r+dr/2)*P.scale*Math.sin(th);
+        ctx.lineTo(x,y);
+      }
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+      // 外弧長標記（r·Δθ，紅色，沿外緣）
+      const arcRadius = r + dr/2 + 0.22;
+      ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 3.2; ctx.lineCap='round';
+      ctx.beginPath();
+      for (let i=0;i<=Narcs;i++){
+        const th = th0 + dth*i/Narcs;
+        const x = P.cx + arcRadius*P.scale*Math.cos(th);
+        const y = P.cy - arcRadius*P.scale*Math.sin(th);
+        if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+      // 弧長文字（沿弧切線外側偏移）
+      const midA = th0 + dth/2;
+      ctx.fillStyle = '#c0392b'; ctx.font = '600 12px "JetBrains Mono", monospace';
+      ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+      ctx.fillText(`r·Δθ ≈ ${(r*dth).toFixed(2)}`,
+        P.cx + (arcRadius+0.18)*P.scale*Math.cos(midA),
+        P.cy - (arcRadius+0.18)*P.scale*Math.sin(midA));
+      // Δr 標記（綠色）
+      const radTh = th0 - dth*0.35;
+      ctx.strokeStyle = '#27ae60'; ctx.lineWidth = 3.2; ctx.lineCap='round';
+      ctx.beginPath();
+      ctx.moveTo(P.cx + (r-dr/2)*P.scale*Math.cos(radTh), P.cy - (r-dr/2)*P.scale*Math.sin(radTh));
+      ctx.lineTo(P.cx + (r+dr/2)*P.scale*Math.cos(radTh), P.cy - (r+dr/2)*P.scale*Math.sin(radTh));
+      ctx.stroke();
+      ctx.fillStyle = '#27ae60';
+      ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+      ctx.fillText(`Δr = ${dr.toFixed(2)}`,
+        P.cx + (r+0.05)*P.scale*Math.cos(radTh),
+        P.cy - (r-0.6)*P.scale*Math.sin(radTh));
+      // 公式區塊
+      ctx.fillStyle = '#1a1a2e'; ctx.font = '600 13px "JetBrains Mono", monospace';
+      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      ctx.fillText('ΔA ≈ r·Δr·Δθ', P.W*0.62, 14);
+      ctx.font = '600 12px "JetBrains Mono", monospace';
+      ctx.fillText(`= ${r.toFixed(2)} × ${dr.toFixed(2)} × ${dth.toFixed(2)}`, P.W*0.62, 34);
+      ctx.fillStyle = '#c0392b'; ctx.font = '700 13px "JetBrains Mono", monospace';
+      ctx.fillText(`= ${(r*dr*dth).toFixed(4)}`, P.W*0.62, 54);
+      // r 標籤
+      ctx.fillStyle = '#7d776b'; ctx.font = '500 10px "JetBrains Mono", monospace';
+      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      for (let R=1;R<=4;R++) ctx.fillText(`r=${R}`, P.cx + R*P.scale + 3, P.cy + 6);
+      setText('daRVal', r.toFixed(2));
+      setText('daDthVal', dth.toFixed(2));
+    }
+    $('daR').addEventListener('input', P.render);
+    $('daDth').addEventListener('input', P.render);
+    P.setRender(render);
+  }
+
+  function init14_3_Annulus(){
+    if (!$('canvas-14-3-annulus')) return;
+    const P = makePolarScene('canvas-14-3-annulus', { cxRatio:0.5, cyRatio:0.5, maxR:3, scaleFill:0.92 });
+    function toggleOn(key){
+      const el = $('annToggles').querySelector(`[data-toggle="${key}"]`);
+      return el && el.classList.contains('on');
+    }
+    function colorRamp(t){
+      // 藍(44,62,122) → 黃(241,196,15) → 紅(192,57,43)
+      if (t < 0.5){
+        const u = t * 2;
+        return [Math.round(44 + (241-44)*u), Math.round(62 + (196-62)*u), Math.round(122 + (15-122)*u)];
+      } else {
+        const u = (t - 0.5) * 2;
+        return [Math.round(241 + (192-241)*u), Math.round(196 + (57-196)*u), Math.round(15 + (43-15)*u)];
+      }
+    }
+    function render(){
+      const ctx = P.ctx;
+      let r1 = parseFloat($('annR1').value);
+      let r2 = parseFloat($('annR2').value);
+      if (r2 <= r1 + 0.05){ r2 = r1 + 0.05; $('annR2').value = r2; }
+      // 1. 背景
+      P.clear();
+      // 2. (toggle) imageData 漸層
+      if (toggleOn('grad')){
+        const dpr = P.dpr;
+        const phyW = P.canvas.width;
+        const phyH = P.canvas.height;
+        const phyCx = P.cx * dpr;
+        const phyCy = P.cy * dpr;
+        const phyScale = P.scale * dpr;
+        const img = ctx.createImageData(phyW, phyH);
+        const data = img.data;
+        const r1s = r1*r1, r2s = r2*r2;
+        const minVal = r1*r1;
+        const maxVal = r2*r2;
+        const denom = Math.max(1e-9, maxVal - minVal);
+        // 背景色 #fbf7ed
+        const bgR = 251, bgG = 247, bgB = 237;
+        for (let py=0; py<phyH; py++){
+          for (let px=0; px<phyW; px++){
+            const dx = (px - phyCx) / phyScale;
+            const dy = (phyCy - py) / phyScale;
+            const rr = dx*dx + dy*dy;
+            const off = (py*phyW + px) * 4;
+            if (rr >= r1s && rr <= r2s){
+              const val = dx*dx + dy*dy;
+              const t = Math.max(0, Math.min(1, (val - minVal) / denom));
+              const [R,G,B] = colorRamp(t);
+              data[off] = R; data[off+1] = G; data[off+2] = B; data[off+3] = 255;
+            } else {
+              data[off] = bgR; data[off+1] = bgG; data[off+2] = bgB; data[off+3] = 255;
+            }
+          }
+        }
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.putImageData(img, 0, 0);
+        ctx.restore();
+      }
+      // 3. (toggle) 直角網格
+      if (toggleOn('cartGrid')){
+        ctx.strokeStyle = 'rgba(122,116,103,.30)'; ctx.lineWidth = 1;
+        for (let g=-3; g<=3; g+=0.5){
+          ctx.beginPath();
+          ctx.moveTo(P.tx(g), P.ty(-3.2));
+          ctx.lineTo(P.tx(g), P.ty(3.2));
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(P.tx(-3.2), P.ty(g));
+          ctx.lineTo(P.tx(3.2), P.ty(g));
+          ctx.stroke();
+        }
+      }
+      // 4. 軸（虛線）
+      P.drawAxes('#bdb6a8', true);
+      // 5. (toggle) 極座標網格
+      if (toggleOn('polarGrid')){
+        const rays = [];
+        for (let k=0;k<12;k++) rays.push(k*Math.PI/6);
+        P.drawRays(rays, r1, r2, 'rgba(122,116,103,.45)', 1);
+        const innerRs = [];
+        for (let k=1; k<=4; k++) innerRs.push(r1 + (r2-r1)*k/5);
+        P.drawConcentric(innerRs, 'rgba(122,116,103,.35)', 1);
+      }
+      // 6. 邊界圓
+      ctx.strokeStyle = '#1a1a2e'; ctx.lineWidth = 2.4; ctx.lineCap='round';
+      ctx.beginPath(); ctx.arc(P.cx, P.cy, r1*P.scale, 0, Math.PI*2); ctx.stroke();
+      ctx.beginPath(); ctx.arc(P.cx, P.cy, r2*P.scale, 0, Math.PI*2); ctx.stroke();
+      // 7. r 標籤（r₁ 圓內側上方、r₂ 圓內側下方，避免超出）
+      ctx.fillStyle = '#1a1a2e'; ctx.font = '600 12px "JetBrains Mono", monospace';
+      ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
+      if (r1 > 0.05) ctx.fillText(`r₁ = ${r1.toFixed(2)}`, P.cx + r1*P.scale - 4, P.cy - 4);
+      ctx.fillStyle = '#c0392b';
+      ctx.textAlign = 'right'; ctx.textBaseline = 'top';
+      ctx.fillText(`r₂ = ${r2.toFixed(2)}`, P.cx + r2*P.scale - 4, P.cy + 4);
+      // 圖例（漸層開啟時）
+      if (toggleOn('grad')){
+        ctx.fillStyle = 'rgba(0,0,0,.45)'; ctx.fillRect(8, 8, 152, 22);
+        ctx.fillStyle = '#fff'; ctx.font = '500 11px "JetBrains Mono", monospace';
+        ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+        ctx.fillText('低 ← x²+y² → 高', 16, 19);
+      }
+      // side panel
+      const area = Math.PI * (r2*r2 - r1*r1);
+      const intVal = Math.PI * (Math.pow(r2, 4) - Math.pow(r1, 4)) / 2;
+      setText('annR1Val', r1.toFixed(2));
+      setText('annR2Val', r2.toFixed(2));
+      setText('annR1Info', r1.toFixed(2));
+      setText('annR2Info', r2.toFixed(2));
+      setText('annArea', area.toFixed(3));
+      setText('annInt', `當前 = ${intVal.toFixed(3)}`);
+    }
+    ['annR1','annR2'].forEach(id => $(id).addEventListener('input', P.render));
+    document.querySelectorAll('#annToggles .toggle-btn').forEach(b=>{
+      b.addEventListener('click', ()=>{ b.classList.toggle('on'); P.render(); });
+    });
+    P.setRender(render);
+  }
+
+  function init14_3_Rose(){
+    if (!$('canvas-14-3-rose')) return;
+    const P = makePolarScene('canvas-14-3-rose', { cxRatio:0.5, cyRatio:0.5, maxR:3, scaleFill:0.92 });
+    function toggleOn(group, key){
+      const el = $(group).querySelector(`[data-toggle="${key}"]`);
+      return el && el.classList.contains('on');
+    }
+    function render(){
+      const ctx = P.ctx;
+      P.clear();
+      P.drawAxes('#bdb6a8', true);
+      if (toggleOn('roseToggles', 'ring')) P.drawConcentric([1,2,3], '#d8d0bd', 1.1);
+      const thMax = parseFloat($('roseTh').value);
+      const step = 0.005;
+      // 完整三瓣淡色背景描邊
+      ctx.strokeStyle = 'rgba(192,57,43,.32)'; ctx.lineWidth = 1.5; ctx.lineCap='round'; ctx.lineJoin='round';
+      ctx.beginPath();
+      let s2 = false;
+      for (let th=0; th<=2*Math.PI+1e-6; th+=step){
+        const r = 3*Math.cos(3*th);
+        if (r < 0){ s2 = false; continue; }
+        const x = P.cx + r*P.scale*Math.cos(th);
+        const y = P.cy - r*P.scale*Math.sin(th);
+        if (!s2){ ctx.moveTo(x,y); s2 = true; } else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+      // 動態填色（已畫到的進度）
+      ctx.fillStyle = 'rgba(192,57,43,.55)';
+      ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 2.6; ctx.lineCap='round'; ctx.lineJoin='round';
+      ctx.beginPath();
+      let started = false;
+      for (let th=0; th<=thMax; th+=step){
+        const r = 3*Math.cos(3*th);
+        if (r < 0){
+          if (started){ ctx.lineTo(P.cx, P.cy); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.beginPath(); started = false; }
+          continue;
+        }
+        const x = P.cx + r*P.scale*Math.cos(th);
+        const y = P.cy - r*P.scale*Math.sin(th);
+        if (!started){ ctx.moveTo(P.cx, P.cy); ctx.lineTo(x,y); started = true; }
+        else ctx.lineTo(x,y);
+      }
+      if (started){ ctx.lineTo(P.cx, P.cy); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+      // 已掃過面積：A(θ) = ½ ∫₀^θ (3cos 3t)² dt = (9/4)·[θ + sin(6θ)/6]（在 r≥0 區間累積）
+      // 為更直接，使用 numeric 計算（包含 r<0 不貢獻）
+      let cumA = 0;
+      const dt = 0.005;
+      for (let t=0; t<thMax; t+=dt){
+        const r = 3*Math.cos(3*t);
+        if (r >= 0) cumA += 0.5 * r*r * dt;
+      }
+      // 標籤
+      ctx.fillStyle = '#1a1a2e'; ctx.font = '600 13px "JetBrains Mono", monospace';
+      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      ctx.fillText('r = 3 cos(3θ)', 14, 14);
+      if (toggleOn('roseToggles', 'cumArea')){
+        ctx.fillStyle = '#c0392b'; ctx.font = '700 13px "JetBrains Mono", monospace';
+        ctx.fillText(`A(θ) = ${cumA.toFixed(3)}`, 14, 36);
+        ctx.fillStyle = '#1a6b4a'; ctx.font = '500 11px "JetBrains Mono", monospace';
+        ctx.fillText(`目標：9π/4 ≈ 7.069`, 14, 56);
+      }
+      ctx.fillStyle = '#c0392b'; ctx.font = '700 14px "JetBrains Mono", monospace';
+      ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+      ctx.fillText('A_total = 9π/4 ≈ 7.069', 14, P.H - 12);
+      ctx.fillStyle = '#7d776b'; ctx.font = '500 10px "JetBrains Mono", monospace';
+      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      if (toggleOn('roseToggles', 'ring')) ctx.fillText('r=3', P.cx + 3*P.scale + 5, P.cy + 6);
+      const tDisp = thMax >= 2*Math.PI - 0.005 ? '2π' : thMax.toFixed(2);
+      setText('roseThVal', tDisp);
+    }
+    $('roseTh').addEventListener('input', P.render);
+    document.querySelectorAll('#roseToggles .toggle-btn').forEach(b=>{
+      b.addEventListener('click', ()=>{ b.classList.toggle('on'); P.render(); });
+    });
+    P.setRender(render);
+  }
+
+  init14_3_DA();
+  init14_3_Annulus();
+  init14_3_Rose();
+
+  // ─── Quizzes ───
+  // 14.1
+  makeChoiceQuiz('quiz-14-1-1', 2, {
+    ok:'✓ 正確！外層上下限<strong>必須是常數</strong>。否則積分出來還會留下變數，無法得到具體數值。',
+    wrong:[
+      '是允許的：內層上下限可以是外層變數的函數（這是 Type I 區域的定義）。',
+      '當然允許 — 這是逐次積分的標準形式。',
+      '',
+      '完全允許：被積函數通常同時含 x 與 y。'
+    ]
+  });
+  // ∫_0^1 ∫_0^x 6xy dy dx：內層 6x · y²/2 |_0^x = 3x³；外層 ∫_0^1 3x³ dx = 3/4
+  makeNumberQuiz('quiz-14-1-2', 0.75, {
+    tolerance:0.01,
+    ok:'✓ 正確！內層 $\\int_0^x 6xy\\,dy=3xy^2\\big|_0^x=3x^3$；外層 $\\int_0^1 3x^3\\,dx=3/4$。',
+    wrong:'內層先固定 $x$ 對 $y$ 積：$\\int_0^x 6xy\\,dy=3xy^2\\big|_0^x=3x^3$；再積外層 $\\int_0^1 3x^3\\,dx=\\dfrac{3}{4}$。'
+  });
+  // 14.2
+  makeChoiceQuiz('quiz-14-2-1', 0, {
+    ok:'✓ 正確！Fubini 需要 $f$ 在 $R$ 上連續，且 $R$ 為 第 I 型或第 II 型（或可拆為有限個）。',
+    wrong:[
+      '',
+      '$f$ 連續即可（不必可微）；可微比連續更強。',
+      '不行 — 任意 $R$ 不保證能拆成 Type I/II。',
+      '太狹隘了：只要連續即可，不限多項式。'
+    ]
+  });
+  // ∫_0^1 ∫_0^2 xy dy dx = ∫_0^1 [x · y²/2]_0^2 dx = ∫_0^1 2x dx = 1
+  makeNumberQuiz('quiz-14-2-2', 1, {
+    tolerance:0.01,
+    ok:'✓ 正確！$\\int_0^2 xy\\,dy=2x$；$\\int_0^1 2x\\,dx=1$。或乘積拆：$\\bigl(\\int_0^1 x\\,dx\\bigr)\\bigl(\\int_0^2 y\\,dy\\bigr)=\\tfrac12\\cdot 2=1$。',
+    wrong:'矩形區域可分離：$\\iint xy\\,dA=\\bigl(\\int_0^1 x\\,dx\\bigr)\\bigl(\\int_0^2 y\\,dy\\bigr)=\\tfrac12\\cdot 2=1$。'
+  });
+  // 14.3
+  makeChoiceQuiz('quiz-14-3-1', 1, {
+    ok:'✓ 正確！上下限要改、被積函數要把 $x,y$ 換成 $r\\cos\\theta,r\\sin\\theta$、$dA=r\\,dr\\,d\\theta$（不再是 $dx\\,dy$）。',
+    wrong:[
+      '$dA$ 必須改為 $r\\,dr\\,d\\theta$；忘了 雅可比 $r$ 是最常見錯誤。',
+      '',
+      '被積函數和 $dA$ 都要改。',
+      '極座標換變數三件事都改：上下限、$f$、$dA$。'
+    ]
+  });
+  // ∫_0^{2π} ∫_0^2 r dr dθ = 2π · 2 = 4π ≈ 12.566
+  makeNumberQuiz('quiz-14-3-2', 4*Math.PI, {
+    tolerance:0.05,
+    ok:'✓ 正確！內層 $\\int_0^2 r\\,dr=2$；外層 $\\int_0^{2\\pi}2\\,d\\theta=4\\pi\\approx 12.566$。這就是半徑 2 的圓盤面積 $\\pi r^2=4\\pi$。',
+    wrong:'$\\int_0^2 r\\,dr=\\bigl[r^2/2\\bigr]_0^2=2$；$\\int_0^{2\\pi}2\\,d\\theta=4\\pi$。'
+  });
+})();
+</script>
+</body>
+</html>

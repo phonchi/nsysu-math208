@@ -1,0 +1,1977 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>空間中的曲面與柱座標、球座標</title>
+<script>
+  MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1a2e;--paper:#f7f3eb;--accent:#c0392b;--accent2:#2c3e7a;--accent3:#1a6b4a;
+  --muted:#8a8578;--card:#fffdf7;--card-border:#e8e2d6;--highlight:#fff3cd;
+  --code-bg:#2d2d3f;--code-fg:#e8e6df;
+  --x-axis:#e74c3c;--y-axis:#27ae60;--z-axis:#2980b9;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.9;font-size:17px;}
+
+/* Hero */
+.hero{min-height:62vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem;position:relative;overflow:hidden;background:linear-gradient(170deg,#1a1a2e 0%,#2c3e7a 40%,#1a6b4a 100%);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.06) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.04) 0%,transparent 40%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);}
+.hero-content{position:relative;z-index:1;max-width:860px;}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;color:#fff;letter-spacing:.04em;line-height:1.3;margin-bottom:1rem;}
+.hero h1 .green{color:#2ecc71;}
+.hero h1 .blue{color:#5dade2;}
+.hero .subtitle{font-size:clamp(.95rem,2.2vw,1.2rem);color:rgba(255,255,255,.65);font-weight:300;margin-bottom:2rem;}
+.hero .big-formula{color:#2ecc71;background:rgba(0,0,0,.3);padding:.8rem 2rem;border-radius:12px;display:inline-block;border:1px solid rgba(255,255,255,.1);margin-bottom:2rem;backdrop-filter:blur(4px);font-size:1.1rem;}
+.scroll-hint{color:rgba(255,255,255,.4);font-size:.9rem;animation:bounce 2s infinite;}
+.scroll-hint span{display:block;font-size:1.4rem;margin-top:.3rem;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+/* Layout */
+.container{max-width:1180px;margin:0 auto;padding:3rem 1.5rem;}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.5rem;}
+h2{font-family:'Noto Serif TC',serif;font-size:1.65rem;font-weight:700;color:var(--ink);margin-bottom:1.2rem;line-height:1.4;}
+h3{font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:700;color:var(--accent2);margin:1.4rem 0 .8rem;}
+section{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--card-border);}
+section:last-of-type{border-bottom:none;}
+p{margin-bottom:1rem;}
+
+/* Viz layout: 3D canvas + side panel */
+.viz-layout{display:grid;grid-template-columns:1fr 320px;gap:1.3rem;margin:1.2rem 0;align-items:start;}
+@media(max-width:900px){.viz-layout{grid-template-columns:1fr;}}
+
+/* 3D canvas panel */
+.canvas3d-panel{background:linear-gradient(160deg,#fffdf7 0%,#f4efe3 100%);border:1px solid var(--card-border);border-radius:12px;padding:1rem;box-shadow:0 4px 18px rgba(0,0,0,.06);position:relative;}
+.canvas3d-panel .canvas-wrap{width:100%;aspect-ratio:1/0.78;position:relative;border-radius:8px;overflow:hidden;background:#1a1a2e;}
+.canvas3d-panel canvas{display:block;width:100%!important;height:100%!important;}
+.hint-overlay{position:absolute;top:8px;right:10px;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:rgba(255,255,255,.55);background:rgba(0,0,0,.25);padding:3px 8px;border-radius:4px;pointer-events:none;}
+
+/* Axis legend */
+.axis-legend{display:flex;gap:1rem;justify-content:center;margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.8rem;flex-wrap:wrap;}
+.axis-legend span{display:inline-flex;align-items:center;gap:.3rem;}
+.axis-legend span::before{content:'';display:inline-block;width:14px;height:3px;border-radius:2px;}
+.axis-legend .ax-x::before{background:var(--x-axis);}
+.axis-legend .ax-y::before{background:var(--y-axis);}
+.axis-legend .ax-z::before{background:var(--z-axis);}
+
+/* Controls */
+.controls-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--card-border);}
+.btn{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:600;padding:.45rem 1rem;border-radius:6px;border:none;cursor:pointer;transition:all .2s;}
+.btn-play{background:var(--accent3);color:#fff;}
+.btn-play:hover{background:#22845c;}
+.btn-play.active{background:var(--accent);}
+.btn-reset{background:var(--card-border);color:var(--ink);}
+.btn-reset:hover{background:#ccc;}
+.btn-toggle{background:var(--accent2);color:#fff;}
+.btn-toggle:hover{background:#1f2e5f;}
+.btn-toggle.off{background:#bbb;color:#555;}
+
+/* Slider row */
+.slider-row{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;background:var(--paper);border-radius:8px;margin-bottom:.5rem;}
+.slider-row .slider-label{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent2);font-weight:600;min-width:48px;}
+.slider-row input[type="range"]{flex:1;accent-color:var(--accent3);height:5px;cursor:pointer;}
+.slider-row .slider-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--accent);font-weight:600;min-width:72px;text-align:right;}
+
+/* Side panel */
+.side-panel{display:flex;flex-direction:column;gap:.85rem;}
+
+/* 側邊導覽 */
+.side-nav{position:fixed;top:50%;right:1rem;transform:translateY(-50%);background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.45rem .5rem;font-size:.74rem;font-family:'JetBrains Mono',monospace;box-shadow:0 4px 18px rgba(0,0,0,.08);z-index:50;display:flex;flex-direction:column;gap:.1rem;max-width:220px;max-height:calc(100vh - 2rem);overflow-y:auto;}
+.side-nav .sn-title{font-size:.66rem;color:var(--muted);letter-spacing:.1em;padding:.2rem .55rem .35rem;border-bottom:1px solid var(--card-border);margin-bottom:.25rem;}
+.side-nav .sn-item{display:block;padding:.28rem .55rem;color:var(--muted);text-decoration:none;border-left:2px solid transparent;border-radius:4px;transition:all .15s;line-height:1.3;}
+.side-nav .sn-item.sn-sub{padding-left:1.1rem;font-size:.7rem;color:#a8a496;}
+.side-nav .sn-item:hover{color:var(--ink);background:var(--highlight);}
+@media(max-width:1280px){.side-nav{display:none;}}
+
+.info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.info-card .ic-title{font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem;}
+.info-card .ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.83rem;padding:.2rem 0;}
+.info-card .ic-label{color:var(--muted);}
+.info-card .ic-value{color:var(--ink);font-weight:600;}
+.info-card .ic-value.highlight{color:var(--accent);}
+
+.eq-card{background:var(--code-bg);border-radius:10px;padding:.95rem 1.1rem;color:#fff;}
+.eq-card .eq-label{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#2ecc71;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;}
+.eq-card .eq-formula{font-size:1.0rem;color:#fff;text-align:center;}
+.eq-card .eq-sub{font-size:.78rem;color:rgba(255,255,255,.55);margin-top:.4rem;text-align:center;}
+
+/* Surface-type cards (quadric chooser) */
+.type-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.65rem;margin:1rem 0;}
+.type-card{background:var(--card);border:2px solid var(--card-border);border-radius:10px;padding:.7rem .9rem;cursor:pointer;transition:all .25s;text-align:center;}
+.type-card:hover{border-color:var(--accent2);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.08);}
+.type-card.selected{border-color:var(--accent3);background:#f0faf4;box-shadow:0 4px 12px rgba(26,107,74,.12);}
+.type-card .tc-name{font-weight:700;font-size:.88rem;color:var(--accent2);margin-bottom:.2rem;}
+.type-card .tc-eq{font-family:'JetBrains Mono',monospace;font-size:.74rem;color:var(--muted);line-height:1.3;}
+
+/* Reference section */
+.ref-group{margin:1.5rem 0 2rem;}
+.ref-group-title{font-family:'Noto Serif TC',serif;font-size:1.12rem;font-weight:700;color:var(--accent2);padding-bottom:.4rem;border-bottom:2px solid var(--accent2);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;}
+.ref-group-title .rg-badge{font-size:.7rem;font-weight:600;color:#fff;background:var(--accent2);padding:2px 8px;border-radius:3px;font-family:'JetBrains Mono',monospace;}
+
+.ref-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:1rem 1.2rem;margin-bottom:.9rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.ref-card-header{display:flex;align-items:baseline;gap:.8rem;margin-bottom:.5rem;flex-wrap:wrap;}
+.ref-card-name{font-family:'Noto Serif TC',serif;font-weight:700;font-size:1.02rem;color:var(--ink);}
+.ref-card-name-en{font-size:.8rem;color:var(--muted);font-weight:400;}
+.ref-card-eq{background:var(--code-bg);color:#fff;border-radius:8px;padding:.65rem 1rem;text-align:center;font-size:.95rem;margin-bottom:.55rem;}
+.ref-note{font-size:.85rem;color:var(--muted);margin-top:.5rem;padding-left:.8rem;border-left:3px solid var(--card-border);}
+
+/* Conversion table */
+.conv-table{width:100%;border-collapse:collapse;font-size:.88rem;margin:.8rem 0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.conv-table th{background:var(--accent2);color:#fff;padding:.6rem .8rem;text-align:center;font-weight:600;font-size:.82rem;}
+.conv-table td{padding:.6rem .8rem;text-align:center;border-bottom:1px solid var(--card-border);font-family:'JetBrains Mono',monospace;font-size:.85rem;}
+.conv-table td:first-child{font-family:'Noto Sans TC',sans-serif;color:var(--accent2);font-weight:600;text-align:left;}
+.conv-table tr:last-child td{border-bottom:none;}
+.conv-table tr:nth-child(even){background:rgba(0,0,0,.015);}
+
+/* Info box */
+.info-box{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1.1rem 1.4rem;margin:1.3rem 0;position:relative;}
+.info-box .info-label{position:absolute;top:-11px;left:14px;background:var(--accent2);color:#fff;font-size:.74rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.05em;}
+.info-box.warm{background:#fef5e7;border-color:#d68910;}
+.info-box.warm .info-label{background:#d68910;}
+
+/* Callout pill */
+.pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:4px;margin:0 .15rem;vertical-align:1px;}
+.pill-x{background:rgba(231,76,60,.12);color:var(--x-axis);border:1px solid rgba(231,76,60,.3);}
+.pill-y{background:rgba(39,174,96,.12);color:var(--y-axis);border:1px solid rgba(39,174,96,.3);}
+.pill-z{background:rgba(41,128,185,.12);color:var(--z-axis);border:1px solid rgba(41,128,185,.3);}
+.deg-note{color:var(--muted);font-size:.78rem;display:inline;}
+
+/* Trace toggle row */
+.toggle-group{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.5rem;}
+.tg-btn{font-family:'JetBrains Mono',monospace;font-size:.72rem;padding:.25rem .6rem;border-radius:4px;border:1px solid var(--card-border);background:var(--paper);cursor:pointer;transition:all .2s;}
+.tg-btn.active{background:var(--accent3);color:#fff;border-color:var(--accent3);}
+
+/* Preset row for curve selection */
+.preset-row{display:flex;gap:.4rem;flex-wrap:wrap;margin:.6rem 0 1rem;}
+.preset-btn{font-family:'JetBrains Mono',monospace;font-size:.78rem;padding:.4rem .85rem;border-radius:6px;border:2px solid var(--card-border);background:var(--card);cursor:pointer;transition:all .2s;color:var(--ink);}
+.preset-btn:hover{border-color:var(--accent2);}
+.preset-btn.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
+
+footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border);}
+.quiz-card{background:#eef5ff;border:1.5px solid var(--accent2);border-radius:10px;padding:1rem 1.2rem;margin:1.2rem 0;box-shadow:0 2px 10px rgba(44,62,122,.07);}
+.quiz-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#fff;background:var(--accent2);padding:2px 8px;border-radius:4px;letter-spacing:.08em;margin-bottom:.45rem;}
+.quiz-q{font-weight:600;margin-bottom:.6rem;}
+.quiz-options{display:flex;flex-direction:column;gap:.4rem;}
+.quiz-opt{padding:.45rem .85rem;border:1.5px solid var(--card-border);border-radius:6px;cursor:pointer;background:var(--card);text-align:left;font-size:.94rem;transition:all .15s;font-family:inherit;}
+.quiz-opt:hover{border-color:var(--accent2);background:#fafcff;}
+.quiz-opt.correct{border-color:var(--accent3);background:#eaf5ee;color:var(--accent3);font-weight:600;}
+.quiz-opt.wrong{border-color:var(--accent);background:#fde9e7;color:var(--accent);}
+.quiz-input-row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin:.4rem 0;}
+.quiz-input{padding:.4rem .7rem;border:1.5px solid var(--card-border);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:.92rem;width:160px;}
+.quiz-input.correct{border-color:var(--accent3);background:#eaf5ee;}
+.quiz-input.wrong{border-color:var(--accent);background:#fde9e7;}
+.quiz-check{padding:.4rem .9rem;border:none;border-radius:6px;background:var(--accent2);color:#fff;font-family:'Noto Sans TC',sans-serif;font-size:.86rem;cursor:pointer;font-weight:600;}
+.quiz-check:hover{background:#1f2e5c;}
+.quiz-feedback{font-size:.86rem;margin-top:.5rem;padding:.45rem .7rem;border-radius:5px;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.ok{background:#eaf5ee;color:var(--accent3);border-left:3px solid var(--accent3);}
+.quiz-feedback.no{background:#fde9e7;color:var(--accent);border-left:3px solid var(--accent);}
+</style>
+</head>
+<body>
+
+<nav class="side-nav">
+  <div class="sn-title">第 11 章</div>
+  <a class="sn-item" href="#sec-prologue">導入</a>
+  <a class="sn-item" href="#sec-surfaces">11.6 空間中的曲面（補充）</a>
+  <a class="sn-item sn-sub" href="#sec-cylinder-surface">  · 柱面</a>
+  <a class="sn-item sn-sub" href="#sec-quadric">  · 二次曲面</a>
+  <a class="sn-item sn-sub" href="#sec-revolution">  · 旋轉面</a>
+  <a class="sn-item" href="#sec-coordinates">11.7 柱座標與球座標</a>
+  <a class="sn-item sn-sub" href="#sec-cylcoord">  · 柱座標</a>
+  <a class="sn-item sn-sub" href="#sec-sphcoord">  · 球座標</a>
+  <a class="sn-item" href="#sec-ref">速查</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <h1>空間中的<span class="green">曲面</span>、<span class="blue">柱座標</span>與球座標</h1>
+    <div class="subtitle">第 11 章 — 11.6 空間中的曲面（補充）、11.7 柱座標與球座標（互動版）</div>
+    <div class="big-formula">柱面｜旋轉面｜二次曲面｜$(r,\theta,z)$ ｜ $(\rho,\theta,\phi)$</div>
+    <div class="scroll-hint">向下捲動開始互動<span>↓</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ============================================================ -->
+<!-- 第 0 段：三維座標系基礎 -->
+<!-- ============================================================ -->
+<section id="sec-prologue">
+  <div class="section-number">導入 · 空間直角座標系</div>
+  <h2>先熱身：在三維空間中辨識點與平面</h2>
+  <p>進入曲面之前，先用 3D 畫布找回空間感。下面的座標系用 <span class="pill pill-x">x 軸 紅</span> <span class="pill pill-y">y 軸 綠</span> <span class="pill pill-z">z 軸 藍</span> 三色標示，整個頁面將沿用這個配色。</p>
+
+  <div class="viz-layout">
+    <div>
+      <div class="canvas3d-panel">
+        <div class="canvas-wrap"><canvas id="canvas-prologue"></canvas><div class="hint-overlay">拖曳旋轉 · 滾輪縮放</div></div>
+        <div class="axis-legend"><span class="ax-x">x</span><span class="ax-y">y</span><span class="ax-z">z</span></div>
+        <div class="controls-bar">
+          <button class="btn btn-toggle" id="togglePoint">顯示範例點 P(2,3,4)</button>
+          <button class="btn btn-toggle" id="togglePlanes">顯示三個座標平面</button>
+          <button class="btn btn-reset" onclick="scenes.prologue.resetCam()">↺ 視角重置</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">空間中的點</div>
+        <div class="eq-formula">$P = (x, y, z)$</div>
+        <div class="eq-sub">由三個實數唯一決定</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">三個座標平面</div>
+        <div class="ic-row"><span class="ic-label">xy 平面</span><span class="ic-value">z = 0</span></div>
+        <div class="ic-row"><span class="ic-label">xz 平面</span><span class="ic-value">y = 0</span></div>
+        <div class="ic-row"><span class="ic-label">yz 平面</span><span class="ic-value">x = 0</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">二點距離公式</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.85rem;text-align:center;padding:.3rem 0;">
+          $d = \sqrt{\Delta x^2 + \Delta y^2 + \Delta z^2}$
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 11.6 內小段：柱面 -->
+<!-- ============================================================ -->
+<section id="sec-surfaces">
+  <div class="section-number">11.6 空間中的曲面（補充）</div>
+  <h2>11.6 空間中的曲面（補充）：柱面、二次曲面、旋轉面</h2>
+  <p>講義目錄將本節標為「空間中的曲面（補充）」，因此本頁把它註明為補充章節。下面依講義順序整理柱面、二次曲面與旋轉面，作為辨認三維曲面的視覺輔助。</p>
+  <h3 id="sec-cylinder-surface">柱面：把一條曲線沿著一個軸平移</h3>
+  <p><strong>柱面</strong> = 一條 <em>母曲線 / 準線</em> 在某一個座標平面上，連同所有平行於某座標軸、通過該曲線的直線 <em>直紋線</em> 組成的曲面。關鍵觀察：<strong>方程式裡「缺少」的變數就是直紋線方向</strong>。</p>
+  <p class="exercise-question">講義例題：畫出下列柱面：(a) $z=y^2$；(b) $z=\sin x,\ 0\le x\le 2\pi$。下方互動也保留其他柱面作為對照，重點仍是判斷缺少哪個變數、直紋線平行哪個座標軸。</p>
+
+  <div class="preset-row" id="cylPresets">
+    <button class="preset-btn active" data-id="circle">$x^2+y^2=4$</button>
+    <button class="preset-btn" data-id="ellipse">$\dfrac{x^2}{9}+\dfrac{y^2}{4}=1$</button>
+    <button class="preset-btn" data-id="para_yx2">$z = y^2$</button>
+    <button class="preset-btn" data-id="sinx">$z = \sin x$</button>
+    <button class="preset-btn" data-id="hyp_xy">$x^2 - y^2 = 1$</button>
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="canvas3d-panel">
+        <div class="canvas-wrap"><canvas id="canvas-cylinder"></canvas><div class="hint-overlay">拖曳旋轉 · 滾輪縮放</div></div>
+        <div class="axis-legend"><span class="ax-x">x</span><span class="ax-y">y</span><span class="ax-z">z</span></div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="btnCylGrow">▶ 重新生成</button>
+          <button class="btn btn-toggle" id="btnCylCurveOnly">只看準線</button>
+          <button class="btn btn-reset" onclick="scenes.cylinder.resetCam()">↺ 視角重置</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">方程式 &amp; 準線 / 直紋線</div>
+        <div class="eq-formula" id="cylEqDisplay">$x^2 + y^2 = 4$</div>
+        <div class="eq-sub" id="cylSubDisplay">準線位在 xy-平面 · 直紋線平行 z 軸</div>
+      </div>
+      <div class="info-box" style="margin:0;">
+        <span class="info-label">關鍵原則</span>
+        <div style="font-size:.92rem;margin-top:.3rem;">方程式缺 <span class="pill pill-z">z</span> → 直紋線平行 <span class="pill pill-z">z 軸</span><br>
+        方程式缺 <span class="pill pill-x">x</span> → 直紋線平行 <span class="pill pill-x">x 軸</span><br>
+        方程式缺 <span class="pill pill-y">y</span> → 直紋線平行 <span class="pill pill-y">y 軸</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-card" id="quiz-ch11-1">
+    <span class="quiz-tag">概念檢查</span>
+    <div class="quiz-q">方程式 $z = y^2$ 表示的曲面，其直紋線 平行於哪個座標軸？</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">$x$ 軸</button>
+      <button class="quiz-opt">$y$ 軸</button>
+      <button class="quiz-opt">$z$ 軸</button>
+      <button class="quiz-opt">無法判定</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 11.6 內小段：二次曲面 -->
+<!-- ============================================================ -->
+<section id="sec-quadric">
+  <div class="section-number">11.6 內小段 · 二次曲面</div>
+  <h2>二次曲面：六種標準形式的完整探索</h2>
+  <p><strong>二次曲面</strong> 是三變數二次方程式 $Ax^2+By^2+Cz^2+\cdots+J=0$ 在空間中的圖形——<em>圓錐曲線的三維對應</em>。六種標準形式全部列在下方，點選任何一張卡片即可在主畫布中觀察它的形狀、調整參數 $a,b,c$，並開關 <strong>截痕</strong>。</p>
+
+  <div class="type-grid" id="quadGrid">
+    <!-- 用 JS 動態生成 -->
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="canvas3d-panel">
+        <div class="canvas-wrap"><canvas id="canvas-quadric"></canvas><div class="hint-overlay">拖曳旋轉 · 滾輪縮放</div></div>
+        <div class="axis-legend"><span class="ax-x">x</span><span class="ax-y">y</span><span class="ax-z">z</span></div>
+        <div class="controls-bar">
+          <button class="btn btn-reset" onclick="scenes.quadric.resetCam()">↺ 視角重置</button>
+          <div class="toggle-group">
+            <button class="tg-btn active" data-trace="xy">平行 xy</button>
+            <button class="tg-btn active" data-trace="xz">平行 xz</button>
+            <button class="tg-btn active" data-trace="yz">平行 yz</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label" id="quadLabel">橢球面</div>
+        <div class="eq-formula" id="quadEq">$\dfrac{x^2}{a^2}+\dfrac{y^2}{b^2}+\dfrac{z^2}{c^2}=1$</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">參數控制</div>
+        <div class="slider-row"><span class="slider-label">a</span><input type="range" id="quadA" min="0.5" max="3" step="0.1" value="2"><span class="slider-val" id="quadAval">2.0</span></div>
+        <div class="slider-row"><span class="slider-label">b</span><input type="range" id="quadB" min="0.5" max="3" step="0.1" value="1.5"><span class="slider-val" id="quadBval">1.5</span></div>
+        <div class="slider-row"><span class="slider-label">c</span><input type="range" id="quadC" min="0.5" max="3" step="0.1" value="1"><span class="slider-val" id="quadCval">1.0</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">截痕分析</div>
+        <div id="quadTraceInfo" style="font-size:.83rem;line-height:1.7;">
+          <div><span class="pill pill-z">平行 xy</span> 橢圓</div>
+          <div><span class="pill pill-y">平行 xz</span> 橢圓</div>
+          <div><span class="pill pill-x">平行 yz</span> 橢圓</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-card" id="quiz-ch11-2">
+    <span class="quiz-tag">概念檢查</span>
+    <div class="quiz-q">某二次曲面：平行 $xy$ 平面的截痕是橢圓，平行 $xz$ 平面的典型截痕是雙曲線。最有可能是哪一種？</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">橢球面 $\dfrac{x^2}{a^2}+\dfrac{y^2}{b^2}+\dfrac{z^2}{c^2}=1$</button>
+      <button class="quiz-opt">單葉雙曲面 $\dfrac{x^2}{a^2}+\dfrac{y^2}{b^2}-\dfrac{z^2}{c^2}=1$</button>
+      <button class="quiz-opt">橢圓錐面 $\dfrac{x^2}{a^2}+\dfrac{y^2}{b^2}=\dfrac{z^2}{c^2}$</button>
+      <button class="quiz-opt">雙葉雙曲面 $\dfrac{z^2}{c^2}-\dfrac{x^2}{a^2}-\dfrac{y^2}{b^2}=1$</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 11.6 內小段：旋轉面 -->
+<!-- ============================================================ -->
+<section id="sec-revolution">
+  <div class="section-number">11.6 內小段 · 旋轉面</div>
+  <h2>旋轉面：讓一條曲線繞一個軸轉一圈</h2>
+  <p><strong>旋轉面</strong>（定義 11.4）由一條 <em>半徑函數</em> $r$ 的圖形繞一條座標軸旋轉而成；因為 $r$ 代表「到軸的距離」，所以必須 <strong>$r(z)\geq 0$</strong>。若繞 <span class="pill pill-z">z 軸</span> 旋轉 $y = r(z)$，其方程式是</p>
+  <div style="text-align:center;margin:.4rem 0 1rem;">
+  $$x^2 + y^2 = [r(z)]^2$$
+  </div>
+  <p style="font-size:.88rem;color:var(--muted);">下面五個預設是常見旋轉面例子（圓柱、拋物面、錐面、雙曲面、球面）。<strong>全部嚴格滿足 $r(z)\geq 0$</strong>；若 $r$ 本身只在有限範圍有定義（例如 $\sqrt{z}$ 需 $z\geq 0$、$\sqrt{4-z^2}$ 需 $\lvert z\rvert\leq 2$），我們也把畫面上 $z$ 的範圍同步縮到該定義域。</p>
+
+  <div class="preset-row" id="revPresets">
+    <button class="preset-btn active" data-id="rev_cyl">$r(z) = 3$（圓柱）</button>
+    <button class="preset-btn" data-id="rev_para">$r(z) = 2\sqrt{z}$（拋物面）</button>
+    <button class="preset-btn" data-id="rev_cone">$r(z) = |z|$（錐面）</button>
+    <button class="preset-btn" data-id="rev_hyp">$r(z) = \sqrt{z^2+1}$（單葉雙曲面）</button>
+    <button class="preset-btn" data-id="rev_sphere">$r(z) = \sqrt{4-z^2}$（球面）</button>
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="canvas3d-panel">
+        <div class="canvas-wrap"><canvas id="canvas-revolution"></canvas><div class="hint-overlay">拖曳旋轉 · 滾輪縮放</div></div>
+        <div class="axis-legend"><span class="ax-x">x</span><span class="ax-y">y</span><span class="ax-z">z</span></div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="btnRevPlay">▶ 轉一圈</button>
+          <button class="btn btn-reset" onclick="scenes.revolution.resetCam()">↺ 視角重置</button>
+          <div style="flex:1;min-width:200px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);">旋轉角度</span>
+            <input type="range" id="revSlider" min="0" max="360" value="360" style="flex:1;accent-color:var(--accent3);">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--accent);font-weight:600;min-width:44px;text-align:right;" id="revAngleDisp">360°</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">母曲線 &amp; 旋轉面</div>
+        <div class="eq-formula" id="revEqDisplay">$r(z) = 3$</div>
+        <div class="eq-sub" id="revSurfEq">$x^2+y^2 = 9$</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">繞不同軸旋轉</div>
+        <div style="font-size:.82rem;line-height:1.7;">
+          繞 <span class="pill pill-x">x</span>：$y^2+z^2 = [r(x)]^2$<br>
+          繞 <span class="pill pill-y">y</span>：$x^2+z^2 = [r(y)]^2$<br>
+          繞 <span class="pill pill-z">z</span>：$x^2+y^2 = [r(z)]^2$
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 11.7 內小段：柱座標 -->
+<!-- ============================================================ -->
+<section id="sec-coordinates">
+  <div class="section-number">11.7 柱座標與球座標</div>
+  <h2>柱座標與球座標：用對稱性描述空間中的點</h2>
+  <h3 id="sec-cylcoord">柱座標 $(r, \theta, z)$：極座標 + 一個高度</h3>
+  <p>拖動滑桿觀察一個點在柱座標下的位置。<strong>想法</strong>：先在 <span class="pill pill-z">xy 平面</span>用極座標 $(r,\theta)$ 定位投影，再沿 <span class="pill pill-z">z 軸</span>拉到高度 $z$。你會同時看到 $(r,\theta,z)$ 與等價的 $(x,y,z)$。</p>
+  <div class="info-box" style="margin:.5rem 0 1rem;background:rgba(52,152,219,.08);border-left:3px solid var(--z-axis);">
+    <strong>定義 11.5 · 值域規定</strong>：$(r,\theta)$ 是投影點的 <em>平面極座標</em>——與二維極座標規定完全一致，$r,\theta$ 皆可為任意實數（$r$ 本身沒有強制非負的限制）；$z$ 為有向距離。因此同一個點會有<em>多組表示</em>（如講義 例題 2：$(2,\pi/3,2)$ 與 $(-2, 4\pi/3, 2)$ 指同一點）。底下滑桿為了可視化方便只取 $r\ge 0$ 這一支。
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="canvas3d-panel">
+        <div class="canvas-wrap"><canvas id="canvas-cylcoord"></canvas><div class="hint-overlay">拖曳旋轉 · 滾輪縮放</div></div>
+        <div class="axis-legend"><span class="ax-x">x</span><span class="ax-y">y</span><span class="ax-z">z</span></div>
+        <div class="controls-bar">
+          <button class="btn btn-reset" onclick="scenes.cylcoord.resetCam()">↺ 視角重置</button>
+          <div class="toggle-group">
+            <button class="tg-btn active" data-cyl="r">$r=c$ 圓柱面</button>
+            <button class="tg-btn" data-cyl="t">$\theta=c$ 垂直平面</button>
+            <button class="tg-btn" data-cyl="z">$z=c$ 水平面</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">柱座標滑桿</div>
+        <div class="slider-row"><span class="slider-label">r</span><input type="range" id="cylR" min="0" max="4" step="0.05" value="2"><span class="slider-val" id="cylRval">2.00</span></div>
+        <div class="slider-row"><span class="slider-label">θ</span><input type="range" id="cylT" min="0" max="6.2831" step="0.01" value="1.047"><span class="slider-val" id="cylTval">π/3</span></div>
+        <div class="slider-row"><span class="slider-label">z</span><input type="range" id="cylZ" min="-3" max="3" step="0.05" value="1.5"><span class="slider-val" id="cylZval">1.50</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">即時座標</div>
+        <div class="ic-row"><span class="ic-label">柱座標 $(r,\theta,z)$</span><span class="ic-value highlight" id="cylCoordStr">(2.00, π/3, 1.50)</span></div>
+        <div class="ic-row"><span class="ic-label">直角 $x = r\cos\theta$</span><span class="ic-value" id="cylX">1.00</span></div>
+        <div class="ic-row"><span class="ic-label">直角 $y = r\sin\theta$</span><span class="ic-value" id="cylY">1.73</span></div>
+        <div class="ic-row"><span class="ic-label">直角 $z = z$</span><span class="ic-value" id="cylZout">1.50</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box warm">
+    <span class="info-label">提示</span>
+    <strong>何時用柱座標？</strong>當題目有以 <span class="pill pill-z">z 軸</span> 為對稱軸的 <em>圓柱面、錐面、拋物面、雙曲面</em>——簡單說只要方程式出現 $x^2+y^2$ 就很適合換成 $r^2$。
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 11.7 內小段：球座標 -->
+<!-- ============================================================ -->
+<section id="sec-sphcoord">
+  <div class="section-number">11.7 內小段 · 球座標系</div>
+  <h2>球座標 $(\rho, \theta, \phi)$：像地球的經緯度</h2>
+  <p>球座標用 <em>三個數字</em> 定位：距原點距離 $\rho$、方位角 $\theta$、與 <span class="pill pill-z">+z 軸</span> 的夾角 $\phi$。拖動滑桿觀察 $\phi$ 從北極 $(\phi=0)$ 轉到赤道 $(\phi=\pi/2)$ 再到南極 $(\phi=\pi)$ 的變化。</p>
+  <div class="info-box" style="margin:.5rem 0 1rem;background:rgba(241,196,15,.1);border-left:3px solid #f1c40f;">
+    <strong>定義 11.6 · 值域規定</strong>：<strong>$\rho \geq 0$</strong>（它是到原點的距離）、$\theta$ 任意實數（和柱座標的 $\theta$ 相同）、<strong>$0 \leq \phi \leq \pi$</strong>（$\phi$ 從 $+z$ 軸量到 $\overrightarrow{OP}$）。第一和第三個座標都<em>非負</em>。<br>球 → 柱 的換算公式 $r = \rho\sin\phi$ 剛好自動落在非負區（因為 $\rho\ge 0$ 且 $\sin\phi\ge 0$ 在 $\phi\in[0,\pi]$ 上恆成立），這也是講義在柱↔球互換時額外註明「$r\ge 0$」的理由——為了配合球座標的 $\rho\ge 0$ 讓兩系統的換算是唯一的。柱座標自己的定義並沒有要求 $r\ge 0$。
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="canvas3d-panel">
+        <div class="canvas-wrap"><canvas id="canvas-sphcoord"></canvas><div class="hint-overlay">拖曳旋轉 · 滾輪縮放</div></div>
+        <div class="axis-legend"><span class="ax-x">x</span><span class="ax-y">y</span><span class="ax-z">z</span></div>
+        <div class="controls-bar">
+          <button class="btn btn-reset" onclick="scenes.sphcoord.resetCam()">↺ 視角重置</button>
+          <div class="toggle-group">
+            <button class="tg-btn active" data-sph="rho">$\rho=c$ 球面</button>
+            <button class="tg-btn" data-sph="theta">$\theta=c$ 垂直平面</button>
+            <button class="tg-btn" data-sph="phi">$\phi=c$ 圓錐</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">球座標滑桿</div>
+        <div class="slider-row"><span class="slider-label">ρ</span><input type="range" id="sphR" min="0" max="4" step="0.05" value="2.5"><span class="slider-val" id="sphRval">2.50</span></div>
+        <div class="slider-row"><span class="slider-label">θ</span><input type="range" id="sphT" min="0" max="6.2831" step="0.01" value="0.785"><span class="slider-val" id="sphTval">π/4</span></div>
+        <div class="slider-row"><span class="slider-label">φ</span><input type="range" id="sphP" min="0" max="3.1416" step="0.01" value="1.047"><span class="slider-val" id="sphPval">π/3</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">即時座標</div>
+        <div class="ic-row"><span class="ic-label">球座標 $(\rho,\theta,\phi)$</span><span class="ic-value highlight" id="sphCoordStr">(2.50, π/4, π/3)</span></div>
+        <div class="ic-row"><span class="ic-label">$x = \rho\sin\phi\cos\theta$</span><span class="ic-value" id="sphX">1.53</span></div>
+        <div class="ic-row"><span class="ic-label">$y = \rho\sin\phi\sin\theta$</span><span class="ic-value" id="sphY">1.53</span></div>
+        <div class="ic-row"><span class="ic-label">$z = \rho\cos\phi$</span><span class="ic-value" id="sphZ">1.25</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">對應的柱座標</div>
+        <div class="ic-row"><span class="ic-label">$r = \rho\sin\phi$</span><span class="ic-value" id="sphCylR">2.17</span></div>
+        <div class="ic-row"><span class="ic-label">$\theta$ (相同)</span><span class="ic-value" id="sphCylT">π/4</span></div>
+        <div class="ic-row"><span class="ic-label">$z = \rho\cos\phi$</span><span class="ic-value" id="sphCylZ">1.25</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box warm">
+    <span class="info-label">提示</span>
+    <strong>何時用球座標？</strong>對稱中心在原點的物體——<em>球面、有錐體的積分、任何以原點為中心的對稱</em>。出現 $x^2+y^2+z^2$ 時換成 $\rho^2$ 幾乎一定會變乾淨。
+  </div>
+
+  <div class="quiz-card" id="quiz-ch11-3">
+    <span class="quiz-tag">概念檢查</span>
+    <div class="quiz-q">球座標 $(\rho,\theta,\phi)$ 中，$\phi$ 的<strong>幾何意義</strong>與<strong>取值範圍</strong>分別是？</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">方位角，$0 < \phi < 2\pi$</button>
+      <button class="quiz-opt">與 $+z$ 軸的夾角，$0 \le \phi \le \pi$</button>
+      <button class="quiz-opt">與 $xy$ 平面的夾角，$-\pi/2 \le \phi \le \pi/2$</button>
+      <button class="quiz-opt">與 $xy$ 平面的夾角，$0 \le \phi \le \pi$</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+
+  <div class="quiz-card" id="quiz-ch11-4">
+    <span class="quiz-tag">數字題</span>
+    <div class="quiz-q">球座標 $(\rho,\theta,\phi)=(5,0,\pi/3)$ 轉換為柱座標 $(r,\theta,z)$。求 $r$（保留 3 位小數）。提示：$r=\rho\sin\phi$。</div>
+    <div class="quiz-input-row">
+      <input type="number" class="quiz-input" placeholder="輸入 r" step="0.001">
+      <button class="quiz-check">檢查</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 速查 -->
+<!-- ============================================================ -->
+<section id="sec-ref">
+  <div class="section-number">速查 · 總覽與換算表</div>
+  <h2>三系統對照、常見曲面方程式</h2>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">01</span> 三座標系統換算表</div>
+
+    <h3>直角 ⇄ 柱座標</h3>
+    <table class="conv-table">
+      <thead><tr><th>方向</th><th>公式</th></tr></thead>
+      <tbody>
+        <tr><td>柱 → 直角</td><td>$x = r\cos\theta,\quad y = r\sin\theta,\quad z = z$</td></tr>
+        <tr><td>直角 → 柱</td><td>$r^2 = x^2 + y^2,\quad \tan\theta = y/x,\quad z = z$</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:.78rem;color:var(--muted);margin:-.3rem 0 .8rem;">($r,\theta$ 是平面極座標，沒有強制 $r\ge 0$ 的規定——和二維極座標相同。)</p>
+
+    <h3>直角 ⇄ 球座標　<span style="font-size:.75rem;color:var(--muted);font-weight:400;">（規定 $\rho \geq 0$、$0 \leq \phi \leq \pi$）</span></h3>
+    <table class="conv-table">
+      <thead><tr><th>方向</th><th>公式</th></tr></thead>
+      <tbody>
+        <tr><td>球 → 直角</td><td>$x = \rho\sin\phi\cos\theta,\quad y = \rho\sin\phi\sin\theta,\quad z = \rho\cos\phi$</td></tr>
+        <tr><td>直角 → 球</td><td>$\rho = \sqrt{x^2+y^2+z^2}\,(\geq 0),\quad \tan\theta = y/x,\quad \phi = \arccos\!\dfrac{z}{\rho}\ \in [0,\pi]$</td></tr>
+      </tbody>
+    </table>
+
+    <h3>柱座標 ⇄ 球座標　<span style="font-size:.75rem;color:var(--muted);font-weight:400;">（互換時規定 $r \geq 0$，以配合 $\rho \geq 0$ 使表示唯一）</span></h3>
+    <table class="conv-table">
+      <thead><tr><th>方向</th><th>公式</th></tr></thead>
+      <tbody>
+        <tr><td>球 → 柱</td><td>$r^2 = \rho^2\sin^2\phi,\quad \theta = \theta,\quad z = \rho\cos\phi$</td></tr>
+        <tr><td>柱 → 球</td><td>$\rho = \sqrt{r^2+z^2}\,(\geq 0),\quad \theta = \theta,\quad \phi = \arccos\!\dfrac{z}{\sqrt{r^2+z^2}}\ \in [0,\pi]$</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">02</span> 常見曲面的三種表示</div>
+
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">以 z 軸為對稱軸的圓柱面</span><span class="ref-card-name-en">圓柱面</span></div>
+      <div class="ref-card-eq">直角：$x^2+y^2=a^2$ ｜ 柱：$r = a$ ｜ 球：$\rho\sin\phi = a$</div>
+      <div class="ref-note">柱座標最簡單——單一方程式 $r=a$。</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">以原點為心的球面</span><span class="ref-card-name-en">原點為心的球面</span></div>
+      <div class="ref-card-eq">直角：$x^2+y^2+z^2=a^2$ ｜ 柱：$r^2+z^2=a^2$ ｜ 球：$\rho = a$</div>
+      <div class="ref-note">球座標最簡單——單一方程式 $\rho=a$。</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">以 z 軸為對稱軸的圓錐面</span><span class="ref-card-name-en">圓錐面</span></div>
+      <div class="ref-card-eq">直角：$x^2+y^2=z^2$ ｜ 柱：$r = \pm z$ ｜ 球：$\phi = \pi/4$ 或 $3\pi/4$</div>
+      <div class="ref-note">球座標最簡單——單一方程式 $\phi = c$。</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">以 z 軸為對稱軸的拋物面</span><span class="ref-card-name-en">旋轉拋物面</span></div>
+      <div class="ref-card-eq">直角：$x^2+y^2=4z$ ｜ 柱：$r^2 = 4z$（$r=2\sqrt{z}$）</div>
+      <div class="ref-note">柱座標把「圓盤形截痕」壓縮成單變數 $r$。</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">過 z 軸的垂直平面</span><span class="ref-card-name-en">$\theta=c$</span></div>
+      <div class="ref-card-eq">柱：$\theta = c$ ｜ 球：$\theta = c$</div>
+      <div class="ref-note">此時 $\theta$ 固定，所有符合該方向的點形成一個通過 $z$ 軸的垂直平面。</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">水平面</span><span class="ref-card-name-en">水平平面</span></div>
+      <div class="ref-card-eq">直角：$z = c$ ｜ 柱：$z = c$</div>
+    </div>
+  </div>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">03</span> 座標系選擇指引</div>
+    <table class="conv-table">
+      <thead><tr><th>對稱類型</th><th>首選系統</th><th>徵兆</th></tr></thead>
+      <tbody>
+        <tr><td>平移對稱（柱面）</td><td>直角 / 柱座標</td><td>方程式缺一個變數</td></tr>
+        <tr><td>繞 z 軸旋轉對稱</td><td>柱座標</td><td>方程式含 $x^2+y^2$</td></tr>
+        <tr><td>以原點為中心的點對稱</td><td>球座標</td><td>方程式含 $x^2+y^2+z^2$</td></tr>
+        <tr><td>錐形對稱（角度固定）</td><td>球座標</td><td>$z^2 = k(x^2+y^2)$</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</section>
+
+</div>
+
+<footer>
+  <p>國立中山大學應用數學系課程講義。<br>
+  第 11 章：向量與空間幾何 — 曲面、柱座標與球座標。</p>
+</footer>
+
+<script>
+/* ============================================================
+   SHARED 3D UTILITIES
+   ============================================================ */
+
+const PI = Math.PI;
+const scenes = {};
+
+// Fraction of π formatter
+function piFrac(val) {
+  const v = val / PI;
+  const denoms = [1,2,3,4,6,8,12];
+  for (const d of denoms) {
+    const n = Math.round(v * d);
+    if (Math.abs(v*d - n) < 0.02) {
+      if (n === 0) return '0';
+      const sign = n < 0 ? '-' : '';
+      const an = Math.abs(n);
+      if (d === 1) return sign + (an === 1 ? 'π' : an + 'π');
+      if (an === 1) return sign + 'π/' + d;
+      return sign + an + 'π/' + d;
+    }
+  }
+  return val.toFixed(2);
+}
+
+/* Simple custom orbit control for each canvas */
+class OrbitCam {
+  constructor(canvas, camera, radius0, phi0, theta0) {
+    this.camera = camera;
+    this.target = new THREE.Vector3(0,0,0);
+    this.theta = theta0;
+    this.phi = phi0;
+    this.radius = radius0;
+    this.theta0 = theta0; this.phi0 = phi0; this.radius0 = radius0;
+    this.minR = 3; this.maxR = 28;
+    this.minPhi = 0.08; this.maxPhi = Math.PI - 0.08;
+    let dragging = false, lastX=0, lastY=0;
+    const onDown = (x,y) => { dragging = true; lastX=x; lastY=y; };
+    const onMove = (x,y) => {
+      if (!dragging) return;
+      this.theta -= (x-lastX)*0.0075;
+      this.phi   -= (y-lastY)*0.0075;
+      this.phi = Math.max(this.minPhi, Math.min(this.maxPhi, this.phi));
+      lastX=x; lastY=y;
+      this.update();
+    };
+    const onUp = () => dragging = false;
+    canvas.addEventListener('mousedown', e => onDown(e.clientX, e.clientY));
+    window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+    window.addEventListener('mouseup', onUp);
+    canvas.addEventListener('touchstart', e => { if (e.touches[0]) { onDown(e.touches[0].clientX, e.touches[0].clientY); } }, {passive:true});
+    canvas.addEventListener('touchmove', e => { if (dragging && e.touches[0]) { e.preventDefault(); onMove(e.touches[0].clientX, e.touches[0].clientY); } }, {passive:false});
+    canvas.addEventListener('touchend', onUp);
+    canvas.addEventListener('wheel', e => {
+      e.preventDefault();
+      this.radius *= (1 + e.deltaY * 0.0014);
+      this.radius = Math.max(this.minR, Math.min(this.maxR, this.radius));
+      this.update();
+    }, {passive:false});
+    this.update();
+  }
+  update() {
+    // Using math convention: theta azimuth in xy-plane (from +x toward +y), phi from +z axis.
+    // Three.js y-up => we use y <-> z swap: camera uses scene "z up" by our orientation trick.
+    const s = Math.sin(this.phi), c = Math.cos(this.phi);
+    const x = this.radius * s * Math.cos(this.theta);
+    const y = this.radius * s * Math.sin(this.theta);
+    const z = this.radius * c;
+    this.camera.position.set(x, y, z);
+    this.camera.up.set(0,0,1);
+    this.camera.lookAt(this.target);
+  }
+  reset() {
+    this.theta = this.theta0; this.phi = this.phi0; this.radius = this.radius0;
+    this.update();
+  }
+}
+
+/* Basic 3D scene wrapper */
+function makeScene(canvasId, opts={}) {
+  const canvas = document.getElementById(canvasId);
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:false});
+  renderer.setPixelRatio(window.devicePixelRatio);
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x1a1a2e);
+
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+  const radius0 = opts.radius || 10;
+  const phi0    = opts.phi    || 1.05;   // from +z, smaller = higher viewpoint
+  const theta0  = opts.theta  || 0.9;
+  const orbit = new OrbitCam(canvas, camera, radius0, phi0, theta0);
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+  const dir1 = new THREE.DirectionalLight(0xffffff, 0.7);
+  dir1.position.set(5,5,8); scene.add(dir1);
+  const dir2 = new THREE.DirectionalLight(0x88aaff, 0.35);
+  dir2.position.set(-5,-3,4); scene.add(dir2);
+
+  // Axes + grid (custom, z-up)
+  const axisGroup = buildAxes(opts.axisLen || 4);
+  scene.add(axisGroup);
+  const grid = buildGrid(opts.gridSize || 6, opts.gridStep || 1);
+  scene.add(grid);
+
+  function resize() {
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    if (w < 4 || h < 4) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  const ro = new ResizeObserver(resize);
+  ro.observe(canvas);
+  setTimeout(resize, 30);
+
+  let running = true;
+  function loop() {
+    if (!running) return;
+    requestAnimationFrame(loop);
+    renderer.render(scene, camera);
+  }
+  requestAnimationFrame(loop);
+
+  return {
+    scene, camera, renderer, orbit, axes:axisGroup, grid,
+    resetCam: () => orbit.reset(),
+    dispose: () => { running=false; ro.disconnect(); renderer.dispose(); },
+  };
+}
+
+/* Build colored axes (z-up) */
+function buildAxes(L) {
+  const g = new THREE.Group();
+  const mkAxis = (dir, color) => {
+    const mat = new THREE.LineBasicMaterial({color, linewidth:2});
+    const geom = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(-L*dir.x, -L*dir.y, -L*dir.z),
+      new THREE.Vector3( L*dir.x,  L*dir.y,  L*dir.z),
+    ]);
+    g.add(new THREE.Line(geom, mat));
+    // arrow head cone
+    const cone = new THREE.Mesh(
+      new THREE.ConeGeometry(0.09, 0.28, 16),
+      new THREE.MeshBasicMaterial({color})
+    );
+    cone.position.set(L*dir.x, L*dir.y, L*dir.z);
+    const up = new THREE.Vector3(0,1,0);
+    const d = new THREE.Vector3(dir.x, dir.y, dir.z);
+    const q = new THREE.Quaternion().setFromUnitVectors(up, d);
+    cone.quaternion.copy(q);
+    g.add(cone);
+  };
+  mkAxis({x:1,y:0,z:0}, 0xe74c3c);
+  mkAxis({x:0,y:1,z:0}, 0x27ae60);
+  mkAxis({x:0,y:0,z:1}, 0x2980b9);
+  return g;
+}
+
+/* Grid on xy-plane, centered at origin */
+function buildGrid(size, step) {
+  const g = new THREE.Group();
+  const mat = new THREE.LineBasicMaterial({color:0x4a4a68, transparent:true, opacity:0.45});
+  const pts = [];
+  for (let i=-size; i<=size; i+=step) {
+    pts.push(new THREE.Vector3(-size,i,0), new THREE.Vector3(size,i,0));
+    pts.push(new THREE.Vector3(i,-size,0), new THREE.Vector3(i,size,0));
+  }
+  const geom = new THREE.BufferGeometry().setFromPoints(pts);
+  g.add(new THREE.LineSegments(geom, mat));
+  return g;
+}
+
+/* Parametric surface via BufferGeometry */
+function paramSurface(fn, uMin, uMax, vMin, vMax, uSegs, vSegs) {
+  const geom = new THREE.BufferGeometry();
+  const positions = [];
+  const indices = [];
+  for (let i = 0; i <= uSegs; i++) {
+    for (let j = 0; j <= vSegs; j++) {
+      const u = uMin + (uMax-uMin)*i/uSegs;
+      const v = vMin + (vMax-vMin)*j/vSegs;
+      const p = fn(u,v);
+      positions.push(p.x, p.y, p.z);
+    }
+  }
+  for (let i = 0; i < uSegs; i++) {
+    for (let j = 0; j < vSegs; j++) {
+      const a = i*(vSegs+1) + j;
+      const b = a + 1;
+      const c = a + (vSegs+1);
+      const d = c + 1;
+      indices.push(a,c,b, b,c,d);
+    }
+  }
+  geom.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geom.setIndex(indices);
+  geom.computeVertexNormals();
+  return geom;
+}
+
+/* Curve (THREE.Line from Vector3 array of points) */
+function makeCurve(points, color=0xffffff, lw=2) {
+  const g = new THREE.BufferGeometry().setFromPoints(points);
+  return new THREE.Line(g, new THREE.LineBasicMaterial({color, linewidth:lw}));
+}
+
+function makeFatCurve(points, color, radius=0.03, radialSeg=6) {
+  // Use a TubeGeometry along a CatmullRomCurve3 for thick curves
+  if (points.length < 2) return new THREE.Group();
+  const curve = new THREE.CatmullRomCurve3(points, false, 'catmullrom', 0.1);
+  const geom = new THREE.TubeGeometry(curve, Math.min(240, points.length*2), radius, radialSeg, false);
+  const mat = new THREE.MeshStandardMaterial({color, roughness:0.35, metalness:0.2});
+  return new THREE.Mesh(geom, mat);
+}
+
+function makeSurfaceMesh(geom, color, opacity=0.72) {
+  const mat = new THREE.MeshStandardMaterial({
+    color, roughness:0.55, metalness:0.15,
+    side:THREE.DoubleSide, transparent:opacity<1, opacity, flatShading:false
+  });
+  return new THREE.Mesh(geom, mat);
+}
+
+function makeSphereMarker(radius=0.14, color=0xf1c40f) {
+  const g = new THREE.SphereGeometry(radius, 20, 14);
+  const m = new THREE.MeshStandardMaterial({color, emissive:color, emissiveIntensity:0.3, roughness:0.3});
+  return new THREE.Mesh(g, m);
+}
+
+/* ============================================================
+   第 0 段：三維座標軸示意
+   ============================================================ */
+(function(){
+  const S = makeScene('canvas-prologue', {radius:9, phi:1.1, theta:0.9, axisLen:4});
+  scenes.prologue = S;
+
+  // Sample point (2,3,4)
+  const pt = makeSphereMarker(0.16, 0xf1c40f);
+  pt.position.set(2,3,4);
+  pt.visible = false;
+  S.scene.add(pt);
+
+  // dashed projection lines
+  const projMat = new THREE.LineDashedMaterial({color:0xf1c40f, dashSize:0.2, gapSize:0.12});
+  function makeDash(pts){
+    const g = new THREE.BufferGeometry().setFromPoints(pts);
+    const l = new THREE.Line(g, projMat);
+    l.computeLineDistances();
+    return l;
+  }
+  const projGroup = new THREE.Group();
+  projGroup.add(makeDash([new THREE.Vector3(2,3,4), new THREE.Vector3(2,3,0)]));
+  projGroup.add(makeDash([new THREE.Vector3(2,3,0), new THREE.Vector3(2,0,0)]));
+  projGroup.add(makeDash([new THREE.Vector3(2,3,0), new THREE.Vector3(0,3,0)]));
+  projGroup.visible = false;
+  S.scene.add(projGroup);
+
+  // coord planes
+  const planesGroup = new THREE.Group();
+  const planeSize = 4;
+  const mkPlane = (normalAxis, color) => {
+    const g = new THREE.PlaneGeometry(planeSize*2, planeSize*2);
+    const m = new THREE.MeshBasicMaterial({color, transparent:true, opacity:0.13, side:THREE.DoubleSide});
+    const mesh = new THREE.Mesh(g, m);
+    if (normalAxis === 'z') { /* xy-plane: default orientation */ }
+    if (normalAxis === 'y') { mesh.rotation.x = Math.PI/2; }
+    if (normalAxis === 'x') { mesh.rotation.y = Math.PI/2; }
+    return mesh;
+  };
+  planesGroup.add(mkPlane('z', 0x2980b9));
+  planesGroup.add(mkPlane('y', 0x27ae60));
+  planesGroup.add(mkPlane('x', 0xe74c3c));
+  planesGroup.visible = false;
+  S.scene.add(planesGroup);
+
+  document.getElementById('togglePoint').addEventListener('click', function(){
+    pt.visible = !pt.visible;
+    projGroup.visible = pt.visible;
+    this.textContent = pt.visible ? '隱藏範例點' : '顯示範例點 P(2,3,4)';
+  });
+  document.getElementById('togglePlanes').addEventListener('click', function(){
+    planesGroup.visible = !planesGroup.visible;
+    this.textContent = planesGroup.visible ? '隱藏座標平面' : '顯示三個座標平面';
+  });
+})();
+
+/* ============================================================
+   11.6 內小段：柱面
+   ============================================================ */
+(function(){
+  const S = makeScene('canvas-cylinder', {radius:11, phi:1.1, theta:0.9, axisLen:4.5, gridSize:5, gridStep:1});
+  scenes.cylinder = S;
+
+  // Each preset: generating curve fn (t->Vector3 IN its plane),
+  // extrusion axis, extrusion range.
+  const CYL_PRESETS = {
+    circle: {
+      eq: '$x^2 + y^2 = 4$',
+      sub: '準線位在 xy-平面 · 直紋線平行 z 軸',
+      // curve in xy-plane
+      curve: t => new THREE.Vector3(2*Math.cos(t), 2*Math.sin(t), 0),
+      tMin: 0, tMax: 2*PI, tSegs: 96,
+      extrudeAxis: 'z', zMin: -2.5, zMax: 2.5,
+      color: 0x3498db, closed: true,
+    },
+    ellipse: {
+      eq: '$\\dfrac{x^2}{9}+\\dfrac{y^2}{4}=1$',
+      sub: '準線位在 xy-平面 · 直紋線平行 z 軸',
+      curve: t => new THREE.Vector3(3*Math.cos(t), 2*Math.sin(t), 0),
+      tMin: 0, tMax: 2*PI, tSegs: 96,
+      extrudeAxis: 'z', zMin: -2.5, zMax: 2.5,
+      color: 0x9b59b6, closed: true,
+    },
+    para_yx2: {
+      eq: '$z = y^2$',
+      sub: '準線位在 yz-平面 · 直紋線平行 x 軸',
+      // curve in yz-plane (x = 0)
+      curve: t => new THREE.Vector3(0, t, t*t),
+      tMin: -1.8, tMax: 1.8, tSegs: 80,
+      extrudeAxis: 'x', zMin: -3, zMax: 3,
+      color: 0xe67e22, closed: false,
+    },
+    sinx: {
+      eq: '$z = \\sin x$',
+      sub: '準線位在 xz-平面 · 直紋線平行 y 軸',
+      curve: t => new THREE.Vector3(t, 0, Math.sin(t)),
+      tMin: 0, tMax: 2*PI, tSegs: 96,
+      extrudeAxis: 'y', zMin: -3, zMax: 3,
+      color: 0xe74c3c, closed: false,
+    },
+    hyp_xy: {
+      eq: '$x^2 - y^2 = 1$',
+      sub: '準線位在 xy-平面 · 直紋線平行 z 軸',
+      curve: null, // special: two-branch, handled below
+      tMin: 0, tMax: 1, tSegs: 2,
+      extrudeAxis: 'z', zMin: -2.5, zMax: 2.5,
+      color: 0x1abc9c, closed: false,
+    },
+  };
+
+  let currentKey = 'circle';
+  let surfaceMesh = null, curveMesh = null, rulingsGroup = null;
+  let animT = 1.0; // 0..1 extrusion progress
+  let growing = false;
+  let curveOnly = false;
+
+  function buildCurve(preset) {
+    // Returns array of Vector3 sampled along curve (in correct plane)
+    if (preset === CYL_PRESETS.hyp_xy) {
+      // Two branches of hyperbola x^2 - y^2 = 1 in xy-plane
+      const ptsR = [], ptsL = [];
+      const tm = 1.3;
+      for (let i=0; i<=60; i++) {
+        const t = -tm + 2*tm*(i/60);
+        ptsR.push(new THREE.Vector3(Math.cosh(t), Math.sinh(t), 0));
+        ptsL.push(new THREE.Vector3(-Math.cosh(t), Math.sinh(t), 0));
+      }
+      return [ptsR, ptsL];
+    }
+    const pts = [];
+    for (let i=0; i<=preset.tSegs; i++) {
+      const t = preset.tMin + (preset.tMax-preset.tMin)*i/preset.tSegs;
+      pts.push(preset.curve(t));
+    }
+    return [pts];
+  }
+
+  function extrudePt(p, axis, amt) {
+    // Translate point p by amt along given axis to get extruded corresponding point
+    if (axis === 'z') return new THREE.Vector3(p.x, p.y, p.z + amt);
+    if (axis === 'x') return new THREE.Vector3(p.x + amt, p.y, p.z);
+    if (axis === 'y') return new THREE.Vector3(p.x, p.y + amt, p.z);
+  }
+
+  function buildSurfaceFromCurves(curves, preset, progress) {
+    // For each curve (array of Vec3 in source plane), extrude and build triangles.
+    const group = new THREE.Group();
+    const axis = preset.extrudeAxis;
+    const zLo = preset.zMin * progress;
+    const zHi = preset.zMax * progress;
+    curves.forEach(pts => {
+      const geom = new THREE.BufferGeometry();
+      const positions = [];
+      const indices = [];
+      const N = pts.length;
+      // two rows: at zLo and zHi along extrusion axis
+      for (let j=0; j<N; j++) {
+        const p = pts[j];
+        const pLo = extrudePt(p, axis, zLo);
+        const pHi = extrudePt(p, axis, zHi);
+        positions.push(pLo.x, pLo.y, pLo.z);
+        positions.push(pHi.x, pHi.y, pHi.z);
+      }
+      for (let j=0; j<N-1; j++) {
+        const a = 2*j, b = a+1, c = 2*(j+1), d = c+1;
+        indices.push(a,c,b, b,c,d);
+      }
+      if (preset.closed) {
+        const a = 2*(N-1), b = a+1, c = 0, d = 1;
+        indices.push(a,c,b, b,c,d);
+      }
+      geom.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+      geom.setIndex(indices);
+      geom.computeVertexNormals();
+      group.add(makeSurfaceMesh(geom, preset.color, 0.72));
+    });
+    return group;
+  }
+
+  function buildRulings(curves, preset, progress) {
+    const g = new THREE.Group();
+    const axis = preset.extrudeAxis;
+    const zLo = preset.zMin * progress;
+    const zHi = preset.zMax * progress;
+    const skip = Math.max(4, Math.floor(curves[0].length/16));
+    curves.forEach(pts => {
+      for (let j=0; j<pts.length; j+=skip) {
+        const p = pts[j];
+        const pLo = extrudePt(p, axis, zLo);
+        const pHi = extrudePt(p, axis, zHi);
+        const line = makeCurve([pLo, pHi], 0xffffff, 1);
+        line.material.opacity = 0.45;
+        line.material.transparent = true;
+        g.add(line);
+      }
+    });
+    return g;
+  }
+
+  function buildGenCurve(curves, preset) {
+    const g = new THREE.Group();
+    curves.forEach(pts => {
+      g.add(makeFatCurve(pts, 0xf1c40f, 0.05, 8));
+    });
+    return g;
+  }
+
+  function clearScene() {
+    if (surfaceMesh) { S.scene.remove(surfaceMesh); surfaceMesh.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material)o.material.dispose();}); surfaceMesh = null; }
+    if (curveMesh)   { S.scene.remove(curveMesh);   curveMesh.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material)o.material.dispose();}); curveMesh = null; }
+    if (rulingsGroup){ S.scene.remove(rulingsGroup); rulingsGroup.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material)o.material.dispose();}); rulingsGroup = null; }
+  }
+
+  function render(progress) {
+    clearScene();
+    const preset = CYL_PRESETS[currentKey];
+    const curves = buildCurve(preset);
+    curveMesh = buildGenCurve(curves, preset);
+    S.scene.add(curveMesh);
+    if (!curveOnly && progress > 0.001) {
+      surfaceMesh = buildSurfaceFromCurves(curves, preset, progress);
+      S.scene.add(surfaceMesh);
+      rulingsGroup = buildRulings(curves, preset, progress);
+      S.scene.add(rulingsGroup);
+    }
+  }
+
+  function setPreset(key) {
+    currentKey = key;
+    const p = CYL_PRESETS[key];
+    document.getElementById('cylEqDisplay').innerHTML = p.eq;
+    document.getElementById('cylSubDisplay').innerHTML = p.sub;
+    if (window.MathJax?.typesetPromise) {
+      MathJax.typesetPromise([document.getElementById('cylEqDisplay')]);
+    }
+    animT = 0;
+    growing = true;
+    render(0);
+  }
+
+  // Animation loop for growth
+  let lastT = performance.now();
+  (function grow(){
+    const now = performance.now();
+    const dt = (now - lastT)/1000; lastT = now;
+    if (growing) {
+      animT += dt * 0.9;
+      if (animT >= 1) { animT = 1; growing = false; }
+      render(animT);
+    }
+    requestAnimationFrame(grow);
+  })();
+
+  // Preset buttons
+  document.querySelectorAll('#cylPresets .preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#cylPresets .preset-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      setPreset(btn.dataset.id);
+    });
+  });
+
+  document.getElementById('btnCylGrow').addEventListener('click', () => {
+    animT = 0; growing = true;
+  });
+  document.getElementById('btnCylCurveOnly').addEventListener('click', function(){
+    curveOnly = !curveOnly;
+    this.textContent = curveOnly ? '顯示整個曲面' : '只看準線';
+    render(animT);
+  });
+
+  setPreset('circle');
+})();
+
+/* ============================================================
+   11.6 內小段：繞 z 軸旋轉面
+   ============================================================ */
+(function(){
+  const S = makeScene('canvas-revolution', {radius:11, phi:1.0, theta:0.9, axisLen:4.5, gridSize:5, gridStep:1});
+  scenes.revolution = S;
+
+  const REV_PRESETS = {
+    rev_cyl:    { eq:'$r(z) = 3$', surf:'$x^2+y^2 = 9$',                r:(z)=>3, zMin:-2.5, zMax:2.5, color:0x1abc9c },
+    rev_para:   { eq:'$r(z) = 2\\sqrt{z},\\ z\\geq 0$', surf:'$x^2+y^2 = 4z$',    r:(z)=>2*Math.sqrt(Math.max(0,z)), zMin:0, zMax:2.5, color:0xe67e22 },
+    rev_cone:   { eq:'$r(z) = |z|$', surf:'$x^2+y^2 = z^2$',            r:(z)=>Math.abs(z), zMin:-2.5, zMax:2.5, color:0x3498db },
+    rev_hyp:    { eq:'$r(z) = \\sqrt{z^2+1}$', surf:'$x^2+y^2 - z^2 = 1$',         r:(z)=>Math.sqrt(z*z+1), zMin:-2, zMax:2, color:0x9b59b6 },
+    rev_sphere: { eq:'$r(z) = \\sqrt{4-z^2},\\ |z|\\leq 2$', surf:'$x^2+y^2+z^2 = 4$', r:(z)=>Math.sqrt(Math.max(0,4-z*z)), zMin:-2, zMax:2, color:0xe74c3c },
+  };
+
+  let currentKey = 'rev_cyl';
+  let revAngle = 2*PI; // 0..2π
+  let surfMesh = null, curveMesh = null, rotatingCurveMesh = null;
+  let animTarget = 2*PI;
+  let animating = false;
+
+  function buildRevSurface(preset, angle) {
+    const uSegs = 48, vSegs = 64;
+    const zMin = preset.zMin, zMax = preset.zMax;
+    const geom = paramSurface((u,v) => {
+      // u is z, v is angle in [0, angle]
+      const z = zMin + (zMax-zMin)*u;
+      const rad = preset.r(z);
+      const x = rad * Math.cos(v);
+      const y = rad * Math.sin(v);
+      return {x, y, z};
+    }, 0, 1, 0, angle, uSegs, vSegs);
+    return makeSurfaceMesh(geom, preset.color, 0.72);
+  }
+
+  function buildGenCurve(preset) {
+    const pts = [];
+    const N = 80;
+    for (let i=0; i<=N; i++) {
+      const z = preset.zMin + (preset.zMax-preset.zMin)*i/N;
+      pts.push(new THREE.Vector3(preset.r(z), 0, z));
+    }
+    return makeFatCurve(pts, 0xf1c40f, 0.05, 8);
+  }
+
+  function buildRotatingCurve(preset, angle) {
+    // Curve at current rotation angle (showing "where the generator currently is")
+    const pts = [];
+    const N = 80;
+    for (let i=0; i<=N; i++) {
+      const z = preset.zMin + (preset.zMax-preset.zMin)*i/N;
+      const rad = preset.r(z);
+      pts.push(new THREE.Vector3(rad*Math.cos(angle), rad*Math.sin(angle), z));
+    }
+    return makeFatCurve(pts, 0xffffff, 0.035, 6);
+  }
+
+  function clearAll() {
+    [surfMesh, curveMesh, rotatingCurveMesh].forEach(o=>{
+      if (!o) return;
+      S.scene.remove(o);
+      o.traverse?.(c=>{if(c.geometry)c.geometry.dispose();if(c.material)c.material.dispose();});
+      if (o.geometry) o.geometry.dispose();
+      if (o.material) o.material.dispose();
+    });
+    surfMesh = curveMesh = rotatingCurveMesh = null;
+  }
+
+  function render(angle) {
+    clearAll();
+    const p = REV_PRESETS[currentKey];
+    if (angle > 0.01) {
+      surfMesh = buildRevSurface(p, angle);
+      S.scene.add(surfMesh);
+    }
+    curveMesh = buildGenCurve(p);
+    S.scene.add(curveMesh);
+    if (angle < 2*PI - 0.02 && angle > 0.01) {
+      rotatingCurveMesh = buildRotatingCurve(p, angle);
+      S.scene.add(rotatingCurveMesh);
+    }
+  }
+
+  function setPreset(key) {
+    currentKey = key;
+    const p = REV_PRESETS[key];
+    document.getElementById('revEqDisplay').innerHTML = p.eq;
+    document.getElementById('revSurfEq').innerHTML = p.surf;
+    if (window.MathJax?.typesetPromise) {
+      MathJax.typesetPromise([document.getElementById('revEqDisplay'), document.getElementById('revSurfEq')]);
+    }
+    render(revAngle);
+  }
+
+  // Slider
+  const sld = document.getElementById('revSlider');
+  const disp = document.getElementById('revAngleDisp');
+  sld.addEventListener('input', () => {
+    animating = false;
+    const deg = +sld.value;
+    revAngle = deg * PI / 180;
+    disp.textContent = deg + '°';
+    render(revAngle);
+  });
+
+  // 播放 animation
+  let lastT = performance.now();
+  (function animLoop(){
+    const now = performance.now();
+    const dt = (now - lastT)/1000; lastT = now;
+    if (animating) {
+      revAngle += dt * 1.2;
+      if (revAngle >= animTarget) { revAngle = animTarget; animating = false; }
+      const deg = Math.round(revAngle * 180 / PI);
+      sld.value = deg;
+      disp.textContent = deg + '°';
+      render(revAngle);
+    }
+    requestAnimationFrame(animLoop);
+  })();
+
+  document.getElementById('btnRevPlay').addEventListener('click', () => {
+    revAngle = 0;
+    animTarget = 2*PI;
+    animating = true;
+  });
+
+  // Preset buttons
+  document.querySelectorAll('#revPresets .preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#revPresets .preset-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      setPreset(btn.dataset.id);
+    });
+  });
+
+  setPreset('rev_cyl');
+})();
+
+/* ============================================================
+   11.6 內小段：二次曲面探索
+   ============================================================ */
+(function(){
+  const S = makeScene('canvas-quadric', {radius:12, phi:1.0, theta:0.8, axisLen:4.5, gridSize:5, gridStep:1});
+  scenes.quadric = S;
+
+  // Definitions
+  const QUADRICS = {
+    ellipsoid: {
+      name: '橢球面 Ellipsoid',
+      eq: '$\\dfrac{x^2}{a^2}+\\dfrac{y^2}{b^2}+\\dfrac{z^2}{c^2}=1$',
+      card_eq: '$\\dfrac{x^2}{a^2}+\\dfrac{y^2}{b^2}+\\dfrac{z^2}{c^2}=1$',
+      traceInfo: '<div><span class="pill pill-z">平行 xy</span> 橢圓</div><div><span class="pill pill-y">平行 xz</span> 橢圓</div><div><span class="pill pill-x">平行 yz</span> 橢圓</div><div style="margin-top:.3rem;color:var(--muted);font-size:.78rem;">當 $a=b=c$ 時退化為球面</div>',
+      color: 0x3498db,
+      // Parametric: x = a sin φ cos θ, y = b sin φ sin θ, z = c cos φ
+      build: (a,b,c) => paramSurface(
+        (u,v) => ({x:a*Math.sin(u)*Math.cos(v), y:b*Math.sin(u)*Math.sin(v), z:c*Math.cos(u)}),
+        0.001, PI-0.001, 0, 2*PI, 40, 64
+      ),
+      // traces at z=0, y=0, x=0
+      trace: (a,b,c) => ({
+        xy: makeEllipsePts(a, b, 0, 'z'),
+        xz: makeEllipsePts(a, c, 0, 'y'),
+        yz: makeEllipsePts(b, c, 0, 'x'),
+      }),
+    },
+    hyp1: {
+      name: '單葉雙曲面 Hyperboloid of One Sheet',
+      eq: '$\\dfrac{x^2}{a^2}+\\dfrac{y^2}{b^2}-\\dfrac{z^2}{c^2}=1$',
+      card_eq: '$\\dfrac{x^2}{a^2}+\\dfrac{y^2}{b^2}-\\dfrac{z^2}{c^2}=1$',
+      traceInfo: '<div><span class="pill pill-z">平行 xy</span> 橢圓</div><div><span class="pill pill-y">平行 xz</span> 雙曲線</div><div><span class="pill pill-x">平行 yz</span> 雙曲線</div><div style="margin-top:.3rem;color:var(--muted);font-size:.78rem;">對稱軸：係數為負的 z 軸</div>',
+      color: 0xe67e22,
+      // x = a cosh(u) cos v, y = b cosh(u) sin v, z = c sinh(u)
+      build: (a,b,c) => paramSurface(
+        (u,v) => ({x:a*Math.cosh(u)*Math.cos(v), y:b*Math.cosh(u)*Math.sin(v), z:c*Math.sinh(u)}),
+        -1.3, 1.3, 0, 2*PI, 36, 64
+      ),
+      trace: (a,b,c) => ({
+        xy: makeEllipsePts(a, b, 0, 'z'),
+        xz: makeHyperbolaXZ(a, c, 'y'),  // (x/a)^2 - (z/c)^2 = 1 in xz-plane (y=0)
+        yz: makeHyperbolaXZ(b, c, 'x'),  // (y/b)^2 - (z/c)^2 = 1 in yz-plane (x=0)
+      }),
+    },
+    hyp2: {
+      name: '雙葉雙曲面 Hyperboloid of Two Sheets',
+      eq: '$\\dfrac{z^2}{c^2}-\\dfrac{x^2}{a^2}-\\dfrac{y^2}{b^2}=1$',
+      card_eq: '$\\dfrac{z^2}{c^2}-\\dfrac{x^2}{a^2}-\\dfrac{y^2}{b^2}=1$',
+      traceInfo: '<div><span class="pill pill-z">平行 xy</span> 橢圓 <span class="deg-note">（僅 $|z|>c$ 有截痕；$|z|<c$ 無交集）</span></div><div><span class="pill pill-y">平行 xz</span> 雙曲線</div><div><span class="pill pill-x">平行 yz</span> 雙曲線</div><div style="margin-top:.3rem;color:var(--muted);font-size:.78rem;">對稱軸：係數為正的 z 軸</div>',
+      color: 0x9b59b6,
+      build: (a,b,c) => {
+        // Two sheets: top (z = c cosh u) and bottom (z = -c cosh u)
+        const top = paramSurface(
+          (u,v) => ({x:a*Math.sinh(u)*Math.cos(v), y:b*Math.sinh(u)*Math.sin(v), z:c*Math.cosh(u)}),
+          0, 1.4, 0, 2*PI, 28, 64
+        );
+        const bot = paramSurface(
+          (u,v) => ({x:a*Math.sinh(u)*Math.cos(v), y:b*Math.sinh(u)*Math.sin(v), z:-c*Math.cosh(u)}),
+          0, 1.4, 0, 2*PI, 28, 64
+        );
+        const grp = new THREE.Group();
+        grp.add(makeSurfaceMesh(top, 0x9b59b6, 0.72));
+        grp.add(makeSurfaceMesh(bot, 0x9b59b6, 0.72));
+        return grp;
+      },
+      isGroup: true,
+      trace: (a,b,c) => {
+        // at z = 1.3c: (x/a)^2 + (y/b)^2 = 1.69 - 1 = 0.69 → ellipse semi-axes a√0.69, b√0.69
+        const zOff = 1.3*c;
+        const s = Math.sqrt((zOff*zOff)/(c*c) - 1);
+        return {
+          xy: makeEllipsePts(a*s, b*s, zOff, 'z'),
+          xz: makeHyperbolaXZ_vertical(a, c, 'y'),  // (z/c)^2 - (x/a)^2 = 1 in y=0
+          yz: makeHyperbolaXZ_vertical(b, c, 'x'),
+        };
+      },
+    },
+    cone: {
+      name: '橢圓錐面 Elliptic Cone',
+      eq: '$\\dfrac{x^2}{a^2}+\\dfrac{y^2}{b^2}=\\dfrac{z^2}{c^2}$',
+      card_eq: '$\\dfrac{x^2}{a^2}+\\dfrac{y^2}{b^2}=\\dfrac{z^2}{c^2}$',
+      traceInfo: '<div><span class="pill pill-z">平行 xy</span> 橢圓 <span class="deg-note">（$z=0$ 退化為原點）</span></div><div><span class="pill pill-y">平行 xz</span> 雙曲線 <span class="deg-note">（$y=0$ 退化為兩相交直線＝錐面的生成線）</span></div><div><span class="pill pill-x">平行 yz</span> 雙曲線 <span class="deg-note">（$x=0$ 亦同）</span></div><div style="margin-top:.3rem;color:var(--muted);font-size:.78rem;">對稱軸：係數為負的 z 軸</div>',
+      color: 0x1abc9c,
+      // x = a u cos v, y = b u sin v, z = c u  (u in [-zmax, zmax])
+      build: (a,b,c) => paramSurface(
+        (u,v) => ({x:a*u*Math.cos(v), y:b*u*Math.sin(v), z:c*u}),
+        -1.6, 1.6, 0, 2*PI, 36, 64
+      ),
+      trace: (a,b,c) => ({
+        // at z=c: (x/a)^2 + (y/b)^2 = 1, ellipse semi-axes a, b (on surface)
+        xy: makeEllipsePts(a, b, c, 'z'),
+        // at y=b: (z/c)^2 - (x/a)^2 = 1, vertical hyperbola semi-axes c, a in plane y=b
+        xz: makeHyperbolaXZ_vertical(a, c, 'y', b),
+        // at x=a: (z/c)^2 - (y/b)^2 = 1, vertical hyperbola semi-axes c, b in plane x=a
+        yz: makeHyperbolaXZ_vertical(b, c, 'x', a),
+      }),
+    },
+    ellParaboloid: {
+      name: '橢圓拋物面 Elliptic Paraboloid',
+      eq: '$z = \\dfrac{x^2}{a^2}+\\dfrac{y^2}{b^2}$',
+      card_eq: '$z = \\dfrac{x^2}{a^2}+\\dfrac{y^2}{b^2}$',
+      traceInfo: '<div><span class="pill pill-z">平行 xy</span> 橢圓 <span class="deg-note">（$z=0$ 退化為原點；僅 $z>0$ 有截痕）</span></div><div><span class="pill pill-y">平行 xz</span> 拋物線（開口向上）</div><div><span class="pill pill-x">平行 yz</span> 拋物線（開口向上）</div><div style="margin-top:.3rem;color:var(--muted);font-size:.78rem;">對稱軸：一次項 $z$ 軸</div>',
+      color: 0xe74c3c,
+      // z = u^2, x = a u cos v, y = b u sin v → z = (x/a)^2 + (y/b)^2
+      build: (a,b,c) => paramSurface(
+        (u,v) => ({x:a*u*Math.cos(v), y:b*u*Math.sin(v), z:u*u}),
+        0, 1.5, 0, 2*PI, 30, 64
+      ),
+      trace: (a,b,c) => ({
+        // at z=1: (x/a)^2 + (y/b)^2 = 1 → ellipse with semi-axes a, b
+        xy: makeEllipsePts(a, b, 1, 'z'),
+        xz: makeParabolaXZ(a, 'y'), // z = (x/a)^2 in xz-plane, opens up
+        yz: makeParabolaXZ(b, 'x'), // z = (y/b)^2 in yz-plane, opens up
+      }),
+    },
+    hypParaboloid: {
+      name: '雙曲拋物面 Hyperbolic Paraboloid',
+      eq: '$z = \\dfrac{y^2}{b^2}-\\dfrac{x^2}{a^2}$',
+      card_eq: '$z = \\dfrac{y^2}{b^2}-\\dfrac{x^2}{a^2}$（馬鞍面）',
+      traceInfo: '<div><span class="pill pill-z">平行 xy</span> 雙曲線 <span class="deg-note">（$z=0$ 退化為兩相交直線 $y=\\pm\\tfrac{b}{a}x$）</span></div><div><span class="pill pill-y">平行 xz</span> 拋物線（$y=0$ 時 $z=-x^2/a^2$，開口向下）</div><div><span class="pill pill-x">平行 yz</span> 拋物線（$x=0$ 時 $z=y^2/b^2$，開口向上）</div><div style="margin-top:.3rem;color:var(--muted);font-size:.78rem;">對稱軸：一次項 $z$ 軸</div>',
+      color: 0xf39c12,
+      // Larson form: z = (y/b)^2 - (x/a)^2
+      build: (a,b,c) => paramSurface(
+        (u,v) => ({x:u, y:v, z:(v/b)*(v/b) - (u/a)*(u/a)}),
+        -a*1.5, a*1.5, -b*1.5, b*1.5, 40, 40
+      ),
+      trace: (a,b,c) => ({
+        // xy at z = 1 (parallel offset): y²/b² - x²/a² = 1, hyperbola opening in y direction
+        xy: makeHyperbolaXY_atZ(a, b, 1),
+        // xz at y=0: z = -(x/a)^2, parabola opening DOWN
+        xz: makeParabolaXZ_neg(a, 'y'),
+        // yz at x=0: z = (y/b)^2, parabola opening UP
+        yz: makeParabolaXZ(b, 'x'),
+      }),
+    },
+  };
+
+  /* Helpers to build trace curves */
+  function makeEllipsePts(A, B, offset, normalAxis) {
+    const pts = [];
+    const N = 96;
+    for (let i=0; i<=N; i++) {
+      const t = 2*PI*i/N;
+      if (normalAxis === 'z') pts.push(new THREE.Vector3(A*Math.cos(t), B*Math.sin(t), offset));
+      if (normalAxis === 'y') pts.push(new THREE.Vector3(A*Math.cos(t), offset, B*Math.sin(t)));
+      if (normalAxis === 'x') pts.push(new THREE.Vector3(offset, A*Math.cos(t), B*Math.sin(t)));
+    }
+    return pts;
+  }
+  function makeHyperbolaXZ(A, C, normalAxis) {
+    // (X/A)^2 - (Z/C)^2 = 1  → two branches; returns array of arrays
+    const branches = [];
+    const tm = 1.3;
+    for (const sign of [1, -1]) {
+      const pts = [];
+      for (let i=0; i<=80; i++) {
+        const t = -tm + 2*tm*(i/80);
+        const X = sign * A * Math.cosh(t);
+        const Z = C * Math.sinh(t);
+        if (normalAxis === 'y') pts.push(new THREE.Vector3(X, 0, Z));
+        if (normalAxis === 'x') pts.push(new THREE.Vector3(0, X, Z));
+      }
+      branches.push(pts);
+    }
+    return branches;
+  }
+  function makeHyperbolaXZ_vertical(A, C, normalAxis, planeOffset = 0) {
+    // (Z/C)^2 - (X/A)^2 = 1 → two branches (up, down), in plane perpendicular to normalAxis at planeOffset
+    const branches = [];
+    const tm = 1.3;
+    for (const sign of [1, -1]) {
+      const pts = [];
+      for (let i=0; i<=80; i++) {
+        const t = -tm + 2*tm*(i/80);
+        const X = A * Math.sinh(t);
+        const Z = sign * C * Math.cosh(t);
+        if (normalAxis === 'y') pts.push(new THREE.Vector3(X, planeOffset, Z));
+        if (normalAxis === 'x') pts.push(new THREE.Vector3(planeOffset, X, Z));
+      }
+      branches.push(pts);
+    }
+    return branches;
+  }
+  function makeHyperbolaXY_atZ(A, B, zOffset) {
+    // Y^2/B^2 - X^2/A^2 = 1 at plane z=zOffset → two branches opening in ±Y direction
+    const branches = [];
+    const tm = 1.3;
+    for (const sign of [1, -1]) {
+      const pts = [];
+      for (let i=0; i<=80; i++) {
+        const t = -tm + 2*tm*(i/80);
+        const X = A * Math.sinh(t);
+        const Y = sign * B * Math.cosh(t);
+        pts.push(new THREE.Vector3(X, Y, zOffset));
+      }
+      branches.push(pts);
+    }
+    return branches;
+  }
+  function makeParabolaXZ(A, normalAxis) {
+    const pts = [];
+    for (let i=-60; i<=60; i++) {
+      const x = A * i/30;
+      const z = (x/A)*(x/A);
+      if (normalAxis === 'y') pts.push(new THREE.Vector3(x, 0, z));
+      if (normalAxis === 'x') pts.push(new THREE.Vector3(0, x, z));
+    }
+    return pts;
+  }
+  function makeParabolaXZ_neg(A, normalAxis) {
+    const pts = [];
+    for (let i=-60; i<=60; i++) {
+      const x = A * i/30;
+      const z = -(x/A)*(x/A);
+      if (normalAxis === 'y') pts.push(new THREE.Vector3(x, 0, z));
+      if (normalAxis === 'x') pts.push(new THREE.Vector3(0, x, z));
+    }
+    return pts;
+  }
+
+  /* UI: generate type-card grid */
+  const grid = document.getElementById('quadGrid');
+  Object.entries(QUADRICS).forEach(([key, q]) => {
+    const card = document.createElement('div');
+    card.className = 'type-card';
+    card.dataset.key = key;
+    card.innerHTML = `<div class="tc-name">${q.name}</div><div class="tc-eq">${q.card_eq}</div>`;
+    grid.appendChild(card);
+    card.addEventListener('click', () => setQuadric(key));
+  });
+
+  let currentKey = 'ellipsoid';
+  let currentMesh = null;
+  let traceMeshes = {xy:null, xz:null, yz:null};
+  let traceVisible = {xy:true, xz:true, yz:true};
+
+  function clearMesh() {
+    if (currentMesh) {
+      S.scene.remove(currentMesh);
+      currentMesh.traverse?.(o=>{if(o.geometry)o.geometry.dispose();if(o.material)o.material.dispose();});
+      if (currentMesh.geometry) currentMesh.geometry.dispose();
+      if (currentMesh.material) currentMesh.material.dispose();
+      currentMesh = null;
+    }
+    ['xy','xz','yz'].forEach(k => {
+      if (traceMeshes[k]) {
+        S.scene.remove(traceMeshes[k]);
+        traceMeshes[k].traverse?.(o=>{if(o.geometry)o.geometry.dispose();if(o.material)o.material.dispose();});
+        traceMeshes[k] = null;
+      }
+    });
+  }
+
+  function addTraceForKey(key, ptsArray, q, color) {
+    const g = new THREE.Group();
+    // ptsArray could be array of Vec3 (single curve), or nested array (multiple branches/lines)
+    if (!ptsArray) return null;
+    const flat = Array.isArray(ptsArray[0]) ? ptsArray : [ptsArray];
+    flat.forEach(pts => {
+      if (pts.length < 2) return;
+      g.add(makeFatCurve(pts, color, 0.04, 6));
+    });
+    return g;
+  }
+
+  function render() {
+    clearMesh();
+    const q = QUADRICS[currentKey];
+    const a = parseFloat(document.getElementById('quadA').value);
+    const b = parseFloat(document.getElementById('quadB').value);
+    const c = parseFloat(document.getElementById('quadC').value);
+    const built = q.build(a,b,c);
+    if (q.isGroup) {
+      currentMesh = built;
+    } else {
+      currentMesh = makeSurfaceMesh(built, q.color, 0.72);
+    }
+    S.scene.add(currentMesh);
+
+    const traces = q.trace(a,b,c);
+    const traceColors = {xy:0x2980b9, xz:0x27ae60, yz:0xe74c3c};
+    ['xy','xz','yz'].forEach(k => {
+      if (traceVisible[k] && traces[k]) {
+        const tm = addTraceForKey(k, traces[k], q, traceColors[k]);
+        if (tm) {
+          S.scene.add(tm);
+          traceMeshes[k] = tm;
+        }
+      }
+    });
+  }
+
+  function setQuadric(key) {
+    currentKey = key;
+    document.querySelectorAll('.type-card').forEach(c => c.classList.toggle('selected', c.dataset.key === key));
+    const q = QUADRICS[key];
+    document.getElementById('quadLabel').textContent = q.name.toUpperCase();
+    document.getElementById('quadEq').innerHTML = q.eq;
+    document.getElementById('quadTraceInfo').innerHTML = q.traceInfo;
+    if (window.MathJax?.typesetPromise) {
+      MathJax.typesetPromise([document.getElementById('quadEq'), document.getElementById('quadTraceInfo')]);
+    }
+    render();
+  }
+
+  // Sliders
+  ['A','B','C'].forEach(k => {
+    const sld = document.getElementById('quad'+k);
+    const disp = document.getElementById('quad'+k+'val');
+    sld.addEventListener('input', () => {
+      disp.textContent = parseFloat(sld.value).toFixed(1);
+      render();
+    });
+  });
+
+  // Trace toggles
+  document.querySelectorAll('.tg-btn[data-trace]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const k = btn.dataset.trace;
+      traceVisible[k] = !traceVisible[k];
+      btn.classList.toggle('active', traceVisible[k]);
+      render();
+    });
+  });
+
+  // Initialize
+  document.querySelector('.type-card[data-key="ellipsoid"]').classList.add('selected');
+  setQuadric('ellipsoid');
+})();
+
+/* ============================================================
+   11.7 內小段：柱座標互動點
+   ============================================================ */
+(function(){
+  const S = makeScene('canvas-cylcoord', {radius:10, phi:1.0, theta:0.9, axisLen:4.5, gridSize:5, gridStep:1});
+  scenes.cylcoord = S;
+
+  // Persistent objects: point marker, projection lines, arc for theta, r-line, z-line
+  const marker = makeSphereMarker(0.15, 0xf1c40f);
+  S.scene.add(marker);
+
+  // projection (dropped from P to xy plane)
+  const projMat = new THREE.LineBasicMaterial({color:0xf1c40f});
+  const projGeom = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
+  const projLine = new THREE.Line(projGeom, projMat);
+  S.scene.add(projLine);
+
+  // r segment from origin to projection
+  const rMat = new THREE.LineBasicMaterial({color:0xe67e22, linewidth:2});
+  const rGeom = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
+  const rLine = new THREE.Line(rGeom, rMat);
+  S.scene.add(rLine);
+
+  // Small sphere at projection point
+  const projPt = makeSphereMarker(0.08, 0xe67e22);
+  S.scene.add(projPt);
+
+  // θ arc at the ground
+  let thetaArc = null;
+  function buildThetaArc(theta) {
+    if (thetaArc) { S.scene.remove(thetaArc); thetaArc.geometry.dispose(); thetaArc.material.dispose(); }
+    const r = 0.55;
+    const pts = [];
+    const N = Math.max(4, Math.ceil(Math.abs(theta)*24));
+    for (let i=0; i<=N; i++) {
+      const t = theta * i / N;
+      pts.push(new THREE.Vector3(r*Math.cos(t), r*Math.sin(t), 0));
+    }
+    const g = new THREE.BufferGeometry().setFromPoints(pts);
+    thetaArc = new THREE.Line(g, new THREE.LineBasicMaterial({color:0xc0392b}));
+    S.scene.add(thetaArc);
+  }
+
+  // Constant-surfaces (toggleable)
+  let constR = null, constT = null, constZ = null;
+  let showR = true, showT = false, showZ = false;
+  function rebuildConstSurfaces(r, t, z) {
+    // r = c : cylinder
+    if (constR) { S.scene.remove(constR); constR.geometry.dispose(); constR.material.dispose(); constR=null; }
+    if (constT) { S.scene.remove(constT); constT.geometry.dispose(); constT.material.dispose(); constT=null; }
+    if (constZ) { S.scene.remove(constZ); constZ.geometry.dispose(); constZ.material.dispose(); constZ=null; }
+
+    if (showR && r > 0.01) {
+      const geom = paramSurface(
+        (u,v) => ({x:r*Math.cos(v), y:r*Math.sin(v), z:u}),
+        -3, 3, 0, 2*PI, 16, 64
+      );
+      constR = makeSurfaceMesh(geom, 0xe67e22, 0.22);
+      S.scene.add(constR);
+    }
+    if (showT) {
+      // half plane at angle t
+      const geom = paramSurface(
+        (u,v) => ({x:u*Math.cos(t), y:u*Math.sin(t), z:v}),
+        0, 4, -3, 3, 4, 16
+      );
+      constT = makeSurfaceMesh(geom, 0xc0392b, 0.22);
+      S.scene.add(constT);
+    }
+    if (showZ) {
+      // horizontal plane z = z0
+      const size = 4.5;
+      const geom = new THREE.PlaneGeometry(size*2, size*2);
+      constZ = new THREE.Mesh(geom, new THREE.MeshStandardMaterial({color:0x2980b9, transparent:true, opacity:0.22, side:THREE.DoubleSide}));
+      constZ.position.z = z;
+      S.scene.add(constZ);
+    }
+  }
+
+  function update() {
+    const r = parseFloat(document.getElementById('cylR').value);
+    const t = parseFloat(document.getElementById('cylT').value);
+    const z = parseFloat(document.getElementById('cylZ').value);
+    const x = r * Math.cos(t);
+    const y = r * Math.sin(t);
+
+    marker.position.set(x, y, z);
+    projPt.position.set(x, y, 0);
+    projGeom.setFromPoints([new THREE.Vector3(x,y,z), new THREE.Vector3(x,y,0)]);
+    projGeom.attributes.position.needsUpdate = true;
+    rGeom.setFromPoints([new THREE.Vector3(0,0,0), new THREE.Vector3(x,y,0)]);
+    rGeom.attributes.position.needsUpdate = true;
+    buildThetaArc(t);
+
+    document.getElementById('cylRval').textContent = r.toFixed(2);
+    document.getElementById('cylTval').textContent = piFrac(t);
+    document.getElementById('cylZval').textContent = z.toFixed(2);
+    document.getElementById('cylCoordStr').textContent = `(${r.toFixed(2)}, ${piFrac(t)}, ${z.toFixed(2)})`;
+    document.getElementById('cylX').textContent = x.toFixed(2);
+    document.getElementById('cylY').textContent = y.toFixed(2);
+    document.getElementById('cylZout').textContent = z.toFixed(2);
+
+    rebuildConstSurfaces(r, t, z);
+  }
+
+  ['R','T','Z'].forEach(k => document.getElementById('cyl'+k).addEventListener('input', update));
+  document.querySelectorAll('.tg-btn[data-cyl]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const k = btn.dataset.cyl;
+      btn.classList.toggle('active');
+      if (k === 'r') showR = !showR;
+      if (k === 't') showT = !showT;
+      if (k === 'z') showZ = !showZ;
+      update();
+    });
+  });
+
+  update();
+})();
+
+/* ============================================================
+   11.7 內小段：球座標互動點
+   ============================================================ */
+(function(){
+  const S = makeScene('canvas-sphcoord', {radius:10, phi:1.0, theta:0.9, axisLen:4.5, gridSize:5, gridStep:1});
+  scenes.sphcoord = S;
+
+  const marker = makeSphereMarker(0.15, 0xf1c40f);
+  S.scene.add(marker);
+
+  // ρ line (origin to P)
+  const rhoGeom = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
+  const rhoLine = new THREE.Line(rhoGeom, new THREE.LineBasicMaterial({color:0xf1c40f, linewidth:2}));
+  S.scene.add(rhoLine);
+
+  // r (cylindrical r on ground)
+  const rProjGeom = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
+  const rProjLine = new THREE.Line(rProjGeom, new THREE.LineBasicMaterial({color:0xe67e22}));
+  S.scene.add(rProjLine);
+
+  // vertical drop
+  const dropGeom = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
+  const dropLine = new THREE.Line(dropGeom, new THREE.LineDashedMaterial({color:0x888888, dashSize:0.15, gapSize:0.1}));
+  S.scene.add(dropLine);
+
+  const projPt = makeSphereMarker(0.08, 0xe67e22);
+  S.scene.add(projPt);
+
+  // Theta arc (ground) and Phi arc (vertical)
+  let thetaArc = null, phiArc = null;
+  function buildThetaArc(theta) {
+    if (thetaArc) { S.scene.remove(thetaArc); thetaArc.geometry.dispose(); thetaArc.material.dispose(); }
+    const r = 0.55;
+    const pts = [];
+    const N = Math.max(4, Math.ceil(Math.abs(theta)*24));
+    for (let i=0; i<=N; i++) {
+      const tt = theta * i / N;
+      pts.push(new THREE.Vector3(r*Math.cos(tt), r*Math.sin(tt), 0));
+    }
+    thetaArc = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({color:0xc0392b}));
+    S.scene.add(thetaArc);
+  }
+  function buildPhiArc(theta, phi) {
+    if (phiArc) { S.scene.remove(phiArc); phiArc.geometry.dispose(); phiArc.material.dispose(); }
+    const r = 0.55;
+    const pts = [];
+    const N = Math.max(4, Math.ceil(Math.abs(phi)*24));
+    // arc in plane containing z-axis and direction (cos theta, sin theta)
+    const ux = Math.cos(theta), uy = Math.sin(theta);
+    for (let i=0; i<=N; i++) {
+      const p = phi * i / N;
+      const sx = r * Math.sin(p);
+      const sz = r * Math.cos(p);
+      pts.push(new THREE.Vector3(sx*ux, sx*uy, sz));
+    }
+    phiArc = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({color:0x2980b9}));
+    S.scene.add(phiArc);
+  }
+
+  // Constant-surfaces
+  let constRho = null, constT = null, constP = null;
+  let showRho = true, showT = false, showP = false;
+
+  function rebuildConstSurfaces(rho, theta, phi) {
+    if (constRho) { S.scene.remove(constRho); constRho.geometry.dispose(); constRho.material.dispose(); constRho=null; }
+    if (constT) { S.scene.remove(constT); constT.geometry.dispose(); constT.material.dispose(); constT=null; }
+    if (constP) { S.scene.remove(constP); constP.geometry.dispose(); constP.material.dispose(); constP=null; }
+
+    if (showRho) {
+      const geom = paramSurface(
+        (u,v) => ({x:rho*Math.sin(u)*Math.cos(v), y:rho*Math.sin(u)*Math.sin(v), z:rho*Math.cos(u)}),
+        0.01, PI-0.01, 0, 2*PI, 28, 56
+      );
+      constRho = makeSurfaceMesh(geom, 0xf1c40f, 0.22);
+      S.scene.add(constRho);
+    }
+    if (showT) {
+      const geom = paramSurface(
+        (u,v) => ({x:u*Math.cos(theta), y:u*Math.sin(theta), z:v}),
+        0, 4, -3, 3, 4, 16
+      );
+      constT = makeSurfaceMesh(geom, 0xc0392b, 0.22);
+      S.scene.add(constT);
+    }
+    if (showP && phi > 0.05 && phi < PI-0.05) {
+      // cone φ = c: z = ρ cos φ, r = ρ sin φ → slope z/r = cot φ
+      const geom = paramSurface(
+        (u,v) => ({x:u*Math.sin(phi)*Math.cos(v), y:u*Math.sin(phi)*Math.sin(v), z:u*Math.cos(phi)}),
+        0, 3.5, 0, 2*PI, 8, 64
+      );
+      constP = makeSurfaceMesh(geom, 0x2980b9, 0.22);
+      S.scene.add(constP);
+    }
+  }
+
+  function update() {
+    const rho = parseFloat(document.getElementById('sphR').value);
+    const theta = parseFloat(document.getElementById('sphT').value);
+    const phi = parseFloat(document.getElementById('sphP').value);
+    const x = rho * Math.sin(phi) * Math.cos(theta);
+    const y = rho * Math.sin(phi) * Math.sin(theta);
+    const z = rho * Math.cos(phi);
+    const cylR = rho * Math.sin(phi);
+
+    marker.position.set(x, y, z);
+    projPt.position.set(x, y, 0);
+    rhoGeom.setFromPoints([new THREE.Vector3(0,0,0), new THREE.Vector3(x,y,z)]);
+    rhoGeom.attributes.position.needsUpdate = true;
+    rProjGeom.setFromPoints([new THREE.Vector3(0,0,0), new THREE.Vector3(x,y,0)]);
+    rProjGeom.attributes.position.needsUpdate = true;
+    dropGeom.setFromPoints([new THREE.Vector3(x,y,z), new THREE.Vector3(x,y,0)]);
+    dropGeom.attributes.position.needsUpdate = true;
+    dropLine.computeLineDistances();
+    buildThetaArc(theta);
+    buildPhiArc(theta, phi);
+
+    document.getElementById('sphRval').textContent = rho.toFixed(2);
+    document.getElementById('sphTval').textContent = piFrac(theta);
+    document.getElementById('sphPval').textContent = piFrac(phi);
+    document.getElementById('sphCoordStr').textContent = `(${rho.toFixed(2)}, ${piFrac(theta)}, ${piFrac(phi)})`;
+    document.getElementById('sphX').textContent = x.toFixed(2);
+    document.getElementById('sphY').textContent = y.toFixed(2);
+    document.getElementById('sphZ').textContent = z.toFixed(2);
+    document.getElementById('sphCylR').textContent = cylR.toFixed(2);
+    document.getElementById('sphCylT').textContent = piFrac(theta);
+    document.getElementById('sphCylZ').textContent = z.toFixed(2);
+
+    rebuildConstSurfaces(rho, theta, phi);
+  }
+
+  ['R','T','P'].forEach(k => document.getElementById('sph'+k).addEventListener('input', update));
+  document.querySelectorAll('.tg-btn[data-sph]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const k = btn.dataset.sph;
+      btn.classList.toggle('active');
+      if (k === 'rho') showRho = !showRho;
+      if (k === 'theta') showT = !showT;
+      if (k === 'phi') showP = !showP;
+      update();
+    });
+  });
+
+  update();
+})();
+
+// ─── 基本觀念 Quiz（Ch 11） ───
+(function(){
+  const $ = id => document.getElementById(id);
+  function makeChoiceQuiz(cardId, correctIndex, hints){
+    const card=$(cardId); if(!card) return;
+    const opts=card.querySelectorAll('.quiz-opt');
+    const fb=card.querySelector('.quiz-feedback');
+    opts.forEach((opt,i)=>{
+      opt.addEventListener('click',()=>{
+        opts.forEach(o=>o.classList.remove('correct','wrong'));
+        if(i===correctIndex){
+          opt.classList.add('correct');
+          fb.className='quiz-feedback show ok';
+          fb.innerHTML=hints && hints.ok ? hints.ok : '✓ 正確！';
+        } else {
+          opt.classList.add('wrong');
+          fb.className='quiz-feedback show no';
+          fb.innerHTML=(hints && hints.wrong && hints.wrong[i]) ? hints.wrong[i] : '再想想。';
+        }
+        if(window.MathJax&&MathJax.typesetPromise) MathJax.typesetPromise([fb]);
+      });
+    });
+  }
+  function makeNumberQuiz(cardId, correct, opts={}){
+    const tol=opts.tolerance||0.02;
+    const card=$(cardId); if(!card) return;
+    const inputs=card.querySelectorAll('.quiz-input');
+    const checkBtn=card.querySelector('.quiz-check');
+    const fb=card.querySelector('.quiz-feedback');
+    function check(){
+      const correctArr = Array.isArray(correct) ? correct : [correct];
+      let allOk=true;
+      inputs.forEach((inp,i)=>{
+        inp.classList.remove('correct','wrong');
+        const v=parseFloat(inp.value);
+        if(isNaN(v) || Math.abs(v-correctArr[i])>tol){ inp.classList.add('wrong'); allOk=false; }
+        else inp.classList.add('correct');
+      });
+      fb.className='quiz-feedback show '+(allOk?'ok':'no');
+      fb.innerHTML=allOk?(opts.ok || '✓ 正確！'):(opts.wrong || '再算一次。');
+      if(window.MathJax&&MathJax.typesetPromise) MathJax.typesetPromise([fb]);
+    }
+    if(checkBtn) checkBtn.addEventListener('click',check);
+    inputs.forEach(inp=>inp.addEventListener('keydown',e=>{if(e.key==='Enter')check();}));
+  }
+  // Q11-1：z = y² 的直紋線平行 x 軸（缺哪個變數，直紋線就平行哪個軸）
+  makeChoiceQuiz('quiz-ch11-1', 0, {
+    ok:'✓ 正確！方程式 $z=y^2$ <strong>缺 $x$</strong>，故沿 $x$ 軸的所有「切片」都長一樣，直紋線平行 $x$ 軸。',
+    wrong:[
+      '',
+      '陷阱：方程式中「出現的變數」不是平移方向；要看「<strong>缺失的變數</strong>」。$z=y^2$ 缺 $x$。',
+      '$z$ 在方程式中是「因變數」（被 $y^2$ 決定），不是平移方向；缺 $x$ 才是。',
+      '由定義 11.2，方程式中缺哪個變數，直紋線就平行哪個軸；此題明確缺 $x$。'
+    ]
+  });
+  // Q11-2：xy 截痕橢圓 + xz 典型截痕雙曲線 → 單葉雙曲面
+  makeChoiceQuiz('quiz-ch11-2', 1, {
+    ok:'✓ 正確！單葉雙曲面 $\\dfrac{x^2}{a^2}+\\dfrac{y^2}{b^2}-\\dfrac{z^2}{c^2}=1$：固定 $z$ 得橢圓；固定 $y$ 得 $\\dfrac{x^2}{a^2}-\\dfrac{z^2}{c^2}=1-\\dfrac{y^2}{b^2}$，典型為雙曲線（特殊值會退化為兩直線）。',
+    wrong:[
+      '橢球面任何方向截痕都是橢圓，不會出現雙曲線。',
+      '',
+      '橢圓錐面在 $z=0$ 退化為一個點、其它 $z$ 值才是橢圓；$xz$ 截痕是兩條直線（不是雙曲線）。',
+      '雙葉雙曲面在 $|z|<c$ 時平行 $xy$ 平面<strong>沒有</strong>截痕，與題目「全是橢圓」矛盾。'
+    ]
+  });
+  // Q11-3：φ 與 +z 軸夾角，[0, π]
+  makeChoiceQuiz('quiz-ch11-3', 1, {
+    ok:'✓ 正確！$\\phi$ 是線段 $\\overrightarrow{OP}$ 與 $+z$ 軸的夾角，$0\\le\\phi\\le\\pi$（從正 $z$ 軸往下測量）。',
+    wrong:[
+      '$\\phi$ 不是方位角；方位角是 $\\theta$（$0\\le\\theta<2\\pi$）。',
+      '',
+      '$\\phi$ 從 $+z$ 軸往下測量，不是從 $xy$ 平面起算。',
+      '同上；測量起點是 $+z$ 軸（不是 $xy$ 平面）。'
+    ]
+  });
+  // Q11-4：r = 5 sin(π/3) = 5√3/2 ≈ 4.330
+  makeNumberQuiz('quiz-ch11-4', 5*Math.sqrt(3)/2, {
+    tolerance:0.001,
+    ok:'✓ 正確！$r=\\rho\\sin\\phi=5\\sin(\\pi/3)=5\\cdot\\dfrac{\\sqrt 3}{2}\\approx 4.330$。',
+    wrong:'用公式 $r=\\rho\\sin\\phi$：$\\sin(\\pi/3)=\\dfrac{\\sqrt 3}{2}$，所以 $r=5\\cdot\\dfrac{\\sqrt 3}{2}$。'
+  });
+})();
+
+</script>
+
+</body>
+</html>

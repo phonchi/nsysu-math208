@@ -1,0 +1,2568 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>向量值函數 — 第 12 章</title>
+<script>
+  MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1a2e;--paper:#f7f3eb;--accent:#c0392b;--accent2:#2c3e7a;--accent3:#1a6b4a;
+  --muted:#8a8578;--card:#fffdf7;--card-border:#e8e2d6;--highlight:#fff3cd;
+  --code-bg:#2d2d3f;--code-fg:#e8e6df;
+  --x-axis:#e74c3c;--y-axis:#27ae60;--z-axis:#2980b9;
+  --vec-r:#f1c40f;       /* position vector r(t) */
+  --vec-tan:#2ecc71;     /* tangent r'(t) */
+  --vec-2nd:#e91e63;     /* second derivative r''(t) */
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.9;font-size:17px;}
+
+/* Hero */
+.hero{min-height:62vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem;position:relative;overflow:hidden;background:linear-gradient(170deg,#1a1a2e 0%,#2c3e7a 40%,#7a1a4a 100%);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.06) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.04) 0%,transparent 40%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);}
+.hero-content{position:relative;z-index:1;max-width:860px;}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;color:#fff;letter-spacing:.04em;line-height:1.3;margin-bottom:1rem;}
+.hero h1 .yellow{color:#f1c40f;}
+.hero h1 .green{color:#2ecc71;}
+.hero h1 .pink{color:#ff6b9d;}
+.hero .subtitle{font-size:clamp(.95rem,2.2vw,1.2rem);color:rgba(255,255,255,.65);font-weight:300;margin-bottom:2rem;}
+.hero .big-formula{color:#f1c40f;background:rgba(0,0,0,.3);padding:.8rem 2rem;border-radius:12px;display:inline-block;border:1px solid rgba(255,255,255,.1);margin-bottom:2rem;backdrop-filter:blur(4px);font-size:1.1rem;}
+.scroll-hint{color:rgba(255,255,255,.4);font-size:.9rem;animation:bounce 2s infinite;}
+.scroll-hint span{display:block;font-size:1.4rem;margin-top:.3rem;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+/* Layout */
+.container{max-width:1180px;margin:0 auto;padding:3rem 1.5rem;}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.5rem;}
+h2{font-family:'Noto Serif TC',serif;font-size:1.65rem;font-weight:700;color:var(--ink);margin-bottom:1.2rem;line-height:1.4;}
+h3{font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:700;color:var(--accent2);margin:1.4rem 0 .8rem;}
+section{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--card-border);}
+section:last-of-type{border-bottom:none;}
+p{margin-bottom:1rem;}
+
+/* Viz layout: 3D canvas + side panel */
+.viz-layout{display:grid;grid-template-columns:1fr 320px;gap:1.3rem;margin:1.2rem 0;align-items:start;}
+@media(max-width:900px){.viz-layout{grid-template-columns:1fr;}}
+
+/* 3D canvas panel */
+.canvas3d-panel{background:linear-gradient(160deg,#fffdf7 0%,#f4efe3 100%);border:1px solid var(--card-border);border-radius:12px;padding:1rem;box-shadow:0 4px 18px rgba(0,0,0,.06);position:relative;}
+.canvas3d-panel .canvas-wrap{width:100%;aspect-ratio:1/0.78;position:relative;border-radius:8px;overflow:hidden;background:#1a1a2e;}
+.canvas3d-panel canvas{display:block;width:100%!important;height:100%!important;}
+/* 2D canvas variant: lighter background, no dark theme */
+.canvas3d-panel.canvas-2d .canvas-wrap{background:#fbf7ed;border:1px solid var(--card-border);}
+.canvas3d-panel.canvas-2d .hint-overlay{color:rgba(0,0,0,.4);background:rgba(255,255,255,.6);}
+.canvas3d-panel.canvas-2d .t-display{color:#a07a08;background:rgba(255,255,255,.85);border:1px solid #f1c40f;}
+.hint-overlay{position:absolute;top:8px;right:10px;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:rgba(255,255,255,.55);background:rgba(0,0,0,.25);padding:3px 8px;border-radius:4px;pointer-events:none;}
+.t-display{position:absolute;top:8px;left:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f1c40f;background:rgba(0,0,0,.45);padding:4px 10px;border-radius:4px;pointer-events:none;font-weight:600;}
+
+/* 側邊導覽 (jump-to-section) */
+.side-nav{position:fixed;top:50%;right:1rem;transform:translateY(-50%);background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.45rem .5rem;font-size:.74rem;font-family:'JetBrains Mono',monospace;box-shadow:0 4px 18px rgba(0,0,0,.08);z-index:50;display:flex;flex-direction:column;gap:.1rem;max-width:170px;}
+.side-nav .sn-title{font-size:.66rem;color:var(--muted);letter-spacing:.1em;padding:.2rem .55rem .35rem;border-bottom:1px solid var(--card-border);margin-bottom:.25rem;}
+.side-nav .sn-item{display:block;padding:.32rem .55rem;color:var(--muted);text-decoration:none;border-left:2px solid transparent;border-radius:4px;transition:all .15s;line-height:1.3;}
+.side-nav .sn-item.sn-sub{padding-left:1.1rem;font-size:.7rem;color:#a8a496;}
+.side-nav .sn-item:hover{color:var(--ink);background:var(--highlight);}
+.side-nav .sn-item.active{color:var(--accent3);border-left-color:var(--accent3);background:rgba(26,107,74,.06);font-weight:600;}
+@media(max-width:1280px){.side-nav{display:none;}}
+
+/* Axis legend */
+.axis-legend{display:flex;gap:1rem;justify-content:center;margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.8rem;flex-wrap:wrap;}
+.axis-legend span{display:inline-flex;align-items:center;gap:.3rem;}
+.axis-legend span::before{content:'';display:inline-block;width:14px;height:3px;border-radius:2px;}
+.axis-legend .ax-x::before{background:var(--x-axis);}
+.axis-legend .ax-y::before{background:var(--y-axis);}
+.axis-legend .ax-z::before{background:var(--z-axis);}
+.axis-legend .ax-r::before{background:var(--vec-r);}
+.axis-legend .ax-tan::before{background:#16a085;}
+.axis-legend .ax-2nd::before{background:var(--vec-2nd);}
+.axis-legend .ax-sec::before{background:#e67e22;}
+
+/* Controls */
+.controls-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--card-border);}
+.btn{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:600;padding:.45rem 1rem;border-radius:6px;border:none;cursor:pointer;transition:all .2s;}
+.btn-play{background:var(--accent3);color:#fff;}
+.btn-play:hover{background:#22845c;}
+.btn-play.active{background:var(--accent);}
+.btn-reset{background:var(--card-border);color:var(--ink);}
+.btn-reset:hover{background:#ccc;}
+.btn-toggle{background:var(--accent2);color:#fff;}
+.btn-toggle:hover{background:#1f2e5f;}
+.btn-toggle.off{background:#bbb;color:#555;}
+
+/* Slider row */
+.slider-row{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;background:var(--paper);border-radius:8px;margin-bottom:.5rem;}
+.slider-row .slider-label{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent2);font-weight:600;min-width:48px;}
+.slider-row input[type="range"]{flex:1;accent-color:var(--accent3);height:5px;cursor:pointer;}
+.slider-row .slider-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--accent);font-weight:600;min-width:72px;text-align:right;}
+
+/* Side panel */
+.side-panel{display:flex;flex-direction:column;gap:.85rem;}
+
+.info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.info-card .ic-title{font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem;}
+.info-card .ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.83rem;padding:.2rem 0;align-items:center;}
+.info-card .ic-label{color:var(--muted);}
+.info-card .ic-value{color:var(--ink);font-weight:600;}
+.info-card .ic-value.highlight{color:var(--accent);}
+.info-card .ic-value.tan{color:var(--accent3);}
+.info-card .ic-value.snd{color:var(--vec-2nd);}
+
+.eq-card{background:var(--code-bg);border-radius:10px;padding:.95rem 1.1rem;color:#fff;}
+.eq-card .eq-label{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#2ecc71;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;}
+.eq-card .eq-formula{font-size:1.0rem;color:#fff;text-align:center;}
+.eq-card .eq-sub{font-size:.78rem;color:rgba(255,255,255,.55);margin-top:.4rem;text-align:center;}
+
+/* Reference section */
+.ref-group{margin:1.5rem 0 2rem;}
+.ref-group-title{font-family:'Noto Serif TC',serif;font-size:1.12rem;font-weight:700;color:var(--accent2);padding-bottom:.4rem;border-bottom:2px solid var(--accent2);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;}
+.ref-group-title .rg-badge{font-size:.7rem;font-weight:600;color:#fff;background:var(--accent2);padding:2px 8px;border-radius:3px;font-family:'JetBrains Mono',monospace;}
+
+.ref-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:1rem 1.2rem;margin-bottom:.9rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.ref-card-header{display:flex;align-items:baseline;gap:.8rem;margin-bottom:.5rem;flex-wrap:wrap;}
+.ref-card-name{font-family:'Noto Serif TC',serif;font-weight:700;font-size:1.02rem;color:var(--ink);}
+.ref-card-name-en{font-size:.8rem;color:var(--muted);font-weight:400;}
+.ref-card-eq{background:var(--code-bg);color:#fff;border-radius:8px;padding:.65rem 1rem;text-align:center;font-size:.95rem;margin-bottom:.55rem;}
+.ref-note{font-size:.85rem;color:var(--muted);margin-top:.5rem;padding-left:.8rem;border-left:3px solid var(--card-border);}
+
+/* Conversion table */
+.conv-table{width:100%;border-collapse:collapse;font-size:.88rem;margin:.8rem 0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.conv-table th{background:var(--accent2);color:#fff;padding:.6rem .8rem;text-align:center;font-weight:600;font-size:.82rem;}
+.conv-table td{padding:.6rem .8rem;text-align:center;border-bottom:1px solid var(--card-border);font-family:'JetBrains Mono',monospace;font-size:.85rem;}
+.conv-table td:first-child{font-family:'Noto Sans TC',sans-serif;color:var(--accent2);font-weight:600;text-align:left;}
+.conv-table tr:last-child td{border-bottom:none;}
+.conv-table tr:nth-child(even){background:rgba(0,0,0,.015);}
+
+/* Info box */
+.info-box{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1.1rem 1.4rem;margin:1.3rem 0;position:relative;}
+.info-box .info-label{position:absolute;top:-11px;left:14px;background:var(--accent2);color:#fff;font-size:.74rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.05em;}
+.info-box.warm{background:#fef5e7;border-color:#d68910;}
+.info-box.warm .info-label{background:#d68910;}
+.info-box.green{background:#eaf5ee;border-color:var(--accent3);}
+.info-box.green .info-label{background:var(--accent3);}
+
+/* Callout pill */
+.pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:4px;margin:0 .15rem;vertical-align:1px;}
+.pill-x{background:rgba(231,76,60,.12);color:var(--x-axis);border:1px solid rgba(231,76,60,.3);}
+.pill-y{background:rgba(39,174,96,.12);color:var(--y-axis);border:1px solid rgba(39,174,96,.3);}
+.pill-z{background:rgba(41,128,185,.12);color:var(--z-axis);border:1px solid rgba(41,128,185,.3);}
+.pill-r{background:rgba(241,196,15,.18);color:#a07a08;border:1px solid rgba(241,196,15,.4);}
+.pill-tan{background:rgba(46,204,113,.15);color:#1e8449;border:1px solid rgba(46,204,113,.35);}
+.pill-2nd{background:rgba(233,30,99,.13);color:#ad1457;border:1px solid rgba(233,30,99,.3);}
+.deg-note{color:var(--muted);font-size:.78rem;display:inline;}
+
+/* Toggle group */
+.toggle-group{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.5rem;}
+.tg-btn{font-family:'JetBrains Mono',monospace;font-size:.72rem;padding:.25rem .6rem;border-radius:4px;border:1px solid var(--card-border);background:var(--paper);cursor:pointer;transition:all .2s;}
+.tg-btn.active{background:var(--accent3);color:#fff;border-color:var(--accent3);}
+
+/* Preset row */
+.preset-row{display:flex;gap:.4rem;flex-wrap:wrap;margin:.6rem 0 1rem;}
+.preset-btn{font-family:'JetBrains Mono',monospace;font-size:.78rem;padding:.4rem .85rem;border-radius:6px;border:2px solid var(--card-border);background:var(--card);cursor:pointer;transition:all .2s;color:var(--ink);}
+.preset-btn:hover{border-color:var(--accent2);}
+.preset-btn.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
+
+/* Step block (for derivations) */
+.step-block{background:#fffaf0;border-left:4px solid var(--accent3);border-radius:8px;padding:.9rem 1.2rem;margin:.7rem 0;}
+.step-block .step-num{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);font-weight:700;letter-spacing:.1em;margin-bottom:.3rem;}
+.exercise-question{background:#f5f7fb;border:1px solid #dfe5f0;border-left:4px solid var(--accent2);border-radius:8px;padding:.65rem .85rem;margin:.65rem 0 .9rem;}
+p.exercise-question::before{content:"題目";display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#fff;background:var(--accent2);border-radius:4px;padding:1px 7px;margin-right:.55rem;letter-spacing:.06em;font-weight:700;}
+.step-block.exercise-question{border-left-color:var(--accent2);}
+.step-block.exercise-question .step-num{color:var(--accent2);}
+.step-block.solution-start{margin-top:1.8rem;position:relative;}
+.step-block.solution-start::before{content:"解題";position:absolute;top:-1.35rem;left:0;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#fff;background:var(--accent3);border-radius:4px;padding:1px 7px;letter-spacing:.06em;font-weight:700;}
+
+/* 性質列表（定理 12.2） */
+.prop-list{counter-reset:prop;list-style:none;padding:0;margin:1rem 0;}
+.prop-list li{counter-increment:prop;background:var(--card);border:1px solid var(--card-border);border-radius:8px;padding:.7rem 1rem .7rem 3rem;margin-bottom:.55rem;position:relative;font-size:.95rem;box-shadow:0 1px 3px rgba(0,0,0,.03);}
+.prop-list li::before{content:counter(prop);position:absolute;left:.85rem;top:50%;transform:translateY(-50%);width:1.7rem;height:1.7rem;background:var(--accent3);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.85rem;}
+
+/* Vector vs Real distinction box */
+.dual-card{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:1rem 0;}
+@media(max-width:600px){.dual-card{grid-template-columns:1fr;}}
+.dual-card .dc{padding:.9rem 1.1rem;border-radius:10px;}
+.dual-card .dc-real{background:#fff5e6;border:1px solid #f0c674;}
+.dual-card .dc-vec{background:#e8f0ff;border:1px solid #7a96d3;}
+.dual-card .dc-title{font-weight:700;font-size:.85rem;margin-bottom:.4rem;}
+.dual-card .dc-real .dc-title{color:#a06800;}
+.dual-card .dc-vec .dc-title{color:#1f3a7a;}
+
+/* Highlight tinted text */
+.text-r{color:#a07a08;font-weight:600;}
+.text-tan{color:#1e8449;font-weight:600;}
+.text-2nd{color:#ad1457;font-weight:600;}
+
+footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border);}
+.quiz-card{background:#eef5ff;border:1.5px solid var(--accent2);border-radius:10px;padding:1rem 1.2rem;margin:1.2rem 0;box-shadow:0 2px 10px rgba(44,62,122,.07);}
+.quiz-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#fff;background:var(--accent2);padding:2px 8px;border-radius:4px;letter-spacing:.08em;margin-bottom:.45rem;}
+.quiz-q{font-weight:600;margin-bottom:.6rem;}
+.quiz-options{display:flex;flex-direction:column;gap:.4rem;}
+.quiz-opt{padding:.45rem .85rem;border:1.5px solid var(--card-border);border-radius:6px;cursor:pointer;background:var(--card);text-align:left;font-size:.94rem;transition:all .15s;font-family:inherit;}
+.quiz-opt:hover{border-color:var(--accent2);background:#fafcff;}
+.quiz-opt.correct{border-color:var(--accent3);background:#eaf5ee;color:var(--accent3);font-weight:600;}
+.quiz-opt.wrong{border-color:var(--accent);background:#fde9e7;color:var(--accent);}
+.quiz-input-row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin:.4rem 0;}
+.quiz-input{padding:.4rem .7rem;border:1.5px solid var(--card-border);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:.92rem;width:160px;}
+.quiz-input.correct{border-color:var(--accent3);background:#eaf5ee;}
+.quiz-input.wrong{border-color:var(--accent);background:#fde9e7;}
+.quiz-check{padding:.4rem .9rem;border:none;border-radius:6px;background:var(--accent2);color:#fff;font-family:'Noto Sans TC',sans-serif;font-size:.86rem;cursor:pointer;font-weight:600;}
+.quiz-check:hover{background:#1f2e5c;}
+.quiz-feedback{font-size:.86rem;margin-top:.5rem;padding:.45rem .7rem;border-radius:5px;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.ok{background:#eaf5ee;color:var(--accent3);border-left:3px solid var(--accent3);}
+.quiz-feedback.no{background:#fde9e7;color:var(--accent);border-left:3px solid var(--accent);}
+</style>
+</head>
+<body>
+
+<!-- 側邊導覽 -->
+<nav class="side-nav" id="sideNav">
+  <div class="sn-title">第 12 章</div>
+  <a class="sn-item" href="#sec-prologue">12.1 向量值函數</a>
+  <a class="sn-item sn-sub" href="#sec-plane">  · 平面曲線</a>
+  <a class="sn-item sn-sub" href="#sec-space">  · 空間曲線</a>
+  <a class="sn-item sn-sub" href="#sec-intersect">  · 例題 4 交線</a>
+  <a class="sn-item sn-sub" href="#sec-limit">  · 極限與連續</a>
+  <a class="sn-item" href="#sec-deriv">12.2 微分與積分</a>
+  <a class="sn-item sn-sub" href="#sec-higher">  · 高階導數</a>
+  <a class="sn-item sn-sub" href="#sec-props">  · 導數性質</a>
+  <a class="sn-item sn-sub" href="#sec-integral">  · 積分</a>
+  <a class="sn-item" href="#sec-ref">速查</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <h1><span class="yellow">向量值函數</span>：把<span class="green">參數</span>送進<span class="pink">向量</span></h1>
+    <div class="subtitle">第 12 章 — 12.1 向量值函數、12.2 微分與積分（互動版）</div>
+    <div class="big-formula">$\mathbf{r}(t) = f(t)\,\mathbf{i} + g(t)\,\mathbf{j} + h(t)\,\mathbf{k}$</div>
+    <div class="scroll-hint">向下捲動開始互動<span>↓</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ============================================================ -->
+<!-- PROLOGUE -->
+<!-- ============================================================ -->
+<section id="sec-prologue">
+  <div class="section-number">12.1 向量值函數</div>
+  <h2>把實數送進「向量輸出」的函數</h2>
+  <p>過去你看過的函數 $y=f(x)$ 把一個實數送到另一個實數。<strong>向量值函數</strong>改變輸出端：<em>給定一個實數 $t$，吐出一個向量</em>。這個小小的概念轉變讓我們可以用「位置向量隨時間變化」的觀點，自然地描述<span class="text-r">空間中的曲線</span>。</p>
+
+  <div class="dual-card">
+    <div class="dc dc-real">
+      <div class="dc-title">實值函數（你熟悉的）</div>
+      <div style="text-align:center;font-size:1.05rem;margin:.4rem 0;">$f: \mathbb{R} \to \mathbb{R}$</div>
+      <div style="text-align:center;font-size:.95rem;">$t \mapsto f(t)$</div>
+      <div style="font-size:.82rem;color:#7a5500;margin-top:.4rem;text-align:center;">$f(t)$、$g(t)$、$h(t)$ 都是這類</div>
+    </div>
+    <div class="dc dc-vec">
+      <div class="dc-title">向量值函數（本章的主角）</div>
+      <div style="text-align:center;font-size:1.05rem;margin:.4rem 0;">$\mathbf{r}: \mathbb{R} \to \mathbb{R}^2$ 或 $\mathbb{R}^3$</div>
+      <div style="text-align:center;font-size:.95rem;">$t \mapsto \mathbf{r}(t)$</div>
+      <div style="font-size:.82rem;color:#1f3a7a;margin-top:.4rem;text-align:center;">$\mathbf{r}(t)$ 對每個 $t$ 是一個向量</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <span class="info-label">定義 12.1</span>
+    <strong>向量值函數的標準形式</strong>
+    <div style="margin:.6rem 0;text-align:center;font-size:1.05rem;">
+      $\mathbf{r}(t) = f(t)\,\mathbf{i} + g(t)\,\mathbf{j}$ &nbsp;&nbsp;<span style="color:var(--muted);">(平面)</span><br>
+      $\mathbf{r}(t) = f(t)\,\mathbf{i} + g(t)\,\mathbf{j} + h(t)\,\mathbf{k}$ &nbsp;&nbsp;<span style="color:var(--muted);">(空間)</span>
+    </div>
+    其中 $f$、$g$、$h$ 稱為<strong>分量函數</strong>，都是參數 $t$ 的實值函數。也常寫成 $\mathbf{r}(t)=\langle f(t),g(t)\rangle$ 或 $\langle f(t),g(t),h(t)\rangle$。
+  </div>
+
+  <h3>位置向量的觀點：曲線是「終點的軌跡」</h3>
+  <p>把 $\mathbf{r}(t)$ 解讀為<em>從原點出發的位置向量</em>，當 $t$ 連續變動時，向量的<strong>終點</strong>就掃出一條曲線 $C$。下方畫布即是這個過程：黃色箭頭是當下的位置向量 $\mathbf{r}(t)$、橘色軌跡是已經掃過的點，箭頭沿曲線的方向就是 $t$ 增加的方向。</p>
+
+  <div class="viz-layout">
+    <div>
+      <div class="canvas3d-panel">
+        <div class="canvas-wrap">
+          <canvas id="canvas-prologue"></canvas>
+          <div class="hint-overlay">拖曳旋轉 · 滾輪縮放</div>
+          <div class="t-display" id="prologueT">t = 0.00</div>
+        </div>
+        <div class="axis-legend">
+          <span class="ax-x">x</span><span class="ax-y">y</span><span class="ax-z">z</span>
+          <span class="ax-r">r(t) 位置向量</span>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="btnProloguePlay">▶ 播放</button>
+          <button class="btn btn-reset" onclick="scenes.prologue.resetCam()">↺ 視角重置</button>
+          <div style="flex:1;min-width:180px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);">t</span>
+            <input type="range" id="prologueSlider" min="0" max="1" step="0.001" value="0" style="flex:1;accent-color:var(--vec-r);">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">展示用曲線</div>
+        <div class="eq-formula">$\mathbf{r}(t) = 2\cos t\,\mathbf{i} + 2\sin t\,\mathbf{j} + \tfrac{t}{2}\mathbf{k}$</div>
+        <div class="eq-sub">$0 \leq t \leq 4\pi$ ｜ 螺旋上升</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">當下位置向量</div>
+        <div class="ic-row"><span class="ic-label">$f(t) = 2\cos t$</span><span class="ic-value highlight" id="prolX">2.00</span></div>
+        <div class="ic-row"><span class="ic-label">$g(t) = 2\sin t$</span><span class="ic-value highlight" id="prolY">0.00</span></div>
+        <div class="ic-row"><span class="ic-label">$h(t) = t/2$</span><span class="ic-value highlight" id="prolZ">0.00</span></div>
+      </div>
+      <div class="info-box green" style="margin:0;padding:.8rem 1rem;">
+        <span class="info-label">關鍵</span>
+        <div style="font-size:.88rem;">$\mathbf{r}(t)$ 是<em>向量</em>；$f(t)$、$g(t)$、$h(t)$ 是<em>實數</em>。差別不要混淆——這是後續所有定義的基礎。</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>定義域：分量定義域的交集</h3>
+  <p>除非另有說明，向量值函數 $\mathbf{r}$ 的<strong>定義域</strong>定義為三個分量函數定義域的<em>交集</em>。例如</p>
+  <div style="text-align:center;margin:.4rem 0 1rem;">$$\mathbf{r}(t) = \ln t\,\mathbf{i} + \sqrt{1-t}\,\mathbf{j} + t\,\mathbf{k}$$</div>
+  <p>$\ln t$ 要求 $t > 0$；$\sqrt{1-t}$ 要求 $t \leq 1$；$t$ 對所有實數都有定義。三者交集即 <strong>$(0, 1]$</strong>。</p>
+
+  <div class="quiz-card" id="quiz-ch12-1">
+    <span class="quiz-tag">概念檢查</span>
+    <div class="quiz-q">求 $\mathbf{r}(t)=\ln t\,\mathbf{i}+\sqrt{1-t}\,\mathbf{j}+|t|\,\mathbf{k}$ 的定義域。</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">$(-\infty,\infty)$</button>
+      <button class="quiz-opt">$(0,\infty)$</button>
+      <button class="quiz-opt">$(-\infty,1]$</button>
+      <button class="quiz-opt">$(0,1]$</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 12.1 內小段：平面曲線 -->
+<!-- ============================================================ -->
+<section id="sec-plane">
+  <div class="section-number">12.1 內小段 · 平面曲線</div>
+  <h2>平面曲線：兩個分量、一個 $t$</h2>
+  <p>下方畫布專門顯示 <span class="pill pill-z">xy 平面</span>。選擇預設、拖動 $t$ 滑桿，觀察點如何沿曲線移動，以及位置向量 $\mathbf{r}(t)$ 如何旋轉。<strong>注意箭頭方向</strong>：它指向 $t$ 增加的方向，這就是曲線的<em>方向</em>。</p>
+  <p class="exercise-question">講義例題 1：畫出向量值函數 $\mathbf r(t)=2\cos t\,\mathbf i-3\sin t\,\mathbf j,\ 0\le t\le 2\pi$ 所表示的平面曲線。講義例題 3：用向量值函數表示拋物線 $y=x^2+1$。</p>
+
+  <div class="preset-row" id="planePresets">
+    <button class="preset-btn active" data-id="ex1">例題 1 · $2\cos t\,\mathbf{i} - 3\sin t\,\mathbf{j}$</button>
+    <button class="preset-btn" data-id="ex1ccw">變體 · $2\cos t\,\mathbf{i} + 3\sin t\,\mathbf{j}$</button>
+    <button class="preset-btn" data-id="ex3">例題 3 · $t\,\mathbf{i} + (t^2{+}1)\,\mathbf{j}$</button>
+    <button class="preset-btn" data-id="circ1">$\sin t\,\mathbf{i}+\cos t\,\mathbf{j}$</button>
+    <button class="preset-btn" data-id="circ2">$\sin t^2\,\mathbf{i}+\cos t^2\,\mathbf{j}$</button>
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="canvas3d-panel canvas-2d">
+        <div class="canvas-wrap">
+          <canvas id="canvas-plane"></canvas>
+          <div class="hint-overlay">2D · xy 平面</div>
+          <div class="t-display" id="planeT">t = 0.00</div>
+        </div>
+        <div class="axis-legend">
+          <span class="ax-x">x</span><span class="ax-y">y</span>
+          <span class="ax-r">r(t)</span>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="btnPlanePlay">▶ 播放</button>
+          <div style="flex:1;min-width:180px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);">t</span>
+            <input type="range" id="planeSlider" min="0" max="1" step="0.001" value="0" style="flex:1;accent-color:var(--vec-r);">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label" id="planeLabel">例 1 · 橢圓 (順時針)</div>
+        <div class="eq-formula" id="planeEq">$\mathbf{r}(t) = 2\cos t\,\mathbf{i} - 3\sin t\,\mathbf{j}$</div>
+        <div class="eq-sub" id="planeRange">$0 \leq t \leq 2\pi$</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">當下值</div>
+        <div class="ic-row"><span class="ic-label">$x = f(t)$</span><span class="ic-value highlight" id="planeX">2.00</span></div>
+        <div class="ic-row"><span class="ic-label">$y = g(t)$</span><span class="ic-value highlight" id="planeY">0.00</span></div>
+      </div>
+      <div class="info-card" id="planeNoteCard">
+        <div class="ic-title">教學重點</div>
+        <div style="font-size:.85rem;line-height:1.7;" id="planeNote">
+          <strong>為何「順時針」？</strong>$y$-分量是 $-3\sin t$（前面有負號）。$t=0$ 時點在 $(2,0)$；$t$ 略增則 $y$ 略<em>負</em>，所以點往下走 → 順時針。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box warm">
+    <span class="info-label">重點 · 講義 p.6</span>
+    <strong>兩個不同的曲線可以有相同的圖形</strong>
+    <p style="margin:.5rem 0;">最後兩個預設值得仔細比較。它們的<em>圖形（畫出來的點集合）</em>都是單位圓 $x^2+y^2=1$，但它們是<em>兩條不同的曲線</em>：</p>
+    <table style="width:100%;border-collapse:collapse;font-size:.92rem;margin:.5rem 0;">
+      <thead>
+        <tr style="background:#fef0d4;">
+          <th style="padding:.4rem .6rem;text-align:left;border-bottom:1px solid #d4b97a;">預設</th>
+          <th style="padding:.4rem .6rem;text-align:left;border-bottom:1px solid #d4b97a;">參數方程</th>
+          <th style="padding:.4rem .6rem;text-align:left;border-bottom:1px solid #d4b97a;">$t$ 範圍</th>
+          <th style="padding:.4rem .6rem;text-align:left;border-bottom:1px solid #d4b97a;">速率 $\|\mathbf{r}'(t)\|$</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:.4rem .6rem;font-family:'JetBrains Mono',monospace;border-bottom:1px solid #e8d6a0;"><code style="background:#fff;padding:1px 5px;border-radius:3px;">circ1</code></td>
+          <td style="padding:.4rem .6rem;border-bottom:1px solid #e8d6a0;">$\mathbf{r}_1(t) = \sin t\,\mathbf{i} + \cos t\,\mathbf{j}$</td>
+          <td style="padding:.4rem .6rem;border-bottom:1px solid #e8d6a0;">$0 \le t \le 2\pi$</td>
+          <td style="padding:.4rem .6rem;border-bottom:1px solid #e8d6a0;">$\|\mathbf{r}_1'\| = 1$（<strong>等速</strong>）</td>
+        </tr>
+        <tr>
+          <td style="padding:.4rem .6rem;font-family:'JetBrains Mono',monospace;"><code style="background:#fff;padding:1px 5px;border-radius:3px;">circ2</code></td>
+          <td style="padding:.4rem .6rem;">$\mathbf{r}_2(t) = \sin(t^2)\,\mathbf{i} + \cos(t^2)\,\mathbf{j}$</td>
+          <td style="padding:.4rem .6rem;">$0 \le t \le \sqrt{2\pi}$</td>
+          <td style="padding:.4rem .6rem;">$\|\mathbf{r}_2'\| = 2t$（<strong>越走越快</strong>）</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin:.5rem 0;font-size:.93rem;"><strong>關鍵差異：</strong>對 $\mathbf{r}_1$ 來說，$t$ 就是（沿圓走的）弧長／角度本身——固定速率 1 繞圓。但 $\mathbf{r}_2$ 把 $t^2$ 當作角度，當 $t$ 從 $1$ 走到 $1.5$，角度從 $1$ 跳到 $2.25$；當 $t$ 從 $2$ 走到 $2.5$，角度從 $4$ 跳到 $6.25$——<em>同樣的 $\Delta t$ 帶來越來越大的角度變化</em>，所以動畫裡的點越往後走越快。</p>
+    <p style="margin:0;font-size:.93rem;"><strong>結論：</strong><em>「曲線」=「點的集合」+「參數化方式」</em>。$\mathbf{r}_1$ 與 $\mathbf{r}_2$ 通過的點完全相同（單位圓），但走法不同，速度律不同，因此是兩條不同的曲線。同時也說明：給定一條曲線，<strong>同一個圖形可以對應到無窮多個參數化</strong>。</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 12.1 內小段：空間曲線 -->
+<!-- ============================================================ -->
+<section id="sec-space">
+  <div class="section-number">12.1 內小段 · 空間曲線</div>
+  <h2>空間曲線：再加一個 $z$ 分量</h2>
+  <p>把第三個分量 $h(t)$ 補上，曲線就「離開平面」了。最經典的例子是<strong>螺旋線</strong>：xy-平面上做圓周運動的同時 $z$ 等速上升。它的投影在 <span class="pill pill-z">z</span> 軸方向上的圓柱面 $x^2+y^2=16$ 上。</p>
+  <p class="exercise-question">講義例題 2：畫出 $\mathbf r(t)=4\cos t\,\mathbf i+4\sin t\,\mathbf j+t\,\mathbf k,\ 0\le t\le 4\pi$ 所表示的空間曲線。</p>
+
+  <div class="preset-row" id="spacePresets">
+    <button class="preset-btn active" data-id="helix">例題 2 · $4\cos t\,\mathbf{i} + 4\sin t\,\mathbf{j} + t\,\mathbf{k}$</button>
+    <button class="preset-btn" data-id="helix_fast">補充：變化頻率 · $4\cos 2t\,\mathbf{i} + 4\sin 2t\,\mathbf{j} + t\,\mathbf{k}$</button>
+    <button class="preset-btn" data-id="conic">補充：圓錐螺線 · $t\cos t\,\mathbf{i} + t\sin t\,\mathbf{j} + t\,\mathbf{k}$</button>
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="canvas3d-panel">
+        <div class="canvas-wrap">
+          <canvas id="canvas-space"></canvas>
+          <div class="hint-overlay">拖曳旋轉 · 滾輪縮放</div>
+          <div class="t-display" id="spaceT">t = 0.00</div>
+        </div>
+        <div class="axis-legend">
+          <span class="ax-x">x</span><span class="ax-y">y</span><span class="ax-z">z</span>
+          <span class="ax-r">r(t)</span>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="btnSpacePlay">▶ 播放</button>
+          <button class="btn btn-toggle" id="btnSpaceCyl">顯示圓柱 $x^2{+}y^2{=}16$</button>
+          <button class="btn btn-toggle off" id="btnSpaceShadow">顯示 xy 投影</button>
+          <button class="btn btn-reset" onclick="scenes.space.resetCam()">↺ 視角重置</button>
+        </div>
+        <div style="margin-top:.6rem;display:flex;align-items:center;gap:.5rem;">
+          <span style="font-size:.78rem;color:var(--muted);min-width:30px;">t</span>
+          <input type="range" id="spaceSlider" min="0" max="1" step="0.001" value="0" style="flex:1;accent-color:var(--vec-r);">
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label" id="spaceLabel">例 2 · 螺旋線</div>
+        <div class="eq-formula" id="spaceEq">$\mathbf{r}(t) = 4\cos t\,\mathbf{i} + 4\sin t\,\mathbf{j} + t\,\mathbf{k}$</div>
+        <div class="eq-sub" id="spaceRange">$0 \leq t \leq 4\pi$ ｜ 兩圈</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">當下位置</div>
+        <div class="ic-row"><span class="ic-label">$x$</span><span class="ic-value highlight" id="spaceX">4.00</span></div>
+        <div class="ic-row"><span class="ic-label">$y$</span><span class="ic-value highlight" id="spaceY">0.00</span></div>
+        <div class="ic-row"><span class="ic-label">$z$</span><span class="ic-value highlight" id="spaceZ">0.00</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">為何在圓柱面上？</div>
+        <div style="font-size:.85rem;line-height:1.7;">
+          $x^2+y^2 = 16\cos^2 t + 16\sin^2 t = 16$。<br>
+          無論 $t$ 為何，到 <span class="pill pill-z">z 軸</span> 的距離恆為 $4$，所以螺旋線整條都躺在圓柱 $x^2+y^2=16$ 上。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 12.1 內小段：例題 4 兩曲面交線 -->
+<!-- ============================================================ -->
+<section id="sec-intersect">
+  <div class="section-number">12.1 內小段 · 例題 4 · 兩曲面交線</div>
+  <h2>把曲線寫成「兩個面交出來的軌跡」</h2>
+  <p class="exercise-question">講義例題 4：畫出半橢球面 $\dfrac{x^2}{12}+\dfrac{y^2}{24}+\dfrac{z^2}{4}=1,\ z\ge0$ 與拋物柱面 $y=x^2$ 的交線 $C$，並求表示此交線的向量值函數。</p>
+  <div style="text-align:center;margin:.5rem 0;">$$\frac{x^2}{12} + \frac{y^2}{24} + \frac{z^2}{4} = 1,\ \ z\geq 0 \quad \text{與} \quad y = x^2$$</div>
+
+  <h3>解題思路（逐步）</h3>
+  <div class="step-block solution-start">
+    <div class="step-num">步驟 1 · 取自然參數</div>
+    令 $x = t$。代入拋物柱面：$y = t^2$。
+  </div>
+  <div class="step-block">
+    <div class="step-num">步驟 2 · 代入半橢球面解 $z$</div>
+    $\dfrac{t^2}{12} + \dfrac{t^4}{24} + \dfrac{z^2}{4} = 1 \;\Longrightarrow\; z^2 = 4 - \dfrac{t^2}{3} - \dfrac{t^4}{6} = \dfrac{24 - 2t^2 - t^4}{6}$。<br>
+    $24 - 2t^2 - t^4 = -(t^4 + 2t^2 - 24) = -(t^2+6)(t^2-4) = (t^2+6)(4-t^2)$。
+  </div>
+  <div class="step-block">
+    <div class="step-num">步驟 3 · 取 $z\ge 0$ 的支</div>
+    $z = \sqrt{\dfrac{(6+t^2)(4-t^2)}{6}}$。要 $z$ 為實數，必須 $4 - t^2 \ge 0$，即 <strong>$-2 \le t \le 2$</strong>。
+  </div>
+  <div class="step-block">
+    <div class="step-num">步驟 4 · 寫成向量值函數</div>
+    $\mathbf{r}(t) = t\,\mathbf{i} + t^2\,\mathbf{j} + \sqrt{\dfrac{(6+t^2)(4-t^2)}{6}}\,\mathbf{k}, \quad -2 \le t \le 2$。
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="canvas3d-panel">
+        <div class="canvas-wrap">
+          <canvas id="canvas-intersect"></canvas>
+          <div class="hint-overlay">拖曳旋轉 · 滾輪縮放</div>
+          <div class="t-display" id="intersectT">t = -2.00</div>
+        </div>
+        <div class="axis-legend">
+          <span class="ax-x">x</span><span class="ax-y">y</span><span class="ax-z">z</span>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="btnIntersectPlay">▶ 沿曲線跑 t</button>
+          <button class="btn btn-toggle" id="btnEllipsoid">半橢球面</button>
+          <button class="btn btn-toggle" id="btnParaCyl">拋物柱面 $y=x^2$</button>
+          <button class="btn btn-reset" onclick="scenes.intersect.resetCam()">↺ 視角重置</button>
+        </div>
+        <div style="margin-top:.6rem;display:flex;align-items:center;gap:.5rem;">
+          <span style="font-size:.78rem;color:var(--muted);min-width:30px;">t</span>
+          <input type="range" id="intersectSlider" min="-2" max="2" step="0.01" value="-2" style="flex:1;accent-color:var(--vec-r);">
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">曲線 C</div>
+        <div class="eq-formula" style="font-size:.93rem;">$\mathbf{r}(t) = t\,\mathbf{i} + t^2\mathbf{j} + \sqrt{\tfrac{(6+t^2)(4-t^2)}{6}}\,\mathbf{k}$</div>
+        <div class="eq-sub">$-2 \le t \le 2$</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">當下點 $\mathbf{r}(t)$</div>
+        <div class="ic-row"><span class="ic-label">$x = t$</span><span class="ic-value highlight" id="intX">-2.00</span></div>
+        <div class="ic-row"><span class="ic-label">$y = t^2$</span><span class="ic-value highlight" id="intY">4.00</span></div>
+        <div class="ic-row"><span class="ic-label">$z$</span><span class="ic-value highlight" id="intZ">0.00</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">三個關鍵點</div>
+        <div style="font-size:.83rem;line-height:1.7;">
+          $t = -2$：$(-2, 4, 0)$<br>
+          $t = 0$：$(0, 0, 2)$ <em>(最高點)</em><br>
+          $t = 2$：$(2, 4, 0)$
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 12.1 內小段：極限與連續 -->
+<!-- ============================================================ -->
+<section id="sec-limit">
+  <div class="section-number">12.1 內小段 · 極限與連續</div>
+  <h2>極限與連續：分量做就行</h2>
+
+  <div class="info-box">
+    <span class="info-label">定義 12.2</span>
+    <strong>向量值函數的極限</strong><br>
+    對 $\mathbf{r}(t) = f(t)\mathbf{i} + g(t)\mathbf{j} + h(t)\mathbf{k}$（空間情形），
+    $$\lim_{t\to a}\mathbf{r}(t) = \Big[\lim_{t\to a}f(t)\Big]\mathbf{i} + \Big[\lim_{t\to a}g(t)\Big]\mathbf{j} + \Big[\lim_{t\to a}h(t)\Big]\mathbf{k}$$
+    前提是三個分量函數的極限都存在。平面情形類似（去掉 $h$）。
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">定義 12.3</span>
+    <strong>連續性</strong><br>
+    $\mathbf{r}$ 在 $t = a$ 連續，定義為 $\displaystyle\lim_{t\to a}\mathbf{r}(t) = \mathbf{r}(a)$。<br>
+    <strong>等價條件</strong>：每個分量函數在 $t = a$ 都連續。
+  </div>
+
+  <h3>例題 5（連續）</h3>
+  <p class="exercise-question">$\mathbf{r}(t) = t\,\mathbf{i} + a\,\mathbf{j} + (a^2 - t^2)\,\mathbf{k}$（$a$ 為常數），在 $t = 0$ 是否連續？</p>
+  <div class="step-block solution-start">
+    <div class="step-num">解題</div>
+    三個分量 $t$、$a$（常數）、$a^2 - t^2$ 全是<em>多項式</em>，在所有實數都連續。所以 $\mathbf{r}$ 在 $t=0$ 連續，且 $\displaystyle\lim_{t\to 0}\mathbf{r}(t) = a\mathbf{j} + a^2\mathbf{k} = \mathbf{r}(0)$。
+  </div>
+
+  <h3>例題 6（決定連續區間）</h3>
+  <p class="exercise-question">$\mathbf{r}(t) = t\,\mathbf{i} + \sqrt{t+1}\,\mathbf{j} + (t^2+1)\,\mathbf{k}$ 在哪些區間連續？</p>
+  <div class="step-block solution-start">
+    <div class="step-num">解題</div>
+    $f(t) = t$：對所有實數連續。<br>
+    $g(t) = \sqrt{t+1}$：要求 $t + 1 \ge 0$，定義域 $[-1, \infty)$；在這上面連續。<br>
+    $h(t) = t^2 + 1$：對所有實數連續。<br>
+    交集：<strong>$\mathbf{r}$ 在 $[-1, \infty)$ 上連續</strong>。
+  </div>
+
+  <div class="quiz-card" id="quiz-ch12-2">
+    <span class="quiz-tag">概念檢查</span>
+    <div class="quiz-q">求 $\displaystyle\lim_{t\to 0}\Big(\dfrac{\sin t}{t}\,\mathbf{i}+(t^2+1)\,\mathbf{j}+\dfrac{t}{t+2}\,\mathbf{k}\Big)$。</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">$(0,1,0)$</button>
+      <button class="quiz-opt">$(1,1,0)$</button>
+      <button class="quiz-opt">不存在</button>
+      <button class="quiz-opt">$(1,1,1)$</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 12.2 內小段：微分 -->
+<!-- ============================================================ -->
+<section id="sec-deriv">
+  <div class="section-number">12.2 向量值函數的微分與積分</div>
+  <h2>導數：分量逐一微分</h2>
+
+  <div class="info-box">
+    <span class="info-label">定義 12.4</span>
+    <strong>向量值函數的導數</strong>
+    $$\mathbf{r}'(t) = \lim_{\Delta t\to 0}\frac{\mathbf{r}(t+\Delta t) - \mathbf{r}(t)}{\Delta t}$$
+    只要這個極限存在，$\mathbf{r}$ 就在 $t$ 處<strong>可微</strong>。注意分子是<em>向量差</em>，分母是<em>純量</em>，結果是<em>向量</em>。
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">定理 12.1</span>
+    <strong>分量逐一微分</strong>
+    <div style="margin:.5rem 0;text-align:center;">
+      $\mathbf{r}(t) = f(t)\mathbf{i} + g(t)\mathbf{j} + h(t)\mathbf{k} \;\Longrightarrow\; \mathbf{r}'(t) = f'(t)\mathbf{i} + g'(t)\mathbf{j} + h'(t)\mathbf{k}$
+    </div>
+    要求 $f$、$g$、$h$ 都可微。<em>把向量值微分轉化為三個一元微分問題。</em>
+  </div>
+
+  <h3>幾何意義：$\mathbf{r}'(t)$ 是切向量</h3>
+  <p class="exercise-question">講義例題 1：對 $\mathbf{r}(t)=t\,\mathbf{i}+(t^2+2)\,\mathbf{j}$，求 $\mathbf r'(t)$；再畫出 $\mathbf r(t)$ 所表示的平面曲線，以及 $\mathbf r(1)$ 與 $\mathbf r'(1)$。</p>
+  <p>下方畫布把這題視覺化。導數 $\mathbf{r}'(t) = \mathbf{i} + 2t\,\mathbf{j}$；<span class="text-tan">綠色箭頭</span>從點 $\mathbf{r}(t)$ 出發，方向是<em>沿曲線、$t$ 增加的方向</em>，這就是切向量。</p>
+
+  <div class="info-box warm" style="margin:.6rem 0;">
+    <span class="info-label">割線 → 切線</span>
+    <strong>割線向量 $\dfrac{\mathbf{r}(t+\Delta t) - \mathbf{r}(t)}{\Delta t}$ 隨 $\Delta t \to 0$ 收斂到切向量 $\mathbf{r}'(t)$。</strong>
+    下方畫布預設同時顯示綠色切線與橘色割線——把 $\Delta t$ 滑桿往左拉到 0.05，觀察橘線旋轉並逐漸與綠線重合。
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="canvas3d-panel canvas-2d">
+        <div class="canvas-wrap">
+          <canvas id="canvas-deriv"></canvas>
+          <div class="hint-overlay">2D · xy 平面</div>
+          <div class="t-display" id="derivT">t = 1.00</div>
+        </div>
+        <div class="axis-legend">
+          <span class="ax-x">x</span><span class="ax-y">y</span>
+          <span class="ax-tan">切線 r'(t)</span><span class="ax-sec">割線 (Δt)</span>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-toggle" id="btnDerivSecant">隱藏割線</button>
+          <button class="btn btn-toggle off" id="btnDerivR">顯示位置向量</button>
+        </div>
+        <div style="margin-top:.6rem;display:flex;flex-direction:column;gap:.4rem;">
+          <div style="display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);min-width:30px;">t</span>
+            <input type="range" id="derivT_slider" min="-2" max="2" step="0.01" value="1" style="flex:1;accent-color:var(--vec-tan);">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--accent3);font-weight:600;min-width:50px;text-align:right;" id="derivT_val">1.00</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);min-width:30px;">Δt</span>
+            <input type="range" id="derivDt_slider" min="0.05" max="1.5" step="0.01" value="0.8" style="flex:1;accent-color:#e67e22;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:#e67e22;font-weight:600;min-width:50px;text-align:right;" id="derivDt_val">0.80</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">例 1 · 微分</div>
+        <div class="eq-formula">$\mathbf{r}(t) = t\,\mathbf{i} + (t^2{+}2)\,\mathbf{j}$</div>
+        <div class="eq-sub">$\mathbf{r}'(t) = \mathbf{i} + 2t\,\mathbf{j}$</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">當下值</div>
+        <div class="ic-row"><span class="ic-label">$\mathbf{r}(t)$</span><span class="ic-value highlight" id="derivR">(1.00, 3.00)</span></div>
+        <div class="ic-row"><span class="ic-label">切線 $\mathbf{r}'(t)$</span><span class="ic-value tan" id="derivRp">(1.00, 2.00)</span></div>
+        <div class="ic-row"><span class="ic-label">$\|\mathbf{r}'(t)\|$</span><span class="ic-value tan" id="derivSpd">2.236</span></div>
+        <div style="border-top:1px dashed var(--card-border);margin:.4rem 0;"></div>
+        <div class="ic-row"><span class="ic-label">割線斜率向量</span><span class="ic-value" id="derivSec" style="color:#c75a0e;font-weight:700;">(1.00, 2.80)</span></div>
+        <div class="ic-row"><span class="ic-label">與切線差距</span><span class="ic-value" id="derivErr" style="color:#c75a0e;font-weight:700;">0.800</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">如何閱讀此圖</div>
+        <div style="font-size:.83rem;line-height:1.7;">
+          綠色虛線是<strong>切線</strong>（$\mathbf{r}'(t)$ 方向）；橘色虛線是<strong>割線</strong>（$\mathbf{r}(t)$ 與 $\mathbf{r}(t+\Delta t)$ 連線方向）。<em>把 $\Delta t$ 滑桿往左拉</em>：橘線會旋轉並逐漸與綠線重合——這就是「割線 → 切線」的極限過程。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>從定義導出分量逐一微分（兩維情形）</h3>
+  <div class="step-block">
+    <div class="step-num">推導</div>
+    $$\begin{aligned}
+    \mathbf{r}'(t) &= \lim_{\Delta t\to 0}\frac{\mathbf{r}(t+\Delta t) - \mathbf{r}(t)}{\Delta t}\\
+    &= \lim_{\Delta t\to 0}\frac{[f(t+\Delta t) - f(t)]\,\mathbf{i} + [g(t+\Delta t) - g(t)]\,\mathbf{j}}{\Delta t}\\
+    &= \Big[\lim_{\Delta t\to 0}\tfrac{f(t+\Delta t)-f(t)}{\Delta t}\Big]\mathbf{i} + \Big[\lim_{\Delta t\to 0}\tfrac{g(t+\Delta t)-g(t)}{\Delta t}\Big]\mathbf{j}\\
+    &= f'(t)\,\mathbf{i} + g'(t)\,\mathbf{j}
+    \end{aligned}$$
+    最後一步用到「向量極限可拆給每個分量」（定義 12.2）。
+  </div>
+
+  <div class="quiz-card" id="quiz-ch12-3">
+    <span class="quiz-tag">概念檢查</span>
+    <div class="quiz-q">對 $\mathbf{r}(t)=t\,\mathbf{i}+(t^2+2)\,\mathbf{j}$（拋物線），$\mathbf{r}'(1)$ 的<strong>幾何意義</strong>是？</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">曲線在點 $(1,3)$ 處的加速度向量</button>
+      <button class="quiz-opt">曲線在點 $(1,3)$ 處的切向量，指向 $t$ 增加方向</button>
+      <button class="quiz-opt">曲線從 $(1,3)$ 指向無窮遠的方向向量</button>
+      <button class="quiz-opt">單變數的 $\dfrac{dy}{dx}$ 在 $x=1$ 的值</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 12.2 內小段：高階導數 -->
+<!-- ============================================================ -->
+<section id="sec-higher">
+  <div class="section-number">12.2 內小段 · 高階導數</div>
+  <h2>$\mathbf{r}'$、$\mathbf{r}''$ 與向量運算</h2>
+  <p>講義例題 2：對 $\mathbf{r}(t) = \cos t\,\mathbf{i} + \sin t\,\mathbf{j} + 2t\,\mathbf{k}$，求各階導數及 $\mathbf{r}'\cdot\mathbf{r}''$、$\mathbf{r}'\times\mathbf{r}''$。</p>
+
+  <div class="step-block">
+    <div class="step-num">a · 一階導數</div>
+    $\mathbf{r}'(t) = -\sin t\,\mathbf{i} + \cos t\,\mathbf{j} + 2\,\mathbf{k}$
+  </div>
+  <div class="step-block">
+    <div class="step-num">b · 二階導數</div>
+    $\mathbf{r}''(t) = -\cos t\,\mathbf{i} - \sin t\,\mathbf{j} + 0\,\mathbf{k}$<br>
+    <em>注意</em>：$\mathbf{r}''$ 沒有 $\mathbf{k}$ 分量，因為 $2t$ 二次微分後消失。
+  </div>
+  <div class="step-block">
+    <div class="step-num">c · 點積 $\mathbf{r}'\cdot\mathbf{r}''$</div>
+    $(-\sin t)(-\cos t) + (\cos t)(-\sin t) + (2)(0) = \sin t\cos t - \sin t\cos t = \boldsymbol{0}$<br>
+    <em>結論</em>：$\mathbf{r}'\perp\mathbf{r}''$ 對<em>所有</em> $t$ 都成立——這在這個曲線上是個美麗的特性。
+  </div>
+  <div class="step-block">
+    <div class="step-num">d · 叉積 $\mathbf{r}'\times\mathbf{r}''$</div>
+    $\begin{vmatrix}\mathbf{i}&\mathbf{j}&\mathbf{k}\\-\sin t&\cos t&2\\-\cos t&-\sin t&0\end{vmatrix} = 2\sin t\,\mathbf{i} - 2\cos t\,\mathbf{j} + (\sin^2 t + \cos^2 t)\,\mathbf{k}$
+    $\;=\; 2\sin t\,\mathbf{i} - 2\cos t\,\mathbf{j} + \mathbf{k}$
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="canvas3d-panel">
+        <div class="canvas-wrap">
+          <canvas id="canvas-higher"></canvas>
+          <div class="hint-overlay">拖曳旋轉 · 滾輪縮放</div>
+          <div class="t-display" id="higherT">t = 0.00</div>
+        </div>
+        <div class="axis-legend">
+          <span class="ax-x">x</span><span class="ax-y">y</span><span class="ax-z">z</span>
+          <span class="ax-tan">r'(t)</span><span class="ax-2nd">r''(t)</span>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="btnHigherPlay">▶ 播放</button>
+          <button class="btn btn-toggle" id="btnHigherRp">$\mathbf{r}'(t)$</button>
+          <button class="btn btn-toggle" id="btnHigherRpp">$\mathbf{r}''(t)$</button>
+          <button class="btn btn-reset" onclick="scenes.higher.resetCam()">↺ 視角重置</button>
+        </div>
+        <div style="margin-top:.6rem;display:flex;align-items:center;gap:.5rem;">
+          <span style="font-size:.78rem;color:var(--muted);min-width:30px;">t</span>
+          <input type="range" id="higherSlider" min="0" max="1" step="0.001" value="0" style="flex:1;accent-color:var(--vec-tan);">
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">例 2 · 高階導數</div>
+        <div class="eq-formula">$\mathbf{r}(t) = \cos t\,\mathbf{i} + \sin t\,\mathbf{j} + 2t\,\mathbf{k}$</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">當下值</div>
+        <div class="ic-row"><span class="ic-label">$\mathbf{r}(t)$</span><span class="ic-value highlight" id="hgR">(1.00, 0.00, 0.00)</span></div>
+        <div class="ic-row"><span class="ic-label">$\mathbf{r}'(t)$</span><span class="ic-value tan" id="hgRp">(0.00, 1.00, 2.00)</span></div>
+        <div class="ic-row"><span class="ic-label">$\mathbf{r}''(t)$</span><span class="ic-value snd" id="hgRpp">(-1.00, 0.00, 0.00)</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">點積 vs 叉積（即時）</div>
+        <div class="ic-row"><span class="ic-label">$\mathbf{r}'\cdot\mathbf{r}''$</span><span class="ic-value" id="hgDot">0.000</span></div>
+        <div class="ic-row"><span class="ic-label">$\mathbf{r}'\times\mathbf{r}''$</span><span class="ic-value" id="hgCross" style="font-size:.74rem;">(0,-2,1)</span></div>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:.3rem;">點積恆為 0：$\mathbf{r}'\perp\mathbf{r}''$。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box warm">
+    <span class="info-label">定義 · 平滑</span>
+    <strong>平滑曲線</strong>：在開區間 $I$ 上，$f', g', h'$ 連續，且 $\mathbf{r}'(t)\ne\mathbf{0}$ 對所有 $t\in I$ 成立。<br>
+    要求 $\mathbf{r}'\ne\mathbf{0}$ 是為了讓<em>切向量始終有方向</em>——若 $\mathbf{r}'=\mathbf{0}$，曲線可能在該點出現尖點。
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 12.2 內小段：導數性質 -->
+<!-- ============================================================ -->
+<section id="sec-props">
+  <div class="section-number">12.2 內小段 · 導數的七條性質</div>
+  <h2>定理 12.2：和、積、點積、叉積、合成</h2>
+  <p>令 $\mathbf{r}, \mathbf{u}$ 為 $t$ 的可微向量值函數，$w$ 為可微的純量函數，$c$ 為常數。下列性質都可由分量逐一微分驗證。</p>
+
+  <ol class="prop-list">
+    <li>$D_t[c\,\mathbf{r}(t)] = c\,\mathbf{r}'(t)$</li>
+    <li>$D_t[\mathbf{r}(t) \pm \mathbf{u}(t)] = \mathbf{r}'(t) \pm \mathbf{u}'(t)$</li>
+    <li>$D_t[w(t)\,\mathbf{r}(t)] = w(t)\,\mathbf{r}'(t) + w'(t)\,\mathbf{r}(t)$ &nbsp;<span class="deg-note">（純量乘向量的乘積律）</span></li>
+    <li>$D_t[\mathbf{r}(t)\cdot\mathbf{u}(t)] = \mathbf{r}(t)\cdot\mathbf{u}'(t) + \mathbf{r}'(t)\cdot\mathbf{u}(t)$ &nbsp;<span class="deg-note">（點積乘積律）</span></li>
+    <li>$D_t[\mathbf{r}(t)\times\mathbf{u}(t)] = \mathbf{r}(t)\times\mathbf{u}'(t) + \mathbf{r}'(t)\times\mathbf{u}(t)$ &nbsp;<span class="deg-note">（叉積乘積律，<strong>順序不可交換</strong>）</span></li>
+    <li>$D_t\big[\mathbf{r}(w(t))\big] = \mathbf{r}'(w(t))\,w'(t)$ &nbsp;<span class="deg-note">（鏈鎖律）</span></li>
+    <li>若 $\mathbf{r}(t)\cdot\mathbf{r}(t) = c$（即 $\|\mathbf{r}(t)\|^2$ 為常數），則 $\mathbf{r}(t)\cdot\mathbf{r}'(t) = 0$。</li>
+  </ol>
+
+  <div class="info-box">
+    <span class="info-label">為何性質 7 重要？</span>
+    若一個運動的<em>位置向量長度</em>固定，例如沿著以原點為中心的球面或圓周運動，則速度向量 $\mathbf{r}'(t)$ <strong>恆與位置向量 $\mathbf{r}(t)$ 垂直</strong>。圓周運動的「向心結構」就是這條性質的直接結果。<br>
+    <strong>證明草圖</strong>：對 $\mathbf{r}\cdot\mathbf{r}=c$ 兩邊微分（用性質 4），$\mathbf{r}\cdot\mathbf{r}' + \mathbf{r}'\cdot\mathbf{r} = 0$，即 $2\,\mathbf{r}\cdot\mathbf{r}' = 0$。
+  </div>
+
+  <h3>例題 4（性質 4 的應用）</h3>
+  <p class="exercise-question">$\mathbf{r}(t) = \dfrac{1}{t}\mathbf{i} - \mathbf{j} + \ln t\,\mathbf{k}$，$\mathbf{u}(t) = t^2\mathbf{i} - 2t\,\mathbf{j} + \mathbf{k}$，求 (a) $D_t[\mathbf{r}\cdot\mathbf{u}]$、(b) $D_t[\mathbf{u}\times\mathbf{u}']$。</p>
+  <div class="step-block solution-start">
+    <div class="step-num">(a) 用性質 4</div>
+    $\mathbf{r}'(t) = -\dfrac{1}{t^2}\mathbf{i} + 0\,\mathbf{j} + \dfrac{1}{t}\mathbf{k}$，$\mathbf{u}'(t) = 2t\,\mathbf{i} - 2\,\mathbf{j} + 0\,\mathbf{k}$。<br>
+    $\mathbf{r}\cdot\mathbf{u}' = \dfrac{1}{t}(2t) + (-1)(-2) + 0 = 2 + 2 = 4$<br>
+    $\mathbf{r}'\cdot\mathbf{u} = \big(-\dfrac{1}{t^2}\big)t^2 + 0\cdot(-2t) + \dfrac{1}{t}\cdot 1 = -1 + \dfrac{1}{t}$<br>
+    所以 $D_t[\mathbf{r}\cdot\mathbf{u}] = 4 + \big(-1 + \dfrac{1}{t}\big) = 3 + \dfrac{1}{t}$。
+  </div>
+  <div class="step-block">
+    <div class="step-num">(b) 用性質 5</div>
+    $D_t[\mathbf{u}\times\mathbf{u}'] = \mathbf{u}\times\mathbf{u}'' + \mathbf{u}'\times\mathbf{u}'$。<br>
+    任何向量與自己的叉積為零：$\mathbf{u}'\times\mathbf{u}' = \mathbf{0}$。剩 $\mathbf{u}\times\mathbf{u}''$。<br>
+    $\mathbf{u}''(t) = 2\mathbf{i} - 0\mathbf{j} + 0\mathbf{k} = 2\mathbf{i}$。<br>
+    $\mathbf{u}\times\mathbf{u}'' = \begin{vmatrix}\mathbf{i}&\mathbf{j}&\mathbf{k}\\t^2&-2t&1\\2&0&0\end{vmatrix} = (0-0)\mathbf{i} - (0-2)\mathbf{j} + (0+4t)\mathbf{k} = 2\mathbf{j} + 4t\,\mathbf{k}$。
+  </div>
+
+  <div class="quiz-card" id="quiz-ch12-4">
+    <span class="quiz-tag">概念檢查（性質 7）</span>
+    <div class="quiz-q">$\mathbf{r}(t)=3\cos t\,\mathbf{i}+3\sin t\,\mathbf{j}$（圓周運動，$\|\mathbf{r}\|=3$）。對任意 $t$，$\mathbf{r}(t)\cdot\mathbf{r}'(t)=$？</div>
+    <div class="quiz-options">
+      <button class="quiz-opt">$9$</button>
+      <button class="quiz-opt">$0$</button>
+      <button class="quiz-opt">$-9\sin 2t$</button>
+      <button class="quiz-opt">$9\cos 2t$</button>
+    </div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 12.2 內小段：積分 -->
+<!-- ============================================================ -->
+<section id="sec-integral">
+  <div class="section-number">12.2 內小段 · 積分</div>
+  <h2>積分：再次「分量逐一處理」</h2>
+
+  <div class="info-box">
+    <span class="info-label">定義 12.5</span>
+    <strong>向量值函數的不定 / 定積分</strong><br>
+    對 $\mathbf{r}(t) = f(t)\mathbf{i} + g(t)\mathbf{j} + h(t)\mathbf{k}$（$f, g, h$ 在 $[a,b]$ 連續）：
+    $$\int \mathbf{r}(t)\,\mathrm{d}t = \Big[\int f(t)\,\mathrm{d}t\Big]\mathbf{i} + \Big[\int g(t)\,\mathrm{d}t\Big]\mathbf{j} + \Big[\int h(t)\,\mathrm{d}t\Big]\mathbf{k}$$
+    $$\int_a^b \mathbf{r}(t)\,\mathrm{d}t = \Big[\int_a^b f\Big]\mathbf{i} + \Big[\int_a^b g\Big]\mathbf{j} + \Big[\int_a^b h\Big]\mathbf{k}$$
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">向量常數 C</span>
+    三個分量的積分常數 $C_1, C_2, C_3$ 合併成一個<strong>向量常數</strong> $\mathbf{C} = C_1\mathbf{i} + C_2\mathbf{j} + C_3\mathbf{k}$：
+    $$\int \mathbf{r}(t)\,\mathrm{d}t = \mathbf{R}(t) + \mathbf{C}, \quad \mathbf{R}'(t) = \mathbf{r}(t)$$
+    所以一個向量值函數的反導數，是一<em>族</em>向量值函數，全部相差一個固定向量。
+  </div>
+
+  <h3>例題 5（不定積分）</h3>
+  <div class="step-block exercise-question">
+    <div class="step-num">題目</div>
+    求 $\displaystyle\int (t\,\mathbf{i} + 3\,\mathbf{j})\,\mathrm{d}t$。
+  </div>
+  <div class="step-block solution-start">
+    <div class="step-num">解題</div>
+    $\displaystyle\int t\,\mathrm{d}t = \tfrac{t^2}{2} + C_1, \quad \int 3\,\mathrm{d}t = 3t + C_2$。<br>
+    $\displaystyle\int (t\,\mathbf{i}+3\mathbf{j})\,\mathrm{d}t = \big(\tfrac{t^2}{2} + C_1\big)\mathbf{i} + (3t + C_2)\mathbf{j} = \tfrac{t^2}{2}\mathbf{i} + 3t\,\mathbf{j} + \mathbf{C}$
+  </div>
+
+  <p>下方畫布顯示這族反導數曲線。固定 $\mathbf{C}$ 的某個選擇，曲線的形狀（拋物線狀）就確定了；改變 $\mathbf{C}$，整族曲線一起<em>平移</em>。</p>
+
+  <div class="viz-layout">
+    <div>
+      <div class="canvas3d-panel canvas-2d">
+        <div class="canvas-wrap">
+          <canvas id="canvas-integral"></canvas>
+          <div class="hint-overlay">2D · xy 平面</div>
+        </div>
+        <div class="axis-legend">
+          <span class="ax-x">x</span><span class="ax-y">y</span>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-toggle" id="btnIntFamily">顯示反導數族 (多條 C)</button>
+        </div>
+        <div style="margin-top:.6rem;display:flex;flex-direction:column;gap:.4rem;">
+          <div style="display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);min-width:30px;">$C_1$</span>
+            <input type="range" id="intC1" min="-3" max="3" step="0.1" value="0" style="flex:1;accent-color:var(--accent3);">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--accent3);font-weight:600;min-width:50px;text-align:right;" id="intC1_val">0.0</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);min-width:30px;">$C_2$</span>
+            <input type="range" id="intC2" min="-3" max="3" step="0.1" value="0" style="flex:1;accent-color:var(--accent3);">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--accent3);font-weight:600;min-width:50px;text-align:right;" id="intC2_val">0.0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="eq-card">
+        <div class="eq-label">例 5 · 反導數族</div>
+        <div class="eq-formula">$\mathbf{R}(t) = \tfrac{t^2}{2}\mathbf{i} + 3t\,\mathbf{j} + \mathbf{C}$</div>
+        <div class="eq-sub" id="intCDisp">$\mathbf{C} = 0\,\mathbf{i} + 0\,\mathbf{j}$</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">幾何觀察</div>
+        <div style="font-size:.84rem;line-height:1.7;">
+          選擇不同 $\mathbf{C}$ 對應到把同一條拋物線狀曲線在 $xy$ 平面上<em>平移</em>到不同位置。所有反導數的「形狀」是一致的。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>例題 6（定積分）</h3>
+  <p class="exercise-question">計算 $\displaystyle\int_0^1 \mathbf{r}(t)\,\mathrm{d}t$，其中 $\mathbf{r}(t) = \sqrt[3]{t}\,\mathbf{i} + \dfrac{1}{t+1}\mathbf{j} + e^{-t}\mathbf{k}$。</p>
+  <div class="step-block solution-start">
+    <div class="step-num">分量逐一積分</div>
+    $\displaystyle\int_0^1 t^{1/3}\,\mathrm{d}t = \Big[\tfrac{3}{4}t^{4/3}\Big]_0^1 = \tfrac{3}{4}$<br>
+    $\displaystyle\int_0^1 \tfrac{1}{t+1}\,\mathrm{d}t = \big[\ln(t+1)\big]_0^1 = \ln 2$<br>
+    $\displaystyle\int_0^1 e^{-t}\,\mathrm{d}t = \big[-e^{-t}\big]_0^1 = 1 - \tfrac{1}{e}$
+  </div>
+  <div class="step-block">
+    <div class="step-num">合成向量</div>
+    $\displaystyle\int_0^1 \mathbf{r}(t)\,\mathrm{d}t = \tfrac{3}{4}\mathbf{i} + \ln 2\,\mathbf{j} + \Big(1 - \tfrac{1}{e}\Big)\mathbf{k} \approx 0.75\,\mathbf{i} + 0.693\,\mathbf{j} + 0.632\,\mathbf{k}$
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- REFERENCE -->
+<!-- ============================================================ -->
+<section id="sec-ref">
+  <div class="section-number">速查 · 速查表</div>
+  <h2>章節重點與公式總覽</h2>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">01</span> 三大基本定義</div>
+
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">向量值函數</span><span class="ref-card-name-en">定義 12.1</span></div>
+      <div class="ref-card-eq">$\mathbf{r}(t) = f(t)\,\mathbf{i} + g(t)\,\mathbf{j} \;[+\;h(t)\,\mathbf{k}]$</div>
+      <div class="ref-note">定義域 = 各分量定義域的交集。</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">極限</span><span class="ref-card-name-en">定義 12.2</span></div>
+      <div class="ref-card-eq">$\displaystyle\lim_{t\to a}\mathbf{r}(t) = \big[\lim f\big]\mathbf{i} + \big[\lim g\big]\mathbf{j} + \big[\lim h\big]\mathbf{k}$</div>
+      <div class="ref-note">每個分量的極限存在 ⇒ 向量值極限存在。</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">連續性</span><span class="ref-card-name-en">定義 12.3</span></div>
+      <div class="ref-card-eq">$\displaystyle\lim_{t\to a}\mathbf{r}(t) = \mathbf{r}(a)$</div>
+      <div class="ref-note">⇔ 每個分量在 $t = a$ 連續。</div>
+    </div>
+  </div>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">02</span> 微分與積分</div>
+
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">導數定義</span><span class="ref-card-name-en">定義 12.4</span></div>
+      <div class="ref-card-eq">$\displaystyle\mathbf{r}'(t) = \lim_{\Delta t\to 0}\frac{\mathbf{r}(t+\Delta t) - \mathbf{r}(t)}{\Delta t}$</div>
+      <div class="ref-note">分子是向量差、分母是純量。</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">分量微分</span><span class="ref-card-name-en">定理 12.1</span></div>
+      <div class="ref-card-eq">$\mathbf{r}'(t) = f'(t)\mathbf{i} + g'(t)\mathbf{j} + h'(t)\mathbf{k}$</div>
+      <div class="ref-note">向量值微分 ↦ 三個一元微分問題。</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">不定積分</span><span class="ref-card-name-en">定義 12.5</span></div>
+      <div class="ref-card-eq">$\displaystyle\int\mathbf{r}\,\mathrm{d}t = \big[\int f\big]\mathbf{i} + \big[\int g\big]\mathbf{j} + \big[\int h\big]\mathbf{k}$</div>
+      <div class="ref-note">三個積分常數合成一個向量常數 $\mathbf{C}$。</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-card-header"><span class="ref-card-name">光滑曲線</span><span class="ref-card-name-en">光滑</span></div>
+      <div class="ref-card-eq">$f', g', h'$ 連續 且 $\mathbf{r}'(t)\ne\mathbf{0}$</div>
+      <div class="ref-note">$\mathbf{r}'\ne\mathbf{0}$ 保證切向量始終有方向，避免尖點。</div>
+    </div>
+  </div>
+
+  <div class="ref-group">
+    <div class="ref-group-title"><span class="rg-badge">03</span> 導數的七條性質（定理 12.2）</div>
+    <table class="conv-table">
+      <thead><tr><th>規則</th><th>公式</th></tr></thead>
+      <tbody>
+        <tr><td>純量倍</td><td>$D_t[c\,\mathbf{r}] = c\,\mathbf{r}'$</td></tr>
+        <tr><td>和差</td><td>$D_t[\mathbf{r} \pm \mathbf{u}] = \mathbf{r}' \pm \mathbf{u}'$</td></tr>
+        <tr><td>純量×向量</td><td>$D_t[w\mathbf{r}] = w\mathbf{r}' + w'\mathbf{r}$</td></tr>
+        <tr><td>點積</td><td>$D_t[\mathbf{r}\cdot\mathbf{u}] = \mathbf{r}\cdot\mathbf{u}' + \mathbf{r}'\cdot\mathbf{u}$</td></tr>
+        <tr><td>叉積</td><td>$D_t[\mathbf{r}\times\mathbf{u}] = \mathbf{r}\times\mathbf{u}' + \mathbf{r}'\times\mathbf{u}$</td></tr>
+        <tr><td>鏈鎖律</td><td>$D_t[\mathbf{r}(w(t))] = \mathbf{r}'(w(t))\,w'(t)$</td></tr>
+        <tr><td>定長條件</td><td>$\mathbf{r}\cdot\mathbf{r}=c \Longrightarrow \mathbf{r}\cdot\mathbf{r}'=0$</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:.83rem;color:var(--muted);margin-top:.5rem;">叉積規則裡<em>順序</em>不可交換——必須是 $\mathbf{r}\times\mathbf{u}' + \mathbf{r}'\times\mathbf{u}$（不是 $+\mathbf{u}\times\mathbf{r}'$）。</p>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <p>國立中山大學應用數學系課程講義。<br>
+  第 12 章：向量值函數 — 作圖、極限、微分與積分。</p>
+</footer>
+
+<script>
+/* ============================================================
+   SHARED 3D UTILITIES
+   ============================================================ */
+
+const PI = Math.PI;
+const scenes = {};
+
+class OrbitCam {
+  constructor(canvas, camera, radius0, phi0, theta0) {
+    this.camera = camera;
+    this.target = new THREE.Vector3(0,0,0);
+    this.theta = theta0;
+    this.phi = phi0;
+    this.radius = radius0;
+    this.theta0 = theta0; this.phi0 = phi0; this.radius0 = radius0;
+    this.minR = 3; this.maxR = 40;
+    this.minPhi = 0.04; this.maxPhi = Math.PI - 0.04;
+    let dragging = false, lastX=0, lastY=0;
+    const onDown = (x,y) => { dragging = true; lastX=x; lastY=y; };
+    const onMove = (x,y) => {
+      if (!dragging) return;
+      this.theta -= (x-lastX)*0.0075;
+      this.phi   -= (y-lastY)*0.0075;
+      this.phi = Math.max(this.minPhi, Math.min(this.maxPhi, this.phi));
+      lastX=x; lastY=y;
+      this.update();
+    };
+    const onUp = () => dragging = false;
+    canvas.addEventListener('mousedown', e => onDown(e.clientX, e.clientY));
+    window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+    window.addEventListener('mouseup', onUp);
+    canvas.addEventListener('touchstart', e => { if (e.touches[0]) { onDown(e.touches[0].clientX, e.touches[0].clientY); } }, {passive:true});
+    canvas.addEventListener('touchmove', e => { if (dragging && e.touches[0]) { e.preventDefault(); onMove(e.touches[0].clientX, e.touches[0].clientY); } }, {passive:false});
+    canvas.addEventListener('touchend', onUp);
+    canvas.addEventListener('wheel', e => {
+      e.preventDefault();
+      this.radius *= (1 + e.deltaY * 0.0014);
+      this.radius = Math.max(this.minR, Math.min(this.maxR, this.radius));
+      this.update();
+    }, {passive:false});
+    this.update();
+  }
+  update() {
+    const s = Math.sin(this.phi), c = Math.cos(this.phi);
+    const x = this.radius * s * Math.cos(this.theta);
+    const y = this.radius * s * Math.sin(this.theta);
+    const z = this.radius * c;
+    this.camera.position.set(x, y, z);
+    this.camera.up.set(0,0,1);
+    this.camera.lookAt(this.target);
+  }
+  setView(theta, phi, radius) {
+    this.theta = theta; this.phi = phi; this.radius = radius;
+    this.update();
+  }
+  reset() {
+    this.theta = this.theta0; this.phi = this.phi0; this.radius = this.radius0;
+    this.update();
+  }
+}
+
+function makeScene(canvasId, opts={}) {
+  const canvas = document.getElementById(canvasId);
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:false});
+  renderer.setPixelRatio(window.devicePixelRatio);
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x1a1a2e);
+
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 200);
+  const radius0 = opts.radius || 12;
+  const phi0    = opts.phi    || 1.05;
+  const theta0  = opts.theta  || 0.9;
+  const orbit = new OrbitCam(canvas, camera, radius0, phi0, theta0);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+  const dir1 = new THREE.DirectionalLight(0xffffff, 0.7);
+  dir1.position.set(5,5,8); scene.add(dir1);
+  const dir2 = new THREE.DirectionalLight(0x88aaff, 0.35);
+  dir2.position.set(-5,-3,4); scene.add(dir2);
+
+  const axisGroup = buildAxes(opts.axisLen || 4);
+  scene.add(axisGroup);
+  const grid = buildGrid(opts.gridSize || 6, opts.gridStep || 1);
+  scene.add(grid);
+
+  function resize() {
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    if (w < 4 || h < 4) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  const ro = new ResizeObserver(resize);
+  ro.observe(canvas);
+  setTimeout(resize, 30);
+
+  let running = true;
+  function loop() {
+    if (!running) return;
+    requestAnimationFrame(loop);
+    renderer.render(scene, camera);
+  }
+  requestAnimationFrame(loop);
+
+  return {
+    scene, camera, renderer, orbit, axes:axisGroup, grid,
+    resetCam: () => orbit.reset(),
+    setView: (t,p,r) => orbit.setView(t,p,r),
+    dispose: () => { running=false; ro.disconnect(); renderer.dispose(); },
+  };
+}
+
+function buildAxes(L) {
+  const g = new THREE.Group();
+  const mkAxis = (dir, color) => {
+    const mat = new THREE.LineBasicMaterial({color});
+    const geom = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(-L*dir.x, -L*dir.y, -L*dir.z),
+      new THREE.Vector3( L*dir.x,  L*dir.y,  L*dir.z),
+    ]);
+    g.add(new THREE.Line(geom, mat));
+    const cone = new THREE.Mesh(
+      new THREE.ConeGeometry(0.09, 0.28, 16),
+      new THREE.MeshBasicMaterial({color})
+    );
+    cone.position.set(L*dir.x, L*dir.y, L*dir.z);
+    const up = new THREE.Vector3(0,1,0);
+    const d = new THREE.Vector3(dir.x, dir.y, dir.z);
+    const q = new THREE.Quaternion().setFromUnitVectors(up, d);
+    cone.quaternion.copy(q);
+    g.add(cone);
+  };
+  mkAxis({x:1,y:0,z:0}, 0xe74c3c);
+  mkAxis({x:0,y:1,z:0}, 0x27ae60);
+  mkAxis({x:0,y:0,z:1}, 0x2980b9);
+  return g;
+}
+
+function buildGrid(size, step) {
+  const g = new THREE.Group();
+  const mat = new THREE.LineBasicMaterial({color:0x4a4a68, transparent:true, opacity:0.45});
+  const pts = [];
+  for (let i=-size; i<=size; i+=step) {
+    pts.push(new THREE.Vector3(-size,i,0), new THREE.Vector3(size,i,0));
+    pts.push(new THREE.Vector3(i,-size,0), new THREE.Vector3(i,size,0));
+  }
+  const geom = new THREE.BufferGeometry().setFromPoints(pts);
+  g.add(new THREE.LineSegments(geom, mat));
+  return g;
+}
+
+/* ----------------------------------------------------------------
+   ARROW (a stick + cone head) for a vector from `origin` to `tip`.
+   Returns a THREE.Group so we can update transforms easily.
+---------------------------------------------------------------- */
+function makeArrow(color, shaftRadius=0.045, headRadius=0.13, headLength=0.32) {
+  const g = new THREE.Group();
+  const shaft = new THREE.Mesh(
+    new THREE.CylinderGeometry(shaftRadius, shaftRadius, 1, 12),
+    new THREE.MeshStandardMaterial({color, emissive:color, emissiveIntensity:0.18, roughness:0.4})
+  );
+  shaft.name = 'shaft';
+  // Cylinder is along +y by default; we'll keep that and orient with quaternion.
+  g.add(shaft);
+  const head = new THREE.Mesh(
+    new THREE.ConeGeometry(headRadius, headLength, 18),
+    new THREE.MeshStandardMaterial({color, emissive:color, emissiveIntensity:0.25, roughness:0.35})
+  );
+  head.name = 'head';
+  g.add(head);
+  g.userData.headLength = headLength;
+  return g;
+}
+
+/* Set arrow from `origin` (Vector3) to `tip` (Vector3). Hides if zero length. */
+function setArrow(arrowGroup, origin, tip) {
+  const dir = new THREE.Vector3().subVectors(tip, origin);
+  const len = dir.length();
+  const headLen = arrowGroup.userData.headLength;
+  if (len < 1e-6) { arrowGroup.visible = false; return; }
+  arrowGroup.visible = true;
+  // Effective shaft length excludes head; min 1e-3 to avoid scaling problems
+  const shaftLen = Math.max(1e-3, len - headLen);
+  const shaft = arrowGroup.getObjectByName('shaft');
+  const head  = arrowGroup.getObjectByName('head');
+  shaft.scale.set(1, shaftLen, 1);
+  shaft.position.set(0, shaftLen/2, 0);
+  head.position.set(0, shaftLen + headLen/2, 0);
+  // rotate so +y maps to dir
+  const up = new THREE.Vector3(0,1,0);
+  const dirN = dir.clone().normalize();
+  const q = new THREE.Quaternion().setFromUnitVectors(up, dirN);
+  arrowGroup.position.copy(origin);
+  arrowGroup.quaternion.copy(q);
+}
+
+function makeCurveLine(points, color=0xffffff) {
+  const g = new THREE.BufferGeometry().setFromPoints(points);
+  return new THREE.Line(g, new THREE.LineBasicMaterial({color}));
+}
+
+function makeFatTube(points, color, radius=0.06, radialSeg=8) {
+  if (points.length < 2) return new THREE.Group();
+  const curve = new THREE.CatmullRomCurve3(points, false, 'catmullrom', 0.1);
+  const geom = new THREE.TubeGeometry(curve, Math.min(400, points.length*2), radius, radialSeg, false);
+  const mat = new THREE.MeshStandardMaterial({color, roughness:0.35, metalness:0.2,
+    emissive:color, emissiveIntensity:0.12});
+  return new THREE.Mesh(geom, mat);
+}
+
+function makeSphereMarker(radius=0.14, color=0xf1c40f) {
+  const g = new THREE.SphereGeometry(radius, 20, 14);
+  const m = new THREE.MeshStandardMaterial({color, emissive:color, emissiveIntensity:0.4, roughness:0.3});
+  return new THREE.Mesh(g, m);
+}
+
+/* Mutable line that keeps a fixed buffer and we update positions */
+function makeMutableLine(maxPoints, color, lineWidth=2) {
+  const positions = new Float32Array(maxPoints * 3);
+  const geom = new THREE.BufferGeometry();
+  geom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geom.setDrawRange(0, 0);
+  const mat = new THREE.LineBasicMaterial({color});
+  const line = new THREE.Line(geom, mat);
+  line.frustumCulled = false;
+  return {
+    line, positions, geom,
+    setPoints(pts) {
+      const n = Math.min(pts.length, maxPoints);
+      for (let i = 0; i < n; i++) {
+        positions[3*i] = pts[i].x;
+        positions[3*i+1] = pts[i].y;
+        positions[3*i+2] = pts[i].z;
+      }
+      geom.attributes.position.needsUpdate = true;
+      geom.setDrawRange(0, n);
+      geom.computeBoundingSphere();
+    }
+  };
+}
+
+/* ============================================================
+   2D SCENE UTILITY  (Canvas 2D for plane curves)
+   make2DScene(canvasId, {xRange, yRange, padding, aspectLock, ...})
+   ============================================================ */
+function make2DScene(canvasId, opts={}) {
+  const canvas = document.getElementById(canvasId);
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+
+  let baseXRange = (opts.xRange || [-5, 5]).slice();
+  let baseYRange = (opts.yRange || [-5, 5]).slice();
+  const cfg = {
+    xRange: baseXRange.slice(),
+    yRange: baseYRange.slice(),
+    padding: opts.padding ?? 36,
+    aspectLock: opts.aspectLock ?? true,
+  };
+  let W = 1, H = 1;
+
+  function lockAspect() {
+    cfg.xRange = baseXRange.slice();
+    cfg.yRange = baseYRange.slice();
+    if (!cfg.aspectLock) return;
+    const dataAspect = (cfg.xRange[1]-cfg.xRange[0]) / (cfg.yRange[1]-cfg.yRange[0]);
+    const innerW = Math.max(1, W - 2*cfg.padding);
+    const innerH = Math.max(1, H - 2*cfg.padding);
+    const pixelAspect = innerW / innerH;
+    if (pixelAspect > dataAspect) {
+      const newW = (cfg.yRange[1]-cfg.yRange[0]) * pixelAspect;
+      const cx = (cfg.xRange[0]+cfg.xRange[1])/2;
+      cfg.xRange = [cx - newW/2, cx + newW/2];
+    } else {
+      const newH = (cfg.xRange[1]-cfg.xRange[0]) / pixelAspect;
+      const cy = (cfg.yRange[0]+cfg.yRange[1])/2;
+      cfg.yRange = [cy - newH/2, cy + newH/2];
+    }
+  }
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width  = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    lockAspect();
+  }
+
+  function setView(xRange, yRange) {
+    baseXRange = xRange.slice();
+    baseYRange = yRange.slice();
+    resize();
+  }
+
+  // data → pixel
+  function tx(x) { return cfg.padding + (x - cfg.xRange[0]) / (cfg.xRange[1]-cfg.xRange[0]) * (W - 2*cfg.padding); }
+  function ty(y) { return H - cfg.padding - (y - cfg.yRange[0]) / (cfg.yRange[1]-cfg.yRange[0]) * (H - 2*cfg.padding); }
+
+  function clear() { ctx.clearRect(0, 0, W, H); }
+
+  function drawGrid(step=1, color='#e8e2d6') {
+    ctx.strokeStyle = color; ctx.lineWidth = 1;
+    const x0 = Math.ceil(cfg.xRange[0]/step)*step;
+    for (let x = x0; x <= cfg.xRange[1]+1e-9; x += step) {
+      ctx.beginPath(); ctx.moveTo(tx(x), ty(cfg.yRange[0])); ctx.lineTo(tx(x), ty(cfg.yRange[1])); ctx.stroke();
+    }
+    const y0 = Math.ceil(cfg.yRange[0]/step)*step;
+    for (let y = y0; y <= cfg.yRange[1]+1e-9; y += step) {
+      ctx.beginPath(); ctx.moveTo(tx(cfg.xRange[0]), ty(y)); ctx.lineTo(tx(cfg.xRange[1]), ty(y)); ctx.stroke();
+    }
+  }
+
+  function drawAxes(opts={}) {
+    const xColor = opts.xColor || '#e74c3c';
+    const yColor = opts.yColor || '#27ae60';
+    // x axis
+    ctx.strokeStyle = xColor; ctx.lineWidth = 1.7;
+    ctx.beginPath(); ctx.moveTo(tx(cfg.xRange[0]), ty(0)); ctx.lineTo(tx(cfg.xRange[1])-2, ty(0)); ctx.stroke();
+    ctx.fillStyle = xColor;
+    ctx.beginPath();
+    ctx.moveTo(tx(cfg.xRange[1]), ty(0));
+    ctx.lineTo(tx(cfg.xRange[1])-9, ty(0)-5);
+    ctx.lineTo(tx(cfg.xRange[1])-9, ty(0)+5);
+    ctx.closePath(); ctx.fill();
+    // y axis
+    ctx.strokeStyle = yColor; ctx.lineWidth = 1.7;
+    ctx.beginPath(); ctx.moveTo(tx(0), ty(cfg.yRange[0])); ctx.lineTo(tx(0), ty(cfg.yRange[1])+2); ctx.stroke();
+    ctx.fillStyle = yColor;
+    ctx.beginPath();
+    ctx.moveTo(tx(0), ty(cfg.yRange[1]));
+    ctx.lineTo(tx(0)-5, ty(cfg.yRange[1])+9);
+    ctx.lineTo(tx(0)+5, ty(cfg.yRange[1])+9);
+    ctx.closePath(); ctx.fill();
+    // labels
+    ctx.font = '600 13px "JetBrains Mono", monospace';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = xColor; ctx.fillText('x', tx(cfg.xRange[1])-14, ty(0)-7);
+    ctx.fillStyle = yColor; ctx.fillText('y', tx(0)+8, ty(cfg.yRange[1])+13);
+    ctx.fillStyle = '#1a1a2e';
+    ctx.font = '500 11px "JetBrains Mono", monospace';
+    ctx.fillText('O', tx(0)-13, ty(0)+13);
+  }
+
+  function drawTicks(step=1, color='#8a8578') {
+    ctx.fillStyle = color;
+    ctx.font = '400 10px "JetBrains Mono", monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    const x0 = Math.ceil(cfg.xRange[0]/step)*step;
+    for (let x = x0; x <= cfg.xRange[1]+1e-9; x += step) {
+      if (Math.abs(x) < 1e-6) continue;
+      if (x < cfg.xRange[0]+0.3 || x > cfg.xRange[1]-0.3) continue;
+      ctx.fillText(formatTick(x), tx(x), ty(0)+4);
+    }
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    const y0 = Math.ceil(cfg.yRange[0]/step)*step;
+    for (let y = y0; y <= cfg.yRange[1]+1e-9; y += step) {
+      if (Math.abs(y) < 1e-6) continue;
+      if (y < cfg.yRange[0]+0.3 || y > cfg.yRange[1]-0.3) continue;
+      ctx.fillText(formatTick(y), tx(0)+5, ty(y));
+    }
+  }
+  function formatTick(v) {
+    const r = Math.round(v);
+    if (Math.abs(v - r) < 1e-6) return String(r);
+    return v.toFixed(1);
+  }
+
+  function drawCurve(points, color='#c0392b', width=2.5, opacity=1) {
+    if (!points || points.length < 2) return;
+    ctx.globalAlpha = opacity;
+    ctx.strokeStyle = color; ctx.lineWidth = width;
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(tx(points[0][0]), ty(points[0][1]));
+    for (let i = 1; i < points.length; i++) ctx.lineTo(tx(points[i][0]), ty(points[i][1]));
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+
+  function drawDashed(p0, p1, color='#999', width=1.5, dash=[6,4]) {
+    ctx.strokeStyle = color; ctx.lineWidth = width;
+    ctx.setLineDash(dash); ctx.lineCap = 'butt';
+    ctx.beginPath();
+    ctx.moveTo(tx(p0[0]), ty(p0[1])); ctx.lineTo(tx(p1[0]), ty(p1[1]));
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Draw a line through point p in direction d, clipped to the visible viewport.
+  // 線段裁切；可選擇畫成虛線。
+  function drawExtendedLine(p, d, color='#888', width=1.2, dash=null) {
+    const xmin = cfg.xRange[0], xmax = cfg.xRange[1];
+    const ymin = cfg.yRange[0], ymax = cfg.yRange[1];
+    const [px, py] = p;
+    const [dx, dy] = d;
+    if (Math.abs(dx) < 1e-12 && Math.abs(dy) < 1e-12) return;
+    let tEnter = -Infinity, tExit = Infinity;
+    const tests = [
+      [-dx, px - xmin], [dx, xmax - px],
+      [-dy, py - ymin], [dy, ymax - py],
+    ];
+    for (const [pp, qq] of tests) {
+      if (Math.abs(pp) < 1e-12) {
+        if (qq < 0) return;
+      } else {
+        const r = qq / pp;
+        if (pp < 0) { if (r > tEnter) tEnter = r; }
+        else        { if (r < tExit ) tExit  = r; }
+      }
+    }
+    if (tEnter > tExit) return;
+    const a = [px + tEnter*dx, py + tEnter*dy];
+    const b = [px + tExit *dx, py + tExit *dy];
+    ctx.strokeStyle = color; ctx.lineWidth = width; ctx.lineCap = 'round';
+    if (dash) ctx.setLineDash(dash);
+    ctx.beginPath();
+    ctx.moveTo(tx(a[0]), ty(a[1])); ctx.lineTo(tx(b[0]), ty(b[1]));
+    ctx.stroke();
+    if (dash) ctx.setLineDash([]);
+  }
+
+  function drawArrow(p0, p1, color='#f1c40f', width=2.5, headSize=11) {
+    const x0 = tx(p0[0]), y0 = ty(p0[1]);
+    const x1 = tx(p1[0]), y1 = ty(p1[1]);
+    const dx = x1 - x0, dy = y1 - y0;
+    const len = Math.hypot(dx, dy);
+    if (len < 1.5) {
+      // tiny: just a dot
+      ctx.fillStyle = color;
+      ctx.beginPath(); ctx.arc(x1, y1, 3, 0, Math.PI*2); ctx.fill();
+      return;
+    }
+    const ux = dx/len, uy = dy/len;
+    const tx1 = x1 - ux * headSize * 0.85;
+    const ty1 = y1 - uy * headSize * 0.85;
+    ctx.strokeStyle = color; ctx.lineWidth = width;
+    ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(tx1, ty1); ctx.stroke();
+    // arrowhead
+    const w = headSize * 0.55;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x1 - ux*headSize - uy*w, y1 - uy*headSize + ux*w);
+    ctx.lineTo(x1 - ux*headSize + uy*w, y1 - uy*headSize - ux*w);
+    ctx.closePath(); ctx.fill();
+  }
+
+  function drawMarker(p, color='#f1c40f', radius=5) {
+    const cx = tx(p[0]), cy = ty(p[1]);
+    ctx.fillStyle = color;
+    ctx.beginPath(); ctx.arc(cx, cy, radius, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.arc(cx, cy, radius, 0, Math.PI*2); ctx.stroke();
+  }
+
+  function drawText(p, text, color='#1a1a2e', size=12, align='left', baseline='alphabetic', offset=[0,0]) {
+    ctx.fillStyle = color;
+    ctx.font = `600 ${size}px "JetBrains Mono", monospace`;
+    ctx.textAlign = align; ctx.textBaseline = baseline;
+    ctx.fillText(text, tx(p[0]) + offset[0], ty(p[1]) + offset[1]);
+  }
+
+  // Render-on-demand
+  let renderFn = null;
+  function setRender(fn) { renderFn = fn; render(); }
+  function render() { if (renderFn) { resize(); renderFn(); } }
+
+  resize();
+  window.addEventListener('resize', () => render());
+
+  return {
+    canvas, ctx, cfg,
+    tx, ty, get W(){return W;}, get H(){return H;},
+    clear, drawGrid, drawAxes, drawTicks, drawCurve, drawDashed, drawExtendedLine, drawArrow, drawMarker, drawText,
+    setView, setRender, render, resize,
+  };
+}
+
+/* ============================================================
+   PROLOGUE — Helix-style demo: r(t) = (2cos t, 2sin t, t/2)
+   ============================================================ */
+(function(){
+  const S = makeScene('canvas-prologue', {radius:11, phi:1.05, theta:0.9, axisLen:5, gridSize:5, gridStep:1});
+  scenes.prologue = S;
+
+  const tMin = 0, tMax = 4*PI;
+  const fn = t => new THREE.Vector3(2*Math.cos(t), 2*Math.sin(t), t/2);
+
+  // pre-compute full curve
+  const N = 240;
+  const fullPts = [];
+  for (let i=0; i<=N; i++) {
+    const t = tMin + (tMax-tMin)*i/N;
+    fullPts.push(fn(t));
+  }
+
+  // background full curve (faded grey)
+  const fullCurve = makeCurveLine(fullPts, 0x6a6a90);
+  S.scene.add(fullCurve);
+
+  // active trail (orange) — mutable
+  const trail = makeMutableLine(N+2, 0xf39c12);
+  S.scene.add(trail.line);
+
+  // moving marker
+  const marker = makeSphereMarker(0.16, 0xf1c40f);
+  S.scene.add(marker);
+
+  // position vector arrow (yellow)
+  const rArrow = makeArrow(0xf1c40f, 0.05, 0.16, 0.34);
+  S.scene.add(rArrow);
+
+  let progress = 0; // 0..1 along t
+  let playing = false;
+
+  const slider = document.getElementById('prologueSlider');
+  const tDisp  = document.getElementById('prologueT');
+  const xOut = document.getElementById('prolX');
+  const yOut = document.getElementById('prolY');
+  const zOut = document.getElementById('prolZ');
+  const playBtn = document.getElementById('btnProloguePlay');
+
+  function update() {
+    const t = tMin + (tMax-tMin)*progress;
+    const p = fn(t);
+    marker.position.copy(p);
+    setArrow(rArrow, new THREE.Vector3(0,0,0), p);
+
+    // build trail up to current progress
+    const M = Math.max(2, Math.floor(N*progress)+1);
+    const pts = [];
+    for (let i=0; i<M; i++) {
+      const tt = tMin + (tMax-tMin)*(i/N);
+      pts.push(fn(tt));
+    }
+    pts.push(p);
+    trail.setPoints(pts);
+
+    tDisp.textContent = `t = ${t.toFixed(2)}`;
+    xOut.textContent = p.x.toFixed(2);
+    yOut.textContent = p.y.toFixed(2);
+    zOut.textContent = p.z.toFixed(2);
+  }
+
+  slider.addEventListener('input', () => {
+    progress = parseFloat(slider.value);
+    update();
+  });
+
+  playBtn.addEventListener('click', () => {
+    playing = !playing;
+    playBtn.classList.toggle('active', playing);
+    playBtn.textContent = playing ? '⏸ 暫停' : '▶ 播放';
+    if (playing) animate();
+  });
+
+  let lastTs = 0;
+  function animate(ts) {
+    if (!playing) return;
+    if (!lastTs) lastTs = ts;
+    const dt = (ts - lastTs) / 1000;
+    lastTs = ts;
+    progress += dt * 0.18; // full sweep ~5.5s
+    if (progress >= 1) { progress = 0; trail.setPoints([fn(tMin)]); }
+    slider.value = progress;
+    update();
+    requestAnimationFrame(animate);
+  }
+
+  update();
+})();
+
+/* ============================================================
+   12.1 內小段：平面曲線（2D 畫布）
+   ============================================================ */
+(function(){
+  const PLANE_PRESETS = {
+    ex1: {
+      label: '例 1 · 橢圓 (順時針)',
+      eq: '$\\mathbf{r}(t) = 2\\cos t\\,\\mathbf{i} - 3\\sin t\\,\\mathbf{j}$',
+      range: '$0 \\leq t \\leq 2\\pi$',
+      note: '<strong>為何「順時針」？</strong>$y$-分量是 $-3\\sin t$（前面有負號）。$t=0$ 時點在 $(2,0)$；$t$ 略增則 $y$ 略<em>負</em>，所以點往下走 → 順時針。',
+      fn: t => [2*Math.cos(t), -3*Math.sin(t)],
+      tMin: 0, tMax: 2*PI,
+      view: {x:[-3.5, 3.5], y:[-3.8, 3.8], grid:1},
+    },
+    ex1ccw: {
+      label: '比較 · 逆時針版本',
+      eq: '$\\mathbf{r}(t) = 2\\cos t\\,\\mathbf{i} + 3\\sin t\\,\\mathbf{j}$',
+      range: '$0 \\leq t \\leq 2\\pi$',
+      note: '把 $y$-分量改回 $+3\\sin t$，$t$ 略增 $y$ 變正 → 逆時針。<em>圖形和 例題 1 完全一樣</em>，但是<em>方向相反</em>，因此<em>不是同一條曲線</em>。',
+      fn: t => [2*Math.cos(t), 3*Math.sin(t)],
+      tMin: 0, tMax: 2*PI,
+      view: {x:[-3.5, 3.5], y:[-3.8, 3.8], grid:1},
+    },
+    ex3: {
+      label: '例 3 · 拋物線參數化',
+      eq: '$\\mathbf{r}(t) = t\\,\\mathbf{i} + (t^2 + 1)\\,\\mathbf{j}$',
+      range: '$-2 \\leq t \\leq 2$',
+      note: '把 $y = x^2 + 1$ 改寫成向量值函數最自然的方式：令 $x = t$，自動 $y = t^2 + 1$。圖中 $t = -2, -1, 0, 1, 2$ 對應點 $(t, t^2+1)$。',
+      fn: t => [t, t*t + 1],
+      tMin: -2, tMax: 2,
+      view: {x:[-3, 3], y:[-1, 6], grid:1},
+    },
+    circ1: {
+      label: '單位圓 · 等速 (∥r′∥=1)',
+      eq: '$\\mathbf{r}_1(t) = \\sin t\\,\\mathbf{i} + \\cos t\\,\\mathbf{j}$',
+      range: '$0 \\leq t \\leq 2\\pi$',
+      note: '從 $(0,1)$ 出發（$t=0$：$\\sin 0=0$、$\\cos 0=1$），<strong>等速</strong>畫單位圓。畫面動畫的快慢全程一致。',
+      fn: t => [Math.sin(t), Math.cos(t)],
+      tMin: 0, tMax: 2*PI,
+      view: {x:[-1.7, 1.7], y:[-1.7, 1.7], grid:0.5},
+    },
+    circ2: {
+      label: '單位圓 · 二次速度 (∥r′∥=2t)',
+      eq: '$\\mathbf{r}_2(t) = \\sin(t^2)\\,\\mathbf{i} + \\cos(t^2)\\,\\mathbf{j}$',
+      range: '$0 \\leq t \\leq \\sqrt{2\\pi}$',
+      note: '<strong>圖形和 circ1 完全一樣（單位圓）</strong>，但因 $\\|\\mathbf{r}_2\'\\|=2t$，<em>$t$ 越大畫越快</em>。按播放比較：起步慢、後段衝刺。<em>圖形相同，曲線不同</em>。',
+      fn: t => [Math.sin(t*t), Math.cos(t*t)],
+      tMin: 0, tMax: Math.sqrt(2*PI),
+      view: {x:[-1.7, 1.7], y:[-1.7, 1.7], grid:0.5},
+    },
+  };
+
+  let currentKey = 'ex1';
+  const N = 240;
+
+  const S = make2DScene('canvas-plane', {xRange: PLANE_PRESETS.ex1.view.x, yRange: PLANE_PRESETS.ex1.view.y, padding: 32});
+  scenes.plane = S;
+  let gridStep = PLANE_PRESETS.ex1.view.grid;
+
+  let progress = 0;
+  let playing = false;
+
+  const slider  = document.getElementById('planeSlider');
+  const tDisp   = document.getElementById('planeT');
+  const eqEl    = document.getElementById('planeEq');
+  const labelEl = document.getElementById('planeLabel');
+  const rangeEl = document.getElementById('planeRange');
+  const noteEl  = document.getElementById('planeNote');
+  const xOut    = document.getElementById('planeX');
+  const yOut    = document.getElementById('planeY');
+  const playBtn = document.getElementById('btnPlanePlay');
+
+  function buildCurvePoints(P, fromFrac, toFrac) {
+    const t0 = P.tMin + (P.tMax - P.tMin) * fromFrac;
+    const t1 = P.tMin + (P.tMax - P.tMin) * toFrac;
+    const pts = [];
+    const M = Math.max(2, Math.ceil(N * (toFrac - fromFrac)) + 1);
+    for (let i = 0; i <= M; i++) {
+      const t = t0 + (t1 - t0) * (i / M);
+      pts.push(P.fn(t));
+    }
+    return pts;
+  }
+
+  function render() {
+    const P = PLANE_PRESETS[currentKey];
+    const t = P.tMin + (P.tMax - P.tMin) * progress;
+    const p = P.fn(t);
+
+    S.clear();
+    S.drawGrid(gridStep);
+    S.drawAxes();
+    S.drawTicks(gridStep);
+
+    // full curve (faded)
+    const fullPts = buildCurvePoints(P, 0, 1);
+    S.drawCurve(fullPts, '#9ea0c4', 1.6, 0.55);
+
+    // active trail (orange) up to current progress
+    if (progress > 1e-3) {
+      const trailPts = buildCurvePoints(P, 0, progress);
+      S.drawCurve(trailPts, '#f39c12', 3, 1);
+    }
+
+    // position vector r(t) (yellow, from origin to current point)
+    S.drawArrow([0,0], p, '#f1c40f', 2.8, 12);
+    // marker at current point
+    S.drawMarker(p, '#f1c40f', 6);
+
+    // side panel
+    tDisp.textContent = `t = ${t.toFixed(2)}`;
+    xOut.textContent = p[0].toFixed(2);
+    yOut.textContent = p[1].toFixed(2);
+  }
+
+  function setPreset(key) {
+    currentKey = key;
+    const P = PLANE_PRESETS[key];
+    S.setView(P.view.x, P.view.y);
+    gridStep = P.view.grid;
+    labelEl.textContent = P.label;
+    eqEl.innerHTML = P.eq;
+    rangeEl.innerHTML = P.range;
+    noteEl.innerHTML = P.note;
+    if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([eqEl, rangeEl, noteEl]);
+    progress = 0;
+    slider.value = 0;
+    render();
+  }
+
+  document.querySelectorAll('#planePresets .preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#planePresets .preset-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      setPreset(btn.dataset.id);
+    });
+  });
+
+  slider.addEventListener('input', () => {
+    progress = parseFloat(slider.value);
+    render();
+  });
+
+  playBtn.addEventListener('click', () => {
+    playing = !playing;
+    playBtn.classList.toggle('active', playing);
+    playBtn.textContent = playing ? '⏸ 暫停' : '▶ 播放';
+    if (playing) { lastTs = 0; requestAnimationFrame(animate); }
+  });
+
+  let lastTs = 0;
+  function animate(ts) {
+    if (!playing) return;
+    if (!lastTs) lastTs = ts;
+    const dt = (ts - lastTs) / 1000;
+    lastTs = ts;
+    progress += dt * 0.22;
+    if (progress >= 1) { progress = 0; }
+    slider.value = progress;
+    render();
+    requestAnimationFrame(animate);
+  }
+
+  // Window resize: re-render
+  window.addEventListener('resize', render);
+
+  setPreset('ex1');
+})();
+
+/* ============================================================
+   12.1 內小段：空間曲線
+   ============================================================ */
+(function(){
+  const S = makeScene('canvas-space', {radius:18, phi:1.05, theta:0.9, axisLen:6, gridSize:6, gridStep:1});
+  scenes.space = S;
+
+  const SPACE_PRESETS = {
+    helix: {
+      label: '例 2 · 螺旋線',
+      eq: '$\\mathbf{r}(t) = 4\\cos t\\,\\mathbf{i} + 4\\sin t\\,\\mathbf{j} + t\\,\\mathbf{k}$',
+      range: '$0 \\leq t \\leq 4\\pi$ ｜ 兩圈',
+      fn: t => new THREE.Vector3(4*Math.cos(t), 4*Math.sin(t), t),
+      tMin: 0, tMax: 4*PI,
+      cylRadius: 4, cylZRange: [0, 4*PI],
+    },
+    helix_fast: {
+      label: '螺旋變化 · 頻率加倍',
+      eq: '$\\mathbf{r}(t) = 4\\cos 2t\\,\\mathbf{i} + 4\\sin 2t\\,\\mathbf{j} + t\\,\\mathbf{k}$',
+      range: '$0 \\leq t \\leq 4\\pi$',
+      fn: t => new THREE.Vector3(4*Math.cos(2*t), 4*Math.sin(2*t), t),
+      tMin: 0, tMax: 4*PI,
+      cylRadius: 4, cylZRange: [0, 4*PI],
+    },
+    conic: {
+      label: '圓錐螺線',
+      eq: '$\\mathbf{r}(t) = t\\cos t\\,\\mathbf{i} + t\\sin t\\,\\mathbf{j} + t\\,\\mathbf{k}$',
+      range: '$0 \\leq t \\leq 4\\pi$ ｜ 半徑隨高度增加',
+      fn: t => new THREE.Vector3(t*Math.cos(t), t*Math.sin(t), t),
+      tMin: 0, tMax: 4*PI,
+      cylRadius: null, cylZRange: null,
+    },
+  };
+
+  let currentKey = 'helix';
+  const N = 320;
+
+  const fullCurve = makeMutableLine(N+5, 0x6a6a90);
+  S.scene.add(fullCurve.line);
+  const trail = makeMutableLine(N+5, 0xf39c12);
+  S.scene.add(trail.line);
+  const marker = makeSphereMarker(0.18, 0xf1c40f);
+  S.scene.add(marker);
+  const rArrow = makeArrow(0xf1c40f, 0.05, 0.16, 0.34);
+  S.scene.add(rArrow);
+
+  // Cylinder geometry x^2+y^2 = 16, transparent
+  let cylMesh = null;
+  function rebuildCylinder() {
+    if (cylMesh) { S.scene.remove(cylMesh); cylMesh = null; }
+    const P = SPACE_PRESETS[currentKey];
+    if (!P.cylRadius || !showCyl) return;
+    const r = P.cylRadius;
+    const [zLo, zHi] = P.cylZRange;
+    const geom = new THREE.CylinderGeometry(r, r, zHi-zLo, 48, 1, true);
+    geom.rotateX(Math.PI/2); // align with z-axis
+    geom.translate(0, 0, (zLo+zHi)/2);
+    const mat = new THREE.MeshStandardMaterial({color:0x4a90c8, roughness:0.6, metalness:0.1,
+      side:THREE.DoubleSide, transparent:true, opacity:0.18});
+    cylMesh = new THREE.Mesh(geom, mat);
+    S.scene.add(cylMesh);
+  }
+
+  // Shadow projection on xy-plane
+  const shadowCurve = makeMutableLine(N+5, 0x999999);
+  shadowCurve.line.material.color.set(0x666688);
+  S.scene.add(shadowCurve.line);
+  shadowCurve.line.visible = false;
+
+  let progress = 0;
+  let playing = false;
+  let showCyl = true;
+  let showShadow = false;
+
+  const slider  = document.getElementById('spaceSlider');
+  const tDisp   = document.getElementById('spaceT');
+  const eqEl    = document.getElementById('spaceEq');
+  const labelEl = document.getElementById('spaceLabel');
+  const rangeEl = document.getElementById('spaceRange');
+  const xOut = document.getElementById('spaceX');
+  const yOut = document.getElementById('spaceY');
+  const zOut = document.getElementById('spaceZ');
+  const playBtn = document.getElementById('btnSpacePlay');
+  const cylBtn  = document.getElementById('btnSpaceCyl');
+  const shBtn   = document.getElementById('btnSpaceShadow');
+
+  function rebuildFull() {
+    const P = SPACE_PRESETS[currentKey];
+    const pts = [], shadowPts = [];
+    for (let i=0; i<=N; i++) {
+      const t = P.tMin + (P.tMax - P.tMin) * (i/N);
+      const p = P.fn(t);
+      pts.push(p);
+      shadowPts.push(new THREE.Vector3(p.x, p.y, 0));
+    }
+    fullCurve.setPoints(pts);
+    shadowCurve.setPoints(shadowPts);
+  }
+
+  function update() {
+    const P = SPACE_PRESETS[currentKey];
+    const t = P.tMin + (P.tMax - P.tMin) * progress;
+    const p = P.fn(t);
+    marker.position.copy(p);
+    setArrow(rArrow, new THREE.Vector3(0,0,0), p);
+
+    const M = Math.max(2, Math.floor(N*progress)+1);
+    const pts = [];
+    for (let i=0; i<M; i++) {
+      const tt = P.tMin + (P.tMax - P.tMin) * (i/N);
+      pts.push(P.fn(tt));
+    }
+    pts.push(p);
+    trail.setPoints(pts);
+
+    tDisp.textContent = `t = ${t.toFixed(2)}`;
+    xOut.textContent = p.x.toFixed(2);
+    yOut.textContent = p.y.toFixed(2);
+    zOut.textContent = p.z.toFixed(2);
+  }
+
+  function setPreset(key) {
+    currentKey = key;
+    const P = SPACE_PRESETS[key];
+    labelEl.textContent = P.label;
+    eqEl.innerHTML = P.eq;
+    rangeEl.innerHTML = P.range;
+    if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([eqEl, rangeEl]);
+    rebuildFull();
+    rebuildCylinder();
+    progress = 0;
+    slider.value = 0;
+    update();
+  }
+
+  document.querySelectorAll('#spacePresets .preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#spacePresets .preset-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      setPreset(btn.dataset.id);
+    });
+  });
+
+  slider.addEventListener('input', () => {
+    progress = parseFloat(slider.value);
+    update();
+  });
+
+  playBtn.addEventListener('click', () => {
+    playing = !playing;
+    playBtn.classList.toggle('active', playing);
+    playBtn.textContent = playing ? '⏸ 暫停' : '▶ 播放';
+    if (playing) { lastTs = 0; animate(); }
+  });
+
+  cylBtn.addEventListener('click', () => {
+    showCyl = !showCyl;
+    cylBtn.classList.toggle('off', !showCyl);
+    rebuildCylinder();
+  });
+
+  shBtn.addEventListener('click', () => {
+    showShadow = !showShadow;
+    shBtn.classList.toggle('off', !showShadow);
+    shadowCurve.line.visible = showShadow;
+  });
+
+  let lastTs = 0;
+  function animate(ts) {
+    if (!playing) return;
+    if (!lastTs) lastTs = ts;
+    const dt = (ts - lastTs) / 1000;
+    lastTs = ts;
+    progress += dt * 0.15;
+    if (progress >= 1) { progress = 0; }
+    slider.value = progress;
+    update();
+    requestAnimationFrame(animate);
+  }
+
+  setPreset('helix');
+})();
+
+/* ============================================================
+   12.1 內小段：例題 4 半橢球面與拋物柱面交線
+   r(t) = (t, t^2, sqrt((6+t^2)(4-t^2)/6)),  -2 <= t <= 2
+   ============================================================ */
+(function(){
+  const S = makeScene('canvas-intersect', {radius:14, phi:1.0, theta:0.7, axisLen:5, gridSize:5, gridStep:1});
+  scenes.intersect = S;
+
+  // Intersection curve r(t)
+  const intFn = t => {
+    const z2 = (6 + t*t) * (4 - t*t) / 6;
+    const z = z2 > 0 ? Math.sqrt(z2) : 0;
+    return new THREE.Vector3(t, t*t, z);
+  };
+  const tMin = -2, tMax = 2;
+  const N = 200;
+
+  // Pre-compute curve
+  const curvePts = [];
+  for (let i=0; i<=N; i++) {
+    const t = tMin + (tMax-tMin)*i/N;
+    curvePts.push(intFn(t));
+  }
+  const fullCurve = makeFatTube(curvePts, 0xf39c12, 0.06, 8);
+  S.scene.add(fullCurve);
+
+  // Marker
+  const marker = makeSphereMarker(0.16, 0xf1c40f);
+  marker.position.copy(intFn(tMin));
+  S.scene.add(marker);
+
+  // ----- Semiellipsoid x^2/12 + y^2/24 + z^2/4 = 1, z >= 0 -----
+  // parametrize: x = 2*sqrt(3) sin u cos v, y = 2*sqrt(6) sin u sin v, z = 2 cos u, u in [0, pi/2], v in [0, 2pi]
+  function buildEllipsoidGeom() {
+    const uSeg = 36, vSeg = 64;
+    const positions = [], indices = [];
+    for (let i=0; i<=uSeg; i++) {
+      const u = (PI/2)*i/uSeg; // 0 to pi/2 -> z >= 0
+      for (let j=0; j<=vSeg; j++) {
+        const v = 2*PI*j/vSeg;
+        const x = 2*Math.sqrt(3)*Math.sin(u)*Math.cos(v);
+        const y = 2*Math.sqrt(6)*Math.sin(u)*Math.sin(v);
+        const z = 2*Math.cos(u);
+        positions.push(x,y,z);
+      }
+    }
+    for (let i=0; i<uSeg; i++) {
+      for (let j=0; j<vSeg; j++) {
+        const a = i*(vSeg+1) + j;
+        const b = a+1;
+        const c = a + (vSeg+1);
+        const d = c+1;
+        indices.push(a,c,b, b,c,d);
+      }
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    g.setIndex(indices);
+    g.computeVertexNormals();
+    return g;
+  }
+  const ellipMat = new THREE.MeshStandardMaterial({color:0x5dade2, roughness:0.6, metalness:0.1,
+    side:THREE.DoubleSide, transparent:true, opacity:0.32});
+  const ellipMesh = new THREE.Mesh(buildEllipsoidGeom(), ellipMat);
+  S.scene.add(ellipMesh);
+
+  // ----- Parabolic cylinder y = x^2, with x in [-2, 2], z in [0, ~3] -----
+  function buildParabCylGeom() {
+    const xSeg = 50, zSeg = 18;
+    const xMin = -2.5, xMax = 2.5;
+    const zMin = 0, zMax = 2.6;
+    const positions = [], indices = [];
+    for (let i=0; i<=xSeg; i++) {
+      const x = xMin + (xMax-xMin)*i/xSeg;
+      const y = x*x;
+      for (let j=0; j<=zSeg; j++) {
+        const z = zMin + (zMax-zMin)*j/zSeg;
+        positions.push(x,y,z);
+      }
+    }
+    for (let i=0; i<xSeg; i++) {
+      for (let j=0; j<zSeg; j++) {
+        const a = i*(zSeg+1) + j;
+        const b = a+1;
+        const c = a + (zSeg+1);
+        const d = c+1;
+        indices.push(a,c,b, b,c,d);
+      }
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    g.setIndex(indices);
+    g.computeVertexNormals();
+    return g;
+  }
+  const paraMat = new THREE.MeshStandardMaterial({color:0x58d68d, roughness:0.6, metalness:0.1,
+    side:THREE.DoubleSide, transparent:true, opacity:0.30});
+  const paraMesh = new THREE.Mesh(buildParabCylGeom(), paraMat);
+  S.scene.add(paraMesh);
+
+  // Endpoint dots
+  const endPts = [tMin, 0, tMax].map(t => {
+    const m = makeSphereMarker(0.13, 0xff5050);
+    m.position.copy(intFn(t));
+    S.scene.add(m);
+    return m;
+  });
+
+  let progress = 0; // 0..1, maps to t in [-2, 2]
+  let playing = false;
+
+  const slider = document.getElementById('intersectSlider');
+  const tDisp  = document.getElementById('intersectT');
+  const xOut = document.getElementById('intX');
+  const yOut = document.getElementById('intY');
+  const zOut = document.getElementById('intZ');
+  const playBtn = document.getElementById('btnIntersectPlay');
+  const ellBtn  = document.getElementById('btnEllipsoid');
+  const parBtn  = document.getElementById('btnParaCyl');
+
+  function update() {
+    const t = parseFloat(slider.value);
+    const p = intFn(t);
+    marker.position.copy(p);
+    tDisp.textContent = `t = ${t.toFixed(2)}`;
+    xOut.textContent = p.x.toFixed(2);
+    yOut.textContent = p.y.toFixed(2);
+    zOut.textContent = p.z.toFixed(2);
+  }
+
+  slider.addEventListener('input', update);
+
+  playBtn.addEventListener('click', () => {
+    playing = !playing;
+    playBtn.classList.toggle('active', playing);
+    playBtn.textContent = playing ? '⏸ 暫停' : '▶ 沿曲線跑 t';
+    if (playing) { lastTs = 0; animate(); }
+  });
+
+  ellBtn.classList.toggle('off', false);
+  parBtn.classList.toggle('off', false);
+  ellBtn.addEventListener('click', () => {
+    ellipMesh.visible = !ellipMesh.visible;
+    ellBtn.classList.toggle('off', !ellipMesh.visible);
+  });
+  parBtn.addEventListener('click', () => {
+    paraMesh.visible = !paraMesh.visible;
+    parBtn.classList.toggle('off', !paraMesh.visible);
+  });
+
+  let lastTs = 0;
+  function animate(ts) {
+    if (!playing) return;
+    if (!lastTs) lastTs = ts;
+    const dt = (ts - lastTs) / 1000;
+    lastTs = ts;
+    let curT = parseFloat(slider.value);
+    curT += dt * 0.6; // sweep speed
+    if (curT > tMax) curT = tMin;
+    slider.value = curT;
+    update();
+    requestAnimationFrame(animate);
+  }
+
+  update();
+})();
+
+/* ============================================================
+   12.2 內小段：微分（2D 畫布）
+   Pedagogical goal: SHOW the secant line rotating to overlap the
+   tangent line as Δt → 0.  Secant visualization is ON by default.
+   ============================================================ */
+(function(){
+  const fn  = t => [t, t*t + 2];
+  const dfn = t => [1, 2*t];
+  const tMin = -2.2, tMax = 2.2;
+  const N = 240;
+
+  const S = make2DScene('canvas-deriv', {
+    xRange: [-3.5, 3.5],
+    yRange: [-0.5, 7.5],
+    padding: 32,
+  });
+  scenes.deriv = S;
+
+  // Secant ON by default so Δt slider always has visible effect
+  let showSecant = true;
+  let showR = false;
+
+  const tSlider  = document.getElementById('derivT_slider');
+  const dtSlider = document.getElementById('derivDt_slider');
+  const tVal     = document.getElementById('derivT_val');
+  const dtVal    = document.getElementById('derivDt_val');
+  const tDisp    = document.getElementById('derivT');
+  const rDisp    = document.getElementById('derivR');
+  const rpDisp   = document.getElementById('derivRp');
+  const spdDisp  = document.getElementById('derivSpd');
+  const secDisp  = document.getElementById('derivSec');
+  const errDisp  = document.getElementById('derivErr');
+  const secBtn   = document.getElementById('btnDerivSecant');
+  const rBtn     = document.getElementById('btnDerivR');
+
+  // Pre-compute full curve points
+  const fullPts = [];
+  for (let i = 0; i <= N; i++) {
+    const t = tMin + (tMax-tMin)*i/N;
+    fullPts.push(fn(t));
+  }
+
+  // Colors
+  const COL_TAN = '#16a085';   // tangent — teal-green (limit)
+  const COL_SEC = '#e67e22';   // secant — orange (current Δt)
+  const COL_CURVE = '#a07a08'; // parabola — dark amber
+  const COL_R = '#f1c40f';     // position vector — yellow
+  const COL_PT = '#1a1a2e';    // point markers — dark
+
+  function render() {
+    const t = parseFloat(tSlider.value);
+    const dt = parseFloat(dtSlider.value);
+    const p = fn(t);
+    const dp = dfn(t);                    // tangent direction (1, 2t)
+    const pdt = fn(t+dt);                 // r(t+Δt)
+    // Scaled secant slope vector  (r(t+Δt) − r(t)) / Δt
+    const secVec = [(pdt[0]-p[0])/dt, (pdt[1]-p[1])/dt];
+
+    S.clear();
+    S.drawGrid(1);
+    S.drawAxes();
+    S.drawTicks(1);
+
+    // The parabola
+    S.drawCurve(fullPts, COL_CURVE, 2.5, 0.85);
+
+    // 可選：位置向量 r(t)
+    if (showR) {
+      S.drawArrow([0,0], p, COL_R, 2.5, 11);
+    }
+
+    if (showSecant) {
+      // Extended SECANT LINE  (faint, full viewport) — thin, dashed
+      S.drawExtendedLine(p, secVec, COL_SEC, 1.2, [4,4]);
+    }
+
+    // Extended TANGENT LINE (faint, full viewport) — thin, solid
+    S.drawExtendedLine(p, dp, COL_TAN, 1.2, [2,5]);
+
+    if (showSecant) {
+      // The chord r(t) → r(t+Δt): solid orange thick line on the curve segment
+      S.drawDashed(p, pdt, COL_SEC, 1.8, [6,4]);
+      // The scaled secant slope vector — main orange arrow from p
+      S.drawArrow(p, [p[0]+secVec[0], p[1]+secVec[1]], COL_SEC, 3, 12);
+      // marker for r(t+Δt)
+      S.drawMarker(pdt, COL_SEC, 5);
+      S.drawText(pdt, 'r(t+Δt)', COL_SEC, 11, 'left', 'alphabetic', [9, -4]);
+    }
+
+    // Tangent vector r'(t) — main green arrow from p (drawn LAST so it's on top)
+    S.drawArrow(p, [p[0]+dp[0], p[1]+dp[1]], COL_TAN, 3.4, 13);
+    S.drawText([p[0]+dp[0], p[1]+dp[1]], "r'(t)", COL_TAN, 12, 'left', 'alphabetic', [10, -2]);
+
+    // Marker at p
+    S.drawMarker(p, COL_R, 6);
+    S.drawText(p, 'r(t)', COL_PT, 11, 'right', 'alphabetic', [-9, -4]);
+
+    // side panel
+    tVal.textContent = t.toFixed(2);
+    dtVal.textContent = dt.toFixed(2);
+    tDisp.textContent = `t = ${t.toFixed(2)}`;
+    rDisp.textContent = `(${p[0].toFixed(2)}, ${p[1].toFixed(2)})`;
+    rpDisp.textContent = `(${dp[0].toFixed(2)}, ${dp[1].toFixed(2)})`;
+    spdDisp.textContent = Math.sqrt(dp[0]*dp[0] + dp[1]*dp[1]).toFixed(3);
+    secDisp.textContent = `(${secVec[0].toFixed(2)}, ${secVec[1].toFixed(2)})`;
+    // error magnitude between secant slope vector and tangent
+    const errVec = [secVec[0]-dp[0], secVec[1]-dp[1]];
+    errDisp.textContent = Math.hypot(errVec[0], errVec[1]).toFixed(3);
+  }
+
+  tSlider.addEventListener('input', render);
+  dtSlider.addEventListener('input', render);
+
+  // Initial state of buttons reflects default visibility
+  secBtn.classList.toggle('off', !showSecant);
+  secBtn.textContent = showSecant ? '隱藏割線' : '顯示割線';
+  secBtn.addEventListener('click', () => {
+    showSecant = !showSecant;
+    secBtn.classList.toggle('off', !showSecant);
+    secBtn.textContent = showSecant ? '隱藏割線' : '顯示割線';
+    render();
+  });
+
+  rBtn.classList.toggle('off', !showR);
+  rBtn.addEventListener('click', () => {
+    showR = !showR;
+    rBtn.classList.toggle('off', !showR);
+    render();
+  });
+
+  window.addEventListener('resize', render);
+  render();
+})();
+
+/* ============================================================
+   12.2 內小段：高階導數：
+   r(t) = cos t i + sin t j + 2t k  (helix-like)
+   ============================================================ */
+(function(){
+  const S = makeScene('canvas-higher', {radius:11, phi:1.05, theta:0.9, axisLen:4, gridSize:4, gridStep:1});
+  scenes.higher = S;
+
+  const fn   = t => new THREE.Vector3(Math.cos(t), Math.sin(t), 2*t);
+  const dfn  = t => new THREE.Vector3(-Math.sin(t), Math.cos(t), 2);
+  const ddfn = t => new THREE.Vector3(-Math.cos(t), -Math.sin(t), 0);
+  const tMin = 0, tMax = 4*PI;
+  const N = 220;
+
+  const fullPts = [];
+  for (let i=0; i<=N; i++) {
+    const t = tMin + (tMax-tMin)*i/N;
+    fullPts.push(fn(t));
+  }
+  const fullCurve = makeFatTube(fullPts, 0x6a6a90, 0.04, 8);
+  S.scene.add(fullCurve);
+
+  const marker = makeSphereMarker(0.14, 0xf1c40f);
+  S.scene.add(marker);
+
+  const rpArrow  = makeArrow(0x2ecc71, 0.05, 0.16, 0.32);
+  S.scene.add(rpArrow);
+  const rppArrow = makeArrow(0xe91e63, 0.05, 0.16, 0.32);
+  S.scene.add(rppArrow);
+
+  let progress = 0;
+  let playing = false;
+  let showRp = true, showRpp = true;
+
+  const slider  = document.getElementById('higherSlider');
+  const tDisp   = document.getElementById('higherT');
+  const rDisp   = document.getElementById('hgR');
+  const rpDisp  = document.getElementById('hgRp');
+  const rppDisp = document.getElementById('hgRpp');
+  const dotDisp = document.getElementById('hgDot');
+  const crsDisp = document.getElementById('hgCross');
+  const playBtn = document.getElementById('btnHigherPlay');
+  const rpBtn   = document.getElementById('btnHigherRp');
+  const rppBtn  = document.getElementById('btnHigherRpp');
+
+  function update() {
+    const t = tMin + (tMax-tMin)*progress;
+    const p = fn(t);
+    const dp = dfn(t);
+    const ddp = ddfn(t);
+
+    marker.position.copy(p);
+    setArrow(rpArrow, p, new THREE.Vector3(p.x+dp.x, p.y+dp.y, p.z+dp.z));
+    setArrow(rppArrow, p, new THREE.Vector3(p.x+ddp.x, p.y+ddp.y, p.z+ddp.z));
+    rpArrow.visible = showRp;
+    rppArrow.visible = showRpp;
+
+    const dot = dp.x*ddp.x + dp.y*ddp.y + dp.z*ddp.z;
+    const cx = dp.y*ddp.z - dp.z*ddp.y;
+    const cy = dp.z*ddp.x - dp.x*ddp.z;
+    const cz = dp.x*ddp.y - dp.y*ddp.x;
+
+    tDisp.textContent = `t = ${t.toFixed(2)}`;
+    rDisp.textContent  = `(${p.x.toFixed(2)}, ${p.y.toFixed(2)}, ${p.z.toFixed(2)})`;
+    rpDisp.textContent = `(${dp.x.toFixed(2)}, ${dp.y.toFixed(2)}, ${dp.z.toFixed(2)})`;
+    rppDisp.textContent= `(${ddp.x.toFixed(2)}, ${ddp.y.toFixed(2)}, ${ddp.z.toFixed(2)})`;
+    dotDisp.textContent = dot.toFixed(3);
+    crsDisp.textContent = `(${cx.toFixed(2)},${cy.toFixed(2)},${cz.toFixed(2)})`;
+  }
+
+  slider.addEventListener('input', () => {
+    progress = parseFloat(slider.value);
+    update();
+  });
+
+  playBtn.addEventListener('click', () => {
+    playing = !playing;
+    playBtn.classList.toggle('active', playing);
+    playBtn.textContent = playing ? '⏸ 暫停' : '▶ 播放';
+    if (playing) { lastTs = 0; animate(); }
+  });
+
+  rpBtn.classList.toggle('off', !showRp);
+  rppBtn.classList.toggle('off', !showRpp);
+  rpBtn.addEventListener('click', () => {
+    showRp = !showRp;
+    rpBtn.classList.toggle('off', !showRp);
+    update();
+  });
+  rppBtn.addEventListener('click', () => {
+    showRpp = !showRpp;
+    rppBtn.classList.toggle('off', !showRpp);
+    update();
+  });
+
+  let lastTs = 0;
+  function animate(ts) {
+    if (!playing) return;
+    if (!lastTs) lastTs = ts;
+    const dt = (ts - lastTs) / 1000;
+    lastTs = ts;
+    progress += dt * 0.13;
+    if (progress >= 1) progress = 0;
+    slider.value = progress;
+    update();
+    requestAnimationFrame(animate);
+  }
+
+  update();
+})();
+
+/* ============================================================
+   12.2 內小段：積分（2D 畫布）
+   ============================================================ */
+(function(){
+  const Rfn = (t, c1, c2) => [t*t/2 + c1, 3*t + c2];
+  const tMin = -3, tMax = 3;
+  const N = 160;
+
+  // C-shifted curve: x = t^2/2 + C1 in [C1, 4.5+C1], y = 3t + C2 in [-9+C2, 9+C2]
+  // With C in [-3,3]: x in [-3, 7.5], y in [-12, 12]. Use y-dominant view.
+  const S = make2DScene('canvas-integral', {
+    xRange: [-5, 9],
+    yRange: [-11, 11],
+    padding: 32,
+    aspectLock: true,
+  });
+  scenes.integral = S;
+
+  let showFamily = false;
+
+  const c1Slider = document.getElementById('intC1');
+  const c2Slider = document.getElementById('intC2');
+  const c1Val    = document.getElementById('intC1_val');
+  const c2Val    = document.getElementById('intC2_val');
+  const cDisp    = document.getElementById('intCDisp');
+  const famBtn   = document.getElementById('btnIntFamily');
+
+  // Pre-build family curves (constant)
+  const cVals = [-2, -1, 0, 1, 2];
+  const familyCurves = [];
+  cVals.forEach(c1 => {
+    cVals.forEach(c2 => {
+      if (c1 === 0 && c2 === 0) return;
+      const pts = [];
+      for (let i = 0; i <= N; i++) {
+        const t = tMin + (tMax-tMin)*i/N;
+        pts.push(Rfn(t, c1, c2));
+      }
+      familyCurves.push(pts);
+    });
+  });
+
+  function render() {
+    const c1 = parseFloat(c1Slider.value);
+    const c2 = parseFloat(c2Slider.value);
+
+    S.clear();
+    S.drawGrid(2, '#ece7d8');
+    S.drawAxes();
+    S.drawTicks(2);
+
+    // Family of antiderivatives (faded grey-blue)
+    if (showFamily) {
+      familyCurves.forEach(pts => S.drawCurve(pts, '#7a7e9a', 1.2, 0.45));
+    }
+
+    // Main curve (orange)
+    const mainPts = [];
+    for (let i = 0; i <= N; i++) {
+      const t = tMin + (tMax-tMin)*i/N;
+      mainPts.push(Rfn(t, c1, c2));
+    }
+    S.drawCurve(mainPts, '#f39c12', 3, 1);
+
+    // Mark t=0 point on main curve (at (C1, C2))
+    S.drawMarker([c1, c2], '#e74c3c', 5);
+    S.drawText([c1, c2], 't=0', '#a02d22', 11, 'left', 'alphabetic', [8, -6]);
+
+    // Side panel
+    c1Val.textContent = c1.toFixed(1);
+    c2Val.textContent = c2.toFixed(1);
+    cDisp.innerHTML = `$\\mathbf{C} = ${c1.toFixed(1)}\\,\\mathbf{i} + ${c2.toFixed(1)}\\,\\mathbf{j}$`;
+    if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([cDisp]);
+  }
+
+  c1Slider.addEventListener('input', render);
+  c2Slider.addEventListener('input', render);
+
+  famBtn.classList.toggle('off', !showFamily);
+  famBtn.addEventListener('click', () => {
+    showFamily = !showFamily;
+    famBtn.classList.toggle('off', !showFamily);
+    render();
+  });
+
+  window.addEventListener('resize', render);
+  render();
+})();
+
+/* ============================================================
+   SIDE NAV — scrollspy: highlight section currently in view
+   ============================================================ */
+(function(){
+  const navItems = Array.from(document.querySelectorAll('#sideNav .sn-item'));
+  if (!navItems.length) return;
+  const sections = navItems
+    .map(a => ({ a, sec: document.querySelector(a.getAttribute('href')) }))
+    .filter(o => o.sec);
+
+  function pickActive() {
+    const probe = window.innerHeight * 0.3;
+    let active = sections[0];
+    for (const o of sections) {
+      const r = o.sec.getBoundingClientRect();
+      if (r.top <= probe) active = o;
+    }
+    navItems.forEach(a => a.classList.toggle('active', a === active.a));
+  }
+  let raf = 0;
+  window.addEventListener('scroll', () => {
+    if (raf) return;
+    raf = requestAnimationFrame(() => { raf = 0; pickActive(); });
+  }, { passive: true });
+  pickActive();
+})();
+
+// ─── 基本觀念 Quiz（Ch 12） ───
+(function(){
+  const $ = id => document.getElementById(id);
+  function makeChoiceQuiz(cardId, correctIndex, hints){
+    const card=$(cardId); if(!card) return;
+    const opts=card.querySelectorAll('.quiz-opt');
+    const fb=card.querySelector('.quiz-feedback');
+    opts.forEach((opt,i)=>{
+      opt.addEventListener('click',()=>{
+        opts.forEach(o=>o.classList.remove('correct','wrong'));
+        if(i===correctIndex){
+          opt.classList.add('correct');
+          fb.className='quiz-feedback show ok';
+          fb.innerHTML=hints && hints.ok ? hints.ok : '✓ 正確！';
+        } else {
+          opt.classList.add('wrong');
+          fb.className='quiz-feedback show no';
+          fb.innerHTML=(hints && hints.wrong && hints.wrong[i]) ? hints.wrong[i] : '再想想。';
+        }
+        if(window.MathJax&&MathJax.typesetPromise) MathJax.typesetPromise([fb]);
+      });
+    });
+  }
+  // Q12-1：定義域 = 各分量定義域交集 = (0, 1]
+  // ln t 要求 t>0；√(1-t) 要求 t≤1；|t| 對所有 t 有定義
+  makeChoiceQuiz('quiz-ch12-1', 3, {
+    ok:'✓ 正確！$\\ln t$ 要 $t>0$；$\\sqrt{1-t}$ 要 $t\\le 1$；$|t|$ 對所有實數有定義。三者交集為 $(0,1]$。',
+    wrong:[
+      '別漏了 $\\ln t$（要求 $t>0$）和 $\\sqrt{1-t}$（要求 $t\\le 1$）；不能無限制。',
+      '只看 $\\ln t$ 漏掉 $\\sqrt{1-t}$ 的限制 $t\\le 1$。',
+      '只看 $\\sqrt{1-t}$ 漏掉 $\\ln t$ 的限制 $t>0$。',
+      ''
+    ]
+  });
+  // Q12-2：lim_{t→0} (sin t/t, t²+1, t/(t+2)) = (1, 1, 0)
+  makeChoiceQuiz('quiz-ch12-2', 1, {
+    ok:'✓ 正確！$\\lim_{t\\to 0}\\dfrac{\\sin t}{t}=1$；$\\lim(t^2+1)=1$；$\\lim\\dfrac{t}{t+2}=\\dfrac{0}{2}=0$。',
+    wrong:[
+      '$\\dfrac{\\sin t}{t}\\to 1$（基本極限），不是 $0$。',
+      '',
+      '每個分量極限都存在且有限，整體極限存在。',
+      '$\\dfrac{t}{t+2}$ 在 $t=0$ 為 $\\dfrac{0}{2}=0$，不是 $1$。'
+    ]
+  });
+  // Q12-3：r'(1) 是切向量
+  makeChoiceQuiz('quiz-ch12-3', 1, {
+    ok:'✓ 正確！$\\mathbf{r}\'(t)$ 是曲線在 $\\mathbf{r}(t)$ 處的<strong>切向量</strong>，方向指向 $t$ 增加方向（定義 12.4）。',
+    wrong:[
+      '加速度向量是 $\\mathbf{r}\'\'(t)$（二階導數），不是 $\\mathbf{r}\'(t)$。',
+      '',
+      '切向量是「局部」量，不是「指向無窮遠的方向」。',
+      '$\\dfrac{dy}{dx}$ 是純量斜率；$\\mathbf{r}\'(1)$ 是向量。兩者不同。'
+    ]
+  });
+  // Q12-4：r·r' = 0（圓周運動，‖r‖=常數 ⇒ r⊥r'）
+  // 驗算：3cos t·(-3sin t) + 3sin t·3cos t = -9 sin t cos t + 9 sin t cos t = 0
+  makeChoiceQuiz('quiz-ch12-4', 1, {
+    ok:'✓ 正確！性質 7：若 $\\|\\mathbf{r}\\|$ 為常數，則 $\\mathbf{r}\\perp\\mathbf{r}\'$，即 $\\mathbf{r}\\cdot\\mathbf{r}\'=0$。直接驗算：$3\\cos t\\cdot(-3\\sin t)+3\\sin t\\cdot 3\\cos t=0$。',
+    wrong:[
+      '$9$ 是 $\\|\\mathbf{r}\\|^2$，不是 $\\mathbf{r}\\cdot\\mathbf{r}\'$。',
+      '',
+      '計算錯誤：$3\\cos t\\cdot(-3\\sin t)+3\\sin t\\cdot 3\\cos t = -9\\sin t\\cos t + 9\\sin t\\cos t = 0$（兩項抵消）。',
+      '同上，正確結果是恆為 $0$，與 $t$ 無關。'
+    ]
+  });
+})();
+</script>
+
+</body>
+</html>
