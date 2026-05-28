@@ -1,6 +1,6 @@
 ---
 type: lecture
-date: 2026-03-08
+date: 2026-03-09
 title: Algorithm Analysis
 tldr: 
 thumbnail: 
