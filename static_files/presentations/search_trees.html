@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>高效率搜尋樹與多路搜尋樹 — Interactive Notes</title>
+<title>高效率搜尋樹與多路搜尋樹 — 互動自學筆記</title>
 <script>
   MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
 </script>
@@ -93,13 +93,26 @@ code{background:#f0ebe0;padding:1px 6px;border-radius:4px;font-family:'JetBrains
 .preset-btn.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
 .speed{display:flex;gap:.45rem;align-items:center;color:var(--muted);font-size:.82rem;margin-left:auto;font-family:'JetBrains Mono',monospace;}
 .speed input{accent-color:var(--accent3);}
-.side-panel{display:flex;flex-direction:column;gap:.85rem;background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.side-panel{display:flex;flex-direction:column;gap:.85rem;}
 .info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.info-card .ic-title{font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem;display:flex;align-items:center;justify-content:space-between;gap:.6rem;}
+.info-card .ic-title .ic-badge{font-size:.7rem;color:#fff;background:var(--accent3);padding:1px 7px;border-radius:3px;letter-spacing:.05em;font-weight:700;white-space:nowrap;}
 .info-label{display:block;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem;}
 .metric,.ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.83rem;padding:.2rem 0;}
 .metric span:first-child,.ic-label{color:var(--muted);}
 .metric span:last-child,.ic-value{color:var(--ink);font-weight:600;}
 .metric span:last-child{color:var(--accent);}
+.ic-value.highlight{color:var(--accent);}
+.ic-value.big{font-size:1.25rem;color:var(--accent2);}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.75rem;margin:1rem 0;}
+.stat-tile{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.stat-tile .stat-label{font-size:.78rem;color:var(--muted);margin-bottom:.35rem;}
+.stat-tile .stat-value{font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--accent2);}
+.stat-tile .stat-note{font-size:.78rem;color:var(--muted);margin-top:.25rem;line-height:1.5;}
+.eq-card{background:var(--code-bg);border-radius:10px;padding:.95rem 1.1rem;color:#fff;margin:.8rem 0;}
+.eq-card .eq-label{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#2ecc71;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;}
+.eq-card .eq-formula{font-size:1rem;color:#fff;text-align:center;line-height:1.8;}
+.eq-card .eq-sub{font-size:.78rem;color:rgba(255,255,255,.62);margin-top:.4rem;text-align:center;}
 .pseudo-code{background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:.85rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.6;overflow-x:auto;}
 .pseudo-code .line{padding:1px 4px;border-radius:3px;display:block;white-space:pre;}
 .pseudo-code .line.hl,.pseudo-code .line.active{background:rgba(243,156,18,.3);color:#fff;border-left:3px solid var(--node-active);padding-left:6px;}
@@ -109,6 +122,24 @@ code{background:#f0ebe0;padding:1px 6px;border-radius:4px;font-family:'JetBrains
 .cell.fill{background:#fff3cd;border-color:var(--node-active);}
 .cell.done{background:#eafaf1;border-color:var(--accent3);}
 .callout{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1rem 1.1rem;margin:1rem 0;}
+.info-box{position:relative;background:#f6fbf8;border:2px solid rgba(26,107,74,.28);border-radius:10px;padding:1.15rem 1.1rem 1rem;margin:1.2rem 0;}
+.info-box.warm{background:#fff8e8;border-color:rgba(243,156,18,.42);}
+.info-box.red{background:#fff1ef;border-color:rgba(192,57,43,.34);}
+.info-box .box-label{position:absolute;top:-.75rem;left:1rem;background:var(--paper);padding:0 .45rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:var(--accent3);letter-spacing:.12em;text-transform:uppercase;}
+.info-box.warm .box-label{color:#b66b00;}
+.info-box.red .box-label{color:var(--accent);}
+.rule-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.8rem;margin:1rem 0;}
+.rule-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.rule-card strong{display:block;color:var(--accent2);margin-bottom:.35rem;}
+.rule-card p{font-size:.92rem;margin-bottom:0;color:var(--muted);line-height:1.7;}
+.formula-list{display:grid;gap:.65rem;margin:1rem 0;}
+.formula-row{display:grid;grid-template-columns:150px minmax(0,1fr);gap:.8rem;align-items:start;background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.75rem .9rem;}
+.formula-row .symbol{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent2);}
+.formula-row .meaning{color:var(--ink);}
+.two-col-notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin:1rem 0;}
+.pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:700;padding:2px 8px;border-radius:999px;background:#eef2ff;color:var(--accent2);border:1px solid rgba(44,62,122,.22);}
+.legend{display:flex;flex-wrap:wrap;gap:.5rem;margin:.8rem 0;}
+.legend .pill{background:var(--card);}
 .cmp-table{width:100%;border-collapse:collapse;font-size:.86rem;margin:.8rem 0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
 .cmp-table th{background:var(--accent2);color:#fff;padding:.6rem .8rem;text-align:center;font-weight:600;font-size:.82rem;}
 .cmp-table td{padding:.6rem .8rem;text-align:center;border-bottom:1px solid var(--card-border);font-family:'JetBrains Mono',monospace;font-size:.82rem;}
@@ -142,53 +173,57 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <body>
 <nav class="float-nav" id="floatNav" aria-label="章節導覽">
   <div class="fn-title">章節導覽</div>
-  <a href="#cost" data-target="cost"><span class="fn-num">P01</span><span class="fn-name">BST 成本</span></a>
-  <a href="#obst" data-target="obst"><span class="fn-num">P02</span><span class="fn-name">Optimal BST</span></a>
-  <a href="#avl" data-target="avl"><span class="fn-num">P03</span><span class="fn-name">AVL 回顧</span></a>
-  <a href="#rb" data-target="rb"><span class="fn-num">P04</span><span class="fn-name">Red-Black</span></a>
-  <a href="#splay" data-target="splay"><span class="fn-num">P05</span><span class="fn-name">Splay</span></a>
-  <a href="#mway" data-target="mway"><span class="fn-num">P06</span><span class="fn-name">m-way</span></a>
-  <a href="#btree" data-target="btree"><span class="fn-num">P07</span><span class="fn-name">B-tree</span></a>
-  <a href="#bplus" data-target="bplus"><span class="fn-num">P08</span><span class="fn-name">B+ Tree</span></a>
+  <a href="#cost" data-target="cost"><span class="fn-num">P01</span><span class="fn-name">搜尋成本</span></a>
+  <a href="#obst" data-target="obst"><span class="fn-num">P02</span><span class="fn-name">最佳 BST</span></a>
+  <a href="#avl" data-target="avl"><span class="fn-num">P03</span><span class="fn-name">AVL 樹</span></a>
+  <a href="#rb" data-target="rb"><span class="fn-num">P04</span><span class="fn-name">紅黑樹</span></a>
+  <a href="#splay" data-target="splay"><span class="fn-num">P05</span><span class="fn-name">伸展樹</span></a>
+  <a href="#mway" data-target="mway"><span class="fn-num">P06</span><span class="fn-name">多路搜尋</span></a>
+  <a href="#btree" data-target="btree"><span class="fn-num">P07</span><span class="fn-name">B 樹</span></a>
+  <a href="#bplus" data-target="bplus"><span class="fn-num">P08</span><span class="fn-name">B+ 樹</span></a>
   <a href="#summary" data-target="summary"><span class="fn-num">P09</span><span class="fn-name">總覽</span></a>
-  <a href="#" class="fn-top"><span class="fn-num">↑</span><span class="fn-name">Top</span></a>
+  <a href="#" class="fn-top"><span class="fn-num">↑</span><span class="fn-name">回頂端</span></a>
 </nav>
 
 <header class="hero">
   <div class="hero-grid"></div>
   <div class="hero-content">
     <h1><span class="green">高效率搜尋樹</span><br><span class="blue">與多路搜尋樹</span></h1>
-    <p class="subtitle">Flexible Learning Week · Optimal BST · Red-Black · Splay · B-tree · B+ Tree</p>
-    <div class="big-formula">Optimal BST｜AVL｜Red-Black｜Splay｜m-way｜B-tree｜B+ Tree</div>
+    <p class="subtitle">彈性學習週自學頁 · 最佳二元搜尋樹 · 紅黑樹 · 伸展樹 · B 樹 · B+ 樹</p>
+    <div class="big-formula">搜尋成本模型｜動態規劃｜旋轉與著色｜多路索引</div>
     <div class="scroll-hint">向下閱讀與操作動畫<span>↓</span></div>
   </div>
 </header>
 
 <main class="container">
 <section id="prologue">
-  <div class="section-number">SELF-STUDY · 學習路線</div>
+  <div class="section-number">自學導覽 · 學習路線</div>
   <h2>從 BST 到資料庫索引</h2>
-  <p class="lead">這份自學頁接在 BST、binary heap 與 AVL 之後，整理剩下的搜尋樹觀念：怎麼把搜尋成本算清楚、怎麼靠平衡規則保證高度，以及為什麼資料庫索引常用 B-tree / B+ tree。</p>
+  <p class="lead">這份自學頁接在二元搜尋樹、二元堆積與 AVL 樹之後，補上第 10、11 章的核心概念。閱讀重點不是背樹名，而是看每種結構如何控制「搜尋成本」：有些靠機率安排根節點，有些靠旋轉或著色控制高度，有些把一個節點做大來減少磁碟存取次數。</p>
   <div class="toc">
-    <div class="toc-title">ROADMAP</div>
+    <div class="toc-title">閱讀順序</div>
     <div class="toc-grid">
       <a href="#cost"><span class="toc-num">P01</span>BST 搜尋成本與外部節點</a>
-      <a href="#obst"><span class="toc-num">P02</span>Optimal BST 動態規劃</a>
-      <a href="#avl"><span class="toc-num">P03</span>AVL 快速回顧</a>
-      <a href="#rb"><span class="toc-num">P04</span>Red-Black Tree</a>
-      <a href="#splay"><span class="toc-num">P05</span>Splay Tree（補充）</a>
-      <a href="#mway"><span class="toc-num">P06</span>m-way Search Tree</a>
-      <a href="#btree"><span class="toc-num">P07</span>B-tree</a>
-      <a href="#bplus"><span class="toc-num">P08</span>B+ Tree</a>
+      <a href="#obst"><span class="toc-num">P02</span>最佳二元搜尋樹</a>
+      <a href="#avl"><span class="toc-num">P03</span>AVL 樹回顧與旋轉</a>
+      <a href="#rb"><span class="toc-num">P04</span>紅黑樹</a>
+      <a href="#splay"><span class="toc-num">P05</span>伸展樹（補充）</a>
+      <a href="#mway"><span class="toc-num">P06</span>多路搜尋樹</a>
+      <a href="#btree"><span class="toc-num">P07</span>B 樹</a>
+      <a href="#bplus"><span class="toc-num">P08</span>B+ 樹</a>
       <a href="#summary"><span class="toc-num">P09</span>總覽比較</a>
     </div>
+  </div>
+  <div class="info-box">
+    <div class="box-label">閱讀方法</div>
+    每一節都先看「定義與成本模型」，再操作動畫。動畫只呈現一條代表性路徑；真正要帶走的是右側規則卡與下方公式框，這些才是考題與實作會用到的判斷依據。
   </div>
 </section>
 
 <section id="cost">
   <div class="section-number">PART 01 · BST 搜尋成本</div>
-  <h2>同一組 key，可以有不同的搜尋成本</h2>
-  <p class="lead">BST 的 inorder 順序固定，但樹形不固定。若每個 key 被搜尋的機率相同，平均比較次數只看深度；若機率不同，常被查到的 key 應該靠近 root。</p>
+  <h2>同一組鍵值，可以有不同的搜尋成本</h2>
+  <p class="lead">二元搜尋樹的中序順序固定，但樹形不固定。若每個鍵值被搜尋的機率相同，平均比較次數只看深度；若機率不同，常被查到的鍵值應靠近根節點。</p>
   <div class="viz-layout">
     <div class="viz-panel">
       <div class="tree-canvas" id="stage-cost"><svg></svg><div class="nodes-layer"></div></div>
@@ -201,24 +236,58 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
     </div>
     <aside class="side-panel">
-      <span class="info-label">Expected comparisons</span>
-      <div class="metric"><span>等機率左樹</span><span>2.4</span></div>
-      <div class="metric"><span>等機率右樹</span><span>2.2</span></div>
-      <div class="metric"><span>加權左樹</span><span>1.85</span></div>
-      <div class="metric"><span>加權右樹</span><span>2.05</span></div>
-      <div class="callout">這裡不是單純追求「最矮」：如果搜尋機率不同，<strong>高機率 key 的深度</strong>會主導平均成本。</div>
+      <div class="info-card">
+        <div class="ic-title">期望比較次數 <span class="ic-badge">例題</span></div>
+        <div class="ic-row"><span class="ic-label">等機率左樹</span><span class="ic-value highlight">2.4</span></div>
+        <div class="ic-row"><span class="ic-label">等機率右樹</span><span class="ic-value highlight">2.2</span></div>
+        <div class="ic-row"><span class="ic-label">加權左樹</span><span class="ic-value highlight">1.85</span></div>
+        <div class="ic-row"><span class="ic-label">加權右樹</span><span class="ic-value highlight">2.05</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">重點判斷 <span class="ic-badge">理由</span></div>
+        <p>這裡不是單純追求「最矮」。如果搜尋機率不同，<strong>高機率鍵值的深度</strong>會主導平均成本。</p>
+      </div>
     </aside>
   </div>
+  <div class="two-col-notes">
+    <div class="info-card">
+      <div class="ic-title">成功搜尋模型 <span class="ic-badge">成本</span></div>
+      <p>若鍵值為 $a_1 \lt a_2 \lt \cdots \lt a_n$，且搜尋 $a_i$ 的機率為 $p_i$，成功搜尋的期望成本可以看成「每個鍵值的深度加 1，再乘上它的機率」。根越淺，比較次數越少。</p>
+      <div class="eq-card">
+        <div class="eq-label">成功搜尋</div>
+        <div class="eq-formula">$\sum_i p_i(\operatorname{depth}(a_i)+1)$</div>
+        <div class="eq-sub">深度從 0 算，根節點比較 1 次。</div>
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="ic-title">外部節點與失敗搜尋 <span class="ic-badge">失敗</span></div>
+      <p>在每個空子指標補上一個外部節點，可把「搜尋失敗」也納入成本。若搜尋值落在 $a_i$ 與 $a_{i+1}$ 之間，就會走到對應的外部節點。</p>
+      <div class="eq-card">
+        <div class="eq-label">路徑長度關係</div>
+        <div class="eq-formula">$E=I+2n$</div>
+        <div class="eq-sub">$I$ 是內部路徑長，$E$ 是外部路徑長，$n$ 是內部節點數。</div>
+      </div>
+    </div>
+  </div>
   <div class="info-card">
-    <span class="info-label">Extended Binary Tree</span>
-    在原本 BST 的每個空 child 補上 external node，可以把「搜尋失敗」也算進成本。若 $I$ 是 internal path length、$E$ 是 external path length、$n$ 是 internal nodes 數，則每個 internal node 會讓 external path 總長多出 2，因此 $E=I+2n$。
+    <div class="ic-title">完整期望成本 <span class="ic-badge">p/q</span></div>
+    <p>投影片把成功搜尋與失敗搜尋都納入模型。$p_i$ 是成功搜尋 $a_i$ 的機率；$q_i$ 是搜尋值落在兩個鍵值間隔中的機率，其中 $q_0$ 表示 $x<a_1$，$q_i$ 表示 $a_i<x<a_{i+1}$，$q_n$ 表示 $x>a_n$。</p>
+    <div class="eq-card">
+      <div class="eq-label">成功 + 失敗</div>
+      <div class="eq-formula">$\sum_{i=1}^{n}p_i(\operatorname{depth}(a_i)+1)+\sum_{i=0}^{n}q_i(\operatorname{depth}(e_i)+1)$</div>
+      <div class="eq-sub">$e_i$ 是對應失敗搜尋的外部節點。</div>
+    </div>
+  </div>
+  <div class="info-box warm">
+    <div class="box-label">投影片例題怎麼讀</div>
+    同樣是鍵值 $5,10,15,20,25$，等機率時右樹比較好；但若 $5,10,25$ 的機率是 $0.3,0.3,0.3$，而 $15,20$ 的機率只有 $0.05,0.05$，左樹反而比較好。這就是最佳二元搜尋樹要處理的問題。
   </div>
 </section>
 
 <section id="obst">
-  <div class="section-number">PART 02 · Optimal Binary Search Tree</div>
-  <h2>Optimal BST：用 DP 選 root</h2>
-  <p class="lead">給定成功搜尋機率 $p_i$ 與失敗搜尋機率 $q_i$，Optimal BST 要找出總期望成本最低的 BST。核心想法是：每個區間都試著選一個 root，左右子樹再用最佳解。</p>
+  <div class="section-number">PART 02 · 最佳二元搜尋樹</div>
+  <h2>用動態規劃選出每個區間的根節點</h2>
+  <p class="lead">最佳二元搜尋樹假設每個成功搜尋與失敗搜尋的機率已知，目標是在所有可能樹形中找出總期望成本最低者。核心想法是：一旦某個鍵值被選為根，左、右兩邊就變成較小的最佳子問題。</p>
   <div class="viz-layout">
     <div class="viz-panel">
       <div class="tree-canvas" id="stage-obst"><svg></svg><div class="nodes-layer"></div></div>
@@ -232,50 +301,76 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
     </div>
     <aside class="side-panel">
-      <span class="info-label">Recurrence</span>
-      <div class="pseudo-code" id="code-obst">
+      <div class="info-card">
+        <div class="ic-title">遞迴式 <span class="ic-badge">動態規劃</span></div>
+        <div class="pseudo-code" id="code-obst">
 <span class="line" data-line="1">w[i,j] = q[i] + Σ(k=i+1..j)(p[k]+q[k])</span>
 <span class="line" data-line="2">c[i,i] = 0</span>
-<span class="line" data-line="3">c[i,j] = w[i,j] + min(c[i,l-1] + c[l,j])</span>
+<span class="line" data-line="3">c[i,j] = w[i,j] + min_{l=i+1..j}(c[i,l-1] + c[l,j])</span>
 <span class="line" data-line="4">r[i,j] = argmin l</span>
-<span class="line" data-line="5">T[0,n] reconstructs from r[0,n]</span>
+<span class="line" data-line="5">由 r[0,n] 重建 T[0,n]</span>
+        </div>
       </div>
-      <div class="callout">若直接對每個區間試所有 root，區間數是 $O(n^2)$，每格最多試 $O(n)$ 個 root，所以基本 DP 是 $O(n^3)$。</div>
+      <div class="info-card">
+        <div class="ic-title">複雜度 <span class="ic-badge">時間</span></div>
+        <p>區間數是 $O(n^2)$，每個區間最多試 $O(n)$ 個根節點，所以基本版本為 $O(n^3)$。</p>
+      </div>
     </aside>
+  </div>
+  <div class="formula-list">
+    <div class="formula-row"><div class="symbol">$T_{ij}$</div><div class="meaning">只含 $a_{i+1},\ldots,a_j$ 的最佳二元搜尋樹；$T_{ii}$ 是空樹。</div></div>
+    <div class="formula-row"><div class="symbol">$w_{ij}$</div><div class="meaning">區間內所有成功與失敗搜尋機率的總和。當整個子樹往下一層，這些機率都會多付一次比較成本。</div></div>
+    <div class="formula-row"><div class="symbol">$c_{ij}$</div><div class="meaning">$T_{ij}$ 的最小期望成本，且 $c_{ii}=0$。</div></div>
+    <div class="formula-row"><div class="symbol">$r_{ij}$</div><div class="meaning">讓 $c_{ij}$ 最小的根節點索引；最後用 $r$ 表把樹形重建出來。</div></div>
+  </div>
+  <div class="info-box">
+    <div class="box-label">為什麼會加上 $w_{ij}$</div>
+    假設 $a_k$ 被選為 $T_{ij}$ 的根。左子樹和右子樹原本各自最佳，但接到根下面後，區間內每一次搜尋都會多走一層，所以除了左右成本 $c_{i,k-1}+c_{kj}$，還要再加整個區間的權重 $w_{ij}$。
   </div>
 </section>
 
 <section id="avl">
-  <div class="section-number">PART 03 · AVL 快速回顧</div>
-  <h2>AVL：用 balance factor 維持高度</h2>
-  <p class="lead">AVL 是 height-balanced BST。每個 node 記錄 $BF(v)=h_L-h_R$，合法值只允許 $-1,0,1$。插入造成最近祖先 $A$ 的 balance factor 變成 $\pm2$ 時，用 LL/RR/LR/RL 旋轉修復。</p>
+  <div class="section-number">PART 03 · AVL 樹</div>
+  <h2>用平衡因子維持高度</h2>
+  <p class="lead">AVL 樹是高度平衡的二元搜尋樹。每個節點 $v$ 記錄平衡因子 $BF(v)=h_L-h_R$，合法值只允許 $-1,0,1$。插入後若最近失衡祖先 $A$ 的平衡因子變成 $\pm2$，就用四種旋轉之一修復。</p>
   <div class="viz-layout">
     <div class="viz-panel">
       <div class="tree-canvas" id="stage-avl"><svg></svg><div class="nodes-layer"></div></div>
-      <div class="status-banner"><span class="status-icon">›</span><span class="status-text">選一個 AVL case，觀察旋轉前後 inorder 不變。</span></div>
+      <div class="status-banner"><span class="status-icon">›</span><span class="status-text">選一個 AVL 情境，觀察旋轉前後中序順序不變。</span></div>
       <div class="controls-bar" data-demo="avl">
-        <button class="preset-btn active" data-case="LL">LL</button>
-        <button class="preset-btn" data-case="RR">RR</button>
-        <button class="preset-btn" data-case="LR">LR</button>
-        <button class="preset-btn" data-case="RL">RL</button>
+        <button class="preset-btn active" data-case="LL">LL 右旋</button>
+        <button class="preset-btn" data-case="RR">RR 左旋</button>
+        <button class="preset-btn" data-case="LR">LR 雙旋</button>
+        <button class="preset-btn" data-case="RL">RL 雙旋</button>
         <button class="btn-step">→ 單步</button>
         <button class="btn-reset">↺ 重置</button>
       </div>
     </div>
     <aside class="side-panel">
-      <span class="info-label">One sentence</span>
-      <p>AVL 的重點不是「旋轉很神奇」，而是旋轉只改局部 parent/child 關係，<strong>不改 inorder sequence</strong>，因此仍然是 BST。</p>
-      <div class="metric"><span>search</span><span>$O(\log n)$</span></div>
-      <div class="metric"><span>insert/delete</span><span>$O(\log n)$</span></div>
-      <div class="metric"><span>額外資訊</span><span>BF/height</span></div>
+      <div class="info-card">
+        <div class="ic-title">一句話重點 <span class="ic-badge">觀念</span></div>
+        <p>旋轉只改局部父子關係，<strong>不改中序順序</strong>，所以修復高度後仍然是二元搜尋樹。</p>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">操作成本 <span class="ic-badge">成本</span></div>
+        <div class="ic-row"><span class="ic-label">搜尋</span><span class="ic-value">$O(\log n)$</span></div>
+        <div class="ic-row"><span class="ic-label">插入/刪除</span><span class="ic-value">$O(\log n)$</span></div>
+        <div class="ic-row"><span class="ic-label">額外資訊</span><span class="ic-value">平衡因子或高度</span></div>
+      </div>
     </aside>
+  </div>
+  <div class="rule-grid">
+    <div class="rule-card"><strong>LL 與 RR：單旋轉</strong><p>新節點落在外側子樹。LL 對 $A$ 右旋，RR 對 $A$ 左旋。</p></div>
+    <div class="rule-card"><strong>LR 與 RL：雙旋轉</strong><p>新節點落在內側子樹。LR 先對左子做左旋再對 $A$ 右旋；RL 對稱。</p></div>
+    <div class="rule-card"><strong>插入時的修復量</strong><p>沿插入路徑往上找第一個失衡祖先，做一次單旋或雙旋即可恢復該區域高度。</p></div>
+    <div class="rule-card"><strong>自學檢查</strong><p>看旋轉前後的中序序列是否相同；若相同，就沒有破壞搜尋樹規則。</p></div>
   </div>
 </section>
 
 <section id="rb">
-  <div class="section-number">PART 04 · Red-Black Tree</div>
-  <h2>Red-Black：用顏色放寬 AVL 的平衡</h2>
-  <p class="lead">Red-black tree 是 extended BST。它不要求左右高度差最多 1，而是用紅黑規則限制最長路徑不會超過最短黑高路徑的兩倍，因此高度仍是 $O(\log n)$。</p>
+  <div class="section-number">PART 04 · 紅黑樹</div>
+  <h2>用著色規則放寬 AVL 的平衡</h2>
+  <p class="lead">紅黑樹是一種擴充二元搜尋樹。它不要求左右高度差最多 1，而是用紅、黑規則限制最長路徑不會超過最短黑高路徑的兩倍，因此高度仍為 $O(\log n)$。</p>
   <div class="viz-layout">
     <div class="viz-panel">
       <div class="tree-canvas" id="stage-rb"><svg></svg><div class="nodes-layer"></div></div>
@@ -288,21 +383,37 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
     </div>
     <aside class="side-panel">
-      <span class="info-label">Rules and height</span>
-      <p>根與 external nodes 是 black；不能有連續 red；所有 root-to-external path 的 black 數相同。</p>
-      <div class="callout">每條路徑長度介於 $r$ 與 $2r$ 之間，所以 $h \le 2\log_2(n+1)$。因此 search、insert、delete 都是 $O(\log n)$。</div>
+      <div class="info-card">
+        <div class="ic-title">三條規則 <span class="ic-badge">紅黑</span></div>
+        <p>根與外部節點為黑；不能有連續紅節點；所有根到外部節點路徑的黑節點數相同。</p>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">高度保證 <span class="ic-badge">界線</span></div>
+        <p>沿用投影片的邊著色觀點：令根的 rank $r$ 為任一路徑到外部節點的黑邊數。每條路徑長度介於 $r$ 到 $2r$，因此 $h \le 2\log_2(n+1)$。</p>
+      </div>
     </aside>
+  </div>
+  <div class="rule-grid">
+    <div class="rule-card"><strong>叔節點為紅</strong><p>父節點與叔節點改黑，祖父節點改紅，衝突往上傳；若祖父是根，最後強制改黑。</p></div>
+    <div class="rule-card"><strong>叔節點為黑</strong><p>依 LL、LR、RR、RL 型態做 AVL 類似旋轉，再重新著色。</p></div>
+    <div class="rule-card"><strong>邊著色觀點</strong><p>也可把顏色看成邊的顏色：到外部節點的邊為黑，沒有連續紅邊，黑邊數一致。</p></div>
+    <div class="rule-card"><strong>為何比 AVL 常用</strong><p>紅黑樹平衡較寬鬆，插入刪除旋轉次數通常較少，因此常見於標準函式庫的有序映射與集合。</p></div>
+  </div>
+  <div class="eq-card">
+    <div class="eq-label">紅黑樹高度</div>
+    <div class="eq-formula">$n \ge 2^r-1,\quad h\le 2r,\quad h\le 2\log_2(n+1)$</div>
+    <div class="eq-sub">搜尋、插入、刪除都沿高度進行，所以最壞時間為 $O(\log n)$。</div>
   </div>
 </section>
 
 <section id="splay">
-  <div class="section-number">PART 05 · Splay Tree（補充）</div>
-  <h2>Splay：每次操作後把目標伸展到 root</h2>
-  <p class="lead">Splay tree 不存 balance factor 或顏色。它允許單次操作最壞 $O(n)$，但靠著每次搜尋/插入/刪除後 splay 到 root，達成 amortized $O(\log n)$。</p>
+  <div class="section-number">PART 05 · 伸展樹（補充）</div>
+  <h2>每次操作後把目標伸展到根節點</h2>
+  <p class="lead">伸展樹也是二元搜尋樹，但不儲存平衡因子或顏色。搜尋、插入、刪除先像普通搜尋樹一樣進行，接著把起始節點一路旋轉到根。單次操作最壞可到 $O(n)$，但攤銷為 $O(\log n)$。</p>
   <div class="viz-layout">
     <div class="viz-panel">
       <div class="tree-canvas" id="stage-splay"><svg></svg><div class="nodes-layer"></div></div>
-      <div class="status-banner"><span class="status-icon">›</span><span class="status-text">目標 key 5 會透過 zig-zig / zig-zag 類型旋轉往上。</span></div>
+      <div class="status-banner"><span class="status-icon">›</span><span class="status-text">目標鍵值 5 會透過單旋、同向雙旋與異向雙旋往上。</span></div>
       <div class="controls-bar" data-demo="splay">
         <button class="btn-play">▶ 播放</button>
         <button class="btn-step">→ 單步</button>
@@ -311,23 +422,42 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
     </div>
     <aside class="side-panel">
-      <span class="info-label">Why useful</span>
-      <p>如果某些資料近期常被查詢，splay 會自然把它們拉近 root，具有 locality 的效果。</p>
-      <div class="metric"><span>單次最壞</span><span>$O(n)$</span></div>
-      <div class="metric"><span>攤銷成本</span><span>$O(\log n)$</span></div>
-      <div class="metric"><span>額外資訊</span><span>無</span></div>
+      <div class="info-card">
+        <div class="ic-title">起始節點 <span class="ic-badge">起點</span></div>
+        <p>搜尋或插入時從找到/插入的節點開始；刪除時通常從被刪節點的父節點開始。</p>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">成本 <span class="ic-badge">攤銷</span></div>
+        <div class="ic-row"><span class="ic-label">單次最壞</span><span class="ic-value">$O(n)$</span></div>
+        <div class="ic-row"><span class="ic-label">攤銷成本</span><span class="ic-value">$O(\log n)$</span></div>
+        <div class="ic-row"><span class="ic-label">額外資訊</span><span class="ic-value">不需要</span></div>
+      </div>
     </aside>
+  </div>
+  <div class="rule-grid">
+    <div class="rule-card"><strong>單旋</strong><p>若起始節點只有父節點、沒有祖父節點，就做一次旋轉讓它成為根。</p></div>
+    <div class="rule-card"><strong>同向雙旋</strong><p>左左或右右型態，先轉祖父再轉父節點，一次上升兩層。</p></div>
+    <div class="rule-card"><strong>異向雙旋</strong><p>左右或右左型態，對起始節點做兩次旋轉，仍保持中序順序。</p></div>
+    <div class="rule-card"><strong>自調整效果</strong><p>近期常查詢的資料會被拉近根節點，對有局部性的查詢序列特別有用。</p></div>
+  </div>
+  <div class="info-box warm">
+    <div class="box-label">自底向上與自頂向下</div>
+    自底向上是先找到起始節點再往上旋轉；自頂向下是搜尋途中就把樹分成「小於目標」與「大於目標」兩棵暫存樹，最後以目標節點為根重新接回。投影片提到實驗上自頂向下通常較快。
+  </div>
+  <div class="rule-grid">
+    <div class="rule-card"><strong>自頂向下步驟 1</strong><p>從根往目標走，一邊走一邊把小於目標的節點接到小樹，把大於目標的節點接到大樹。</p></div>
+    <div class="rule-card"><strong>自頂向下步驟 2</strong><p>遇到同向兩步時先做一次旋轉，避免路徑太斜；到達目標後把小樹接左邊、大樹接右邊。</p></div>
   </div>
 </section>
 
 <section id="mway">
-  <div class="section-number">PART 06 · m-way Search Tree</div>
-  <h2>一個 node 裡可以放多個 key</h2>
-  <p class="lead">m-way search tree 的 node 不是只放一個 key，而是放 $K_1,\dots,K_n$ 與 $A_0,\dots,A_n$ 子樹指標。搜尋時先在 node 內找 key 的區間，再往對應 child 走。</p>
+  <div class="section-number">PART 06 · 多路搜尋樹</div>
+  <h2>一個節點裡可以放多個鍵值</h2>
+  <p class="lead">多路搜尋樹把二元搜尋樹「每個節點一個鍵值、最多兩個子樹」推廣成「每個節點多個鍵值、最多 $m$ 個子樹」。搜尋時先在節點內找出目標落在哪個區間，再往對應子樹走。</p>
   <div class="viz-layout">
     <div class="viz-panel">
       <div class="tree-canvas" id="stage-mway"><svg></svg><div class="nodes-layer"></div></div>
-      <div class="status-banner"><span class="status-icon">›</span><span class="status-text">查找 28：先比較 root 的 20, 40，再進入中間子樹。</span></div>
+      <div class="status-banner"><span class="status-icon">›</span><span class="status-text">查找 28：先比較根節點的 20, 40，再進入中間子樹。</span></div>
       <div class="controls-bar" data-demo="mway">
         <button class="btn-play">▶ 播放</button>
         <button class="btn-step">→ 單步</button>
@@ -336,28 +466,42 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
     </div>
     <aside class="side-panel">
-      <span class="info-label">Routing rule</span>
-      <div class="pseudo-code">
-<span class="line">在 node 內找 i，使 K_i ≤ x &lt; K_{i+1}</span>
+      <div class="info-card">
+        <div class="ic-title">路由規則 <span class="ic-badge">搜尋</span></div>
+        <div class="pseudo-code">
+<span class="line">在節點內找 i，使 K_i ≤ x &lt; K_{i+1}</span>
 <span class="line">若 x 等於某個 K_i：成功</span>
 <span class="line">否則往 A_i 走</span>
+        </div>
       </div>
-      <div class="callout">分支數變大後，高度會下降。這是 B-tree 適合磁碟/資料庫索引的基礎。</div>
+      <div class="info-card">
+        <div class="ic-title">高度直覺 <span class="ic-badge">理由</span></div>
+        <p>分支數變大後，高度下降。這是 B 樹適合磁碟與資料庫索引的基礎。</p>
+      </div>
     </aside>
+  </div>
+  <div class="info-card">
+    <div class="ic-title">正式定義 <span class="ic-badge">定義</span></div>
+    <p>一個 $m$ 路搜尋樹節點可寫成 $n,A_0,(K_1,A_1),\ldots,(K_n,A_n)$，其中最多有 $m$ 個子樹、所以鍵值數 $0\le n\le m-1$。鍵值滿足 $K_1 \lt K_2 \lt \cdots \lt K_n$。令 $K_0=-\infty$、$K_{n+1}=\infty$，則子樹 $A_i$ 中所有鍵值都必須大於 $K_i$ 且小於 $K_{i+1}$。</p>
+  </div>
+  <div class="eq-card">
+    <div class="eq-label">容量上界</div>
+    <div class="eq-formula">高度為 $h$、分支度為 $m$ 的多路搜尋樹，最多有 $m^h-1$ 個鍵值。</div>
+    <div class="eq-sub">這個公式說明為什麼提高分支數可以大幅降低高度。</div>
   </div>
 </section>
 
 <section id="btree">
-  <div class="section-number">PART 07 · B-tree</div>
-  <h2>B-tree：保持每個 node 半滿，所有葉子同層</h2>
-  <p class="lead">order $m$ 的 B-tree 是有容量限制的 m-way search tree。除了 root 以外，每個內部 node 至少有 $\lceil m/2\rceil$ 個 children，最多 $m$ 個 children，所有 external nodes 在同一層。</p>
+  <div class="section-number">PART 07 · B 樹</div>
+  <h2>保持每個節點至少半滿，所有葉子同層</h2>
+  <p class="lead">$m$ 階 B 樹是有容量限制的多路搜尋樹。除了根與外部節點以外，每個內部節點至少有 $\lceil m/2\rceil$ 個子節點，最多 $m$ 個子節點，所有外部節點在同一層。</p>
   <div class="viz-layout">
     <div class="viz-panel">
       <div class="tree-canvas" id="stage-btree"><svg></svg><div class="nodes-layer"></div></div>
-      <div class="status-banner"><span class="status-icon">›</span><span class="status-text">切換插入與刪除情境，觀察 split、borrow、merge。</span></div>
+      <div class="status-banner"><span class="status-icon">›</span><span class="status-text">切換插入與刪除情境，觀察分裂、借用與合併。</span></div>
       <div class="controls-bar" data-demo="btree">
-        <button class="preset-btn active" data-case="insert">Insert split</button>
-        <button class="preset-btn" data-case="delete">Delete borrow/merge</button>
+        <button class="preset-btn active" data-case="insert">插入：分裂</button>
+        <button class="preset-btn" data-case="delete">刪除：借用/合併</button>
         <button class="btn-play">▶ 播放</button>
         <button class="btn-step">→ 單步</button>
         <button class="btn-reset">↺ 重置</button>
@@ -365,21 +509,46 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
     </div>
     <aside class="side-panel">
-      <span class="info-label">Height bound</span>
-      <p>若有 $N$ 個 keys、order 為 $m$、高度為 $h$，分支數至少約為 $\lceil m/2\rceil$，所以高度是 $O(\log_m N)$ 等級。</p>
-      <div class="callout">PPT 的例子：order $m=200$、$N \le 2\times10^6-2$ 時，高度可以不超過 3。這解釋了為什麼資料庫索引很在意「一次讀很多 key」。</div>
+      <div class="info-card">
+        <div class="ic-title">高度上界 <span class="ic-badge">界線</span></div>
+        <p>若鍵值數為 $N$、階數為 $m$、高度為 $h$，每層至少維持約半滿，因此高度是 $O(\log_m N)$ 等級。</p>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">投影片例子 <span class="ic-badge">m=200</span></div>
+        <p>當 $m=200$ 且 $N \le 2\times10^6-2$ 時，高度可不超過 3。這就是資料庫索引重視大節點的原因。</p>
+      </div>
     </aside>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-tile"><div class="stat-label">3 階</div><div class="stat-value">2-3 樹</div><div class="stat-note">每個內部節點可有 2 或 3 個子節點。</div></div>
+    <div class="stat-tile"><div class="stat-label">4 階</div><div class="stat-value">2-3-4 樹</div><div class="stat-note">每個內部節點可有 2、3 或 4 個子節點。</div></div>
+    <div class="stat-tile"><div class="stat-label">2 階</div><div class="stat-value">滿二元樹</div><div class="stat-note">所有內部節點都有 2 個子節點。</div></div>
+  </div>
+  <div class="eq-card">
+    <div class="eq-label">高度估計</div>
+    <div class="eq-formula">$2\lceil m/2\rceil^{h-1}-1 \le N \le m^h-1$</div>
+    <div class="eq-sub">下界來自根至少 2 個子節點，其餘內部節點至少半滿。</div>
+  </div>
+  <div class="rule-grid">
+    <div class="rule-card"><strong>插入分裂</strong><p>先插入葉節點；若節點超過容量，取中間鍵值往父節點提升，左右鍵值分成兩個節點。</p></div>
+    <div class="rule-card"><strong>刪除借用</strong><p>刪除後若節點鍵值太少，優先向相鄰兄弟借一個鍵值，父節點鍵值同步調整。</p></div>
+    <div class="rule-card"><strong>刪除合併</strong><p>若兄弟無法借，就把父節點的一個分隔鍵拉下來與兄弟合併；不足可能往父節點傳。</p></div>
+    <div class="rule-card"><strong>根節點下降</strong><p>若合併一路傳到根，且根只剩一個鍵值被拉下來，原根可被移除，樹高下降 1。</p></div>
+  </div>
+  <div class="info-box warm">
+    <div class="box-label">左偏與右偏</div>
+    2-3-4 樹插入 102 的投影片例子提醒我們：分裂或調整時可能有左偏、右偏兩種合法結果。只要每個節點容量合法、所有葉子同層、且中序順序正確，兩種結果都仍是合法 B 樹。
   </div>
 </section>
 
 <section id="bplus">
-  <div class="section-number">PART 08 · B+ Tree</div>
-  <h2>B+ Tree：資料都在 leaf，leaf 串成 linked list</h2>
-  <p class="lead">B+ tree 的 internal nodes 只當 index，真正資料放在 leaf/data nodes。所有 leaf 用 linked list 串起來，所以範圍查詢不用一直回到 root。</p>
+  <div class="section-number">PART 08 · B+ 樹</div>
+  <h2>資料都在葉節點，葉節點串成雙向串列</h2>
+  <p class="lead">B+ 樹把內部節點當成索引節點，只存分隔鍵值與指標；真正資料放在資料節點，也就是葉節點。所有葉節點用雙向串列串起來，因此範圍查詢找到第一個葉節點後，可以直接往右掃描。</p>
   <div class="viz-layout">
     <div class="viz-panel">
       <div class="tree-canvas" id="stage-bplus"><svg></svg><div class="nodes-layer"></div></div>
-      <div class="status-banner"><span class="status-icon">›</span><span class="status-text">範圍查詢：先走 index 找到第一個 leaf，再沿 leaf links 掃描。</span></div>
+      <div class="status-banner"><span class="status-icon">›</span><span class="status-text">範圍查詢：先走索引找到第一個葉節點，再沿葉節點串列掃描。</span></div>
       <div class="controls-bar" data-demo="bplus">
         <button class="btn-play">▶ 播放</button>
         <button class="btn-step">→ 單步</button>
@@ -388,33 +557,74 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
     </div>
     <aside class="side-panel">
-      <span class="info-label">B-tree vs B+ tree</span>
-      <div class="metric"><span>B-tree</span><span>keys/records 可在內部</span></div>
-      <div class="metric"><span>B+ tree</span><span>records 在 leaves</span></div>
-      <div class="metric"><span>range query</span><span>leaf links</span></div>
-      <div class="callout">B+ tree 犧牲一點搜尋路徑上的直接命中，換來更規律的 leaf storage 與高效率 range scan。</div>
+      <div class="info-card">
+        <div class="ic-title">B 樹 vs B+ 樹 <span class="ic-badge">比較</span></div>
+        <div class="ic-row"><span class="ic-label">B 樹</span><span class="ic-value">內部可存資料</span></div>
+        <div class="ic-row"><span class="ic-label">B+ 樹</span><span class="ic-value">資料在葉節點</span></div>
+        <div class="ic-row"><span class="ic-label">範圍查詢</span><span class="ic-value">沿葉節點串列</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">資料庫直覺 <span class="ic-badge">索引</span></div>
+        <p>B+ 樹犧牲內部節點直接命中資料的機會，換來更規律的葉節點儲存與高效率範圍掃描。</p>
+      </div>
     </aside>
+  </div>
+  <div class="rule-grid">
+    <div class="rule-card"><strong>索引節點</strong><p>只放鍵值與指標，用來決定搜尋往哪個子樹走，不直接放完整資料。</p></div>
+    <div class="rule-card"><strong>資料節點</strong><p>所有實際資料都在葉節點；也就是投影片中的資料節點。</p></div>
+    <div class="rule-card"><strong>插入</strong><p>插入到葉節點；若葉節點滿了就分裂，並把新的分隔鍵更新到上層索引。</p></div>
+    <div class="rule-card"><strong>刪除</strong><p>刪除後若葉節點不足，先借用；不能借就合併，並同步更新父層索引鍵。</p></div>
+  </div>
+  <div class="two-col-notes">
+    <div class="info-card">
+      <div class="ic-title">插入範例 <span class="ic-badge">分裂</span></div>
+      <p>投影片中插入 14 時，資料應放在第一個葉節點。若葉節點容量超過上限，就分裂成兩個葉節點，並把新葉節點的第一個鍵值複製到父層索引，讓搜尋能導向新的資料節點。</p>
+    </div>
+    <div class="info-card">
+      <div class="ic-title">刪除範例 <span class="ic-badge">借用/合併</span></div>
+      <p>刪除 71 可從相鄰葉節點借用並更新父層分隔鍵；若刪除後兄弟也不能借，就合併葉節點，父層索引也要刪掉或更新，必要時不足會繼續往上傳。</p>
+    </div>
+  </div>
+  <div class="info-box">
+    <div class="box-label">為什麼範圍查詢快</div>
+    找單一鍵值時仍需從根走到葉節點，成本是 $O(\log N)$。但若要找一段連續鍵值，只要找到第一個葉節點，後面可以沿葉節點串列順序掃描，不必對每筆資料重新從根搜尋。
   </div>
 </section>
 
 <section id="summary">
   <div class="section-number">PART 09 · 總覽比較</div>
   <h2>每種搜尋樹解決的是不同瓶頸</h2>
-  <p class="lead">不要把所有 balanced tree 都記成「某種旋轉」。先問：瓶頸是高度？搜尋機率？局部性？磁碟 I/O？範圍查詢？</p>
+  <p class="lead">不要把所有平衡樹都記成「某種旋轉」。先問：瓶頸是高度？搜尋機率？近期常用資料？磁碟存取？還是範圍查詢？</p>
   <table class="cmp-table">
     <thead><tr><th>結構</th><th>核心想法</th><th>典型成本</th><th>適合場景</th></tr></thead>
     <tbody>
       <tr><td>普通 BST</td><td>左小右大</td><td>平均可好，最壞 $O(n)$</td><td>概念基礎、小型資料</td></tr>
-      <tr><td>Optimal BST</td><td>依搜尋機率安排 root</td><td>建構 DP $O(n^3)$</td><td>已知查詢分布且資料較靜態</td></tr>
-      <tr><td>AVL</td><td>嚴格高度平衡</td><td>search/insert/delete $O(\log n)$</td><td>搜尋很多、想要低高度</td></tr>
-      <tr><td>Red-Black</td><td>用紅黑規則放寬平衡</td><td>search/insert/delete $O(\log n)$</td><td>標準 library map/set 常用</td></tr>
-      <tr><td>Splay</td><td>操作後把目標拉到 root</td><td>amortized $O(\log n)$</td><td>有 locality 的查詢序列</td></tr>
-      <tr><td>B-tree</td><td>高分支、node 半滿、葉同層</td><td>$O(\log N)$，高度很小</td><td>磁碟與資料庫索引</td></tr>
-      <tr><td>B+ tree</td><td>資料在 leaf，leaf 串接</td><td>搜尋 $O(\log N)$，range scan 快</td><td>資料庫 range query、檔案系統索引</td></tr>
+      <tr><td>最佳 BST</td><td>依搜尋機率安排根節點</td><td>建構 DP $O(n^3)$</td><td>已知查詢分布且資料較靜態</td></tr>
+      <tr><td>AVL 樹</td><td>嚴格高度平衡</td><td>搜尋/插入/刪除 $O(\log n)$</td><td>搜尋很多、想要低高度</td></tr>
+      <tr><td>紅黑樹</td><td>用著色規則放寬平衡</td><td>搜尋/插入/刪除 $O(\log n)$</td><td>標準函式庫的有序映射與集合</td></tr>
+      <tr><td>伸展樹</td><td>操作後把目標拉到根節點</td><td>攤銷 $O(\log n)$</td><td>有局部性的查詢序列</td></tr>
+      <tr><td>B 樹</td><td>高分支、節點半滿、葉同層</td><td>$O(\log N)$，高度很小</td><td>磁碟與資料庫索引</td></tr>
+      <tr><td>B+ 樹</td><td>資料在葉節點，葉節點串接</td><td>搜尋 $O(\log N)$，範圍掃描快</td><td>資料庫範圍查詢、檔案系統索引</td></tr>
+    </tbody>
+  </table>
+  <div class="info-box red">
+    <div class="box-label">考前自我檢查</div>
+    若題目問「為何高度是對數」，回答 AVL/紅黑/B 樹的高度限制；若題目問「為何平均成本較小」，回答搜尋機率與最佳 BST；若題目問「為何資料庫索引不用普通 BST」，回答磁碟 I/O 與 B/B+ 樹的大分支節點。
+  </div>
+  <h3>與線性結構的操作成本比較</h3>
+  <table class="cmp-table">
+    <thead><tr><th>操作</th><th>排序陣列</th><th>鏈結串列</th><th>AVL 樹</th></tr></thead>
+    <tbody>
+      <tr><td>搜尋 $x$</td><td>$O(\log n)$</td><td>$O(n)$</td><td>$O(\log n)$</td></tr>
+      <tr><td>搜尋第 $k$ 筆</td><td>$O(1)$</td><td>$O(k)$</td><td>$O(\log n)$</td></tr>
+      <tr><td>刪除 $x$</td><td>$O(n)$</td><td>$O(1)$（已知位置）</td><td>$O(\log n)$</td></tr>
+      <tr><td>插入 $x$</td><td>$O(n)$</td><td>$O(1)$（已知位置）</td><td>$O(\log n)$</td></tr>
+      <tr><td>依序輸出</td><td>$O(n)$</td><td>$O(n)$</td><td>$O(n)$</td></tr>
     </tbody>
   </table>
 </section>
 </main>
+<footer>資料結構 · 高效率搜尋樹與多路搜尋樹互動自學筆記</footer>
 
 <script>
 const $ = id => document.getElementById(id);
@@ -501,11 +711,11 @@ function initCost(){
   const stage = $('stage-cost');
   const edges = [['L10','L5'],['L10','L25'],['L25','L20'],['L20','L15'],['R10','R5'],['R10','R20'],['R20','R15'],['R20','R25']];
   const steps = [
-    {status:'兩棵 BST 都有 inorder：5, 10, 15, 20, 25。', path:[]},
+    {status:'兩棵 BST 都有相同中序順序：5, 10, 15, 20, 25。', path:[]},
     {status:'等機率時，左樹平均比較次數：(1+2+2+3+4)/5 = 2.4。', path:['L10','L25','L20','L15']},
     {status:'等機率時，右樹平均比較次數：(1+2+2+3+3)/5 = 2.2。', path:['R10','R20','R15','R25']},
     {status:'若 5,10,25 的搜尋機率較高，左樹加權成本變成 1.85。', path:['L5','L10','L25']},
-    {status:'同一組 key 的最佳樹形取決於搜尋機率，不只取決於高度。', path:[]}
+    {status:'同一組鍵值的最佳樹形取決於搜尋機率，不只取決於高度。', path:[]}
   ];
   return new Player(steps, s => {
     drawBinary(stage, mergeNodes(trees.leftCost, trees.rightCost), edges, {path:s.path});
@@ -540,10 +750,10 @@ function initObst(){
   const optTree = {'15':{x:50,y:18,label:'15'},'10':{x:32,y:45,label:'10'},'20':{x:68,y:45,label:'20'},'25':{x:78,y:72,label:'25'}};
   const steps = [
     {status:'初始化 diagonal：T[i,i] 是空樹，c[i,i]=0。', active:0, line:2, tree:false},
-    {status:'填長度 1 的區間，例如 T[0,1] 只能選 a1=10 當 root。', active:5, line:3, tree:false},
-    {status:'填長度 2、3 的區間，每格試可能 root 並記錄 r[i,j]。', active:12, line:4, tree:false},
+    {status:'填長度 1 的區間，例如 T[0,1] 只能選 a1=10 當根節點。', active:5, line:3, tree:false},
+    {status:'填長度 2、3 的區間，每格試可能根節點並記錄 r[i,j]。', active:12, line:4, tree:false},
     {status:'最後 T[0,4] 得到 c[0,4]=32，r[0,4]=2。', active:14, line:4, tree:false},
-    {status:'由 r 表重建：a2=15 是 root，左邊是 10，右邊接 20,25。', active:15, line:5, tree:true}
+    {status:'由 r 表重建：a2=15 是根節點，左邊是 10，右邊接 20,25。', active:15, line:5, tree:true}
   ];
   return new Player(steps, s => {
     renderMatrix(s.active);
@@ -556,22 +766,22 @@ function initObst(){
 
 const avlCases = {
   LL: [
-    {status:'LL：新節點落在 A 的 left-left，A 的 BF 變成 +2。', nodes:{A:{x:50,y:18,label:'A',cls:'active'},B:{x:34,y:43,label:'B'},Y:{x:22,y:70,label:'Y'},AR:{x:64,y:43,label:'AR',cls:'small'}}, edges:[['A','B'],['A','AR'],['B','Y']]},
-    {status:'對 A 做 right rotation，B 上升。', nodes:{B:{x:50,y:22,label:'B',cls:'active'},Y:{x:34,y:50,label:'Y'},A:{x:66,y:50,label:'A'},AR:{x:78,y:75,label:'AR',cls:'small'}}, edges:[['B','Y'],['B','A'],['A','AR']]}
+    {status:'LL：新節點落在 A 的左子樹之左子樹，A 的 BF 變成 +2。', nodes:{A:{x:50,y:18,label:'A',cls:'active'},B:{x:34,y:43,label:'B'},Y:{x:22,y:70,label:'Y'},AR:{x:64,y:43,label:'AR',cls:'small'}}, edges:[['A','B'],['A','AR'],['B','Y']]},
+    {status:'對 A 做右旋，B 上升。', nodes:{B:{x:50,y:22,label:'B',cls:'active'},Y:{x:34,y:50,label:'Y'},A:{x:66,y:50,label:'A'},AR:{x:78,y:75,label:'AR',cls:'small'}}, edges:[['B','Y'],['B','A'],['A','AR']]}
   ],
   RR: [
-    {status:'RR：新節點落在 A 的 right-right，A 的 BF 變成 -2。', nodes:{A:{x:50,y:18,label:'A',cls:'active'},AL:{x:36,y:43,label:'AL',cls:'small'},B:{x:66,y:43,label:'B'},Y:{x:78,y:70,label:'Y'}}, edges:[['A','AL'],['A','B'],['B','Y']]},
-    {status:'對 A 做 left rotation，B 上升。', nodes:{B:{x:50,y:22,label:'B',cls:'active'},A:{x:34,y:50,label:'A'},Y:{x:66,y:50,label:'Y'},AL:{x:22,y:75,label:'AL',cls:'small'}}, edges:[['B','A'],['B','Y'],['A','AL']]}
+    {status:'RR：新節點落在 A 的右子樹之右子樹，A 的 BF 變成 -2。', nodes:{A:{x:50,y:18,label:'A',cls:'active'},AL:{x:36,y:43,label:'AL',cls:'small'},B:{x:66,y:43,label:'B'},Y:{x:78,y:70,label:'Y'}}, edges:[['A','AL'],['A','B'],['B','Y']]},
+    {status:'對 A 做左旋，B 上升。', nodes:{B:{x:50,y:22,label:'B',cls:'active'},A:{x:34,y:50,label:'A'},Y:{x:66,y:50,label:'Y'},AL:{x:22,y:75,label:'AL',cls:'small'}}, edges:[['B','A'],['B','Y'],['A','AL']]}
   ],
   LR: [
     {status:'LR：先對 B 左旋，再對 A 右旋。', nodes:{A:{x:50,y:16,label:'A',cls:'active'},B:{x:34,y:42,label:'B'},C:{x:45,y:68,label:'C'}}, edges:[['A','B'],['B','C']]},
     {status:'C 先上到 B 的位置。', nodes:{A:{x:50,y:16,label:'A'},C:{x:34,y:42,label:'C',cls:'active'},B:{x:25,y:68,label:'B'}}, edges:[['A','C'],['C','B']]},
-    {status:'最後 C 上升成局部 root。', nodes:{C:{x:50,y:22,label:'C',cls:'active'},B:{x:34,y:52,label:'B'},A:{x:66,y:52,label:'A'}}, edges:[['C','B'],['C','A']]}
+    {status:'最後 C 上升成局部根節點。', nodes:{C:{x:50,y:22,label:'C',cls:'active'},B:{x:34,y:52,label:'B'},A:{x:66,y:52,label:'A'}}, edges:[['C','B'],['C','A']]}
   ],
   RL: [
     {status:'RL：先對 B 右旋，再對 A 左旋。', nodes:{A:{x:50,y:16,label:'A',cls:'active'},B:{x:66,y:42,label:'B'},C:{x:55,y:68,label:'C'}}, edges:[['A','B'],['B','C']]},
     {status:'C 先上到 B 的位置。', nodes:{A:{x:50,y:16,label:'A'},C:{x:66,y:42,label:'C',cls:'active'},B:{x:75,y:68,label:'B'}}, edges:[['A','C'],['C','B']]},
-    {status:'最後 C 上升成局部 root。', nodes:{C:{x:50,y:22,label:'C',cls:'active'},A:{x:34,y:52,label:'A'},B:{x:66,y:52,label:'B'}}, edges:[['C','A'],['C','B']]}
+    {status:'最後 C 上升成局部根節點。', nodes:{C:{x:50,y:22,label:'C',cls:'active'},A:{x:34,y:52,label:'A'},B:{x:66,y:52,label:'B'}}, edges:[['C','A'],['C','B']]}
   ]
 };
 function initAvl(){
@@ -591,13 +801,13 @@ function initAvl(){
 function initRb(){
   const stage = $('stage-rb');
   const steps = [
-    {status:'插入 50，root 必須是 black。', nodes:{'50':{x:50,y:20,label:'50',cls:'black'}}, edges:[]},
-    {status:'插入 10、80 為 red，沒有連續 red。', nodes:{'50':{x:50,y:20,label:'50',cls:'black'},'10':{x:35,y:48,label:'10',cls:'red'},'80':{x:65,y:48,label:'80',cls:'red'}}, edges:[['50','10'],['50','80']]},
-    {status:'插入 90 造成 red parent + red child；uncle 10 是 red，所以 recolor。', nodes:{'50':{x:50,y:20,label:'50',cls:'red'},'10':{x:35,y:48,label:'10',cls:'black'},'80':{x:65,y:48,label:'80',cls:'black'},'90':{x:75,y:74,label:'90',cls:'red'}}, edges:[['50','10'],['50','80'],['80','90']]},
-    {status:'root 再強制改回 black。', nodes:{'50':{x:50,y:20,label:'50',cls:'black'},'10':{x:35,y:48,label:'10',cls:'black'},'80':{x:65,y:48,label:'80',cls:'black'},'90':{x:75,y:74,label:'90',cls:'red'},'70':{x:55,y:74,label:'70',cls:'red'}}, edges:[['50','10'],['50','80'],['80','70'],['80','90']]},
-    {status:'插入 60 後可先 recolor，再把衝突往上傳。', nodes:{'50':{x:50,y:18,label:'50',cls:'black'},'10':{x:30,y:45,label:'10',cls:'black'},'80':{x:70,y:45,label:'80',cls:'red'},'70':{x:60,y:70,label:'70',cls:'black'},'90':{x:82,y:70,label:'90',cls:'black'},'60':{x:52,y:88,label:'60',cls:'red'}}, edges:[['50','10'],['50','80'],['80','70'],['80','90'],['70','60']]},
-    {status:'插入 65 形成 LRb，使用 AVL 類似的 double rotation 並調色。', nodes:{'50':{x:42,y:30,label:'50',cls:'black'},'10':{x:25,y:58,label:'10',cls:'black'},'65':{x:65,y:30,label:'65',cls:'black'},'60':{x:54,y:58,label:'60',cls:'red'},'80':{x:78,y:58,label:'80',cls:'red'},'70':{x:70,y:82,label:'70',cls:'black'},'90':{x:88,y:82,label:'90',cls:'black'}}, edges:[['50','10'],['50','65'],['65','60'],['65','80'],['80','70'],['80','90']]},
-    {status:'插入 62 後再做 recolor / rotation，最後仍滿足黑高一致。', nodes:{'65':{x:50,y:18,label:'65',cls:'black'},'50':{x:34,y:46,label:'50',cls:'red'},'80':{x:68,y:46,label:'80',cls:'red'},'10':{x:24,y:74,label:'10',cls:'black'},'60':{x:44,y:74,label:'60',cls:'black'},'70':{x:60,y:74,label:'70',cls:'black'},'90':{x:78,y:74,label:'90',cls:'black'},'62':{x:50,y:91,label:'62',cls:'red'}}, edges:[['65','50'],['65','80'],['50','10'],['50','60'],['80','70'],['80','90'],['60','62']]}
+    {status:'插入 50，根節點必須是黑色。', nodes:{'50':{x:50,y:20,label:'50',cls:'black'}}, edges:[]},
+    {status:'插入 10、80 為紅色，沒有連續紅色節點。', nodes:{'50':{x:50,y:20,label:'50',cls:'black'},'10':{x:35,y:48,label:'10',cls:'red'},'80':{x:65,y:48,label:'80',cls:'red'}}, edges:[['50','10'],['50','80']]},
+    {status:'插入 90 造成紅色父節點與紅色子節點；叔節點 10 也是紅色，所以先重新著色。', nodes:{'50':{x:50,y:20,label:'50',cls:'red'},'10':{x:35,y:48,label:'10',cls:'black'},'80':{x:65,y:48,label:'80',cls:'black'},'90':{x:75,y:74,label:'90',cls:'red'}}, edges:[['50','10'],['50','80'],['80','90']]},
+    {status:'根節點再強制改回黑色。', nodes:{'50':{x:50,y:20,label:'50',cls:'black'},'10':{x:35,y:48,label:'10',cls:'black'},'80':{x:65,y:48,label:'80',cls:'black'},'90':{x:75,y:74,label:'90',cls:'red'},'70':{x:55,y:74,label:'70',cls:'red'}}, edges:[['50','10'],['50','80'],['80','70'],['80','90']]},
+    {status:'插入 60 後可先重新著色，再把衝突往上傳。', nodes:{'50':{x:50,y:18,label:'50',cls:'black'},'10':{x:30,y:45,label:'10',cls:'black'},'80':{x:70,y:45,label:'80',cls:'red'},'70':{x:60,y:70,label:'70',cls:'black'},'90':{x:82,y:70,label:'90',cls:'black'},'60':{x:52,y:88,label:'60',cls:'red'}}, edges:[['50','10'],['50','80'],['80','70'],['80','90'],['70','60']]},
+    {status:'插入 65 形成 LRb，使用 AVL 類似的雙旋轉並調色。', nodes:{'50':{x:42,y:30,label:'50',cls:'black'},'10':{x:25,y:58,label:'10',cls:'black'},'65':{x:65,y:30,label:'65',cls:'black'},'60':{x:54,y:58,label:'60',cls:'red'},'80':{x:78,y:58,label:'80',cls:'red'},'70':{x:70,y:82,label:'70',cls:'black'},'90':{x:88,y:82,label:'90',cls:'black'}}, edges:[['50','10'],['50','65'],['65','60'],['65','80'],['80','70'],['80','90']]},
+    {status:'插入 62 後再做重新著色或旋轉，最後仍滿足黑高一致。', nodes:{'65':{x:50,y:18,label:'65',cls:'black'},'50':{x:34,y:46,label:'50',cls:'red'},'80':{x:68,y:46,label:'80',cls:'red'},'10':{x:24,y:74,label:'10',cls:'black'},'60':{x:44,y:74,label:'60',cls:'black'},'70':{x:60,y:74,label:'70',cls:'black'},'90':{x:78,y:74,label:'90',cls:'black'},'62':{x:50,y:91,label:'62',cls:'red'}}, edges:[['65','50'],['65','80'],['50','10'],['50','60'],['80','70'],['80','90'],['60','62']]}
   ];
   return new Player(steps, s => { drawBinary(stage, s.nodes, s.edges, {}); setText(statusOf(stage), s.status); });
 }
@@ -605,10 +815,10 @@ function initRb(){
 function initSplay(){
   const stage = $('stage-splay');
   const steps = [
-    {status:'搜尋 key 5，先像普通 BST 一樣走到目標。', active:'5', nodes:{'1':{x:46,y:12,label:'1'},'9':{x:70,y:30,label:'9'},'8':{x:55,y:48,label:'8'},'2':{x:38,y:40,label:'2'},'6':{x:47,y:64,label:'6'},'4':{x:34,y:68,label:'4'},'5':{x:42,y:84,label:'5'}}, edges:[['1','9'],['9','8'],['8','2'],['2','6'],['2','4'],['4','5']]},
-    {status:'RR / LL 類型會一次上升兩層，稱為 zig-zig。', active:'5', nodes:{'1':{x:42,y:12,label:'1'},'9':{x:72,y:30,label:'9'},'5':{x:50,y:44,label:'5'},'2':{x:34,y:65,label:'2'},'8':{x:66,y:65,label:'8'},'4':{x:42,y:82,label:'4'},'6':{x:58,y:82,label:'6'}}, edges:[['1','9'],['9','5'],['5','2'],['5','8'],['2','4'],['8','6']]},
-    {status:'LR / RL 類型會先內旋再外旋，稱為 zig-zag。', active:'5', nodes:{'1':{x:32,y:32,label:'1'},'5':{x:50,y:18,label:'5'},'9':{x:70,y:36,label:'9'},'2':{x:42,y:58,label:'2'},'8':{x:62,y:58,label:'8'},'4':{x:47,y:80,label:'4'},'6':{x:57,y:80,label:'6'}}, edges:[['5','1'],['5','9'],['1','2'],['9','8'],['2','4'],['8','6']]},
-    {status:'splay 完成後，剛查到的 5 成為 root。', active:'5', nodes:{'5':{x:50,y:16,label:'5'},'1':{x:32,y:44,label:'1'},'9':{x:70,y:44,label:'9'},'2':{x:40,y:68,label:'2'},'8':{x:62,y:68,label:'8'},'4':{x:46,y:88,label:'4'},'6':{x:56,y:88,label:'6'}}, edges:[['5','1'],['5','9'],['1','2'],['9','8'],['2','4'],['8','6']]}
+    {status:'搜尋鍵值 5，先像普通 BST 一樣走到目標。', active:'5', nodes:{'1':{x:46,y:12,label:'1'},'9':{x:70,y:30,label:'9'},'8':{x:55,y:48,label:'8'},'2':{x:38,y:40,label:'2'},'6':{x:47,y:64,label:'6'},'4':{x:34,y:68,label:'4'},'5':{x:42,y:84,label:'5'}}, edges:[['1','9'],['9','8'],['8','2'],['2','6'],['2','4'],['4','5']]},
+    {status:'RR / LL 類型會一次上升兩層，稱為同向雙旋。', active:'5', nodes:{'1':{x:42,y:12,label:'1'},'9':{x:72,y:30,label:'9'},'5':{x:50,y:44,label:'5'},'2':{x:34,y:65,label:'2'},'8':{x:66,y:65,label:'8'},'4':{x:42,y:82,label:'4'},'6':{x:58,y:82,label:'6'}}, edges:[['1','9'],['9','5'],['5','2'],['5','8'],['2','4'],['8','6']]},
+    {status:'LR / RL 類型會先內旋再外旋，稱為異向雙旋。', active:'5', nodes:{'1':{x:32,y:32,label:'1'},'5':{x:50,y:18,label:'5'},'9':{x:70,y:36,label:'9'},'2':{x:42,y:58,label:'2'},'8':{x:62,y:58,label:'8'},'4':{x:47,y:80,label:'4'},'6':{x:57,y:80,label:'6'}}, edges:[['5','1'],['5','9'],['1','2'],['9','8'],['2','4'],['8','6']]},
+    {status:'伸展完成後，剛查到的 5 成為根節點。', active:'5', nodes:{'5':{x:50,y:16,label:'5'},'1':{x:32,y:44,label:'1'},'9':{x:70,y:44,label:'9'},'2':{x:40,y:68,label:'2'},'8':{x:62,y:68,label:'8'},'4':{x:46,y:88,label:'4'},'6':{x:56,y:88,label:'6'}}, edges:[['5','1'],['5','9'],['1','2'],['9','8'],['2','4'],['8','6']]}
   ];
   return new Player(steps, s => { drawBinary(stage, s.nodes, s.edges, {active:s.active}); setText(statusOf(stage), s.status); });
 }
@@ -620,9 +830,9 @@ function initMway(){
   ];
   const links = [[[50,25],[24,45]],[[50,25],[50,45]],[[50,25],[76,45]],[[50,62],[50,78]]];
   const steps = [
-    {status:'查找 28：在 root 比較 20, 40。', active:['a']},
-    {status:'20 < 28 < 40，因此走中間 child A1。', active:['a','c']},
-    {status:'在 node [25, 30] 中，25 < 28 < 30，走中間 child。', active:['c','e']},
+    {status:'查找 28：在根節點比較 20, 40。', active:['a']},
+    {status:'20 < 28 < 40，因此走中間子樹 A1。', active:['a','c']},
+    {status:'在節點 [25, 30] 中，25 < 28 < 30，走中間子樹。', active:['c','e']},
     {status:'到 [28]，搜尋成功。', active:['e'], target:['e']}
   ];
   return new Player(steps, s => {
@@ -633,15 +843,15 @@ function initMway(){
 
 const btreeCases = {
   insert: [
-    {status:'Order 5 B-tree：leaf [380,395,406,412] 已滿，準備插入 382。', items:[{x:50,y:18,keys:[320,540]},{x:50,y:42,keys:[430,480]},{x:28,y:72,keys:[380,395,406,412],cls:'active'},{x:54,y:72,keys:[451,472]},{x:76,y:72,keys:[493,506,511]}], links:[[[50,25],[28,63]],[[50,25],[54,63]],[[50,25],[76,63]]]},
-    {status:'插入 382 後 split full node，395 被 promoted 到 parent。', items:[{x:50,y:20,keys:[395,430,480],cls:'target'},{x:22,y:72,keys:[380,382]},{x:42,y:72,keys:[406,412]},{x:62,y:72,keys:[451,472]},{x:82,y:72,keys:[493,506,511]}], links:[[[50,28],[22,63]],[[50,28],[42,63]],[[50,28],[62,63]],[[50,28],[82,63]]]},
-    {status:'再插入 518、508，右側 leaf 也 split，508 promoted。', items:[{x:50,y:20,keys:[395,430,480,508],cls:'target'},{x:16,y:72,keys:[380,382]},{x:35,y:72,keys:[406,412]},{x:54,y:72,keys:[451,472]},{x:72,y:72,keys:[493,506]},{x:90,y:72,keys:[511,518]}], links:[[[50,28],[16,63]],[[50,28],[35,63]],[[50,28],[54,63]],[[50,28],[72,63]],[[50,28],[90,63]]]}
+    {status:'五階 B 樹：葉節點 [380,395,406,412] 已滿，準備插入 382。', items:[{x:50,y:18,keys:[320,540]},{x:50,y:42,keys:[430,480]},{x:28,y:72,keys:[380,395,406,412],cls:'active'},{x:54,y:72,keys:[451,472]},{x:76,y:72,keys:[493,506,511]}], links:[[[50,25],[28,63]],[[50,25],[54,63]],[[50,25],[76,63]]]},
+    {status:'插入 382 後分裂滿節點，395 被提升到父節點。', items:[{x:50,y:20,keys:[395,430,480],cls:'target'},{x:22,y:72,keys:[380,382]},{x:42,y:72,keys:[406,412]},{x:62,y:72,keys:[451,472]},{x:82,y:72,keys:[493,506,511]}], links:[[[50,28],[22,63]],[[50,28],[42,63]],[[50,28],[62,63]],[[50,28],[82,63]]]},
+    {status:'再插入 518、508，右側葉節點也分裂，508 被提升。', items:[{x:50,y:20,keys:[395,430,480,508],cls:'target'},{x:16,y:72,keys:[380,382]},{x:35,y:72,keys:[406,412]},{x:54,y:72,keys:[451,472]},{x:72,y:72,keys:[493,506]},{x:90,y:72,keys:[511,518]}], links:[[[50,28],[16,63]],[[50,28],[35,63]],[[50,28],[54,63]],[[50,28],[72,63]],[[50,28],[90,63]]]}
   ],
   delete: [
-    {status:'刪除 113 後，leaf key 太少，可向 sibling borrow。', items:[{x:50,y:18,keys:[80,120,150]},{x:32,y:62,keys:[90,113],cls:'active'},{x:60,y:62,keys:[126,135,142]}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]},
-    {status:'borrow/rotation：parent 的 120 下來，sibling 的 126 上去。', items:[{x:50,y:18,keys:[80,126,150],cls:'target'},{x:32,y:62,keys:[90,120]},{x:60,y:62,keys:[135,142]}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]},
-    {status:'若 sibling 也無法借，就把 parent key 拉下來 merge。', items:[{x:50,y:18,keys:[80,150],cls:'target'},{x:34,y:62,keys:[68,73]},{x:62,y:62,keys:[90,126,135,142],cls:'active'}], links:[[[50,26],[34,52]],[[50,26],[62,52]]]},
-    {status:'merge 可能一路傳到 root；若 root 只剩一個 key 且被合併，樹高下降。', items:[{x:50,y:18,keys:[60,300],cls:'target'},{x:32,y:62,keys:[30,50]},{x:65,y:62,keys:[150,180,220,280],cls:'active'}], links:[[[50,26],[32,52]],[[50,26],[65,52]]]}
+    {status:'刪除 113 後，葉節點鍵值太少，可向兄弟節點借用。', items:[{x:50,y:18,keys:[80,120,150]},{x:32,y:62,keys:[90,113],cls:'active'},{x:60,y:62,keys:[126,135,142]}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]},
+    {status:'借用/旋轉：父節點的 120 下來，兄弟節點的 126 上去。', items:[{x:50,y:18,keys:[80,126,150],cls:'target'},{x:32,y:62,keys:[90,120]},{x:60,y:62,keys:[135,142]}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]},
+    {status:'若兄弟節點也無法借，就把父節點鍵值拉下來合併。', items:[{x:50,y:18,keys:[80,150],cls:'target'},{x:34,y:62,keys:[68,73]},{x:62,y:62,keys:[90,126,135,142],cls:'active'}], links:[[[50,26],[34,52]],[[50,26],[62,52]]]},
+    {status:'合併可能一路傳到根節點；若根節點只剩一個鍵值且被合併，樹高下降。', items:[{x:50,y:18,keys:[60,300],cls:'target'},{x:32,y:62,keys:[30,50]},{x:65,y:62,keys:[150,180,220,280],cls:'active'}], links:[[[50,26],[32,52]],[[50,26],[65,52]]]}
   ]
 };
 function initBtree(){
@@ -658,11 +868,11 @@ function initBtree(){
 function initBplus(){
   const stage = $('stage-bplus');
   const steps = [
-    {status:'Internal nodes 只做 index，records 都放在 leaf/data nodes。', scan:[], active:['A']},
-    {status:'查找範圍 16 到 72：先經過 root [20,40] 找第一個可能 leaf。', scan:['L1'], active:['A','B']},
-    {status:'到 leaf 後，不用回 root，沿著 leaf linked list 往右掃。', scan:['L1','L2'], active:['B','C']},
-    {status:'繼續掃到超過 72 為止，range scan 主要走 leaf links。', scan:['L1','L2','L3'], active:['C','D']},
-    {status:'這就是 B+ tree 很適合資料庫 range query 的原因。', scan:['L1','L2','L3'], active:['A']}
+    {status:'內部節點只做索引，資料記錄都放在葉節點。', scan:[], active:['A']},
+    {status:'查找範圍 16 到 72：先經過根節點 [20,40] 找第一個可能葉節點。', scan:['L1'], active:['A','B']},
+    {status:'到葉節點後，不用回根節點，沿著葉節點串列往右掃。', scan:['L1','L2'], active:['B','C']},
+    {status:'繼續掃到超過 72 為止，範圍掃描主要走葉節點連結。', scan:['L1','L2','L3'], active:['C','D']},
+    {status:'這就是 B+ 樹很適合資料庫範圍查詢的原因。', scan:['L1','L2','L3'], active:['A']}
   ];
   const items = [
     {id:'A',x:50,y:16,keys:[20,40]}, {id:'B',x:24,y:42,keys:[10]}, {id:'C',x:50,y:42,keys:[30]}, {id:'D',x:76,y:42,keys:[70,80]},
