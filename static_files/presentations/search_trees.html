@@ -271,7 +271,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   </div>
   <div class="info-card">
     <div class="ic-title">完整期望成本 <span class="ic-badge">p/q</span></div>
-    <p>投影片把成功搜尋與失敗搜尋都納入模型。$p_i$ 是成功搜尋 $a_i$ 的機率；$q_i$ 是搜尋值落在兩個鍵值間隔中的機率，其中 $q_0$ 表示 $x<a_1$，$q_i$ 表示 $a_i<x<a_{i+1}$，$q_n$ 表示 $x>a_n$。</p>
+    <p>完整模型會把成功搜尋與失敗搜尋都納入成本。$p_i$ 是成功搜尋 $a_i$ 的機率；$q_i$ 是搜尋值落在兩個鍵值間隔中的機率，其中 $q_0$ 表示 $x \lt a_1$，$q_i$ 表示 $a_i \lt x \lt a_{i+1}$，$q_n$ 表示 $x \gt a_n$。</p>
     <div class="eq-card">
       <div class="eq-label">成功 + 失敗</div>
       <div class="eq-formula">$\sum_{i=1}^{n}p_i(\operatorname{depth}(a_i)+1)+\sum_{i=0}^{n}q_i(\operatorname{depth}(e_i)+1)$</div>
@@ -279,7 +279,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     </div>
   </div>
   <div class="info-box warm">
-    <div class="box-label">投影片例題怎麼讀</div>
+    <div class="box-label">例題怎麼讀</div>
     同樣是鍵值 $5,10,15,20,25$，等機率時右樹比較好；但若 $5,10,25$ 的機率是 $0.3,0.3,0.3$，而 $15,20$ 的機率只有 $0.05,0.05$，左樹反而比較好。這就是最佳二元搜尋樹要處理的問題。
   </div>
 </section>
@@ -288,6 +288,10 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div class="section-number">PART 02 · 最佳二元搜尋樹</div>
   <h2>用動態規劃選出每個區間的根節點</h2>
   <p class="lead">最佳二元搜尋樹假設每個成功搜尋與失敗搜尋的機率已知，目標是在所有可能樹形中找出總期望成本最低者。核心想法是：一旦某個鍵值被選為根，左、右兩邊就變成較小的最佳子問題。</p>
+  <div class="info-box">
+    <div class="box-label">這裡的動態規劃是什麼意思</div>
+    動態規劃是一種「先解小問題、把答案存起來、再組合成大問題」的方法。最佳二元搜尋樹的小問題是連續區間 $T_{ij}$：只考慮 $a_{i+1},\ldots,a_j$ 時，哪個鍵值當根會讓期望成本最低。先算短區間，存下最佳成本 $c_{ij}$ 與根 $r_{ij}$，長區間就能直接查表組合左右子樹，不必重複計算同一段。
+  </div>
   <div class="viz-layout">
     <div class="viz-panel">
       <div class="tree-canvas" id="stage-obst"><svg></svg><div class="nodes-layer"></div></div>
@@ -389,7 +393,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">高度保證 <span class="ic-badge">界線</span></div>
-        <p>沿用投影片的邊著色觀點：令根的 rank $r$ 為任一路徑到外部節點的黑邊數。每條路徑長度介於 $r$ 到 $2r$，因此 $h \le 2\log_2(n+1)$。</p>
+        <p>也可以用邊著色觀點理解：令根的 rank $r$ 為任一路徑到外部節點的黑邊數。每條路徑長度介於 $r$ 到 $2r$，因此 $h \le 2\log_2(n+1)$。</p>
       </div>
     </aside>
   </div>
@@ -442,7 +446,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   </div>
   <div class="info-box warm">
     <div class="box-label">自底向上與自頂向下</div>
-    自底向上是先找到起始節點再往上旋轉；自頂向下是搜尋途中就把樹分成「小於目標」與「大於目標」兩棵暫存樹，最後以目標節點為根重新接回。投影片提到實驗上自頂向下通常較快。
+    自底向上是先找到起始節點再往上旋轉；自頂向下是搜尋途中就把樹分成「小於目標」與「大於目標」兩棵暫存樹，最後以目標節點為根重新接回。常見實作觀察是：自頂向下版本能在搜尋途中同步重組，通常比先找完再往上修更直接。
   </div>
   <div class="rule-grid">
     <div class="rule-card"><strong>自頂向下步驟 1</strong><p>從根往目標走，一邊走一邊把小於目標的節點接到小樹，把大於目標的節點接到大樹。</p></div>
@@ -514,7 +518,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <p>若鍵值數為 $N$、階數為 $m$、高度為 $h$，每層至少維持約半滿，因此高度是 $O(\log_m N)$ 等級。</p>
       </div>
       <div class="info-card">
-        <div class="ic-title">投影片例子 <span class="ic-badge">m=200</span></div>
+        <div class="ic-title">高度例子 <span class="ic-badge">m=200</span></div>
         <p>當 $m=200$ 且 $N \le 2\times10^6-2$ 時，高度可不超過 3。這就是資料庫索引重視大節點的原因。</p>
       </div>
     </aside>
@@ -537,7 +541,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   </div>
   <div class="info-box warm">
     <div class="box-label">左偏與右偏</div>
-    2-3-4 樹插入 102 的投影片例子提醒我們：分裂或調整時可能有左偏、右偏兩種合法結果。只要每個節點容量合法、所有葉子同層、且中序順序正確，兩種結果都仍是合法 B 樹。
+    2-3-4 樹插入 102 時，分裂或調整可能得到左偏、右偏兩種合法結果。只要每個節點容量合法、所有葉子同層、且中序順序正確，兩種結果都仍是合法 B 樹。
   </div>
 </section>
 
@@ -571,14 +575,14 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   </div>
   <div class="rule-grid">
     <div class="rule-card"><strong>索引節點</strong><p>只放鍵值與指標，用來決定搜尋往哪個子樹走，不直接放完整資料。</p></div>
-    <div class="rule-card"><strong>資料節點</strong><p>所有實際資料都在葉節點；也就是投影片中的資料節點。</p></div>
+    <div class="rule-card"><strong>資料節點</strong><p>所有實際資料都在葉節點；內部節點只負責把搜尋導向正確葉節點。</p></div>
     <div class="rule-card"><strong>插入</strong><p>插入到葉節點；若葉節點滿了就分裂，並把新的分隔鍵更新到上層索引。</p></div>
     <div class="rule-card"><strong>刪除</strong><p>刪除後若葉節點不足，先借用；不能借就合併，並同步更新父層索引鍵。</p></div>
   </div>
   <div class="two-col-notes">
     <div class="info-card">
       <div class="ic-title">插入範例 <span class="ic-badge">分裂</span></div>
-      <p>投影片中插入 14 時，資料應放在第一個葉節點。若葉節點容量超過上限，就分裂成兩個葉節點，並把新葉節點的第一個鍵值複製到父層索引，讓搜尋能導向新的資料節點。</p>
+      <p>以插入 14 為例，資料應放在第一個葉節點。若葉節點容量超過上限，就分裂成兩個葉節點，並把新葉節點的第一個鍵值複製到父層索引，讓搜尋能導向新的資料節點。</p>
     </div>
     <div class="info-card">
       <div class="ic-title">刪除範例 <span class="ic-badge">借用/合併</span></div>
@@ -599,7 +603,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <thead><tr><th>結構</th><th>核心想法</th><th>典型成本</th><th>適合場景</th></tr></thead>
     <tbody>
       <tr><td>普通 BST</td><td>左小右大</td><td>平均可好，最壞 $O(n)$</td><td>概念基礎、小型資料</td></tr>
-      <tr><td>最佳 BST</td><td>依搜尋機率安排根節點</td><td>建構 DP $O(n^3)$</td><td>已知查詢分布且資料較靜態</td></tr>
+      <tr><td>最佳 BST</td><td>依搜尋機率安排根節點</td><td>建表 $O(n^3)$</td><td>已知查詢分布且資料較靜態</td></tr>
       <tr><td>AVL 樹</td><td>嚴格高度平衡</td><td>搜尋/插入/刪除 $O(\log n)$</td><td>搜尋很多、想要低高度</td></tr>
       <tr><td>紅黑樹</td><td>用著色規則放寬平衡</td><td>搜尋/插入/刪除 $O(\log n)$</td><td>標準函式庫的有序映射與集合</td></tr>
       <tr><td>伸展樹</td><td>操作後把目標拉到根節點</td><td>攤銷 $O(\log n)$</td><td>有局部性的查詢序列</td></tr>
@@ -759,29 +763,37 @@ function initObst(){
     renderMatrix(s.active);
     highlightLine(code, s.line);
     if(s.tree) drawBinary(stage, optTree, [['15','10'],['15','20'],['20','25']], {});
-    else drawBinary(stage, {'?':{x:50,y:48,label:'DP'}}, [], {active:'?'});
+    else drawBinary(stage, {'?':{x:50,y:48,label:'表格'}}, [], {active:'?'});
     setText(statusOf(stage), s.status);
   });
 }
 
 const avlCases = {
   LL: [
-    {status:'LL：新節點落在 A 的左子樹之左子樹，A 的 BF 變成 +2。', nodes:{A:{x:50,y:18,label:'A',cls:'active'},B:{x:34,y:43,label:'B'},Y:{x:22,y:70,label:'Y'},AR:{x:64,y:43,label:'AR',cls:'small'}}, edges:[['A','B'],['A','AR'],['B','Y']]},
-    {status:'對 A 做右旋，B 上升。', nodes:{B:{x:50,y:22,label:'B',cls:'active'},Y:{x:34,y:50,label:'Y'},A:{x:66,y:50,label:'A'},AR:{x:78,y:75,label:'AR',cls:'small'}}, edges:[['B','Y'],['B','A'],['A','AR']]}
+    {status:'LL 起點：A 的左子樹較高，但插入前仍可視為局部平衡。', nodes:{A:{x:50,y:18,label:'A'},B:{x:34,y:43,label:'B'},AR:{x:64,y:43,label:'AR',cls:'small'}}, edges:[['A','B'],['A','AR']]},
+    {status:'新節點 Y 插到 B 的左側，A 的左左路徑變長。', nodes:{A:{x:50,y:18,label:'A',cls:'active'},B:{x:34,y:43,label:'B'},Y:{x:22,y:70,label:'Y',cls:'target'},AR:{x:64,y:43,label:'AR',cls:'small'}}, edges:[['A','B'],['A','AR'],['B','Y']]},
+    {status:'最近失衡祖先是 A，BF(A)=+2；LL 型態對 A 做右旋。', nodes:{A:{x:54,y:18,label:'A',cls:'active'},B:{x:38,y:35,label:'B',cls:'target'},Y:{x:25,y:64,label:'Y'},AR:{x:68,y:43,label:'AR',cls:'small'}}, edges:[['A','B'],['A','AR'],['B','Y']]},
+    {status:'右旋完成：B 上升，A 變成 B 的右子，局部高度恢復。', nodes:{B:{x:50,y:22,label:'B',cls:'active'},Y:{x:34,y:50,label:'Y'},A:{x:66,y:50,label:'A'},AR:{x:78,y:75,label:'AR',cls:'small'}}, edges:[['B','Y'],['B','A'],['A','AR']]}
   ],
   RR: [
-    {status:'RR：新節點落在 A 的右子樹之右子樹，A 的 BF 變成 -2。', nodes:{A:{x:50,y:18,label:'A',cls:'active'},AL:{x:36,y:43,label:'AL',cls:'small'},B:{x:66,y:43,label:'B'},Y:{x:78,y:70,label:'Y'}}, edges:[['A','AL'],['A','B'],['B','Y']]},
-    {status:'對 A 做左旋，B 上升。', nodes:{B:{x:50,y:22,label:'B',cls:'active'},A:{x:34,y:50,label:'A'},Y:{x:66,y:50,label:'Y'},AL:{x:22,y:75,label:'AL',cls:'small'}}, edges:[['B','A'],['B','Y'],['A','AL']]}
+    {status:'RR 起點：A 的右子樹較高，但插入前仍可視為局部平衡。', nodes:{A:{x:50,y:18,label:'A'},AL:{x:36,y:43,label:'AL',cls:'small'},B:{x:66,y:43,label:'B'}}, edges:[['A','AL'],['A','B']]},
+    {status:'新節點 Y 插到 B 的右側，A 的右右路徑變長。', nodes:{A:{x:50,y:18,label:'A',cls:'active'},AL:{x:36,y:43,label:'AL',cls:'small'},B:{x:66,y:43,label:'B'},Y:{x:78,y:70,label:'Y',cls:'target'}}, edges:[['A','AL'],['A','B'],['B','Y']]},
+    {status:'最近失衡祖先是 A，BF(A)=-2；RR 型態對 A 做左旋。', nodes:{A:{x:46,y:18,label:'A',cls:'active'},AL:{x:32,y:43,label:'AL',cls:'small'},B:{x:62,y:35,label:'B',cls:'target'},Y:{x:75,y:64,label:'Y'}}, edges:[['A','AL'],['A','B'],['B','Y']]},
+    {status:'左旋完成：B 上升，A 變成 B 的左子，局部高度恢復。', nodes:{B:{x:50,y:22,label:'B',cls:'active'},A:{x:34,y:50,label:'A'},Y:{x:66,y:50,label:'Y'},AL:{x:22,y:75,label:'AL',cls:'small'}}, edges:[['B','A'],['B','Y'],['A','AL']]}
   ],
   LR: [
-    {status:'LR：先對 B 左旋，再對 A 右旋。', nodes:{A:{x:50,y:16,label:'A',cls:'active'},B:{x:34,y:42,label:'B'},C:{x:45,y:68,label:'C'}}, edges:[['A','B'],['B','C']]},
-    {status:'C 先上到 B 的位置。', nodes:{A:{x:50,y:16,label:'A'},C:{x:34,y:42,label:'C',cls:'active'},B:{x:25,y:68,label:'B'}}, edges:[['A','C'],['C','B']]},
-    {status:'最後 C 上升成局部根節點。', nodes:{C:{x:50,y:22,label:'C',cls:'active'},B:{x:34,y:52,label:'B'},A:{x:66,y:52,label:'A'}}, edges:[['C','B'],['C','A']]}
+    {status:'LR 起點：新節點 C 落在 A 的左子 B 的右側。', nodes:{A:{x:50,y:16,label:'A'},B:{x:34,y:42,label:'B'},C:{x:45,y:68,label:'C',cls:'target'}}, edges:[['A','B'],['B','C']]},
+    {status:'A 失衡且彎向內側；LR 不能只做一次右旋。', nodes:{A:{x:50,y:16,label:'A',cls:'active'},B:{x:34,y:42,label:'B'},C:{x:45,y:68,label:'C',cls:'target'}}, edges:[['A','B'],['B','C']]},
+    {status:'第一步先對 B 左旋，讓 C 上升到 A 的左子位置。', nodes:{A:{x:50,y:16,label:'A'},C:{x:34,y:42,label:'C',cls:'active'},B:{x:25,y:68,label:'B'}}, edges:[['A','C'],['C','B']]},
+    {status:'現在變成 LL 型態，再對 A 做右旋。', nodes:{A:{x:56,y:16,label:'A',cls:'active'},C:{x:40,y:36,label:'C',cls:'target'},B:{x:27,y:64,label:'B'}}, edges:[['A','C'],['C','B']]},
+    {status:'雙旋完成：C 成為局部根，B 與 A 分別在左右兩側。', nodes:{C:{x:50,y:22,label:'C',cls:'active'},B:{x:34,y:52,label:'B'},A:{x:66,y:52,label:'A'}}, edges:[['C','B'],['C','A']]}
   ],
   RL: [
-    {status:'RL：先對 B 右旋，再對 A 左旋。', nodes:{A:{x:50,y:16,label:'A',cls:'active'},B:{x:66,y:42,label:'B'},C:{x:55,y:68,label:'C'}}, edges:[['A','B'],['B','C']]},
-    {status:'C 先上到 B 的位置。', nodes:{A:{x:50,y:16,label:'A'},C:{x:66,y:42,label:'C',cls:'active'},B:{x:75,y:68,label:'B'}}, edges:[['A','C'],['C','B']]},
-    {status:'最後 C 上升成局部根節點。', nodes:{C:{x:50,y:22,label:'C',cls:'active'},A:{x:34,y:52,label:'A'},B:{x:66,y:52,label:'B'}}, edges:[['C','A'],['C','B']]}
+    {status:'RL 起點：新節點 C 落在 A 的右子 B 的左側。', nodes:{A:{x:50,y:16,label:'A'},B:{x:66,y:42,label:'B'},C:{x:55,y:68,label:'C',cls:'target'}}, edges:[['A','B'],['B','C']]},
+    {status:'A 失衡且彎向內側；RL 不能只做一次左旋。', nodes:{A:{x:50,y:16,label:'A',cls:'active'},B:{x:66,y:42,label:'B'},C:{x:55,y:68,label:'C',cls:'target'}}, edges:[['A','B'],['B','C']]},
+    {status:'第一步先對 B 右旋，讓 C 上升到 A 的右子位置。', nodes:{A:{x:50,y:16,label:'A'},C:{x:66,y:42,label:'C',cls:'active'},B:{x:75,y:68,label:'B'}}, edges:[['A','C'],['C','B']]},
+    {status:'現在變成 RR 型態，再對 A 做左旋。', nodes:{A:{x:44,y:16,label:'A',cls:'active'},C:{x:60,y:36,label:'C',cls:'target'},B:{x:73,y:64,label:'B'}}, edges:[['A','C'],['C','B']]},
+    {status:'雙旋完成：C 成為局部根，A 與 B 分別在左右兩側。', nodes:{C:{x:50,y:22,label:'C',cls:'active'},A:{x:34,y:52,label:'A'},B:{x:66,y:52,label:'B'}}, edges:[['C','A'],['C','B']]}
   ]
 };
 function initAvl(){
@@ -844,13 +856,18 @@ function initMway(){
 const btreeCases = {
   insert: [
     {status:'五階 B 樹：葉節點 [380,395,406,412] 已滿，準備插入 382。', items:[{x:50,y:18,keys:[320,540]},{x:50,y:42,keys:[430,480]},{x:28,y:72,keys:[380,395,406,412],cls:'active'},{x:54,y:72,keys:[451,472]},{x:76,y:72,keys:[493,506,511]}], links:[[[50,25],[28,63]],[[50,25],[54,63]],[[50,25],[76,63]]]},
-    {status:'插入 382 後分裂滿節點，395 被提升到父節點。', items:[{x:50,y:20,keys:[395,430,480],cls:'target'},{x:22,y:72,keys:[380,382]},{x:42,y:72,keys:[406,412]},{x:62,y:72,keys:[451,472]},{x:82,y:72,keys:[493,506,511]}], links:[[[50,28],[22,63]],[[50,28],[42,63]],[[50,28],[62,63]],[[50,28],[82,63]]]},
-    {status:'再插入 518、508，右側葉節點也分裂，508 被提升。', items:[{x:50,y:20,keys:[395,430,480,508],cls:'target'},{x:16,y:72,keys:[380,382]},{x:35,y:72,keys:[406,412]},{x:54,y:72,keys:[451,472]},{x:72,y:72,keys:[493,506]},{x:90,y:72,keys:[511,518]}], links:[[[50,28],[16,63]],[[50,28],[35,63]],[[50,28],[54,63]],[[50,28],[72,63]],[[50,28],[90,63]]]}
+    {status:'先把 382 插進葉節點，暫時得到 [380,382,395,406,412]，超過最多 4 個鍵值。', items:[{x:50,y:18,keys:[320,540]},{x:50,y:42,keys:[430,480]},{x:28,y:72,keys:[380,382,395,406,412],cls:'target'},{x:54,y:72,keys:[451,472]},{x:76,y:72,keys:[493,506,511]}], links:[[[50,25],[28,63]],[[50,25],[54,63]],[[50,25],[76,63]]]},
+    {status:'選中間鍵值 395 往父節點提升，左右兩側先分成 [380,382] 與 [406,412]。', items:[{x:50,y:18,keys:[320,540]},{x:50,y:42,keys:[430,480],cls:'active'},{x:24,y:72,keys:[380,382]},{x:42,y:72,keys:[395],cls:'target'},{x:56,y:72,keys:[406,412]},{x:78,y:72,keys:[451,472]}], links:[[[50,25],[24,63]],[[50,25],[56,63]],[[50,25],[78,63]]]},
+    {status:'父節點接收 395，新的兩個葉節點都合法，且所有葉子仍在同一層。', items:[{x:50,y:20,keys:[395,430,480],cls:'target'},{x:22,y:72,keys:[380,382]},{x:42,y:72,keys:[406,412]},{x:62,y:72,keys:[451,472]},{x:82,y:72,keys:[493,506,511]}], links:[[[50,28],[22,63]],[[50,28],[42,63]],[[50,28],[62,63]],[[50,28],[82,63]]]},
+    {status:'接著插入 518，右側葉節點變成 [493,506,511,518]，仍未超過容量。', items:[{x:50,y:20,keys:[395,430,480]},{x:22,y:72,keys:[380,382]},{x:42,y:72,keys:[406,412]},{x:62,y:72,keys:[451,472]},{x:82,y:72,keys:[493,506,511,518],cls:'active'}], links:[[[50,28],[22,63]],[[50,28],[42,63]],[[50,28],[62,63]],[[50,28],[82,63]]]},
+    {status:'再插入 508，右側葉節點分裂，508 被提升到父節點。', items:[{x:50,y:20,keys:[395,430,480,508],cls:'target'},{x:16,y:72,keys:[380,382]},{x:35,y:72,keys:[406,412]},{x:54,y:72,keys:[451,472]},{x:72,y:72,keys:[493,506]},{x:90,y:72,keys:[511,518]}], links:[[[50,28],[16,63]],[[50,28],[35,63]],[[50,28],[54,63]],[[50,28],[72,63]],[[50,28],[90,63]]]}
   ],
   delete: [
-    {status:'刪除 113 後，葉節點鍵值太少，可向兄弟節點借用。', items:[{x:50,y:18,keys:[80,120,150]},{x:32,y:62,keys:[90,113],cls:'active'},{x:60,y:62,keys:[126,135,142]}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]},
-    {status:'借用/旋轉：父節點的 120 下來，兄弟節點的 126 上去。', items:[{x:50,y:18,keys:[80,126,150],cls:'target'},{x:32,y:62,keys:[90,120]},{x:60,y:62,keys:[135,142]}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]},
-    {status:'若兄弟節點也無法借，就把父節點鍵值拉下來合併。', items:[{x:50,y:18,keys:[80,150],cls:'target'},{x:34,y:62,keys:[68,73]},{x:62,y:62,keys:[90,126,135,142],cls:'active'}], links:[[[50,26],[34,52]],[[50,26],[62,52]]]},
+    {status:'刪除情境：葉節點 [90,113] 中要刪掉 113。', items:[{x:50,y:18,keys:[80,120,150]},{x:32,y:62,keys:[90,113],cls:'active'},{x:60,y:62,keys:[126,135,142]}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]},
+    {status:'刪除 113 後只剩 [90]，鍵值太少，先檢查相鄰兄弟能不能借。', items:[{x:50,y:18,keys:[80,120,150]},{x:32,y:62,keys:[90],cls:'target'},{x:60,y:62,keys:[126,135,142],cls:'active'}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]},
+    {status:'兄弟節點有多餘鍵值，可以借用；父節點的 120 會下來補左葉。', items:[{x:50,y:18,keys:[80,120,150],cls:'active'},{x:32,y:62,keys:[90],cls:'target'},{x:60,y:62,keys:[126,135,142],cls:'active'}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]},
+    {status:'借用/旋轉完成：左葉變成 [90,120]，兄弟的 126 上升更新父節點。', items:[{x:50,y:18,keys:[80,126,150],cls:'target'},{x:32,y:62,keys:[90,120]},{x:60,y:62,keys:[135,142]}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]},
+    {status:'另一種情境：若兄弟節點也無法借，就把父節點鍵值拉下來合併。', items:[{x:50,y:18,keys:[80,150],cls:'target'},{x:34,y:62,keys:[68,73]},{x:62,y:62,keys:[90,126,135,142],cls:'active'}], links:[[[50,26],[34,52]],[[50,26],[62,52]]]},
     {status:'合併可能一路傳到根節點；若根節點只剩一個鍵值且被合併，樹高下降。', items:[{x:50,y:18,keys:[60,300],cls:'target'},{x:32,y:62,keys:[30,50]},{x:65,y:62,keys:[150,180,220,280],cls:'active'}], links:[[[50,26],[32,52]],[[50,26],[65,52]]]}
   ]
 };
