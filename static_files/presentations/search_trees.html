@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>高效率搜尋樹與多路搜尋樹 — Interactive Notes</title>
+<script>
+  MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+:root{
+  --bg:#f6f4ef;
+  --paper:#fffdf8;
+  --ink:#24211d;
+  --muted:#766f66;
+  --line:#ded7cd;
+  --card:#ffffff;
+  --accent:#b54538;
+  --accent2:#276b78;
+  --accent3:#587a38;
+  --accent4:#7a4f9a;
+  --code:#292521;
+  --node:#fff;
+  --node-border:#3e3830;
+  --active:#f2a23a;
+  --good:#2f8f66;
+  --bad:#c43d38;
+  --red:#e04b45;
+  --black:#2d2a27;
+  --shadow:0 10px 30px rgba(55,45,35,.11);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;line-height:1.65}
+body::before{content:"";position:fixed;inset:0;background:linear-gradient(135deg,rgba(181,69,56,.08),transparent 30%),linear-gradient(315deg,rgba(39,107,120,.08),transparent 35%);pointer-events:none;z-index:-1}
+a{color:inherit}
+code{font-family:"JetBrains Mono","Fira Code",Consolas,monospace;background:#f1ece4;padding:.08rem .28rem;border-radius:4px}
+.page{max-width:1180px;margin:0 auto;padding:0 1rem 5rem}
+.floating-nav{position:fixed;left:1rem;top:50%;transform:translateY(-50%);z-index:20;display:flex;flex-direction:column;gap:.35rem}
+.floating-nav a{display:flex;align-items:center;gap:.35rem;text-decoration:none;background:rgba(255,253,248,.94);border:1px solid var(--line);border-radius:8px;padding:.35rem .45rem;box-shadow:var(--shadow);font-size:.78rem;color:var(--muted)}
+.floating-nav a:hover,.floating-nav a.active{color:var(--ink);border-color:var(--accent)}
+.fn-num{font-family:"JetBrains Mono",monospace;color:var(--accent);font-weight:800}
+header.hero{min-height:92vh;display:flex;align-items:center;position:relative;padding:5rem 0 4rem}
+.hero-inner{max-width:900px}
+.eyebrow{font-family:"JetBrains Mono",monospace;color:var(--accent2);font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.78rem}
+h1{font-size:clamp(2.3rem,6vw,5.1rem);line-height:1.02;margin:.75rem 0 1rem;letter-spacing:0}
+.hero p{font-size:1.15rem;max-width:760px;color:var(--muted)}
+.big-formula{margin-top:2rem;font-size:clamp(1.15rem,2.4vw,2rem);font-weight:800;color:var(--accent)}
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.7rem;margin-top:2rem}
+.toc a{display:flex;gap:.6rem;align-items:center;text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:.75rem .85rem;box-shadow:var(--shadow)}
+.toc-num{font-family:"JetBrains Mono",monospace;color:var(--accent2);font-weight:800}
+section{padding:4.5rem 0;border-top:1px solid rgba(222,215,205,.75)}
+.section-number{font-family:"JetBrains Mono",monospace;font-size:.82rem;color:var(--accent3);font-weight:800;letter-spacing:.15em;margin-bottom:.5rem}
+h2{font-size:clamp(1.75rem,3.5vw,3rem);line-height:1.1;margin:.2rem 0 1rem;letter-spacing:0}
+h3{font-size:1.05rem;margin:.2rem 0 .75rem}
+.lead{font-size:1.05rem;color:var(--muted);max-width:880px}
+.grid-2{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.48fr);gap:1.2rem;align-items:start;margin-top:1.5rem}
+.viz-panel,.side-panel,.info-card{background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow)}
+.viz-panel{padding:1rem;overflow:hidden}
+.side-panel{padding:1rem}
+.info-card{padding:1rem;margin:1rem 0}
+.info-label{display:block;font-family:"JetBrains Mono",monospace;font-size:.75rem;font-weight:800;color:var(--accent2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.35rem}
+.stage{position:relative;width:100%;height:380px;background:#fbfaf6;border:1px solid #e7dfd4;border-radius:8px;overflow:hidden}
+.stage svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.nodes-layer{position:absolute;inset:0}
+.t-node{position:absolute;width:46px;height:46px;border-radius:50%;border:2px solid var(--node-border);background:var(--node);display:flex;align-items:center;justify-content:center;font-weight:800;transform:translate(-50%,-50%);transition:all .28s ease;box-shadow:0 5px 14px rgba(0,0,0,.08)}
+.t-node.small{width:32px;height:32px;font-size:.75rem}
+.t-node.active{background:var(--active);border-color:#9a5e10;color:#1f1a14;transform:translate(-50%,-50%) scale(1.08)}
+.t-node.path{background:#e7f3f5;border-color:var(--accent2)}
+.t-node.red{background:var(--red);border-color:#8f211d;color:#fff}
+.t-node.black{background:var(--black);border-color:#111;color:#fff}
+.t-node.external{background:#f0eee8;border-style:dashed;color:#8b8378}
+.t-edge{stroke:#9c9489;stroke-width:2}
+.t-edge.active{stroke:var(--active);stroke-width:4}
+.multi-node{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;border:2px solid #3b352e;border-radius:7px;background:#fff;box-shadow:0 6px 14px rgba(0,0,0,.08);transition:all .28s ease}
+.multi-node .key{min-width:38px;height:34px;display:flex;align-items:center;justify-content:center;border-right:1px solid #cfc7bc;font-weight:800;font-family:"JetBrains Mono",monospace}
+.multi-node .key:last-child{border-right:0}
+.multi-node.active{border-color:var(--active);background:#fff4dd;transform:translate(-50%,-50%) scale(1.04)}
+.multi-node.target{border-color:var(--good);background:#eaf7f1}
+.multi-node.under{border-color:var(--bad);background:#fff1ef}
+.leaf-row{position:absolute;height:42px;border:2px solid #3b352e;border-radius:7px;background:#fff;display:flex;align-items:center;transform:translate(-50%,-50%);box-shadow:0 6px 14px rgba(0,0,0,.08)}
+.leaf-row .record{min-width:34px;padding:.25rem .38rem;border-right:1px solid #cfc7bc;text-align:center;font-family:"JetBrains Mono",monospace;font-weight:800}
+.leaf-row .record:last-child{border-right:0}
+.leaf-row.active{border-color:var(--active);background:#fff4dd}
+.leaf-row.scan{border-color:var(--good);background:#eaf7f1}
+.status-banner{display:flex;gap:.5rem;align-items:center;min-height:42px;margin-top:.7rem;padding:.65rem .8rem;border-radius:8px;background:#292521;color:#fff}
+.status-icon{color:var(--active);font-weight:900}
+.controls-bar{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-top:.8rem}
+button,.btn{border:0;border-radius:7px;padding:.55rem .8rem;font-weight:800;cursor:pointer;background:var(--accent2);color:#fff;transition:transform .15s ease,opacity .15s ease}
+button:hover{transform:translateY(-1px)}
+.btn-step{background:var(--accent4)}
+.btn-reset{background:#6f675d}
+.preset-btn{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.preset-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.speed{display:flex;gap:.45rem;align-items:center;color:var(--muted);font-size:.82rem;margin-left:auto}
+.speed input{accent-color:var(--accent)}
+.metric{display:grid;grid-template-columns:1fr auto;gap:.5rem;border-top:1px solid var(--line);padding:.55rem 0;font-size:.92rem}
+.metric:first-child{border-top:0}
+.metric span:last-child{font-family:"JetBrains Mono",monospace;font-weight:800;color:var(--accent)}
+.pseudo-code{background:var(--code);color:#f7efe3;border-radius:8px;padding:.85rem;overflow:auto;font-family:"JetBrains Mono",monospace;font-size:.78rem;line-height:1.55;margin-top:.7rem}
+.pseudo-code .line{display:block;padding:.08rem .25rem;border-radius:4px}
+.pseudo-code .line.hl{background:rgba(242,162,58,.26)}
+.matrix{display:grid;gap:3px;margin-top:.8rem;overflow:auto}
+.cell{min-width:56px;padding:.35rem .45rem;background:#f3eee6;border:1px solid #ded7cd;border-radius:5px;text-align:center;font-family:"JetBrains Mono",monospace;font-size:.75rem}
+.cell.head{background:#e7f3f5;color:var(--accent2);font-weight:900}
+.cell.fill{background:#fff4dd;border-color:var(--active)}
+.cell.done{background:#eaf7f1;border-color:var(--good)}
+.compare-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:8px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);margin-top:1rem}
+.compare-table th,.compare-table td{border-bottom:1px solid var(--line);padding:.7rem;text-align:left;vertical-align:top}
+.compare-table th{background:#efe8dc;color:#4d453b}
+.compare-table tr:last-child td{border-bottom:0}
+.badge{display:inline-block;padding:.08rem .35rem;border-radius:5px;background:#e7f3f5;color:var(--accent2);font-family:"JetBrains Mono",monospace;font-size:.78rem;font-weight:800}
+.callout{border-left:4px solid var(--accent);padding:.75rem 1rem;background:#fff8ef;border-radius:0 8px 8px 0;margin:1rem 0}
+@media(max-width:980px){.floating-nav{display:none}.grid-2{grid-template-columns:1fr}.page{padding-inline:.85rem}.stage{height:340px}.speed{margin-left:0;width:100%}}
+@media(max-width:620px){header.hero{min-height:84vh}.toc{grid-template-columns:1fr}.stage{height:320px}.controls-bar button{flex:1}.compare-table{font-size:.86rem}}
+</style>
+</head>
+<body>
+<nav class="floating-nav" aria-label="章節導覽">
+  <a href="#cost" data-target="cost"><span class="fn-num">P01</span><span>BST 成本</span></a>
+  <a href="#obst" data-target="obst"><span class="fn-num">P02</span><span>Optimal BST</span></a>
+  <a href="#avl" data-target="avl"><span class="fn-num">P03</span><span>AVL 回顧</span></a>
+  <a href="#rb" data-target="rb"><span class="fn-num">P04</span><span>Red-Black</span></a>
+  <a href="#splay" data-target="splay"><span class="fn-num">P05</span><span>Splay</span></a>
+  <a href="#mway" data-target="mway"><span class="fn-num">P06</span><span>m-way</span></a>
+  <a href="#btree" data-target="btree"><span class="fn-num">P07</span><span>B-tree</span></a>
+  <a href="#bplus" data-target="bplus"><span class="fn-num">P08</span><span>B+ Tree</span></a>
+  <a href="#summary" data-target="summary"><span class="fn-num">P09</span><span>總覽</span></a>
+</nav>
+
+<main class="page">
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Flexible Learning Week · Search Trees</div>
+    <h1>高效率搜尋樹與多路搜尋樹</h1>
+    <p>這份自學頁接在 BST、binary heap 與 AVL 之後，整理剩下的搜尋樹觀念：怎麼把搜尋成本算清楚、怎麼靠平衡規則保證高度，以及為什麼資料庫索引常用 B-tree / B+ tree。</p>
+    <div class="big-formula">Optimal BST｜AVL｜Red-Black｜Splay｜m-way｜B-tree｜B+ Tree</div>
+    <div class="toc">
+      <a href="#cost"><span class="toc-num">P01</span>BST 搜尋成本與外部節點</a>
+      <a href="#obst"><span class="toc-num">P02</span>Optimal BST 動態規劃</a>
+      <a href="#avl"><span class="toc-num">P03</span>AVL 快速回顧</a>
+      <a href="#rb"><span class="toc-num">P04</span>Red-Black Tree</a>
+      <a href="#splay"><span class="toc-num">P05</span>Splay Tree（補充）</a>
+      <a href="#mway"><span class="toc-num">P06</span>m-way Search Tree</a>
+      <a href="#btree"><span class="toc-num">P07</span>B-tree</a>
+      <a href="#bplus"><span class="toc-num">P08</span>B+ Tree</a>
+      <a href="#summary"><span class="toc-num">P09</span>總覽比較</a>
+    </div>
+  </div>
+</header>
+
+<section id="cost">
+  <div class="section-number">PART 01 · BST 搜尋成本</div>
+  <h2>同一組 key，可以有不同的搜尋成本</h2>
+  <p class="lead">BST 的 inorder 順序固定，但樹形不固定。若每個 key 被搜尋的機率相同，平均比較次數只看深度；若機率不同，常被查到的 key 應該靠近 root。</p>
+  <div class="grid-2">
+    <div class="viz-panel">
+      <div class="stage" id="stage-cost"><svg></svg><div class="nodes-layer"></div></div>
+      <div class="status-banner"><span class="status-icon">›</span><span class="status-text">按「單步」比較兩棵 BST 的搜尋成本。</span></div>
+      <div class="controls-bar" data-demo="cost">
+        <button class="btn-play">▶ 播放</button>
+        <button class="btn-step">→ 單步</button>
+        <button class="btn-reset">↺ 重置</button>
+        <label class="speed">速度 <input type="range" min="350" max="1600" value="850" step="50"></label>
+      </div>
+    </div>
+    <aside class="side-panel">
+      <span class="info-label">Expected comparisons</span>
+      <div class="metric"><span>等機率左樹</span><span>2.4</span></div>
+      <div class="metric"><span>等機率右樹</span><span>2.2</span></div>
+      <div class="metric"><span>加權左樹</span><span>1.85</span></div>
+      <div class="metric"><span>加權右樹</span><span>2.05</span></div>
+      <div class="callout">這裡不是單純追求「最矮」：如果搜尋機率不同，<strong>高機率 key 的深度</strong>會主導平均成本。</div>
+    </aside>
+  </div>
+  <div class="info-card">
+    <span class="info-label">Extended Binary Tree</span>
+    在原本 BST 的每個空 child 補上 external node，可以把「搜尋失敗」也算進成本。若 $I$ 是 internal path length、$E$ 是 external path length、$n$ 是 internal nodes 數，則每個 internal node 會讓 external path 總長多出 2，因此 $E=I+2n$。
+  </div>
+</section>
+
+<section id="obst">
+  <div class="section-number">PART 02 · Optimal Binary Search Tree</div>
+  <h2>Optimal BST：用 DP 選 root</h2>
+  <p class="lead">給定成功搜尋機率 $p_i$ 與失敗搜尋機率 $q_i$，Optimal BST 要找出總期望成本最低的 BST。核心想法是：每個區間都試著選一個 root，左右子樹再用最佳解。</p>
+  <div class="grid-2">
+    <div class="viz-panel">
+      <div class="stage" id="stage-obst"><svg></svg><div class="nodes-layer"></div></div>
+      <div class="matrix" id="obst-matrix" style="grid-template-columns:repeat(6,minmax(58px,1fr));"></div>
+      <div class="status-banner"><span class="status-icon">›</span><span class="status-text">固定例題：a = 10, 15, 20, 25。</span></div>
+      <div class="controls-bar" data-demo="obst">
+        <button class="btn-play">▶ 播放</button>
+        <button class="btn-step">→ 單步</button>
+        <button class="btn-reset">↺ 重置</button>
+        <label class="speed">速度 <input type="range" min="350" max="1600" value="850" step="50"></label>
+      </div>
+    </div>
+    <aside class="side-panel">
+      <span class="info-label">Recurrence</span>
+      <div class="pseudo-code" id="code-obst">
+<span class="line" data-line="1">w[i,j] = q[i] + Σ(k=i+1..j)(p[k]+q[k])</span>
+<span class="line" data-line="2">c[i,i] = 0</span>
+<span class="line" data-line="3">c[i,j] = w[i,j] + min(c[i,l-1] + c[l,j])</span>
+<span class="line" data-line="4">r[i,j] = argmin l</span>
+<span class="line" data-line="5">T[0,n] reconstructs from r[0,n]</span>
+      </div>
+      <div class="callout">若直接對每個區間試所有 root，區間數是 $O(n^2)$，每格最多試 $O(n)$ 個 root，所以基本 DP 是 $O(n^3)$。</div>
+    </aside>
+  </div>
+</section>
+
+<section id="avl">
+  <div class="section-number">PART 03 · AVL 快速回顧</div>
+  <h2>AVL：用 balance factor 維持高度</h2>
+  <p class="lead">AVL 是 height-balanced BST。每個 node 記錄 $BF(v)=h_L-h_R$，合法值只允許 $-1,0,1$。插入造成最近祖先 $A$ 的 balance factor 變成 $\pm2$ 時，用 LL/RR/LR/RL 旋轉修復。</p>
+  <div class="grid-2">
+    <div class="viz-panel">
+      <div class="stage" id="stage-avl"><svg></svg><div class="nodes-layer"></div></div>
+      <div class="status-banner"><span class="status-icon">›</span><span class="status-text">選一個 AVL case，觀察旋轉前後 inorder 不變。</span></div>
+      <div class="controls-bar" data-demo="avl">
+        <button class="preset-btn active" data-case="LL">LL</button>
+        <button class="preset-btn" data-case="RR">RR</button>
+        <button class="preset-btn" data-case="LR">LR</button>
+        <button class="preset-btn" data-case="RL">RL</button>
+        <button class="btn-step">→ 單步</button>
+        <button class="btn-reset">↺ 重置</button>
+      </div>
+    </div>
+    <aside class="side-panel">
+      <span class="info-label">One sentence</span>
+      <p>AVL 的重點不是「旋轉很神奇」，而是旋轉只改局部 parent/child 關係，<strong>不改 inorder sequence</strong>，因此仍然是 BST。</p>
+      <div class="metric"><span>search</span><span>$O(\log n)$</span></div>
+      <div class="metric"><span>insert/delete</span><span>$O(\log n)$</span></div>
+      <div class="metric"><span>額外資訊</span><span>BF/height</span></div>
+    </aside>
+  </div>
+</section>
+
+<section id="rb">
+  <div class="section-number">PART 04 · Red-Black Tree</div>
+  <h2>Red-Black：用顏色放寬 AVL 的平衡</h2>
+  <p class="lead">Red-black tree 是 extended BST。它不要求左右高度差最多 1，而是用紅黑規則限制最長路徑不會超過最短黑高路徑的兩倍，因此高度仍是 $O(\log n)$。</p>
+  <div class="grid-2">
+    <div class="viz-panel">
+      <div class="stage" id="stage-rb"><svg></svg><div class="nodes-layer"></div></div>
+      <div class="status-banner"><span class="status-icon">›</span><span class="status-text">固定插入序列：50, 10, 80, 90, 70, 60, 65, 62。</span></div>
+      <div class="controls-bar" data-demo="rb">
+        <button class="btn-play">▶ 播放</button>
+        <button class="btn-step">→ 單步</button>
+        <button class="btn-reset">↺ 重置</button>
+        <label class="speed">速度 <input type="range" min="350" max="1600" value="850" step="50"></label>
+      </div>
+    </div>
+    <aside class="side-panel">
+      <span class="info-label">Rules and height</span>
+      <p>根與 external nodes 是 black；不能有連續 red；所有 root-to-external path 的 black 數相同。</p>
+      <div class="callout">每條路徑長度介於 $r$ 與 $2r$ 之間，所以 $h \le 2\log_2(n+1)$。因此 search、insert、delete 都是 $O(\log n)$。</div>
+    </aside>
+  </div>
+</section>
+
+<section id="splay">
+  <div class="section-number">PART 05 · Splay Tree（補充）</div>
+  <h2>Splay：每次操作後把目標伸展到 root</h2>
+  <p class="lead">Splay tree 不存 balance factor 或顏色。它允許單次操作最壞 $O(n)$，但靠著每次搜尋/插入/刪除後 splay 到 root，達成 amortized $O(\log n)$。</p>
+  <div class="grid-2">
+    <div class="viz-panel">
+      <div class="stage" id="stage-splay"><svg></svg><div class="nodes-layer"></div></div>
+      <div class="status-banner"><span class="status-icon">›</span><span class="status-text">目標 key 5 會透過 zig-zig / zig-zag 類型旋轉往上。</span></div>
+      <div class="controls-bar" data-demo="splay">
+        <button class="btn-play">▶ 播放</button>
+        <button class="btn-step">→ 單步</button>
+        <button class="btn-reset">↺ 重置</button>
+        <label class="speed">速度 <input type="range" min="350" max="1600" value="850" step="50"></label>
+      </div>
+    </div>
+    <aside class="side-panel">
+      <span class="info-label">Why useful</span>
+      <p>如果某些資料近期常被查詢，splay 會自然把它們拉近 root，具有 locality 的效果。</p>
+      <div class="metric"><span>單次最壞</span><span>$O(n)$</span></div>
+      <div class="metric"><span>攤銷成本</span><span>$O(\log n)$</span></div>
+      <div class="metric"><span>額外資訊</span><span>無</span></div>
+    </aside>
+  </div>
+</section>
+
+<section id="mway">
+  <div class="section-number">PART 06 · m-way Search Tree</div>
+  <h2>一個 node 裡可以放多個 key</h2>
+  <p class="lead">m-way search tree 的 node 不是只放一個 key，而是放 $K_1,\dots,K_n$ 與 $A_0,\dots,A_n$ 子樹指標。搜尋時先在 node 內找 key 的區間，再往對應 child 走。</p>
+  <div class="grid-2">
+    <div class="viz-panel">
+      <div class="stage" id="stage-mway"><svg></svg><div class="nodes-layer"></div></div>
+      <div class="status-banner"><span class="status-icon">›</span><span class="status-text">查找 28：先比較 root 的 20, 40，再進入中間子樹。</span></div>
+      <div class="controls-bar" data-demo="mway">
+        <button class="btn-play">▶ 播放</button>
+        <button class="btn-step">→ 單步</button>
+        <button class="btn-reset">↺ 重置</button>
+        <label class="speed">速度 <input type="range" min="350" max="1600" value="850" step="50"></label>
+      </div>
+    </div>
+    <aside class="side-panel">
+      <span class="info-label">Routing rule</span>
+      <div class="pseudo-code">
+<span class="line">在 node 內找 i，使 K_i ≤ x &lt; K_{i+1}</span>
+<span class="line">若 x 等於某個 K_i：成功</span>
+<span class="line">否則往 A_i 走</span>
+      </div>
+      <div class="callout">分支數變大後，高度會下降。這是 B-tree 適合磁碟/資料庫索引的基礎。</div>
+    </aside>
+  </div>
+</section>
+
+<section id="btree">
+  <div class="section-number">PART 07 · B-tree</div>
+  <h2>B-tree：保持每個 node 半滿，所有葉子同層</h2>
+  <p class="lead">order $m$ 的 B-tree 是有容量限制的 m-way search tree。除了 root 以外，每個內部 node 至少有 $\lceil m/2\rceil$ 個 children，最多 $m$ 個 children，所有 external nodes 在同一層。</p>
+  <div class="grid-2">
+    <div class="viz-panel">
+      <div class="stage" id="stage-btree"><svg></svg><div class="nodes-layer"></div></div>
+      <div class="status-banner"><span class="status-icon">›</span><span class="status-text">切換插入與刪除情境，觀察 split、borrow、merge。</span></div>
+      <div class="controls-bar" data-demo="btree">
+        <button class="preset-btn active" data-case="insert">Insert split</button>
+        <button class="preset-btn" data-case="delete">Delete borrow/merge</button>
+        <button class="btn-play">▶ 播放</button>
+        <button class="btn-step">→ 單步</button>
+        <button class="btn-reset">↺ 重置</button>
+        <label class="speed">速度 <input type="range" min="350" max="1600" value="850" step="50"></label>
+      </div>
+    </div>
+    <aside class="side-panel">
+      <span class="info-label">Height bound</span>
+      <p>若有 $N$ 個 keys、order 為 $m$、高度為 $h$，分支數至少約為 $\lceil m/2\rceil$，所以高度是 $O(\log_m N)$ 等級。</p>
+      <div class="callout">PPT 的例子：order $m=200$、$N \le 2\times10^6-2$ 時，高度可以不超過 3。這解釋了為什麼資料庫索引很在意「一次讀很多 key」。</div>
+    </aside>
+  </div>
+</section>
+
+<section id="bplus">
+  <div class="section-number">PART 08 · B+ Tree</div>
+  <h2>B+ Tree：資料都在 leaf，leaf 串成 linked list</h2>
+  <p class="lead">B+ tree 的 internal nodes 只當 index，真正資料放在 leaf/data nodes。所有 leaf 用 linked list 串起來，所以範圍查詢不用一直回到 root。</p>
+  <div class="grid-2">
+    <div class="viz-panel">
+      <div class="stage" id="stage-bplus"><svg></svg><div class="nodes-layer"></div></div>
+      <div class="status-banner"><span class="status-icon">›</span><span class="status-text">範圍查詢：先走 index 找到第一個 leaf，再沿 leaf links 掃描。</span></div>
+      <div class="controls-bar" data-demo="bplus">
+        <button class="btn-play">▶ 播放</button>
+        <button class="btn-step">→ 單步</button>
+        <button class="btn-reset">↺ 重置</button>
+        <label class="speed">速度 <input type="range" min="350" max="1600" value="850" step="50"></label>
+      </div>
+    </div>
+    <aside class="side-panel">
+      <span class="info-label">B-tree vs B+ tree</span>
+      <div class="metric"><span>B-tree</span><span>keys/records 可在內部</span></div>
+      <div class="metric"><span>B+ tree</span><span>records 在 leaves</span></div>
+      <div class="metric"><span>range query</span><span>leaf links</span></div>
+      <div class="callout">B+ tree 犧牲一點搜尋路徑上的直接命中，換來更規律的 leaf storage 與高效率 range scan。</div>
+    </aside>
+  </div>
+</section>
+
+<section id="summary">
+  <div class="section-number">PART 09 · 總覽比較</div>
+  <h2>每種搜尋樹解決的是不同瓶頸</h2>
+  <p class="lead">不要把所有 balanced tree 都記成「某種旋轉」。先問：瓶頸是高度？搜尋機率？局部性？磁碟 I/O？範圍查詢？</p>
+  <table class="compare-table">
+    <thead><tr><th>結構</th><th>核心想法</th><th>典型成本</th><th>適合場景</th></tr></thead>
+    <tbody>
+      <tr><td>普通 BST</td><td>左小右大</td><td>平均可好，最壞 $O(n)$</td><td>概念基礎、小型資料</td></tr>
+      <tr><td>Optimal BST</td><td>依搜尋機率安排 root</td><td>建構 DP $O(n^3)$</td><td>已知查詢分布且資料較靜態</td></tr>
+      <tr><td>AVL</td><td>嚴格高度平衡</td><td>search/insert/delete $O(\log n)$</td><td>搜尋很多、想要低高度</td></tr>
+      <tr><td>Red-Black</td><td>用紅黑規則放寬平衡</td><td>search/insert/delete $O(\log n)$</td><td>標準 library map/set 常用</td></tr>
+      <tr><td>Splay</td><td>操作後把目標拉到 root</td><td>amortized $O(\log n)$</td><td>有 locality 的查詢序列</td></tr>
+      <tr><td>B-tree</td><td>高分支、node 半滿、葉同層</td><td>$O(\log N)$，高度很小</td><td>磁碟與資料庫索引</td></tr>
+      <tr><td>B+ tree</td><td>資料在 leaf，leaf 串接</td><td>搜尋 $O(\log N)$，range scan 快</td><td>資料庫 range query、檔案系統索引</td></tr>
+    </tbody>
+  </table>
+</section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+function setText(el, text){ if(el) el.textContent = text; }
+function stageParts(stage){ return { svg: stage.querySelector('svg'), layer: stage.querySelector('.nodes-layer') }; }
+function clearStage(stage){ const p = stageParts(stage); p.svg.innerHTML = ''; p.layer.innerHTML = ''; }
+function line(svg, x1, y1, x2, y2, cls='t-edge'){
+  const l = document.createElementNS('http://www.w3.org/2000/svg','line');
+  l.setAttribute('x1',x1); l.setAttribute('y1',y1); l.setAttribute('x2',x2); l.setAttribute('y2',y2); l.setAttribute('class',cls);
+  svg.appendChild(l);
+}
+function node(layer, x, y, label, cls=''){
+  const el = document.createElement('div');
+  el.className = 't-node ' + cls;
+  el.style.left = x + '%'; el.style.top = y + '%'; el.textContent = label;
+  layer.appendChild(el);
+  return el;
+}
+function drawBinary(stage, nodes, edges, opts={}){
+  clearStage(stage);
+  const {svg, layer} = stageParts(stage);
+  const rect = stage.getBoundingClientRect();
+  const w = rect.width || 700, h = rect.height || 360;
+  edges.forEach(e => {
+    const a = nodes[e[0]], b = nodes[e[1]];
+    if(a && b) line(svg, a.x*w/100, a.y*h/100, b.x*w/100, b.y*h/100, e[2] || 't-edge');
+  });
+  Object.entries(nodes).forEach(([id,n]) => {
+    const classes = [n.cls || '', opts.active === id ? 'active' : '', (opts.path||[]).includes(id) ? 'path' : ''].filter(Boolean).join(' ');
+    node(layer, n.x, n.y, n.label ?? id, classes);
+  });
+}
+function multiNode(layer, x, y, keys, cls='multi-node'){
+  const el = document.createElement('div');
+  el.className = cls;
+  el.style.left = x + '%'; el.style.top = y + '%';
+  keys.forEach(k => { const s = document.createElement('span'); s.className = 'key'; s.textContent = k; el.appendChild(s); });
+  layer.appendChild(el);
+  return el;
+}
+function leafRow(layer, x, y, records, cls='leaf-row'){
+  const el = document.createElement('div');
+  el.className = cls;
+  el.style.left = x + '%'; el.style.top = y + '%';
+  records.forEach(k => { const s = document.createElement('span'); s.className = 'record'; s.textContent = k; el.appendChild(s); });
+  layer.appendChild(el);
+  return el;
+}
+function drawMulti(stage, items, links=[]){
+  clearStage(stage);
+  const {svg, layer} = stageParts(stage);
+  const rect = stage.getBoundingClientRect();
+  const w = rect.width || 700, h = rect.height || 360;
+  links.forEach(([a,b,cls]) => line(svg, a[0]*w/100, a[1]*h/100, b[0]*w/100, b[1]*h/100, cls || 't-edge'));
+  items.forEach(it => {
+    if(it.type === 'leaf') leafRow(layer, it.x, it.y, it.keys, 'leaf-row ' + (it.cls || ''));
+    else multiNode(layer, it.x, it.y, it.keys, 'multi-node ' + (it.cls || ''));
+  });
+}
+function statusOf(stage){ return stage.closest('.viz-panel').querySelector('.status-text'); }
+function highlightLine(code, lineNo){
+  if(!code) return;
+  code.querySelectorAll('.line').forEach(l => l.classList.toggle('hl', l.dataset.line === String(lineNo)));
+}
+class Player{
+  constructor(steps, apply, delay=850){ this.steps = steps; this.apply = apply; this.delay = delay; this.i = 0; this.timer = null; this.apply(this.steps[0],0); }
+  reset(){ this.stop(); this.i = 0; this.apply(this.steps[0],0); }
+  stop(){ if(this.timer){ clearTimeout(this.timer); this.timer = null; } }
+  setDelay(d){ this.delay = d; }
+  step(){ this.stop(); if(this.i < this.steps.length - 1) this.i += 1; this.apply(this.steps[this.i], this.i); }
+  play(){ this.stop(); const tick=()=>{ if(this.i >= this.steps.length-1){ this.timer=null; return; } this.i += 1; this.apply(this.steps[this.i], this.i); this.timer=setTimeout(tick,this.delay); }; this.timer=setTimeout(tick,120); }
+}
+
+const trees = {
+  leftCost: {
+    L10:{x:24,y:16,label:'10'}, L5:{x:12,y:38,label:'5'}, L25:{x:36,y:38,label:'25'}, L20:{x:31,y:60,label:'20'}, L15:{x:27,y:80,label:'15'}
+  },
+  rightCost: {
+    R10:{x:72,y:16,label:'10'}, R5:{x:60,y:38,label:'5'}, R20:{x:84,y:38,label:'20'}, R15:{x:78,y:60,label:'15'}, R25:{x:90,y:60,label:'25'}
+  }
+};
+function mergeNodes(a,b){ return Object.assign({}, a, b); }
+function initCost(){
+  const stage = $('stage-cost');
+  const edges = [['L10','L5'],['L10','L25'],['L25','L20'],['L20','L15'],['R10','R5'],['R10','R20'],['R20','R15'],['R20','R25']];
+  const steps = [
+    {status:'兩棵 BST 都有 inorder：5, 10, 15, 20, 25。', path:[]},
+    {status:'等機率時，左樹平均比較次數：(1+2+2+3+4)/5 = 2.4。', path:['L10','L25','L20','L15']},
+    {status:'等機率時，右樹平均比較次數：(1+2+2+3+3)/5 = 2.2。', path:['R10','R20','R15','R25']},
+    {status:'若 5,10,25 的搜尋機率較高，左樹加權成本變成 1.85。', path:['L5','L10','L25']},
+    {status:'同一組 key 的最佳樹形取決於搜尋機率，不只取決於高度。', path:[]}
+  ];
+  return new Player(steps, s => {
+    drawBinary(stage, mergeNodes(trees.leftCost, trees.rightCost), edges, {path:s.path});
+    setText(statusOf(stage), s.status);
+  });
+}
+
+function initObst(){
+  const stage = $('stage-obst'), matrix = $('obst-matrix'), code = $('code-obst');
+  const labels = ['', '0','1','2','3','4'];
+  const entries = [
+    ['0,0','w=2 c=0 r=0'],['1,1','w=3 c=0 r=0'],['2,2','w=1 c=0 r=0'],['3,3','w=1 c=0 r=0'],['4,4','w=1 c=0 r=0'],
+    ['0,1','w=8 c=8 r=1'],['1,2','w=7 c=7 r=2'],['2,3','w=3 c=3 r=3'],['3,4','w=3 c=3 r=4'],
+    ['0,2','w=12 c=19 r=1'],['1,3','w=9 c=12 r=2'],['2,4','w=5 c=8 r=3'],
+    ['0,3','w=14 c=25 r=2'],['1,4','w=11 c=19 r=2'],
+    ['0,4','w=16 c=32 r=2']
+  ];
+  function renderMatrix(activeIndex){
+    matrix.innerHTML = '';
+    labels.forEach(l => { const c=document.createElement('div'); c.className='cell head'; c.textContent=l; matrix.appendChild(c); });
+    for(let i=0;i<=4;i++){
+      const h=document.createElement('div'); h.className='cell head'; h.textContent=i; matrix.appendChild(h);
+      for(let j=0;j<=4;j++){
+        const e = entries.find(x => x[0] === `${i},${j}`);
+        const c=document.createElement('div');
+        c.className='cell' + (e ? (entries.indexOf(e) < activeIndex ? ' done' : entries.indexOf(e) === activeIndex ? ' fill' : '') : '');
+        c.textContent = e ? e[1] : '';
+        matrix.appendChild(c);
+      }
+    }
+  }
+  const optTree = {'15':{x:50,y:18,label:'15'},'10':{x:32,y:45,label:'10'},'20':{x:68,y:45,label:'20'},'25':{x:78,y:72,label:'25'}};
+  const steps = [
+    {status:'初始化 diagonal：T[i,i] 是空樹，c[i,i]=0。', active:0, line:2, tree:false},
+    {status:'填長度 1 的區間，例如 T[0,1] 只能選 a1=10 當 root。', active:5, line:3, tree:false},
+    {status:'填長度 2、3 的區間，每格試可能 root 並記錄 r[i,j]。', active:12, line:4, tree:false},
+    {status:'最後 T[0,4] 得到 c[0,4]=32，r[0,4]=2。', active:14, line:4, tree:false},
+    {status:'由 r 表重建：a2=15 是 root，左邊是 10，右邊接 20,25。', active:15, line:5, tree:true}
+  ];
+  return new Player(steps, s => {
+    renderMatrix(s.active);
+    highlightLine(code, s.line);
+    if(s.tree) drawBinary(stage, optTree, [['15','10'],['15','20'],['20','25']], {});
+    else drawBinary(stage, {'?':{x:50,y:48,label:'DP'}}, [], {active:'?'});
+    setText(statusOf(stage), s.status);
+  });
+}
+
+const avlCases = {
+  LL: [
+    {status:'LL：新節點落在 A 的 left-left，A 的 BF 變成 +2。', nodes:{A:{x:50,y:18,label:'A',cls:'active'},B:{x:34,y:43,label:'B'},Y:{x:22,y:70,label:'Y'},AR:{x:64,y:43,label:'AR',cls:'small'}}, edges:[['A','B'],['A','AR'],['B','Y']]},
+    {status:'對 A 做 right rotation，B 上升。', nodes:{B:{x:50,y:22,label:'B',cls:'active'},Y:{x:34,y:50,label:'Y'},A:{x:66,y:50,label:'A'},AR:{x:78,y:75,label:'AR',cls:'small'}}, edges:[['B','Y'],['B','A'],['A','AR']]}
+  ],
+  RR: [
+    {status:'RR：新節點落在 A 的 right-right，A 的 BF 變成 -2。', nodes:{A:{x:50,y:18,label:'A',cls:'active'},AL:{x:36,y:43,label:'AL',cls:'small'},B:{x:66,y:43,label:'B'},Y:{x:78,y:70,label:'Y'}}, edges:[['A','AL'],['A','B'],['B','Y']]},
+    {status:'對 A 做 left rotation，B 上升。', nodes:{B:{x:50,y:22,label:'B',cls:'active'},A:{x:34,y:50,label:'A'},Y:{x:66,y:50,label:'Y'},AL:{x:22,y:75,label:'AL',cls:'small'}}, edges:[['B','A'],['B','Y'],['A','AL']]}
+  ],
+  LR: [
+    {status:'LR：先對 B 左旋，再對 A 右旋。', nodes:{A:{x:50,y:16,label:'A',cls:'active'},B:{x:34,y:42,label:'B'},C:{x:45,y:68,label:'C'}}, edges:[['A','B'],['B','C']]},
+    {status:'C 先上到 B 的位置。', nodes:{A:{x:50,y:16,label:'A'},C:{x:34,y:42,label:'C',cls:'active'},B:{x:25,y:68,label:'B'}}, edges:[['A','C'],['C','B']]},
+    {status:'最後 C 上升成局部 root。', nodes:{C:{x:50,y:22,label:'C',cls:'active'},B:{x:34,y:52,label:'B'},A:{x:66,y:52,label:'A'}}, edges:[['C','B'],['C','A']]}
+  ],
+  RL: [
+    {status:'RL：先對 B 右旋，再對 A 左旋。', nodes:{A:{x:50,y:16,label:'A',cls:'active'},B:{x:66,y:42,label:'B'},C:{x:55,y:68,label:'C'}}, edges:[['A','B'],['B','C']]},
+    {status:'C 先上到 B 的位置。', nodes:{A:{x:50,y:16,label:'A'},C:{x:66,y:42,label:'C',cls:'active'},B:{x:75,y:68,label:'B'}}, edges:[['A','C'],['C','B']]},
+    {status:'最後 C 上升成局部 root。', nodes:{C:{x:50,y:22,label:'C',cls:'active'},A:{x:34,y:52,label:'A'},B:{x:66,y:52,label:'B'}}, edges:[['C','A'],['C','B']]}
+  ]
+};
+function initAvl(){
+  const stage = $('stage-avl'); let current = 'LL'; let player;
+  const build = () => {
+    const steps = avlCases[current];
+    player = new Player(steps, s => { drawBinary(stage, s.nodes, s.edges, {}); setText(statusOf(stage), s.status); });
+  };
+  build();
+  stage.closest('section').querySelectorAll('.preset-btn').forEach(btn => btn.onclick = () => {
+    stage.closest('section').querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active'); current = btn.dataset.case; build();
+  });
+  return { step:()=>player.step(), reset:()=>player.reset(), play:()=>player.play(), setDelay:d=>player.setDelay(d) };
+}
+
+function initRb(){
+  const stage = $('stage-rb');
+  const steps = [
+    {status:'插入 50，root 必須是 black。', nodes:{'50':{x:50,y:20,label:'50',cls:'black'}}, edges:[]},
+    {status:'插入 10、80 為 red，沒有連續 red。', nodes:{'50':{x:50,y:20,label:'50',cls:'black'},'10':{x:35,y:48,label:'10',cls:'red'},'80':{x:65,y:48,label:'80',cls:'red'}}, edges:[['50','10'],['50','80']]},
+    {status:'插入 90 造成 red parent + red child；uncle 10 是 red，所以 recolor。', nodes:{'50':{x:50,y:20,label:'50',cls:'red'},'10':{x:35,y:48,label:'10',cls:'black'},'80':{x:65,y:48,label:'80',cls:'black'},'90':{x:75,y:74,label:'90',cls:'red'}}, edges:[['50','10'],['50','80'],['80','90']]},
+    {status:'root 再強制改回 black。', nodes:{'50':{x:50,y:20,label:'50',cls:'black'},'10':{x:35,y:48,label:'10',cls:'black'},'80':{x:65,y:48,label:'80',cls:'black'},'90':{x:75,y:74,label:'90',cls:'red'},'70':{x:55,y:74,label:'70',cls:'red'}}, edges:[['50','10'],['50','80'],['80','70'],['80','90']]},
+    {status:'插入 60 後可先 recolor，再把衝突往上傳。', nodes:{'50':{x:50,y:18,label:'50',cls:'black'},'10':{x:30,y:45,label:'10',cls:'black'},'80':{x:70,y:45,label:'80',cls:'red'},'70':{x:60,y:70,label:'70',cls:'black'},'90':{x:82,y:70,label:'90',cls:'black'},'60':{x:52,y:88,label:'60',cls:'red'}}, edges:[['50','10'],['50','80'],['80','70'],['80','90'],['70','60']]},
+    {status:'插入 65 形成 LRb，使用 AVL 類似的 double rotation 並調色。', nodes:{'50':{x:42,y:30,label:'50',cls:'black'},'10':{x:25,y:58,label:'10',cls:'black'},'65':{x:65,y:30,label:'65',cls:'black'},'60':{x:54,y:58,label:'60',cls:'red'},'80':{x:78,y:58,label:'80',cls:'red'},'70':{x:70,y:82,label:'70',cls:'black'},'90':{x:88,y:82,label:'90',cls:'black'}}, edges:[['50','10'],['50','65'],['65','60'],['65','80'],['80','70'],['80','90']]},
+    {status:'插入 62 後再做 recolor / rotation，最後仍滿足黑高一致。', nodes:{'65':{x:50,y:18,label:'65',cls:'black'},'50':{x:34,y:46,label:'50',cls:'red'},'80':{x:68,y:46,label:'80',cls:'red'},'10':{x:24,y:74,label:'10',cls:'black'},'60':{x:44,y:74,label:'60',cls:'black'},'70':{x:60,y:74,label:'70',cls:'black'},'90':{x:78,y:74,label:'90',cls:'black'},'62':{x:50,y:91,label:'62',cls:'red'}}, edges:[['65','50'],['65','80'],['50','10'],['50','60'],['80','70'],['80','90'],['60','62']]}
+  ];
+  return new Player(steps, s => { drawBinary(stage, s.nodes, s.edges, {}); setText(statusOf(stage), s.status); });
+}
+
+function initSplay(){
+  const stage = $('stage-splay');
+  const steps = [
+    {status:'搜尋 key 5，先像普通 BST 一樣走到目標。', active:'5', nodes:{'1':{x:46,y:12,label:'1'},'9':{x:70,y:30,label:'9'},'8':{x:55,y:48,label:'8'},'2':{x:38,y:40,label:'2'},'6':{x:47,y:64,label:'6'},'4':{x:34,y:68,label:'4'},'5':{x:42,y:84,label:'5'}}, edges:[['1','9'],['9','8'],['8','2'],['2','6'],['2','4'],['4','5']]},
+    {status:'RR / LL 類型會一次上升兩層，稱為 zig-zig。', active:'5', nodes:{'1':{x:42,y:12,label:'1'},'9':{x:72,y:30,label:'9'},'5':{x:50,y:44,label:'5'},'2':{x:34,y:65,label:'2'},'8':{x:66,y:65,label:'8'},'4':{x:42,y:82,label:'4'},'6':{x:58,y:82,label:'6'}}, edges:[['1','9'],['9','5'],['5','2'],['5','8'],['2','4'],['8','6']]},
+    {status:'LR / RL 類型會先內旋再外旋，稱為 zig-zag。', active:'5', nodes:{'1':{x:32,y:32,label:'1'},'5':{x:50,y:18,label:'5'},'9':{x:70,y:36,label:'9'},'2':{x:42,y:58,label:'2'},'8':{x:62,y:58,label:'8'},'4':{x:47,y:80,label:'4'},'6':{x:57,y:80,label:'6'}}, edges:[['5','1'],['5','9'],['1','2'],['9','8'],['2','4'],['8','6']]},
+    {status:'splay 完成後，剛查到的 5 成為 root。', active:'5', nodes:{'5':{x:50,y:16,label:'5'},'1':{x:32,y:44,label:'1'},'9':{x:70,y:44,label:'9'},'2':{x:40,y:68,label:'2'},'8':{x:62,y:68,label:'8'},'4':{x:46,y:88,label:'4'},'6':{x:56,y:88,label:'6'}}, edges:[['5','1'],['5','9'],['1','2'],['9','8'],['2','4'],['8','6']]}
+  ];
+  return new Player(steps, s => { drawBinary(stage, s.nodes, s.edges, {active:s.active}); setText(statusOf(stage), s.status); });
+}
+
+function initMway(){
+  const stage = $('stage-mway');
+  const base = [
+    {id:'a',x:50,y:18,keys:[20,40]}, {id:'b',x:24,y:54,keys:[10,15]}, {id:'c',x:50,y:54,keys:[25,30]}, {id:'d',x:76,y:54,keys:[45,50]}, {id:'e',x:50,y:84,keys:[28]}
+  ];
+  const links = [[[50,25],[24,45]],[[50,25],[50,45]],[[50,25],[76,45]],[[50,62],[50,78]]];
+  const steps = [
+    {status:'查找 28：在 root 比較 20, 40。', active:['a']},
+    {status:'20 < 28 < 40，因此走中間 child A1。', active:['a','c']},
+    {status:'在 node [25, 30] 中，25 < 28 < 30，走中間 child。', active:['c','e']},
+    {status:'到 [28]，搜尋成功。', active:['e'], target:['e']}
+  ];
+  return new Player(steps, s => {
+    drawMulti(stage, base.map(n => Object.assign({}, n, {cls:(s.target||[]).includes(n.id)?'target':(s.active||[]).includes(n.id)?'active':''})), links);
+    setText(statusOf(stage), s.status);
+  });
+}
+
+const btreeCases = {
+  insert: [
+    {status:'Order 5 B-tree：leaf [380,395,406,412] 已滿，準備插入 382。', items:[{x:50,y:18,keys:[320,540]},{x:50,y:42,keys:[430,480]},{x:28,y:72,keys:[380,395,406,412],cls:'active'},{x:54,y:72,keys:[451,472]},{x:76,y:72,keys:[493,506,511]}], links:[[[50,25],[28,63]],[[50,25],[54,63]],[[50,25],[76,63]]]},
+    {status:'插入 382 後 split full node，395 被 promoted 到 parent。', items:[{x:50,y:20,keys:[395,430,480],cls:'target'},{x:22,y:72,keys:[380,382]},{x:42,y:72,keys:[406,412]},{x:62,y:72,keys:[451,472]},{x:82,y:72,keys:[493,506,511]}], links:[[[50,28],[22,63]],[[50,28],[42,63]],[[50,28],[62,63]],[[50,28],[82,63]]]},
+    {status:'再插入 518、508，右側 leaf 也 split，508 promoted。', items:[{x:50,y:20,keys:[395,430,480,508],cls:'target'},{x:16,y:72,keys:[380,382]},{x:35,y:72,keys:[406,412]},{x:54,y:72,keys:[451,472]},{x:72,y:72,keys:[493,506]},{x:90,y:72,keys:[511,518]}], links:[[[50,28],[16,63]],[[50,28],[35,63]],[[50,28],[54,63]],[[50,28],[72,63]],[[50,28],[90,63]]]}
+  ],
+  delete: [
+    {status:'刪除 113 後，leaf key 太少，可向 sibling borrow。', items:[{x:50,y:18,keys:[80,120,150]},{x:32,y:62,keys:[90,113],cls:'active'},{x:60,y:62,keys:[126,135,142]}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]},
+    {status:'borrow/rotation：parent 的 120 下來，sibling 的 126 上去。', items:[{x:50,y:18,keys:[80,126,150],cls:'target'},{x:32,y:62,keys:[90,120]},{x:60,y:62,keys:[135,142]}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]},
+    {status:'若 sibling 也無法借，就把 parent key 拉下來 merge。', items:[{x:50,y:18,keys:[80,150],cls:'target'},{x:34,y:62,keys:[68,73]},{x:62,y:62,keys:[90,126,135,142],cls:'active'}], links:[[[50,26],[34,52]],[[50,26],[62,52]]]},
+    {status:'merge 可能一路傳到 root；若 root 只剩一個 key 且被合併，樹高下降。', items:[{x:50,y:18,keys:[60,300],cls:'target'},{x:32,y:62,keys:[30,50]},{x:65,y:62,keys:[150,180,220,280],cls:'active'}], links:[[[50,26],[32,52]],[[50,26],[65,52]]]}
+  ]
+};
+function initBtree(){
+  const stage = $('stage-btree'); let current = 'insert'; let player;
+  const build = () => { player = new Player(btreeCases[current], s => { drawMulti(stage, s.items, s.links); setText(statusOf(stage), s.status); }); };
+  build();
+  stage.closest('section').querySelectorAll('.preset-btn').forEach(btn => btn.onclick = () => {
+    stage.closest('section').querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active'); current = btn.dataset.case; build();
+  });
+  return { step:()=>player.step(), reset:()=>player.reset(), play:()=>player.play(), setDelay:d=>player.setDelay(d) };
+}
+
+function initBplus(){
+  const stage = $('stage-bplus');
+  const steps = [
+    {status:'Internal nodes 只做 index，records 都放在 leaf/data nodes。', scan:[], active:['A']},
+    {status:'查找範圍 16 到 72：先經過 root [20,40] 找第一個可能 leaf。', scan:['L1'], active:['A','B']},
+    {status:'到 leaf 後，不用回 root，沿著 leaf linked list 往右掃。', scan:['L1','L2'], active:['B','C']},
+    {status:'繼續掃到超過 72 為止，range scan 主要走 leaf links。', scan:['L1','L2','L3'], active:['C','D']},
+    {status:'這就是 B+ tree 很適合資料庫 range query 的原因。', scan:['L1','L2','L3'], active:['A']}
+  ];
+  const items = [
+    {id:'A',x:50,y:16,keys:[20,40]}, {id:'B',x:24,y:42,keys:[10]}, {id:'C',x:50,y:42,keys:[30]}, {id:'D',x:76,y:42,keys:[70,80]},
+    {id:'L1',type:'leaf',x:20,y:76,keys:[2,4,6,12,16,18]}, {id:'L2',type:'leaf',x:50,y:76,keys:[20,25,32,36,40,50,60]}, {id:'L3',type:'leaf',x:80,y:76,keys:[71,72,80,82,84]}
+  ];
+  const links = [[[50,24],[24,36]],[[50,24],[50,36]],[[50,24],[76,36]],[[24,50],[20,68]],[[50,50],[50,68]],[[76,50],[80,68]],[[32,76],[38,76],'t-edge active'],[[65,76],[70,76],'t-edge active']];
+  return new Player(steps, s => {
+    drawMulti(stage, items.map(it => Object.assign({}, it, {cls:(s.scan||[]).includes(it.id)?'scan':(s.active||[]).includes(it.id)?'active':''})), links);
+    setText(statusOf(stage), s.status);
+  });
+}
+
+const inits = { cost:initCost, obst:initObst, avl:initAvl, rb:initRb, splay:initSplay, mway:initMway, btree:initBtree, bplus:initBplus };
+const players = {};
+function initControls(){
+  document.querySelectorAll('.controls-bar[data-demo]').forEach(bar => {
+    const name = bar.dataset.demo;
+    if(!players[name]) players[name] = inits[name]();
+    const p = players[name];
+    const play = bar.querySelector('.btn-play');
+    const step = bar.querySelector('.btn-step');
+    const reset = bar.querySelector('.btn-reset');
+    const speed = bar.querySelector('input[type=range]');
+    if(play) play.onclick = () => p.play && p.play();
+    if(step) step.onclick = () => p.step();
+    if(reset) reset.onclick = () => p.reset();
+    if(speed) speed.oninput = () => p.setDelay && p.setDelay(parseInt(speed.value,10));
+  });
+}
+function initNav(){
+  const links = [...document.querySelectorAll('.floating-nav a')];
+  const sections = links.map(a => $(a.dataset.target)).filter(Boolean);
+  const onScroll = () => {
+    let cur = sections[0]?.id;
+    sections.forEach(sec => { if(sec.getBoundingClientRect().top < window.innerHeight*.35) cur = sec.id; });
+    links.forEach(a => a.classList.toggle('active', a.dataset.target === cur));
+  };
+  document.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+}
+window.addEventListener('resize', () => Object.values(players).forEach(p => p.reset && p.reset()));
+document.addEventListener('DOMContentLoaded', () => {
+  initControls();
+  initNav();
+  if(window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise().catch(()=>{});
+});
+</script>
+</body>
+</html>
