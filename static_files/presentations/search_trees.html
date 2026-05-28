@@ -369,6 +369,10 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <div class="rule-card"><strong>插入時的修復量</strong><p>沿插入路徑往上找第一個失衡祖先，做一次單旋或雙旋即可恢復該區域高度。</p></div>
     <div class="rule-card"><strong>自學檢查</strong><p>看旋轉前後的中序序列是否相同；若相同，就沒有破壞搜尋樹規則。</p></div>
   </div>
+  <div class="info-box">
+    <div class="box-label">月份例子</div>
+    APR、OCT、JAN 的月份例子只是把抽象的 $A,B,C,Y$ 換成實際字串鍵值：APR 觸發 LL，OCT 觸發 RR，JAN 觸發 LR。自學時先看本頁的抽象旋轉，再對月份樹做同樣的中序順序檢查。
+  </div>
 </section>
 
 <section id="rb">
@@ -419,6 +423,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       <div class="tree-canvas" id="stage-splay"><svg></svg><div class="nodes-layer"></div></div>
       <div class="status-banner"><span class="status-icon">›</span><span class="status-text">目標鍵值 5 會透過單旋、同向雙旋與異向雙旋往上。</span></div>
       <div class="controls-bar" data-demo="splay">
+        <button class="preset-btn active" data-case="bottomup">Bottom-up</button>
+        <button class="preset-btn" data-case="topdown">Top-down</button>
         <button class="btn-play">▶ 播放</button>
         <button class="btn-step">→ 單步</button>
         <button class="btn-reset">↺ 重置</button>
@@ -488,6 +494,10 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <div class="ic-title">正式定義 <span class="ic-badge">定義</span></div>
     <p>一個 $m$ 路搜尋樹節點可寫成 $n,A_0,(K_1,A_1),\ldots,(K_n,A_n)$，其中最多有 $m$ 個子樹、所以鍵值數 $0\le n\le m-1$。鍵值滿足 $K_1 \lt K_2 \lt \cdots \lt K_n$。令 $K_0=-\infty$、$K_{n+1}=\infty$，則子樹 $A_i$ 中所有鍵值都必須大於 $K_i$ 且小於 $K_{i+1}$。</p>
   </div>
+  <div class="info-box">
+    <div class="box-label">節點格式怎麼讀</div>
+    例如根節點有鍵值 20, 40，可記成 $2,A_0,(20,A_1),(40,A_2)$：第一個 2 表示節點內有兩個鍵值，$A_0$ 放小於 20 的子樹，$A_1$ 放介於 20 與 40 的子樹，$A_2$ 放大於 40 的子樹。a,b,c,d,e 節點的表格就是在練習這種讀法。
+  </div>
   <div class="eq-card">
     <div class="eq-label">容量上界</div>
     <div class="eq-formula">高度為 $h$、分支度為 $m$ 的多路搜尋樹，最多有 $m^h-1$ 個鍵值。</div>
@@ -505,7 +515,10 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       <div class="status-banner"><span class="status-icon">›</span><span class="status-text">切換插入與刪除情境，觀察分裂、借用與合併。</span></div>
       <div class="controls-bar" data-demo="btree">
         <button class="preset-btn active" data-case="insert">插入：分裂</button>
-        <button class="preset-btn" data-case="delete">刪除：借用/合併</button>
+        <button class="preset-btn" data-case="delete-rotation">刪除：借用</button>
+        <button class="preset-btn" data-case="delete-combine">刪除：合併</button>
+        <button class="preset-btn" data-case="delete-parent-rotate">父層借用</button>
+        <button class="preset-btn" data-case="delete-double-combine">雙重合併</button>
         <button class="btn-play">▶ 播放</button>
         <button class="btn-step">→ 單步</button>
         <button class="btn-reset">↺ 重置</button>
@@ -520,6 +533,10 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       <div class="info-card">
         <div class="ic-title">高度例子 <span class="ic-badge">m=200</span></div>
         <p>當 $m=200$ 且 $N \le 2\times10^6-2$ 時，高度可不超過 3。這就是資料庫索引重視大節點的原因。</p>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">高度約定 <span class="ic-badge">h</span></div>
+        <p>這裡的高度估計使用課堂定義：根至少有 2 個子節點，下一層開始每個內部節點至少約半滿，因此可推出鍵值數下界。</p>
       </div>
     </aside>
   </div>
@@ -541,7 +558,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   </div>
   <div class="info-box warm">
     <div class="box-label">左偏與右偏</div>
-    2-3-4 樹插入 102 時，分裂或調整可能得到左偏、右偏兩種合法結果。只要每個節點容量合法、所有葉子同層、且中序順序正確，兩種結果都仍是合法 B 樹。
+    2-3-4 樹插入 102 時，分裂或調整可能得到 left bias 與 right bias 兩種合法結果。left bias 可把 102 留在左側局部，right bias 可讓 100 留在父節點；只要每個節點容量合法、所有葉子同層、且中序順序正確，兩種結果都仍是合法 B 樹。
   </div>
 </section>
 
@@ -554,6 +571,10 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       <div class="tree-canvas" id="stage-bplus"><svg></svg><div class="nodes-layer"></div></div>
       <div class="status-banner"><span class="status-icon">›</span><span class="status-text">範圍查詢：先走索引找到第一個葉節點，再沿葉節點串列掃描。</span></div>
       <div class="controls-bar" data-demo="bplus">
+        <button class="preset-btn active" data-case="range">範圍查詢</button>
+        <button class="preset-btn" data-case="insert-split">插入 14/86</button>
+        <button class="preset-btn" data-case="delete-borrow-combine">刪除 71/80</button>
+        <button class="preset-btn" data-case="delete-deficient">刪除 32/86</button>
         <button class="btn-play">▶ 播放</button>
         <button class="btn-step">→ 單步</button>
         <button class="btn-reset">↺ 重置</button>
@@ -582,11 +603,11 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div class="two-col-notes">
     <div class="info-card">
       <div class="ic-title">插入範例 <span class="ic-badge">分裂</span></div>
-      <p>以插入 14 為例，資料應放在第一個葉節點。若葉節點容量超過上限，就分裂成兩個葉節點，並把新葉節點的第一個鍵值複製到父層索引，讓搜尋能導向新的資料節點。</p>
+      <p>以插入 14 為例，資料應放在第一個葉節點；插入 86 則會讓最後一個葉節點分裂。若葉節點容量超過上限，就分裂成兩個葉節點，並把新葉節點的第一個鍵值複製到父層索引，讓搜尋能導向新的資料節點。</p>
     </div>
     <div class="info-card">
       <div class="ic-title">刪除範例 <span class="ic-badge">借用/合併</span></div>
-      <p>刪除 71 可從相鄰葉節點借用並更新父層分隔鍵；若刪除後兄弟也不能借，就合併葉節點，父層索引也要刪掉或更新，必要時不足會繼續往上傳。</p>
+      <p>刪除 71 可從相鄰葉節點借用並更新父層分隔鍵；刪除 80 可能需要合併。刪除 32 或刪除 86 時，若父層索引也不足，修復會繼續往上傳。</p>
     </div>
   </div>
   <div class="info-box">
@@ -815,24 +836,48 @@ function initRb(){
   const steps = [
     {status:'插入 50，根節點必須是黑色。', nodes:{'50':{x:50,y:20,label:'50',cls:'black'}}, edges:[]},
     {status:'插入 10、80 為紅色，沒有連續紅色節點。', nodes:{'50':{x:50,y:20,label:'50',cls:'black'},'10':{x:35,y:48,label:'10',cls:'red'},'80':{x:65,y:48,label:'80',cls:'red'}}, edges:[['50','10'],['50','80']]},
-    {status:'插入 90 造成紅色父節點與紅色子節點；叔節點 10 也是紅色，所以先重新著色。', nodes:{'50':{x:50,y:20,label:'50',cls:'red'},'10':{x:35,y:48,label:'10',cls:'black'},'80':{x:65,y:48,label:'80',cls:'black'},'90':{x:75,y:74,label:'90',cls:'red'}}, edges:[['50','10'],['50','80'],['80','90']]},
-    {status:'根節點再強制改回黑色。', nodes:{'50':{x:50,y:20,label:'50',cls:'black'},'10':{x:35,y:48,label:'10',cls:'black'},'80':{x:65,y:48,label:'80',cls:'black'},'90':{x:75,y:74,label:'90',cls:'red'},'70':{x:55,y:74,label:'70',cls:'red'}}, edges:[['50','10'],['50','80'],['80','70'],['80','90']]},
-    {status:'插入 60 後可先重新著色，再把衝突往上傳。', nodes:{'50':{x:50,y:18,label:'50',cls:'black'},'10':{x:30,y:45,label:'10',cls:'black'},'80':{x:70,y:45,label:'80',cls:'red'},'70':{x:60,y:70,label:'70',cls:'black'},'90':{x:82,y:70,label:'90',cls:'black'},'60':{x:52,y:88,label:'60',cls:'red'}}, edges:[['50','10'],['50','80'],['80','70'],['80','90'],['70','60']]},
-    {status:'插入 65 形成 LRb，使用 AVL 類似的雙旋轉並調色。', nodes:{'50':{x:42,y:30,label:'50',cls:'black'},'10':{x:25,y:58,label:'10',cls:'black'},'65':{x:65,y:30,label:'65',cls:'black'},'60':{x:54,y:58,label:'60',cls:'red'},'80':{x:78,y:58,label:'80',cls:'red'},'70':{x:70,y:82,label:'70',cls:'black'},'90':{x:88,y:82,label:'90',cls:'black'}}, edges:[['50','10'],['50','65'],['65','60'],['65','80'],['80','70'],['80','90']]},
-    {status:'插入 62 後再做重新著色或旋轉，最後仍滿足黑高一致。', nodes:{'65':{x:50,y:18,label:'65',cls:'black'},'50':{x:34,y:46,label:'50',cls:'red'},'80':{x:68,y:46,label:'80',cls:'red'},'10':{x:24,y:74,label:'10',cls:'black'},'60':{x:44,y:74,label:'60',cls:'black'},'70':{x:60,y:74,label:'70',cls:'black'},'90':{x:78,y:74,label:'90',cls:'black'},'62':{x:50,y:91,label:'62',cls:'red'}}, edges:[['65','50'],['65','80'],['50','10'],['50','60'],['80','70'],['80','90'],['60','62']]}
+    {status:'插入 90 形成 RRr：父 80 與新節點 90 連續紅，叔節點 10 也是紅。', nodes:{'50':{x:50,y:20,label:'50',cls:'black'},'10':{x:35,y:48,label:'10',cls:'red'},'80':{x:65,y:48,label:'80',cls:'red'},'90':{x:75,y:74,label:'90',cls:'red'}}, edges:[['50','10'],['50','80'],['80','90']]},
+    {status:'RRr 用 color change：10、80 改黑，50 暫時改紅；因 50 是根，下一步強制改黑。', nodes:{'50':{x:50,y:20,label:'50',cls:'red'},'10':{x:35,y:48,label:'10',cls:'black'},'80':{x:65,y:48,label:'80',cls:'black'},'90':{x:75,y:74,label:'90',cls:'red'}}, edges:[['50','10'],['50','80'],['80','90']]},
+    {status:'根節點 50 強制改黑，RB1 恢復。', nodes:{'50':{x:50,y:20,label:'50',cls:'black'},'10':{x:35,y:48,label:'10',cls:'black'},'80':{x:65,y:48,label:'80',cls:'black'},'90':{x:75,y:74,label:'90',cls:'red'}}, edges:[['50','10'],['50','80'],['80','90']]},
+    {status:'插入 70：父 80 是黑色，因此沒有連續紅色衝突。', nodes:{'50':{x:50,y:20,label:'50',cls:'black'},'10':{x:35,y:48,label:'10',cls:'black'},'80':{x:65,y:48,label:'80',cls:'black'},'70':{x:55,y:74,label:'70',cls:'red'},'90':{x:75,y:74,label:'90',cls:'red'}}, edges:[['50','10'],['50','80'],['80','70'],['80','90']]},
+    {status:'插入 60 形成 LLr：父 70 與新節點 60 連續紅，叔節點 90 也是紅。', nodes:{'50':{x:50,y:18,label:'50',cls:'black'},'10':{x:32,y:45,label:'10',cls:'black'},'80':{x:68,y:45,label:'80',cls:'black'},'70':{x:58,y:70,label:'70',cls:'red'},'90':{x:80,y:70,label:'90',cls:'red'},'60':{x:50,y:88,label:'60',cls:'red'}}, edges:[['50','10'],['50','80'],['80','70'],['80','90'],['70','60']]},
+    {status:'LLr 用 color change：70、90 改黑，80 改紅；根到外部節點黑高仍一致。', nodes:{'50':{x:50,y:18,label:'50',cls:'black'},'10':{x:32,y:45,label:'10',cls:'black'},'80':{x:68,y:45,label:'80',cls:'red'},'70':{x:58,y:70,label:'70',cls:'black'},'90':{x:80,y:70,label:'90',cls:'black'},'60':{x:50,y:88,label:'60',cls:'red'}}, edges:[['50','10'],['50','80'],['80','70'],['80','90'],['70','60']]},
+    {status:'插入 65 形成 LRb：父 60 是紅、叔節點為黑，需做 AVL 類似雙旋轉並調色。', nodes:{'50':{x:44,y:20,label:'50',cls:'black'},'10':{x:28,y:50,label:'10',cls:'black'},'80':{x:70,y:30,label:'80',cls:'red'},'70':{x:60,y:58,label:'70',cls:'black'},'90':{x:82,y:58,label:'90',cls:'black'},'60':{x:52,y:82,label:'60',cls:'red'},'65':{x:60,y:95,label:'65',cls:'red'}}, edges:[['50','10'],['50','80'],['80','70'],['80','90'],['70','60'],['60','65']]},
+    {status:'LRb 修復後：65 成為局部根並改黑，60 與 80 成為紅色子節點。', nodes:{'50':{x:42,y:30,label:'50',cls:'black'},'10':{x:25,y:58,label:'10',cls:'black'},'65':{x:65,y:30,label:'65',cls:'black'},'60':{x:54,y:58,label:'60',cls:'red'},'80':{x:78,y:58,label:'80',cls:'red'},'70':{x:70,y:82,label:'70',cls:'black'},'90':{x:88,y:82,label:'90',cls:'black'}}, edges:[['50','10'],['50','65'],['65','60'],['65','80'],['80','70'],['80','90']]},
+    {status:'插入 62 形成 LRr：父 60 紅、叔 80 紅，先 color change，衝突往上傳到 65。', nodes:{'50':{x:42,y:30,label:'50',cls:'black'},'10':{x:25,y:58,label:'10',cls:'black'},'65':{x:65,y:30,label:'65',cls:'red'},'60':{x:54,y:58,label:'60',cls:'black'},'80':{x:78,y:58,label:'80',cls:'black'},'62':{x:60,y:82,label:'62',cls:'red'},'70':{x:72,y:82,label:'70',cls:'black'},'90':{x:90,y:82,label:'90',cls:'black'}}, edges:[['50','10'],['50','65'],['65','60'],['65','80'],['60','62'],['80','70'],['80','90']]},
+    {status:'上傳後變成 RLb：65 是 50 的右子且衝突在左側，需對 50、65 做旋轉並調色。', nodes:{'50':{x:42,y:30,label:'50',cls:'red'},'10':{x:25,y:58,label:'10',cls:'black'},'65':{x:65,y:30,label:'65',cls:'red'},'60':{x:54,y:58,label:'60',cls:'black'},'80':{x:78,y:58,label:'80',cls:'black'},'62':{x:60,y:82,label:'62',cls:'red'},'70':{x:72,y:82,label:'70',cls:'black'},'90':{x:90,y:82,label:'90',cls:'black'}}, edges:[['50','10'],['50','65'],['65','60'],['65','80'],['60','62'],['80','70'],['80','90']]},
+    {status:'RLb 修復完成：65 成為根，50 與 80 為紅色，所有根到外部節點的黑高一致。', nodes:{'65':{x:50,y:18,label:'65',cls:'black'},'50':{x:34,y:46,label:'50',cls:'red'},'80':{x:68,y:46,label:'80',cls:'red'},'10':{x:24,y:74,label:'10',cls:'black'},'60':{x:44,y:74,label:'60',cls:'black'},'70':{x:60,y:74,label:'70',cls:'black'},'90':{x:78,y:74,label:'90',cls:'black'},'62':{x:50,y:91,label:'62',cls:'red'}}, edges:[['65','50'],['65','80'],['50','10'],['50','60'],['80','70'],['80','90'],['60','62']]}
   ];
   return new Player(steps, s => { drawBinary(stage, s.nodes, s.edges, {}); setText(statusOf(stage), s.status); });
 }
 
 function initSplay(){
-  const stage = $('stage-splay');
-  const steps = [
-    {status:'搜尋鍵值 5，先像普通 BST 一樣走到目標。', active:'5', nodes:{'1':{x:46,y:12,label:'1'},'9':{x:70,y:30,label:'9'},'8':{x:55,y:48,label:'8'},'2':{x:38,y:40,label:'2'},'6':{x:47,y:64,label:'6'},'4':{x:34,y:68,label:'4'},'5':{x:42,y:84,label:'5'}}, edges:[['1','9'],['9','8'],['8','2'],['2','6'],['2','4'],['4','5']]},
-    {status:'RR / LL 類型會一次上升兩層，稱為同向雙旋。', active:'5', nodes:{'1':{x:42,y:12,label:'1'},'9':{x:72,y:30,label:'9'},'5':{x:50,y:44,label:'5'},'2':{x:34,y:65,label:'2'},'8':{x:66,y:65,label:'8'},'4':{x:42,y:82,label:'4'},'6':{x:58,y:82,label:'6'}}, edges:[['1','9'],['9','5'],['5','2'],['5','8'],['2','4'],['8','6']]},
-    {status:'LR / RL 類型會先內旋再外旋，稱為異向雙旋。', active:'5', nodes:{'1':{x:32,y:32,label:'1'},'5':{x:50,y:18,label:'5'},'9':{x:70,y:36,label:'9'},'2':{x:42,y:58,label:'2'},'8':{x:62,y:58,label:'8'},'4':{x:47,y:80,label:'4'},'6':{x:57,y:80,label:'6'}}, edges:[['5','1'],['5','9'],['1','2'],['9','8'],['2','4'],['8','6']]},
-    {status:'伸展完成後，剛查到的 5 成為根節點。', active:'5', nodes:{'5':{x:50,y:16,label:'5'},'1':{x:32,y:44,label:'1'},'9':{x:70,y:44,label:'9'},'2':{x:40,y:68,label:'2'},'8':{x:62,y:68,label:'8'},'4':{x:46,y:88,label:'4'},'6':{x:56,y:88,label:'6'}}, edges:[['5','1'],['5','9'],['1','2'],['9','8'],['2','4'],['8','6']]}
-  ];
-  return new Player(steps, s => { drawBinary(stage, s.nodes, s.edges, {active:s.active}); setText(statusOf(stage), s.status); });
+  const stage = $('stage-splay'); let current = 'bottomup'; let player;
+  const cases = {
+    bottomup: [
+      {status:'Bottom-up：搜尋鍵值 5，先像普通 BST 一樣走到 splay node。', active:'5', nodes:{'1':{x:46,y:12,label:'1'},'9':{x:70,y:30,label:'9'},'8':{x:55,y:48,label:'8'},'2':{x:38,y:40,label:'2'},'7':{x:55,y:66,label:'7'},'6':{x:47,y:80,label:'6'},'4':{x:34,y:68,label:'4'},'5':{x:42,y:92,label:'5'}}, edges:[['1','9'],['9','8'],['8','2'],['2','7'],['7','6'],['2','4'],['6','5']]},
+      {status:'第一步是 RR：5 一次上升兩層，仍保持中序順序。', active:'5', nodes:{'1':{x:42,y:12,label:'1'},'9':{x:72,y:30,label:'9'},'8':{x:58,y:48,label:'8'},'2':{x:36,y:42,label:'2'},'5':{x:48,y:66,label:'5'},'4':{x:38,y:84,label:'4'},'7':{x:60,y:84,label:'7'},'6':{x:54,y:96,label:'6'}}, edges:[['1','9'],['9','8'],['8','2'],['2','5'],['5','4'],['5','7'],['7','6']]},
+      {status:'接著是 LL：5 再往上兩層，局部左右子樹仍按小到大排列。', active:'5', nodes:{'1':{x:35,y:30,label:'1'},'9':{x:72,y:30,label:'9'},'5':{x:50,y:18,label:'5'},'2':{x:40,y:52,label:'2'},'8':{x:64,y:52,label:'8'},'4':{x:46,y:76,label:'4'},'7':{x:58,y:76,label:'7'},'6':{x:54,y:92,label:'6'}}, edges:[['5','1'],['5','9'],['1','2'],['9','8'],['2','4'],['8','7'],['7','6']]},
+      {status:'再遇到 LR：先內旋再外旋，5 繼續靠近根。', active:'5', nodes:{'1':{x:32,y:32,label:'1'},'5':{x:50,y:18,label:'5'},'9':{x:70,y:36,label:'9'},'2':{x:42,y:58,label:'2'},'8':{x:62,y:58,label:'8'},'4':{x:47,y:80,label:'4'},'7':{x:58,y:80,label:'7'},'6':{x:54,y:94,label:'6'}}, edges:[['5','1'],['5','9'],['1','2'],['9','8'],['2','4'],['8','7'],['7','6']]},
+      {status:'最後 RL 後，剛查到的 5 成為根節點。', active:'5', nodes:{'5':{x:50,y:16,label:'5'},'1':{x:32,y:44,label:'1'},'9':{x:70,y:44,label:'9'},'2':{x:40,y:68,label:'2'},'8':{x:62,y:68,label:'8'},'4':{x:46,y:88,label:'4'},'7':{x:56,y:88,label:'7'},'6':{x:52,y:98,label:'6'}}, edges:[['5','1'],['5','9'],['1','2'],['9','8'],['2','4'],['8','7'],['7','6']]}
+    ],
+    topdown: [
+      {status:'Top-down 起點：splay node x=5，先準備 small 與 big 兩棵暫存樹。', active:'5', nodes:{'small':{x:14,y:18,label:'small'},'big':{x:86,y:18,label:'big'},'1':{x:46,y:12,label:'1'},'9':{x:70,y:30,label:'9'},'8':{x:55,y:48,label:'8'},'2':{x:38,y:40,label:'2'},'7':{x:55,y:66,label:'7'},'6':{x:47,y:80,label:'6'},'4':{x:34,y:68,label:'4'},'5':{x:42,y:92,label:'5'}}, edges:[['1','9'],['9','8'],['8','2'],['2','7'],['7','6'],['2','4'],['6','5']]},
+      {status:'沿搜尋路徑遇到 RL，先做轉換；小於 x 的節點逐步接到 small。', active:'5', nodes:{'small':{x:16,y:24,label:'small:1'},'big':{x:86,y:18,label:'big:9'},'2':{x:44,y:30,label:'2'},'8':{x:64,y:30,label:'8'},'7':{x:58,y:54,label:'7'},'6':{x:50,y:76,label:'6'},'4':{x:38,y:62,label:'4'},'5':{x:44,y:92,label:'5'}}, edges:[['2','8'],['8','7'],['7','6'],['2','4'],['6','5']]},
+      {status:'接著遇到 LR，較大的節點接到 big，較小的節點留給 small。', active:'5', nodes:{'small':{x:16,y:24,label:'small:1,2'},'big':{x:84,y:24,label:'big:8,9'},'6':{x:52,y:34,label:'6'},'7':{x:64,y:56,label:'7'},'4':{x:40,y:56,label:'4'},'5':{x:48,y:82,label:'5'}}, edges:[['6','4'],['6','7'],['4','5']]},
+      {status:'遇到 LL 時先旋轉，避免搜尋路徑繼續變斜。', active:'5', nodes:{'small':{x:17,y:24,label:'small:1,2,4'},'big':{x:84,y:24,label:'big:6,7,8,9'},'5':{x:50,y:60,label:'5'}}, edges:[]},
+      {status:'遇到 RR 時也先旋轉；現在已接近 splay node。', active:'5', nodes:{'small':{x:18,y:30,label:'small'},'big':{x:82,y:30,label:'big'},'5':{x:50,y:50,label:'x=5'}}, edges:[]},
+      {status:'到達 splay node x=5：small 裡都小於 5，big 裡都大於 5。', active:'5', nodes:{'small':{x:22,y:42,label:'small'},'5':{x:50,y:24,label:'5'},'big':{x:78,y:42,label:'big'}}, edges:[['5','small'],['5','big']]},
+      {status:'最後把 small 接到 x 左邊、big 接到 x 右邊，得到以 5 為根的新搜尋樹。', active:'5', nodes:{'5':{x:50,y:16,label:'5'},'1':{x:32,y:44,label:'1'},'9':{x:70,y:44,label:'9'},'2':{x:40,y:68,label:'2'},'8':{x:62,y:68,label:'8'},'4':{x:46,y:88,label:'4'},'7':{x:56,y:88,label:'7'},'6':{x:52,y:98,label:'6'}}, edges:[['5','1'],['5','9'],['1','2'],['9','8'],['2','4'],['8','7'],['7','6']]}
+    ]
+  };
+  const build = () => { player = new Player(cases[current], s => { drawBinary(stage, s.nodes, s.edges, {active:s.active}); setText(statusOf(stage), s.status); }); };
+  build();
+  stage.closest('section').querySelectorAll('.preset-btn').forEach(btn => btn.onclick = () => {
+    stage.closest('section').querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active'); current = btn.dataset.case; build();
+  });
+  return { step:()=>player.step(), reset:()=>player.reset(), play:()=>player.play(), setDelay:d=>player.setDelay(d) };
 }
 
 function initMway(){
@@ -862,13 +907,26 @@ const btreeCases = {
     {status:'接著插入 518，右側葉節點變成 [493,506,511,518]，仍未超過容量。', items:[{x:50,y:20,keys:[395,430,480]},{x:22,y:72,keys:[380,382]},{x:42,y:72,keys:[406,412]},{x:62,y:72,keys:[451,472]},{x:82,y:72,keys:[493,506,511,518],cls:'active'}], links:[[[50,28],[22,63]],[[50,28],[42,63]],[[50,28],[62,63]],[[50,28],[82,63]]]},
     {status:'再插入 508，右側葉節點分裂，508 被提升到父節點。', items:[{x:50,y:20,keys:[395,430,480,508],cls:'target'},{x:16,y:72,keys:[380,382]},{x:35,y:72,keys:[406,412]},{x:54,y:72,keys:[451,472]},{x:72,y:72,keys:[493,506]},{x:90,y:72,keys:[511,518]}], links:[[[50,28],[16,63]],[[50,28],[35,63]],[[50,28],[54,63]],[[50,28],[72,63]],[[50,28],[90,63]]]}
   ],
-  delete: [
-    {status:'刪除情境：葉節點 [90,113] 中要刪掉 113。', items:[{x:50,y:18,keys:[80,120,150]},{x:32,y:62,keys:[90,113],cls:'active'},{x:60,y:62,keys:[126,135,142]}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]},
-    {status:'刪除 113 後只剩 [90]，鍵值太少，先檢查相鄰兄弟能不能借。', items:[{x:50,y:18,keys:[80,120,150]},{x:32,y:62,keys:[90],cls:'target'},{x:60,y:62,keys:[126,135,142],cls:'active'}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]},
-    {status:'兄弟節點有多餘鍵值，可以借用；父節點的 120 會下來補左葉。', items:[{x:50,y:18,keys:[80,120,150],cls:'active'},{x:32,y:62,keys:[90],cls:'target'},{x:60,y:62,keys:[126,135,142],cls:'active'}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]},
-    {status:'借用/旋轉完成：左葉變成 [90,120]，兄弟的 126 上升更新父節點。', items:[{x:50,y:18,keys:[80,126,150],cls:'target'},{x:32,y:62,keys:[90,120]},{x:60,y:62,keys:[135,142]}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]},
-    {status:'另一種情境：若兄弟節點也無法借，就把父節點鍵值拉下來合併。', items:[{x:50,y:18,keys:[80,150],cls:'target'},{x:34,y:62,keys:[68,73]},{x:62,y:62,keys:[90,126,135,142],cls:'active'}], links:[[[50,26],[34,52]],[[50,26],[62,52]]]},
-    {status:'合併可能一路傳到根節點；若根節點只剩一個鍵值且被合併，樹高下降。', items:[{x:50,y:18,keys:[60,300],cls:'target'},{x:32,y:62,keys:[30,50]},{x:65,y:62,keys:[150,180,220,280],cls:'active'}], links:[[[50,26],[32,52]],[[50,26],[65,52]]]}
+  'delete-rotation': [
+    {status:'刪除 113 前：左葉 [90,113] 與右兄弟 [126,135,142] 共享父鍵 120。', items:[{x:50,y:18,keys:[80,120,150]},{x:32,y:62,keys:[90,113],cls:'active'},{x:60,y:62,keys:[126,135,142]}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]},
+    {status:'刪除 113 後只剩 [90]，低於最少鍵值，先檢查兄弟能不能借。', items:[{x:50,y:18,keys:[80,120,150]},{x:32,y:62,keys:[90],cls:'target'},{x:60,y:62,keys:[126,135,142],cls:'active'}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]},
+    {status:'Rotation：父鍵 120 下移到不足節點，兄弟最小鍵 126 上移到父節點。', items:[{x:50,y:18,keys:[80,120,150],cls:'active'},{x:32,y:62,keys:[90,120],cls:'target'},{x:60,y:62,keys:[126,135,142],cls:'active'}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]},
+    {status:'借用完成：父節點變 [80,126,150]，兩個葉節點都恢復合法容量。', items:[{x:50,y:18,keys:[80,126,150],cls:'target'},{x:32,y:62,keys:[90,120]},{x:60,y:62,keys:[135,142]}], links:[[[50,26],[32,52]],[[50,26],[60,52]]]}
+  ],
+  'delete-combine': [
+    {status:'刪除 120 前：目標葉節點與兄弟都沒有多餘鍵值可借。', items:[{x:50,y:18,keys:[80,126,150]},{x:34,y:62,keys:[68,73]},{x:62,y:62,keys:[90,120],cls:'active'},{x:82,y:62,keys:[135,142]}], links:[[[50,26],[34,52]],[[50,26],[62,52]],[[50,26],[82,52]]]},
+    {status:'Combination：刪除 120 後，把父鍵 126 拉下來，和兄弟鍵值合併。', items:[{x:50,y:18,keys:[80,150],cls:'target'},{x:34,y:62,keys:[68,73]},{x:62,y:62,keys:[90,126,135,142],cls:'active'}], links:[[[50,26],[34,52]],[[50,26],[62,52]]]},
+    {status:'合併後父節點少一個鍵，若父節點仍有足夠鍵值，刪除就停止。', items:[{x:50,y:18,keys:[80,150]},{x:34,y:62,keys:[68,73]},{x:62,y:62,keys:[90,126,135,142],cls:'target'}], links:[[[50,26],[34,52]],[[50,26],[62,52]]]}
+  ],
+  'delete-parent-rotate': [
+    {status:'刪除 65 後，底層節點不足，先與兄弟合併；不足會傳到父層。', items:[{x:50,y:12,keys:[60,170]},{x:28,y:42,keys:[30,50]},{x:50,y:42,keys:[80,150],cls:'active'},{x:76,y:42,keys:[180,220,280]},{x:38,y:76,keys:[72],cls:'target'},{x:56,y:76,keys:[87,96]}], links:[[[50,20],[28,34]],[[50,20],[50,34]],[[50,20],[76,34]],[[50,50],[38,68]],[[50,50],[56,68]]]},
+    {status:'父層可以向右兄弟借：170 下移到中間子樹，180 上移到根。', items:[{x:50,y:12,keys:[60,180],cls:'target'},{x:28,y:42,keys:[30,50]},{x:50,y:42,keys:[150,170],cls:'active'},{x:76,y:42,keys:[220,280]},{x:40,y:76,keys:[72,80,87,96]},{x:58,y:76,keys:[153,162]}], links:[[[50,20],[28,34]],[[50,20],[50,34]],[[50,20],[76,34]],[[50,50],[40,68]],[[50,50],[58,68]]]},
+    {status:'combine then rotate 完成：底層和父層都恢復容量，樹高不變。', items:[{x:50,y:12,keys:[60,180]},{x:28,y:42,keys:[30,50]},{x:50,y:42,keys:[150,170],cls:'target'},{x:76,y:42,keys:[220,280]},{x:40,y:76,keys:[72,80,87,96]},{x:58,y:76,keys:[153,162]},{x:76,y:76,keys:[187,202]}], links:[[[50,20],[28,34]],[[50,20],[50,34]],[[50,20],[76,34]],[[50,50],[40,68]],[[50,50],[58,68]],[[76,50],[76,68]]]}
+  ],
+  'delete-double-combine': [
+    {status:'刪除 173 前：底層不足後，父層也可能不足。', items:[{x:50,y:12,keys:[60,180,300]},{x:30,y:42,keys:[30,50]},{x:50,y:42,keys:[150,170]},{x:70,y:42,keys:[220,280]},{x:54,y:76,keys:[173,178],cls:'active'},{x:70,y:76,keys:[187,202]}], links:[[[50,20],[30,34]],[[50,20],[50,34]],[[50,20],[70,34]],[[50,50],[54,68]],[[70,50],[70,68]]]},
+    {status:'第一個 combination：刪除 173 後與兄弟合併，父節點失去分隔鍵。', items:[{x:50,y:12,keys:[60,180,300]},{x:30,y:42,keys:[30,50]},{x:50,y:42,keys:[150,170],cls:'target'},{x:70,y:42,keys:[220,280]},{x:62,y:76,keys:[153,162,170,178],cls:'active'},{x:78,y:76,keys:[187,202]}], links:[[[50,20],[30,34]],[[50,20],[50,34]],[[50,20],[70,34]],[[50,50],[62,68]],[[70,50],[78,68]]]},
+    {status:'第二個 combination 傳到父層：根從 [60,180,300] 變成 [60,300]。', items:[{x:50,y:14,keys:[60,300],cls:'target'},{x:32,y:58,keys:[30,50]},{x:65,y:58,keys:[150,180,220,280],cls:'active'},{x:54,y:86,keys:[153,162,170,178]},{x:82,y:86,keys:[187,202]}], links:[[[50,22],[32,48]],[[50,22],[65,48]],[[65,66],[54,78]],[[65,66],[82,78]]]}
   ]
 };
 function initBtree(){
@@ -883,23 +941,49 @@ function initBtree(){
 }
 
 function initBplus(){
-  const stage = $('stage-bplus');
-  const steps = [
-    {status:'內部節點只做索引，資料記錄都放在葉節點。', scan:[], active:['A']},
-    {status:'查找範圍 16 到 72：先經過根節點 [20,40] 找第一個可能葉節點。', scan:['L1'], active:['A','B']},
-    {status:'到葉節點後，不用回根節點，沿著葉節點串列往右掃。', scan:['L1','L2'], active:['B','C']},
-    {status:'繼續掃到超過 72 為止，範圍掃描主要走葉節點連結。', scan:['L1','L2','L3'], active:['C','D']},
-    {status:'這就是 B+ 樹很適合資料庫範圍查詢的原因。', scan:['L1','L2','L3'], active:['A']}
-  ];
-  const items = [
+  const stage = $('stage-bplus'); let current = 'range'; let player;
+  const links3 = [[[50,24],[24,36]],[[50,24],[50,36]],[[50,24],[76,36]],[[24,50],[20,68]],[[50,50],[50,68]],[[76,50],[80,68]],[[32,76],[38,76],'t-edge active'],[[65,76],[70,76],'t-edge active']];
+  const base3 = [
     {id:'A',x:50,y:16,keys:[20,40]}, {id:'B',x:24,y:42,keys:[10]}, {id:'C',x:50,y:42,keys:[30]}, {id:'D',x:76,y:42,keys:[70,80]},
     {id:'L1',type:'leaf',x:20,y:76,keys:[2,4,6,12,16,18]}, {id:'L2',type:'leaf',x:50,y:76,keys:[20,25,32,36,40,50,60]}, {id:'L3',type:'leaf',x:80,y:76,keys:[71,72,80,82,84]}
   ];
-  const links = [[[50,24],[24,36]],[[50,24],[50,36]],[[50,24],[76,36]],[[24,50],[20,68]],[[50,50],[50,68]],[[76,50],[80,68]],[[32,76],[38,76],'t-edge active'],[[65,76],[70,76],'t-edge active']];
-  return new Player(steps, s => {
-    drawMulti(stage, items.map(it => Object.assign({}, it, {cls:(s.scan||[]).includes(it.id)?'scan':(s.active||[]).includes(it.id)?'active':''})), links);
-    setText(statusOf(stage), s.status);
+  const mark = (items, ids, cls) => items.map(it => Object.assign({}, it, ids.includes(it.id) ? {cls} : {}));
+  const cases = {
+    range: [
+      {status:'內部節點只做索引，資料記錄都放在葉節點。', items:mark(base3,['A'],'active'), links:links3},
+      {status:'查找範圍 16 到 72：先經過根節點 [20,40] 找第一個可能葉節點。', items:mark(base3,['A','B','L1'],'active'), links:links3},
+      {status:'到葉節點後，不用回根節點，沿著葉節點串列往右掃。', items:mark(base3,['L1','L2'],'scan'), links:links3},
+      {status:'繼續掃到超過 72 為止，範圍掃描主要走葉節點連結。', items:mark(base3,['L1','L2','L3'],'scan'), links:links3},
+      {status:'這就是 B+ 樹很適合資料庫範圍查詢的原因。', items:mark(base3,['A'],'active'), links:links3}
+    ],
+    'insert-split': [
+      {status:'插入 14 前：14 應放入第一個資料節點 [2,4,6,12,16,18]。', items:mark(base3,['L1'],'active'), links:links3},
+      {status:'插入 14 後葉節點超過容量，分裂成 [2,4,6,12,14] 與 [16,18]。', items:[{id:'A',x:50,y:16,keys:[20,40]},{id:'B',x:22,y:42,keys:[10,16],cls:'target'},{id:'C',x:50,y:42,keys:[30]},{id:'D',x:76,y:42,keys:[70,80]},{id:'L1',type:'leaf',x:16,y:76,keys:[2,4,6,12,14],cls:'active'},{id:'L1b',type:'leaf',x:38,y:76,keys:[16,18],cls:'active'},{id:'L2',type:'leaf',x:58,y:76,keys:[20,25,32,36,40,50,60]},{id:'L3',type:'leaf',x:84,y:76,keys:[71,72,80,82,84]}], links:[[[50,24],[22,36]],[[50,24],[50,36]],[[50,24],[76,36]],[[22,50],[16,68]],[[22,50],[38,68]],[[50,50],[58,68]],[[76,50],[84,68]],[[27,76],[31,76],'t-edge active']]},
+      {status:'新葉節點的第一個鍵 16 被複製到父層索引，使搜尋能導向新資料節點。', items:[{id:'A',x:50,y:16,keys:[20,40]},{id:'B',x:22,y:42,keys:[10,16],cls:'target'},{id:'C',x:50,y:42,keys:[30]},{id:'D',x:76,y:42,keys:[70,80]},{id:'L1',type:'leaf',x:16,y:76,keys:[2,4,6,12,14]},{id:'L1b',type:'leaf',x:38,y:76,keys:[16,18]},{id:'L2',type:'leaf',x:58,y:76,keys:[20,25,32,36,40,50,60]},{id:'L3',type:'leaf',x:84,y:76,keys:[71,72,80,82,84]}], links:[[[50,24],[22,36]],[[50,24],[50,36]],[[50,24],[76,36]],[[22,50],[16,68]],[[22,50],[38,68]],[[50,50],[58,68]],[[76,50],[84,68]],[[27,76],[31,76],'t-edge active']]},
+      {status:'插入 86 時，最後一個資料節點 [71,72,80,82,84] 也會分裂。', items:[{id:'G',x:50,y:8,keys:[40]},{id:'A',x:34,y:28,keys:[20]},{id:'F',x:70,y:28,keys:[80],cls:'target'},{id:'D',x:70,y:50,keys:[70,84]},{id:'E',type:'leaf',x:78,y:82,keys:[84,86],cls:'active'},{id:'L3',type:'leaf',x:58,y:82,keys:[71,72,80,82],cls:'active'}], links:[[[50,16],[34,22]],[[50,16],[70,22]],[[70,36],[70,44]],[[70,58],[58,74]],[[70,58],[78,74]],[[66,82],[70,82],'t-edge active']]},
+      {status:'插入 86 完成：分隔鍵 84 更新到上層索引，B+ 樹仍然所有資料都在葉節點。', items:[{id:'G',x:50,y:8,keys:[40]},{id:'A',x:34,y:28,keys:[20]},{id:'F',x:70,y:28,keys:[80]},{id:'D',x:60,y:50,keys:[70]},{id:'E',x:80,y:50,keys:[84],cls:'target'},{id:'L3',type:'leaf',x:56,y:82,keys:[71,72,80,82]},{id:'L4',type:'leaf',x:82,y:82,keys:[84,86]}], links:[[[50,16],[34,22]],[[50,16],[70,22]],[[70,36],[60,44]],[[70,36],[80,44]],[[60,58],[56,74]],[[80,58],[82,74]],[[68,82],[70,82],'t-edge active']]}
+    ],
+    'delete-borrow-combine': [
+      {status:'刪除 71 前：資料節點 [71,72,80,82,84] 可從相鄰葉節點借用後修正父層分隔鍵。', items:mark(base3,['L3'],'active'), links:links3},
+      {status:'刪除 71 後，父層右側分隔鍵由 80 更新成 82，這是 borrow 情境。', items:[{id:'A',x:50,y:16,keys:[20,40]},{id:'B',x:24,y:42,keys:[10]},{id:'C',x:50,y:42,keys:[30]},{id:'D',x:76,y:42,keys:[70,82],cls:'target'},{id:'L1',type:'leaf',x:20,y:76,keys:[2,4,6,12,16,18]},{id:'L2',type:'leaf',x:50,y:76,keys:[20,25,32,36,40,50,60]},{id:'L3',type:'leaf',x:80,y:76,keys:[72,80,82,84],cls:'active'}], links:links3},
+      {status:'刪除 80 時，葉節點不足且無法借，改用 combine 合併資料節點。', items:[{id:'A',x:50,y:16,keys:[20,40]},{id:'B',x:24,y:42,keys:[10]},{id:'C',x:50,y:42,keys:[30]},{id:'D',x:76,y:42,keys:[70],cls:'target'},{id:'L1',type:'leaf',x:20,y:76,keys:[2,4,6,12,16,18]},{id:'L2',type:'leaf',x:50,y:76,keys:[20,25,32,36,40,50,60]},{id:'L3',type:'leaf',x:80,y:76,keys:[72,82,84],cls:'active'}], links:links3},
+      {status:'合併後父層索引刪掉或更新，葉節點串列仍維持排序連結。', items:[{id:'A',x:50,y:16,keys:[20,40]},{id:'B',x:24,y:42,keys:[10]},{id:'C',x:50,y:42,keys:[30]},{id:'D',x:76,y:42,keys:[70],cls:'target'},{id:'L1',type:'leaf',x:20,y:76,keys:[2,4,6,12,16,18]},{id:'L2',type:'leaf',x:50,y:76,keys:[20,25,32,36,40,50,60]},{id:'L3',type:'leaf',x:80,y:76,keys:[72,82,84],cls:'scan'}], links:links3}
+    ],
+    'delete-deficient': [
+      {status:'刪除 32 前：以較大的 B+ 樹為例，C 葉節點含有 32。', items:[{id:'G',x:50,y:8,keys:[40]},{id:'A',x:34,y:28,keys:[20]},{id:'F',x:70,y:28,keys:[80]},{id:'C',type:'leaf',x:44,y:80,keys:[20,25,32,36],cls:'active'},{id:'D',type:'leaf',x:62,y:80,keys:[40,50,60,71,72]},{id:'E',type:'leaf',x:82,y:80,keys:[80,82,84,86]}], links:[[[50,16],[34,22]],[[50,16],[70,22]],[[34,36],[44,72]],[[70,36],[62,72]],[[70,36],[82,72]]]},
+      {status:'刪除 32 後 C is deficient，先嘗試從左兄弟 B 借用。', items:[{id:'G',x:50,y:8,keys:[40]},{id:'A',x:34,y:28,keys:[20],cls:'target'},{id:'F',x:70,y:28,keys:[80]},{id:'B',type:'leaf',x:24,y:80,keys:[2,4,6,12,14,16,18],cls:'active'},{id:'C',type:'leaf',x:46,y:80,keys:[20,25,36],cls:'target'},{id:'D',type:'leaf',x:68,y:80,keys:[40,50,60,71,72]}], links:[[[50,16],[34,22]],[[50,16],[70,22]],[[34,36],[24,72]],[[34,36],[46,72]],[[70,36],[68,72]]]},
+      {status:'After borrowing from B：分隔鍵由 20 更新成 16，C 恢復合法容量。', items:[{id:'G',x:50,y:8,keys:[40]},{id:'A',x:34,y:28,keys:[16],cls:'target'},{id:'F',x:70,y:28,keys:[80]},{id:'B',type:'leaf',x:24,y:80,keys:[2,4,6,12,14]},{id:'C',type:'leaf',x:46,y:80,keys:[16,18,20,25,36],cls:'active'},{id:'D',type:'leaf',x:68,y:80,keys:[40,50,60,71,72]}], links:[[[50,16],[34,22]],[[50,16],[70,22]],[[34,36],[24,72]],[[34,36],[46,72]],[[70,36],[68,72]]]},
+      {status:'刪除 86 時，E becomes deficient，若不能借就和相鄰葉節點 combine。', items:[{id:'G',x:50,y:8,keys:[40]},{id:'A',x:34,y:28,keys:[20]},{id:'F',x:70,y:28,keys:[80],cls:'target'},{id:'D',type:'leaf',x:62,y:80,keys:[40,50,60,71,72]},{id:'E',type:'leaf',x:84,y:80,keys:[80,82,84],cls:'active'}], links:[[[50,16],[34,22]],[[50,16],[70,22]],[[70,36],[62,72]],[[70,36],[84,72]]]},
+      {status:'刪除 86 後可能讓 F 也不足，最後把 A,G,F 合併回較矮的索引層。', items:[{id:'A',x:50,y:16,keys:[20,40],cls:'target'},{id:'B',x:24,y:42,keys:[10]},{id:'C',x:50,y:42,keys:[30]},{id:'D',x:76,y:42,keys:[70,80]},{id:'L1',type:'leaf',x:20,y:76,keys:[2,4,6,12,14,16,18]},{id:'L2',type:'leaf',x:50,y:76,keys:[20,25,32,36,40,50,60]},{id:'L3',type:'leaf',x:80,y:76,keys:[71,72,80,82,84]}], links:links3}
+    ]
+  };
+  const build = () => { player = new Player(cases[current], s => { drawMulti(stage, s.items, s.links); setText(statusOf(stage), s.status); }); };
+  build();
+  stage.closest('section').querySelectorAll('.preset-btn').forEach(btn => btn.onclick = () => {
+    stage.closest('section').querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active'); current = btn.dataset.case; build();
   });
+  return { step:()=>player.step(), reset:()=>player.reset(), play:()=>player.play(), setDelay:d=>player.setDelay(d) };
 }
 
 const inits = { cost:initCost, obst:initObst, avl:initAvl, rb:initRb, splay:initSplay, mway:initMway, btree:initBtree, bplus:initBplus };
