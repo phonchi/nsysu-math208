@@ -937,7 +937,9 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <div class="info-box">
     <span class="info-label">高度與節點數的關係</span>
-    完美平衡二元樹（每層填滿）有 $2^{h+1}-1$ 個節點，所以 $h \approx \log_2 n$。<br>
+    完美平衡二元樹的意思是：每個節點的 left subtree 和 right subtree 節點數相同（或只差 1），所以每往下一層，剩下要搜尋的子樹大小大約減半。若樹高是 $h$，每層填滿時節點數為
+    $$1+2+4+\cdots+2^h=2^{h+1}-1.$$
+    因此 $n \approx 2^{h+1}$，也就是 $h \approx \log_2 n$。換句話說，<code>put()</code> 不會拜訪整棵樹，而是從 root 開始，每次比較後只往左或往右其中一邊走；在 balanced binary tree 中，最多走約 $\log_2 n$ 層，所以 worst-case performance 是 $O(\log_2 n)$。<br>
     若 keys 隨機插入，高度期望也是 $O(\log n)$，因為大概一半 key 進左、一半進右。<br>
     但<strong>最差情況 $h = n - 1$</strong> —— 把已排序 keys 依序插入就會發生：每個新節點都比當前所有節點大（或小），永遠落到右（或左）這一支，BST 退化成連結串列。
   </div>
