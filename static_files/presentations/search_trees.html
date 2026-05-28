@@ -623,15 +623,25 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <table class="cmp-table">
     <thead><tr><th>結構</th><th>核心想法</th><th>典型成本</th><th>適合場景</th></tr></thead>
     <tbody>
-      <tr><td>普通 BST</td><td>左小右大</td><td>平均可好，最壞 $O(n)$</td><td>概念基礎、小型資料</td></tr>
-      <tr><td>最佳 BST</td><td>依搜尋機率安排根節點</td><td>建表 $O(n^3)$</td><td>已知查詢分布且資料較靜態</td></tr>
-      <tr><td>AVL 樹</td><td>嚴格高度平衡</td><td>搜尋/插入/刪除 $O(\log n)$</td><td>搜尋很多、想要低高度</td></tr>
-      <tr><td>紅黑樹</td><td>用著色規則放寬平衡</td><td>搜尋/插入/刪除 $O(\log n)$</td><td>標準函式庫的有序映射與集合</td></tr>
-      <tr><td>伸展樹</td><td>操作後把目標拉到根節點</td><td>攤銷 $O(\log n)$</td><td>有局部性的查詢序列</td></tr>
-      <tr><td>B 樹</td><td>高分支、節點半滿、葉同層</td><td>$O(\log N)$，高度很小</td><td>磁碟與資料庫索引</td></tr>
-      <tr><td>B+ 樹</td><td>資料在葉節點，葉節點串接</td><td>搜尋 $O(\log N)$，範圍掃描快</td><td>資料庫範圍查詢、檔案系統索引</td></tr>
+      <tr><td>普通 BST</td><td>左小右大</td><td>平均可好，最壞 $O(n)$</td><td>教學概念、資料量小、或輸入順序已隨機；不適合需要最壞情況保證的核心索引。</td></tr>
+      <tr><td>最佳 BST</td><td>依搜尋機率安排根節點</td><td>建表 $O(n^3)$</td><td>查詢分布穩定、資料幾乎不更新；例如固定字典、編譯器關鍵字表。</td></tr>
+      <tr><td>AVL 樹</td><td>嚴格高度平衡</td><td>搜尋/插入/刪除 $O(\log n)$</td><td>搜尋遠多於更新、需要穩定低高度；例如記憶體中的符號表、需控制查詢延遲的集合。</td></tr>
+      <tr><td>紅黑樹</td><td>用著色規則放寬平衡</td><td>搜尋/插入/刪除 $O(\log n)$</td><td>插入刪除頻繁且仍要 $O(\log n)$ 保證；例如標準函式庫的 map/set、事件集合。</td></tr>
+      <tr><td>伸展樹</td><td>操作後把目標拉到根節點</td><td>攤銷 $O(\log n)$</td><td>有快取局部性，最近查過的鍵很可能再查；例如互動式編輯器、快取表，但單次操作最壞仍可能很慢。</td></tr>
+      <tr><td>B 樹</td><td>高分支、節點半滿、葉同層</td><td>$O(\log N)$，高度很小</td><td>磁碟頁面或區塊存取昂貴；一個節點可對應一頁，降低樹高，適合檔案系統與資料庫索引。</td></tr>
+      <tr><td>B+ 樹</td><td>資料在葉節點，葉節點串接</td><td>搜尋 $O(\log N)$，範圍掃描快</td><td>大量範圍查詢與順序掃描；葉節點串列讓區間查詢、排序輸出、資料庫索引掃描有效率。</td></tr>
     </tbody>
   </table>
+  <div class="rule-grid">
+    <div class="rule-card"><strong>怎麼選：查詢機率已知</strong><p>如果鍵集合固定，而且每個鍵被搜尋的機率可事先估計，最佳 BST 的目標是讓常查的鍵更靠近根。</p></div>
+    <div class="rule-card"><strong>怎麼選：記憶體內的一般集合</strong><p>若需要一般用途的有序集合，紅黑樹常是實務預設；若搜尋比例很高、希望高度更緊，AVL 樹較合適。</p></div>
+    <div class="rule-card"><strong>怎麼選：近期資料重複使用</strong><p>如果操作序列有快取局部性，伸展樹會把最近用到的資料拉到根附近，用多次操作的平均效果換取彈性。</p></div>
+    <div class="rule-card"><strong>怎麼選：資料在外部儲存</strong><p>若主要成本是讀寫磁碟頁面或 SSD 區塊，不應只追求二元樹高度；B 樹與 B+ 樹用高分支節點減少 I/O 次數。</p></div>
+  </div>
+  <div class="info-box">
+    <div class="box-label">選型口訣</div>
+    資料全在記憶體且要一般用途，先想到紅黑樹；搜尋遠多於更新，考慮 AVL 樹；查詢分布固定且資料很少更新，考慮最佳 BST；資料大到需要頁面或區塊存取，先想到 B 樹或 B+ 樹；範圍掃描很多時，B+ 樹通常比只存內部鍵值的 B 樹更合適。
+  </div>
   <div class="info-box red">
     <div class="box-label">考前自我檢查</div>
     若題目問「為何高度是對數」，回答 AVL/紅黑/B 樹的高度限制；若題目問「為何平均成本較小」，回答搜尋機率與最佳 BST；若題目問「為何資料庫索引不用普通 BST」，回答磁碟 I/O 與 B/B+ 樹的大分支節點。
