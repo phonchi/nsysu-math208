@@ -1441,6 +1441,8 @@ function initBST(suffix = '', lockedOp = null) {
   }
 
   function rebuild() {
+    if (player) player.stop();
+    player = null;
     const raw = $$('bstInitInput').value.split(/[\s,]+/).map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
     root = buildBST(raw);
     render(null, null, `已建立 BST（${raw.length} 個 keys）`);
@@ -1464,9 +1466,21 @@ function initBST(suffix = '', lockedOp = null) {
     btn.onclick = () => {
       const k = parseInt($$('bstOpKey').value, 10);
       if (isNaN(k)) return;
-      startOp(btn.dataset.bstop, k);
+      startOp(btn.dataset.bstop, k, false);
     };
   });
+  const bstPlayBtn = $$('bstPlay');
+  if (bstPlayBtn) {
+    bstPlayBtn.onclick = () => {
+      const k = parseInt($$('bstOpKey').value, 10);
+      if (isNaN(k)) return;
+      if (!player || player.idx >= player.steps.length - 1) {
+        startOp(currentBstOp, k, true);
+      } else {
+        player.play();
+      }
+    };
+  }
   $$('bstApplyInit').onclick = rebuild;
   $$('bstShuffle').onclick = () => {
     const arr = $$('bstInitInput').value.split(/[\s,]+/).map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
@@ -1659,6 +1673,8 @@ function initBSTDelete(suffix = '') {
   }
 
   function rebuild() {
+    if (player) player.stop();
+    player = null;
     const raw = $$('delInitInput').value.split(/[\s,]+/).map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
     root = buildBST(raw);
     render({});
@@ -1697,7 +1713,7 @@ function initBSTDelete(suffix = '') {
     btn.onclick = () => {
       $$('delKey').value = btn.dataset.delk;
       rebuild();
-      setTimeout(startDel, 50);
+      prepareDel();
     };
   });
 

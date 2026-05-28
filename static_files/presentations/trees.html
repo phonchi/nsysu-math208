@@ -797,10 +797,11 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <div class="input-row">
           <label>操作 key：</label>
           <input type="number" id="bstOpKey" value="40" style="width:80px;">
-          <button class="btn btn-play" data-bstop="put">put (插入)</button>
-          <button class="btn btn-play" data-bstop="get" style="background:var(--accent2);">get (搜尋)</button>
+          <button class="btn btn-toggle" data-bstop="put">put (插入)</button>
+          <button class="btn btn-toggle" data-bstop="get" style="background:var(--accent2);">get (搜尋)</button>
         </div>
         <div class="controls-bar">
+          <button class="btn btn-play" id="bstPlay">▶ 播放</button>
           <button class="btn btn-step" id="bstStep">→ 單步</button>
           <button class="btn btn-reset" id="bstReset">↺ 重置</button>
           <div style="flex:1;min-width:160px;display:flex;align-items:center;gap:.5rem;">
@@ -2538,6 +2539,8 @@ function initBST() {
   }
 
   function rebuild() {
+    if (player) player.stop();
+    player = null;
     const raw = $('bstInitInput').value.split(/[\s,]+/).map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
     root = buildBST(raw);
     render(null, null, `已建立 BST（${raw.length} 個 keys）`);
@@ -2553,9 +2556,18 @@ function initBST() {
     btn.onclick = () => {
       const k = parseInt($('bstOpKey').value, 10);
       if (isNaN(k)) return;
-      startOp(btn.dataset.bstop, k);
+      startOp(btn.dataset.bstop, k, false);
     };
   });
+  $('bstPlay').onclick = () => {
+    const k = parseInt($('bstOpKey').value, 10);
+    if (isNaN(k)) return;
+    if (!player || player.idx >= player.steps.length - 1) {
+      startOp(currentBstOp, k, true);
+    } else {
+      player.play();
+    }
+  };
   $('bstApplyInit').onclick = rebuild;
   $('bstShuffle').onclick = () => {
     const arr = $('bstInitInput').value.split(/[\s,]+/).map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
@@ -2743,6 +2755,8 @@ function initBSTDelete() {
   }
 
   function rebuild() {
+    if (player) player.stop();
+    player = null;
     const raw = $('delInitInput').value.split(/[\s,]+/).map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
     root = buildBST(raw);
     render({});
@@ -2753,25 +2767,34 @@ function initBSTDelete() {
     $('delPhase').textContent = '—';
   }
 
-  function startDel() {
+  function prepareDel() {
     const k = parseInt($('delKey').value, 10);
-    if (isNaN(k)) return;
+    if (isNaN(k)) return false;
     if (player) player.stop();
     const steps = genDeleteSteps(k);
     player = new Player({ steps, apply: applyStep, delay: 800 });
     player.reset();
-    player.play();
+    return true;
+  }
+
+  function startDel() {
+    if (prepareDel()) player.play();
   }
 
   $('delApplyInit').onclick = rebuild;
   $('delPlay').onclick = startDel;
-  $('delStep').onclick = () => { if (!player) startDel(); else player.step(); };
+  $('delStep').onclick = () => {
+    if (!player) {
+      if (!prepareDel()) return;
+    }
+    player.step();
+  };
   $('delReset').onclick = rebuild;
   document.querySelectorAll('#bst-delete .preset-btn[data-delk]').forEach(btn => {
     btn.onclick = () => {
       $('delKey').value = btn.dataset.delk;
       rebuild();
-      setTimeout(startDel, 50);
+      prepareDel();
     };
   });
 
