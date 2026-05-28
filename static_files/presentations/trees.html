@@ -735,7 +735,20 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <div class="info-box green">
     <span class="info-label">為什麼 heapify 是 O(n) 而不是 O(n log n)？</span>
-    Naïve 想法是對 $n$ 個元素逐一 <code>insert</code>，每個 $O(\log n)$，總共 $O(n \log n)$。但 <code>heapify</code> 從<strong>陣列中間 $\lfloor n/2 \rfloor - 1$ 倒著做 perc_down</strong>：底層大量節點高度只有 0 或 1，往下移的成本很小。嚴謹分析會用 $\sum_{h=0}^{\log n} \frac{n}{2^{h+1}} \cdot h = O(n)$。直觀上：<strong>樹底層節點多但移動少，頂層節點少但移動多，兩者相乘的總和是 $O(n)$</strong>。
+    Naïve 想法是對 $n$ 個元素逐一 <code>insert</code>，每個 $O(\log n)$，總共 $O(n \log n)$。但 <code>heapify</code> 不是反覆插入；它從<strong>最後一個非葉節點 $\lfloor n/2 \rfloor - 1$ 倒著做 perc_down</strong>。證明如下：
+    <ol style="margin:.55rem 0 0 1.3rem;line-height:1.8;">
+      <li>一個節點往下 <code>perc_down</code> 的成本，最多正比於它的高度 $h$，因為每往下一層只做常數次比較與交換。</li>
+      <li>在 complete binary tree 中，高度為 $h$ 的節點數最多是 $\left\lceil n/2^{h+1} \right\rceil$。也就是說，靠近底層的節點很多，但高度很小；靠近 root 的節點高度大，但數量很少。</li>
+      <li>因此總成本可由各高度分組估計：
+        \[
+        T(n) \le c\sum_{h=0}^{\lfloor \log n \rfloor} \frac{n}{2^{h+1}}\cdot h
+        = cn\sum_{h=0}^{\lfloor \log n \rfloor} \frac{h}{2^{h+1}}
+        \le cn\sum_{h=0}^{\infty} \frac{h}{2^{h+1}}
+        = cn = O(n).
+        \]
+      </li>
+    </ol>
+    直觀上：<strong>樹底層節點多但移動少，頂層節點少但移動多，兩者相乘的總和是線性的</strong>。所以 Floyd 的 bottom-up heapify 是 $O(n)$；若把必須處理整個輸入也算作下界，這個界是緊的，也就是 $\Theta(n)$。
   </div>
 
   <h3>應用：Heap Sort（堆排序）</h3>
