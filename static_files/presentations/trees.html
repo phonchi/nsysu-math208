@@ -631,6 +631,13 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <p><strong>Binary heap</strong> 的設計目標就是折衷這兩件事：不要求整個 list 完全排序，只維持足夠的局部順序，讓 <code>enqueue</code> 與 <code>dequeue</code> 都是 $O(\log n)$，而 <code>get-min</code> 可以是 $O(1)$。</p>
 
   <div class="info-box">
+    <span class="info-label">Priority queue 操作如何用 binary heap 實作？</span>
+    <strong><code>enqueue(x)</code>：</strong>把新元素 append 到陣列最後，然後一路和 parent 比較並 <code>perc_up</code>，成本 $O(\log n)$。<br>
+    <strong><code>dequeue()</code> / <code>delete-min</code>：</strong>取出 root，把最後一個元素搬到 root，再 <code>perc_down</code> 修復 heap order，成本 $O(\log n)$。<br>
+    <strong><code>change-priority(x, newKey)</code>：</strong>先更新 key；若 priority 變高（min-heap 中 key 變小）就 <code>perc_up</code>，若 priority 變低（key 變大）就 <code>perc_down</code>。若外部保留元素到 index 的對照表，調整成本是 $O(\log n)$；若沒有 index handle，還要先掃描找元素，總成本會變成 $O(n)$。
+  </div>
+
+  <div class="info-box">
     <span class="info-label">先看編號方式：Level-order traversal (BFS)</span>
     要把一棵樹放進陣列，最自然的編號方式是 <strong>level-order traversal</strong>，也就是 BFS：先拜訪 root，再由左到右拜訪第 1 層，接著由左到右拜訪第 2 層，依此類推。若用 0-based index 編號，root 是 0，下一層從左到右是 1、2，再下一層是 3、4、5、6。
     <br><br>
@@ -727,8 +734,10 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <div class="ic-title">複雜度</div>
         <div class="ic-row"><span class="ic-label">insert</span><span class="ic-value">$O(\log n)$</span></div>
         <div class="ic-row"><span class="ic-label">delete-min</span><span class="ic-value">$O(\log n)$</span></div>
+        <div class="ic-row"><span class="ic-label">change-priority</span><span class="ic-value">$O(\log n)$*</span></div>
         <div class="ic-row"><span class="ic-label">get-min</span><span class="ic-value highlight">$O(1)$</span></div>
         <div class="ic-row"><span class="ic-label">heapify</span><span class="ic-value highlight">$O(n)$</span></div>
+        <div style="margin-top:.35rem;font-size:.72rem;color:var(--muted);line-height:1.45;">*需已知道元素 index；否則先找元素會是 $O(n)$。</div>
       </div>
     </div>
   </div>
