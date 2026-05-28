@@ -740,12 +740,12 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       <li>一個節點往下 <code>perc_down</code> 的成本，最多正比於它的高度 $h$，因為每往下一層只做常數次比較與交換。</li>
       <li>在 complete binary tree 中，高度為 $h$ 的節點數最多是 $\left\lceil n/2^{h+1} \right\rceil$。也就是說，靠近底層的節點很多，但高度很小；靠近 root 的節點高度大，但數量很少。</li>
       <li>因此總成本可由各高度分組估計：
-        \[
+        $$
         T(n) \le c\sum_{h=0}^{\lfloor \log n \rfloor} \frac{n}{2^{h+1}}\cdot h
         = cn\sum_{h=0}^{\lfloor \log n \rfloor} \frac{h}{2^{h+1}}
         \le cn\sum_{h=0}^{\infty} \frac{h}{2^{h+1}}
         = cn = O(n).
-        \]
+        $$
       </li>
     </ol>
     直觀上：<strong>樹底層節點多但移動少，頂層節點少但移動多，兩者相乘的總和是線性的</strong>。所以 Floyd 的 bottom-up heapify 是 $O(n)$；若把必須處理整個輸入也算作下界，這個界是緊的，也就是 $\Theta(n)$。
