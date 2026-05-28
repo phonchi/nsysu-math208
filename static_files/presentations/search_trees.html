@@ -8,135 +8,170 @@
   MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
 </script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#f6f4ef;
-  --paper:#fffdf8;
-  --ink:#24211d;
-  --muted:#766f66;
-  --line:#ded7cd;
-  --card:#ffffff;
-  --accent:#b54538;
-  --accent2:#276b78;
-  --accent3:#587a38;
-  --accent4:#7a4f9a;
-  --code:#292521;
-  --node:#fff;
-  --node-border:#3e3830;
-  --active:#f2a23a;
-  --good:#2f8f66;
-  --bad:#c43d38;
-  --red:#e04b45;
-  --black:#2d2a27;
-  --shadow:0 10px 30px rgba(55,45,35,.11);
+:root {
+  --ink:#1a1a2e;--paper:#f7f3eb;--accent:#c0392b;--accent2:#2c3e7a;--accent3:#1a6b4a;
+  --muted:#8a8578;--card:#fffdf7;--card-border:#e8e2d6;--highlight:#fff3cd;
+  --code-bg:#2d2d3f;--code-fg:#e8e6df;
+  --node-default:#5b7eb8;--node-active:#f39c12;--node-visited:#27ae60;
+  --node-target:#16a085;--node-key:#e67e22;--node-parent:#8e44ad;
+  --node-current:#c0392b;--node-success:#27ae60;
+  --edge-default:#8a8578;--edge-active:#f39c12;--edge-visited:#27ae60;
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;line-height:1.65}
-body::before{content:"";position:fixed;inset:0;background:linear-gradient(135deg,rgba(181,69,56,.08),transparent 30%),linear-gradient(315deg,rgba(39,107,120,.08),transparent 35%);pointer-events:none;z-index:-1}
-a{color:inherit}
-code{font-family:"JetBrains Mono","Fira Code",Consolas,monospace;background:#f1ece4;padding:.08rem .28rem;border-radius:4px}
-.page{max-width:1180px;margin:0 auto;padding:0 1rem 5rem}
-.floating-nav{position:fixed;left:1rem;top:50%;transform:translateY(-50%);z-index:20;display:flex;flex-direction:column;gap:.35rem}
-.floating-nav a{display:flex;align-items:center;gap:.35rem;text-decoration:none;background:rgba(255,253,248,.94);border:1px solid var(--line);border-radius:8px;padding:.35rem .45rem;box-shadow:var(--shadow);font-size:.78rem;color:var(--muted)}
-.floating-nav a:hover,.floating-nav a.active{color:var(--ink);border-color:var(--accent)}
-.fn-num{font-family:"JetBrains Mono",monospace;color:var(--accent);font-weight:800}
-header.hero{min-height:92vh;display:flex;align-items:center;position:relative;padding:5rem 0 4rem}
-.hero-inner{max-width:900px}
-.eyebrow{font-family:"JetBrains Mono",monospace;color:var(--accent2);font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.78rem}
-h1{font-size:clamp(2.3rem,6vw,5.1rem);line-height:1.02;margin:.75rem 0 1rem;letter-spacing:0}
-.hero p{font-size:1.15rem;max-width:760px;color:var(--muted)}
-.big-formula{margin-top:2rem;font-size:clamp(1.15rem,2.4vw,2rem);font-weight:800;color:var(--accent)}
-.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.7rem;margin-top:2rem}
-.toc a{display:flex;gap:.6rem;align-items:center;text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:.75rem .85rem;box-shadow:var(--shadow)}
-.toc-num{font-family:"JetBrains Mono",monospace;color:var(--accent2);font-weight:800}
-section{padding:4.5rem 0;border-top:1px solid rgba(222,215,205,.75)}
-.section-number{font-family:"JetBrains Mono",monospace;font-size:.82rem;color:var(--accent3);font-weight:800;letter-spacing:.15em;margin-bottom:.5rem}
-h2{font-size:clamp(1.75rem,3.5vw,3rem);line-height:1.1;margin:.2rem 0 1rem;letter-spacing:0}
-h3{font-size:1.05rem;margin:.2rem 0 .75rem}
-.lead{font-size:1.05rem;color:var(--muted);max-width:880px}
-.grid-2{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.48fr);gap:1.2rem;align-items:start;margin-top:1.5rem}
-.viz-panel,.side-panel,.info-card{background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow)}
-.viz-panel{padding:1rem;overflow:hidden}
-.side-panel{padding:1rem}
-.info-card{padding:1rem;margin:1rem 0}
-.info-label{display:block;font-family:"JetBrains Mono",monospace;font-size:.75rem;font-weight:800;color:var(--accent2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.35rem}
-.stage{position:relative;width:100%;height:380px;background:#fbfaf6;border:1px solid #e7dfd4;border-radius:8px;overflow:hidden}
-.stage svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.nodes-layer{position:absolute;inset:0}
-.t-node{position:absolute;width:46px;height:46px;border-radius:50%;border:2px solid var(--node-border);background:var(--node);display:flex;align-items:center;justify-content:center;font-weight:800;transform:translate(-50%,-50%);transition:all .28s ease;box-shadow:0 5px 14px rgba(0,0,0,.08)}
-.t-node.small{width:32px;height:32px;font-size:.75rem}
-.t-node.active{background:var(--active);border-color:#9a5e10;color:#1f1a14;transform:translate(-50%,-50%) scale(1.08)}
-.t-node.path{background:#e7f3f5;border-color:var(--accent2)}
-.t-node.red{background:var(--red);border-color:#8f211d;color:#fff}
-.t-node.black{background:var(--black);border-color:#111;color:#fff}
-.t-node.external{background:#f0eee8;border-style:dashed;color:#8b8378}
-.t-edge{stroke:#9c9489;stroke-width:2}
-.t-edge.active{stroke:var(--active);stroke-width:4}
-.multi-node{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;border:2px solid #3b352e;border-radius:7px;background:#fff;box-shadow:0 6px 14px rgba(0,0,0,.08);transition:all .28s ease}
-.multi-node .key{min-width:38px;height:34px;display:flex;align-items:center;justify-content:center;border-right:1px solid #cfc7bc;font-weight:800;font-family:"JetBrains Mono",monospace}
-.multi-node .key:last-child{border-right:0}
-.multi-node.active{border-color:var(--active);background:#fff4dd;transform:translate(-50%,-50%) scale(1.04)}
-.multi-node.target{border-color:var(--good);background:#eaf7f1}
-.multi-node.under{border-color:var(--bad);background:#fff1ef}
-.leaf-row{position:absolute;height:42px;border:2px solid #3b352e;border-radius:7px;background:#fff;display:flex;align-items:center;transform:translate(-50%,-50%);box-shadow:0 6px 14px rgba(0,0,0,.08)}
-.leaf-row .record{min-width:34px;padding:.25rem .38rem;border-right:1px solid #cfc7bc;text-align:center;font-family:"JetBrains Mono",monospace;font-weight:800}
-.leaf-row .record:last-child{border-right:0}
-.leaf-row.active{border-color:var(--active);background:#fff4dd}
-.leaf-row.scan{border-color:var(--good);background:#eaf7f1}
-.status-banner{display:flex;gap:.5rem;align-items:center;min-height:42px;margin-top:.7rem;padding:.65rem .8rem;border-radius:8px;background:#292521;color:#fff}
-.status-icon{color:var(--active);font-weight:900}
-.controls-bar{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-top:.8rem}
-button,.btn{border:0;border-radius:7px;padding:.55rem .8rem;font-weight:800;cursor:pointer;background:var(--accent2);color:#fff;transition:transform .15s ease,opacity .15s ease}
-button:hover{transform:translateY(-1px)}
-.btn-step{background:var(--accent4)}
-.btn-reset{background:#6f675d}
-.preset-btn{background:#fff;color:var(--ink);border:1px solid var(--line)}
-.preset-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.speed{display:flex;gap:.45rem;align-items:center;color:var(--muted);font-size:.82rem;margin-left:auto}
-.speed input{accent-color:var(--accent)}
-.metric{display:grid;grid-template-columns:1fr auto;gap:.5rem;border-top:1px solid var(--line);padding:.55rem 0;font-size:.92rem}
-.metric:first-child{border-top:0}
-.metric span:last-child{font-family:"JetBrains Mono",monospace;font-weight:800;color:var(--accent)}
-.pseudo-code{background:var(--code);color:#f7efe3;border-radius:8px;padding:.85rem;overflow:auto;font-family:"JetBrains Mono",monospace;font-size:.78rem;line-height:1.55;margin-top:.7rem}
-.pseudo-code .line{display:block;padding:.08rem .25rem;border-radius:4px}
-.pseudo-code .line.hl{background:rgba(242,162,58,.26)}
-.matrix{display:grid;gap:3px;margin-top:.8rem;overflow:auto}
-.cell{min-width:56px;padding:.35rem .45rem;background:#f3eee6;border:1px solid #ded7cd;border-radius:5px;text-align:center;font-family:"JetBrains Mono",monospace;font-size:.75rem}
-.cell.head{background:#e7f3f5;color:var(--accent2);font-weight:900}
-.cell.fill{background:#fff4dd;border-color:var(--active)}
-.cell.done{background:#eaf7f1;border-color:var(--good)}
-.compare-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:8px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);margin-top:1rem}
-.compare-table th,.compare-table td{border-bottom:1px solid var(--line);padding:.7rem;text-align:left;vertical-align:top}
-.compare-table th{background:#efe8dc;color:#4d453b}
-.compare-table tr:last-child td{border-bottom:0}
-.badge{display:inline-block;padding:.08rem .35rem;border-radius:5px;background:#e7f3f5;color:var(--accent2);font-family:"JetBrains Mono",monospace;font-size:.78rem;font-weight:800}
-.callout{border-left:4px solid var(--accent);padding:.75rem 1rem;background:#fff8ef;border-radius:0 8px 8px 0;margin:1rem 0}
-@media(max-width:980px){.floating-nav{display:none}.grid-2{grid-template-columns:1fr}.page{padding-inline:.85rem}.stage{height:340px}.speed{margin-left:0;width:100%}}
-@media(max-width:620px){header.hero{min-height:84vh}.toc{grid-template-columns:1fr}.stage{height:320px}.controls-bar button{flex:1}.compare-table{font-size:.86rem}}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.9;font-size:17px;}
+.hero{min-height:62vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem;position:relative;overflow:hidden;background:linear-gradient(170deg,#1a1a2e 0%,#2c3e7a 40%,#1a6b4a 100%);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.06) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.04) 0%,transparent 40%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);}
+.hero-content{position:relative;z-index:1;max-width:900px;}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;color:#fff;letter-spacing:.04em;line-height:1.3;margin-bottom:1rem;}
+.hero h1 .green{color:#2ecc71;}
+.hero h1 .blue{color:#5dade2;}
+.hero h1 .orange{color:#f39c12;}
+.hero .subtitle{font-size:clamp(.95rem,2.2vw,1.2rem);color:rgba(255,255,255,.65);font-weight:300;margin-bottom:2rem;}
+.hero .big-formula{color:#2ecc71;background:rgba(0,0,0,.3);padding:.8rem 2rem;border-radius:12px;display:inline-block;border:1px solid rgba(255,255,255,.1);margin-bottom:2rem;backdrop-filter:blur(4px);font-size:1.05rem;}
+.scroll-hint{color:rgba(255,255,255,.4);font-size:.9rem;animation:bounce 2s infinite;}
+.scroll-hint span{display:block;font-size:1.4rem;margin-top:.3rem;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+.container{max-width:1180px;margin:0 auto;padding:3rem 1.5rem;}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.5rem;}
+h2{font-family:'Noto Serif TC',serif;font-size:1.65rem;font-weight:700;color:var(--ink);margin-bottom:1.2rem;line-height:1.4;}
+h3{font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:700;color:var(--accent2);margin:1.4rem 0 .8rem;}
+section{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--card-border);}
+section:last-of-type{border-bottom:none;}
+p{margin-bottom:1rem;}
+.lead{color:var(--muted);}
+code{background:#f0ebe0;padding:1px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.88em;color:var(--accent2);}
+.toc{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:1.2rem 1.5rem;margin:1rem 0 2rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.toc-title{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.7rem;}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.5rem .8rem;}
+.toc-grid a{color:var(--accent2);text-decoration:none;font-size:.9rem;padding:.3rem 0;display:flex;align-items:center;gap:.4rem;transition:color .2s;}
+.toc-grid a:hover{color:var(--accent);}
+.toc-grid a .toc-num{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);min-width:34px;}
+.viz-layout{display:grid;grid-template-columns:1fr 320px;gap:1.3rem;margin:1.2rem 0;align-items:start;}
+@media(max-width:900px){.viz-layout{grid-template-columns:1fr;}}
+.viz-panel{background:linear-gradient(160deg,#fffdf7 0%,#f4efe3 100%);border:1px solid var(--card-border);border-radius:12px;padding:1rem;box-shadow:0 4px 18px rgba(0,0,0,.06);position:relative;}
+.tree-canvas{position:relative;width:100%;height:380px;background:#fafafa;border-radius:8px;overflow:hidden;border:1px solid #ececec;}
+.tree-canvas svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
+.tree-canvas .nodes-layer{position:absolute;inset:0;}
+.t-node{position:absolute;width:42px;height:42px;border-radius:50%;background:var(--node-default);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:700;transform:translate(-50%,-50%);transition:left .35s cubic-bezier(.4,0,.2,1),top .35s cubic-bezier(.4,0,.2,1),background .25s,box-shadow .25s,transform .25s;box-shadow:0 2px 6px rgba(0,0,0,.15);cursor:pointer;border:2px solid transparent;z-index:2;}
+.t-node.small{width:32px;height:32px;font-size:.72rem;}
+.t-node:hover{transform:translate(-50%,-50%) scale(1.1);}
+.t-node.active{background:var(--node-active);box-shadow:0 0 0 4px rgba(243,156,18,.3),0 4px 12px rgba(243,156,18,.4);transform:translate(-50%,-50%) scale(1.1);z-index:5;}
+.t-node.path{background:#e67e22;}
+.t-node.red{background:#c0392b;}
+.t-node.black{background:#2d2d3f;}
+.t-node.external{background:#aaa;border-style:dashed;}
+.t-edge{stroke:var(--edge-default);stroke-width:2;transition:stroke .3s,stroke-width .3s,opacity .3s;}
+.t-edge.active{stroke:var(--edge-active);stroke-width:3;}
+.multi-node{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;border:2px solid var(--node-default);border-radius:8px;background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.12);transition:all .28s ease;z-index:2;}
+.multi-node .key{min-width:38px;height:34px;display:flex;align-items:center;justify-content:center;border-right:1px solid var(--card-border);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;}
+.multi-node .key:last-child{border-right:0;}
+.multi-node.active{border-color:var(--node-active);background:#fff3cd;box-shadow:0 0 0 4px rgba(243,156,18,.25),0 4px 12px rgba(243,156,18,.3);transform:translate(-50%,-50%) scale(1.04);}
+.multi-node.target{border-color:var(--node-target);background:#eafaf1;}
+.multi-node.under{border-color:var(--accent);background:#fdf2f0;}
+.leaf-row{position:absolute;height:42px;border:2px solid var(--node-default);border-radius:8px;background:#fff;display:flex;align-items:center;transform:translate(-50%,-50%);box-shadow:0 2px 8px rgba(0,0,0,.12);z-index:2;}
+.leaf-row .record{min-width:34px;padding:.25rem .38rem;border-right:1px solid var(--card-border);text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78rem;}
+.leaf-row .record:last-child{border-right:0;}
+.leaf-row.active{border-color:var(--node-active);background:#fff3cd;}
+.leaf-row.scan{border-color:var(--node-success);background:#eafaf1;}
+.status-banner{margin-top:.8rem;padding:.7rem 1rem;background:var(--code-bg);color:#fff;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.85rem;min-height:42px;display:flex;align-items:center;gap:.6rem;}
+.status-banner .status-icon{color:#2ecc71;font-weight:700;}
+.status-banner .status-text{flex:1;}
+.controls-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--card-border);}
+.controls-bar button,.btn{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:600;padding:.45rem 1rem;border-radius:6px;border:none;cursor:pointer;transition:all .2s;}
+.btn-play{background:var(--accent3);color:#fff;}
+.btn-play:hover{background:#22845c;}
+.btn-step{background:var(--accent2);color:#fff;}
+.btn-step:hover{background:#1f2e5f;}
+.btn-reset{background:var(--card-border);color:var(--ink);}
+.btn-reset:hover{background:#ccc;}
+.preset-btn{font-family:'JetBrains Mono',monospace;font-size:.78rem;padding:.4rem .85rem;border-radius:6px;border:2px solid var(--card-border);background:var(--card);cursor:pointer;transition:all .2s;color:var(--ink);}
+.preset-btn:hover{border-color:var(--accent2);}
+.preset-btn.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
+.speed{display:flex;gap:.45rem;align-items:center;color:var(--muted);font-size:.82rem;margin-left:auto;font-family:'JetBrains Mono',monospace;}
+.speed input{accent-color:var(--accent3);}
+.side-panel{display:flex;flex-direction:column;gap:.85rem;background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.info-label{display:block;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem;}
+.metric,.ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.83rem;padding:.2rem 0;}
+.metric span:first-child,.ic-label{color:var(--muted);}
+.metric span:last-child,.ic-value{color:var(--ink);font-weight:600;}
+.metric span:last-child{color:var(--accent);}
+.pseudo-code{background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:.85rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.6;overflow-x:auto;}
+.pseudo-code .line{padding:1px 4px;border-radius:3px;display:block;white-space:pre;}
+.pseudo-code .line.hl,.pseudo-code .line.active{background:rgba(243,156,18,.3);color:#fff;border-left:3px solid var(--node-active);padding-left:6px;}
+.matrix{display:grid;gap:3px;margin-top:.8rem;overflow:auto;}
+.cell{min-width:56px;padding:.35rem .45rem;background:#f0ebe0;border:1px solid var(--card-border);border-radius:5px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;}
+.cell.head{background:#eef2ff;color:var(--accent2);font-weight:700;}
+.cell.fill{background:#fff3cd;border-color:var(--node-active);}
+.cell.done{background:#eafaf1;border-color:var(--accent3);}
+.callout{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1rem 1.1rem;margin:1rem 0;}
+.cmp-table{width:100%;border-collapse:collapse;font-size:.86rem;margin:.8rem 0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.cmp-table th{background:var(--accent2);color:#fff;padding:.6rem .8rem;text-align:center;font-weight:600;font-size:.82rem;}
+.cmp-table td{padding:.6rem .8rem;text-align:center;border-bottom:1px solid var(--card-border);font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.cmp-table td:first-child{font-family:'Noto Sans TC',sans-serif;color:var(--accent2);font-weight:600;text-align:left;}
+.cmp-table tr:last-child td{border-bottom:none;}
+.cmp-table tr:nth-child(even){background:rgba(0,0,0,.015);}
+.badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:4px;background:rgba(41,128,185,.12);color:#2980b9;border:1px solid rgba(41,128,185,.3);}
+.float-nav{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:2px;background:rgba(255,253,250,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--card-border);border-radius:12px;padding:10px 7px;box-shadow:0 6px 24px rgba(0,0,0,.10);font-family:'JetBrains Mono',monospace;max-height:88vh;overflow-y:auto;transition:padding .25s ease;}
+.float-nav .fn-title{font-family:'Noto Serif TC',serif;font-weight:700;font-size:.68rem;color:var(--accent2);text-align:center;letter-spacing:1.5px;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--card-border);max-width:0;overflow:hidden;transition:max-width .25s ease;}
+.float-nav:hover .fn-title{max-width:220px;}
+.float-nav a{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:7px;color:var(--ink);text-decoration:none;white-space:nowrap;transition:all .2s ease;border-left:3px solid transparent;}
+.float-nav a .fn-num{font-weight:700;font-size:.66rem;color:var(--muted);letter-spacing:.4px;flex-shrink:0;width:30px;text-align:left;}
+.float-nav a .fn-name{font-family:'Noto Sans TC',sans-serif;font-size:.76rem;font-weight:500;max-width:0;overflow:hidden;transition:max-width .25s ease,padding .25s ease;padding:0;}
+.float-nav:hover a .fn-name{max-width:220px;padding-left:2px;}
+.float-nav a:hover{background:var(--card);}
+.float-nav a.active{background:var(--accent2);color:#fff;border-left-color:var(--accent);box-shadow:0 2px 6px rgba(192,57,43,.25);}
+.float-nav a.active .fn-num{color:rgba(255,255,255,.85);}
+.float-nav a.active .fn-name{color:#fff;}
+.float-nav .fn-top{margin-top:6px;padding-top:6px;border-top:1px solid var(--card-border);justify-content:center;}
+.float-nav .fn-top .fn-num{width:auto;color:var(--accent2);font-size:.78rem;}
+@media(max-width:768px){
+  .float-nav{right:8px;top:auto;bottom:14px;transform:none;padding:6px 5px;max-height:70vh;}
+  .float-nav .fn-title{display:none;}
+  .float-nav a{padding:4px 7px;}
+  .float-nav a .fn-num{width:26px;font-size:.62rem;}
+  .speed{margin-left:0;width:100%;}
+}
+footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border);}
 </style>
 </head>
 <body>
-<nav class="floating-nav" aria-label="章節導覽">
-  <a href="#cost" data-target="cost"><span class="fn-num">P01</span><span>BST 成本</span></a>
-  <a href="#obst" data-target="obst"><span class="fn-num">P02</span><span>Optimal BST</span></a>
-  <a href="#avl" data-target="avl"><span class="fn-num">P03</span><span>AVL 回顧</span></a>
-  <a href="#rb" data-target="rb"><span class="fn-num">P04</span><span>Red-Black</span></a>
-  <a href="#splay" data-target="splay"><span class="fn-num">P05</span><span>Splay</span></a>
-  <a href="#mway" data-target="mway"><span class="fn-num">P06</span><span>m-way</span></a>
-  <a href="#btree" data-target="btree"><span class="fn-num">P07</span><span>B-tree</span></a>
-  <a href="#bplus" data-target="bplus"><span class="fn-num">P08</span><span>B+ Tree</span></a>
-  <a href="#summary" data-target="summary"><span class="fn-num">P09</span><span>總覽</span></a>
+<nav class="float-nav" id="floatNav" aria-label="章節導覽">
+  <div class="fn-title">章節導覽</div>
+  <a href="#cost" data-target="cost"><span class="fn-num">P01</span><span class="fn-name">BST 成本</span></a>
+  <a href="#obst" data-target="obst"><span class="fn-num">P02</span><span class="fn-name">Optimal BST</span></a>
+  <a href="#avl" data-target="avl"><span class="fn-num">P03</span><span class="fn-name">AVL 回顧</span></a>
+  <a href="#rb" data-target="rb"><span class="fn-num">P04</span><span class="fn-name">Red-Black</span></a>
+  <a href="#splay" data-target="splay"><span class="fn-num">P05</span><span class="fn-name">Splay</span></a>
+  <a href="#mway" data-target="mway"><span class="fn-num">P06</span><span class="fn-name">m-way</span></a>
+  <a href="#btree" data-target="btree"><span class="fn-num">P07</span><span class="fn-name">B-tree</span></a>
+  <a href="#bplus" data-target="bplus"><span class="fn-num">P08</span><span class="fn-name">B+ Tree</span></a>
+  <a href="#summary" data-target="summary"><span class="fn-num">P09</span><span class="fn-name">總覽</span></a>
+  <a href="#" class="fn-top"><span class="fn-num">↑</span><span class="fn-name">Top</span></a>
 </nav>
 
-<main class="page">
 <header class="hero">
-  <div class="hero-inner">
-    <div class="eyebrow">Flexible Learning Week · Search Trees</div>
-    <h1>高效率搜尋樹與多路搜尋樹</h1>
-    <p>這份自學頁接在 BST、binary heap 與 AVL 之後，整理剩下的搜尋樹觀念：怎麼把搜尋成本算清楚、怎麼靠平衡規則保證高度，以及為什麼資料庫索引常用 B-tree / B+ tree。</p>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <h1><span class="green">高效率搜尋樹</span><br><span class="blue">與多路搜尋樹</span></h1>
+    <p class="subtitle">Flexible Learning Week · Optimal BST · Red-Black · Splay · B-tree · B+ Tree</p>
     <div class="big-formula">Optimal BST｜AVL｜Red-Black｜Splay｜m-way｜B-tree｜B+ Tree</div>
-    <div class="toc">
+    <div class="scroll-hint">向下閱讀與操作動畫<span>↓</span></div>
+  </div>
+</header>
+
+<main class="container">
+<section id="prologue">
+  <div class="section-number">SELF-STUDY · 學習路線</div>
+  <h2>從 BST 到資料庫索引</h2>
+  <p class="lead">這份自學頁接在 BST、binary heap 與 AVL 之後，整理剩下的搜尋樹觀念：怎麼把搜尋成本算清楚、怎麼靠平衡規則保證高度，以及為什麼資料庫索引常用 B-tree / B+ tree。</p>
+  <div class="toc">
+    <div class="toc-title">ROADMAP</div>
+    <div class="toc-grid">
       <a href="#cost"><span class="toc-num">P01</span>BST 搜尋成本與外部節點</a>
       <a href="#obst"><span class="toc-num">P02</span>Optimal BST 動態規劃</a>
       <a href="#avl"><span class="toc-num">P03</span>AVL 快速回顧</a>
@@ -148,15 +183,15 @@ button:hover{transform:translateY(-1px)}
       <a href="#summary"><span class="toc-num">P09</span>總覽比較</a>
     </div>
   </div>
-</header>
+</section>
 
 <section id="cost">
   <div class="section-number">PART 01 · BST 搜尋成本</div>
   <h2>同一組 key，可以有不同的搜尋成本</h2>
   <p class="lead">BST 的 inorder 順序固定，但樹形不固定。若每個 key 被搜尋的機率相同，平均比較次數只看深度；若機率不同，常被查到的 key 應該靠近 root。</p>
-  <div class="grid-2">
+  <div class="viz-layout">
     <div class="viz-panel">
-      <div class="stage" id="stage-cost"><svg></svg><div class="nodes-layer"></div></div>
+      <div class="tree-canvas" id="stage-cost"><svg></svg><div class="nodes-layer"></div></div>
       <div class="status-banner"><span class="status-icon">›</span><span class="status-text">按「單步」比較兩棵 BST 的搜尋成本。</span></div>
       <div class="controls-bar" data-demo="cost">
         <button class="btn-play">▶ 播放</button>
@@ -184,9 +219,9 @@ button:hover{transform:translateY(-1px)}
   <div class="section-number">PART 02 · Optimal Binary Search Tree</div>
   <h2>Optimal BST：用 DP 選 root</h2>
   <p class="lead">給定成功搜尋機率 $p_i$ 與失敗搜尋機率 $q_i$，Optimal BST 要找出總期望成本最低的 BST。核心想法是：每個區間都試著選一個 root，左右子樹再用最佳解。</p>
-  <div class="grid-2">
+  <div class="viz-layout">
     <div class="viz-panel">
-      <div class="stage" id="stage-obst"><svg></svg><div class="nodes-layer"></div></div>
+      <div class="tree-canvas" id="stage-obst"><svg></svg><div class="nodes-layer"></div></div>
       <div class="matrix" id="obst-matrix" style="grid-template-columns:repeat(6,minmax(58px,1fr));"></div>
       <div class="status-banner"><span class="status-icon">›</span><span class="status-text">固定例題：a = 10, 15, 20, 25。</span></div>
       <div class="controls-bar" data-demo="obst">
@@ -214,9 +249,9 @@ button:hover{transform:translateY(-1px)}
   <div class="section-number">PART 03 · AVL 快速回顧</div>
   <h2>AVL：用 balance factor 維持高度</h2>
   <p class="lead">AVL 是 height-balanced BST。每個 node 記錄 $BF(v)=h_L-h_R$，合法值只允許 $-1,0,1$。插入造成最近祖先 $A$ 的 balance factor 變成 $\pm2$ 時，用 LL/RR/LR/RL 旋轉修復。</p>
-  <div class="grid-2">
+  <div class="viz-layout">
     <div class="viz-panel">
-      <div class="stage" id="stage-avl"><svg></svg><div class="nodes-layer"></div></div>
+      <div class="tree-canvas" id="stage-avl"><svg></svg><div class="nodes-layer"></div></div>
       <div class="status-banner"><span class="status-icon">›</span><span class="status-text">選一個 AVL case，觀察旋轉前後 inorder 不變。</span></div>
       <div class="controls-bar" data-demo="avl">
         <button class="preset-btn active" data-case="LL">LL</button>
@@ -241,9 +276,9 @@ button:hover{transform:translateY(-1px)}
   <div class="section-number">PART 04 · Red-Black Tree</div>
   <h2>Red-Black：用顏色放寬 AVL 的平衡</h2>
   <p class="lead">Red-black tree 是 extended BST。它不要求左右高度差最多 1，而是用紅黑規則限制最長路徑不會超過最短黑高路徑的兩倍，因此高度仍是 $O(\log n)$。</p>
-  <div class="grid-2">
+  <div class="viz-layout">
     <div class="viz-panel">
-      <div class="stage" id="stage-rb"><svg></svg><div class="nodes-layer"></div></div>
+      <div class="tree-canvas" id="stage-rb"><svg></svg><div class="nodes-layer"></div></div>
       <div class="status-banner"><span class="status-icon">›</span><span class="status-text">固定插入序列：50, 10, 80, 90, 70, 60, 65, 62。</span></div>
       <div class="controls-bar" data-demo="rb">
         <button class="btn-play">▶ 播放</button>
@@ -264,9 +299,9 @@ button:hover{transform:translateY(-1px)}
   <div class="section-number">PART 05 · Splay Tree（補充）</div>
   <h2>Splay：每次操作後把目標伸展到 root</h2>
   <p class="lead">Splay tree 不存 balance factor 或顏色。它允許單次操作最壞 $O(n)$，但靠著每次搜尋/插入/刪除後 splay 到 root，達成 amortized $O(\log n)$。</p>
-  <div class="grid-2">
+  <div class="viz-layout">
     <div class="viz-panel">
-      <div class="stage" id="stage-splay"><svg></svg><div class="nodes-layer"></div></div>
+      <div class="tree-canvas" id="stage-splay"><svg></svg><div class="nodes-layer"></div></div>
       <div class="status-banner"><span class="status-icon">›</span><span class="status-text">目標 key 5 會透過 zig-zig / zig-zag 類型旋轉往上。</span></div>
       <div class="controls-bar" data-demo="splay">
         <button class="btn-play">▶ 播放</button>
@@ -289,9 +324,9 @@ button:hover{transform:translateY(-1px)}
   <div class="section-number">PART 06 · m-way Search Tree</div>
   <h2>一個 node 裡可以放多個 key</h2>
   <p class="lead">m-way search tree 的 node 不是只放一個 key，而是放 $K_1,\dots,K_n$ 與 $A_0,\dots,A_n$ 子樹指標。搜尋時先在 node 內找 key 的區間，再往對應 child 走。</p>
-  <div class="grid-2">
+  <div class="viz-layout">
     <div class="viz-panel">
-      <div class="stage" id="stage-mway"><svg></svg><div class="nodes-layer"></div></div>
+      <div class="tree-canvas" id="stage-mway"><svg></svg><div class="nodes-layer"></div></div>
       <div class="status-banner"><span class="status-icon">›</span><span class="status-text">查找 28：先比較 root 的 20, 40，再進入中間子樹。</span></div>
       <div class="controls-bar" data-demo="mway">
         <button class="btn-play">▶ 播放</button>
@@ -316,9 +351,9 @@ button:hover{transform:translateY(-1px)}
   <div class="section-number">PART 07 · B-tree</div>
   <h2>B-tree：保持每個 node 半滿，所有葉子同層</h2>
   <p class="lead">order $m$ 的 B-tree 是有容量限制的 m-way search tree。除了 root 以外，每個內部 node 至少有 $\lceil m/2\rceil$ 個 children，最多 $m$ 個 children，所有 external nodes 在同一層。</p>
-  <div class="grid-2">
+  <div class="viz-layout">
     <div class="viz-panel">
-      <div class="stage" id="stage-btree"><svg></svg><div class="nodes-layer"></div></div>
+      <div class="tree-canvas" id="stage-btree"><svg></svg><div class="nodes-layer"></div></div>
       <div class="status-banner"><span class="status-icon">›</span><span class="status-text">切換插入與刪除情境，觀察 split、borrow、merge。</span></div>
       <div class="controls-bar" data-demo="btree">
         <button class="preset-btn active" data-case="insert">Insert split</button>
@@ -341,9 +376,9 @@ button:hover{transform:translateY(-1px)}
   <div class="section-number">PART 08 · B+ Tree</div>
   <h2>B+ Tree：資料都在 leaf，leaf 串成 linked list</h2>
   <p class="lead">B+ tree 的 internal nodes 只當 index，真正資料放在 leaf/data nodes。所有 leaf 用 linked list 串起來，所以範圍查詢不用一直回到 root。</p>
-  <div class="grid-2">
+  <div class="viz-layout">
     <div class="viz-panel">
-      <div class="stage" id="stage-bplus"><svg></svg><div class="nodes-layer"></div></div>
+      <div class="tree-canvas" id="stage-bplus"><svg></svg><div class="nodes-layer"></div></div>
       <div class="status-banner"><span class="status-icon">›</span><span class="status-text">範圍查詢：先走 index 找到第一個 leaf，再沿 leaf links 掃描。</span></div>
       <div class="controls-bar" data-demo="bplus">
         <button class="btn-play">▶ 播放</button>
@@ -366,7 +401,7 @@ button:hover{transform:translateY(-1px)}
   <div class="section-number">PART 09 · 總覽比較</div>
   <h2>每種搜尋樹解決的是不同瓶頸</h2>
   <p class="lead">不要把所有 balanced tree 都記成「某種旋轉」。先問：瓶頸是高度？搜尋機率？局部性？磁碟 I/O？範圍查詢？</p>
-  <table class="compare-table">
+  <table class="cmp-table">
     <thead><tr><th>結構</th><th>核心想法</th><th>典型成本</th><th>適合場景</th></tr></thead>
     <tbody>
       <tr><td>普通 BST</td><td>左小右大</td><td>平均可好，最壞 $O(n)$</td><td>概念基礎、小型資料</td></tr>
@@ -658,7 +693,7 @@ function initControls(){
   });
 }
 function initNav(){
-  const links = [...document.querySelectorAll('.floating-nav a')];
+  const links = [...document.querySelectorAll('.float-nav a[data-target]')];
   const sections = links.map(a => $(a.dataset.target)).filter(Boolean);
   const onScroll = () => {
     let cur = sections[0]?.id;
