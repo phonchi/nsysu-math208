@@ -3,6 +3,7 @@ type: assignment
 date: 2026-05-19T16:00:00+3:30
 title: 'Take home quiz #2'
 attachment: /static_files/assignments/Quiz2_2026.pdf
+solutions: /static_files/assignments/Quiz2_2026_sol.pdf
 
 due_event: 
     type: due
