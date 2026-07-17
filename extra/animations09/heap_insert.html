@@ -39,9 +39,9 @@
 <div class="info-card">
 <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
 <div class="pseudo-code" id="heapCodeIns" style="font-size:.74em;">
-<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_perc_up</span>(self, i):</span>
-<span class="line" data-l="2">    <span class="kw">while</span> (i - <span class="num">1</span>) // <span class="num">2</span> &gt;= <span class="num">0</span>:</span>
-<span class="line" data-l="3">        p = (i - <span class="num">1</span>) // <span class="num">2</span></span>
+<span class="line" data-l="1"><span class="fn">percUp</span>(self, i):</span>
+<span class="line" data-l="2">    <span class="kw">while</span> (i - <span class="num">1</span>) / <span class="num">2</span> &gt;= <span class="num">0</span>:</span>
+<span class="line" data-l="3">        p = (i - <span class="num">1</span>) / <span class="num">2</span></span>
 <span class="line" data-l="4">        <span class="kw">if</span> heap[i] &lt; heap[p]:</span>
 <span class="line" data-l="5">            <span class="fn">swap</span>(heap[i], heap[p])</span>
 <span class="line" data-l="6">        i = p</span>

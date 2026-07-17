@@ -653,7 +653,7 @@ function initParseTree() {
       const fr = document.createElement('div');
       fr.className = 'stack-frame' + (i === frame.stk.length - 1 ? ' top' : '');
       const node = map.get(id);
-      fr.textContent = `[${i}] ${node ? (node.key === '?' ? '_' : node.key) : '_'}`;
+      fr.textContent = `[${i}] ${node ? (node->key === '?' ? '_' : node->key) : '_'}`;
       stkEl.appendChild(fr);
     });
 
@@ -1418,7 +1418,7 @@ function initBST(suffix = '', lockedOp = null) {
       render(s.path || null, s.node || null, s.status);
     }
     if (s.cmp != null) setText($$('bstCmp'), s.cmp);
-    if (s.node) setText($$('bstCur'), s.node.key);
+    if (s.node) setText($$('bstCur'), s.node->key);
     if (s.result) setText($$('bstResult'), s.result);
     hlLine($$('bstCode'), s.line);
   }

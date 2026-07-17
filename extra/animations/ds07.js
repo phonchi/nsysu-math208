@@ -292,10 +292,10 @@ function genBinarySearch(arr, target) {
     cmp++;
     const elimL = range(0, first);
     const elimR = range(last+1, sorted.length);
-    frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'compare'}, eliminated:[...elimL,...elimR], pointers:{low:{idx:first,label:'first',cls:'low'},high:{idx:last,label:'last',cls:'high'},mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`midpoint = (${first}+${last})//2 = ${midpoint}，比較 a_list[${midpoint}] = ${sorted[midpoint]} 與 ${target}`, stats:{cmp,low:first,high:last,mid:midpoint,result:'搜尋中...'}, pcLine:5});
+    frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'compare'}, eliminated:[...elimL,...elimR], pointers:{low:{idx:first,label:'first',cls:'low'},high:{idx:last,label:'last',cls:'high'},mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`midpoint = (${first}+${last})//2 = ${midpoint}，比較 aList[${midpoint}] = ${sorted[midpoint]} 與 ${target}`, stats:{cmp,low:first,high:last,mid:midpoint,result:'搜尋中...'}, pcLine:5});
 
     if (sorted[midpoint] === target) {
-      frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'found'}, eliminated:[...elimL,...elimR], pointers:{mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`★ 命中！a_list[${midpoint}] = ${target}`, stats:{cmp,low:first,high:last,mid:midpoint,result:`True (位置 ${midpoint})`}, pcLine:7});
+      frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'found'}, eliminated:[...elimL,...elimR], pointers:{mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`★ 命中！aList[${midpoint}] = ${target}`, stats:{cmp,low:first,high:last,mid:midpoint,result:`True (位置 ${midpoint})`}, pcLine:7});
       return frames;
     } else if (target < sorted[midpoint]) {
       frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'compare'}, eliminated:[...elimL,...elimR,...range(midpoint,sorted.length)], pointers:{low:{idx:first,label:'first',cls:'low'},high:{idx:last,label:'last',cls:'high'},mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`${target} < ${sorted[midpoint]} → 右半全部排除，last = ${midpoint-1}`, stats:{cmp,low:first,high:last,mid:midpoint,result:'搜尋中...'}, pcLine:9});
@@ -344,16 +344,16 @@ function genSelectionSort(initial) {
   let cmp = 0, swp = 0;
   frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:'初始陣列', stats:{cmp,swp,minIdx:'—'}, pcLine:1});
   for (let i = 0; i < N - 1; i++) {
-    // Lecture's exact init: min_idx = len(a_list) - 1
+    // Lecture's exact init: minIdx = len(aList) - 1
     let minIdx = N - 1;
     const sortedSet = range(0, i);
-    frames.push({arr:[...a], origIdx:[...oi], highlights:{[minIdx]:'active'}, sorted:sortedSet, message:`pass ${i+1}: 從 a[${i}..${N-1}] 找最小值，依講義初始 min_idx = ${N-1}（最末端），a[${minIdx}]=${a[minIdx]}`, stats:{cmp,swp,minIdx}, pcLine:3});
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{[minIdx]:'active'}, sorted:sortedSet, message:`pass ${i+1}: 從 a[${i}..${N-1}] 找最小值，依講義初始 minIdx = ${N-1}（最末端），a[${minIdx}]=${a[minIdx]}`, stats:{cmp,swp,minIdx}, pcLine:3});
     for (let j = i; j < N; j++) {
       cmp++;
       frames.push({arr:[...a], origIdx:[...oi], highlights:{[minIdx]:'active',[j]:'compare'}, sorted:sortedSet, message:`比較 a[${j}]=${a[j]} 與目前最小 a[${minIdx}]=${a[minIdx]}`, stats:{cmp,swp,minIdx}, pcLine:5});
       if (a[j] < a[minIdx]) {
         minIdx = j;
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[minIdx]:'active'}, sorted:sortedSet, message:`更小！更新 min_idx = ${minIdx}（值 ${a[minIdx]}）`, stats:{cmp,swp,minIdx}, pcLine:6});
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[minIdx]:'active'}, sorted:sortedSet, message:`更小！更新 minIdx = ${minIdx}（值 ${a[minIdx]}）`, stats:{cmp,swp,minIdx}, pcLine:6});
       }
     }
     if (minIdx !== i) {
@@ -362,7 +362,7 @@ function genSelectionSort(initial) {
       swp++;
       frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'swap',[minIdx]:'swap'}, sorted:sortedSet, message:`交換 a[${minIdx}] ↔ a[${i}]：最小值歸位到 a[${i}]`, stats:{cmp,swp,minIdx}, pcLine:8});
     } else {
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'sorted'}, sorted:sortedSet, message:`min_idx == i，已在正確位置，無需交換`, stats:{cmp,swp,minIdx}, pcLine:7});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'sorted'}, sorted:sortedSet, message:`minIdx == i，已在正確位置，無需交換`, stats:{cmp,swp,minIdx}, pcLine:7});
     }
     frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(0, i+1), message:`pass ${i+1} 結束：a[${i}]=${a[i]} 已就位`, stats:{cmp,swp,minIdx:'—'}, pcLine:1});
   }
@@ -379,27 +379,27 @@ function genInsertionSort(initial) {
   let cmp = 0, sft = 0;
   frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:[0], message:'初始：a[0] 自成一個已排序區', stats:{cmp,sft,key:'—'}, pcLine:1});
   for (let i = 1; i < N; i++) {
-    const cur_val = a[i];
+    const curVal = a[i];
     const oiKey = oi[i];
-    let cur_pos = i;
+    let curPos = i;
     const sortedSet = range(0, i);
-    frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, sorted:sortedSet, message:`取出 cur_val = a_list[${i}] = ${cur_val}, cur_pos = ${i}`, stats:{cmp,sft,key:cur_val}, pcLine:3});
-    while (cur_pos > 0 && a[cur_pos-1] > cur_val) {
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, sorted:sortedSet, message:`取出 curVal = aList[${i}] = ${curVal}, curPos = ${i}`, stats:{cmp,sft,key:curVal}, pcLine:3});
+    while (curPos > 0 && a[curPos-1] > curVal) {
       cmp++;
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos-1]:'compare',[cur_pos]:'key'}, sorted:sortedSet, message:`比較 a_list[${cur_pos-1}]=${a[cur_pos-1]} 與 cur_val=${cur_val}：${a[cur_pos-1]} > ${cur_val}`, stats:{cmp,sft,key:cur_val}, pcLine:5});
-      a[cur_pos] = a[cur_pos-1];
-      oi[cur_pos] = oi[cur_pos-1];
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos-1]:'compare',[curPos]:'key'}, sorted:sortedSet, message:`比較 aList[${curPos-1}]=${a[curPos-1]} 與 curVal=${curVal}：${a[curPos-1]} > ${curVal}`, stats:{cmp,sft,key:curVal}, pcLine:5});
+      a[curPos] = a[curPos-1];
+      oi[curPos] = oi[curPos-1];
       sft++;
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'swap'}, sorted:sortedSet, message:`位移 a_list[${cur_pos-1}] → a_list[${cur_pos}]，cur_pos = ${cur_pos-1}`, stats:{cmp,sft,key:cur_val}, pcLine:6});
-      cur_pos--;
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos]:'swap'}, sorted:sortedSet, message:`位移 aList[${curPos-1}] → aList[${curPos}]，curPos = ${curPos-1}`, stats:{cmp,sft,key:curVal}, pcLine:6});
+      curPos--;
     }
-    if (cur_pos > 0) {
+    if (curPos > 0) {
       cmp++;
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos-1]:'compare'}, sorted:sortedSet, message:`比較 a_list[${cur_pos-1}]=${a[cur_pos-1]} 與 cur_val=${cur_val}：${a[cur_pos-1]} ≤ ${cur_val}，停止位移`, stats:{cmp,sft,key:cur_val}, pcLine:5});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos-1]:'compare'}, sorted:sortedSet, message:`比較 aList[${curPos-1}]=${a[curPos-1]} 與 curVal=${curVal}：${a[curPos-1]} ≤ ${curVal}，停止位移`, stats:{cmp,sft,key:curVal}, pcLine:5});
     }
-    a[cur_pos] = cur_val;
-    oi[cur_pos] = oiKey;
-    frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'sorted'}, sorted:range(0, i+1), message:`把 cur_val=${cur_val} 插入 a_list[${cur_pos}]`, stats:{cmp,sft,key:cur_val}, pcLine:8});
+    a[curPos] = curVal;
+    oi[curPos] = oiKey;
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos]:'sorted'}, sorted:range(0, i+1), message:`把 curVal=${curVal} 插入 aList[${curPos}]`, stats:{cmp,sft,key:curVal}, pcLine:8});
   }
   frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(0, N), message:`★ 排序完成！${cmp} 次比較、${sft} 次位移`, stats:{cmp,sft,key:'—'}, pcLine:1});
   return frames;
@@ -407,10 +407,10 @@ function genInsertionSort(initial) {
 
 // --- Shell Sort ---
 // 嚴格對齊講義（07_Searching and Sorting.ipynb cell 194）的兩個函式架構：
-//   shell_sort(a_list)：外層 while sublist_count，對每個 pos_start 呼叫 gap_insertion_sort
-//   gap_insertion_sort(a_list, start, gap)：對子列 [start, start+gap, start+2gap, ...] 做 insertion sort
-// 變數命名 (cur_val / cur_pos / pos_start / sublist_count) 全照講義 snake_case。
-  // shift 過程中把 cur_val 放在移動中的 hole，讓 arr 與 origIdx 都描述同一個 bar。
+//   shellSort(aList)：外層 while sublistCount，對每個 posStart 呼叫 gapInsertionSort
+//   gapInsertionSort(aList, start, gap)：對子列 [start, start+gap, start+2gap, ...] 做 insertion sort
+// 變數命名 (curVal / curPos / posStart / sublistCount) 全照講義 snake_case。
+  // shift 過程中把 curVal 放在移動中的 hole，讓 arr 與 origIdx 都描述同一個 bar。
   // 否則 BarVis 會把 key bar 移到 hole，但用被位移值的文字重畫它。
 function genShellSort(initial, gapSeq) {
   const frames = [];
@@ -426,89 +426,89 @@ function genShellSort(initial, gapSeq) {
     while ((1 << k) - 1 <= N) k++;
     for (let i = k - 1; i >= 1; i--) gaps.push((1 << i) - 1);
   } else {
-    // 講義版：sublist_count = N // 2，每輪折半
+    // 講義版：sublistCount = N // 2，每輪折半
     gaps = [];
     let g = Math.floor(N / 2);
     while (g > 0) { gaps.push(g); g = Math.floor(g / 2); }
   }
 
-  // === 講義版 gap_insertion_sort：對 a_list 從 start 開始、stride = gap 的子列做 insertion sort ===
-  function gap_insertion_sort(start, gap) {
-    // pcLine 9: for i in range(start + gap, len(a_list), gap)
+  // === 講義版 gapInsertionSort：對 aList 從 start 開始、stride = gap 的子列做 insertion sort ===
+  function gapInsertionSort(start, gap) {
+    // pcLine 9: for i in range(start + gap, len(aList), gap)
     for (let i = start + gap; i < N; i += gap) {
       frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, message:`for i in range(${start}+${gap}, ${N}, ${gap})：i = ${i}`, stats:{cmp,swp,gap}, pcLine:9});
 
-      const cur_val = a[i];
+      const curVal = a[i];
       const oiKey = oi[i];
-      let cur_pos = i;
+      let curPos = i;
 
-      // pcLine 10: cur_val = a_list[i]
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, message:`cur_val = a_list[${i}] = ${cur_val}`, stats:{cmp,swp,gap}, pcLine:10});
-      // pcLine 11: cur_pos = i
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'key'}, message:`cur_pos = i = ${cur_pos}`, stats:{cmp,swp,gap}, pcLine:11});
+      // pcLine 10: curVal = aList[i]
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, message:`curVal = aList[${i}] = ${curVal}`, stats:{cmp,swp,gap}, pcLine:10});
+      // pcLine 11: curPos = i
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos]:'key'}, message:`curPos = i = ${curPos}`, stats:{cmp,swp,gap}, pcLine:11});
 
-      while (cur_pos >= gap && a[cur_pos - gap] > cur_val) {
+      while (curPos >= gap && a[curPos - gap] > curVal) {
         cmp++;
         // pcLine 12: while-condition 為真
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos-gap]:'compare',[cur_pos]:'key'}, message:`while ${cur_pos} >= ${gap} and a_list[${cur_pos-gap}]=${a[cur_pos-gap]} > cur_val=${cur_val} → 進入迴圈`, stats:{cmp,swp,gap}, pcLine:12});
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos-gap]:'compare',[curPos]:'key'}, message:`while ${curPos} >= ${gap} and aList[${curPos-gap}]=${a[curPos-gap]} > curVal=${curVal} → 進入迴圈`, stats:{cmp,swp,gap}, pcLine:12});
 
-        // SHIFT: a[cur_pos] ← a[cur_pos - gap]
+        // SHIFT: a[curPos] ← a[curPos - gap]
         // 同步維持 moving key 的 visual hole，讓 origIdx 與 arr 一致。
-        a[cur_pos] = a[cur_pos - gap];
-        a[cur_pos - gap] = cur_val;
-        oi[cur_pos] = oi[cur_pos - gap];
-        oi[cur_pos - gap] = oiKey;
+        a[curPos] = a[curPos - gap];
+        a[curPos - gap] = curVal;
+        oi[curPos] = oi[curPos - gap];
+        oi[curPos - gap] = oiKey;
         swp++;
-        // pcLine 13: a_list[cur_pos] = a_list[cur_pos - gap]
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'swap',[cur_pos-gap]:'key'}, message:`a_list[${cur_pos}] = a_list[${cur_pos-gap}] = ${a[cur_pos]} (位移)`, stats:{cmp,swp,gap}, pcLine:13});
+        // pcLine 13: aList[curPos] = aList[curPos - gap]
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos]:'swap',[curPos-gap]:'key'}, message:`aList[${curPos}] = aList[${curPos-gap}] = ${a[curPos]} (位移)`, stats:{cmp,swp,gap}, pcLine:13});
 
-        cur_pos -= gap;
-        // pcLine 14: cur_pos = cur_pos - gap
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'key'}, message:`cur_pos = cur_pos - gap = ${cur_pos}`, stats:{cmp,swp,gap}, pcLine:14});
+        curPos -= gap;
+        // pcLine 14: curPos = curPos - gap
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos]:'key'}, message:`curPos = curPos - gap = ${curPos}`, stats:{cmp,swp,gap}, pcLine:14});
       }
 
-      // while exit: 兩種情況都 highlight cur_pos
-      if (cur_pos >= gap) {
+      // while exit: 兩種情況都 highlight curPos
+      if (curPos >= gap) {
         cmp++;
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos-gap]:'compare',[cur_pos]:'key'}, message:`while: a_list[${cur_pos-gap}]=${a[cur_pos-gap]} ≤ cur_val=${cur_val} → 停止`, stats:{cmp,swp,gap}, pcLine:12});
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos-gap]:'compare',[curPos]:'key'}, message:`while: aList[${curPos-gap}]=${a[curPos-gap]} ≤ curVal=${curVal} → 停止`, stats:{cmp,swp,gap}, pcLine:12});
       } else {
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'key'}, message:`while: cur_pos=${cur_pos} < gap=${gap} → 停止（已到子列開頭）`, stats:{cmp,swp,gap}, pcLine:12});
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos]:'key'}, message:`while: curPos=${curPos} < gap=${gap} → 停止（已到子列開頭）`, stats:{cmp,swp,gap}, pcLine:12});
       }
 
-      // pcLine 15: a_list[cur_pos] = cur_val
-      // shift 中 arr[cur_pos] 與 oi[cur_pos] 已同步代表 moving key；此處保留講義的插入步驟。
-      a[cur_pos] = cur_val;
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'sorted'}, message:`a_list[${cur_pos}] = cur_val = ${cur_val}`, stats:{cmp,swp,gap}, pcLine:15});
+      // pcLine 15: aList[curPos] = curVal
+      // shift 中 arr[curPos] 與 oi[curPos] 已同步代表 moving key；此處保留講義的插入步驟。
+      a[curPos] = curVal;
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos]:'sorted'}, message:`aList[${curPos}] = curVal = ${curVal}`, stats:{cmp,swp,gap}, pcLine:15});
     }
   }
 
-  // === 講義版 shell_sort：外層折半 + 對每個 pos_start 呼叫 gap_insertion_sort ===
-  // pcLine 2: sublist_count 初始化
-  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublist_count = len(a_list) // 2 = ${gaps[0]}`, stats:{cmp,swp,gap:'—'}, pcLine:2});
+  // === 講義版 shellSort：外層折半 + 對每個 posStart 呼叫 gapInsertionSort ===
+  // pcLine 2: sublistCount 初始化
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublistCount = len(aList) // 2 = ${gaps[0]}`, stats:{cmp,swp,gap:'—'}, pcLine:2});
 
   for (let gIdx = 0; gIdx < gaps.length; gIdx++) {
-    const sublist_count = gaps[gIdx];
-    // pcLine 3: while sublist_count > 0
-    frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`while sublist_count > 0：sublist_count = ${sublist_count}`, stats:{cmp,swp,gap:sublist_count}, pcLine:3});
+    const sublistCount = gaps[gIdx];
+    // pcLine 3: while sublistCount > 0
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`while sublistCount > 0：sublistCount = ${sublistCount}`, stats:{cmp,swp,gap:sublistCount}, pcLine:3});
 
-    for (let pos_start = 0; pos_start < sublist_count; pos_start++) {
-      // pcLine 4: for pos_start in range(sublist_count)
+    for (let posStart = 0; posStart < sublistCount; posStart++) {
+      // pcLine 4: for posStart in range(sublistCount)
       const indices = [];
-      for (let k = pos_start; k < N; k += sublist_count) indices.push(k);
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`for pos_start in range(${sublist_count})：pos_start = ${pos_start}, 子列索引 = [${indices.join(', ')}]`, stats:{cmp,swp,gap:sublist_count}, pcLine:4});
-      // pcLine 5: 呼叫 gap_insertion_sort
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`gap_insertion_sort(a_list, ${pos_start}, ${sublist_count})`, stats:{cmp,swp,gap:sublist_count}, pcLine:5});
+      for (let k = posStart; k < N; k += sublistCount) indices.push(k);
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`for posStart in range(${sublistCount})：posStart = ${posStart}, 子列索引 = [${indices.join(', ')}]`, stats:{cmp,swp,gap:sublistCount}, pcLine:4});
+      // pcLine 5: 呼叫 gapInsertionSort
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`gapInsertionSort(aList, ${posStart}, ${sublistCount})`, stats:{cmp,swp,gap:sublistCount}, pcLine:5});
 
       // 真正呼叫子函式（不再 inline 展開）
-      gap_insertion_sort(pos_start, sublist_count);
+      gapInsertionSort(posStart, sublistCount);
     }
 
-    // pcLine 6: sublist_count = sublist_count // 2 (outer while 收尾)
+    // pcLine 6: sublistCount = sublistCount // 2 (outer while 收尾)
     if (gIdx < gaps.length - 1) {
       const newGap = gaps[gIdx + 1];
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublist_count = sublist_count // 2 = ${newGap}`, stats:{cmp,swp,gap:newGap}, pcLine:6});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublistCount = sublistCount // 2 = ${newGap}`, stats:{cmp,swp,gap:newGap}, pcLine:6});
     } else {
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublist_count = sublist_count // 2 = 0 → while 結束`, stats:{cmp,swp,gap:'—'}, pcLine:6});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublistCount = sublistCount // 2 = 0 → while 結束`, stats:{cmp,swp,gap:'—'}, pcLine:6});
     }
   }
 
@@ -525,7 +525,7 @@ function genMergeSort(initial) {
   const oi = a.map((_,i)=>i);
   let cmp = 0, wr = 0;
   const treeNodes = []; // {level, from, to, status}
-  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:'初始：呼叫 merge_sort(0, n-1)', stats:{cmp,wr,phase:'初始化'}, brackets:[{from:0,to:N-1,row:0,label:`[0..${N-1}]`}], tree:[{level:0,from:0,to:N-1,status:'active'}], pcLine:1});
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:'初始：呼叫 mergeSort(0, n-1)', stats:{cmp,wr,phase:'初始化'}, brackets:[{from:0,to:N-1,row:0,label:`[0..${N-1}]`}], tree:[{level:0,from:0,to:N-1,status:'active'}], pcLine:1});
 
   function snapshotTree(extras) {
     return treeNodes.map(n => ({...n, status: extras[`${n.from}-${n.to}`] || n.status}));
@@ -591,7 +591,7 @@ function genQuickSort(initial, pivotMode) {
   const oi = a.map((_,i)=>i);
   let cmp = 0, swp = 0;
   const finalSorted = new Set();
-  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:'初始：呼叫 quick_sort(0, n-1)', stats:{cmp,swp,pivot:'—',rangeStr:`[0..${N-1}]`,lm:'—',rm:'—'}, brackets:[{from:0,to:N-1,row:0,label:`[0..${N-1}]`}], pcLine:1});
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:'初始：呼叫 quickSort(0, n-1)', stats:{cmp,swp,pivot:'—',rangeStr:`[0..${N-1}]`,lm:'—',rm:'—'}, brackets:[{from:0,to:N-1,row:0,label:`[0..${N-1}]`}], pcLine:1});
 
   function partition(first, last) {
     let pivotIdx = first;
