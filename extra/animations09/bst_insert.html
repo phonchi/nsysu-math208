@@ -35,17 +35,17 @@
 <div class="info-card">
 <div class="ic-title" id="bstCodeTitleInsert">虛擬碼 — _put <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
 <div class="pseudo-code" id="bstCodeInsert" style="font-size:.73em;">
-<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_put</span>(self, key, value, current_node):</span>
-<span class="line" data-l="2">    <span class="kw">if</span> key &lt; current_node.key:</span>
-<span class="line" data-l="3">        <span class="kw">if</span> current_node.left_child:</span>
-<span class="line" data-l="4">            self.<span class="fn">_put</span>(key, value, current_node.left_child)</span>
+<span class="line" data-l="1"><span class="fn">put</span>(self, key, value, currentNode):</span>
+<span class="line" data-l="2">    <span class="kw">if</span> key &lt; currentNode->key:</span>
+<span class="line" data-l="3">        <span class="kw">if</span> currentNode->leftChild:</span>
+<span class="line" data-l="4">            <span class="fn">put</span>(key, value, currentNode->leftChild)</span>
 <span class="line" data-l="5">        <span class="kw">else</span>:</span>
-<span class="line" data-l="6">            current_node.left_child = <span class="fn">TreeNode</span>(key, value, parent=current_node)</span>
+<span class="line" data-l="6">            currentNode->leftChild = <span class="fn">TreeNode</span>(key, value, parent=currentNode)</span>
 <span class="line" data-l="7">    <span class="kw">else</span>:</span>
-<span class="line" data-l="8">        <span class="kw">if</span> current_node.right_child:</span>
-<span class="line" data-l="9">            self.<span class="fn">_put</span>(key, value, current_node.right_child)</span>
+<span class="line" data-l="8">        <span class="kw">if</span> currentNode->rightChild:</span>
+<span class="line" data-l="9">            <span class="fn">put</span>(key, value, currentNode->rightChild)</span>
 <span class="line" data-l="10">        <span class="kw">else</span>:</span>
-<span class="line" data-l="11">            current_node.right_child = <span class="fn">TreeNode</span>(key, value, parent=current_node)</span>
+<span class="line" data-l="11">            currentNode->rightChild = <span class="fn">TreeNode</span>(key, value, parent=currentNode)</span>
 </div>
 </div>
 </div>

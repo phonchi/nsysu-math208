@@ -1,0 +1,28 @@
+[
+    {
+        "question": "In a hash table of size 13, which index positions would the following two keys map to: 27 and 130?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "1, 10",
+                "correct": false,
+                "feedback": "Incorrect. While 27 maps to 1, 130 does not map to 10."
+            },
+            {
+                "answer": "13, 0",
+                "correct": false,
+                "feedback": "Incorrect. An index of 13 is impossible for a table of size 13, as indices range from 0 to 12."
+            },
+            {
+                "answer": "1, 0",
+                "correct": true,
+                "feedback": "Correct! Using the remainder method (key % size): 27 % 13 = 1, and 130 % 13 = 0."
+            },
+            {
+                "answer": "2, 3",
+                "correct": false,
+                "feedback": "Incorrect. Please re-check your modulo arithmetic for both keys."
+            }
+        ]
+    }
+]

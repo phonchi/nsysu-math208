@@ -1,0 +1,28 @@
+[
+    {
+        "question": "Given the following list of numbers: [21, 1, 26, 45, 29, 28, 2, 9, 16, 49, 39, 27, 43, 34, 46, 40], which answer illustrates the list to be sorted after 3 recursive calls to mergesort?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "[16, 49, 39, 27, 43, 34, 46, 40]",
+                "correct": false,
+                "feedback": "Incorrect. This is the second (right) half of the initial list, which is not reached until the entire left half has been fully processed and merged."
+            },
+            {
+                "answer": "[21, 1]",
+                "correct": true,
+                "feedback": "Correct! Mergesort splits the list in half and recursively calls itself on the left sublist first. For a list of 16 items, the first recursive call receives the first 8 items, the second receives the first 4, and the third receives the first 2 items."
+            },
+            {
+                "answer": "[21, 1, 26, 45]",
+                "correct": false,
+                "feedback": "Incorrect. This 4-item list is the input to the second recursive call."
+            },
+            {
+                "answer": "[21]",
+                "correct": false,
+                "feedback": "Incorrect. A single-element list like this would be the input to the fourth recursive call, which would then trigger the base case."
+            }
+        ]
+    }
+]

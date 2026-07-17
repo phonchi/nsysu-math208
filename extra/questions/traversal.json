@@ -1,0 +1,28 @@
+[
+	{
+        "question": "In which type of tree traversal is the root node visited after all of its subtrees have been visited?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "Preorder traversal",
+                "correct": false,
+                "feedback": "Incorrect. In preorder traversal, the root node is visited first, before the subtrees."
+            },
+            {
+                "answer": "Inorder traversal",
+                "correct": false,
+                "feedback": "Incorrect. In inorder traversal, we visit the left subtree, then the root, then the right subtree."
+            },
+            {
+                "answer": "Postorder traversal",
+                "correct": true,
+                "feedback": "Correct! Postorder visits the left subtree, then the right subtree, and finally the root node."
+            },
+            {
+                "answer": "Level-order traversal",
+                "correct": false,
+                "feedback": "Incorrect. Level-order visits nodes layer by layer from top to bottom."
+            }
+        ]
+    }
+]

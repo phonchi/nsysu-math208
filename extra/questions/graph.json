@@ -1,0 +1,28 @@
+[
+	{
+        "question": "Regarding graph implementation methods, which of the following statements is true according to the materials?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "An adjacency matrix is the most space-efficient way to represent a sparse graph.",
+                "correct": false,
+                "feedback": "Incorrect. The lecture notes indicate that for a sparse graph, an adjacency matrix is inefficient because most cells will be empty while still occupying V squared space."
+            },
+            {
+                "answer": "An adjacency list is more space-efficient for graphs that are sparsely connected.",
+                "correct": true,
+                "feedback": "Correct! Adjacency lists allow us to represent a sparse graph compactly by only storing the actual connections that exist."
+            },
+            {
+                "answer": "In an adjacency matrix, if two vertices are not connected, no memory is allocated for that pair.",
+                "correct": false,
+                "feedback": "Incorrect. In a matrix implementation, every potential edge occupies a cell, even if the weight is 0 or infinity."
+            },
+            {
+                "answer": "Finding all neighbors of a vertex is faster in an adjacency matrix than in an adjacency list.",
+                "correct": false,
+                "feedback": "Incorrect. In a matrix, you must iterate through an entire row of length V. In a list, you only iterate through the actual neighbors."
+            }
+        ]
+    }
+]

@@ -65,15 +65,15 @@
     },
     {
         "front": "Formatted String",
-        "back": "A string that contains placeholders for inserting variables or expressions into the string, allowing for dynamic string creation with variable content."
+        "back": "Output built by inserting variable values into text with controlled formatting. In C++ this is done by chaining values into an output stream with << and applying manipulators for layout."
     },
     {
         "front": "Mutable",
         "back": "In programming, a mutable object is one whose state or value can be changed after it's created. This means that methods or operations can modify the data held by the object without needing to create a new object."
     },
     {
-        "front": "Format Operator",
-        "back": "An operator used in some programming languages (like `%` in `Python`) to format strings, by substituting variables or expressions into placeholders defined in a format string."
+        "front": "Stream Manipulator",
+        "back": "A helper such as fixed, setprecision, setw, or endl that is inserted into a C++ stream with << to control how subsequent values are formatted (decimal places, field width, line breaks). Most live in the <iomanip> header."
     },
     {
         "front": "Format Modifier",
@@ -85,7 +85,7 @@
     },
     {
         "front": "Syntax Error",
-        "back": "An error in the syntax of a programming language code, meaning the code does not follow the rules or grammar of the language. Syntax errors are detected by the compiler or interpreter."
+        "back": "An error in the grammar of the code, detected by the compiler before the program ever runs. In C++, compilation fails and no executable is produced until the syntax error is fixed."
     },
     {
         "front": "Logic Error",
@@ -96,8 +96,8 @@
         "back": "Events that occur during the execution of a program that disrupt the normal flow of instructions. Exceptions are typically handled by exception handling constructs in programming languages."
     },
     {
-        "front": "Module",
-        "back": "A module is a file containing Python definitions and statements. The file name is the module name with the suffix `.py` added. Modules are used to organize code in a logical and manageable way."
+        "front": "Header File",
+        "back": "A file (such as <iostream> or \"myclass.h\") containing declarations that a C++ program pulls in with #include. Headers let code be organized and reused across multiple source files, playing the role that modules play in other languages."
     },
     {
         "front": "Functions",
@@ -158,5 +158,25 @@
     {
         "front": "Inheritance",
         "back": "A principle in OOP where a new class is derived from an existing class. The derived class inherits attributes and methods of the existing class, allowing for code reuse."
+    },
+    {
+        "front": "Compiler",
+        "back": "A program that translates the entire source code into machine code before execution. C++ is a compiled language: g++ turns .cpp files into an executable, catching type and syntax errors at compile time."
+    },
+    {
+        "front": "Pointer",
+        "back": "A variable that stores the memory address of another variable. Declared with *, e.g. int *p = &x;. Pointers enable dynamic memory management and linked data structures, and are central to C++."
+    },
+    {
+        "front": "Reference / Address-of Operator (&)",
+        "back": "In a declaration, & creates a reference (an alias to an existing variable). In an expression, & yields the address of a variable, e.g. p = &x;."
+    },
+    {
+        "front": "Dereference Operator (*)",
+        "back": "Applied to a pointer in an expression, * accesses the value stored at the address the pointer holds, e.g. cout << *p; prints the value that p points to."
+    },
+    {
+        "front": "Namespace",
+        "back": "A named scope that groups identifiers to avoid name collisions. The C++ standard library lives in namespace std, which is why programs write std::cout or add 'using namespace std;'."
     }
 ]

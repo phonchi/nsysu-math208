@@ -17,7 +17,7 @@
     },
     {
         "front": "Tail of Linked List",
-        "back": "The last node in a linked list. Its next reference is set to None to indicate that there is no subsequent node in the sequence."
+        "back": "The last node in a linked list. Its next pointer is set to NULL to indicate that there is no subsequent node in the sequence."
     },
     {
         "front": "Ordered List",
@@ -25,7 +25,7 @@
     },
     {
         "front": "Circularly Linked List",
-        "back": "A variant of a linked list where the tail of the list uses its next reference to point back to the head node instead of None. This is useful for data sets that are cyclic."
+        "back": "A variant of a linked list where the tail of the list uses its next reference to point back to the head node instead of NULL. This is useful for data sets that are cyclic."
     },
     {
         "front": "Doubly Linked List",

@@ -1,0 +1,28 @@
+[
+    {
+        "question": "If a low-level array starts at memory address 1024 and each element (e.g., an integer) occupies 4 bytes of memory, what is the address of the element at index 8?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "1032",
+                "correct": false,
+                "feedback": "Incorrect. This would be the address for index 2. Remember the formula is base + index * size."
+            },
+            {
+                "answer": "1056",
+                "correct": true,
+                "feedback": "Correct! The address is calculated as: 1024 + (8 * 4) = 1024 + 32 = 1056."
+            },
+            {
+                "answer": "1028",
+                "correct": false,
+                "feedback": "Incorrect. This is the address of the second element (index 1)."
+            },
+            {
+                "answer": "1060",
+                "correct": false,
+                "feedback": "Incorrect. It seems you calculated for index 9 instead of index 8."
+            }
+        ]
+    }
+]

@@ -1,0 +1,28 @@
+[
+    {
+        "question": "Suppose you are doing a sequential search of the ordered list [3, 5, 6, 8, 11, 12, 14, 15, 17, 18]. How many comparisons would you need to do in order to find the key 13?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "10",
+                "correct": false,
+                "feedback": "Incorrect. A sequential search of an unordered list would require checking all 10 elements. However, in an ordered list, the algorithm can stop early once it reaches a value greater than the target."
+            },
+            {
+                "answer": "5",
+                "correct": false,
+                "feedback": "Incorrect. After 5 comparisons, the search reaches the value 11. Since 11 is less than 13, the algorithm must continue searching the next elements."
+            },
+            {
+                "answer": "7",
+                "correct": true,
+                "feedback": "Correct! In an ordered list, the search compares the target against each element until the item is found or a value larger than the target is encountered. In this case, you compare 13 against 3, 5, 6, 8, 11, 12, and 14. Once the algorithm compares 13 with 14 and finds that 14 is greater, it stops because 13 cannot exist further in the list."
+            },
+            {
+                "answer": "6",
+                "correct": false,
+                "feedback": "Incorrect. After 6 comparisons, the search reaches 12. Because 12 is less than 13, the search must perform a 7th comparison with 14 to determine that 13 is not in the list."
+            }
+        ]
+    }
+]

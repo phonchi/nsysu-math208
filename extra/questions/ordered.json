@@ -1,0 +1,28 @@
+[
+	{
+        "question": "What is the primary optimization in the search(item) method of an OrderedList compared to an UnorderedList when the item is not present in the list?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "It uses a binary search algorithm to find the item in logarithmic time.",
+                "correct": false,
+                "feedback": "Incorrect. Linked lists do not support the constant-time random access required for binary search."
+            },
+            {
+                "answer": "It can stop the search early if it encounters a node containing a value greater than the target item.",
+                "correct": true,
+                "feedback": "Correct! Because the list is sorted, if a node's data is already larger than the target, the target cannot possibly appear later in the list."
+            },
+            {
+                "answer": "It can jump backward to the head to re-scan the list more quickly.",
+                "correct": false,
+                "feedback": "Incorrect. Singly linked lists only allow forward traversal."
+            },
+            {
+                "answer": "It stores an index for every node to allow for direct access.",
+                "correct": false,
+                "feedback": "Incorrect. Linked lists rely on sequential references rather than indices for their structure."
+            }
+        ]
+    }
+]

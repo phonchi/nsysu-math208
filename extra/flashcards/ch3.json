@@ -37,7 +37,7 @@
     },
     {
         "front": "Dictionaries of Keys Matrix (DOK)",
-        "back": "A sparse matrix representation using a dictionary (or hash map) where each key is a tuple (row, column) and the value is the element value."
+        "back": "A sparse matrix representation using a hash map (such as std::map or std::unordered_map) where each key is a (row, column) pair and the value is the element value."
     },
     {
         "front": "Sparse Matrix as Linear List",

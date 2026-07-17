@@ -1,25 +1,25 @@
 [
     {
-        "question": "Which of the list operations shown below is NOT $O(1)$?",
+        "question": "Which of the vector operations shown below is NOT $O(1)$?",
         "type": "multiple_choice",
         "answers": [
             {
-                "answer": "a_list.pop(0)",
+                "answer": "vec.erase(vec.begin())",
                 "correct": true,
-                "feedback": "Correct! `pop(0)` removes the first element, which requires all subsequent elements to be shifted one position to the left, taking $O(n)$ time."
+                "feedback": "Correct! Erasing the first element requires all subsequent elements to be shifted one position to the left, taking $O(n)$ time."
             },
             {
-                "answer": "a_list.pop()",
+                "answer": "vec.pop_back()",
                 "correct": false,
-                "feedback": "No. `pop()` removes the last element, which is an $O(1)$ operation because no shifting is required."
+                "feedback": "No. pop_back() removes the last element, which is an $O(1)$ operation because no shifting is required."
             },
             {
-                "answer": "a_list.append()",
+                "answer": "vec.push_back(x)",
                 "correct": false,
-                "feedback": "No. `append()` adds an element to the end of the list, which is $O(1)$ (amortized)."
+                "feedback": "No. push_back() adds an element at the end of the vector, which is $O(1)$ (amortized)."
             },
             {
-                "answer": "a_list[10]",
+                "answer": "vec[10]",
                 "correct": false,
                 "feedback": "No. Accessing an element by index is a direct memory lookup, which is $O(1)$."
             }

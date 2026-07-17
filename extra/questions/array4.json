@@ -1,0 +1,28 @@
+[
+    {
+        "question": "In a 2D array (Matrix) with 5 rows and 10 columns stored in Row-Major order, which formula represents the 1D index of the element at row $i$ and column $j$?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "code": "i + j",
+                "correct": false,
+                "feedback": "Incorrect. This does not account for the number of elements in each row."
+            },
+            {
+                "code": "i * 10 + j",
+                "correct": true,
+                "feedback": "Correct! In Row-Major order, you skip 'i' full rows (each 10 elements long) and then add the column offset 'j'."
+            },
+            {
+                "code": "j * 5 + i",
+                "correct": false,
+                "feedback": "Incorrect. This formula would be used for Column-Major order."
+            },
+            {
+                "code": "i * 5 + j",
+                "correct": false,
+                "feedback": "Incorrect. You must multiply the row index by the total number of columns, not the number of rows."
+            }
+        ]
+    }
+]

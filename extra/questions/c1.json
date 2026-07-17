@@ -1,0 +1,28 @@
+[
+    {
+        "question": "Convert the following infix expression to postfix: $10 + 3 * 5 / (16 - 4)$",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "answer": "$10 \\ 3 \\ 5 \\ * \\ 16 \\ 4 \\ - \\ / \\ +$",
+                "correct": true,
+                "feedback": "Correct! Operands are output directly, and operators are stacked based on precedence. The parentheses ensure (16 - 4) is processed as '16 4 -' before being divided."
+            },
+            {
+                "answer": "$10 \\ 3 \\ 5 \\ * \\ / \\ 16 \\ 4 \\ - \\ +$",
+                "correct": false,
+                "feedback": "Incorrect. This order suggests the division operator was placed before the parenthesized expression was processed."
+            },
+            {
+                "answer": "$10 \\ 3 \\ 5 \\ 16 \\ 4 \\ - \\ / \\ * \\ +$",
+                "correct": false,
+                "feedback": "Incorrect. This arrangement incorrectly groups the operands before the multiplication and division operators."
+            },
+            {
+                "answer": "$10 \\ 3 \\ + \\ 5 \\ * \\ 16 \\ 4 \\ - \\ /$",
+                "correct": false,
+                "feedback": "Incorrect. This violates the precedence of multiplication over addition."
+            }
+        ]
+    }
+]

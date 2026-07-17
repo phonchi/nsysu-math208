@@ -39,14 +39,14 @@
 <div class="info-card">
 <div class="ic-title">find_successor <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
 <div class="pseudo-code" style="font-size:.74em;">
-<span class="line"><span class="kw">def</span> <span class="fn">find_successor</span>(self):</span>
-<span class="line">    <span class="kw">if</span> self.right_child:</span>
-<span class="line">        <span class="kw">return</span> self.right_child.<span class="fn">find_min</span>()</span>
+<span class="line"><span class="fn">find_successor</span>(self):</span>
+<span class="line">    <span class="kw">if</span> rightChild:</span>
+<span class="line">        <span class="kw">return</span> rightChild.<span class="fn">find_min</span>()</span>
 <span class="line">    ...</span>
-<span class="line"><span class="kw">def</span> <span class="fn">find_min</span>(self):</span>
+<span class="line"><span class="fn">find_min</span>(self):</span>
 <span class="line">    cur = self</span>
-<span class="line">    <span class="kw">while</span> cur.left_child:</span>
-<span class="line">        cur = cur.left_child</span>
+<span class="line">    <span class="kw">while</span> cur.leftChild:</span>
+<span class="line">        cur = cur.leftChild</span>
 <span class="line">    <span class="kw">return</span> cur</span>
 </div>
 </div>

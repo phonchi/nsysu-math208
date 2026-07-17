@@ -7,14 +7,14 @@
    Each panel HTML triggers init via:
      <script>(function go(){
         if(!window.DS09||!window.DS09.init){setTimeout(go,50);return;}
-        window.DS09.init.preorder();   // or .inorder, .postorder, .heapInsert, ...
+        window.DS09.init.preorder();   / or .inorder, .postorder, .heapInsert, ...
      })();<\/script>
    (the backslash-escaped `<\/script>` keeps this docstring literal from
    prematurely closing the outer <script> when this file is inlined into
    a Jupyter saved-output HTML page.)
 */
 (function () {
-  if (window.DS09) return;   // idempotent — re-running cell 6 must not redeclare
+  if (window.DS09) return;   / idempotent — re-running cell 6 must not redeclare
 
 /* ============================================================
    COMMON UTILITIES
@@ -30,7 +30,7 @@ class TNode {
     this.left = null;
     this.right = null;
     this.parent = null;
-    this.x = 0; this.y = 0;  // computed layout coords (relative to canvas)
+    this.x = 0; this.y = 0;  / computed layout coords (relative to canvas)
     this.id = TNode._id++;
   }
 }
@@ -86,12 +86,12 @@ function treeHeight(root) {
 function renderTree(canvas, root, opts={}) {
   const nodesLayer = canvas.querySelector('.nodes-layer');
   const svg = canvas.querySelector('svg');
-  // Clear
+  / Clear
   nodesLayer.innerHTML = '';
   svg.innerHTML = '';
   if (!root) return;
 
-  // Edges first (so they sit under nodes)
+  / Edges first (so they sit under nodes)
   function drawEdges(n) {
     if (!n) return;
     if (n.left) {
@@ -115,7 +115,7 @@ function renderTree(canvas, root, opts={}) {
   }
   drawEdges(root);
 
-  // Nodes
+  / Nodes
   for (const n of allNodes(root)) {
     const div = document.createElement('div');
     div.className = 't-node node-' + n.id;
@@ -136,7 +136,7 @@ function renderTree(canvas, root, opts={}) {
 function updateEdges(canvas, root) {
   const svg = canvas.querySelector('svg');
   if (!root) { svg.innerHTML = ''; return; }
-  // Remove existing
+  / Remove existing
   svg.innerHTML = '';
   function drawEdges(n) {
     if (!n) return;
@@ -230,8 +230,8 @@ function hlLine(codeEl, lineNum) {
 /* Generic step-based animation player */
 class Player {
   constructor(opts) {
-    this.steps = opts.steps;          // array of step objects
-    this.apply = opts.apply;          // (step, idx) => void
+    this.steps = opts.steps;          / array of step objects
+    this.apply = opts.apply;          / (step, idx) => void
     this.delay = opts.delay || 700;
     this.idx = 0;
     this.timer = null;
@@ -276,8 +276,8 @@ class Player {
 function initVocabulary() {
   const canvas = $('canvas-vocab');
   if (!canvas) return;
-  // Sample tree (Mammalia style)
-  // Use same tree as PDF: root with several layers
+  / Sample tree (Mammalia style)
+  / Use same tree as PDF: root with several layers
   const root = buildFromArr(['A',
     'B', 'D', null, null, 'E', 'H', null, null, null,
     'C', 'F', null, null, 'G', null, null
@@ -293,7 +293,7 @@ function initVocabulary() {
     });
   }
 
-  // Compute properties for a node
+  / Compute properties for a node
   function nodeProps(n) {
     let level = 0;
     for (let p = n.parent; p; p = p.parent) level++;
@@ -340,7 +340,7 @@ function initVocabulary() {
 
   function clickNode(n) {
     clearHL(canvas);
-    // Highlight subtree
+    / Highlight subtree
     function markSub(x) {
       if (!x) return;
       setNodeClass(canvas, x.id, 'subtree');
@@ -348,14 +348,14 @@ function initVocabulary() {
       if (x.right) { setEdgeClass(canvas, x.id, x.right.id, 'subtree'); markSub(x.right); }
     }
     markSub(n);
-    // Highlight path-to-root
+    / Highlight path-to-root
     let cur = n;
     while (cur.parent) {
       setEdgeClass(canvas, cur.parent.id, cur.id, 'path');
       setNodeClass(canvas, cur.parent.id, 'path');
       cur = cur.parent;
     }
-    // Current node
+    / Current node
     setNodeClass(canvas, n.id, 'current');
     const p = nodeProps(n);
     $('vocabStatus').textContent =
@@ -379,10 +379,10 @@ function initNodesRefs() {
   const canvas = $('canvas-nr');
   if (!canvas) return;
 
-  // Build steps: each step describes the tree state and which line is active
+  / Build steps: each step describes the tree state and which line is active
   function buildSteps() {
     const steps = [];
-    // Step 0: just root 'a'
+    / Step 0: just root 'a'
     let s0 = { tree: () => {
       const r = new TNode('a');
       return r;
@@ -448,7 +448,7 @@ function initNodesRefs() {
     layoutTree(root, w, h, 35, 35);
     renderTree(canvas, root);
     if (s.highlight) {
-      // find node with that key and mark
+      / find node with that key and mark
       for (const n of allNodes(root)) {
         if (n.key === s.highlight) {
           setNodeClass(canvas, n.id, 'target');
@@ -523,17 +523,17 @@ function initParseTree() {
     /* Simulate the build_parse_tree algorithm and emit a
        step for each token + intermediate state. */
     const steps = [];
-    // We'll keep root as a TNode tree. Each node has a 'cur' marker.
+    / We'll keep root as a TNode tree. Each node has a 'cur' marker.
     const root = new TNode('');
     let cur = root;
     const stk = [root];
     let nodeCounter = 0;
     function snapshot(activeIdx, msg, highlightCur=true, finished=false, evalRes=null) {
-      // Deep copy tree structure with node ids preserved by serialization
-      // Simpler: each step keeps a reference to the same root (since we mutate);
-      // but for animation we need a "frame": serialize keys per id.
+      / Deep copy tree structure with node ids preserved by serialization
+      / Simpler: each step keeps a reference to the same root (since we mutate);
+      / but for animation we need a "frame": serialize keys per id.
       const frame = { activeIdx, msg, finished, evalRes };
-      // Snapshot: for each node id, record key
+      / Snapshot: for each node id, record key
       frame.keys = new Map();
       frame.parents = new Map();
       frame.struct = serializeTree(root);
@@ -546,7 +546,7 @@ function initParseTree() {
     for (let i = 0; i < tokens.length; i++) {
       const t = tokens[i];
       if (t === '(') {
-        // insert_left then descend
+        / insert_left then descend
         cur.left = new TNode(''); cur.left.parent = cur;
         stk.push(cur);
         cur = cur.left;
@@ -568,7 +568,7 @@ function initParseTree() {
       }
     }
     snapshot(tokens.length, '建構完成', true, true);
-    // Compute evaluation
+    / Compute evaluation
     function evalT(n) {
       if (n.left && n.right) {
         const a = evalT(n.left), b = evalT(n.right);
@@ -588,7 +588,7 @@ function initParseTree() {
   }
 
   function serializeTree(root) {
-    // Returns array of {id, key, left, right} representing the tree
+    / Returns array of {id, key, left, right} representing the tree
     const nodes = [];
     function visit(n) {
       if (!n) return null;
@@ -605,13 +605,13 @@ function initParseTree() {
   }
 
   function applyFrame(frame) {
-    // Reconstruct tree from struct
+    / Reconstruct tree from struct
     const struct = frame.struct;
     if (!struct) return;
     const map = new Map();
     for (const nd of struct.nodes) {
       const n = new TNode(nd.key === '' ? '?' : nd.key);
-      n.id = nd.id;  // preserve id
+      n.id = nd.id;  / preserve id
       map.set(nd.id, n);
     }
     for (const nd of struct.nodes) {
@@ -625,17 +625,17 @@ function initParseTree() {
     layoutTree(root, w, h, 35, 35);
     renderTree(canvas, root);
 
-    // Highlight cur
+    / Highlight cur
     if (frame.cur != null) setNodeClass(canvas, frame.cur, 'current');
 
-    // Update side panel
+    / Update side panel
     $('parseTok').textContent = frame.activeIdx >= 0 && frame.activeIdx < currentTokens.length ?
       currentTokens[frame.activeIdx] : '—';
     $('parseCur').textContent = (frame.cur != null) ? (map.get(frame.cur).key || '?') : '—';
     $('parseStackD').textContent = frame.stk.length;
     $('parseResult').textContent = frame.finished ? frame.evalRes : '—';
 
-    // Tokens strip
+    / Tokens strip
     const tokEl = $('parseTokens');
     tokEl.innerHTML = '';
     currentTokens.forEach((t, i) => {
@@ -646,7 +646,7 @@ function initParseTree() {
       tokEl.appendChild(sp);
     });
 
-    // Stack
+    / Stack
     const stkEl = $('parseStack');
     stkEl.innerHTML = '<div class="stack-label">parent ↓</div>';
     frame.stk.forEach((id, i) => {
@@ -724,10 +724,10 @@ function initTraversals(suffix = '', lockedKind = null) {
   if (!canvas) return;
   const panelRoot = canvas.closest('.ds09-anim');
 
-  // Three sample trees
+  / Three sample trees
   const trees = {
     parse: () => {
-      // (3 + (4 * 5))
+      / (3 + (4 * 5))
       const r = new TNode('+');
       r.left = new TNode(3); r.left.parent = r;
       r.right = new TNode('*'); r.right.parent = r;
@@ -785,9 +785,9 @@ function initTraversals(suffix = '', lockedKind = null) {
   }
 
   function applyFrame(frame) {
-    // Clear
+    / Clear
     canvas.querySelectorAll('.t-node').forEach(el => el.classList.remove('active','visited','target'));
-    // Mark visited (any node whose key already in output)
+    / Mark visited (any node whose key already in output)
     const outputSet = new Set(frame.output);
     for (const n of allNodes(currentTree)) {
       if (outputSet.has(n.key)) setNodeClass(canvas, n.id, 'visited');
@@ -795,14 +795,14 @@ function initTraversals(suffix = '', lockedKind = null) {
     if (frame.active != null) {
       setNodeClass(canvas, frame.active, frame.phase === 'visit' ? 'target' : 'active');
     }
-    // Output strip
+    / Output strip
     const out = $$('travOutput');
     if (frame.output.length === 0) {
       out.innerHTML = '<span style="color:rgba(255,255,255,.4)">尚未訪問任何節點</span>';
     } else {
       out.innerHTML = frame.output.map(k => `<span class="out-key">${k}</span>`).join('');
     }
-    // Stack
+    / Stack
     const stkEl = $$('travStack');
     stkEl.innerHTML = '<div class="stack-label">call stack ↓</div>';
     frame.callStack.forEach((k, i) => {
@@ -827,22 +827,22 @@ function initTraversals(suffix = '', lockedKind = null) {
       delay: parseInt($$('travSpeed').value, 10),
     });
     player.reset();
-    // Update code panel to match traversal
+    / Update code panel to match traversal
     const codeMap = {
-      preorder: `<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">preorder</span>(tree):</span>
+      preorder: `<span class="line" data-l="1"><span class="fn">preorder</span>(tree):</span>
 <span class="line" data-l="2">    <span class="kw">if</span> tree:</span>
 <span class="line" data-l="3">        <span class="fn">print</span>(tree._key, end=<span class="str">" "</span>)</span>
-<span class="line" data-l="4">        <span class="fn">preorder</span>(tree._left_child)</span>
-<span class="line" data-l="5">        <span class="fn">preorder</span>(tree._right_child)</span>`,
-      inorder: `<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">inorder</span>(tree):</span>
+<span class="line" data-l="4">        <span class="fn">preorder</span>(tree._leftChild)</span>
+<span class="line" data-l="5">        <span class="fn">preorder</span>(tree._rightChild)</span>`,
+      inorder: `<span class="line" data-l="1"><span class="fn">inorder</span>(tree):</span>
 <span class="line" data-l="2">    <span class="kw">if</span> tree:</span>
-<span class="line" data-l="3">        <span class="fn">inorder</span>(tree._left_child)</span>
+<span class="line" data-l="3">        <span class="fn">inorder</span>(tree._leftChild)</span>
 <span class="line" data-l="4">        <span class="fn">print</span>(tree._key, end=<span class="str">" "</span>)</span>
-<span class="line" data-l="5">        <span class="fn">inorder</span>(tree._right_child)</span>`,
-      postorder: `<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">postorder</span>(tree):</span>
+<span class="line" data-l="5">        <span class="fn">inorder</span>(tree._rightChild)</span>`,
+      postorder: `<span class="line" data-l="1"><span class="fn">postorder</span>(tree):</span>
 <span class="line" data-l="2">    <span class="kw">if</span> tree:</span>
-<span class="line" data-l="3">        <span class="fn">postorder</span>(tree._left_child)</span>
-<span class="line" data-l="4">        <span class="fn">postorder</span>(tree._right_child)</span>
+<span class="line" data-l="3">        <span class="fn">postorder</span>(tree._leftChild)</span>
+<span class="line" data-l="4">        <span class="fn">postorder</span>(tree._rightChild)</span>
 <span class="line" data-l="5">        <span class="fn">print</span>(tree._key, end=<span class="str">" "</span>)</span>`,
     };
     $$('travCode').innerHTML = codeMap[currentTrav];
@@ -859,7 +859,7 @@ function initTraversals(suffix = '', lockedKind = null) {
   }
 
   if (lockedKind) {
-    // Hide the traversal-kind preset row (kind is locked by panel choice)
+    / Hide the traversal-kind preset row (kind is locked by panel choice)
     panelRoot.querySelectorAll('.preset-btn[data-trav]').forEach(b => {
       b.classList.toggle('active', b.dataset.trav === lockedKind);
       const row = b.closest('.preset-row');
@@ -909,8 +909,8 @@ function initHeap(suffix = '', lockedOp = null) {
   const panelRoot = canvas.closest('.ds09-anim');
   const listEl = $$('heapList');
 
-  // Map external lockedOp names ('insert' | 'extract' | 'build') onto
-  // the internal data-op identifiers used in the original markup.
+  / Map external lockedOp names ('insert' | 'extract' | 'build') onto
+  / the internal data-op identifiers used in the original markup.
   const opMap = { insert: 'insert', extract: 'delete', build: 'heapify' };
   const initialOp = lockedOp ? (opMap[lockedOp] || lockedOp) : 'insert';
 
@@ -919,7 +919,7 @@ function initHeap(suffix = '', lockedOp = null) {
   let player = null;
   let stats = { swap: 0, cmp: 0 };
 
-  // Build a TNode tree from heap array (parallel structure for visualization)
+  / Build a TNode tree from heap array (parallel structure for visualization)
   function arrToTree(arr) {
     if (arr.length === 0) return null;
     const nodes = arr.map(k => new TNode(k));
@@ -939,11 +939,11 @@ function initHeap(suffix = '', lockedOp = null) {
     if (root) {
       layoutTree(root, w, h, 36, 36);
       renderTree(canvas, root);
-      // Apply highlights based on array index
+      / Apply highlights based on array index
       const allTNodes = [];
       (function walk(n){ if(!n) return; allTNodes.push(n); walk(n.left); walk(n.right); })(root);
-      // The order in allTNodes is preorder, but our nodes were created in array order
-      // Re-grab by index using the original index of creation
+      / The order in allTNodes is preorder, but our nodes were created in array order
+      / Re-grab by index using the original index of creation
       arr.forEach((_, i) => {
         const el = canvas.querySelectorAll('.t-node')[i];
         if (!el) return;
@@ -955,7 +955,7 @@ function initHeap(suffix = '', lockedOp = null) {
       renderTree(canvas, null);
     }
 
-    // Render array list
+    / Render array list
     listEl.innerHTML = '';
     arr.forEach((k, i) => {
       const cell = document.createElement('div');
@@ -968,7 +968,7 @@ function initHeap(suffix = '', lockedOp = null) {
     });
   }
 
-  // Re-render relying on creation order: rebuild the tree so nodes-layer order matches array index
+  / Re-render relying on creation order: rebuild the tree so nodes-layer order matches array index
   function renderHeap(arr, hl) {
     hl = hl || {};
     TNode._id = 0;
@@ -982,7 +982,7 @@ function initHeap(suffix = '', lockedOp = null) {
     nodesLayer.innerHTML = '';
     svg.innerHTML = '';
 
-    // Build node DOMs in array order
+    / Build node DOMs in array order
     const nodeEls = [];
     arr.forEach((k, i) => {
       const div = document.createElement('div');
@@ -993,16 +993,16 @@ function initHeap(suffix = '', lockedOp = null) {
       nodeEls.push(div);
       nodesLayer.appendChild(div);
     });
-    // Now position by walking tree (mapping order: BFS = array order)
+    / Now position by walking tree (mapping order: BFS = array order)
     if (root) {
-      // Use BFS to map index -> tnode
+      / Use BFS to map index -> tnode
       const q = [root]; const tnodes = [];
       while (q.length) { const n = q.shift(); tnodes.push(n); if (n.left) q.push(n.left); if (n.right) q.push(n.right); }
       tnodes.forEach((n, i) => {
         nodeEls[i].style.left = n.x + 'px';
         nodeEls[i].style.top = n.y + 'px';
       });
-      // Edges
+      / Edges
       tnodes.forEach((n, i) => {
         const li = 2*i+1, ri = 2*i+2;
         for (const ci of [li, ri]) {
@@ -1018,7 +1018,7 @@ function initHeap(suffix = '', lockedOp = null) {
       });
     }
 
-    // Highlights
+    / Highlights
     arr.forEach((_, i) => {
       const el = nodeEls[i]; if (!el) return;
       if (hl.active === i) el.classList.add('active');
@@ -1040,7 +1040,7 @@ function initHeap(suffix = '', lockedOp = null) {
     });
   }
 
-  // Generate steps for percolate up from index i
+  / Generate steps for percolate up from index i
   function genPercUp(arr, startI) {
     const a = arr.slice();
     const steps = [];
@@ -1129,7 +1129,7 @@ function initHeap(suffix = '', lockedOp = null) {
     for (let i = start; i >= 0; i--) {
       steps.push({arr:cur.slice(), hl:{active:i, fixed:fixed.slice()}, status:`對 heap[${i}]=${cur[i]} 做 perc_down`, line:null, swap:totalSwap, cmp:totalCmp, idx:i, par:'—'});
       const r = genPercDown(cur, i, cur.length-1, totalSwap, totalCmp);
-      // Inject fixed indices into each step
+      / Inject fixed indices into each step
       r.steps.forEach(s => {
         s.hl = Object.assign({}, s.hl, {fixed: fixed.slice()});
         steps.push(s);
@@ -1175,17 +1175,17 @@ function initHeap(suffix = '', lockedOp = null) {
     } else if (currentOp === 'delete') {
       regen(genDeleteSteps(heapArr));
     } else if (currentOp === 'heapify') {
-      // Use the input array as-is (unsorted)
+      / Use the input array as-is (unsorted)
       const raw = $$('heapArrInput').value.split(/[\s,]+/).map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
       heapArr = raw;
       regen(genHeapifySteps(raw));
     }
   }
 
-  // Wire up controls — operation toggle row is panel-scoped.
+  / Wire up controls — operation toggle row is panel-scoped.
   const opButtons = panelRoot.querySelectorAll('.preset-btn[data-op]');
   if (lockedOp) {
-    // Set the active preset to the locked op and hide the toggle row entirely.
+    / Set the active preset to the locked op and hide the toggle row entirely.
     opButtons.forEach(b => {
       b.classList.toggle('active', b.dataset.op === currentOp);
     });
@@ -1258,7 +1258,7 @@ function initBST(suffix = '', lockedOp = null) {
   if (!canvas) return;
   const panelRoot = canvas.closest('.ds09-anim');
 
-  // Map external lockedOp ('search'|'insert') onto internal data-bstop ('get'|'put').
+  / Map external lockedOp ('search'|'insert') onto internal data-bstop ('get'|'put').
   const opMap = { search: 'get', insert: 'put' };
   const initialBstOp = lockedOp ? (opMap[lockedOp] || lockedOp) : null;
 
@@ -1266,32 +1266,32 @@ function initBST(suffix = '', lockedOp = null) {
   let player = null;
   let currentBstOp = initialBstOp || 'put';
 
-  // Pseudo-code variants for put vs get; line numbers in genOpSteps refer to these.
+  / Pseudo-code variants for put vs get; line numbers in genOpSteps refer to these.
   const codeTemplates = {
     put: {
       title: '虛擬碼 — _put <span class="ic-badge" style="background:var(--accent2)">CODE</span>',
-      html: '<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_put</span>(self, key, value, current_node):</span>\n' +
-            '<span class="line" data-l="2">    <span class="kw">if</span> key &lt; current_node.key:</span>\n' +
-            '<span class="line" data-l="3">        <span class="kw">if</span> current_node.left_child:</span>\n' +
-            '<span class="line" data-l="4">            self.<span class="fn">_put</span>(key, value, current_node.left_child)</span>\n' +
+      html: '<span class="line" data-l="1"><span class="fn">put</span>(self, key, value, currentNode):</span>\n' +
+            '<span class="line" data-l="2">    <span class="kw">if</span> key &lt; currentNode->key:</span>\n' +
+            '<span class="line" data-l="3">        <span class="kw">if</span> currentNode->leftChild:</span>\n' +
+            '<span class="line" data-l="4">            <span class="fn">put</span>(key, value, currentNode->leftChild)</span>\n' +
             '<span class="line" data-l="5">        <span class="kw">else</span>:</span>\n' +
-            '<span class="line" data-l="6">            current_node.left_child = <span class="fn">TreeNode</span>(key, value, parent=current_node)</span>\n' +
+            '<span class="line" data-l="6">            currentNode->leftChild = <span class="fn">TreeNode</span>(key, value, parent=currentNode)</span>\n' +
             '<span class="line" data-l="7">    <span class="kw">else</span>:</span>\n' +
-            '<span class="line" data-l="8">        <span class="kw">if</span> current_node.right_child:</span>\n' +
-            '<span class="line" data-l="9">            self.<span class="fn">_put</span>(key, value, current_node.right_child)</span>\n' +
+            '<span class="line" data-l="8">        <span class="kw">if</span> currentNode->rightChild:</span>\n' +
+            '<span class="line" data-l="9">            <span class="fn">put</span>(key, value, currentNode->rightChild)</span>\n' +
             '<span class="line" data-l="10">        <span class="kw">else</span>:</span>\n' +
-            '<span class="line" data-l="11">            current_node.right_child = <span class="fn">TreeNode</span>(key, value, parent=current_node)</span>'
+            '<span class="line" data-l="11">            currentNode->rightChild = <span class="fn">TreeNode</span>(key, value, parent=currentNode)</span>'
     },
     get: {
       title: '虛擬碼 — _get <span class="ic-badge" style="background:var(--accent2)">CODE</span>',
-      html: '<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_get</span>(self, key, current_node):</span>\n' +
-            '<span class="line" data-l="2">    <span class="kw">if not</span> current_node: <span class="kw">return None</span></span>\n' +
-            '<span class="line" data-l="3">    <span class="kw">if</span> current_node.key == key:</span>\n' +
-            '<span class="line" data-l="4">        <span class="kw">return</span> current_node</span>\n' +
-            '<span class="line" data-l="5">    <span class="kw">elif</span> key &lt; current_node.key:</span>\n' +
-            '<span class="line" data-l="6">        <span class="kw">return</span> self.<span class="fn">_get</span>(key, current_node.left_child)</span>\n' +
+      html: '<span class="line" data-l="1"><span class="fn">get</span>(self, key, currentNode):</span>\n' +
+            '<span class="line" data-l="2">    <span class="kw">if</span> ! currentNode: <span class="kw">return</span> NULL</span>\n' +
+            '<span class="line" data-l="3">    <span class="kw">if</span> currentNode->key == key:</span>\n' +
+            '<span class="line" data-l="4">        <span class="kw">return</span> currentNode</span>\n' +
+            '<span class="line" data-l="5">    <span class="kw">else if</span> key &lt; currentNode->key:</span>\n' +
+            '<span class="line" data-l="6">        <span class="kw">return</span> <span class="fn">get</span>(key, currentNode->leftChild)</span>\n' +
             '<span class="line" data-l="7">    <span class="kw">else</span>:</span>\n' +
-            '<span class="line" data-l="8">        <span class="kw">return</span> self.<span class="fn">_get</span>(key, current_node.right_child)</span>'
+            '<span class="line" data-l="8">        <span class="kw">return</span> <span class="fn">get</span>(key, currentNode->rightChild)</span>'
     }
   };
 
@@ -1329,7 +1329,7 @@ function initBST(suffix = '', lockedOp = null) {
       hlPath.forEach(n => {
         if (n) setNodeClass(canvas, n.id, 'path');
       });
-      // Edges along path
+      / Edges along path
       for (let i = 0; i < hlPath.length - 1; i++) {
         if (hlPath[i] && hlPath[i+1]) {
           setEdgeClass(canvas, hlPath[i].id, hlPath[i+1].id, 'path');
@@ -1342,8 +1342,8 @@ function initBST(suffix = '', lockedOp = null) {
     setText($$('bstSize'), nodeCount(root));
   }
 
-  // Generate steps for a put or get operation
-  // Line-number maps for the two pseudo-code templates
+  / Generate steps for a put or get operation
+  / Line-number maps for the two pseudo-code templates
   const lineMap = {
     put: { visitLT: 2, visitGTE: 7, goLeft: 4, goRight: 9, insertLeft: 6, insertRight: 11, foundEq: null, notFound: null },
     get: { visitLT: 5, visitGTE: 7, goLeft: 6, goRight: 8, insertLeft: null, insertRight: null, foundEq: 4, notFound: 2 }
@@ -1378,7 +1378,7 @@ function initBST(suffix = '', lockedOp = null) {
           cur = cur.left;
         } else {
           if (op === 'put') {
-            steps.push({type:'insert-left', node:cur, path:path.slice(), key, status:`${key} < ${cur.key} 且 left_child 為空，插入為左子`, line:L.insertLeft, cmp});
+            steps.push({type:'insert-left', node:cur, path:path.slice(), key, status:`${key} < ${cur.key} 且 leftChild 為空，插入為左子`, line:L.insertLeft, cmp});
             steps.push({type:'commit', node:cur, path:path.slice(), key, side:'left', status:`插入 ${key} 完成 ✓`, line:null, cmp});
           } else {
             steps.push({type:'not-found', node:cur, path:path.slice(), status:`${key} 不在樹中`, line:L.notFound, result:'NOT FOUND', cmp});
@@ -1391,7 +1391,7 @@ function initBST(suffix = '', lockedOp = null) {
           cur = cur.right;
         } else {
           if (op === 'put') {
-            steps.push({type:'insert-right', node:cur, path:path.slice(), key, status:`${key} >= ${cur.key} 且 right_child 為空，插入為右子`, line:L.insertRight, cmp});
+            steps.push({type:'insert-right', node:cur, path:path.slice(), key, status:`${key} >= ${cur.key} 且 rightChild 為空，插入為右子`, line:L.insertRight, cmp});
             steps.push({type:'commit', node:cur, path:path.slice(), key, side:'right', status:`插入 ${key} 完成 ✓`, line:null, cmp});
           } else {
             steps.push({type:'not-found', node:cur, path:path.slice(), status:`${key} 不在樹中`, line:L.notFound, result:'NOT FOUND', cmp});
@@ -1453,10 +1453,10 @@ function initBST(suffix = '', lockedOp = null) {
     hlLine($$('bstCode'), null);
   }
 
-  // Wire — operation buttons are panel-scoped.
+  / Wire — operation buttons are panel-scoped.
   const bstOpButtons = panelRoot.querySelectorAll('button[data-bstop]');
   if (initialBstOp) {
-    // Hide non-matching op buttons; keep only the locked op visible & active.
+    / Hide non-matching op buttons; keep only the locked op visible & active.
     bstOpButtons.forEach(b => {
       if (b.dataset.bstop !== initialBstOp) b.style.display = 'none';
     });
@@ -1507,12 +1507,12 @@ function initBST(suffix = '', lockedOp = null) {
 
   rebuild();
   _ensurePanelReady(canvas, () => {
-    // 不能呼叫 player.apply()：commit / commit-root step 會 create TNode 並 mutate root，
-    // ResizeObserver fire 時 replay 會二次 insert → 樹結構壞。改用 pure render(...) snapshot。
+    / 不能呼叫 player.apply()：commit / commit-root step 會 create TNode 並 mutate root，
+    / ResizeObserver fire 時 replay 會二次 insert → 樹結構壞。改用 pure render(...) snapshot。
     if (player && player.steps && player.steps[player.idx]) {
       const s = player.steps[player.idx];
-      // For commit frame，root 已被當初的 applyStep 插入新節點，從 s.node[s.side] 直接取出
-      // 並 highlight 它，否則只會 highlight 到 parent。
+      / For commit frame，root 已被當初的 applyStep 插入新節點，從 s.node[s.side] 直接取出
+      / 並 highlight 它，否則只會 highlight 到 parent。
       if (s.type === 'commit' && s.node && s.side) {
         const child = s.node[s.side];
         render(child ? s.path.concat([child]) : s.path, child || s.node, s.status ?? null);
@@ -1608,7 +1608,7 @@ function initBSTDelete(suffix = '') {
       steps.push({status:'刪除完成 ✓', commit:'lift-child', target, child, case:'Case 2', phase:'完成', succ:'—'});
     } else {
       steps.push({status:`兩個子節點 → 找 in-order successor（右子樹中最小）`, hl:{path, target}, case:'Case 3', target:target.key, succ:'?', phase:'找 successor'});
-      // Walk right subtree to find min
+      / Walk right subtree to find min
       let cur = target.right;
       const succPath = [target, cur];
       steps.push({status:`進入右子樹 → ${cur.key}`, hl:{path, target, successor:cur}, case:'Case 3', target:target.key, succ:cur.key, phase:'找 successor'});
@@ -1658,7 +1658,7 @@ function initBSTDelete(suffix = '') {
       render({target: s.target, successor: succ});
     } else if (s.commit === 'splice-succ') {
       const succ = s.succNode || s.succ;
-      // succ has at most a right child
+      / succ has at most a right child
       const child = succ.right;
       spliceNode(succ, child);
       render({});
@@ -1685,8 +1685,8 @@ function initBSTDelete(suffix = '') {
     $$('delPhase').textContent = '—';
   }
 
-  // Build a fresh Player for the current key but do not auto-play.
-  // startDel() calls this then play()s; delStep() calls this then step()s.
+  / Build a fresh Player for the current key but do not auto-play.
+  / startDel() calls this then play()s; delStep() calls this then step()s.
   function prepareDel() {
     const k = parseInt($$('delKey').value, 10);
     if (isNaN(k)) return false;
@@ -1719,9 +1719,9 @@ function initBSTDelete(suffix = '') {
 
   rebuild();
   _ensurePanelReady(canvas, () => {
-    // 不能呼叫 player.apply()：commit step (remove-leaf / lift-child / copy-key / splice-succ)
-    // 會 mutate root（刪節點 / 接子樹），replay 會二次刪 → 樹結構壞。
-    // render(hl) 是 pure：只讀 root + 套 highlight，不改 tree。
+    / 不能呼叫 player.apply()：commit step (remove-leaf / lift-child / copy-key / splice-succ)
+    / 會 mutate root（刪節點 / 接子樹），replay 會二次刪 → 樹結構壞。
+    / render(hl) 是 pure：只讀 root + 套 highlight，不改 tree。
     if (player && player.steps && player.steps[player.idx]) {
       render(player.steps[player.idx].hl || {});
     } else render({});
@@ -1766,7 +1766,7 @@ function initBSTAnalysis() {
 
   function regen() {
     const n = parseInt($('bstAnalN').value, 10) || 10;
-    // Random distinct integers between 1 and 99
+    / Random distinct integers between 1 and 99
     const arr = [];
     while (arr.length < n) {
       const x = Math.floor(Math.random()*99) + 1;
@@ -1809,16 +1809,16 @@ function initAVL() {
   let currentCase = 'LL';
   let player = null;
 
-  // Build a tree using preorder array form. null = empty.
+  / Build a tree using preorder array form. null = empty.
   function build(arr) { TNode._id = 0; const idx={i:0}; return buildFromArr(arr, idx); }
 
-  // For each case, define the BEFORE tree, the rotation steps, and the AFTER labels.
-  // We use letter labels A, B, C, x, y, z to make rotations didactic.
+  / For each case, define the BEFORE tree, the rotation steps, and the AFTER labels.
+  / We use letter labels A, B, C, x, y, z to make rotations didactic.
   const cases = {
     LL: {
       label: 'LL — 右旋 (Right Rotate)',
       fix: '對 z 做單一右旋',
-      // Before (left-left heavy): z(top), y=z.left, x=y.left, A=x.left, B=x.right, C=y.right, D=z.right
+      / Before (left-left heavy): z(top), y=z.left, x=y.left, A=x.left, B=x.right, C=y.right, D=z.right
       buildBefore: () => build(['z','y','x','A',null,null,'B',null,null,'C',null,null,'D',null,null]),
       narrate: [
         '初始：z 的 left subtree (rooted at y) 比 right (D) 高 2。',
@@ -1957,15 +1957,15 @@ function initAVL() {
 
   window.DS09 = {
     init: {
-      // PART 04 — Tree traversals (cells 129/136/144 in 09 ipynb).
+      / PART 04 — Tree traversals (cells 129/136/144 in 09 ipynb).
       preorder:    _once('preorder',    () => initTraversals('Pre',  'preorder')),
       inorder:     _once('inorder',     () => initTraversals('In',   'inorder')),
       postorder:   _once('postorder',   () => initTraversals('Post', 'postorder')),
-      // PART 05 — Binary heap (cells 185/198/207).
+      / PART 05 — Binary heap (cells 185/198/207).
       heapInsert:  _once('heapInsert',  () => initHeap('Ins',   'insert')),
       heapExtract: _once('heapExtract', () => initHeap('Ext',   'extract')),
       heapBuild:   _once('heapBuild',   () => initHeap('Build', 'build')),
-      // PART 06 — BST search/insert/delete (cells 231/254/285).
+      / PART 06 — BST search/insert/delete (cells 231/254/285).
       bstSearch:   _once('bstSearch',   () => initBST('Search', 'search')),
       bstInsert:   _once('bstInsert',   () => initBST('Insert', 'insert')),
       bstDelete:   _once('bstDelete',   () => initBSTDelete('Del')),
@@ -1977,12 +1977,12 @@ function initAVL() {
     }
   };
 
-  // window resize (debounced) — re-layout open panels.
+  / window resize (debounced) — re-layout open panels.
   let _t = null;
   window.addEventListener('resize', () => {
     if (_t) clearTimeout(_t);
     _t = setTimeout(() => {
-      // No-op for now: each init's regen() runs on its own clientWidth read.
+      / No-op for now: each init's regen() runs on its own clientWidth read.
     }, 150);
   });
 })();
