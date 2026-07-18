@@ -695,7 +695,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   「需要反轉的暫存」正是 stack 的主場。演算法四步：</p>
   <ol style="line-height:2;margin:.3rem 0 .6rem 1.6rem;font-size:.92rem;">
     <li>開一個空的 opStack、一個空的輸出串列。</li>
-    <li>把中序字串切成 token（C++ 用 stringstream，等同 Python 的 split）。</li>
+    <li>把中序字串切成 token（C++ 用 stringstream 逐個抽出來）。</li>
     <li>由左到右掃：運算元直接輸出；<code>(</code> 進 stack；<code>)</code> 一路 pop 輸出直到遇見 <code>(</code>；
         一般運算子先把 stack 上「優先權大於等於自己」的全部 pop 輸出，再把自己 push 進去。</li>
     <li>掃完把 stack 剩下的全部 pop 輸出。</li>

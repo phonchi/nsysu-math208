@@ -377,7 +377,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   </div>
   <div class="info-box warm">
     <span class="info-label">為什麼用 C++？</span>
-    C++ 讓你貼著記憶體學：指標、new/delete、值語意，Python 幫你藏起來的細節這裡全部攤開。
+    C++ 讓你貼著記憶體學：指標、new/delete、值語意，這些被高階語言藏起來的細節全部攤開。
     課程用 cppds 這本書，程式碼跟著書的風格走（NULL、手刻結構）。
   </div>
 </section>
@@ -407,7 +407,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <div class="side-panel">
       <div class="info-card">
         <div class="ic-title">int 是固定大小的</div>
-        <div style="font-size:.86rem;line-height:1.9;">Python 的整數要多大有多大；C++ 的
+        <div style="font-size:.86rem;line-height:1.9;">C++ 的
         <code>int</code> 通常 32 位元，上限 2,147,483,647。所以 <code>pow(2, 100)</code>
         只能給你 double 近似值。超過上限不會報錯，直接繞回負數，這種溢位是經典 bug 來源。</div>
       </div>
@@ -432,7 +432,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     </tbody>
   </table></div>
   <div class="info-box warm" style="margin-top:.8rem;">
-    <span class="info-label">連鎖比較不能照搬 Python</span>
+    <span class="info-label">連鎖比較是陷阱</span>
     <code>10 &lt; 5 &lt; 3</code> 在 C++ 會編譯、會跑，而且結果是 <code>true</code>：
     先算 <code>10 &lt; 5</code> 得 0，再算 <code>0 &lt; 3</code> 得 true。想表達區間，乖乖寫
     <code>(5 &gt;= 1) &amp;&amp; (5 &lt;= 10)</code>。另外 cout 預設把 bool 印成 1/0，
@@ -445,7 +445,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <ul style="line-height:2;margin:.4rem 0 .4rem 1.4rem;">
     <li>盒子的<strong>型別終身不變</strong>。把 <code>true</code> 塞給 int 變數是合法的，但值會被轉成 1，變數還是 int。</li>
     <li>識別字（identifier）以字母或底線開頭、大小寫視為不同，保留字（<code>int</code>、<code>class</code>、<code>while</code>）不能拿來當名字。</li>
-    <li>這叫<strong>靜態型別</strong>：編譯器在程式跑起來之前就知道每個變數的型別，型別錯誤在編譯期就抓到。Python 是同一個名字隨時可以指向不同型別的物件，兩邊的世界觀完全不同。</li>
+    <li>這叫<strong>靜態型別</strong>：編譯器在程式跑起來之前就知道每個變數的型別，型別錯誤在編譯期就抓到，跑起來之後不會再有「名字突然變成別種東西」的意外。</li>
   </ul>
   
 <div class="quiz-box">
@@ -472,8 +472,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="pointers">
   <div class="section-number">PART 02 · 指標</div>
   <h2>指標：存位址的變數 <span class="sec-badge">cppds §1.8（Pointers）</span></h2>
-  <p>Python 的變數其實全是參考：每個名字存的都是物件的位址，只是語言不讓你看。
-  C++ 把兩種世界都交到你手上：一般變數直接放值，<strong>指標</strong>是一種放「別的變數的位址」的變數。
+  <p>C++ 把兩種世界都交到你手上：一般變數直接放值，<strong>指標</strong>是一種放「別的變數的位址」的變數。
   兩個運算子要熟到變反射動作：<code>&amp;</code> 取位址、<code>*</code> 解參考（沿位址取值）。</p>
   <div class="viz-layout">
     <div>
@@ -499,8 +498,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       <div class="info-card">
         <div class="ic-title">為什麼現在就要學指標？</div>
         <div style="font-size:.86rem;line-height:1.9;">第 4 章的鏈結串列、第 8 章的樹、第 9 章的圖，
-        全部用「節點＋指標」蓋出來。<code>NULL</code> 扮演的角色相當於 Python 的 <code>None</code>：
-        解參考 NULL 的下場，就是 Python 的 <code>AttributeError: NoneType</code> 換成 C++ 的 segfault。</div>
+        全部用「節點＋指標」蓋出來。<code>NULL</code> 扮演「這裡沒有東西」的哨兵：
+        解參考 NULL 的下場是 segfault，程式當場倒地。</div>
       </div>
     </div>
   </div>
@@ -533,9 +532,9 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   無序集合有 <code>set</code> 和 <code>map</code> 家族。這一節的幾張表整學期都會回頭查，
   值得現在花時間讀熟。</p>
 
-  <h3>vector：最接近 Python list 的東西</h3>
-  <p><code>vector</code> 是同型別元素的有序集合，可以動態長大。跟 Python list 差在兩點：
-  元素必須同型別；沒有內建切片語法，同樣效果用迭代器範圍
+  <h3>vector：會自己長大的序列</h3>
+  <p><code>vector</code> 是同型別元素的有序集合，可以動態長大。兩個要點：
+  元素必須同型別；切片這類「取一段」的需求用迭代器範圍表達
   <code>vector&lt;double&gt;(v.begin()+1, v.begin()+3)</code> 做出來（取索引 1 到 2，不含 3）。</p>
   <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
     <thead><tr><th>方法</th><th>用法</th><th>說明</th></tr></thead>
@@ -556,7 +555,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <h3 style="margin-top:1.6rem;">string：可變的字元序列</h3>
   <p>雙引號是 <code>string</code>、單引號是 <code>char</code>，兩者不能混用。
-  串接用 <code>+</code>，長度是 <code>length()</code>。跟 Python 最大的差異：
+  串接用 <code>+</code>，長度是 <code>length()</code>。重點：
   <strong>C++ 的字串是可變的</strong>，<code>my_name[0] = 'X'</code> 完全合法。</p>
   <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
     <thead><tr><th>方法</th><th>用法</th><th>說明</th></tr></thead>
@@ -573,7 +572,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <h3 style="margin-top:1.6rem;">array：固定大小、零防護</h3>
   <p>C 語言傳下來的原生陣列 <code>int my_arr[] = {2, 1, 4};</code> 大小定了就不能改，
-  角色接近 Python 的 tuple（但元素可以改）。它<strong>完全沒有界限檢查</strong>：
+  它<strong>完全沒有界限檢查</strong>：
   <code>my_arr[3]</code> 會編譯、會執行、然後靜靜讀出一格垃圾記憶體。附錄 A 的自學頁會深挖它的底層。</p>
 
   <h3 style="margin-top:1.6rem;">set：不重複、自動排序</h3>
@@ -584,7 +583,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   搭配 <code>inserter</code> 把結果倒進新容器。</p>
 
   <h3 style="margin-top:1.6rem;">map／unordered_map：key 對應 value</h3>
-  <p>對應 Python 的 dict。<code>map</code> 內部照 key 排序，<code>unordered_map</code> 用雜湊表（第 2、6 章會分析它們的效能）。
+  <p>key 對應 value 的查找表。<code>map</code> 內部照 key 排序，<code>unordered_map</code> 用雜湊表（第 2、6 章會分析它們的效能）。
   走訪時拿到的是 pair，key 是 <code>.first</code>、value 是 <code>.second</code>。</p>
   <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
     <thead><tr><th>操作</th><th>用法</th><th>說明</th></tr></thead>
@@ -612,7 +611,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <p><code>string s = "David"; s[0] = &#39;X&#39;;</code> 在 C++ 的結果是？</p>
   
   <div class="quiz-options" id="qStrOptions">
-    <div class="quiz-opt" data-correct="true" data-fb="C++ 字串是可變的，vector 也是。Python 字串不可變的規矩在這裡不適用。" onclick="quizCheck('qStr', this)"><span class="opt-letter">(A)</span> 合法，s 變成 "Xavid"</div><div class="quiz-opt" data-correct="false" data-fb="索引 0 在範圍內，寫入完全合法。" onclick="quizCheck('qStr', this)"><span class="opt-letter">(B)</span> 執行期錯誤</div><div class="quiz-opt" data-correct="false" data-fb="<code>s[0]</code> 回傳字元的參考，可以直接賦值。" onclick="quizCheck('qStr', this)"><span class="opt-letter">(C)</span> 編譯錯誤</div>
+    <div class="quiz-opt" data-correct="true" data-fb="C++ 字串是可變的，vector 也是；改單一字元、改單一元素都合法。" onclick="quizCheck('qStr', this)"><span class="opt-letter">(A)</span> 合法，s 變成 "Xavid"</div><div class="quiz-opt" data-correct="false" data-fb="索引 0 在範圍內，寫入完全合法。" onclick="quizCheck('qStr', this)"><span class="opt-letter">(B)</span> 執行期錯誤</div><div class="quiz-opt" data-correct="false" data-fb="<code>s[0]</code> 回傳字元的參考，可以直接賦值。" onclick="quizCheck('qStr', this)"><span class="opt-letter">(C)</span> 編譯錯誤</div>
   </div>
   <div class="quiz-feedback" id="qStrFeedback"></div>
 </div>
@@ -623,7 +622,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <h2>輸入與輸出：cin、cout 與格式化 <span class="sec-badge">講義補充（cppds §1.7 範疇）</span></h2>
   <p><code>cout</code> 寫到標準輸出、<code>cin</code> 從標準輸入讀，都住在 <code>&lt;iostream&gt;</code>。
   <code>cin &gt;&gt; radius</code> 有個好用的特性：<strong>目標變數的型別決定文字怎麼轉換</strong>。
-  讀進 double 就直接轉成數字，不用像 Python 再包一層 <code>float()</code>。
+  讀進 double 就直接轉成數字，不用自己再轉一次型。
   代價是輸入不合法時 cin 不丟錯誤，而是進入 fail 狀態，之後的讀取全部沉默失敗，除錯時要特別留意。</p>
   <p><code>cout</code> 也跟 <code>print()</code> 不同：沒有自動空格、沒有自動換行，分隔符自己用
   <code>&lt;&lt;</code> 串、行尾自己加 <code>endl</code>。要控制欄寬和小數位數，用
@@ -633,7 +632,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <tbody>
       <tr><td class="mono">endl</td><td>換行並沖刷緩衝</td><td>—</td></tr>
       <tr><td class="mono">setw(n)</td><td>下一個值放進寬度 n 的欄位</td><td><strong>只影響下一個值</strong></td></tr>
-      <tr><td class="mono">fixed + setprecision(n)</td><td>定點表示、小數點後 n 位（Python 的 %.2f）</td><td>持續有效</td></tr>
+      <tr><td class="mono">fixed + setprecision(n)</td><td>定點表示、小數點後 n 位</td><td>持續有效</td></tr>
       <tr><td class="mono">left / right</td><td>欄位內靠左／靠右</td><td>持續有效</td></tr>
       <tr><td class="mono">setfill(c)</td><td>欄位空白改用字元 c 填</td><td>持續有效</td></tr>
       <tr><td class="mono">boolalpha</td><td>bool 印成 true/false</td><td>持續有效</td></tr>
@@ -657,7 +656,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       <div class="info-card">
         <div class="ic-title">printf 也還活著</div>
         <div class="mono" style="font-size:.8rem;line-height:2;">printf("The %10s costs %5.2f\n",<br>&nbsp;&nbsp;item.c_str(), double(price));</div>
-        <div style="font-size:.82rem;line-height:1.8;color:var(--muted);margin-top:.4rem;">C 傳下來的格式字串。Python 的 % 格式化就是從這裡抄的，所以你其實已經會了。注意 string 要先 <code>c_str()</code>。</div>
+        <div style="font-size:.82rem;line-height:1.8;color:var(--muted);margin-top:.4rem;">C 傳下來的格式字串，後來很多語言的 % 格式化都是從它抄的。注意 string 要先 <code>c_str()</code>。</div>
       </div>
     </div>
   </div>
@@ -677,27 +676,27 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div class="section-number">PART 05 · 講義補充</div>
   <h2>控制結構：迴圈與選擇 <span class="sec-badge">講義補充（cppds §1.7 範疇）</span></h2>
   <p>演算法需要兩種控制結構：迭代與選擇。C++ 的身體是<strong>大括號</strong>圍出來的，
-  縮排只是給人看的，編譯器完全不管。這點跟 Python 相反，也是初學最容易踩的坑：
+  縮排只是給人看的，編譯器完全不管。初學最容易踩的坑：
   縮排看起來對、大括號漏了，程式的意思就變了。</p>
 
   <h3>三種迴圈</h3>
   <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
-    <thead><tr><th>寫法</th><th>對應 Python</th><th>用途</th></tr></thead>
+    <thead><tr><th>寫法</th><th>用途</th></tr></thead>
     <tbody>
-      <tr><td class="mono">while (counter &lt;= 5) { ... }</td><td class="mono">while</td><td>條件為真就重複</td></tr>
-      <tr><td class="mono">for (int item : my_list)</td><td class="mono">for x in lst</td><td>range-based for：走訪容器成員</td></tr>
-      <tr><td class="mono">for (int i = 0; i &lt; 10; i++)</td><td class="mono">range(10)</td><td>計數迴圈，起點、終點、步幅全自訂</td></tr>
+      <tr><td class="mono">while (counter &lt;= 5) { ... }</td><td>條件為真就重複</td></tr>
+      <tr><td class="mono">for (int item : my_list)</td><td>range-based for：走訪容器成員</td></tr>
+      <tr><td class="mono">for (int i = 0; i &lt; 10; i++)</td><td>計數迴圈，起點、終點、步幅全自訂</td></tr>
     </tbody>
   </table></div>
-  <p style="margin-top:.6rem;">Python 的 <code>range()</code> 沒有直接對應，計數 for 就是它的替身，控制力還更細：</p>
+  <p style="margin-top:.6rem;">計數 for 的三段式讓起點、終點、步幅全部自訂：</p>
   <div class="pseudo-code" style="font-size:.8rem;">
-<span class="line"><span class="kw">for</span> (<span class="kw">int</span> i = 5; i &lt; 10; i++)&nbsp;&nbsp;&nbsp;<span class="com">// range(5, 10)</span></span>
-<span class="line"><span class="kw">for</span> (<span class="kw">int</span> i = 5; i &lt; 10; i += 2) <span class="com">// range(5, 10, 2)</span></span>
-<span class="line"><span class="kw">for</span> (<span class="kw">int</span> i = 10; i &gt; 1; i--)&nbsp;&nbsp;&nbsp;<span class="com">// range(10, 1, -1)</span></span></div>
+<span class="line"><span class="kw">for</span> (<span class="kw">int</span> i = 5; i &lt; 10; i++)&nbsp;&nbsp;&nbsp;<span class="com">// i = 5,6,…,9</span></span>
+<span class="line"><span class="kw">for</span> (<span class="kw">int</span> i = 5; i &lt; 10; i += 2) <span class="com">// i = 5,7,9</span></span>
+<span class="line"><span class="kw">for</span> (<span class="kw">int</span> i = 10; i &gt; 1; i--)&nbsp;&nbsp;&nbsp;<span class="com">// i = 10,9,…,2</span></span></div>
 
   <h3 style="margin-top:1.4rem;">選擇：if、else if、else</h3>
   <p>巢狀 if 疊四層看得眼花，慣用寫法是把 <code>else</code> 跟下一個 <code>if</code>
-  接成 <code>else if</code>（Python 的 <code>elif</code>）。最後的 <code>else</code>
+  接成 <code>else if</code>。最後的 <code>else</code>
   是保底，漏了它，所有條件都不成立時就什麼都不做：</p>
   <div class="pseudo-code" style="font-size:.8rem;">
 <span class="line"><span class="kw">if</span> (score &gt;= 90)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cout &lt;&lt; <span class="str">&quot;A&quot;</span>;</span>
@@ -707,7 +706,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <span class="line"><span class="kw">else</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cout &lt;&lt; <span class="str">&quot;F&quot;</span>;</span></div>
 
   <h3 style="margin-top:1.4rem;">list comprehension 的等價寫法</h3>
-  <p>Python 一行的 <code>[x*x for x in range(1,11) if x%2 != 0]</code>，C++ 用普通迴圈組合：</p>
+  <p>「取 1 到 10 的奇數、各自平方、收進 vector」這類篩選＋轉換需求，C++ 用迴圈與條件組合：</p>
   <div class="pseudo-code" style="font-size:.8rem;">
 <span class="line">vector&lt;<span class="kw">int</span>&gt; sqList;</span>
 <span class="line"><span class="kw">for</span> (<span class="kw">int</span> x = 1; x &lt;= 10; x++) {</span>
@@ -843,9 +842,9 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <span class="line">        <span class="kw">int</span> num, den;</span>
 <span class="line">};</span></div>
   <p>建構子跟類別同名、沒有回傳型別。物件自己用隱含指標 <code>this</code> 存取，
-  不像 Python 的 <code>self</code> 要寫在參數列裡。成員直接叫名字就好（要明講也可以寫 <code>this-&gt;num</code>）。
+  成員直接叫名字就好（要明講也可以寫 <code>this-&gt;num</code>）。
   重點在 <code>private:</code>：C++ 的 private 是<strong>編譯器強制執行</strong>的，
-  外面寫 <code>a.num</code> 直接編譯錯誤。Python 的底線命名只是君子協定，這裡是法律。
+  外面寫 <code>a.num</code> 直接編譯錯誤：這不是命名慣例的君子協定，是法律。
   順帶一提，class 不寫存取修飾詞時，預設全部 private。</p>
 
   <h3 style="margin-top:1.4rem;">第 2 步：建構子多載（多型的第一課）</h3>
@@ -859,7 +858,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <h3 style="margin-top:1.4rem;">第 3 步：operator&lt;&lt;，讓 cout 認得你</h3>
   <p><code>cout &lt;&lt; my_fraction</code> 一開始<strong>直接編譯失敗</strong>。
-  Python 會退回預設的 <code>__str__</code> 印個位址混過去；C++ 拒絕猜。
+  C++ 不會偷偷退回某種預設表示法幫你混過去，它拒絕猜。
   解法是多載串流插入運算子，並宣告成 <code>friend</code>，讓它能讀 private 的 num 和 den：</p>
   <div class="pseudo-code" style="font-size:.8rem;">
 <span class="line"><span class="kw">friend</span> ostream&amp; <span class="kw">operator</span>&lt;&lt;(ostream&amp; stream, <span class="kw">const</span> Fraction&amp; f) {</span>
@@ -881,7 +880,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <h3 style="margin-top:1.4rem;">第 5 步：operator==，定義「相等」是什麼意思</h3>
   <p>沒定義 <code>operator==</code> 之前，<code>f1 == f2</code> 也不能編譯。
   用交叉相乘 <code>num * other.den == other.num * den</code>，1/2 和 2/4 就會相等，
-  這叫<strong>深相等</strong>（比值）。對照 Python 預設的 <code>==</code> 比的是參考（淺相等）。
+  這叫<strong>深相等</strong>：比的是值，不是「是不是同一個物件」。
   另外記住 C++ 的<strong>值語意</strong>：<code>f3 = f1</code> 是把整個物件複製一份，
   不是多一個名字指向同一個物件。</p>
 
@@ -905,7 +904,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <p><code>Fraction f1(1,2); Fraction f3 = f1;</code> 之後改動 f3，f1 會變嗎？</p>
   
   <div class="quiz-options" id="qClsOptions">
-    <div class="quiz-opt" data-correct="true" data-fb="C++ 賦值預設複製整個物件（值語意）。Python 的 f3 = f1 只是幫同一個物件多取一個名字，兩個世界規則相反。" onclick="quizCheck('qCls', this)"><span class="opt-letter">(A)</span> 不會，f3 是完整的複製品</div><div class="quiz-opt" data-correct="false" data-fb="那是 Python 的行為。C++ 要指向同一份，得動用指標或參考。" onclick="quizCheck('qCls', this)"><span class="opt-letter">(B)</span> 會，f3 和 f1 指向同一物件</div><div class="quiz-opt" data-correct="false" data-fb="複製建構是合法的，編譯器還會自動幫你生一份成員逐一複製的版本。" onclick="quizCheck('qCls', this)"><span class="opt-letter">(C)</span> 編譯錯誤</div>
+    <div class="quiz-opt" data-correct="true" data-fb="C++ 賦值預設複製整個物件（值語意），之後改 f3 完全不影響 f1。" onclick="quizCheck('qCls', this)"><span class="opt-letter">(A)</span> 不會，f3 是完整的複製品</div><div class="quiz-opt" data-correct="false" data-fb="C++ 要讓兩個名字共用同一份物件，得動用指標或參考。" onclick="quizCheck('qCls', this)"><span class="opt-letter">(B)</span> 會，f3 和 f1 指向同一物件</div><div class="quiz-opt" data-correct="false" data-fb="複製建構是合法的，編譯器還會自動幫你生一份成員逐一複製的版本。" onclick="quizCheck('qCls', this)"><span class="opt-letter">(C)</span> 編譯錯誤</div>
   </div>
   <div class="quiz-feedback" id="qClsFeedback"></div>
 </div>
@@ -950,7 +949,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <strong>virtual ... = 0</strong>：純虛擬函式。LogicGate 自己不知道怎麼算邏輯，所以宣告了卻不實作，
         這讓它成為抽象類別，沒有人能直接 new 一個 LogicGate。<br>
         <strong>protected</strong>：介於 public 與 private 之間，子類碰得到、外人碰不到。label、pin 都放這層。<br>
-        <strong>: LogicGate(n)</strong>：初始化列，呼叫父類建構子，相當於 Python 的 super().__init__(n)。<br>
+        <strong>: LogicGate(n)</strong>：初始化列，呼叫父類建構子把 n 交上去。<br>
         <strong>HAS-A</strong>：Connector 不繼承 LogicGate，它「擁有」兩個閘（fromGate、toGate）。
         IS-A 用繼承、HAS-A 用成員，分清楚這兩種關係是物件導向設計的第一堂課。
       </div>
@@ -1042,7 +1041,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <p>想取出 vector 最後一個元素並移除它，正確的寫法是？</p>
   
   <div class="quiz-options" id="ex2Options">
-    <div class="quiz-opt" data-correct="true" data-fb="C++ 把「看」和「刪」拆成兩個動作：back() 讀值、pop_back() 刪除且不回傳。Python 的 pop() 一次做完兩件事，這裡要分兩步。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(A)</span> <code>int x = v.back(); v.pop_back();</code></div><div class="quiz-opt" data-correct="false" data-fb="pop_back() 的回傳型別是 void，這行編譯不過。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(B)</span> <code>int x = v.pop_back();</code></div><div class="quiz-opt" data-correct="false" data-fb="erase 拿的是迭代器且 v.end() 不是最後一個元素，這是另一個常見誤用。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(C)</span> <code>int x = v.erase(v.end());</code></div>
+    <div class="quiz-opt" data-correct="true" data-fb="C++ 把「看」和「刪」拆成兩個動作：back() 讀值、pop_back() 刪除且不回傳，永遠分兩步。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(A)</span> <code>int x = v.back(); v.pop_back();</code></div><div class="quiz-opt" data-correct="false" data-fb="pop_back() 的回傳型別是 void，這行編譯不過。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(B)</span> <code>int x = v.pop_back();</code></div><div class="quiz-opt" data-correct="false" data-fb="erase 拿的是迭代器且 v.end() 不是最後一個元素，這是另一個常見誤用。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(C)</span> <code>int x = v.erase(v.end());</code></div>
   </div>
   <div class="quiz-feedback" id="ex2Feedback"></div>
 </div>

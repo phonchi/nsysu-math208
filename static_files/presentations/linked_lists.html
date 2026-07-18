@@ -705,7 +705,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <p>C++ 手刻串列 <code>remove</code> 之後少做了什麼，會發生什麼事？</p>
   
   <div class="quiz-options" id="ex3Options">
-    <div class="quiz-opt" data-correct="true" data-fb="節點脫鉤後若不 delete，這塊 heap 記憶體永遠拿不回來：Python/Java 有 GC，C++ 沒有。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(A)</span> 少 <code>delete cur</code> → 記憶體洩漏</div><div class="quiz-opt" data-correct="false" data-fb="不設 NULL 不影響編譯；dangling pointer 是執行期風險。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(B)</span> 少 <code>cur = NULL</code> → 編譯錯誤</div><div class="quiz-opt" data-correct="false" data-fb="單次洩漏也許無感，長時間執行的服務會被漏死。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(C)</span> 什麼都不會發生</div>
+    <div class="quiz-opt" data-correct="true" data-fb="節點脫鉤後若不 delete，這塊 heap 記憶體永遠拿不回來：C++ 沒有垃圾回收，釋放永遠要自己來。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(A)</span> 少 <code>delete cur</code> → 記憶體洩漏</div><div class="quiz-opt" data-correct="false" data-fb="不設 NULL 不影響編譯；dangling pointer 是執行期風險。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(B)</span> 少 <code>cur = NULL</code> → 編譯錯誤</div><div class="quiz-opt" data-correct="false" data-fb="單次洩漏也許無感，長時間執行的服務會被漏死。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(C)</span> 什麼都不會發生</div>
   </div>
   <div class="quiz-feedback" id="ex3Feedback"></div>
 </div>

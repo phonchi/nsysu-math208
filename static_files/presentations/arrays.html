@@ -389,7 +389,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   甚至 <code>string</code> 本身就是字元的 compact array）。
   <strong>Referential array</strong>：格子裡放的是<strong>指標</strong>，真正的物件散落在 heap。
   想存一排長短不一的名字（"Rene"、"Joseph"、"Virginia"…）又要維持 O(1) 索引，格子就必須等寬，
-  於是 Python 的 list 一律存 8 byte 的參考。代價有二：每個元素多付 8 byte 的指標稅，
+  於是「什麼都能裝」的動態串列一律存 8 byte 的參考。代價有二：每個元素多付 8 byte 的指標稅，
   以及取值都要多跳一次記憶體。</p>
 
   <h3>手刻一個 compact 動態陣列：ArrayList</h3>
