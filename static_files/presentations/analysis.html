@@ -342,7 +342,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="prologue">
   <div class="section-number">PROLOGUE · 開場</div>
   <h2>演算法分析：比「誰的程式快」更聰明的問法 <span class="sec-badge">cppds §2.1–2.2</span></h2>
-  <p>同一個問題有很多寫法。「哪個好？」不能只用碼表量——機器快慢、資料大小都會干擾。
+  <p>同一個問題有很多寫法。「哪個好？」不能只用碼表量：機器快慢、資料大小都會干擾。
   演算法分析問的是：<strong>當輸入規模 n 變大，工作量怎麼成長？</strong>
   我們數「基本操作次數」T(n)，只留下<strong>成長最快的主導項</strong>。</p>
   <div class="viz-layout">
@@ -360,17 +360,35 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     </div>
     <div class="side-panel">
       <div class="info-card">
-        <div class="ic-title">兩種解法</div>
-        <div style="font-size:.85rem;line-height:2;" class="mono">
-        // 迴圈：O(n)<br>
-        for (i=1; i&lt;=n; i++) sum += i;<br><br>
-        // 高斯公式：O(1)<br>
-        sum = n * (n + 1) / 2;</div>
+        <div class="ic-title">兩種解法 <span class="ic-badge">CODE</span></div>
+        <div class="pseudo-code" style="font-size:.76rem;">
+<span class="line"><span class="com">// 迴圈版：加 n 次</span></span>
+<span class="line"><span class="kw">long long</span> <span class="fn">sumOfN</span>(<span class="kw">long long</span> n) {</span>
+<span class="line">    <span class="kw">long long</span> theSum = <span class="num">0</span>;</span>
+<span class="line">    <span class="kw">for</span> (<span class="kw">long long</span> i = <span class="num">1</span>; i &lt;= n; i++)</span>
+<span class="line">        theSum = theSum + i;</span>
+<span class="line">    <span class="kw">return</span> theSum;</span>
+<span class="line">}</span>
+<span class="line"><span class="com">// 高斯公式版：三個運算，n 再大也一樣</span></span>
+<span class="line">theSum = (n * (n + <span class="num">1</span>)) / <span class="num">2</span>;</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">怎麼在 C++ 計時？</div>
+        <div class="pseudo-code" style="font-size:.74rem;">
+<span class="line"><span class="com">// <chrono>：夾住要量的程式碼</span></span>
+<span class="line"><span class="kw">auto</span> start = steady_clock::<span class="fn">now</span>();</span>
+<span class="line"><span class="com">// ... 要計時的程式 ...</span></span>
+<span class="line">secs = duration&lt;<span class="kw">double</span>&gt;(</span>
+<span class="line">    steady_clock::<span class="fn">now</span>() - start).<span class="fn">count</span>();</span></div>
+        <div style="font-size:.82rem;line-height:1.8;color:var(--muted);margin-top:.4rem;">講義的實測：迴圈版
+        n 從 10⁵ 加到 10⁶，時間差不多也乘十；公式版對 10⁵ 到 10⁸ 四種 n 的耗時幾乎是同一個數字。
+        跟 Python 的 timeit 一樣，短小的操作要重複跑很多次再平均，雜訊才壓得下來。</div>
       </div>
       <div class="info-card">
         <div class="ic-title">benchmark 的干擾因素</div>
-        <div style="font-size:.86rem;line-height:1.9;">CPU、編譯器最佳化、語言、當下負載……
-        <strong>操作次數的成長級別</strong>才是演算法本身的性質。</div>
+        <div style="font-size:.86rem;line-height:1.9;">CPU、編譯器最佳化（-O2 有時會把整個迴圈摺掉！）、
+        當下的系統負載，都會影響碼表讀數。操作次數的成長級別才是演算法本身的性質，
+        這就是接下來 Big-O 要抓的東西。</div>
       </div>
     </div>
   </div>
@@ -396,13 +414,23 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     </table>
     </div>
   </div>
+  <h3 style="margin-top:1.3rem;">逐行數一次 T(n)</h3>
+  <p>拿一段真的程式來數。三個賦值（3）、外圈跑 n 次的內圈各貢獻 n 次（3n²… 這裡照講義的例子）：
+  <span class="mono">T(n) = 3 + 3n² + 2n + 1 = 3n² + 2n + 4</span>。
+  n 一大，3n² 說了算，其他項連同係數 3 全部丟掉：O(n²)。
+  數的時候不用精確到每一行，抓住「哪一段被執行最多次」就夠了。</p>
+  <h3 style="margin-top:1.3rem;">最好、最差、平均</h3>
+  <p>有些演算法的表現不只看 n，還看<strong>資料內容</strong>。在陣列裡找一個值：
+  運氣好第一格就中（best case，O(1)）、運氣差找到最後一格或根本不在（worst case，O(n)）、
+  平均攤下來要看一半（average case）。講 Big-O 時預設講 worst case，因為它是保證；
+  第 6 章的雜湊表會是「平均 O(1)、最差 O(n)」這種分開報的典型例子。</p>
   
 <div class="quiz-box">
   <div class="quiz-label">QUIZ · 讀程式數操作</div>
   <p><code>for (i=0;i&lt;n;i++) for (j=0;j&lt;n;j++) k++;</code> 之後接 <code>for (i=0;i&lt;n;i++) k++;</code>，整段的 Big-O 是？</p>
   
   <div class="quiz-options" id="qBigoOptions">
-    <div class="quiz-opt" data-correct="true" data-fb="T(n) = n² + n，主導項是 n²。低次項 n 直接丟掉。" onclick="quizCheck('qBigo', this)"><span class="opt-letter">(A)</span> O(n²)</div><div class="quiz-opt" data-correct="false" data-fb="Big-O 只留主導項——n² + n 就寫 O(n²)。" onclick="quizCheck('qBigo', this)"><span class="opt-letter">(B)</span> O(n² + n)</div><div class="quiz-opt" data-correct="false" data-fb="兩段是「接續」不是「巢狀」：相加不相乘。" onclick="quizCheck('qBigo', this)"><span class="opt-letter">(C)</span> O(n³)</div>
+    <div class="quiz-opt" data-correct="true" data-fb="T(n) = n² + n，主導項是 n²。低次項 n 直接丟掉。" onclick="quizCheck('qBigo', this)"><span class="opt-letter">(A)</span> O(n²)</div><div class="quiz-opt" data-correct="false" data-fb="Big-O 只留主導項：n² + n 就寫 O(n²)。" onclick="quizCheck('qBigo', this)"><span class="opt-letter">(B)</span> O(n² + n)</div><div class="quiz-opt" data-correct="false" data-fb="兩段是「接續」不是「巢狀」：相加不相乘。" onclick="quizCheck('qBigo', this)"><span class="opt-letter">(C)</span> O(n³)</div>
   </div>
   <div class="quiz-feedback" id="qBigoFeedback"></div>
 </div>
@@ -429,7 +457,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <div class="side-panel">
       <div class="info-card">
         <div class="ic-title">怎麼讀這張圖</div>
-        <div style="font-size:.86rem;line-height:1.9;">n 小時大家擠在一起——常數項還有戲；
+        <div style="font-size:.86rem;line-height:1.9;">n 小時大家擠在一起：常數項還有戲；
         n 一大，曲線<strong>層級分明</strong>：這就是為什麼我們只在乎 order of magnitude。
         勾選 2ⁿ 感受一下什麼叫「瞬間出框」。</div>
       </div>
@@ -440,7 +468,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="anagram">
   <div class="section-number">PART 03 · 案例研究</div>
   <h2>Anagram 偵測：同一題的四種成長率 <span class="sec-badge">cppds §2.4</span></h2>
-  <p>「earth 和 heart 是不是變位詞？」四種解法都對，但成長率天差地遠——
+  <p>「earth 和 heart 是不是變位詞？」四種解法都對，但成長率天差地遠。
   這是「<strong>正確 ≠ 好</strong>」的最佳教材。</p>
   <div class="viz-layout">
     <div>
@@ -458,7 +486,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
     </div>
     <div class="side-panel">
-      <div class="info-card"><div class="ic-title">四解法 <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="anaCode">
+      <div class="info-card"><div class="ic-title">四解法總覽 <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="anaCode">
 <span class="line" data-l="1"><span class="com">// 解法 1 Checking Off：對 s1 每個字元，去 s2 找到就劃掉 → O(n²)</span></span>
 <span class="line" data-l="2"><span class="com">// 解法 2 Sort and Compare：兩字串排序後逐字比 → O(n log n)</span></span>
 <span class="line" data-l="3"><span class="com">// 解法 3 Brute Force：列出 s1 全部排列 → O(n!)，免談</span></span>
@@ -470,10 +498,48 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <span class="line" data-l="9">    <span class="kw">return</span> c1 全等 c2</span></div></div>
       <div class="info-card">
         <div class="ic-title">空間換時間</div>
-        <div style="font-size:.86rem;line-height:1.9;">解法 4 用兩個 26 格計數陣列換到 O(n)——
-        <strong>時間與空間的交易</strong>是演算法設計的常見槓桿。</div>
+        <div style="font-size:.86rem;line-height:1.9;">解法 4 用兩個 26 格計數陣列換到 O(n)。
+        時間與空間的交易是演算法設計最常用的槓桿之一。</div>
       </div>
     </div>
+  </div>
+  <h3 style="margin-top:1.4rem;">四個解法攤開看</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:.8rem;">
+    <div class="info-card"><div class="ic-title">解法 1：Checking Off，O(n²) <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.71rem;">
+<span class="line"><span class="kw">bool</span> <span class="fn">anagramSolution1</span>(string s1, string s2) {</span>
+<span class="line">    <span class="kw">bool</span> stillOK = (s1.<span class="fn">length</span>() == s2.<span class="fn">length</span>());</span>
+<span class="line">    vector&lt;<span class="kw">char</span>&gt; aList(s2.<span class="fn">begin</span>(), s2.<span class="fn">end</span>());</span>
+<span class="line">    <span class="kw">for</span> (每個 s1 的字元，stillOK 時) {</span>
+<span class="line">        在 aList 裡線性找它;            <span class="com">// 內圈：O(n)</span></span>
+<span class="line">        <span class="kw">if</span> (found) aList.<span class="fn">erase</span>(那一格);  <span class="com">// 劃掉</span></span>
+<span class="line">        <span class="kw">else</span> stillOK = <span class="num">false</span>;</span>
+<span class="line">    }</span>
+<span class="line">    <span class="kw">return</span> stillOK;   <span class="com">// n 個字元 × 每個找 O(n) = O(n²)</span></span>
+<span class="line">}</span></div>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">完整版在 dscpp/anagram.hpp。比較次數是 1+2+…+n = n(n+1)/2，主導項 n²/2。</div></div>
+    <div class="info-card"><div class="ic-title">解法 2：Sort and Compare，O(n log n) <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.71rem;">
+<span class="line"><span class="kw">bool</span> <span class="fn">anagramSolution2</span>(string s1, string s2) {</span>
+<span class="line">    <span class="fn">sort</span>(s1.<span class="fn">begin</span>(), s1.<span class="fn">end</span>());</span>
+<span class="line">    <span class="fn">sort</span>(s2.<span class="fn">begin</span>(), s2.<span class="fn">end</span>());</span>
+<span class="line">    <span class="com">// 排序後逐字比對，一個不同就 false</span></span>
+<span class="line">    <span class="kw">return</span> s1 逐字等於 s2;</span>
+<span class="line">}   <span class="com">// 迴圈 O(n)，但 sort 是 O(n log n)：貴的那步說了算</span></span></div></div>
+    <div class="info-card"><div class="ic-title">解法 3：Brute Force，O(n!)</div>
+      <div style="font-size:.85rem;line-height:1.9;">列出 s1 全部排列、看 s2 在不在裡面。
+      20 個字元的排列數是 20! ≈ 2.4×10¹⁸：就算一微秒生一個，也要七萬多年。
+      正確、可寫、完全不可用，這種選項的存在是為了提醒你先估量級再動手。</div></div>
+    <div class="info-card"><div class="ic-title">解法 4：Count and Compare，O(n) <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.71rem;">
+<span class="line"><span class="kw">bool</span> <span class="fn">anagramSolution4</span>(string s1, string s2) {</span>
+<span class="line">    <span class="kw">int</span> c1[<span class="num">26</span>] = {<span class="num">0</span>};  <span class="kw">int</span> c2[<span class="num">26</span>] = {<span class="num">0</span>};</span>
+<span class="line">    <span class="kw">for</span> (i : s1) c1[i - <span class="str">&#39;a&#39;</span>]++;</span>
+<span class="line">    <span class="kw">for</span> (i : s2) c2[i - <span class="str">&#39;a&#39;</span>]++;</span>
+<span class="line">    <span class="kw">for</span> (i = <span class="num">0</span>; i &lt; <span class="num">26</span>; i++)</span>
+<span class="line">        <span class="kw">if</span> (c1[i] != c2[i]) <span class="kw">return</span> <span class="num">false</span>;</span>
+<span class="line">    <span class="kw">return</span> <span class="num">true</span>;   <span class="com">// T(n) = 2n + 26 → O(n)</span></span>
+<span class="line">}</span></div></div>
   </div>
   
 <div class="quiz-box">
@@ -481,7 +547,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <p>解法 2「排序後比較」看起來只有一個迴圈，為什麼不是 O(n)？</p>
   
   <div class="quiz-options" id="qAnaOptions">
-    <div class="quiz-opt" data-correct="true" data-fb="迴圈是 O(n)，但前面的 sort 是 O(n log n)——整體由最貴的步驟主導。" onclick="quizCheck('qAna', this)"><span class="opt-letter">(A)</span> 排序本身要 O(n log n)</div><div class="quiz-opt" data-correct="false" data-fb="逐字比較是 O(n)；貴的是排序。" onclick="quizCheck('qAna', this)"><span class="opt-letter">(B)</span> 字串比較是 O(n²)</div><div class="quiz-opt" data-correct="false" data-fb="隱藏成本！呼叫 sort() 不代表成本消失。" onclick="quizCheck('qAna', this)"><span class="opt-letter">(C)</span> 它其實是 O(n)</div>
+    <div class="quiz-opt" data-correct="true" data-fb="迴圈是 O(n)，但前面的 sort 是 O(n log n)：整體由最貴的步驟主導。" onclick="quizCheck('qAna', this)"><span class="opt-letter">(A)</span> 排序本身要 O(n log n)</div><div class="quiz-opt" data-correct="false" data-fb="逐字比較是 O(n)；貴的是排序。" onclick="quizCheck('qAna', this)"><span class="opt-letter">(B)</span> 字串比較是 O(n²)</div><div class="quiz-opt" data-correct="false" data-fb="隱藏成本！呼叫 sort() 不代表成本消失。" onclick="quizCheck('qAna', this)"><span class="opt-letter">(C)</span> 它其實是 O(n)</div>
   </div>
   <div class="quiz-feedback" id="qAnaFeedback"></div>
 </div>
@@ -491,7 +557,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div class="section-number">PART 04 · C++ 容器</div>
   <h2>vector 的操作成本：為什麼 push_back 是攤銷 O(1) <span class="sec-badge">cppds §2.5–2.6</span></h2>
   <p><code>vector</code> 底層是連續陣列。<strong>索引 O(1)</strong>；
-  <code>push_back</code> 平常 O(1)，偶爾裝滿要<strong>翻倍搬家</strong>——把搬家成本平均到每次操作，仍是 O(1)（攤銷）。
+  <code>push_back</code> 平常 O(1)，偶爾裝滿要<strong>翻倍搬家</strong>：把搬家成本平均到每次操作，仍是 O(1)（攤銷）。
   但 <code>insert(begin(), x)</code> 每次都要整體右移 → O(n)。</p>
   <div class="viz-layout">
     <div>
@@ -508,16 +574,28 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     </div>
     <div class="side-panel">
       <div class="info-card">
-        <div class="ic-title">vector 成本表</div>
-        <div class="ic-row"><span class="ic-label">v[i]</span><span class="ic-value">O(1)</span></div>
+        <div class="ic-title">vector 成本表（背這張）</div>
+        <div class="ic-row"><span class="ic-label">v[i] 讀寫</span><span class="ic-value">O(1)</span></div>
         <div class="ic-row"><span class="ic-label">push_back / pop_back</span><span class="ic-value">O(1) 攤銷</span></div>
-        <div class="ic-row"><span class="ic-label">insert / erase（前端）</span><span class="ic-value highlight">O(n)</span></div>
-        <div class="ic-row"><span class="ic-label">find（無序）</span><span class="ic-value">O(n)</span></div>
+        <div class="ic-row"><span class="ic-label">insert / erase（前端或中間）</span><span class="ic-value highlight">O(n)</span></div>
+        <div class="ic-row"><span class="ic-label">走訪 / find（無序）</span><span class="ic-value">O(n)</span></div>
+        <div class="ic-row"><span class="ic-label">切一段（k 個元素）</span><span class="ic-value">O(k)</span></div>
+        <div class="ic-row"><span class="ic-label">sort</span><span class="ic-value">O(n log n)</span></div>
       </div>
       <div class="info-card">
-        <div class="ic-title">string 也是一樣的</div>
-        <div style="font-size:.86rem;line-height:1.9;"><code>string</code> 本質是字元的動態陣列：
-        <code>s[i]</code> O(1)、<code>s += c</code> 攤銷 O(1)、<code>s.insert(0, ...)</code> O(n)、兩字串串接 O(n+m)。</div>
+        <div class="ic-title">四種把 0..n−1 塞進 vector 的寫法 <span class="ic-badge">CODE</span></div>
+        <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line"><span class="fn">test1</span>: v.<span class="fn">insert</span>(v.<span class="fn">begin</span>(), i)  <span class="com">// 前端插入：最慢</span></span>
+<span class="line"><span class="fn">test2</span>: v.<span class="fn">push_back</span>(i)           <span class="com">// 攤銷 O(1)</span></span>
+<span class="line"><span class="fn">test3</span>: v.<span class="fn">reserve</span>(n) 再 push_back <span class="com">// 連搬家都省了</span></span>
+<span class="line"><span class="fn">test4</span>: vector&lt;<span class="kw">int</span>&gt; v(n); v[i]=i  <span class="com">// 開好大小直接填</span></span></div>
+        <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">講義用 chrono 對四種寫法各跑 1000 次取平均：test1 慢一個數量級以上，後三種同級，reserve 再快一截。</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">量出 Big-O 的土方法</div>
+        <div style="font-size:.86rem;line-height:1.9;">把 n 加倍再量一次，看時間變幾倍：
+        接近 1 倍是 O(1)、2 倍是 O(n)、4 倍是 O(n²)。講義用這招驗證了
+        <code>pop_back()</code> 平坦不動、<code>erase(begin())</code> 隨 n 線性爬升。</div>
       </div>
     </div>
   </div>
@@ -526,7 +604,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="hash">
   <div class="section-number">PART 05 · 雜湊容器</div>
   <h2>unordered_map / set：平均 O(1) 的代價與條件 <span class="sec-badge">cppds §2.8</span></h2>
-  <p><code>unordered_map</code>（雜湊表）讓「查 key」平均 O(1)——不用排序、不用走訪。
+  <p><code>unordered_map</code>（雜湊表）讓「查 key」平均 O(1)：不用排序、不用走訪。
   細節（hash 函數、碰撞、載入因子）第 6 章展開；本章先記住成本表與<strong>「平均」兩個字的份量</strong>。</p>
   <div class="viz-layout">
     <div>
@@ -568,7 +646,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <p>T(n) = 3 + 100·log n + 0.001·n² 的 Big-O 是？</p>
   
   <div class="quiz-options" id="ex1Options">
-    <div class="quiz-opt" data-correct="true" data-fb="係數 0.001 再小，n² 終究輾壓 100·log n——n=10⁶ 時 n² 項已是 log 項的十億倍級。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> O(n²)</div><div class="quiz-opt" data-correct="false" data-fb="被 100 的大係數騙了——Big-O 看的是成長率，不是係數。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> O(log n)</div><div class="quiz-opt" data-correct="false" data-fb="相加取最大，不是相乘。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> O(n² log n)</div>
+    <div class="quiz-opt" data-correct="true" data-fb="係數 0.001 再小，n² 終究輾壓 100·log n：n=10⁶ 時 n² 項已是 log 項的十億倍級。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> O(n²)</div><div class="quiz-opt" data-correct="false" data-fb="被 100 的大係數騙了：Big-O 看的是成長率，不是係數。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> O(log n)</div><div class="quiz-opt" data-correct="false" data-fb="相加取最大，不是相乘。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> O(n² log n)</div>
   </div>
   <div class="quiz-feedback" id="ex1Feedback"></div>
 </div>
@@ -578,9 +656,29 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <p><code>for (i=0;i&lt;n;i++) for (j=i;j&lt;n;j++) k++;</code> 執行 k++ 幾次？Big-O？</p>
   
   <div class="quiz-options" id="ex2Options">
-    <div class="quiz-opt" data-correct="true" data-fb="內圈長度 n, n−1, …, 1，總和是三角形數——仍是平方級。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(A)</span> n(n+1)/2 次；O(n²)</div><div class="quiz-opt" data-correct="false" data-fb="除以 2 不會降級：n²/2 還是 O(n²)。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(B)</span> n²/2 次；O(n)</div><div class="quiz-opt" data-correct="false" data-fb="內圈是線性遞減，不是每次砍半——砍半才有 log。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(C)</span> n log n 次；O(n log n)</div>
+    <div class="quiz-opt" data-correct="true" data-fb="內圈長度 n, n−1, …, 1，總和是三角形數：仍是平方級。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(A)</span> n(n+1)/2 次；O(n²)</div><div class="quiz-opt" data-correct="false" data-fb="除以 2 不會降級：n²/2 還是 O(n²)。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(B)</span> n²/2 次；O(n)</div><div class="quiz-opt" data-correct="false" data-fb="內圈是線性遞減，不是每次砍半：砍半才有 log。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(C)</span> n log n 次；O(n log n)</div>
   </div>
   <div class="quiz-feedback" id="ex2Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 4 · 講義練習：翻倍迴圈</div>
+  <p><code>int i = 1; while (i &lt;= n) {{ for (j = 1; j &lt;= i; j++) x++; i *= 2; }}</code> 的複雜度是？</p>
+  
+  <div class="quiz-options" id="ex4Options">
+    <div class="quiz-opt" data-correct="true" data-fb="外圈 i 走 1, 2, 4, …, n（log n 輪），內圈次數是 1+2+4+…+n = 2n−1。等比級數的和被最後一項主導，總計 O(n)。有 log 不一定就是 O(n log n)，要看內圈怎麼長。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(A)</span> O(n)</div><div class="quiz-opt" data-correct="false" data-fb="那是「每輪都做 n 次、共 log n 輪」的情況。這裡每輪只做 i 次，加總是等比級數。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(B)</span> O(n log n)</div><div class="quiz-opt" data-correct="false" data-fb="log n 是輪數，但每輪的工作量在翻倍，最後一輪就做了 n 次。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(C)</span> O(log n)</div>
+  </div>
+  <div class="quiz-feedback" id="ex4Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 5 · 講義練習：第 k 小</div>
+  <p>亂序數列找第 k 小的數，要求 O(n log n)。最直接的做法是？</p>
+  
+  <div class="quiz-options" id="ex5Options">
+    <div class="quiz-opt" data-correct="true" data-fb="sort O(n log n) + 索引 O(1)。順帶一提：更快的 O(n) 平均解（quickselect）會在第 7 章快速排序的分割技巧裡現身。" onclick="quizCheck('ex5', this)"><span class="opt-letter">(A)</span> 整串 sort 一次，回傳第 k−1 格</div><div class="quiz-opt" data-correct="false" data-fb="每輪 O(n)、共 k 輪 → O(kn)；k 接近 n 時就是 O(n²)，不合要求。" onclick="quizCheck('ex5', this)"><span class="opt-letter">(B)</span> 跑 k 輪「找最小、刪掉」</div><div class="quiz-opt" data-correct="false" data-fb="雜湊表沒有次序概念，找「第 k 小」反而無從下手。" onclick="quizCheck('ex5', this)"><span class="opt-letter">(C)</span> 全部塞進 unordered_map</div>
+  </div>
+  <div class="quiz-feedback" id="ex5Feedback"></div>
 </div>
   
 <div class="quiz-box">
@@ -588,7 +686,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <p>需求：不斷插入單字、隨時問「這個單字出現過嗎」。10⁶ 次操作，選哪個？</p>
   
   <div class="quiz-options" id="ex3Options">
-    <div class="quiz-opt" data-correct="true" data-fb="插入與查找都是平均 O(1)，總計 O(10⁶)；vector 方案是 O(10¹²) 級。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(A)</span> unordered_set</div><div class="quiz-opt" data-correct="false" data-fb="每次 find O(n)，總計平方級——n 大直接卡死。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(B)</span> vector + 每次 find</div><div class="quiz-opt" data-correct="false" data-fb="排序每次 O(n log n)，比查找本身還貴。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(C)</span> 每次插入後重新排序 + binary search</div>
+    <div class="quiz-opt" data-correct="true" data-fb="插入與查找都是平均 O(1)，總計 O(10⁶)；vector 方案是 O(10¹²) 級。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(A)</span> unordered_set</div><div class="quiz-opt" data-correct="false" data-fb="每次 find O(n)，總計平方級：n 大直接卡死。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(B)</span> vector + 每次 find</div><div class="quiz-opt" data-correct="false" data-fb="排序每次 O(n log n)，比查找本身還貴。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(C)</span> 每次插入後重新排序 + binary search</div>
   </div>
   <div class="quiz-feedback" id="ex3Feedback"></div>
 </div>
@@ -603,7 +701,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     ② Big-O 三步驟：數 T(n) → 找主導項 → 丟係數。<br>
     ③ Anagram 案例：同一題可以有 O(n!)、O(n²)、O(n log n)、O(n) 四種命運。<br>
     ④ C++ 容器成本表要背：vector 索引 O(1)／前端插入 O(n)；unordered_map 平均 O(1)。<br>
-    ⑤ 「平均」有前提（好的 hash、健康的載入因子）——第 6 章雜湊專章見。
+    ⑤ 「平均」有前提（好的 hash、健康的載入因子）：第 6 章雜湊專章見。
   </div>
   <div style="overflow-x:auto;margin-top:1rem;">
   <table class="cmp-table" style="width:100%;font-size:.88rem;">
@@ -733,7 +831,7 @@ function sumcmpRun() {
     `迴圈法：<strong>${n.toLocaleString()}</strong> 次加法<br>` +
     `高斯公式：<strong>3</strong> 個運算（乘、加、除）<br>` +
     `比值：<strong>${(n/gauss).toLocaleString(undefined,{maximumFractionDigits:0})}×</strong>`;
-  setStatus('sumcmpStatus', 'n 增加 100 倍，迴圈法工作量也增加 100 倍；公式法不動如山——這就是 O(n) 與 O(1) 的差別。');
+  setStatus('sumcmpStatus', 'n 增加 100 倍，迴圈法工作量也增加 100 倍；公式法不動如山：這就是 O(n) 與 O(1) 的差別。');
 }
 sumcmpRun();
 
@@ -845,7 +943,7 @@ function vecPush() {
     vec.moves += vec.size;
     vec.cap *= 2;
     vec.size++;
-    vecRender(`裝滿了！配置 ${vec.cap} 格新家、搬移 ${vec.size-1} 個元素，再放入新元素——這次很貴，但很少發生。`, true);
+    vecRender(`裝滿了！配置 ${vec.cap} 格新家、搬移 ${vec.size-1} 個元素，再放入新元素：這次很貴，但很少發生。`, true);
   } else {
     vec.size++;
     vecRender('還有空位：直接放進尾端，O(1)。');
@@ -855,7 +953,7 @@ function vecFront() {
   if (vec.size === vec.cap) { vec.cap *= 2; }
   vec.moves += vec.size;
   vec.size++;
-  vecRender(`insert(begin())：${vec.size-1} 個元素全部右移一格——每次都是 O(n)！`, true);
+  vecRender(`insert(begin())：${vec.size-1} 個元素全部右移一格：每次都是 O(n)！`, true);
 }
 function vecReset() { vec = {size:0, cap:1, moves:0}; vecRender('已重置：size 0 / capacity 1。'); }
 vecReset();
@@ -870,7 +968,7 @@ function hashRace() {
     `vector 線性查找：約 <strong>${linear.toLocaleString()}</strong> 次比較<br>` +
     `排序 + binary search：約 <strong>${binary.toLocaleString()}</strong> 次比較<br>` +
     `unordered_set：約 <strong>${Math.round(hash).toLocaleString()}</strong> 次（平均每查 1.2 次探查）`;
-  setStatus('hashStatus', '同樣 1000 次查詢，三種容器差了 4 個數量級——資料一大，容器選擇就是生死題。');
+  setStatus('hashStatus', '同樣 1000 次查詢，三種容器差了 4 個數量級：資料一大，容器選擇就是生死題。');
 }
 </script>
 </body>

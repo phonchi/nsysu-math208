@@ -371,8 +371,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       <div class="info-card">
         <div class="ic-title">兩個直接推論</div>
         <div style="font-size:.87rem;line-height:1.9;">
-        ① 存取任何 a[i] 成本相同——<strong>不用走訪</strong>。<br>
-        ② 格子必須<strong>等寬</strong>——所以 C++ 陣列是同型別元素。</div>
+        ① 存取任何 a[i] 成本相同：<strong>不用走訪</strong>。<br>
+        ② 格子必須<strong>等寬</strong>：所以 C++ 陣列是同型別元素。</div>
       </div>
       <div class="info-card">
         <div class="ic-title">C++ 對照</div>
@@ -385,9 +385,49 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="compact">
   <div class="section-number">PART 02 · 兩種存法</div>
   <h2>Compact vs Referential：值放格子裡，還是放「別處」？ <span class="sec-badge">課程補充 A.2</span></h2>
-  <p><strong>Compact array</strong>：元素的值直接躺在連續格子裡（C++ <code>int a[]</code>、<code>vector&lt;int&gt;</code>）。
-  <strong>Referential array</strong>：格子裡放的是<strong>指標</strong>，真正的物件散落在 heap
-  （<code>vector&lt;string*&gt;</code>、Python 的 list 一律如此）。</p>
+  <p><strong>Compact array</strong>：元素的值直接躺在連續格子裡（C++ <code>int a[]</code>、<code>vector&lt;int&gt;</code>、
+  甚至 <code>string</code> 本身就是字元的 compact array）。
+  <strong>Referential array</strong>：格子裡放的是<strong>指標</strong>，真正的物件散落在 heap。
+  想存一排長短不一的名字（"Rene"、"Joseph"、"Virginia"…）又要維持 O(1) 索引，格子就必須等寬，
+  於是 Python 的 list 一律存 8 byte 的參考。代價有二：每個元素多付 8 byte 的指標稅，
+  以及取值都要多跳一次記憶體。</p>
+
+  <h3>手刻一個 compact 動態陣列：ArrayList</h3>
+  <p>講義用原生 <code>new[]</code> 自己刻了一個簡化版 vector，把「動態陣列到底在做什麼」攤開來看。
+  幾個值得停下來看的細節：解構子要 <code>delete[]</code>（自己配置的自己收）、
+  <code>operator[]</code> 回傳<strong>參考</strong>（讀寫共用一個運算子）、insert 與 remove 都要搬移元素。</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:.8rem;">
+    <div class="info-card"><div class="ic-title">骨架與索引 <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line"><span class="kw">class</span> <span class="fn">ArrayList</span> {</span>
+<span class="line">    <span class="kw">int</span> maxSize, lastIndex;</span>
+<span class="line">    <span class="kw">int</span> *myArray;            <span class="com">// 原生動態陣列</span></span>
+<span class="line">  <span class="kw">public</span>:</span>
+<span class="line">    <span class="fn">ArrayList</span>(<span class="kw">int</span> cap = <span class="num">8</span>) {</span>
+<span class="line">        maxSize = cap;  lastIndex = <span class="num">0</span>;</span>
+<span class="line">        myArray = <span class="kw">new</span> <span class="kw">int</span>[maxSize];</span>
+<span class="line">    }</span>
+<span class="line">    ~<span class="fn">ArrayList</span>() { <span class="kw">delete</span>[] myArray; }  <span class="com">// 誰配置誰釋放</span></span>
+<span class="line">    <span class="kw">int</span>&amp; <span class="kw">operator</span>[](<span class="kw">int</span> idx) {</span>
+<span class="line">        <span class="kw">if</span> (<span class="num">0</span> &lt;= idx &amp;&amp; idx &lt; lastIndex) <span class="kw">return</span> myArray[idx];</span>
+<span class="line">        <span class="kw">throw</span> <span class="fn">out_of_range</span>(<span class="str">&quot;index out of bounds&quot;</span>);</span>
+<span class="line">    }   <span class="com">// 回傳參考：a[i] 讀寫都通</span></span>
+<span class="line">};</span></div></div>
+    <div class="info-card"><div class="ic-title">insert / remove：搬移的真面目 <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line"><span class="kw">void</span> <span class="fn">insert</span>(<span class="kw">int</span> idx, <span class="kw">int</span> val) {</span>
+<span class="line">    <span class="kw">for</span> (<span class="kw">int</span> i = lastIndex; i &gt; idx; i--)</span>
+<span class="line">        myArray[i] = myArray[i - <span class="num">1</span>];   <span class="com">// 右移讓位</span></span>
+<span class="line">    myArray[idx] = val;  lastIndex++;</span>
+<span class="line">}</span>
+<span class="line"><span class="kw">void</span> <span class="fn">remove</span>(<span class="kw">int</span> val) {</span>
+<span class="line">    找到 val 所在的 i;</span>
+<span class="line">    <span class="kw">for</span> (<span class="kw">int</span> j = i; j &lt; lastIndex - <span class="num">1</span>; j++)</span>
+<span class="line">        myArray[j] = myArray[j + <span class="num">1</span>];   <span class="com">// 左移補洞</span></span>
+<span class="line">    lastIndex--;</span>
+<span class="line">}</span></div>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">第 2 章說 vector 的 insert/erase 是 O(n)，這兩個迴圈就是那個 n 的本體。</div></div>
+  </div>
   <div class="viz-panel">
     <div class="bq-row" id="cmpVis" style="min-height:110px;"></div>
     <div class="status-banner" id="cmpStatus"><span class="status-icon">›</span><span class="status-text">切換兩種視角。</span></div>
@@ -402,7 +442,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <p>走訪加總 10⁶ 個 int，compact 版比 referential 版快很多，主因是？</p>
   
   <div class="quiz-options" id="qCmpOptions">
-    <div class="quiz-opt" data-correct="true" data-fb="compact 版一次 cache line 載入 16 個 int；referential 版每個元素都要多跳一次指標、位置又分散——cache miss 連發。" onclick="quizCheck('qCmp', this)"><span class="opt-letter">(A)</span> 連續記憶體對 CPU cache 友善</div><div class="quiz-opt" data-correct="false" data-fb="大小差異是次要；殺手是「跳來跳去」造成的 cache miss。" onclick="quizCheck('qCmp', this)"><span class="opt-letter">(B)</span> 指標比 int 大</div><div class="quiz-opt" data-correct="false" data-fb="轉換成本極小——記憶體階層才是主戰場。" onclick="quizCheck('qCmp', this)"><span class="opt-letter">(C)</span> referential 版要多做型別轉換</div>
+    <div class="quiz-opt" data-correct="true" data-fb="compact 版一次 cache line 載入 16 個 int；referential 版每個元素都要多跳一次指標、位置又分散：cache miss 連發。" onclick="quizCheck('qCmp', this)"><span class="opt-letter">(A)</span> 連續記憶體對 CPU cache 友善</div><div class="quiz-opt" data-correct="false" data-fb="大小差異是次要；殺手是「跳來跳去」造成的 cache miss。" onclick="quizCheck('qCmp', this)"><span class="opt-letter">(B)</span> 指標比 int 大</div><div class="quiz-opt" data-correct="false" data-fb="轉換成本極小：記憶體階層才是主戰場。" onclick="quizCheck('qCmp', this)"><span class="opt-letter">(C)</span> referential 版要多做型別轉換</div>
   </div>
   <div class="quiz-feedback" id="qCmpFeedback"></div>
 </div>
@@ -411,9 +451,11 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="multidim">
   <div class="section-number">PART 03 · 多維</div>
   <h2>多維陣列：row-major 的攤平公式 <span class="sec-badge">課程補充 A.3</span></h2>
-  <p>記憶體是一維的，二維陣列只是「攤平」：C++ 採 <strong>row-major</strong>（一整列放完才放下一列），
-  <span class="mono">addr(a[i][j]) = base + (i × 行數 + j) × sizeof</span>。
-  Fortran/MATLAB 用 column-major——<strong>走訪順序跟佈局一致才快</strong>。</p>
+  <p>記憶體是一維的，二維陣列只是「攤平」。C++ 標準<strong>保證</strong> row-major：
+  <code>M[0][0], M[0][1], M[1][0]</code> 在記憶體裡連續排列，印位址就能親眼看到。定位公式：</p>
+  <p style="text-align:center;" class="mono"><strong>y = x + Cols × i + j</strong>（x 是起始位址、Cols 是每列的欄數）</p>
+  <p>Fortran 和 MATLAB 用 column-major（整欄放完才放下一欄）；C++ 沒有內建這種佈局，
+  需要的話自己開一維陣列、把公式的 i、j 對調。記住一個原則就夠了：<strong>走訪順序跟佈局一致才快</strong>。</p>
   <div class="viz-layout">
     <div>
       <div class="viz-panel">
@@ -430,7 +472,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       <div class="info-card">
         <div class="ic-title">效能後果</div>
         <div style="font-size:.87rem;line-height:1.9;">row-major 佈局下，<code>for i for j a[i][j]</code>
-        是順著記憶體走（cache 友善）；內外圈對調就變成每步跳 4×行數 bytes——
+        是順著記憶體走（cache 友善）；內外圈對調就變成每步跳 4×行數 bytes：
         大矩陣可差 <strong>5~10 倍</strong>。</div>
       </div>
       <div class="info-card">
@@ -444,7 +486,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="sparse">
   <div class="section-number">PART 04 · 稀疏矩陣</div>
   <h2>稀疏矩陣：只存非零，空間從 O(mn) 降到 O(nnz) <span class="sec-badge">課程補充 A.4</span></h2>
-  <p>推薦系統的「使用者×商品」矩陣 99.9% 是 0——整片存起來是浪費。
+  <p>推薦系統的「使用者×商品」矩陣 99.9% 是 0：整片存起來是浪費。
   <strong>COO</strong>（座標表：三條平行陣列 row/col/val）適合建構與批次運算；
   <strong>DOK</strong>（dictionary of keys：map 以 (r,c) 當 key）適合隨機讀寫。</p>
   <div class="viz-layout">
@@ -478,13 +520,54 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
     </div>
   </div>
+  <h3 style="margin-top:1.4rem;">完整的 SparseMatrix 類別（dscpp/sparsematrix.hpp）</h3>
+  <p>講義把 DOK 寫成一個可運算的類別：讀寫共用 <code>operator()</code>（const 版查不到回 0、
+  非 const 版會插入）、<code>nnz()</code> 數非零項、<code>sparsity()</code> 算密度，
+  連加法和乘法都直接在稀疏表示上做，完全不用把矩陣展開：</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:.8rem;">
+    <div class="info-card"><div class="ic-title">稀疏加法 <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line">SparseMatrix <span class="kw">operator</span>+(<span class="kw">const</span> SparseMatrix&amp; other) {</span>
+<span class="line">    SparseMatrix result;</span>
+<span class="line">    <span class="kw">for</span> (item : data)          <span class="com">// 自己的非零項</span></span>
+<span class="line">        result[item.pos] = item.val + other(item.pos);</span>
+<span class="line">    <span class="kw">for</span> (item : other.data)    <span class="com">// 對方獨有的非零項</span></span>
+<span class="line">        <span class="kw">if</span> (data 沒有 item.pos) result[item.pos] = item.val;</span>
+<span class="line">    <span class="kw">return</span> result;   <span class="com">// 成本只跟 nnz 有關，跟 m×n 無關</span></span>
+<span class="line">}</span></div></div>
+    <div class="info-card"><div class="ic-title">稀疏乘法 <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line">SparseMatrix <span class="kw">operator</span>*(<span class="kw">const</span> SparseMatrix&amp; other) {</span>
+<span class="line">    SparseMatrix result;</span>
+<span class="line">    <span class="kw">for</span> (item1 : data)</span>
+<span class="line">        <span class="kw">for</span> (item2 : other.data)</span>
+<span class="line">            <span class="kw">if</span> (item1 的欄 == item2 的列)</span>
+<span class="line">                result(item1.列, item2.欄)</span>
+<span class="line">                    += item1.val * item2.val;</span>
+<span class="line">    <span class="kw">return</span> result;  <span class="com">// 只在非零×非零時才有工作</span></span>
+<span class="line">}</span></div></div>
+  </div>
+  <h3 style="margin-top:1.4rem;">A.4.3 第三種表示：每列一條串列</h3>
+  <p>講義最後給了一張圖：整個矩陣是一個「列陣列」，每列掛一條<strong>鏈結串列</strong>，
+  節點存（欄號、值、next 指標）。同一列的非零項照欄號串起來，逐列運算（例如稀疏矩陣相加）
+  變成兩條串列的合併。這是下一章鏈結串列的預告：等你學完 ch4，回頭就能自己實作這個版本。</p>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 稀疏運算的成本</div>
+  <p>兩個 10⁵×10⁵、各有 10⁶ 個非零項的矩陣用 DOK 相加，工作量大約跟什麼成正比？</p>
+  
+  <div class="quiz-options" id="qSpAddOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="演算法只走訪兩邊的非零項。若用密集表示，光走過 10¹⁰ 個格子就死了。稀疏結構的意義：成本跟資料量走，不跟矩陣尺寸走。" onclick="quizCheck('qSpAdd', this)"><span class="opt-letter">(A)</span> 兩邊 nnz 的總和（約 2×10⁶ 項）</div><div class="quiz-opt" data-correct="false" data-fb="那是密集表示的成本。稀疏加法從頭到尾沒碰過零。" onclick="quizCheck('qSpAdd', this)"><span class="opt-letter">(B)</span> 矩陣尺寸 10⁵ × 10⁵</div><div class="quiz-opt" data-correct="false" data-fb="相乘的內外雙迴圈才會到乘積級；加法是兩趟線性走訪。" onclick="quizCheck('qSpAdd', this)"><span class="opt-letter">(C)</span> nnz 的乘積（10¹²）</div>
+  </div>
+  <div class="quiz-feedback" id="qSpAddFeedback"></div>
+</div>
   
 <div class="quiz-box">
   <div class="quiz-label">QUIZ · 什麼時候划算？</div>
   <p>5×6 的 double 矩陣（8B/值）。DOK 每個非零項約需 24B（key+值+map 開銷）。幾個非零以下 DOK 才省空間？</p>
   
   <div class="quiz-options" id="qSpOptions">
-    <div class="quiz-opt" data-correct="true" data-fb="整片存 = 240B；DOK ≈ 24×nnz → nnz < 10 才划算。稀疏結構是「夠稀疏」才有利。" onclick="quizCheck('qSp', this)"><span class="opt-letter">(A)</span> 約 10 個以下</div><div class="quiz-opt" data-correct="false" data-fb="每項的 overhead 是 3 倍——密矩陣用 DOK 反而更肥又更慢。" onclick="quizCheck('qSp', this)"><span class="opt-letter">(B)</span> 永遠划算</div><div class="quiz-opt" data-correct="false" data-fb="30×24 = 720B，早就超過整片的 240B 了。" onclick="quizCheck('qSp', this)"><span class="opt-letter">(C)</span> 30 個以下</div>
+    <div class="quiz-opt" data-correct="true" data-fb="整片存 = 240B；DOK ≈ 24×nnz → nnz < 10 才划算。稀疏結構是「夠稀疏」才有利。" onclick="quizCheck('qSp', this)"><span class="opt-letter">(A)</span> 約 10 個以下</div><div class="quiz-opt" data-correct="false" data-fb="每項的 overhead 是 3 倍：密矩陣用 DOK 反而更肥又更慢。" onclick="quizCheck('qSp', this)"><span class="opt-letter">(B)</span> 永遠划算</div><div class="quiz-opt" data-correct="false" data-fb="30×24 = 720B，早就超過整片的 240B 了。" onclick="quizCheck('qSp', this)"><span class="opt-letter">(C)</span> 30 個以下</div>
   </div>
   <div class="quiz-feedback" id="qSpFeedback"></div>
 </div>
@@ -499,7 +582,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <p><code>double a[100]</code>（8B/格）base = 2000。<code>&amp;a[13]</code> 是？</p>
   
   <div class="quiz-options" id="ex1Options">
-    <div class="quiz-opt" data-correct="true" data-fb="2000 + 13×8 = 2104。一個乘法一個加法——這就是 O(1)。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> <code>2104</code></div><div class="quiz-opt" data-correct="false" data-fb="忘了乘 sizeof(double)=8。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> <code>2013</code></div><div class="quiz-opt" data-correct="false" data-fb="那是 a[14]；索引從 0 起算。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> <code>2112</code></div>
+    <div class="quiz-opt" data-correct="true" data-fb="2000 + 13×8 = 2104。一個乘法一個加法：這就是 O(1)。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> <code>2104</code></div><div class="quiz-opt" data-correct="false" data-fb="忘了乘 sizeof(double)=8。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> <code>2013</code></div><div class="quiz-opt" data-correct="false" data-fb="那是 a[14]；索引從 0 起算。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> <code>2112</code></div>
   </div>
   <div class="quiz-feedback" id="ex1Feedback"></div>
 </div>
@@ -515,11 +598,21 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 </div>
   
 <div class="quiz-box">
+  <div class="quiz-label">EXERCISE 4 · 講義練習：students 陣列</div>
+  <p>100×4 的陣列，students[0][0] 的位址是 0、每個元素佔 1 格、row-major。students[5][3] 的位址是？</p>
+  
+  <div class="quiz-options" id="ex4Options">
+    <div class="quiz-opt" data-correct="true" data-fb="y = x + Cols×i + j = 0 + 4×5 + 3 = 23。跟上一題同一條公式，只是把 sizeof 換成 1。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(A)</span> <code>23</code></div><div class="quiz-opt" data-correct="false" data-fb="把 100 當成 Cols 了。公式吃的是「每列幾欄」（4），不是列數。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(B)</span> <code>53</code></div><div class="quiz-opt" data-correct="false" data-fb="算到 row 開頭就停了，還要 +j = 3。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(C)</span> <code>20</code></div>
+  </div>
+  <div class="quiz-feedback" id="ex4Feedback"></div>
+</div>
+  
+<div class="quiz-box">
   <div class="quiz-label">EXERCISE 3 · 結構選擇</div>
   <p>10⁵×10⁵ 矩陣、約 10⁶ 個非零、需要頻繁「讀寫任意 (r,c)」。選哪個？</p>
   
   <div class="quiz-options" id="ex3Options">
-    <div class="quiz-opt" data-correct="true" data-fb="隨機讀寫 O(log nnz) 或 O(1)；COO 要線性掃、密陣列 10¹⁰ 格根本放不下（40GB+）。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(A)</span> DOK（map/unordered_map）</div><div class="quiz-opt" data-correct="false" data-fb="COO 隨機查 (r,c) 要掃整條列表——它是「建構/匯出」格式。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(B)</span> COO 三陣列</div><div class="quiz-opt" data-correct="false" data-fb="10¹⁰ × 4B = 40GB，記憶體先陣亡。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(C)</span> 直接開二維 vector</div>
+    <div class="quiz-opt" data-correct="true" data-fb="隨機讀寫 O(log nnz) 或 O(1)；COO 要線性掃、密陣列 10¹⁰ 格根本放不下（40GB+）。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(A)</span> DOK（map/unordered_map）</div><div class="quiz-opt" data-correct="false" data-fb="COO 隨機查 (r,c) 要掃整條列表：它是「建構/匯出」格式。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(B)</span> COO 三陣列</div><div class="quiz-opt" data-correct="false" data-fb="10¹⁰ × 4B = 40GB，記憶體先陣亡。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(C)</span> 直接開二維 vector</div>
   </div>
   <div class="quiz-feedback" id="ex3Feedback"></div>
 </div>
@@ -543,7 +636,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div class="info-box" style="margin-top:1rem;">
     <span class="info-label">關鍵概念複習</span>
     ① O(1) 隨機存取 = 連續 + 等寬 + 一條位址公式。<br>
-    ② compact/referential 的差別在「值住哪」——cache 效應由此而生。<br>
+    ② compact/referential 的差別在「值住哪」：cache 效應由此而生。<br>
     ③ 多維只是攤平；<strong>走訪順序要順著佈局</strong>。<br>
     ④ 稀疏結構只存非零：格式跟著存取模式選（建構用 COO、讀寫用 DOK）。
   </div>
@@ -666,7 +759,7 @@ function addrRender(sel) {
     d.innerHTML = `<div style="font-size:.62rem;opacity:.8;">addr ${1000 + i*size}</div>a[${i}]`;
     d.onclick = () => {
       addrRender(i);
-      setStatus('addrStatus', `addr(a[${i}]) = 1000 + ${i} × ${size} = <strong>${1000 + i*size}</strong>——不管 i 多大都是一個乘加。`);
+      setStatus('addrStatus', `addr(a[${i}]) = 1000 + ${i} × ${size} = <strong>${1000 + i*size}</strong>：不管 i 多大都是一個乘加。`);
     };
     el.appendChild(d);
   }
@@ -693,7 +786,7 @@ function cmpShow(mode) {
     const note = document.createElement('div'); note.className = 'bq-label';
     note.textContent = '…真正的物件散落在 heap 各處';
     el.appendChild(note);
-    setStatus('cmpStatus', 'referential：格子裡是指標，每次取值都要「跳」到 heap——位置分散，cache 常 miss。');
+    setStatus('cmpStatus', 'referential：格子裡是指標，每次取值都要「跳」到 heap：位置分散，cache 常 miss。');
   }
 }
 cmpShow('compact');
@@ -735,8 +828,8 @@ function mdWalk(mode) {
   mdTimer = setInterval(() => {
     if (t >= order.length) { clearInterval(mdTimer);
       setStatus('mdStatus', mode === 'row'
-        ? 'row-major 走訪：攤平索引 0,1,2,…連續前進——cache line 一路吃到飽。'
-        : 'column 走訪：攤平索引 0,4,8,1,5,9,…每步跳 4 格——大矩陣時 cache miss 連發。');
+        ? 'row-major 走訪：攤平索引 0,1,2,…連續前進：cache line 一路吃到飽。'
+        : 'column 走訪：攤平索引 0,4,8,1,5,9,…每步跳 4 格：大矩陣時 cache miss 連發。');
       return; }
     mdRender(order[t]); t++;
   }, 260);

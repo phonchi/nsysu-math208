@@ -371,7 +371,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">作業系統的例子</div>
-        <div style="font-size:.86rem;line-height:1.9;">分時系統把工作排成<strong>環狀串列</strong>輪流執行——
+        <div style="font-size:.86rem;line-height:1.9;">分時系統把工作排成<strong>環狀串列</strong>輪流執行：
         鏈結結構天生適合「不斷插入、移除、輪轉」的場景。</div>
       </div>
     </div>
@@ -382,7 +382,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div class="section-number">PART 01 · 節點</div>
   <h2>Node 類別：資料 + 一根指向下一個的指標 <span class="sec-badge">cppds §4.3.1</span></h2>
   <p>節點是鏈結串列的積木：<code>data</code> 放資料、<code>next</code> 指向下一個節點。
-  <code>next == NULL</code> 表示「後面沒有了」——這就是串列的結尾記號（grounded）。</p>
+  <code>next == NULL</code> 表示「後面沒有了」：這就是串列的結尾記號（grounded）。</p>
   <div class="viz-layout">
     <div>
       <div class="viz-panel">
@@ -396,16 +396,19 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
     </div>
     <div class="side-panel">
-      <div class="info-card"><div class="ic-title">C++ 實作 <span class="ic-badge">CODE</span></div><div class="pseudo-code" style="font-size:.8rem;">
-<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">Node</span> {                <span class="com">// dscpp/linked_list.hpp</span></span>
-<span class="line" data-l="2">  <span class="kw">public</span>:</span>
-<span class="line" data-l="3">    <span class="kw">int</span> data;</span>
-<span class="line" data-l="4">    Node *next;</span>
-<span class="line" data-l="5">    <span class="fn">Node</span>(<span class="kw">int</span> initData) {</span>
-<span class="line" data-l="6">        data = initData;</span>
-<span class="line" data-l="7">        next = <span class="num">NULL</span>;      <span class="com">// 沒有下一個</span></span>
-<span class="line" data-l="8">    }</span>
-<span class="line" data-l="9">};</span></div></div>
+      <div class="info-card"><div class="ic-title">C++ 實作 <span class="ic-badge">CODE</span></div><div class="pseudo-code" style="font-size:.76rem;">
+<span class="line" data-l="1"><span class="kw">template</span> &lt;<span class="kw">typename</span> T&gt;   <span class="com">// dscpp/linked_list.hpp</span></span>
+<span class="line" data-l="2"><span class="kw">class</span> <span class="fn">Node</span> {</span>
+<span class="line" data-l="3">  <span class="kw">private</span>:</span>
+<span class="line" data-l="4">    T data;</span>
+<span class="line" data-l="5">    Node&lt;T&gt; *next;</span>
+<span class="line" data-l="6">  <span class="kw">public</span>:</span>
+<span class="line" data-l="7">    <span class="fn">Node</span>(T initdata) { data = initdata; next = <span class="num">NULL</span>; }</span>
+<span class="line" data-l="8">    T <span class="fn">getData</span>() { <span class="kw">return</span> data; }</span>
+<span class="line" data-l="9">    Node&lt;T&gt;* <span class="fn">getNext</span>() { <span class="kw">return</span> next; }</span>
+<span class="line" data-l="10">    <span class="kw">void</span> <span class="fn">setData</span>(T d) { data = d; }</span>
+<span class="line" data-l="11">    <span class="kw">void</span> <span class="fn">setNext</span>(Node&lt;T&gt; *n) { next = n; }</span>
+<span class="line" data-l="12">};</span></div></div>
       <div class="info-card">
         <div class="ic-title">指標語法速記</div>
         <div style="font-size:.86rem;line-height:2;" class="mono">
@@ -423,7 +426,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <h2>UnorderedList：add、search、remove 的指標舞步 <span class="sec-badge">cppds §4.3</span></h2>
   <p>未排序串列把新元素<strong>加在 head</strong>（最省事的位置，O(1)）。
   重點戲是 <code>remove</code>：需要 <strong>prev / cur 雙指標</strong>同行，找到後讓 prev「跳過」cur。
-  <strong>順序錯了串列就斷</strong>——先接住後面，再改前面。</p>
+  <strong>順序錯了串列就斷</strong>：先接住後面，再改前面。</p>
   <div class="viz-layout">
     <div>
       <div class="viz-panel">
@@ -440,7 +443,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
     </div>
     <div class="side-panel">
-      <div class="info-card"><div class="ic-title">三大操作 <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="ullCode">
+      <div class="info-card"><div class="ic-title">三大操作（動畫對照）<span class="ic-badge">CODE</span></div><div class="pseudo-code" id="ullCode">
 <span class="line" data-l="1"><span class="kw">void</span> <span class="fn">add</span>(<span class="kw">int</span> item):        <span class="com">// 加在 head，O(1)</span></span>
 <span class="line" data-l="2">    Node *temp = <span class="kw">new</span> <span class="fn">Node</span>(item)</span>
 <span class="line" data-l="3">    temp-&gt;next = head        <span class="com">// ① 先接住整條串列</span></span>
@@ -461,13 +464,54 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <span class="line" data-l="18">    <span class="kw">else</span>: prev-&gt;next = cur-&gt;next</span></div></div>
     </div>
   </div>
+
+  <h3 style="margin-top:1.5rem;">完整類別長什麼樣（dscpp/linked_list.hpp）</h3>
+  <p>動畫面板用的是簡化寫法；實際的類別把 head 藏在 private、透過 Node 的
+  <code>getNext()／setNext()</code> 操作。<code>size()</code>、<code>search()</code>、<code>remove()</code>
+  都建立在同一個技巧上：<strong>走訪</strong>（traversal），也就是從 head 出發、
+  一個節點一個節點地拜訪到 NULL 為止。</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:.8rem;">
+    <div class="info-card"><div class="ic-title">size：邊走邊數 <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.74rem;">
+<span class="line"><span class="kw">int</span> <span class="fn">size</span>() {</span>
+<span class="line">    Node&lt;T&gt; *current = head;</span>
+<span class="line">    <span class="kw">int</span> count = <span class="num">0</span>;</span>
+<span class="line">    <span class="kw">while</span> (current != <span class="num">NULL</span>) {</span>
+<span class="line">        count++;</span>
+<span class="line">        current = current-&gt;<span class="fn">getNext</span>();</span>
+<span class="line">    }</span>
+<span class="line">    <span class="kw">return</span> count;   <span class="com">// O(n)：串列不會免費告訴你長度</span></span>
+<span class="line">}</span></div></div>
+    <div class="info-card"><div class="ic-title">remove：雙指標＋delete <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line"><span class="kw">void</span> <span class="fn">remove</span>(T item) {</span>
+<span class="line">    Node&lt;T&gt; *current = head, *previous = <span class="num">NULL</span>;</span>
+<span class="line">    <span class="kw">bool</span> found = <span class="num">false</span>;</span>
+<span class="line">    <span class="kw">while</span> (!found &amp;&amp; current != <span class="num">NULL</span>) {</span>
+<span class="line">        <span class="kw">if</span> (current-&gt;<span class="fn">getData</span>() == item) found = <span class="num">true</span>;</span>
+<span class="line">        <span class="kw">else</span> { previous = current; current = current-&gt;<span class="fn">getNext</span>(); }</span>
+<span class="line">    }</span>
+<span class="line">    <span class="kw">if</span> (found) {</span>
+<span class="line">        <span class="kw">if</span> (previous == <span class="num">NULL</span>) head = current-&gt;<span class="fn">getNext</span>();</span>
+<span class="line">        <span class="kw">else</span> previous-&gt;<span class="fn">setNext</span>(current-&gt;<span class="fn">getNext</span>());</span>
+<span class="line">        <span class="kw">delete</span> current;   <span class="com">// C++ 沒有垃圾回收！</span></span>
+<span class="line">    }</span>
+<span class="line">}</span></div></div>
+  </div>
+  <div class="info-box warm" style="margin-top:.9rem;">
+    <span class="info-label">為什麼需要 previous？</span>
+    單向串列<strong>不能往回走</strong>。current 停在要刪的節點上時，需要改的其實是「前一個節點的 next」，
+    但這時已經回不去了。解法是讓 previous 永遠跟在 current 後面一格。
+    刪 head 是特殊情況：previous 還是 NULL，這時改的是 head 本身。
+    講義留了一題思考：<strong>刪最後一個節點時，這兩個分支夠用嗎？</strong>（提示：夠。想想 current->getNext() 那時是什麼。）
+  </div>
   
 <div class="quiz-box">
   <div class="quiz-label">QUIZ · add 的兩行順序</div>
-  <p><code>add</code> 裡若把兩行寫反——先 <code>head = temp</code> 再 <code>temp-&gt;next = head</code>——會發生什麼事？</p>
+  <p><code>add</code> 裡若把兩行寫反（先 <code>head = temp</code>、再 <code>temp-&gt;next = head</code>），會發生什麼事？</p>
   
   <div class="quiz-options" id="qUllOptions">
-    <div class="quiz-opt" data-correct="true" data-fb="head 先被改成 temp，之後 temp->next = head 就是指向自己；原本的串列再也沒有任何指標能到達（記憶體洩漏）。" onclick="quizCheck('qUll', this)"><span class="opt-letter">(A)</span> temp 的 next 指向自己，其餘節點全部漏接</div><div class="quiz-opt" data-correct="false" data-fb="順序是關鍵！先讓新節點接住原串列，才能安全移動 head。" onclick="quizCheck('qUll', this)"><span class="opt-letter">(B)</span> 沒差，結果一樣</div><div class="quiz-opt" data-correct="false" data-fb="語法完全合法——這是「邏輯炸彈」，編譯器不會救你。" onclick="quizCheck('qUll', this)"><span class="opt-letter">(C)</span> 編譯錯誤</div>
+    <div class="quiz-opt" data-correct="true" data-fb="head 先被改成 temp，之後 temp->next = head 就是指向自己；原本的串列再也沒有任何指標能到達（記憶體洩漏）。" onclick="quizCheck('qUll', this)"><span class="opt-letter">(A)</span> temp 的 next 指向自己，其餘節點全部漏接</div><div class="quiz-opt" data-correct="false" data-fb="順序是關鍵！先讓新節點接住原串列，才能安全移動 head。" onclick="quizCheck('qUll', this)"><span class="opt-letter">(B)</span> 沒差，結果一樣</div><div class="quiz-opt" data-correct="false" data-fb="語法完全合法，這是「邏輯炸彈」，編譯器不會救你。" onclick="quizCheck('qUll', this)"><span class="opt-letter">(C)</span> 編譯錯誤</div>
   </div>
   <div class="quiz-feedback" id="qUllFeedback"></div>
 </div>
@@ -514,7 +558,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <div class="ic-row"><span class="ic-label">未排序 add</span><span class="ic-value">O(1)</span></div>
         <div class="ic-row"><span class="ic-label">排序 add</span><span class="ic-value">O(n)</span></div>
         <div class="ic-row"><span class="ic-label">search / remove</span><span class="ic-value">O(n)</span></div>
-        <div style="font-size:.76rem;color:var(--muted);margin-top:.3rem;">鏈結串列<strong>不能</strong>二分搜尋——沒有 O(1) 隨機存取。</div>
+        <div style="font-size:.76rem;color:var(--muted);margin-top:.3rem;">鏈結串列<strong>不能</strong>二分搜尋：沒有 O(1) 隨機存取。</div>
       </div>
     </div>
   </div>
@@ -523,9 +567,13 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="variants">
   <div class="section-number">PART 04 · 變化型</div>
   <h2>雙向與環狀：多一根指標，換一批超能力 <span class="sec-badge">課程補充（cppds §4 延伸）</span></h2>
-  <p>單向串列<strong>無法高效刪除尾端</strong>（要先走到倒數第二個）。
-  <strong>雙向串列</strong>（doubly linked）每個節點多存 <code>prev</code>，兩個方向都能走；
-  <strong>環狀串列</strong>（circular）讓 tail 指回 head，適合輪流排程。</p>
+  <p>單向串列刪尾端很痛：要先走到倒數第二個節點。<strong>雙向串列</strong>（doubly linked）
+  給每個節點多存一根 <code>prev</code>，兩個方向都能走；<strong>環狀串列</strong>（circular）
+  讓 tail 的 next 指回 head，作業系統的分時排程（輪流給每個程式一點 CPU）就是這樣繞圈的。</p>
+  <p>雙向串列的插入要同時接好四根指標：新節點的 prev、next，加上左右鄰居各一根。
+  順序亂了照樣斷鏈，所以實務上常加<strong>哨兵節點</strong>（sentinel）：在頭尾各放一個不存資料的假節點，
+  讓「插在最前」「刪到只剩一個」這些邊界情況消失，每次操作都變成「在兩個真實存在的節點之間動手」。
+  多花兩個節點的記憶體，換到少一半的 if，很划算。</p>
   <div class="viz-panel">
     <div class="bq-row" id="varVis" style="min-height:90px;"></div>
     <div class="status-banner" id="varStatus"><span class="status-icon">›</span><span class="status-text">切換三種串列型態，注意指標的方向與端點。</span></div>
@@ -541,7 +589,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <p>要讓「刪除尾端節點」變成 O(1)，需要哪種配置？</p>
   
   <div class="quiz-options" id="qVarOptions">
-    <div class="quiz-opt" data-correct="true" data-fb="tail 直接定位尾端，tail->prev 直接定位倒數第二個——兩步搞定。" onclick="quizCheck('qVar', this)"><span class="opt-letter">(A)</span> 雙向串列 + tail 指標</div><div class="quiz-opt" data-correct="false" data-fb="tail 找得到尾端，但刪除還需要「倒數第二個」的 next 清 NULL——單向串列拿不到它，仍要 O(n) 走訪。" onclick="quizCheck('qVar', this)"><span class="opt-letter">(B)</span> 單向串列 + tail 指標</div><div class="quiz-opt" data-correct="false" data-fb="環狀解決「輪轉」問題；刪尾端一樣需要前一個節點，仍是 O(n)。" onclick="quizCheck('qVar', this)"><span class="opt-letter">(C)</span> 環狀單向串列</div>
+    <div class="quiz-opt" data-correct="true" data-fb="tail 直接定位尾端，tail->prev 直接定位倒數第二個：兩步搞定。" onclick="quizCheck('qVar', this)"><span class="opt-letter">(A)</span> 雙向串列 + tail 指標</div><div class="quiz-opt" data-correct="false" data-fb="tail 找得到尾端，但刪除還需要「倒數第二個」的 next 清 NULL：單向串列拿不到它，仍要 O(n) 走訪。" onclick="quizCheck('qVar', this)"><span class="opt-letter">(B)</span> 單向串列 + tail 指標</div><div class="quiz-opt" data-correct="false" data-fb="環狀解決「輪轉」問題；刪尾端一樣需要前一個節點，仍是 O(n)。" onclick="quizCheck('qVar', this)"><span class="opt-letter">(C)</span> 環狀單向串列</div>
   </div>
   <div class="quiz-feedback" id="qVarFeedback"></div>
 </div>
@@ -565,11 +613,35 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     </tbody>
   </table>
   </div>
+  <h3 style="margin-top:1.2rem;">forward_list 的操作長相（cppds §4.5）</h3>
+  <p>單向串列的 STL 版本連命名都在提醒你它的限制：插入叫 <code>insert_after</code>、
+  刪除叫 <code>erase_after</code>，因為單向串列只能「在某個節點後面」動手。常用操作：</p>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>操作</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">push_front(x) / pop_front()</td><td>頭端加入、移除，O(1)</td></tr>
+      <tr><td class="mono">emplace_front(...)</td><td>就地建構元素後放到最前面</td></tr>
+      <tr><td class="mono">insert_after(it, x)</td><td>在迭代器 it 的後面插入，O(1)</td></tr>
+      <tr><td class="mono">erase_after(it)</td><td>刪掉 it 後面那個節點，O(1)</td></tr>
+      <tr><td class="mono">remove(x) / unique() / sort()</td><td>串列自家的成員函式版本（不能用 std::sort，沒隨機存取）</td></tr>
+    </tbody>
+  </table></div>
   <div class="info-box warm" style="margin-top:.9rem;">
     <span class="info-label">工程直覺</span>
-    現代 CPU 上 vector 常常「理論輸、實測贏」——cache locality 的威力。
-    選 list 家族的時機：<strong>頻繁在中間插刪、且已握有位置（迭代器）</strong>。
+    現代 CPU 上 vector 常常「理論輸、實測贏」，因為連續記憶體對快取太友善。
+    選 list 家族的時機是：頻繁在中間插刪，而且手上已經握有位置（迭代器）。
+    沒有這兩個條件，先用 vector。
   </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 為什麼叫 insert_after？</div>
+  <p>forward_list 只提供 insert_after，不提供 insert（插在某節點前面）。原因是？</p>
+  
+  <div class="quiz-options" id="qStlOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="要插在 it 前面，就得改「it 前一個節點」的 next，但單向串列走不回去。命名直接反映了資料結構的能力邊界。" onclick="quizCheck('qStl', this)"><span class="opt-letter">(A)</span> 單向串列拿不到「前一個節點」，只能在已知節點後面接</div><div class="quiz-opt" data-correct="false" data-fb="這是能力問題：雙向的 std::list 就有真正的 insert。" onclick="quizCheck('qStl', this)"><span class="opt-letter">(B)</span> 歷史包袱，沒有技術原因</div><div class="quiz-opt" data-correct="false" data-fb="不是快慢問題，是「做不做得到」的問題。" onclick="quizCheck('qStl', this)"><span class="opt-letter">(C)</span> insert_after 比較快</div>
+  </div>
+  <div class="quiz-feedback" id="qStlFeedback"></div>
+</div>
 </section>
 
 <section id="exercises">
@@ -581,7 +653,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <p>一條長度 n 的單向串列，<code>size()</code>（用走訪實作）與「取第 k 個元素」的成本分別是？</p>
   
   <div class="quiz-options" id="ex1Options">
-    <div class="quiz-opt" data-correct="true" data-fb="兩者都得從 head 一步步走；這是串列與陣列最根本的差別。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> O(n) 與 O(k)</div><div class="quiz-opt" data-correct="false" data-fb="除非額外維護 size 計數器，否則串列沒有免費的 size；取第 k 個永遠要走 k 步。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> O(1) 與 O(1)</div><div class="quiz-opt" data-correct="false" data-fb="沒有隨機存取就沒有二分——log 是陣列的專利。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> O(n) 與 O(log k)</div>
+    <div class="quiz-opt" data-correct="true" data-fb="兩者都得從 head 一步步走；這是串列與陣列最根本的差別。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> O(n) 與 O(k)</div><div class="quiz-opt" data-correct="false" data-fb="除非額外維護 size 計數器，否則串列沒有免費的 size；取第 k 個永遠要走 k 步。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> O(1) 與 O(1)</div><div class="quiz-opt" data-correct="false" data-fb="沒有隨機存取就沒有二分：log 是陣列的專利。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> O(n) 與 O(log k)</div>
   </div>
   <div class="quiz-feedback" id="ex1Feedback"></div>
 </div>
@@ -591,7 +663,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <p><code>remove(item)</code> 用 prev/cur 雙指標。刪除的是 <strong>head 節點</strong>時，正確動作是？</p>
   
   <div class="quiz-options" id="ex2Options">
-    <div class="quiz-opt" data-correct="true" data-fb="prev == NULL 代表 cur 就是 head——特殊情況要直接搬 head。這正是虛擬碼第 17 行。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(A)</span> <code>head = cur-&gt;next</code>（prev 是 NULL）</div><div class="quiz-opt" data-correct="false" data-fb="prev 是 NULL，解參考會當機（segfault）！" onclick="quizCheck('ex2', this)"><span class="opt-letter">(B)</span> <code>prev-&gt;next = cur-&gt;next</code></div><div class="quiz-opt" data-correct="false" data-fb="大可不必——一個 if 就解決的邊界情況。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(C)</span> 先把串列反轉再刪</div>
+    <div class="quiz-opt" data-correct="true" data-fb="prev == NULL 代表 cur 就是 head：特殊情況要直接搬 head。這正是虛擬碼第 17 行。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(A)</span> <code>head = cur-&gt;next</code>（prev 是 NULL）</div><div class="quiz-opt" data-correct="false" data-fb="prev 是 NULL，解參考會當機（segfault）！" onclick="quizCheck('ex2', this)"><span class="opt-letter">(B)</span> <code>prev-&gt;next = cur-&gt;next</code></div><div class="quiz-opt" data-correct="false" data-fb="大可不必，一個 if 就解決的邊界情況。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(C)</span> 先把串列反轉再刪</div>
   </div>
   <div class="quiz-feedback" id="ex2Feedback"></div>
 </div>
@@ -601,7 +673,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <p>C++ 手刻串列 <code>remove</code> 之後少做了什麼，會發生什麼事？</p>
   
   <div class="quiz-options" id="ex3Options">
-    <div class="quiz-opt" data-correct="true" data-fb="節點脫鉤後若不 delete，這塊 heap 記憶體永遠拿不回來——Python/Java 有 GC，C++ 沒有。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(A)</span> 少 <code>delete cur</code> → 記憶體洩漏</div><div class="quiz-opt" data-correct="false" data-fb="不設 NULL 不影響編譯；dangling pointer 是執行期風險。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(B)</span> 少 <code>cur = NULL</code> → 編譯錯誤</div><div class="quiz-opt" data-correct="false" data-fb="單次洩漏也許無感，長時間執行的服務會被漏死。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(C)</span> 什麼都不會發生</div>
+    <div class="quiz-opt" data-correct="true" data-fb="節點脫鉤後若不 delete，這塊 heap 記憶體永遠拿不回來：Python/Java 有 GC，C++ 沒有。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(A)</span> 少 <code>delete cur</code> → 記憶體洩漏</div><div class="quiz-opt" data-correct="false" data-fb="不設 NULL 不影響編譯；dangling pointer 是執行期風險。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(B)</span> 少 <code>cur = NULL</code> → 編譯錯誤</div><div class="quiz-opt" data-correct="false" data-fb="單次洩漏也許無感，長時間執行的服務會被漏死。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(C)</span> 什麼都不會發生</div>
   </div>
   <div class="quiz-feedback" id="ex3Feedback"></div>
 </div>
@@ -791,7 +863,7 @@ function nodeDemo(step) {
   } else if (step === 2) {
     setStatus('nodeStatus', '<code>temp->data</code> 回傳 93。箭頭運算子 -> = 「解參考 + 取成員」。');
   } else {
-    setStatus('nodeStatus', '<code>temp->next</code> 是 NULL——這個節點還沒接上任何串列。');
+    setStatus('nodeStatus', '<code>temp->next</code> 是 NULL：這個節點還沒接上任何串列。');
   }
 }
 
@@ -877,7 +949,7 @@ function varShow(mode) {
   const msgs = {
     singly: '單向：一根 next。刪尾端要先走到倒數第二個 → O(n)。',
     doubly: '雙向：next + prev（⇄）。任一節點可雙向移動；配合 tail 指標，尾端插刪 O(1)。',
-    circular: '環狀：tail 的 next 指回 head，「下一個」永遠存在——輪流排程的天然結構。',
+    circular: '環狀：tail 的 next 指回 head，「下一個」永遠存在：輪流排程的天然結構。',
   };
   setStatus('varStatus', msgs[mode]);
 }

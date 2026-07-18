@@ -295,14 +295,17 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <nav class="float-nav" id="floatNav" aria-label="章節導覽">
   <div class="fn-title">章節導覽</div>
   <a href="#prologue" data-target="prologue"><span class="fn-num">P00</span><span class="fn-name">為什麼學資料結構？</span></a>
-  <a href="#types" data-target="types"><span class="fn-num">P01</span><span class="fn-name">原子型別與記憶體</span></a>
+  <a href="#types" data-target="types"><span class="fn-num">P01</span><span class="fn-name">原子型別與變數</span></a>
   <a href="#pointers" data-target="pointers"><span class="fn-num">P02</span><span class="fn-name">指標</span></a>
   <a href="#collections" data-target="collections"><span class="fn-num">P03</span><span class="fn-name">集合型別</span></a>
-  <a href="#functions" data-target="functions"><span class="fn-num">P04</span><span class="fn-name">函式與傳參</span></a>
-  <a href="#classes" data-target="classes"><span class="fn-num">P05</span><span class="fn-name">類別：Fraction</span></a>
-  <a href="#inherit" data-target="inherit"><span class="fn-num">P06</span><span class="fn-name">繼承：邏輯閘</span></a>
+  <a href="#io" data-target="io"><span class="fn-num">P04</span><span class="fn-name">輸入與輸出</span></a>
+  <a href="#control" data-target="control"><span class="fn-num">P05</span><span class="fn-name">控制結構</span></a>
+  <a href="#exceptions" data-target="exceptions"><span class="fn-num">P06</span><span class="fn-name">例外處理</span></a>
+  <a href="#functions" data-target="functions"><span class="fn-num">P07</span><span class="fn-name">函式與傳參</span></a>
+  <a href="#classes" data-target="classes"><span class="fn-num">P08</span><span class="fn-name">類別：Fraction</span></a>
+  <a href="#inherit" data-target="inherit"><span class="fn-num">P09</span><span class="fn-name">繼承：邏輯閘</span></a>
   <a href="#exercises" data-target="exercises"><span class="fn-num">EX</span><span class="fn-name">練習題</span></a>
-  <a href="#reference" data-target="reference"><span class="fn-num">REF</span><span class="fn-name">總覽比較</span></a>
+  <a href="#reference" data-target="reference"><span class="fn-num">REF</span><span class="fn-name">總覽與詞彙</span></a>
   <a href="#top" class="fn-top" title="回到頂端"><span class="fn-num">↑ TOP</span></a>
 </nav>
 
@@ -320,7 +323,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div class="hero-content">
     <h1><span class="blue">C++</span> 導論：型別、<span class="orange">指標</span>與物件</h1>
     <div class="subtitle">cppds Chapter 1 — Introduction（對應講義 01）</div>
-    <div class="big-formula">ADT｜原子型別｜指標｜集合｜傳值vs傳參考｜Fraction｜邏輯閘</div>
+    <div class="big-formula">ADT｜原子型別｜指標｜五種集合｜I/O 格式化｜控制結構｜例外｜Fraction｜邏輯閘</div>
     <div class="scroll-hint">向下捲動開始互動<span>↓</span></div>
   </div>
 </div>
@@ -330,72 +333,153 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div class="toc-title">CONTENTS · 內容目錄</div>
   <div class="toc-grid">
     <a href="#prologue"><span class="toc-num">P00</span>為什麼學資料結構？</a>
-    <a href="#types"><span class="toc-num">P01</span>原子型別與記憶體</a>
+    <a href="#types"><span class="toc-num">P01</span>原子型別與變數</a>
     <a href="#pointers"><span class="toc-num">P02</span>指標</a>
     <a href="#collections"><span class="toc-num">P03</span>集合型別</a>
-    <a href="#functions"><span class="toc-num">P04</span>函式與傳參</a>
-    <a href="#classes"><span class="toc-num">P05</span>類別：Fraction</a>
-    <a href="#inherit"><span class="toc-num">P06</span>繼承：邏輯閘</a>
+    <a href="#io"><span class="toc-num">P04</span>輸入與輸出</a>
+    <a href="#control"><span class="toc-num">P05</span>控制結構</a>
+    <a href="#exceptions"><span class="toc-num">P06</span>例外處理</a>
+    <a href="#functions"><span class="toc-num">P07</span>函式與傳參</a>
+    <a href="#classes"><span class="toc-num">P08</span>類別：Fraction</a>
+    <a href="#inherit"><span class="toc-num">P09</span>繼承：邏輯閘</a>
     <a href="#exercises"><span class="toc-num">EX</span>練習題</a>
-    <a href="#reference"><span class="toc-num">REF</span>總覽比較</a>
+    <a href="#reference"><span class="toc-num">REF</span>總覽與詞彙</a>
   </div>
 </div>
 
 <section id="prologue">
   <div class="section-number">PROLOGUE · 開場</div>
-  <h2>抽象化、ADT 與這門課的地圖 <span class="sec-badge">cppds §1.1–1.6</span></h2>
-  <p>寫程式 = 把問題的<strong>資料</strong>與<strong>過程</strong>編碼進電腦。
-  <strong>抽象資料型別（ADT）</strong>只告訴你「能做什麼操作」（介面），把「怎麼做到」（實作）藏起來——
-  同一個 ADT 可以有很多實作，效能各不相同。<strong>資料結構 = ADT 的實作</strong>。</p>
+  <h2>演算法、抽象化，還有這門課要帶你去哪 <span class="sec-badge">cppds §1.1–1.6</span></h2>
+  <p>面對一個問題，資訊科學家的目標是寫出<strong>演算法</strong>：一份一步一步的指令清單，
+  能解決這個問題的任何一個實例。講義給了正式定義，四個條件缺一不可：</p>
+  <div class="viz-panel">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.9rem;">
+      <div class="info-card"><div class="ic-title">① 定義良好</div>
+        <div style="font-size:.88rem;line-height:1.85;">指令是有序的集合，每一步都明確。</div></div>
+      <div class="info-card"><div class="ic-title">② 步驟不含糊</div>
+        <div style="font-size:.88rem;line-height:1.85;">說「把兩個整數相加」，就得先講清楚什麼是整數、什麼是加。</div></div>
+      <div class="info-card"><div class="ic-title">③ 產生結果</div>
+        <div style="font-size:.88rem;line-height:1.85;">回傳資料，或造成某種效果（例如印出東西）。</div></div>
+      <div class="info-card"><div class="ic-title">④ 有限時間內停止</div>
+        <div style="font-size:.88rem;line-height:1.85;">跑不完的程序不算演算法。存在演算法可解的問題，我們說它是「可計算的」（computable）。</div></div>
+    </div>
+  </div>
+  <p style="margin-top:1rem;">資訊科學同時也是研究<strong>抽象化</strong>的學問。開車不需要懂引擎，
+  你只用方向盤、油門、煞車這組「介面」。寫程式也一樣：<code>#include &lt;cmath&gt;</code> 之後喊一聲
+  <code>sqrt(16)</code> 就拿到 4，不必知道底層是牛頓法還是查表。這叫<strong>程序抽象化</strong>。</p>
+  <p>把同一招用在資料上，就是<strong>抽象資料型別（ADT）</strong>：只描述資料有哪些操作、行為是什麼，
+  完全不管怎麼實作。使用者摸到的是外殼，實作藏在殼裡面一層，這層包裝叫<strong>封裝</strong>。
+  而 ADT 的具體實作，就是我們整學期要磨的東西：<strong>資料結構</strong>。</p>
   <div class="info-box">
-    <span class="info-label">為什麼要學？</span>
-    ① 大問題靠抽象化管理複雜度；② 同一問題的不同解法差距可以是「秒 vs 年」（第 2 章起量化）；
-    ③ 這些結構是所有系統的積木：OS、資料庫、編譯器、AI 框架。
+    <span class="info-label">為什麼值得花一學期？</span>
+    同一個 ADT 通常有好幾種實作，介面一樣、效能天差地遠。第 2 章開始你會看到：
+    同一個問題，一種寫法跑一秒，另一種要跑到天荒地老。學會「評估解法」跟學會「寫出解法」一樣重要。
   </div>
   <div class="info-box warm">
-    <span class="info-label">C++ 的定位</span>
-    C++ 讓我們<strong>貼著記憶體</strong>學資料結構：指標、手動配置（new/delete）、值語意——
-    Python 幫你藏起來的細節，這裡全部攤開。懂了底層，回頭用什麼語言都更強。
+    <span class="info-label">為什麼用 C++？</span>
+    C++ 讓你貼著記憶體學：指標、new/delete、值語意，Python 幫你藏起來的細節這裡全部攤開。
+    課程用 cppds 這本書，程式碼跟著書的風格走（NULL、手刻結構）。
   </div>
 </section>
 
 <section id="types">
   <div class="section-number">PART 01 · 原子型別</div>
-  <h2>內建原子型別：每個變數都是「固定大小的格子」 <span class="sec-badge">cppds §1.8</span></h2>
-  <p>C++ 是<strong>靜態型別</strong>語言：宣告變數就固定了型別與大小。
-  <code>int</code>、<code>double</code>、<code>char</code>、<code>bool</code> 是最基本的「原子」。</p>
+  <h2>原子型別與變數：每個變數都是一格固定大小的記憶體 <span class="sec-badge">cppds §1.8</span></h2>
+  <p>C++ 要求每個變數<strong>先宣告型別才能用</strong>。數值型別主要是 <code>int</code> 與
+  <code>double</code>（後者精度是 <code>float</code> 的兩倍）；算術運算子 <code>+ - * / %</code>
+  都在，次方則要用 <code>&lt;cmath&gt;</code> 的 <code>pow()</code>。先看一段講義的示範：</p>
   <div class="viz-layout">
     <div>
       <div class="viz-panel">
-        <div class="bq-row" id="typeVis" style="min-height:96px;"></div>
-        <div class="status-banner" id="typeStatus"><span class="status-icon">›</span><span class="status-text">點型別卡看它的大小與取值範圍。</span></div>
+        <div class="pseudo-code" style="font-size:.8rem;">
+<span class="line">cout &lt;&lt; 2 + 3 * 4;        <span class="com">// 14，先乘除後加減</span></span>
+<span class="line">cout &lt;&lt; (2 + 3) * 4;      <span class="com">// 20，括號改變順序</span></span>
+<span class="line">cout &lt;&lt; <span class="fn">pow</span>(2, 10);       <span class="com">// 1024</span></span>
+<span class="line">cout &lt;&lt; 7 / 3;            <span class="com">// 2！整數除法直接截斷</span></span>
+<span class="line">cout &lt;&lt; 7.0 / 3;          <span class="com">// 2.33333，有一邊是 double 就是浮點除法</span></span>
+<span class="line">cout &lt;&lt; 7 % 3;            <span class="com">// 1，取餘數</span></span>
+<span class="line">cout &lt;&lt; <span class="fn">pow</span>(2, 100);      <span class="com">// 1.26765e+30：double 近似值，不是精確整數</span></span></div>
+        <div class="status-banner" id="typeStatus"><span class="status-icon">›</span><span class="status-text">點下面的型別卡，看各型別的大小與地雷。</span></div>
         <div class="controls-bar" id="typeBtns"></div>
+        <div class="bq-row" id="typeVis" style="min-height:70px;"></div>
       </div>
     </div>
     <div class="side-panel">
       <div class="info-card">
-        <div class="ic-title">與 Python 的分野</div>
-        <div style="font-size:.86rem;line-height:1.9;">Python 的 int 無上限、變數可隨時換型別；
-        C++ 的 int 通常 4 bytes、溢位不會報錯（21 億再 +1 變負的！）。<strong>大小固定</strong>正是陣列 O(1) 定址的前提。</div>
+        <div class="ic-title">int 是固定大小的</div>
+        <div style="font-size:.86rem;line-height:1.9;">Python 的整數要多大有多大；C++ 的
+        <code>int</code> 通常 32 位元，上限 2,147,483,647。所以 <code>pow(2, 100)</code>
+        只能給你 double 近似值。超過上限不會報錯，直接繞回負數，這種溢位是經典 bug 來源。</div>
       </div>
       <div class="info-card">
-        <div class="ic-title">整數除法陷阱</div>
-        <div class="mono" style="font-size:.85rem;line-height:2;">9 / 5&nbsp;&nbsp;→ 1&nbsp;&nbsp;// int ÷ int = int<br>9.0 / 5 → 1.8<br>9 % 5&nbsp;&nbsp;→ 4</div>
+        <div class="ic-title">整數除法</div>
+        <div style="font-size:.86rem;line-height:1.9;"><code>7 / 3</code> 是 2，不是 2.33。
+        兩個 int 相除結果就是 int，往零截斷。想要小數，至少讓一邊是 <code>double</code>。</div>
       </div>
     </div>
   </div>
+
+  <h3 style="margin-top:1.6rem;">布林、比較與邏輯運算子</h3>
+  <p><code>bool</code> 只有 <code>true</code> 和 <code>false</code> 兩個值，搭配
+  <code>&amp;&amp;</code>（且）、<code>||</code>（或）、<code>!</code>（非）。
+  比較運算的結果也是 bool。整理成一張表：</p>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>運算</th><th>寫法</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>大小比較</td><td class="mono">&lt; &gt; &lt;= &gt;=</td><td>結果是 bool</td></tr>
+      <tr><td>相等／不等</td><td class="mono">== 　!=</td><td>注意 <code>=</code> 是賦值，<code>==</code> 才是比較</td></tr>
+      <tr><td>邏輯且／或／非</td><td class="mono">&amp;&amp; 　|| 　!</td><td>短路求值：左邊定案就不看右邊</td></tr>
+    </tbody>
+  </table></div>
+  <div class="info-box warm" style="margin-top:.8rem;">
+    <span class="info-label">連鎖比較不能照搬 Python</span>
+    <code>10 &lt; 5 &lt; 3</code> 在 C++ 會編譯、會跑，而且結果是 <code>true</code>：
+    先算 <code>10 &lt; 5</code> 得 0，再算 <code>0 &lt; 3</code> 得 true。想表達區間，乖乖寫
+    <code>(5 &gt;= 1) &amp;&amp; (5 &lt;= 10)</code>。另外 cout 預設把 bool 印成 1/0，
+    想看 true/false 要先插入 <code>boolalpha</code>。
+  </div>
+
+  <h3 style="margin-top:1.6rem;">變數是一個「有名字的盒子」</h3>
+  <p>宣告 <code>int the_sum = 0;</code> 時，編譯器保留一塊剛好放得下 int 的記憶體，
+  把 0 直接放進去。之後的賦值都是換掉盒子裡的值。三件事值得慢慢咀嚼：</p>
+  <ul style="line-height:2;margin:.4rem 0 .4rem 1.4rem;">
+    <li>盒子的<strong>型別終身不變</strong>。把 <code>true</code> 塞給 int 變數是合法的，但值會被轉成 1，變數還是 int。</li>
+    <li>識別字（identifier）以字母或底線開頭、大小寫視為不同，保留字（<code>int</code>、<code>class</code>、<code>while</code>）不能拿來當名字。</li>
+    <li>這叫<strong>靜態型別</strong>：編譯器在程式跑起來之前就知道每個變數的型別，型別錯誤在編譯期就抓到。Python 是同一個名字隨時可以指向不同型別的物件，兩邊的世界觀完全不同。</li>
+  </ul>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 型別與除法</div>
+  <p><code>int n = 7; double d = n / 2;</code> 之後 d 的值是？</p>
+  
+  <div class="quiz-options" id="qTypeOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="7/2 先做整數除法得 3，然後才轉成 double。除法發生當下的型別決定一切。" onclick="quizCheck('qType', this)"><span class="opt-letter">(A)</span> <code>3.0</code></div><div class="quiz-opt" data-correct="false" data-fb="想拿 3.5，寫 <code>n / 2.0</code> 或 <code>double(n) / 2</code>，讓除法在浮點世界進行。" onclick="quizCheck('qType', this)"><span class="opt-letter">(B)</span> <code>3.5</code></div><div class="quiz-opt" data-correct="false" data-fb="int 放進 double 是合法的隱式轉換，編譯器不會攔。" onclick="quizCheck('qType', this)"><span class="opt-letter">(C)</span> 編譯錯誤</div>
+  </div>
+  <div class="quiz-feedback" id="qTypeFeedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 布林運算</div>
+  <p><code>cout &lt;&lt; (10 &lt; 5 &lt; 3);</code> 印出什麼？</p>
+  
+  <div class="quiz-options" id="qBoolOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="(10&lt;5) 先變成 0，接著 0&lt;3 為 true，預設印成 1。語法合法、語意錯誤，編譯器不會救你。" onclick="quizCheck('qBool', this)"><span class="opt-letter">(A)</span> <code>1</code></div><div class="quiz-opt" data-correct="false" data-fb="直覺上 10&lt;5 是假沒錯，但接下來 0&lt;3 又變真了。" onclick="quizCheck('qBool', this)"><span class="opt-letter">(B)</span> <code>0</code></div><div class="quiz-opt" data-correct="false" data-fb="C++ 允許這樣寫，這正是它危險的地方。" onclick="quizCheck('qBool', this)"><span class="opt-letter">(C)</span> 編譯錯誤</div>
+  </div>
+  <div class="quiz-feedback" id="qBoolFeedback"></div>
+</div>
 </section>
 
 <section id="pointers">
   <div class="section-number">PART 02 · 指標</div>
-  <h2>指標：存「位址」的變數 <span class="sec-badge">cppds §1.8（Pointers）</span></h2>
-  <p>指標是整門課的關鍵道具（第 4 章串列、第 8 章樹全靠它）。
-  兩個運算子：<code>&amp;</code> 取位址、<code>*</code> 解參考（沿位址取值）。</p>
+  <h2>指標：存位址的變數 <span class="sec-badge">cppds §1.8（Pointers）</span></h2>
+  <p>Python 的變數其實全是參考：每個名字存的都是物件的位址，只是語言不讓你看。
+  C++ 把兩種世界都交到你手上：一般變數直接放值，<strong>指標</strong>是一種放「別的變數的位址」的變數。
+  兩個運算子要熟到變反射動作：<code>&amp;</code> 取位址、<code>*</code> 解參考（沿位址取值）。</p>
   <div class="viz-layout">
     <div>
       <div class="viz-panel">
         <div class="bq-row" id="ptrVis" style="min-height:100px;"></div>
-        <div class="status-banner" id="ptrStatus"><span class="status-icon">›</span><span class="status-text">按步驟按鈕，看變數格與指標格的變化。</span></div>
+        <div class="status-banner" id="ptrStatus"><span class="status-icon">›</span><span class="status-text">照順序按四顆按鈕，看變數格與指標格怎麼變。</span></div>
         <div class="controls-bar">
           <button class="btn" onclick="ptrStep(1)">① int varN=100</button>
           <button class="btn" onclick="ptrStep(2)">② ptrN=&amp;varN</button>
@@ -409,55 +493,298 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <span class="line" data-l="1"><span class="kw">int</span> varN = <span class="num">100</span>;      <span class="com">// 一般變數：住著值</span></span>
 <span class="line" data-l="2"><span class="kw">int</span> *ptrN = &amp;varN;    <span class="com">// 指標：住著位址</span></span>
 <span class="line" data-l="3">cout &lt;&lt; ptrN;          <span class="com">// 印出位址（如 0x7ffe...）</span></span>
-<span class="line" data-l="4">cout &lt;&lt; *ptrN;         <span class="com">// 解參考：順著位址取值 → 100</span></span>
-<span class="line" data-l="5">*ptrN = <span class="num">50</span>;            <span class="com">// 透過指標改 varN</span></span>
-<span class="line" data-l="6">ptrN = <span class="num">NULL</span>;           <span class="com">// 指向「無」；解參考 NULL = 當機</span></span></div></div>
+<span class="line" data-l="4">cout &lt;&lt; *ptrN;         <span class="com">// 解參考：沿位址取值，得到 100</span></span>
+<span class="line" data-l="5">*ptrN = <span class="num">50</span>;            <span class="com">// 透過指標改 varN 本人</span></span>
+<span class="line" data-l="6">ptrN = <span class="num">NULL</span>;           <span class="com">// 指向「無」；解參考 NULL 會當機</span></span></div></div>
+      <div class="info-card">
+        <div class="ic-title">為什麼現在就要學指標？</div>
+        <div style="font-size:.86rem;line-height:1.9;">第 4 章的鏈結串列、第 8 章的樹、第 9 章的圖，
+        全部用「節點＋指標」蓋出來。<code>NULL</code> 扮演的角色相當於 Python 的 <code>None</code>：
+        解參考 NULL 的下場，就是 Python 的 <code>AttributeError: NoneType</code> 換成 C++ 的 segfault。</div>
+      </div>
     </div>
   </div>
   
 <div class="quiz-box">
   <div class="quiz-label">QUIZ · 讀指標</div>
-  <p>接上面 ③ 之後執行 <code>cout &lt;&lt; varN;</code> 印出什麼？</p>
+  <p>接上面第 ③ 步之後執行 <code>cout &lt;&lt; varN;</code>，印出什麼？</p>
   
   <div class="quiz-options" id="qPtrOptions">
-    <div class="quiz-opt" data-correct="true" data-fb="*ptrN = 50 透過位址改的就是 varN 本人——一塊記憶體、兩個名字。" onclick="quizCheck('qPtr', this)"><span class="opt-letter">(A)</span> <code>50</code></div><div class="quiz-opt" data-correct="false" data-fb="指標不是複製品：*ptrN 與 varN 是同一格記憶體。" onclick="quizCheck('qPtr', this)"><span class="opt-letter">(B)</span> <code>100</code></div><div class="quiz-opt" data-correct="false" data-fb="印位址要 cout << ptrN（不加 *）。" onclick="quizCheck('qPtr', this)"><span class="opt-letter">(C)</span> 位址（0x…）</div>
+    <div class="quiz-opt" data-correct="true" data-fb="<code>*ptrN = 50</code> 改的就是 varN 那塊記憶體。一塊記憶體、兩個名字。" onclick="quizCheck('qPtr', this)"><span class="opt-letter">(A)</span> <code>50</code></div><div class="quiz-opt" data-correct="false" data-fb="指標不是複製品。*ptrN 與 varN 是同一格。" onclick="quizCheck('qPtr', this)"><span class="opt-letter">(B)</span> <code>100</code></div><div class="quiz-opt" data-correct="false" data-fb="印位址是 <code>cout &lt;&lt; ptrN</code>，不加星號。" onclick="quizCheck('qPtr', this)"><span class="opt-letter">(C)</span> 位址（0x…）</div>
   </div>
   <div class="quiz-feedback" id="qPtrFeedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 危險的指標</div>
+  <p><code>int *p; cout &lt;&lt; *p;</code> 這兩行的問題是？</p>
+  
+  <div class="quiz-options" id="qPtr2Options">
+    <div class="quiz-opt" data-correct="true" data-fb="p 還沒指向任何有效位址（野指標）。可能印垃圾、可能當機。好習慣：宣告就初始化，暫時沒目標就設 NULL。" onclick="quizCheck('qPtr2', this)"><span class="opt-letter">(A)</span> 解參考未初始化的指標，行為未定義</div><div class="quiz-opt" data-correct="false" data-fb="語法完全合法。合法但爆炸，是 C++ 給新手的第一份見面禮。" onclick="quizCheck('qPtr2', this)"><span class="opt-letter">(B)</span> 語法錯誤</div><div class="quiz-opt" data-correct="false" data-fb="「未定義行為」的意思是：什麼都可能發生，包括看起來正常。" onclick="quizCheck('qPtr2', this)"><span class="opt-letter">(C)</span> 一定印出 0</div>
+  </div>
+  <div class="quiz-feedback" id="qPtr2Feedback"></div>
 </div>
 </section>
 
 <section id="collections">
   <div class="section-number">PART 03 · 集合型別</div>
-  <h2>集合總覽：有序四兄弟＋無序雙雄 <span class="sec-badge">cppds §1.9</span></h2>
-  <p>有序（sequence）：<strong>array、vector、string</strong>（＋第 4 章的 list）；
-  無序（unordered）：<strong>set、unordered_map（hash table）</strong>。
-  這張表整學期都用得到：</p>
-  <div class="viz-panel">
-    <div style="overflow-x:auto;">
-    <table class="cmp-table" style="width:100%;font-size:.86rem;">
-      <thead><tr><th>容器</th><th>特性</th><th>常用操作</th><th>本課登場</th></tr></thead>
-      <tbody>
-        <tr><td class="mono">int a[10]</td><td>固定長度、最原始</td><td>a[i]</td><td>附錄 A 低階陣列</td></tr>
-        <tr><td class="mono">vector&lt;T&gt;</td><td>可成長陣列</td><td>push_back、[i]、size</td><td>全書主力容器</td></tr>
-        <tr><td class="mono">string</td><td>字元序列</td><td>+=、[i]、substr</td><td>§3 迴文、§6 雜湊</td></tr>
-        <tr><td class="mono">set&lt;T&gt;</td><td>不重複、自動排序</td><td>insert、count</td><td>§9 Dijkstra visited</td></tr>
-        <tr><td class="mono">unordered_map&lt;K,V&gt;</td><td>key→value、平均 O(1)</td><td>[key]、count</td><td>§2 分析、§6 雜湊原理</td></tr>
-      </tbody>
-    </table>
-    </div>
-    <div class="status-banner" id="colStatus"><span class="status-icon">›</span><span class="status-text">按按鈕跑一段 vector 示範。</span></div>
-    <div class="controls-bar">
-      <button class="btn" onclick="colDemo()">▶ vector 示範：push_back ×3 → [1] → size</button>
-    </div>
+  <h2>集合型別：vector、string、array、set、map <span class="sec-badge">cppds §1.9</span></h2>
+  <p>有序集合（sequence）有 <code>array</code>、<code>vector</code>、<code>string</code>；
+  無序集合有 <code>set</code> 和 <code>map</code> 家族。這一節的幾張表整學期都會回頭查，
+  值得現在花時間讀熟。</p>
+
+  <h3>vector：最接近 Python list 的東西</h3>
+  <p><code>vector</code> 是同型別元素的有序集合，可以動態長大。跟 Python list 差在兩點：
+  元素必須同型別；沒有內建切片語法，同樣效果用迭代器範圍
+  <code>vector&lt;double&gt;(v.begin()+1, v.begin()+3)</code> 做出來（取索引 1 到 2，不含 3）。</p>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>方法</th><th>用法</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">[ ] / .at(i)</td><td class="mono">v[i]、v.at(i)</td><td>索引從 0 起算；<code>at()</code> 有界限檢查、越界丟例外，<code>[]</code> 沒有</td></tr>
+      <tr><td class="mono">push_back</td><td class="mono">v.push_back(x)</td><td>加到尾端</td></tr>
+      <tr><td class="mono">pop_back</td><td class="mono">v.pop_back()</td><td>移除最後一項，<strong>不回傳值</strong>！要值先讀 <code>v.back()</code></td></tr>
+      <tr><td class="mono">insert / erase</td><td class="mono">v.insert(v.begin()+i, x)</td><td>在第 i 格插入／刪除（要搬移後面所有元素）</td></tr>
+      <tr><td class="mono">size / front / back</td><td class="mono">v.size()</td><td>長度、第一項、最後一項</td></tr>
+      <tr><td class="mono">sort / reverse / count / find</td><td class="mono">sort(v.begin(), v.end())</td><td>來自 <code>&lt;algorithm&gt;</code>，吃迭代器範圍</td></tr>
+    </tbody>
+  </table></div>
+  <div class="viz-panel" style="margin-top:.8rem;">
+    <div class="status-banner" id="colStatus"><span class="status-icon">›</span><span class="status-text">跑一段 vector 示範。</span></div>
+    <div class="controls-bar"><button class="btn" onclick="colDemo()">▶ push_back ×3 → v[1] → pop_back</button></div>
     <div class="bq-row" id="colVis" style="min-height:64px;"></div>
   </div>
+
+  <h3 style="margin-top:1.6rem;">string：可變的字元序列</h3>
+  <p>雙引號是 <code>string</code>、單引號是 <code>char</code>，兩者不能混用。
+  串接用 <code>+</code>，長度是 <code>length()</code>。跟 Python 最大的差異：
+  <strong>C++ 的字串是可變的</strong>，<code>my_name[0] = 'X'</code> 完全合法。</p>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>方法</th><th>用法</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">substr</td><td class="mono">s.substr(pos, len)</td><td>從 pos 取 len 個字元的子字串</td></tr>
+      <tr><td class="mono">find</td><td class="mono">s.find("v")</td><td>第一次出現的索引</td></tr>
+      <tr><td class="mono">append / +=</td><td class="mono">s.append(" Ranum")</td><td>接在尾端</td></tr>
+      <tr><td class="mono">insert / erase</td><td class="mono">s.insert(pos, t)</td><td>插入／刪除一段</td></tr>
+      <tr><td class="mono">c_str</td><td class="mono">s.c_str()</td><td>轉成 C 風格字元陣列（printf 會用到）</td></tr>
+    </tbody>
+  </table></div>
+  <p style="font-size:.9rem;color:var(--muted);">沒有內建 <code>split()</code>：之後解析輸入時會用
+  <code>&lt;sstream&gt;</code> 的 stringstream 達到同樣效果。</p>
+
+  <h3 style="margin-top:1.6rem;">array：固定大小、零防護</h3>
+  <p>C 語言傳下來的原生陣列 <code>int my_arr[] = {2, 1, 4};</code> 大小定了就不能改，
+  角色接近 Python 的 tuple（但元素可以改）。它<strong>完全沒有界限檢查</strong>：
+  <code>my_arr[3]</code> 會編譯、會執行、然後靜靜讀出一格垃圾記憶體。附錄 A 的自學頁會深挖它的底層。</p>
+
+  <h3 style="margin-top:1.6rem;">set：不重複、自動排序</h3>
+  <p><code>set&lt;int&gt; s = {3, 6, 4, 6, 3};</code> 建出來只剩 3、4、6：重複的直接丟掉。
+  成員檢查用 <code>s.count(x)</code>（回 1 或 0），加入 <code>insert</code>、移除 <code>erase</code>。
+  聯集、交集、差集、子集判斷由 <code>&lt;algorithm&gt;</code> 的
+  <code>set_union</code>、<code>set_intersection</code>、<code>set_difference</code>、<code>includes</code> 提供，
+  搭配 <code>inserter</code> 把結果倒進新容器。</p>
+
+  <h3 style="margin-top:1.6rem;">map／unordered_map：key 對應 value</h3>
+  <p>對應 Python 的 dict。<code>map</code> 內部照 key 排序，<code>unordered_map</code> 用雜湊表（第 2、6 章會分析它們的效能）。
+  走訪時拿到的是 pair，key 是 <code>.first</code>、value 是 <code>.second</code>。</p>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>操作</th><th>用法</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">[ ]</td><td class="mono">m["Iowa"]</td><td>取值；<strong>key 不存在時會自動插入一個預設值</strong>，這是地雷</td></tr>
+      <tr><td class="mono">at</td><td class="mono">m.at(k)</td><td>取值，key 不存在改丟例外</td></tr>
+      <tr><td class="mono">count</td><td class="mono">m.count(k)</td><td>1 表示存在、0 不存在，安全的成員檢查</td></tr>
+      <tr><td class="mono">find</td><td class="mono">m.find(k) == m.end()</td><td>找不到回 end()；這是 C++ 版的「查不到給預設值」慣用法</td></tr>
+      <tr><td class="mono">erase / size / clear</td><td class="mono">m.erase(k)</td><td>刪除、數量、清空</td></tr>
+    </tbody>
+  </table></div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · map 的 [] 陷阱</div>
+  <p><code>map&lt;string,int&gt; m; cout &lt;&lt; m["kent"]; cout &lt;&lt; m.size();</code> 印出什麼？</p>
+  
+  <div class="quiz-options" id="qMapOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="用 [] 查一個不存在的 key，map 會當場插入 {&quot;kent&quot;, 0}。查詢順便污染了資料，這是 [] 和 count/find 最大的差別。" onclick="quizCheck('qMap', this)"><span class="opt-letter">(A)</span> <code>0</code> 和 <code>1</code></div><div class="quiz-opt" data-correct="false" data-fb="[] 有副作用：查完 map 裡就多了一筆。純查詢請用 count() 或 find()。" onclick="quizCheck('qMap', this)"><span class="opt-letter">(B)</span> <code>0</code> 和 <code>0</code></div><div class="quiz-opt" data-correct="false" data-fb="丟例外的是 at()。[] 的行為是默默插入預設值。" onclick="quizCheck('qMap', this)"><span class="opt-letter">(C)</span> 丟出例外</div>
+  </div>
+  <div class="quiz-feedback" id="qMapFeedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 字串可變性</div>
+  <p><code>string s = "David"; s[0] = &#39;X&#39;;</code> 在 C++ 的結果是？</p>
+  
+  <div class="quiz-options" id="qStrOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="C++ 字串是可變的，vector 也是。Python 字串不可變的規矩在這裡不適用。" onclick="quizCheck('qStr', this)"><span class="opt-letter">(A)</span> 合法，s 變成 "Xavid"</div><div class="quiz-opt" data-correct="false" data-fb="索引 0 在範圍內，寫入完全合法。" onclick="quizCheck('qStr', this)"><span class="opt-letter">(B)</span> 執行期錯誤</div><div class="quiz-opt" data-correct="false" data-fb="<code>s[0]</code> 回傳字元的參考，可以直接賦值。" onclick="quizCheck('qStr', this)"><span class="opt-letter">(C)</span> 編譯錯誤</div>
+  </div>
+  <div class="quiz-feedback" id="qStrFeedback"></div>
+</div>
+</section>
+
+<section id="io">
+  <div class="section-number">PART 04 · 講義補充</div>
+  <h2>輸入與輸出：cin、cout 與格式化 <span class="sec-badge">講義補充（cppds §1.7 範疇）</span></h2>
+  <p><code>cout</code> 寫到標準輸出、<code>cin</code> 從標準輸入讀，都住在 <code>&lt;iostream&gt;</code>。
+  <code>cin &gt;&gt; radius</code> 有個好用的特性：<strong>目標變數的型別決定文字怎麼轉換</strong>。
+  讀進 double 就直接轉成數字，不用像 Python 再包一層 <code>float()</code>。
+  代價是輸入不合法時 cin 不丟錯誤，而是進入 fail 狀態，之後的讀取全部沉默失敗，除錯時要特別留意。</p>
+  <p><code>cout</code> 也跟 <code>print()</code> 不同：沒有自動空格、沒有自動換行，分隔符自己用
+  <code>&lt;&lt;</code> 串、行尾自己加 <code>endl</code>。要控制欄寬和小數位數，用
+  <code>&lt;iomanip&gt;</code> 的<strong>串流操縱子</strong>（stream manipulator）：</p>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>操縱子</th><th>效果</th><th>持續性</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">endl</td><td>換行並沖刷緩衝</td><td>—</td></tr>
+      <tr><td class="mono">setw(n)</td><td>下一個值放進寬度 n 的欄位</td><td><strong>只影響下一個值</strong></td></tr>
+      <tr><td class="mono">fixed + setprecision(n)</td><td>定點表示、小數點後 n 位（Python 的 %.2f）</td><td>持續有效</td></tr>
+      <tr><td class="mono">left / right</td><td>欄位內靠左／靠右</td><td>持續有效</td></tr>
+      <tr><td class="mono">setfill(c)</td><td>欄位空白改用字元 c 填</td><td>持續有效</td></tr>
+      <tr><td class="mono">boolalpha</td><td>bool 印成 true/false</td><td>持續有效</td></tr>
+    </tbody>
+  </table></div>
+  <div class="viz-layout" style="margin-top:.8rem;">
+    <div>
+      <div class="viz-panel">
+        <div class="mono" style="font-size:.85rem;color:var(--muted);">cout &lt;&lt; "The " &lt;&lt; <span id="ioExpr">setw(10) &lt;&lt; item</span> &lt;&lt; " costs " ... &lt;&lt; price</div>
+        <pre id="ioOut" style="background:#2d2d3f;color:#e8e6df;font-family:'JetBrains Mono',monospace;font-size:.85rem;padding:.8rem 1rem;border-radius:10px;line-height:1.7;overflow-x:auto;"></pre>
+        <div class="status-banner" id="ioStatus"><span class="status-icon">›</span><span class="status-text">調整參數，馬上看排版結果（item = "banana"、price = 24）。</span></div>
+        <div class="controls-bar" style="flex-wrap:wrap;">
+          <label class="mono" style="font-size:.8rem;">setw <select id="ioW"><option>6</option><option selected>10</option><option>14</option></select></label>
+          <label class="mono" style="font-size:.8rem;">對齊 <select id="ioAlign"><option value="right" selected>right</option><option value="left">left</option></select></label>
+          <label class="mono" style="font-size:.8rem;">setfill <select id="ioFill"><option value=" " selected>空白</option><option value="0">'0'</option><option value=".">'.'</option></select></label>
+          <label class="mono" style="font-size:.8rem;">setprecision <select id="ioPrec"><option>0</option><option selected>2</option><option>4</option></select></label>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">printf 也還活著</div>
+        <div class="mono" style="font-size:.8rem;line-height:2;">printf("The %10s costs %5.2f\n",<br>&nbsp;&nbsp;item.c_str(), double(price));</div>
+        <div style="font-size:.82rem;line-height:1.8;color:var(--muted);margin-top:.4rem;">C 傳下來的格式字串。Python 的 % 格式化就是從這裡抄的，所以你其實已經會了。注意 string 要先 <code>c_str()</code>。</div>
+      </div>
+    </div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · setw 的持續性</div>
+  <p><code>cout &lt;&lt; setw(10) &lt;&lt; "a" &lt;&lt; "b";</code> 的輸出是？</p>
+  
+  <div class="quiz-options" id="qIoOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="setw 只影響下一個值：&quot;a&quot; 被放進寬度 10 的欄位（預設靠右），&quot;b&quot; 不受影響直接印。" onclick="quizCheck('qIo', this)"><span class="opt-letter">(A)</span> 9 個空白、a、緊接著 b</div><div class="quiz-opt" data-correct="false" data-fb="setw 是一次性的。想要每個值都有欄寬，每個值前面都要 setw。" onclick="quizCheck('qIo', this)"><span class="opt-letter">(B)</span> a、b 各佔 10 格</div><div class="quiz-opt" data-correct="false" data-fb="setw 作用於單一個值，不是整行。" onclick="quizCheck('qIo', this)"><span class="opt-letter">(C)</span> ab 一起靠右在 10 格內</div>
+  </div>
+  <div class="quiz-feedback" id="qIoFeedback"></div>
+</div>
+</section>
+
+<section id="control">
+  <div class="section-number">PART 05 · 講義補充</div>
+  <h2>控制結構：迴圈與選擇 <span class="sec-badge">講義補充（cppds §1.7 範疇）</span></h2>
+  <p>演算法需要兩種控制結構：迭代與選擇。C++ 的身體是<strong>大括號</strong>圍出來的，
+  縮排只是給人看的，編譯器完全不管。這點跟 Python 相反，也是初學最容易踩的坑：
+  縮排看起來對、大括號漏了，程式的意思就變了。</p>
+
+  <h3>三種迴圈</h3>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>寫法</th><th>對應 Python</th><th>用途</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">while (counter &lt;= 5) { ... }</td><td class="mono">while</td><td>條件為真就重複</td></tr>
+      <tr><td class="mono">for (int item : my_list)</td><td class="mono">for x in lst</td><td>range-based for：走訪容器成員</td></tr>
+      <tr><td class="mono">for (int i = 0; i &lt; 10; i++)</td><td class="mono">range(10)</td><td>計數迴圈，起點、終點、步幅全自訂</td></tr>
+    </tbody>
+  </table></div>
+  <p style="margin-top:.6rem;">Python 的 <code>range()</code> 沒有直接對應，計數 for 就是它的替身，控制力還更細：</p>
+  <div class="pseudo-code" style="font-size:.8rem;">
+<span class="line"><span class="kw">for</span> (<span class="kw">int</span> i = 5; i &lt; 10; i++)&nbsp;&nbsp;&nbsp;<span class="com">// range(5, 10)</span></span>
+<span class="line"><span class="kw">for</span> (<span class="kw">int</span> i = 5; i &lt; 10; i += 2) <span class="com">// range(5, 10, 2)</span></span>
+<span class="line"><span class="kw">for</span> (<span class="kw">int</span> i = 10; i &gt; 1; i--)&nbsp;&nbsp;&nbsp;<span class="com">// range(10, 1, -1)</span></span></div>
+
+  <h3 style="margin-top:1.4rem;">選擇：if、else if、else</h3>
+  <p>巢狀 if 疊四層看得眼花，慣用寫法是把 <code>else</code> 跟下一個 <code>if</code>
+  接成 <code>else if</code>（Python 的 <code>elif</code>）。最後的 <code>else</code>
+  是保底，漏了它，所有條件都不成立時就什麼都不做：</p>
+  <div class="pseudo-code" style="font-size:.8rem;">
+<span class="line"><span class="kw">if</span> (score &gt;= 90)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cout &lt;&lt; <span class="str">&quot;A&quot;</span>;</span>
+<span class="line"><span class="kw">else if</span> (score &gt;= 80) cout &lt;&lt; <span class="str">&quot;B&quot;</span>;</span>
+<span class="line"><span class="kw">else if</span> (score &gt;= 70) cout &lt;&lt; <span class="str">&quot;C&quot;</span>;</span>
+<span class="line"><span class="kw">else if</span> (score &gt;= 60) cout &lt;&lt; <span class="str">&quot;D&quot;</span>;</span>
+<span class="line"><span class="kw">else</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cout &lt;&lt; <span class="str">&quot;F&quot;</span>;</span></div>
+
+  <h3 style="margin-top:1.4rem;">list comprehension 的等價寫法</h3>
+  <p>Python 一行的 <code>[x*x for x in range(1,11) if x%2 != 0]</code>，C++ 用普通迴圈組合：</p>
+  <div class="pseudo-code" style="font-size:.8rem;">
+<span class="line">vector&lt;<span class="kw">int</span>&gt; sqList;</span>
+<span class="line"><span class="kw">for</span> (<span class="kw">int</span> x = 1; x &lt;= 10; x++) {</span>
+<span class="line">    <span class="kw">if</span> (x % 2 != 0) sqList.<span class="fn">push_back</span>(x * x);</span>
+<span class="line">}</span></div>
+  <p style="font-size:.9rem;color:var(--muted);">之後學到 <code>&lt;algorithm&gt;</code> 的
+  <code>transform</code> 和 <code>copy_if</code>，會有更接近宣告式的寫法。</p>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 講義練習改編：average 函式</div>
+  <p>寫 <code>average(a_list)</code>：平均 ≥ 60 印 pass、否則 fail，平均取到小數一位。對 {99,100,74,63,100,100} 應印出？</p>
+  
+  <div class="quiz-options" id="qCtlOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="總和 536／6 = 89.333…，setprecision(1) 搭配 fixed 取到一位。注意總和除以 size() 前要轉 double，不然整數除法先砍小數。" onclick="quizCheck('qCtl', this)"><span class="opt-letter">(A)</span> <code>pass (Average: 89.3)</code></div><div class="quiz-opt" data-correct="false" data-fb="536/6 用整數除法才會得 89。先轉 double 再除，或把總和宣告成 double。" onclick="quizCheck('qCtl', this)"><span class="opt-letter">(B)</span> <code>pass (Average: 89.0)</code></div><div class="quiz-opt" data-correct="false" data-fb="89.3 ≥ 60，是 pass。" onclick="quizCheck('qCtl', this)"><span class="opt-letter">(C)</span> <code>fail (Average: 89.3)</code></div>
+  </div>
+  <div class="quiz-feedback" id="qCtlFeedback"></div>
+</div>
+</section>
+
+<section id="exceptions">
+  <div class="section-number">PART 06 · 講義補充</div>
+  <h2>例外處理：錯誤發生時給程式一條活路 <span class="sec-badge">講義補充</span></h2>
+  <p>錯誤分兩種。<strong>語法錯誤</strong>是句子寫壞了，編譯器直接拒收，程式根本生不出來，
+  這其實是 C++ 對你最溫柔的時刻。<strong>邏輯錯誤</strong>是程式會跑但答案不對；
+  其中最糟的一類會直接把程式弄死，像除以零、用越界的索引，這種執行期錯誤叫<strong>例外</strong>。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="pseudo-code" style="font-size:.8rem;">
+<span class="line">vector&lt;<span class="kw">int</span>&gt; v = {1, 2, 3};</span>
+<span class="line"><span class="kw">try</span> {</span>
+<span class="line">    cout &lt;&lt; v.<span class="fn">at</span>(10);            <span class="com">// at() 越界會 throw out_of_range</span></span>
+<span class="line">} <span class="kw">catch</span> (<span class="kw">const</span> out_of_range&amp; e) {</span>
+<span class="line">    cout &lt;&lt; <span class="str">&quot;Bad index for the vector&quot;</span>;</span>
+<span class="line">    cout &lt;&lt; v.<span class="fn">back</span>();            <span class="com">// 改用最後一個元素頂著</span></span>
+<span class="line">}</span></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text">try 圈住可能爆炸的程式碼，catch 接住爆炸後決定怎麼辦。沒接住的例外會讓程式當場終止。</span></div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">自己丟例外</div>
+        <div class="pseudo-code" style="font-size:.78rem;">
+<span class="line"><span class="kw">if</span> (aNumber &lt; 0)</span>
+<span class="line">    <span class="kw">throw</span> <span class="fn">runtime_error</span>(</span>
+<span class="line">      <span class="str">&quot;You can't use a negative number&quot;</span>);</span>
+<span class="line"><span class="kw">else</span></span>
+<span class="line">    cout &lt;&lt; <span class="fn">sqrt</span>(aNumber);</span></div>
+        <div style="font-size:.82rem;line-height:1.8;color:var(--muted);margin-top:.4rem;">與其把負數餵給 sqrt 拿到 nan，不如自己檢查、自己 throw，錯誤訊息由你定義。</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">[] 與 at() 的分工</div>
+        <div style="font-size:.86rem;line-height:1.9;"><code>v[10]</code> 越界是未定義行為，安靜地读垃圾；
+        <code>v.at(10)</code> 越界丟例外，吵但誠實。開發期用 at() 抓 bug，效能關鍵處確定安全後再用 []。</div>
+      </div>
+    </div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 例外基本功</div>
+  <p>下列哪個「不會」被 try/catch 接住？</p>
+  
+  <div class="quiz-options" id="qExcOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="[] 不做檢查也不丟例外，它是未定義行為，可能安靜讀垃圾也可能 segfault。catch 只接得住有人 throw 的東西。" onclick="quizCheck('qExc', this)"><span class="opt-letter">(A)</span> <code>v[10]</code> 的越界存取</div><div class="quiz-opt" data-correct="false" data-fb="at() 會丟 out_of_range，接得住。" onclick="quizCheck('qExc', this)"><span class="opt-letter">(B)</span> <code>v.at(10)</code> 的越界存取</div><div class="quiz-opt" data-correct="false" data-fb="自己丟的當然接得住，這正是 throw 的用途。" onclick="quizCheck('qExc', this)"><span class="opt-letter">(C)</span> 自己 <code>throw runtime_error(...)</code></div>
+  </div>
+  <div class="quiz-feedback" id="qExcFeedback"></div>
+</div>
 </section>
 
 <section id="functions">
-  <div class="section-number">PART 04 · 函式</div>
-  <h2>傳值 vs 傳參考：影本還是本人？ <span class="sec-badge">cppds §1.10</span></h2>
-  <p>C++ 預設<strong>傳值</strong>（複製一份）；加 <code>&amp;</code> 變<strong>傳參考</strong>（操作原變數）。
-  大型容器傳值會整包複製——所以慣例寫 <code>const vector&lt;int&gt;&amp; v</code>（借看不借改）。</p>
+  <div class="section-number">PART 07 · 函式</div>
+  <h2>定義函式與三種傳參方式 <span class="sec-badge">cppds §1.10</span></h2>
+  <p>C++ 函式的定義需要四樣東西：<strong>回傳型別、名字、帶型別的參數列、本體</strong>，
+  用 <code>return</code> 交回結果。<code>int square(int n) { return n * n; }</code>
+  就是完整的一課：連回傳值的型別都要先說好。</p>
+  <p>參數怎麼傳進去，決定函式能不能動到呼叫端的變數。C++ 預設<strong>傳值</strong>（整份複製），
+  加 <code>&amp;</code> 變<strong>傳參考</strong>（操作原變數），傳指標則介於中間：複製的是位址。</p>
   <div class="viz-layout">
     <div>
       <div class="viz-panel">
@@ -472,170 +799,315 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     </div>
     <div class="side-panel">
       <div class="info-card"><div class="ic-title">三種傳法 <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="fnCode">
-<span class="line" data-l="1"><span class="kw">void</span> <span class="fn">byValue</span>(<span class="kw">int</span> x)&nbsp;&nbsp;{ x = <span class="num">99</span>; }   <span class="com">// 拿到影本</span></span>
-<span class="line" data-l="2"><span class="kw">void</span> <span class="fn">byRef</span>(<span class="kw">int</span> &amp;x)&nbsp;{ x = <span class="num">99</span>; }   <span class="com">// 拿到本人</span></span>
-<span class="line" data-l="3"><span class="kw">void</span> <span class="fn">byPtr</span>(<span class="kw">int</span> *x)&nbsp;{ *x = <span class="num">99</span>; }  <span class="com">// 拿到地址</span></span>
-<span class="line" data-l="4"><span class="kw">int</span> a = <span class="num">1</span>;</span>
-<span class="line" data-l="5"><span class="fn">byValue</span>(a);   <span class="com">// a 仍是 1</span></span>
-<span class="line" data-l="6"><span class="fn">byRef</span>(a);     <span class="com">// a 變 99</span></span>
-<span class="line" data-l="7"><span class="fn">byPtr</span>(&amp;a);    <span class="com">// a 變 99</span></span></div></div>
+<span class="line" data-l="1"><span class="kw">int</span> <span class="fn">square</span>(<span class="kw">int</span> n) { <span class="kw">return</span> n * n; }</span>
+<span class="line" data-l="2"> </span>
+<span class="line" data-l="3"><span class="kw">void</span> <span class="fn">byValue</span>(<span class="kw">int</span> x)&nbsp;&nbsp;{ x = <span class="num">99</span>; }   <span class="com">// 拿到影本</span></span>
+<span class="line" data-l="4"><span class="kw">void</span> <span class="fn">byRef</span>(<span class="kw">int</span> &amp;x)&nbsp;{ x = <span class="num">99</span>; }   <span class="com">// 拿到本人</span></span>
+<span class="line" data-l="5"><span class="kw">void</span> <span class="fn">byPtr</span>(<span class="kw">int</span> *x)&nbsp;{ *x = <span class="num">99</span>; }  <span class="com">// 拿到位址</span></span>
+<span class="line" data-l="6"><span class="kw">int</span> a = <span class="num">1</span>;</span>
+<span class="line" data-l="7"><span class="fn">byValue</span>(a);   <span class="com">// a 還是 1</span></span>
+<span class="line" data-l="8"><span class="fn">byRef</span>(a);     <span class="com">// a 變 99</span></span>
+<span class="line" data-l="9"><span class="fn">byPtr</span>(&amp;a);    <span class="com">// a 變 99</span></span></div></div>
       <div class="info-card">
-        <div class="ic-title">陣列參數的特例</div>
-        <div style="font-size:.86rem;line-height:1.9;">C 風格陣列當參數會<strong>退化成指標</strong>——
-        函式裡改 a[i] 就是改原陣列，且 sizeof 資訊遺失。vector 沒這個坑。</div>
+        <div class="ic-title">兩個實務慣例</div>
+        <div style="font-size:.86rem;line-height:1.9;">
+        ① 大容器用 <code>const vector&lt;int&gt;&amp; v</code>：借看不借改，也省下整包複製。<br>
+        ② C 風格陣列當參數會退化成指標，函式裡改 a[i] 就是改原陣列，而且長度資訊會遺失。vector 沒有這些怪癖。</div>
       </div>
     </div>
   </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · swap 的正確簽名</div>
+  <p>要讓 <code>swap2(x, y)</code> 真的交換呼叫端的兩個變數，參數該怎麼宣告？</p>
+  
+  <div class="quiz-options" id="qFnOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="傳參考拿到本人。傳值版本交換的是兩份影本，呼叫端不動如山，這是最經典的新手陷阱。" onclick="quizCheck('qFn', this)"><span class="opt-letter">(A)</span> <code>int &amp;a, int &amp;b</code></div><div class="quiz-opt" data-correct="false" data-fb="函式裡交換得再開心，呼叫端的 x、y 一動也不動。" onclick="quizCheck('qFn', this)"><span class="opt-letter">(B)</span> <code>int a, int b</code></div><div class="quiz-opt" data-correct="false" data-fb="const 參考不能賦值，連編譯都過不了。" onclick="quizCheck('qFn', this)"><span class="opt-letter">(C)</span> <code>const int &amp;a, const int &amp;b</code></div>
+  </div>
+  <div class="quiz-feedback" id="qFnFeedback"></div>
+</div>
 </section>
 
 <section id="classes">
-  <div class="section-number">PART 05 · 類別</div>
-  <h2>自訂型別：Fraction 與運算子多載 <span class="sec-badge">cppds §1.11</span></h2>
-  <p>類別 = 狀態（成員變數）＋行為（成員函式）。<strong>運算子多載</strong>讓
-  <code>f1 + f2</code>、<code>f1 == f2</code> 對自訂型別也成立——這是把 Fraction 變成「一等公民」的關鍵。
-  建構子裡先約分（gcd），確保 <code>3/6</code> 一進門就變 <code>1/2</code>。</p>
-  <div class="viz-layout">
-    <div>
-      <div class="viz-panel">
-        <div style="display:flex;gap:.6rem;align-items:center;justify-content:center;flex-wrap:wrap;" class="mono">
-          <input id="frA" style="width:64px;padding:.35rem;border:1px solid var(--card-border);border-radius:6px;" value="1/4">
-          <span id="frOp" style="font-size:1.2rem;">+</span>
-          <input id="frB" style="width:64px;padding:.35rem;border:1px solid var(--card-border);border-radius:6px;" value="1/2">
-          <span>=</span><span id="frOut" style="font-size:1.25rem;font-weight:700;color:var(--accent2);">?</span>
-        </div>
-        <div class="status-banner" id="frStatus"><span class="status-icon">›</span><span class="status-text">輸入兩個分數（a/b 格式），選運算。</span></div>
-        <div class="controls-bar">
-          <button class="btn" onclick="frCalc('+')">operator+</button>
-          <button class="btn" onclick="frCalc('*')">operator*</button>
-          <button class="btn" onclick="frCalc('==')">operator==</button>
-        </div>
-      </div>
+  <div class="section-number">PART 08 · 類別</div>
+  <h2>自訂型別：把 Fraction 一步一步蓋起來 <span class="sec-badge">cppds §1.11</span></h2>
+  <p>浮點數存 1/3 只能存個近似值。想要「精確的分數」，就得自己造型別。
+  講義用五步把 <code>Fraction</code> 從空殼蓋成能加、能比、能印的完整類別，每一步都有理由。</p>
+
+  <h3>第 1 步：建構子與 private 成員</h3>
+  <div class="pseudo-code" style="font-size:.8rem;">
+<span class="line"><span class="kw">class</span> <span class="fn">Fraction</span> {</span>
+<span class="line">    <span class="kw">public</span>:</span>
+<span class="line">        <span class="fn">Fraction</span>(<span class="kw">int</span> top, <span class="kw">int</span> bottom) { num = top; den = bottom; }</span>
+<span class="line">    <span class="kw">private</span>:</span>
+<span class="line">        <span class="kw">int</span> num, den;</span>
+<span class="line">};</span></div>
+  <p>建構子跟類別同名、沒有回傳型別。物件自己用隱含指標 <code>this</code> 存取，
+  不像 Python 的 <code>self</code> 要寫在參數列裡。成員直接叫名字就好（要明講也可以寫 <code>this-&gt;num</code>）。
+  重點在 <code>private:</code>：C++ 的 private 是<strong>編譯器強制執行</strong>的，
+  外面寫 <code>a.num</code> 直接編譯錯誤。Python 的底線命名只是君子協定，這裡是法律。
+  順帶一提，class 不寫存取修飾詞時，預設全部 private。</p>
+
+  <h3 style="margin-top:1.4rem;">第 2 步：建構子多載（多型的第一課）</h3>
+  <div class="pseudo-code" style="font-size:.8rem;">
+<span class="line"><span class="fn">Fraction</span>(<span class="kw">int</span> top, <span class="kw">int</span> bottom) { num = top; den = bottom; }  <span class="com">// 3/5</span></span>
+<span class="line"><span class="fn">Fraction</span>(<span class="kw">int</span> top) { num = top; den = 1; }                   <span class="com">// 整數 5 → 5/1</span></span>
+<span class="line"><span class="fn">Fraction</span>() { num = 1; den = 1; }                            <span class="com">// 沒給就是 1/1</span></span>
+<span class="line"><span class="com">// 或者一行解決：Fraction(int top = 0, int bottom = 1)</span></span></div>
+  <p>三個建構子同名不同參數列，編譯器在編譯期依引數的數量與型別挑一個。
+  用預設參數也能做到同一件事，使用者根本分不出來你選了哪種寫法，這正是封裝的意思。</p>
+
+  <h3 style="margin-top:1.4rem;">第 3 步：operator&lt;&lt;，讓 cout 認得你</h3>
+  <p><code>cout &lt;&lt; my_fraction</code> 一開始<strong>直接編譯失敗</strong>。
+  Python 會退回預設的 <code>__str__</code> 印個位址混過去；C++ 拒絕猜。
+  解法是多載串流插入運算子，並宣告成 <code>friend</code>，讓它能讀 private 的 num 和 den：</p>
+  <div class="pseudo-code" style="font-size:.8rem;">
+<span class="line"><span class="kw">friend</span> ostream&amp; <span class="kw">operator</span>&lt;&lt;(ostream&amp; stream, <span class="kw">const</span> Fraction&amp; f) {</span>
+<span class="line">    stream &lt;&lt; f.num &lt;&lt; <span class="str">&quot;/&quot;</span> &lt;&lt; f.den;</span>
+<span class="line">    <span class="kw">return</span> stream;   <span class="com">// 回傳 stream 才能繼續串接</span></span>
+<span class="line">}</span></div>
+
+  <h3 style="margin-top:1.4rem;">第 4 步：operator+，加法要順便約分</h3>
+  <p>通分相加：a/b + c/d = (ad + cb)/bd。直接這樣存會愈加愈肥（1/4 + 1/2 = 6/8），
+  所以建構子或加法要用<strong>最大公因數</strong>約分，6/8 進門就變 3/4。這維護了一條不變量：
+  Fraction 永遠是最簡分數，其他方法都可以放心依賴這件事。</p>
+  <div class="pseudo-code" style="font-size:.8rem;">
+<span class="line">Fraction <span class="kw">operator</span>+(Fraction other) {</span>
+<span class="line">    <span class="kw">int</span> newNum = num * other.den + other.num * den;</span>
+<span class="line">    <span class="kw">int</span> newDen = den * other.den;</span>
+<span class="line">    <span class="kw">return</span> <span class="fn">Fraction</span>(newNum / <span class="fn">gcd</span>(newNum, newDen), newDen / <span class="fn">gcd</span>(newNum, newDen));</span>
+<span class="line">}</span></div>
+
+  <h3 style="margin-top:1.4rem;">第 5 步：operator==，定義「相等」是什麼意思</h3>
+  <p>沒定義 <code>operator==</code> 之前，<code>f1 == f2</code> 也不能編譯。
+  用交叉相乘 <code>num * other.den == other.num * den</code>，1/2 和 2/4 就會相等，
+  這叫<strong>深相等</strong>（比值）。對照 Python 預設的 <code>==</code> 比的是參考（淺相等）。
+  另外記住 C++ 的<strong>值語意</strong>：<code>f3 = f1</code> 是把整個物件複製一份，
+  不是多一個名字指向同一個物件。</p>
+
+  <div class="viz-panel" style="margin-top:1rem;">
+    <div style="display:flex;gap:.6rem;align-items:center;justify-content:center;flex-wrap:wrap;" class="mono">
+      <input id="frA" style="width:64px;padding:.35rem;border:1px solid var(--card-border);border-radius:6px;" value="1/4">
+      <span id="frOp" style="font-size:1.2rem;">+</span>
+      <input id="frB" style="width:64px;padding:.35rem;border:1px solid var(--card-border);border-radius:6px;" value="1/2">
+      <span>=</span><span id="frOut" style="font-size:1.25rem;font-weight:700;color:var(--accent2);">?</span>
     </div>
-    <div class="side-panel">
-      <div class="info-card"><div class="ic-title">Fraction <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="fracCode" style="font-size:.78rem;">
-<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">Fraction</span> {          <span class="com">// dscpp/fraction.hpp</span></span>
-<span class="line" data-l="2">  <span class="kw">private</span>:</span>
-<span class="line" data-l="3">    <span class="kw">int</span> num, den;             <span class="com">// 狀態（private：封裝）</span></span>
-<span class="line" data-l="4">  <span class="kw">public</span>:</span>
-<span class="line" data-l="5">    <span class="fn">Fraction</span>(<span class="kw">int</span> t, <span class="kw">int</span> b) { num = t/<span class="fn">gcd</span>(t,b); den = b/<span class="fn">gcd</span>(t,b); }</span>
-<span class="line" data-l="6">    Fraction <span class="kw">operator</span>+(Fraction o) {</span>
-<span class="line" data-l="7">        <span class="kw">return</span> <span class="fn">Fraction</span>(num*o.den + o.num*den, den*o.den);</span>
-<span class="line" data-l="8">    }</span>
-<span class="line" data-l="9">    <span class="kw">bool</span> <span class="kw">operator</span>==(Fraction o) {</span>
-<span class="line" data-l="10">        <span class="kw">return</span> num*o.den == o.num*den;</span>
-<span class="line" data-l="11">    }</span>
-<span class="line" data-l="12">};</span></div></div>
-      <div class="info-card">
-        <div class="ic-title">封裝的意義</div>
-        <div style="font-size:.86rem;line-height:1.9;">num/den 設成 private：外界只能走公開介面，
-        「永遠是最簡分數」這個<strong>不變量</strong>就有人守門。</div>
-      </div>
+    <div class="status-banner" id="frStatus"><span class="status-icon">›</span><span class="status-text">輸入兩個分數（a/b 格式），選一種運算試試。</span></div>
+    <div class="controls-bar" style="justify-content:center;">
+      <button class="btn" onclick="frCalc('+')">operator+</button>
+      <button class="btn" onclick="frCalc('*')">operator*</button>
+      <button class="btn" onclick="frCalc('==')">operator==</button>
     </div>
   </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 值語意</div>
+  <p><code>Fraction f1(1,2); Fraction f3 = f1;</code> 之後改動 f3，f1 會變嗎？</p>
+  
+  <div class="quiz-options" id="qClsOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="C++ 賦值預設複製整個物件（值語意）。Python 的 f3 = f1 只是幫同一個物件多取一個名字，兩個世界規則相反。" onclick="quizCheck('qCls', this)"><span class="opt-letter">(A)</span> 不會，f3 是完整的複製品</div><div class="quiz-opt" data-correct="false" data-fb="那是 Python 的行為。C++ 要指向同一份，得動用指標或參考。" onclick="quizCheck('qCls', this)"><span class="opt-letter">(B)</span> 會，f3 和 f1 指向同一物件</div><div class="quiz-opt" data-correct="false" data-fb="複製建構是合法的，編譯器還會自動幫你生一份成員逐一複製的版本。" onclick="quizCheck('qCls', this)"><span class="opt-letter">(C)</span> 編譯錯誤</div>
+  </div>
+  <div class="quiz-feedback" id="qClsFeedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 講義練習：負分母</div>
+  <p>講義要求 Fraction(9, -10) 也要能跟其他分數正確比大小。建構子該做什麼？</p>
+  
+  <div class="quiz-options" id="qCls2Options">
+    <div class="quiz-opt" data-correct="true" data-fb="把負號統一搬到分子（9/−10 存成 −9/10），所有比較運算子就不用各自處理負分母的特例。在入口維護不變量，比在每個運算子裡打補丁高明。" onclick="quizCheck('qCls2', this)"><span class="opt-letter">(A)</span> 分母為負時，分子分母同乘 −1</div><div class="quiz-opt" data-correct="false" data-fb="講義說這是不必要的限制。數學上 9/−10 是合法的分數，只是表示法要正規化。" onclick="quizCheck('qCls2', this)"><span class="opt-letter">(B)</span> 丟出例外拒絕負分母</div><div class="quiz-opt" data-correct="false" data-fb="能動，但每個比較運算子都要重複這段邏輯，漏一個就出 bug。" onclick="quizCheck('qCls2', this)"><span class="opt-letter">(C)</span> 在 operator&gt; 裡特判分母正負</div>
+  </div>
+  <div class="quiz-feedback" id="qCls2Feedback"></div>
+</div>
 </section>
 
 <section id="inherit">
-  <div class="section-number">PART 06 · 繼承</div>
-  <h2>繼承與多型：邏輯閘電路 <span class="sec-badge">cppds §1.12</span></h2>
-  <p>LogicGate（共同行為）→ BinaryGate/UnaryGate（輸入腳位數）→ AndGate/OrGate/NotGate（各自的
-  <code>performGateLogic</code>）。<strong>IS-A</strong> 層級讓新閘只需要寫「差異」那一小段。</p>
+  <div class="section-number">PART 09 · 繼承</div>
+  <h2>繼承與多型：用邏輯閘蓋一座電路 <span class="sec-badge">cppds §1.12</span></h2>
+  <p>vector 是一種循序集合，我們說 vector「是一個」（IS-A）sequence：這就是繼承要表達的關係。
+  子類拿到父類的全部家當，再加上自己的特色。講義用數位電路模擬把這套想法跑一遍，
+  類別階層長這樣：<code>LogicGate</code> →（<code>BinaryGate</code>、<code>UnaryGate</code>）→
+  （<code>AndGate</code>、<code>OrGate</code>、<code>NotGate</code>）。</p>
   <div class="viz-layout">
     <div>
       <div class="viz-panel">
         <div style="display:flex;gap:1.2rem;justify-content:center;align-items:center;flex-wrap:wrap;" class="mono" id="circuitVis">
           <div style="text-align:center;">A <select id="gInA" class="mono"><option>0</option><option selected>1</option></select>
           B <select id="gInB" class="mono"><option>0</option><option selected>1</option></select>
-          <div class="bq-item" style="margin-top:.4rem;">AND</div><div id="gAndOut">?</div></div>
+          <div class="bq-item" style="margin-top:.4rem;">AND g1</div><div id="gAndOut">?</div></div>
           <div style="text-align:center;">C <select id="gInC" class="mono"><option selected>0</option><option>1</option></select>
           D <select id="gInD" class="mono"><option selected>0</option><option>1</option></select>
-          <div class="bq-item" style="margin-top:.4rem;">AND</div><div id="gAnd2Out">?</div></div>
-          <div style="text-align:center;">→ <div class="bq-item" style="background:#8e44ad;">OR</div><div id="gOrOut">?</div></div>
-          <div style="text-align:center;">→ <div class="bq-item" style="background:#1a6b4a;">NOT</div><div id="gNotOut" style="font-size:1.3rem;font-weight:700;">?</div></div>
+          <div class="bq-item" style="margin-top:.4rem;">AND g2</div><div id="gAnd2Out">?</div></div>
+          <div style="text-align:center;">→ <div class="bq-item" style="background:#8e44ad;">OR g3</div><div id="gOrOut">?</div></div>
+          <div style="text-align:center;">→ <div class="bq-item" style="background:#1a6b4a;">NOT g4</div><div id="gNotOut" style="font-size:1.3rem;font-weight:700;">?</div></div>
         </div>
-        <div class="status-banner" id="gateStatus"><span class="status-icon">›</span><span class="status-text">這是講義的 NOT((A AND B) OR (C AND D)) 電路（= NAND·NOR 定理示範）。改輸入按「執行」。</span></div>
+        <div class="status-banner" id="gateStatus"><span class="status-icon">›</span><span class="status-text">講義的示範電路：NOT((A AND B) OR (C AND D))。改輸入按「執行」。</span></div>
         <div class="controls-bar"><button class="btn" onclick="gateRun()">▶ 執行電路</button></div>
+        <div class="mono" style="font-size:.78rem;color:var(--muted);">對應程式：AndGate g1, g2; OrGate g3; NotGate g4;<br>Connector c1(&amp;g1,&amp;g3), c2(&amp;g2,&amp;g3), c3(&amp;g3,&amp;g4); 然後 g4.getOutput()。</div>
+      </div>
+      <div class="info-box" style="margin-top:.9rem;">
+        <span class="info-label">這段設計裡的四個關鍵字</span>
+        <strong>virtual ... = 0</strong>：純虛擬函式。LogicGate 自己不知道怎麼算邏輯，所以宣告了卻不實作，
+        這讓它成為抽象類別，沒有人能直接 new 一個 LogicGate。<br>
+        <strong>protected</strong>：介於 public 與 private 之間，子類碰得到、外人碰不到。label、pin 都放這層。<br>
+        <strong>: LogicGate(n)</strong>：初始化列，呼叫父類建構子，相當於 Python 的 super().__init__(n)。<br>
+        <strong>HAS-A</strong>：Connector 不繼承 LogicGate，它「擁有」兩個閘（fromGate、toGate）。
+        IS-A 用繼承、HAS-A 用成員，分清楚這兩種關係是物件導向設計的第一堂課。
       </div>
     </div>
     <div class="side-panel">
-      <div class="info-card"><div class="ic-title">類別層級 <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="gateCode" style="font-size:.78rem;">
-<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">LogicGate</span> { ... <span class="fn">getOutput</span>() 呼叫 <span class="fn">performGateLogic</span>() ... };</span>
-<span class="line" data-l="2"><span class="kw">class</span> <span class="fn">BinaryGate</span> : <span class="kw">public</span> LogicGate { ... 兩個輸入腳位 ... };</span>
-<span class="line" data-l="3"><span class="kw">class</span> <span class="fn">AndGate</span> : <span class="kw">public</span> BinaryGate {</span>
-<span class="line" data-l="4">    <span class="kw">int</span> <span class="fn">performGateLogic</span>() { <span class="kw">return</span> getPinA() &amp;&amp; getPinB(); }</span>
-<span class="line" data-l="5">};</span>
-<span class="line" data-l="6"><span class="com">// Connector 把 fromGate 的輸出接到 toGate 的輸入 → 組合電路</span></span></div></div>
-      <div class="info-card">
-        <div class="ic-title">多型在哪？</div>
-        <div style="font-size:.86rem;line-height:1.9;">父類的 <code>getOutput()</code> 呼叫
-        <code>performGateLogic()</code>，但實際執行的是<strong>子類</strong>的版本
-        （C++ 用 <code>virtual</code> 實現）——同一介面、各自行為。</div>
-      </div>
+      <div class="info-card"><div class="ic-title">基底與 BinaryGate <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="gateCode" style="font-size:.74rem;">
+<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">LogicGate</span> {</span>
+<span class="line" data-l="2">  <span class="kw">public</span>:</span>
+<span class="line" data-l="3">    <span class="fn">LogicGate</span>(string n) { label = n; }</span>
+<span class="line" data-l="4">    <span class="kw">int</span> <span class="fn">getOutput</span>() { output = <span class="fn">performGateLogic</span>(); <span class="kw">return</span> output; }</span>
+<span class="line" data-l="5">    <span class="kw">virtual</span> <span class="kw">int</span> <span class="fn">performGateLogic</span>() = <span class="num">0</span>;  <span class="com">// 純虛擬函式</span></span>
+<span class="line" data-l="6">  <span class="kw">protected</span>:                        <span class="com">// 子類看得到、外界看不到</span></span>
+<span class="line" data-l="7">    string label;  <span class="kw">int</span> output;</span>
+<span class="line" data-l="8">};</span>
+<span class="line" data-l="9"> </span>
+<span class="line" data-l="10"><span class="kw">class</span> <span class="fn">BinaryGate</span> : <span class="kw">public</span> LogicGate {</span>
+<span class="line" data-l="11">  <span class="kw">public</span>:</span>
+<span class="line" data-l="12">    <span class="fn">BinaryGate</span>(string n) : <span class="fn">LogicGate</span>(n) {  <span class="com">// 初始化列呼叫父類建構子</span></span>
+<span class="line" data-l="13">        pinA = <span class="num">NULL</span>;  pinB = <span class="num">NULL</span>;</span>
+<span class="line" data-l="14">    }</span>
+<span class="line" data-l="15">    <span class="kw">void</span> <span class="fn">setNextPin</span>(Connector* source) {</span>
+<span class="line" data-l="16">        <span class="kw">if</span> (pinA == <span class="num">NULL</span>) pinA = source;</span>
+<span class="line" data-l="17">        <span class="kw">else if</span> (pinB == <span class="num">NULL</span>) pinB = source;</span>
+<span class="line" data-l="18">        <span class="kw">else</span> cout &lt;&lt; <span class="str">&quot;Cannot Connect: NO EMPTY PINS&quot;</span>;</span>
+<span class="line" data-l="19">    }</span>
+<span class="line" data-l="20">  <span class="kw">protected</span>:</span>
+<span class="line" data-l="21">    Connector *pinA, *pinB;   <span class="com">// NULL = 這隻腳還空著</span></span>
+<span class="line" data-l="22">};</span></div></div>
+      <div class="info-card"><div class="ic-title">具體的閘 <span class="ic-badge">CODE</span></div><div class="pseudo-code" style="font-size:.76rem;">
+<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">AndGate</span> : <span class="kw">public</span> BinaryGate {</span>
+<span class="line" data-l="2">  <span class="kw">public</span>:</span>
+<span class="line" data-l="3">    <span class="fn">AndGate</span>(string n) : <span class="fn">BinaryGate</span>(n) {}</span>
+<span class="line" data-l="4">    <span class="kw">int</span> <span class="fn">performGateLogic</span>() {</span>
+<span class="line" data-l="5">        <span class="kw">return</span> (<span class="fn">getPinA</span>() == 1 &amp;&amp; <span class="fn">getPinB</span>() == 1) ? 1 : 0;</span>
+<span class="line" data-l="6">    }</span>
+<span class="line" data-l="7">};   <span class="com">// OrGate、NotGate 同款，只換這一個函式</span></span></div></div>
+      <div class="info-card"><div class="ic-title">Connector <span class="ic-badge">CODE</span></div><div class="pseudo-code" style="font-size:.76rem;">
+<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">Connector</span> {        <span class="com">// 不在閘的階層裡：HAS-A</span></span>
+<span class="line" data-l="2">  <span class="kw">public</span>:</span>
+<span class="line" data-l="3">    <span class="fn">Connector</span>(LogicGate* fgate, LogicGate* tgate) {</span>
+<span class="line" data-l="4">        fromGate = fgate;  toGate = tgate;</span>
+<span class="line" data-l="5">        tgate-&gt;<span class="fn">setNextPin</span>(<span class="kw">this</span>);  <span class="com">// 把自己插上目的閘的腳位</span></span>
+<span class="line" data-l="6">    }</span>
+<span class="line" data-l="7">  <span class="kw">private</span>:</span>
+<span class="line" data-l="8">    LogicGate *fromGate, *toGate;</span>
+<span class="line" data-l="9">};</span></div></div>
     </div>
   </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 多型的機關</div>
+  <p><code>getOutput()</code> 定義在 LogicGate，卻能執行到 AndGate 的邏輯。靠的是？</p>
+  
+  <div class="quiz-options" id="qInhOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="這就是多型。父類寫流程（拿輸出前先算邏輯），子類各自填入「怎麼算」。少了 virtual，呼叫的永遠是父類版本。" onclick="quizCheck('qInh', this)"><span class="opt-letter">(A)</span> virtual：執行期依實際型別挑選 performGateLogic</div><div class="quiz-opt" data-correct="false" data-fb="編譯器不猜。沒有 virtual 就是靜態繫結，看宣告型別決定。" onclick="quizCheck('qInh', this)"><span class="opt-letter">(B)</span> 編譯器看變數名稱猜的</div><div class="quiz-opt" data-correct="false" data-fb="AndGate 只寫了 performGateLogic。getOutput 完整繼承自父類，一行都沒改。" onclick="quizCheck('qInh', this)"><span class="opt-letter">(C)</span> AndGate 重新定義了 getOutput</div>
+  </div>
+  <div class="quiz-feedback" id="qInhFeedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 抽象類別</div>
+  <p><code>LogicGate g("G0");</code> 這行會怎樣？</p>
+  
+  <div class="quiz-options" id="qInh2Options">
+    <div class="quiz-opt" data-correct="true" data-fb="performGateLogic 是純虛擬函式（= 0），LogicGate 是抽象類別，只能當基底。想要物件，得 new 它的具體子類。" onclick="quizCheck('qInh2', this)"><span class="opt-letter">(A)</span> 編譯錯誤：抽象類別不能實例化</div><div class="quiz-opt" data-correct="false" data-fb="連物件都生不出來，談不上回傳值。" onclick="quizCheck('qInh2', this)"><span class="opt-letter">(B)</span> 可以，但 getOutput 會回傳 0</div><div class="quiz-opt" data-correct="false" data-fb="這種錯不會拖到執行期，編譯器當場擋下。" onclick="quizCheck('qInh2', this)"><span class="opt-letter">(C)</span> 執行期錯誤</div>
+  </div>
+  <div class="quiz-feedback" id="qInh2Feedback"></div>
+</div>
+  <p style="font-size:.9rem;color:var(--muted);margin-top:.8rem;">想逐步看物件、指標與 virtual 派發的過程，
+  可以把 gates 的程式碼貼進 <a href="https://pythontutor.com/cpp.html" style="color:var(--accent2);">C++ Tutor</a> 跑一遍。</p>
 </section>
 
 <section id="exercises">
   <div class="section-number">EXERCISES · 練習</div>
-  <h2>動手驗證 <span class="sec-badge">cppds §1 綜合</span></h2>
+  <h2>綜合練習 <span class="sec-badge">cppds §1 綜合</span></h2>
   
 <div class="quiz-box">
-  <div class="quiz-label">EXERCISE 1 · 型別</div>
-  <p><code>int n = 7; double d = n / 2;</code> 之後 d 是？</p>
+  <div class="quiz-label">EXERCISE 1 · 溢位</div>
+  <p><code>int big = 2147483647; big = big + 1;</code> 之後 big 是？</p>
   
   <div class="quiz-options" id="ex1Options">
-    <div class="quiz-opt" data-correct="true" data-fb="7/2 先做「int ÷ int」得 3，才轉成 double——除法當下的型別決定一切。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> <code>3.0</code></div><div class="quiz-opt" data-correct="false" data-fb="想要 3.5 要寫 n / 2.0 或 double(n) / 2。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> <code>3.5</code></div><div class="quiz-opt" data-correct="false" data-fb="int 塞給 double 是合法的隱式轉換。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> 編譯錯誤</div>
+    <div class="quiz-opt" data-correct="true" data-fb="32 位元 int 到頂之後繞回最小的負數。C++ 不會警告、不會丟例外，帳就這樣默默錯下去。需要大範圍就用 long long。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> <code>-2147483648</code></div><div class="quiz-opt" data-correct="false" data-fb="這個數已經超出 32 位元 int 能表示的範圍了。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> <code>2147483648</code></div><div class="quiz-opt" data-correct="false" data-fb="有號整數溢位是未定義行為，實務上最常見的結果就是繞回負數，不是報錯。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> 執行期錯誤</div>
   </div>
   <div class="quiz-feedback" id="ex1Feedback"></div>
 </div>
   
 <div class="quiz-box">
-  <div class="quiz-label">EXERCISE 2 · 指標</div>
-  <p><code>int *p; cout &lt;&lt; *p;</code> 的問題是？</p>
+  <div class="quiz-label">EXERCISE 2 · pop_back 的回傳值</div>
+  <p>想取出 vector 最後一個元素並移除它，正確的寫法是？</p>
   
   <div class="quiz-options" id="ex2Options">
-    <div class="quiz-opt" data-correct="true" data-fb="p 沒指向任何有效位址（wild pointer）。好習慣：宣告即初始化，暫時沒目標就設 NULL。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(A)</span> 解參考未初始化的指標 → 未定義行為</div><div class="quiz-opt" data-correct="false" data-fb="語法完全合法——這正是 C++ 可怕之處：合法但爆炸。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(B)</span> 語法錯誤</div><div class="quiz-opt" data-correct="false" data-fb="未定義行為：可能亂數、可能當機，什麼都可能。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(C)</span> 一定印出 0</div>
+    <div class="quiz-opt" data-correct="true" data-fb="C++ 把「看」和「刪」拆成兩個動作：back() 讀值、pop_back() 刪除且不回傳。Python 的 pop() 一次做完兩件事，這裡要分兩步。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(A)</span> <code>int x = v.back(); v.pop_back();</code></div><div class="quiz-opt" data-correct="false" data-fb="pop_back() 的回傳型別是 void，這行編譯不過。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(B)</span> <code>int x = v.pop_back();</code></div><div class="quiz-opt" data-correct="false" data-fb="erase 拿的是迭代器且 v.end() 不是最後一個元素，這是另一個常見誤用。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(C)</span> <code>int x = v.erase(v.end());</code></div>
   </div>
   <div class="quiz-feedback" id="ex2Feedback"></div>
 </div>
   
 <div class="quiz-box">
-  <div class="quiz-label">EXERCISE 3 · 傳參</div>
-  <p>要寫 <code>void swap2(?, ?)</code> 讓呼叫端兩變數真的交換，参數應該是？</p>
+  <div class="quiz-label">EXERCISE 3 · 深相等</div>
+  <p>Fraction x(1,2); Fraction z(2,4); 定義了交叉相乘的 operator== 之後，<code>x == z</code> 是？</p>
   
   <div class="quiz-options" id="ex3Options">
-    <div class="quiz-opt" data-correct="true" data-fb="傳參考拿到本人才能交換；傳值只是交換影本。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(A)</span> <code>int &amp;a, int &amp;b</code></div><div class="quiz-opt" data-correct="false" data-fb="函式裡交換的是影本，呼叫端不動如山——經典陷阱。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(B)</span> <code>int a, int b</code></div><div class="quiz-opt" data-correct="false" data-fb="const 參考「借看不借改」，不能賦值。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(C)</span> <code>const int &amp;a, const int &amp;b</code></div>
+    <div class="quiz-opt" data-correct="true" data-fb="1×4 == 2×2。兩個物件的成員數值不同（1,2 vs 2,4），但代表同一個分數。深相等就是我們的 ADT 想要的語意。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(A)</span> true：比的是值，不是物件身分</div><div class="quiz-opt" data-correct="false" data-fb="那是逐成員比較。我們定義的是交叉相乘，1/2 與 2/4 相等。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(B)</span> false：成員不同就不等</div><div class="quiz-opt" data-correct="false" data-fb="operator== 已經定義了，比較合法。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(C)</span> 編譯錯誤</div>
   </div>
   <div class="quiz-feedback" id="ex3Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 4 · 型別選擇</div>
+  <p>要記錄「每位學生的成績清單」，讓你能用學號查到該生所有成績，最直接的容器組合是？</p>
+  
+  <div class="quiz-options" id="ex4Options">
+    <div class="quiz-opt" data-correct="true" data-fb="key 是學號、value 是成績序列，容器可以巢狀。用 [] 新增、用 at()/find() 查詢。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(A)</span> <code>map&lt;string, vector&lt;int&gt;&gt;</code></div><div class="quiz-opt" data-correct="false" data-fb="這是「一排字典」，用學號查人得掃整排，方向反了。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(B)</span> <code>vector&lt;map&lt;string,int&gt;&gt;</code></div><div class="quiz-opt" data-correct="false" data-fb="set 沒有 key 對 value 的概念，也不允許重複，存成績都成問題。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(C)</span> <code>set&lt;vector&lt;int&gt;&gt;</code></div>
+  </div>
+  <div class="quiz-feedback" id="ex4Feedback"></div>
 </div>
 </section>
 
 <section id="reference">
   <div class="section-number">REFERENCE · 總覽</div>
-  <h2>第 1 章總覽 <span class="sec-badge">cppds §1 總覽</span></h2>
+  <h2>本章地圖與詞彙 <span class="sec-badge">cppds §1 總覽</span></h2>
   <div style="overflow-x:auto;">
-  <table class="cmp-table" style="width:100%;font-size:.88rem;">
-    <thead><tr><th>主題</th><th>cppds</th><th>本頁</th><th>整學期會再遇到</th></tr></thead>
+  <table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>主題</th><th>cppds</th><th>本頁</th><th>之後在哪裡用到</th></tr></thead>
     <tbody>
-      <tr><td>抽象化 / ADT</td><td>§1.5–1.6</td><td>P00</td><td>每一章的開場白</td></tr>
-      <tr><td>原子型別</td><td>§1.8</td><td>P01</td><td>位址計算（附錄 A）</td></tr>
+      <tr><td>演算法、抽象化、ADT</td><td>§1.1–1.6</td><td>P00</td><td>每一章的開場白</td></tr>
+      <tr><td>原子型別、變數、運算子</td><td>§1.8</td><td>P01</td><td>附錄 A 的位址計算</td></tr>
       <tr><td>指標</td><td>§1.8</td><td>P02</td><td>串列（ch4）、樹（ch8）、圖（ch9）</td></tr>
-      <tr><td>集合型別</td><td>§1.9</td><td>P03</td><td>vector/map 全書主力</td></tr>
-      <tr><td>函式與傳參</td><td>§1.10</td><td>P04</td><td>所有演算法的簽名</td></tr>
-      <tr><td>類別與多載</td><td>§1.11</td><td>P05</td><td>自訂 Stack/Queue/BST…</td></tr>
-      <tr><td>繼承</td><td>§1.12</td><td>P06</td><td>LogicGate 家族、OOP 設計</td></tr>
+      <tr><td>集合型別五張表</td><td>§1.9</td><td>P03</td><td>vector/map 全書主力</td></tr>
+      <tr><td>I/O 與格式化</td><td>講義補充</td><td>P04</td><td>之後所有輸出排版</td></tr>
+      <tr><td>控制結構</td><td>講義補充</td><td>P05</td><td>所有演算法的骨架</td></tr>
+      <tr><td>例外處理</td><td>講義補充</td><td>P06</td><td>at()、自訂錯誤</td></tr>
+      <tr><td>函式與傳參</td><td>§1.10</td><td>P07</td><td>所有演算法的簽名</td></tr>
+      <tr><td>類別、多載、值語意</td><td>§1.11</td><td>P08</td><td>自訂 Stack、Queue、BST</td></tr>
+      <tr><td>繼承、virtual、HAS-A</td><td>§1.12</td><td>P09</td><td>物件導向設計</td></tr>
     </tbody>
   </table>
   </div>
-  <div class="info-box" style="margin-top:1rem;">
-    <span class="info-label">關鍵概念複習</span>
-    ① ADT = 介面；資料結構 = 實作；效能 = 選擇的理由。<br>
-    ② 指標三件套：<code>&amp;</code> 取址、<code>*</code> 解參考、NULL 表「無」。<br>
-    ③ 傳值複製、傳參考同體；大容器用 <code>const &amp;</code>。<br>
-    ④ 封裝守不變量；繼承寫差異；多型讓同一介面各自表述。
+  <h3 style="margin-top:1.4rem;">關鍵詞彙（講義 Key terms 精選）</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:.7rem;">
+    <div class="info-card"><div class="ic-title">抽象與封裝</div><div style="font-size:.84rem;line-height:1.9;">
+      <strong>ADT</strong>：只講操作與行為的資料模型。<br><strong>資料結構</strong>：ADT 的具體實作。<br>
+      <strong>封裝</strong>：把狀態藏起來，只留公開介面。<br><strong>介面</strong>：元件之間交換資訊的邊界。</div></div>
+    <div class="info-card"><div class="ic-title">語言機制</div><div style="font-size:.84rem;line-height:1.9;">
+      <strong>編譯器</strong>：把整份原始碼翻成機器碼，型別錯誤在這關被抓。<br>
+      <strong>指標</strong>／<strong>&amp;</strong> 取址／<strong>*</strong> 解參考。<br>
+      <strong>namespace</strong>：標準函式庫都住在 std 裡。<br><strong>標頭檔</strong>：#include 拉進來的宣告。</div></div>
+    <div class="info-card"><div class="ic-title">錯誤三兄弟</div><div style="font-size:.84rem;line-height:1.9;">
+      <strong>語法錯誤</strong>：編譯期被擋。<br><strong>邏輯錯誤</strong>：會跑但答案錯。<br>
+      <strong>例外</strong>：執行期被打斷，可 try/catch 接住。</div></div>
+    <div class="info-card"><div class="ic-title">物件導向</div><div style="font-size:.84rem;line-height:1.9;">
+      <strong>建構子</strong>：與類別同名、無回傳型別。<br><strong>多載</strong>：同名不同參數列。<br>
+      <strong>覆寫</strong>：子類換掉父類的實作。<br><strong>多型</strong>：同一介面、各自表述（virtual）。<br>
+      <strong>深／淺複製</strong>：複製內容 vs 複製參考。</div></div>
   </div>
 </section></div>
 <footer>
-  互動式 C++ 導論教學 · 基於 Problem Solving with Algorithms and Data Structures using C++ (cppds) Ch.1<br>
+  互動式 C++ 導論自學教材 · 依 cppds Ch.1 與課程講義 01 編寫<br>
   <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);">Designed for NSYSU · Interactive C++ self-study</span>
 </footer>
 <script>
@@ -743,21 +1215,22 @@ function renderBoxQueue(containerId, items, opts={}) {
 
 /* ---------- P01 types ---------- */
 const TYPES = {
-  'int':    {size: 4, range: '−2,147,483,648 ～ 2,147,483,647', note: '溢位不報錯，直接繞回負數！'},
-  'double': {size: 8, range: '±1.7×10³⁰⁸（15~16 位有效數字）', note: '0.1 + 0.2 != 0.3——浮點誤差。'},
-  'char':   {size: 1, range: "'a' 其實是整數 97（ASCII）", note: "ch - 'a' 可算字母序——anagram 解法 4 用過。"},
-  'bool':   {size: 1, range: 'true / false', note: '非零即 true；cout 印出 1/0。'},
+  'int':    {size: 4, range: '−2,147,483,648 到 2,147,483,647', note: '溢位不報錯，直接繞回負數。'},
+  'long long': {size: 8, range: '約 ±9.2×10¹⁸', note: 'int 不夠用時的第一選擇。'},
+  'double': {size: 8, range: '約 ±1.7×10³⁰⁸，15 到 16 位有效數字', note: '0.1 + 0.2 != 0.3，浮點誤差是常態。'},
+  'char':   {size: 1, range: "'a' 其實是整數 97（ASCII）", note: "ch - 'a' 可以算出字母序，第 2 章的 anagram 會用到。"},
+  'bool':   {size: 1, range: 'true / false', note: '非零即 true；cout 預設印 1/0，boolalpha 之後印 true/false。'},
 };
 function typeShow(name) {
   const t = TYPES[name];
   const el = $('typeVis'); el.innerHTML = '';
   for (let i = 0; i < t.size; i++) {
     const d = document.createElement('div');
-    d.className = 'bq-item'; d.style.minWidth = '40px';
+    d.className = 'bq-item'; d.style.minWidth = '38px';
     d.textContent = 'B' + i;
     el.appendChild(d);
   }
-  setStatus('typeStatus', `<strong>${name}</strong>：${t.size} byte${t.size>1?'s':''}｜範圍：${t.range}｜${t.note}`);
+  setStatus('typeStatus', `<strong>${name}</strong>：${t.size} byte｜範圍：${t.range}｜${t.note}`);
 }
 (function initTypes(){
   const bar = $('typeBtns');
@@ -771,7 +1244,6 @@ function typeShow(name) {
 })();
 
 /* ---------- P02 pointers ---------- */
-let ptrState = 0;
 function ptrRender(varVal, ptrVal, msg, line) {
   const el = $('ptrVis'); el.innerHTML = '';
   const mk = (label, val, addr, color) => {
@@ -788,22 +1260,21 @@ function ptrRender(varVal, ptrVal, msg, line) {
   setStatus('ptrStatus', msg); hlLine('ptrCode', line);
 }
 function ptrStep(s) {
-  ptrState = s;
-  if (s === 1) ptrRender('100', '?', 'varN 拿到一格 4B 記憶體（0x1000），放入 100。ptrN 還沒登場。', 1);
-  if (s === 2) ptrRender('100', '0x1000', 'ptrN 的「值」是 varN 的位址——它指著 varN。*ptrN 讀出 100。', 2);
-  if (s === 3) ptrRender('50', '0x1000', '*ptrN = 50：順著位址把 varN 本人改成 50。一塊記憶體、兩個名字。', 5);
-  if (s === 4) ptrRender('50', 'NULL', 'ptrN = NULL：不再指向任何東西。此時 *ptrN 會 segfault——先檢查再解參考！', 6);
+  if (s === 1) ptrRender('100', '?', 'varN 拿到一格 4 byte 的記憶體（位址 0x1000），放入 100。ptrN 還沒登場。', 1);
+  if (s === 2) ptrRender('100', '0x1000', 'ptrN 的「值」是 varN 的位址。此時 *ptrN 讀出 100。', 2);
+  if (s === 3) ptrRender('50', '0x1000', '*ptrN = 50：沿位址把 varN 本人改成 50。一塊記憶體、兩個名字。', 5);
+  if (s === 4) ptrRender('50', 'NULL', 'ptrN = NULL：不再指向任何東西。這時解參考就當機，先檢查再用。', 6);
 }
 ptrStep(1);
 
-/* ---------- P03 collections demo ---------- */
+/* ---------- P03 vector demo ---------- */
 function colDemo() {
   const steps = [
-    {v: ['17'], msg: 'v.push_back(17) → size 1'},
-    {v: ['17','26'], msg: 'v.push_back(26) → size 2'},
-    {v: ['17','26','31'], msg: 'v.push_back(31) → size 3'},
-    {v: ['17','26','31'], hl: 1, msg: 'v[1] → 26（O(1) 直達）'},
-    {v: ['17','26','31'], msg: 'v.size() → 3'},
+    {v: ['17'], msg: 'v.push_back(17)，size 變 1'},
+    {v: ['17','26'], msg: 'v.push_back(26)'},
+    {v: ['17','26','31'], msg: 'v.push_back(31)'},
+    {v: ['17','26','31'], hl: 1, msg: 'v[1] 直達 26，O(1)'},
+    {v: ['17','26'], msg: 'v.pop_back()：31 沒了，而且它不告訴你 31 是多少。要值得先 v.back()'},
   ];
   let i = 0;
   const t = setInterval(() => {
@@ -812,10 +1283,37 @@ function colDemo() {
     renderBoxQueue('colVis', s.v, {highlight: s.hl ?? -1});
     setStatus('colStatus', s.msg);
     i++;
-  }, 700);
+  }, 750);
 }
 
-/* ---------- P04 functions ---------- */
+/* ---------- P04 io formatter ---------- */
+function ioRender() {
+  const w = parseInt($('ioW').value, 10);
+  const align = $('ioAlign').value;
+  const fill = $('ioFill').value;
+  const prec = parseInt($('ioPrec').value, 10);
+  const item = 'banana';
+  const price = 24;
+  const pad = (s, n, ch, left) => {
+    s = String(s);
+    while (s.length < n) { if (left) s = s + ch; else s = ch + s; }
+    return s;
+  };
+  const itemF = pad(item, w, fill, align === 'left');
+  const priceF = pad(price.toFixed(prec), w, fill, align === 'left');
+  $('ioOut').textContent = `The ${itemF} costs ${priceF} cents`;
+  const parts = [];
+  if (align === 'left') parts.push('left');
+  if (fill !== ' ') parts.push(`setfill('${fill}')`);
+  parts.push(`setw(${w})`);
+  if (prec > 0) parts.push(`fixed << setprecision(${prec})`);
+  $('ioExpr').textContent = parts.join(' << ') + ' << item';
+  setStatus('ioStatus', `寬度 ${w}、${align === 'left' ? '靠左' : '靠右'}、填充字元「${fill === ' ' ? '空白' : fill}」、小數 ${prec} 位。setw 記得對每個值都要下一次。`);
+}
+['ioW','ioAlign','ioFill','ioPrec'].forEach(id => $(id).addEventListener('change', ioRender));
+ioRender();
+
+/* ---------- P07 functions ---------- */
 function fnDemo(mode) {
   const el = $('fnVis'); el.innerHTML = '';
   const mk = (label, val, color) => {
@@ -827,37 +1325,39 @@ function fnDemo(mode) {
   if (mode === 'value') {
     el.appendChild(mk('呼叫端 a', '1', '#5b7eb8'));
     el.appendChild(mk('函式內 x（影本）', '1 → 99', '#e67e22'));
-    setStatus('fnStatus', 'byValue：x 是 a 的影本；函式內改成 99，呼叫端 a 依然是 1。');
-    hlLine('fnCode', 5);
+    setStatus('fnStatus', 'byValue：x 是 a 的影本。函式裡改成 99，回來後 a 還是 1。');
+    hlLine('fnCode', 7);
   } else if (mode === 'ref') {
-    el.appendChild(mk('a ＝ x（同一格）', '1 → 99', '#1a6b4a'));
-    setStatus('fnStatus', 'byRef：x 是 a 的別名——函式內的修改就是修改 a。回來後 a = 99。');
-    hlLine('fnCode', 6);
+    el.appendChild(mk('a 與 x（同一格）', '1 → 99', '#1a6b4a'));
+    setStatus('fnStatus', 'byRef：x 是 a 的別名，函式內的修改就是修改 a。回來後 a = 99。');
+    hlLine('fnCode', 8);
   } else {
     el.appendChild(mk('呼叫端 a', '1 → 99', '#5b7eb8'));
     el.appendChild(mk('函式內 x（位址）', '&a', '#8e44ad'));
-    setStatus('fnStatus', 'byPtr：傳位址，*x = 99 改到 a。效果同傳參考，但呼叫端要寫 &a、函式內要解參考。');
-    hlLine('fnCode', 7);
+    setStatus('fnStatus', 'byPtr：複製的是位址，*x = 99 改到 a。效果同傳參考，但呼叫端要寫 &a、函式內要解參考。');
+    hlLine('fnCode', 9);
   }
 }
 fnDemo('value');
 
-/* ---------- P05 fraction ---------- */
+/* ---------- P08 fraction ---------- */
 function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b]; } return a || 1; }
 function parseFrac(s) {
-  const m = s.trim().match(/^(-?\d+)\s*\/\s*(\d+)$/);
+  const m = s.trim().match(/^(-?\d+)\s*\/\s*(-?\d+)$/);
   if (!m) return null;
-  return [parseInt(m[1],10), parseInt(m[2],10)];
+  let n = parseInt(m[1],10), d = parseInt(m[2],10);
+  if (d < 0) { n = -n; d = -d; }   // 負分母正規化，跟講義練習一致
+  return [n, d];
 }
 function frCalc(op) {
   const A = parseFrac($('frA').value), B = parseFrac($('frB').value);
   $('frOp').textContent = op;
-  if (!A || !B || !A[1] || !B[1]) { $('frOut').textContent = '?'; setStatus('frStatus', '請用 a/b 格式（分母非 0）。'); return; }
+  if (!A || !B || !A[1] || !B[1]) { $('frOut').textContent = '?'; setStatus('frStatus', '請用 a/b 格式，分母不能是 0。'); return; }
   const [an, ad] = A, [bn, bd] = B;
   if (op === '==') {
     const eq = an * bd === bn * ad;
     $('frOut').textContent = eq ? 'true' : 'false';
-    setStatus('frStatus', `operator==：交叉相乘 ${an}×${bd} ${eq?'==':'≠'} ${bn}×${ad} → ${eq}。不必先通分！`);
+    setStatus('frStatus', `operator==：交叉相乘 ${an}×${bd} 與 ${bn}×${ad} ${eq ? '相等' : '不等'}，所以是 ${eq}。不必先通分。`);
     return;
   }
   let n, d;
@@ -865,19 +1365,19 @@ function frCalc(op) {
   else { n = an*bn; d = ad*bd; }
   const g = gcd(n, d);
   $('frOut').textContent = `${n/g}/${d/g}`;
-  setStatus('frStatus', `operator${op}：先算出 ${n}/${d}，建構子用 gcd=${g} 約分 → <strong>${n/g}/${d/g}</strong>。不變量：永遠最簡。`);
+  setStatus('frStatus', `operator${op}：先得到 ${n}/${d}，再用 gcd = ${g} 約分成 ${n/g}/${d/g}。不變量：出手的永遠是最簡分數。`);
 }
 frCalc('+');
 
-/* ---------- P06 gates ---------- */
+/* ---------- P09 gates ---------- */
 function gateRun() {
   const A = +$('gInA').value, B = +$('gInB').value, C = +$('gInC').value, D = +$('gInD').value;
   const and1 = A && B ? 1 : 0, and2 = C && D ? 1 : 0;
   const or1 = (and1 || and2) ? 1 : 0, out = or1 ? 0 : 1;
   $('gAndOut').textContent = and1; $('gAnd2Out').textContent = and2;
   $('gOrOut').textContent = or1; $('gNotOut').textContent = out;
-  setStatus('gateStatus', `AND(${A},${B})=${and1}、AND(${C},${D})=${and2} → OR=${or1} → NOT=<strong>${out}</strong>。` +
-    ' Connector 物件把訊號一路往前送——每個閘只負責自己的 performGateLogic()。');
+  setStatus('gateStatus', `AND(${A},${B})=${and1}、AND(${C},${D})=${and2}，OR 得 ${or1}，NOT 得 <strong>${out}</strong>。` +
+    '訊號沿 Connector 一路往前送，每個閘只管自己的 performGateLogic()。');
 }
 gateRun();
 </script>

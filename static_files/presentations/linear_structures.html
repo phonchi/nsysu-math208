@@ -355,7 +355,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div class="section-number">PROLOGUE · 開場</div>
   <h2>線性結構：資料的「排隊學」 <span class="sec-badge">cppds §3.1–3.2</span></h2>
   <p>堆疊（stack）、佇列（queue）、雙端佇列（deque）都是<strong>線性結構</strong>：元素之間只有「前後」關係，
-  新增與移除發生在<strong>端點</strong>。差別只在「哪一端進、哪一端出」——這個小差別決定了它們完全不同的用途。</p>
+  新增與移除發生在<strong>端點</strong>。差別只在「哪一端進、哪一端出」：這個小差別決定了它們完全不同的用途。</p>
   <div class="info-box">
     <span class="info-label">本章你會學到的技術</span>
     <strong>1. 三種 ADT：</strong>stack（LIFO）、queue（FIFO）、deque（兩端皆可）。<br>
@@ -383,9 +383,9 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       <div class="info-card">
         <div class="ic-title">一句話記住</div>
         <div style="font-size:.9rem;line-height:2;">
-          <strong>Stack</strong>：後進先出——<em>復原（undo）、呼叫堆疊、括號配對</em>。<br>
-          <strong>Queue</strong>：先進先出——<em>排隊、工作佇列、BFS</em>。<br>
-          <strong>Deque</strong>：兩端皆可——<em>滑動視窗、迴文檢查</em>。
+          <strong>Stack</strong>：後進先出：<em>復原（undo）、呼叫堆疊、括號配對</em>。<br>
+          <strong>Queue</strong>：先進先出：<em>排隊、工作佇列、BFS</em>。<br>
+          <strong>Deque</strong>：兩端皆可：<em>滑動視窗、迴文檢查</em>。
         </div>
       </div>
       <div class="info-card">
@@ -401,12 +401,34 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div class="section-number">PART 01 · 堆疊</div>
   <h2>Stack：後進先出的「盤子塔」 <span class="sec-badge">cppds §3.3–3.5</span></h2>
   <p>堆疊只在同一端（<strong>top</strong>）加入與移除。想像疊盤子：最後放上去的盤子一定最先被拿走
-  —— <strong>LIFO</strong>（last-in first-out）。它天生就是「<strong>反轉順序</strong>」的機器。</p>
-  <div class="viz-layout">
+  ： <strong>LIFO</strong>（last-in first-out）。它天生就是「<strong>反轉順序</strong>」的機器。</p>
+  <h3>先把 ADT 說清楚</h3>
+  <p>Stack ADT 有六個操作：<code>push(item)</code>、<code>pop()</code>（移除並回傳 top）、
+  <code>peek()</code>（只看不拿）、<code>isEmpty()</code>、<code>size()</code>，加上建構子。
+  講義用一張操作序列表把行為完全定死（top 在最右邊）：</p>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>操作</th><th>Stack 內容（top 在右）</th><th>回傳</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">s.isEmpty()</td><td class="mono">[]</td><td class="mono">true</td></tr>
+      <tr><td class="mono">s.push(4)</td><td class="mono">[4]</td><td></td></tr>
+      <tr><td class="mono">s.push("dog")</td><td class="mono">[4, dog]</td><td></td></tr>
+      <tr><td class="mono">s.peek()</td><td class="mono">[4, dog]</td><td class="mono">dog</td></tr>
+      <tr><td class="mono">s.push(true)</td><td class="mono">[4, dog, true]</td><td></td></tr>
+      <tr><td class="mono">s.size()</td><td class="mono">[4, dog, true]</td><td class="mono">3</td></tr>
+      <tr><td class="mono">s.push(8.4)</td><td class="mono">[4, dog, true, 8.4]</td><td></td></tr>
+      <tr><td class="mono">s.pop()</td><td class="mono">[4, dog, true]</td><td class="mono">8.4</td></tr>
+      <tr><td class="mono">s.pop()</td><td class="mono">[4, dog]</td><td class="mono">true</td></tr>
+    </tbody>
+  </table></div>
+  <p style="font-size:.88rem;color:var(--muted);">表裡混放了數字、字串、布林，這是 ADT 層次的示意。
+  實作成 C++ template 之後，一個 Stack 物件只裝一種型別：<code>Stack&lt;double&gt;</code> 裝 double、
+  <code>Stack&lt;string&gt;</code> 裝字串。</p>
+
+  <div class="viz-layout" style="margin-top:1rem;">
     <div>
       <div class="viz-panel">
         <div class="bs-stack" id="stackVis" style="min-height:230px;"></div>
-        <div class="status-banner" id="stackStatus"><span class="status-icon">›</span><span class="status-text">輸入值後按 push；pop 會移除 top。試著觀察 push 4、push "dog"、pop 的效果。</span></div>
+        <div class="status-banner" id="stackStatus"><span class="status-icon">›</span><span class="status-text">輸入值後按 push；pop 會移除 top。照上面那張表操作一輪試試。</span></div>
         <div class="controls-bar">
           <input id="stackInput" class="mono" style="width:90px;padding:.35rem .5rem;border:1px solid var(--card-border);border-radius:6px;" value="8.4">
           <button class="btn" onclick="stackPush()">push</button>
@@ -433,10 +455,55 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <div class="ic-title">操作成本（vector 尾端當 top）</div>
         <div class="ic-row"><span class="ic-label">push / pop / peek</span><span class="ic-value">O(1)*</span></div>
         <div class="ic-row"><span class="ic-label">size / isEmpty</span><span class="ic-value">O(1)</span></div>
-        <div style="font-size:.76rem;color:var(--muted);margin-top:.3rem;">* push 為攤銷 O(1)。若改用 vector <strong>前端</strong>當 top（講義的 Stack2），每個操作都變 O(n)！</div>
+        <div style="font-size:.76rem;color:var(--muted);margin-top:.3rem;">* push 是攤銷 O(1)。</div>
       </div>
     </div>
   </div>
+
+  <h3 style="margin-top:1.6rem;">同一個 ADT、另一種實作：Stack2 的代價</h3>
+  <p>把 top 改放在 vector 的<strong>前端</strong>也做得出一個功能完全正確的 stack：
+  push 用 <code>insert(begin())</code>、pop 用 <code>erase(begin())</code>。
+  介面一模一樣，使用者根本分不出來。這就是抽象化的威力，也是它的陷阱：
+  <strong>每次 push 和 pop 都要把整排元素搬一格</strong>，O(1) 變 O(n)。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="mono" id="s2Out" style="font-size:.9rem;line-height:2;min-height:60px;"></div>
+        <div class="status-banner" id="s2Status"><span class="status-icon">›</span><span class="status-text">數字會說話：對兩種實作各做 n 次 push，數一數總共搬移了幾個元素。</span></div>
+        <div class="controls-bar">
+          <select id="s2N" class="mono" style="padding:.35rem;border-radius:6px;border:1px solid var(--card-border);">
+            <option value="10">n = 10</option><option value="100" selected>n = 100</option><option value="1000">n = 1000</option>
+          </select>
+          <button class="btn" onclick="s2Race()">▶ 比一比</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">Stack2（top 在前端）<span class="ic-badge">CODE</span></div>
+        <div class="pseudo-code" style="font-size:.76rem;">
+<span class="line"><span class="kw">void</span> <span class="fn">push</span>(T item) {</span>
+<span class="line">    items.<span class="fn">insert</span>(items.<span class="fn">begin</span>(), item);  <span class="com">// O(n)!</span></span>
+<span class="line">}</span>
+<span class="line">T <span class="fn">pop</span>() {</span>
+<span class="line">    T top = items.<span class="fn">front</span>();</span>
+<span class="line">    items.<span class="fn">erase</span>(items.<span class="fn">begin</span>());   <span class="com">// O(n)!</span></span>
+<span class="line">    <span class="kw">return</span> top;</span>
+<span class="line">}</span></div>
+        <div style="font-size:.8rem;color:var(--muted);margin-top:.4rem;">邏輯等價、效能天差地遠。這個例子會在第 2 章（演算法分析）被正式量化。</div>
+      </div>
+    </div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 講義練習：revString</div>
+  <p>用 stack 反轉字串：把 "NSYSU" 逐字 push，再逐字 pop 接起來。結果與原理是？</p>
+  
+  <div class="quiz-options" id="qRevOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="進去的順序 N,S,Y,S,U，出來的順序 U,S,Y,S,N。任何「產生順序與使用順序相反」的問題，先想 stack。" onclick="quizCheck('qRev', this)"><span class="opt-letter">(A)</span> 得到 "USYSN"；stack 天生就是反轉機器</div><div class="quiz-opt" data-correct="false" data-fb="LIFO 的意思就是後進先出，順序一定反過來。保序的是 queue。" onclick="quizCheck('qRev', this)"><span class="opt-letter">(B)</span> 得到 "NSYSU"；順序不變</div><div class="quiz-opt" data-correct="false" data-fb="Stack&lt;char&gt; 完全合法，STL 的 stack&lt;char&gt; 也行。" onclick="quizCheck('qRev', this)"><span class="opt-letter">(C)</span> 會當機，字元不能放 stack</div>
+  </div>
+  <div class="quiz-feedback" id="qRevFeedback"></div>
+</div>
   
 <div class="quiz-box">
   <div class="quiz-label">QUIZ · Stack 行為</div>
@@ -453,7 +520,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div class="section-number">PART 02 · 括號配對</div>
   <h2>括號配對：stack 的第一個殺手級應用 <span class="sec-badge">cppds §3.6–3.7</span></h2>
   <p>編譯器怎麼知道 <code>(()</code> 少了一個右括號？<strong>由內往外配對</strong>的結構剛好是 LIFO：
-  每個右括號要配的是「<strong>最近一個還沒配對的左括號</strong>」——這就是 stack 的 top。</p>
+  每個右括號要配的是「<strong>最近一個還沒配對的左括號</strong>」：這就是 stack 的 top。</p>
   <div class="viz-layout">
     <div>
       <div class="viz-panel">
@@ -495,12 +562,26 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
     </div>
   </div>
+  <h3 style="margin-top:1.4rem;">一般化：三種括號混用</h3>
+  <p>實際的程式語言同時用 <code>()</code>、<code>[]</code>、<code>{}</code>，
+  各自要維持自己的開閉關係。像 <code>{ { ( [ ] [ ] ) } ( ) }</code> 是平衡的，
+  <code>( [ ) ]</code> 就不是：每個閉符號要配的不只是「某個開符號」，而是
+  <strong>stack 頂端那一個、而且種類要對</strong>。演算法只多一件事：pop 出來後用
+  <code>matches()</code> 檢查種類。</p>
+  <div class="pseudo-code" style="font-size:.78rem;">
+<span class="line"><span class="kw">bool</span> <span class="fn">matches</span>(<span class="kw">char</span> symLeft, <span class="kw">char</span> symRight) {</span>
+<span class="line">    string allLefts = <span class="str">&quot;([{{&quot;</span>;   string allRights = <span class="str">&quot;)]}}&quot;</span>;</span>
+<span class="line">    <span class="kw">return</span> allLefts.<span class="fn">find</span>(symLeft) == allRights.<span class="fn">find</span>(symRight);</span>
+<span class="line">}   <span class="com">// 開閉符號在各自字串裡的位置相同，就是一對</span></span></div>
+  <p style="font-size:.88rem;color:var(--muted);">完整的 <code>balanceChecker()</code> 在講義 §3.7：
+  跟 parChecker 只差在 pop 之後多呼叫一次 matches()。上面的動畫輸入框直接支援三種括號，
+  拿 <code>[{()]</code> 餵餵看。</p>
 </section>
 
 <section id="base">
   <div class="section-number">PART 03 · 進位轉換</div>
   <h2>十進位 → 任意進位：「除基取餘」與順序反轉 <span class="sec-badge">cppds §3.8</span></h2>
-  <p>反覆「除以基底、記下餘數」會<strong>由低位往高位</strong>產生數字，但我們書寫時要從高位開始——
+  <p>反覆「除以基底、記下餘數」會<strong>由低位往高位</strong>產生數字，但我們書寫時要從高位開始：
   又是一個「<strong>產生順序與使用順序相反</strong>」的問題，stack 出場。</p>
   <div class="viz-layout">
     <div>
@@ -539,7 +620,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       <div class="info-card">
         <div class="ic-title">為什麼是 stack？</div>
         <div style="font-size:.85rem;line-height:1.9;">第一個算出的餘數是<strong>最低位</strong>，最後算出的是<strong>最高位</strong>。
-        pop 的順序剛好把它反過來——高位先出。</div>
+        pop 的順序剛好把它反過來：高位先出。</div>
       </div>
     </div>
   </div>
@@ -549,7 +630,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <p><code>baseConverter(25, 2)</code> 的結果是？（可用上面的動畫驗證）</p>
   
   <div class="quiz-options" id="qBaseOptions">
-    <div class="quiz-opt" data-correct="true" data-fb="25 = 16+8+1；餘數依序 1,0,0,1,1，pop 反轉後 11001。" onclick="quizCheck('qBase', this)"><span class="opt-letter">(A)</span> <code>11001</code></div><div class="quiz-opt" data-correct="false" data-fb="這是餘數「產生順序」直接串起來的結果——忘了 stack 的反轉。" onclick="quizCheck('qBase', this)"><span class="opt-letter">(B)</span> <code>10011</code></div><div class="quiz-opt" data-correct="false" data-fb="26 才是 11010；25 是奇數，最低位必為 1。" onclick="quizCheck('qBase', this)"><span class="opt-letter">(C)</span> <code>11010</code></div>
+    <div class="quiz-opt" data-correct="true" data-fb="25 = 16+8+1；餘數依序 1,0,0,1,1，pop 反轉後 11001。" onclick="quizCheck('qBase', this)"><span class="opt-letter">(A)</span> <code>11001</code></div><div class="quiz-opt" data-correct="false" data-fb="這是餘數「產生順序」直接串起來的結果：忘了 stack 的反轉。" onclick="quizCheck('qBase', this)"><span class="opt-letter">(B)</span> <code>10011</code></div><div class="quiz-opt" data-correct="false" data-fb="26 才是 11010；25 是奇數，最低位必為 1。" onclick="quizCheck('qBase', this)"><span class="opt-letter">(C)</span> <code>11010</code></div>
   </div>
   <div class="quiz-feedback" id="qBaseFeedback"></div>
 </div>
@@ -558,9 +639,38 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="infix">
   <div class="section-number">PART 04 · 表達式</div>
   <h2>中序、前序、後序：把括號「編譯」掉 <span class="sec-badge">cppds §3.9</span></h2>
-  <p>人類習慣<strong>中序</strong>（A + B * C），但機器喜歡<strong>後序</strong>（A B C * +）——
-  完全不需要括號與優先權表就能由左至右直接計算。轉換的核心：<strong>運算元照抄、運算子進 stack 等待</strong>，
-  優先權高的先出來。</p>
+  <p>寫 <code>A + B * C</code> 的時候，誰先算？人靠兩條默契：<strong>優先權</strong>（乘除高於加減）
+  和<strong>結合律</strong>（同級由左到右）。括號則能推翻默契。這種「運算子夾在中間」的寫法叫
+  <strong>中序</strong>（infix），對人友善，對機器是負擔：電腦得先讀懂整套默契才知道順序。</p>
+  <p>把運算子搬到運算元前面就是<strong>前序</strong>（prefix），搬到後面就是<strong>後序</strong>
+  （postfix）。神奇的是，搬完之後<strong>括號和優先權表都不需要了</strong>，順序資訊全部藏在位置裡：</p>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>中序</th><th>前序</th><th>後序</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">A + B</td><td class="mono">+ A B</td><td class="mono">A B +</td></tr>
+      <tr><td class="mono">A + B * C</td><td class="mono">+ A * B C</td><td class="mono">A B C * +</td></tr>
+      <tr><td class="mono">(A + B) * C</td><td class="mono">* + A B C</td><td class="mono">A B + C *</td></tr>
+      <tr><td class="mono">A + B * C + D</td><td class="mono">+ + A * B C D</td><td class="mono">A B C * + D +</td></tr>
+      <tr><td class="mono">(A + B) * (C + D)</td><td class="mono">* + A B + C D</td><td class="mono">A B + C D + *</td></tr>
+      <tr><td class="mono">A + B + C + D</td><td class="mono">+ + + A B C D</td><td class="mono">A B + C + D +</td></tr>
+    </tbody>
+  </table></div>
+  <div class="info-box" style="margin-top:.8rem;">
+    <span class="info-label">手算技巧：全括號法</span>
+    先把式子<strong>完全加括號</strong>（一個運算子一對括號）：A + B * C 變成 (A + (B * C))。
+    然後把每個運算子搬到它那對括號的<strong>右括號</strong>位置、拆掉括號，就是後序；
+    搬到<strong>左括號</strong>位置就是前序。考試手算用這招又快又不會錯。
+  </div>
+  <p style="margin-top:.8rem;">機器轉換用 stack：<strong>運算元照抄、運算子進 stack 等待</strong>。
+  關鍵觀察是後序式裡運算子的出現順序，可能跟中序相反（+ 先讀到卻最後輸出），
+  「需要反轉的暫存」正是 stack 的主場。演算法四步：</p>
+  <ol style="line-height:2;margin:.3rem 0 .6rem 1.6rem;font-size:.92rem;">
+    <li>開一個空的 opStack、一個空的輸出串列。</li>
+    <li>把中序字串切成 token（C++ 用 stringstream，等同 Python 的 split）。</li>
+    <li>由左到右掃：運算元直接輸出；<code>(</code> 進 stack；<code>)</code> 一路 pop 輸出直到遇見 <code>(</code>；
+        一般運算子先把 stack 上「優先權大於等於自己」的全部 pop 輸出，再把自己 push 進去。</li>
+    <li>掃完把 stack 剩下的全部 pop 輸出。</li>
+  </ol>
   <div class="viz-layout">
     <div>
       <div class="viz-panel">
@@ -632,23 +742,54 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
     </div>
   </div>
+  <div class="info-box warm" style="margin-top:1rem;">
+    <span class="info-label">後序求值的一個細節：pop 的順序</span>
+    看到運算子就 pop 兩次：<strong>第一次 pop 出來的是右運算元、第二次才是左運算元</strong>。
+    加法乘法無所謂，除法減法就是生死線：7 8 + 3 2 + / 是 15 / 5 = 3，
+    順序寫反會變成 5 / 15。輔助函式 <code>doMath(op, op1, op2)</code> 把四則收在一處，
+    完整程式在 dscpp/expression.hpp。
+  </div>
   
 <div class="quiz-box">
   <div class="quiz-label">QUIZ · 中序轉後序</div>
   <p><code>( A + B ) * C</code> 的後序表達式是？</p>
   
   <div class="quiz-options" id="qInfixOptions">
-    <div class="quiz-opt" data-correct="true" data-fb="括號強迫 + 先輸出；* 最後補上。" onclick="quizCheck('qInfix', this)"><span class="opt-letter">(A)</span> <code>A B + C *</code></div><div class="quiz-opt" data-correct="false" data-fb="這是 A * ( B + C ) 的後序——括號位置不同！" onclick="quizCheck('qInfix', this)"><span class="opt-letter">(B)</span> <code>A B C + *</code></div><div class="quiz-opt" data-correct="false" data-fb="這是「前序」（prefix），不是後序。" onclick="quizCheck('qInfix', this)"><span class="opt-letter">(C)</span> <code>+ A B * C</code></div>
+    <div class="quiz-opt" data-correct="true" data-fb="括號強迫 + 先輸出，* 最後補上。" onclick="quizCheck('qInfix', this)"><span class="opt-letter">(A)</span> <code>A B + C *</code></div><div class="quiz-opt" data-correct="false" data-fb="這是 A * ( B + C ) 的後序。括號位置不同，答案就不同。" onclick="quizCheck('qInfix', this)"><span class="opt-letter">(B)</span> <code>A B C + *</code></div><div class="quiz-opt" data-correct="false" data-fb="這是前序（prefix），不是後序。" onclick="quizCheck('qInfix', this)"><span class="opt-letter">(C)</span> <code>+ A B * C</code></div>
   </div>
   <div class="quiz-feedback" id="qInfixFeedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 講義練習：加入次方運算子</div>
+  <p>要讓轉換器支援右結合的 <code>^</code>（次方），pop 條件要怎麼改？<code>5 * 3 ^ ( 4 - 2 )</code> 的後序是？</p>
+  
+  <div class="quiz-options" id="qCaretOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="左結合運算子 pop 到「大於等於」，右結合的 ^ 只 pop「嚴格大於」，同級的 ^ 要留在 stack 裡等右邊先算。整串算出來是 45。" onclick="quizCheck('qCaret', this)"><span class="opt-letter">(A)</span> 遇到 ^ 時只 pop「嚴格大於」自己的；答案 5 3 4 2 - ^ *</div><div class="quiz-opt" data-correct="false" data-fb="用「大於等於」會把前一個 ^ 提早倒出來，2^3^2 就會被算成 (2^3)^2 = 64，而正確是 2^(3^2) = 512。" onclick="quizCheck('qCaret', this)"><span class="opt-letter">(B)</span> 照舊 pop「大於等於」；答案 5 3 ^ 4 2 - *</div><div class="quiz-opt" data-correct="false" data-fb="次方的優先權最高（4），比乘除（3）還高。結合方向與優先權是兩件獨立的事。" onclick="quizCheck('qCaret', this)"><span class="opt-letter">(C)</span> 把 ^ 的優先權設成最低</div>
+  </div>
+  <div class="quiz-feedback" id="qCaretFeedback"></div>
 </div>
 </section>
 
 <section id="queue">
   <div class="section-number">PART 05 · 佇列</div>
   <h2>Queue：先進先出的公平隊伍 <span class="sec-badge">cppds §3.10–3.12</span></h2>
-  <p>佇列在<strong>rear 加入、front 移除</strong>——先來的先被服務（<strong>FIFO</strong>）。
-  作業系統的工作排程、印表機隊伍、BFS 的「下一層名單」全都是 queue。</p>
+  <p>佇列在 <strong>rear 加入、front 移除</strong>，先來的先被服務（FIFO）。
+  作業系統的工作排程、印表機隊伍、BFS 的「下一層名單」全是 queue。ADT 操作只有五個：
+  <code>enqueue(item)</code>、<code>dequeue()</code>、<code>isEmpty()</code>、<code>size()</code> 加建構子。
+  講義的操作序列表（<strong>front 在右</strong>，注意方向）：</p>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>操作</th><th>Queue 內容（front 在右）</th><th>回傳</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">q.enqueue(4)</td><td class="mono">[4]</td><td></td></tr>
+      <tr><td class="mono">q.enqueue("dog")</td><td class="mono">[dog, 4]</td><td></td></tr>
+      <tr><td class="mono">q.enqueue(true)</td><td class="mono">[true, dog, 4]</td><td></td></tr>
+      <tr><td class="mono">q.size()</td><td class="mono">[true, dog, 4]</td><td class="mono">3</td></tr>
+      <tr><td class="mono">q.enqueue(8.4)</td><td class="mono">[8.4, true, dog, 4]</td><td></td></tr>
+      <tr><td class="mono">q.dequeue()</td><td class="mono">[8.4, true, dog]</td><td class="mono">4</td></tr>
+      <tr><td class="mono">q.dequeue()</td><td class="mono">[8.4, true]</td><td class="mono">dog</td></tr>
+    </tbody>
+  </table></div>
   <div class="viz-layout">
     <div>
       <div class="viz-panel">
@@ -730,14 +871,68 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
 <section id="printer">
   <div class="section-number">PART 07 · 模擬</div>
-  <h2>印表機模擬：用機率+queue 回答容量問題 <span class="sec-badge">cppds §3.14</span></h2>
-  <p>實驗室 10 台電腦共用一台印表機：低品質模式印得快（10 頁/分）但粗糙、高品質慢（5 頁/分）但精美。
-  <strong>學生平均要等多久？</strong>這種「容量規劃」問題用 queue 模擬最自然。</p>
-  <div class="info-box">
-    <span class="info-label">模擬的主要步驟（每秒一個 tick）</span>
-    1. 以 1/180 機率產生新列印工作（每小時約 20 個工作），頁數 1~20 隨機，進 queue。<br>
-    2. 印表機空閒且 queue 非空 → 取出 front 工作，記錄它<strong>等了多久</strong>。<br>
-    3. 印表機每 tick 消化「每秒頁數」的工作量，直到當前工作印完。
+  <h2>印表機模擬：用機率與 queue 回答容量問題 <span class="sec-badge">cppds §3.14</span></h2>
+  <p>實驗室的印表機可以切兩種模式：草稿模式一分鐘 10 頁，高品質模式一分鐘只剩 5 頁。
+  切高品質的話，學生會不會等到天荒地老？這是個真實的容量規劃問題，
+  而且沒辦法用公式直接算，因為「什麼時候有人送印、一次印幾頁」都是隨機的。
+  講義的做法：<strong>寫一個模擬</strong>，讓隨機事件跑一小時，統計平均等待時間。</p>
+  <h3>先把機率定出來</h3>
+  <p>實驗室平均 10 個人，每人每小時印兩次，所以每小時約 20 個列印工作。換算成秒：</p>
+  <p style="text-align:center;" class="mono">20 件/小時 × 1 小時/60 分 × 1 分/60 秒 = 1 件/180 秒</p>
+  <p>於是每一秒擲一顆 180 面的骰子，擲到 180 就生出一個工作（頁數 1 到 20 均勻隨機）。
+  可能連續好幾秒都有工作、也可能好幾分鐘沒動靜，這正是模擬的本性。</p>
+  <h3>三個類別、一個主迴圈</h3>
+  <p>照真實世界的物件切：<code>Task</code>（記創建時間戳與頁數）、<code>Printer</code>（記頁速與剩餘工作量）、
+  print queue（就用我們的 Queue ADT）。主迴圈每秒一個 tick：</p>
+  <ol style="line-height:2;margin:.3rem 0 .6rem 1.6rem;font-size:.92rem;">
+    <li>擲骰子決定要不要生新工作，生了就 enqueue（帶上目前秒數當時間戳）。</li>
+    <li>印表機空閒且 queue 非空：dequeue 下一個工作，<strong>目前秒數減時間戳就是它等了多久</strong>，記進等待清單。</li>
+    <li>印表機 tick 一秒：剩餘時間減一，歸零就變空閒。</li>
+  </ol>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:.8rem;">
+    <div class="info-card"><div class="ic-title">Task <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.74rem;">
+<span class="line"><span class="kw">class</span> <span class="fn">Task</span> {</span>
+<span class="line">    <span class="kw">int</span> timestamp, pages;</span>
+<span class="line">  <span class="kw">public</span>:</span>
+<span class="line">    <span class="fn">Task</span>(<span class="kw">int</span> time) {</span>
+<span class="line">        timestamp = time;</span>
+<span class="line">        pages = <span class="fn">rand</span>() % <span class="num">20</span> + <span class="num">1</span>;</span>
+<span class="line">    }</span>
+<span class="line">    <span class="kw">int</span> <span class="fn">getPages</span>() { <span class="kw">return</span> pages; }</span>
+<span class="line">    <span class="kw">int</span> <span class="fn">waitTime</span>(<span class="kw">int</span> now) {</span>
+<span class="line">        <span class="kw">return</span> now - timestamp;</span>
+<span class="line">    }</span>
+<span class="line">};</span></div></div>
+    <div class="info-card"><div class="ic-title">Printer <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.74rem;">
+<span class="line"><span class="kw">class</span> <span class="fn">Printer</span> {</span>
+<span class="line">    <span class="kw">int</span> pageRate;  Task *currentTask;</span>
+<span class="line">    <span class="kw">double</span> timeRemaining;</span>
+<span class="line">  <span class="kw">public</span>:</span>
+<span class="line">    <span class="kw">void</span> <span class="fn">tick</span>() {</span>
+<span class="line">        <span class="kw">if</span> (currentTask != <span class="num">NULL</span>) {</span>
+<span class="line">            timeRemaining -= <span class="num">1</span>;</span>
+<span class="line">            <span class="kw">if</span> (timeRemaining &lt;= <span class="num">0</span>) currentTask = <span class="num">NULL</span>;</span>
+<span class="line">        }</span>
+<span class="line">    }</span>
+<span class="line">    <span class="kw">void</span> <span class="fn">startNext</span>(Task *t) {</span>
+<span class="line">        currentTask = t;</span>
+<span class="line">        timeRemaining = t-&gt;<span class="fn">getPages</span>() * <span class="num">60.0</span> / pageRate;</span>
+<span class="line">    }</span>
+<span class="line">};</span></div></div>
+    <div class="info-card"><div class="ic-title">主迴圈 <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.74rem;">
+<span class="line"><span class="kw">for</span> (sec = <span class="num">0</span>; sec &lt; <span class="num">3600</span>; sec++) {</span>
+<span class="line">    <span class="kw">if</span> (<span class="fn">newPrintTask</span>())      <span class="com">// rand()%180 == 0</span></span>
+<span class="line">        printQueue.<span class="fn">push</span>(<span class="kw">new</span> <span class="fn">Task</span>(sec));</span>
+<span class="line">    <span class="kw">if</span> (!labPrinter.<span class="fn">busy</span>() &amp;&amp; !printQueue.<span class="fn">empty</span>()) {</span>
+<span class="line">        Task *next = printQueue.<span class="fn">front</span>();  printQueue.<span class="fn">pop</span>();</span>
+<span class="line">        waitingTimes.<span class="fn">push_back</span>(next-&gt;<span class="fn">waitTime</span>(sec));</span>
+<span class="line">        labPrinter.<span class="fn">startNext</span>(next);</span>
+<span class="line">    }</span>
+<span class="line">    labPrinter.<span class="fn">tick</span>();</span>
+<span class="line">}</span></div></div>
   </div>
   <div class="viz-panel">
     <div style="overflow-x:auto;">
@@ -753,16 +948,45 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   </div>
   <div class="info-box warm" style="margin-top:.8rem;">
     <span class="info-label">結論怎麼讀？</span>
-    10 頁/分的平均等待明顯較短且穩定——如果多數列印是草稿，切低品質模式能顯著縮短排隊時間；
-    決策依據不是直覺，是<strong>模擬數據</strong>。
+    講義跑了 10 次 3600 秒：5 頁/分的平均等待起伏很大，動輒好幾分鐘還常留下未完成的工作；
+    10 頁/分則穩定壓在半分鐘以內、隊伍清空。等六分鐘拿一份報告，學生下一堂課都要遲到了，
+    所以「切高品質」這個提案大概不可行。注意這個結論的效力完全建立在假設上（10 個人、每人印兩次、1 到 20 頁均勻分布），
+    人數若成長兩成、或週六沒課大家不趕時間，都要改假設重跑。模擬的價值就在這裡：改參數比改現實便宜太多。
   </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 模擬的機率設定</div>
+  <p>為什麼是「每秒以 1/180 的機率生一個工作」？</p>
+  
+  <div class="quiz-options" id="qPrnOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="20 件/小時 = 1 件/180 秒。用「每秒擲一次 1/180」近似 Poisson 到達過程，是模擬裡最常見的手法。" onclick="quizCheck('qPrn', this)"><span class="opt-letter">(A)</span> 每小時 20 件換算成秒就是平均 180 秒一件</div><div class="quiz-opt" data-correct="false" data-fb="頁速另外算：頁數 × 60 ÷ 每分鐘頁數，跟 180 無關。" onclick="quizCheck('qPrn', this)"><span class="opt-letter">(B)</span> 180 是印表機印一頁的秒數</div><div class="quiz-opt" data-correct="false" data-fb="模擬只跟假設一樣可信。這個數字是從「10 人 × 每人 2 件」推出來的。" onclick="quizCheck('qPrn', this)"><span class="opt-letter">(C)</span> 隨便訂的，跑起來像就好</div>
+  </div>
+  <div class="quiz-feedback" id="qPrnFeedback"></div>
+</div>
 </section>
 
 <section id="deque">
   <div class="section-number">PART 08 · 雙端佇列</div>
   <h2>Deque 與迴文檢查：兩端都能進出 <span class="sec-badge">cppds §3.15–3.18</span></h2>
-  <p>雙端佇列（deque，唸作 "deck"）兩端都可以加入與移除——它一個人就能扮演 stack 或 queue。
-  代價是<strong>使用者要自己維持紀律</strong>，否則就失去了結構帶來的「防呆」。</p>
+  <p>雙端佇列（deque，唸作 deck）兩端都能加入與移除，一個人就能扮演 stack 或 queue。
+  代價是使用者要自己維持紀律，結構不再幫你防呆。六個操作：<code>addFront</code>、<code>addRear</code>、
+  <code>removeFront</code>、<code>removeRear</code>、<code>isEmpty</code>、<code>size</code>。
+  講義的操作表（<strong>front 在右</strong>，方向跟 queue 的表一致）：</p>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>操作</th><th>Deque 內容（front 在右）</th><th>回傳</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">d.add_rear(4)</td><td class="mono">[4]</td><td></td></tr>
+      <tr><td class="mono">d.add_rear("dog")</td><td class="mono">[dog, 4]</td><td></td></tr>
+      <tr><td class="mono">d.add_front("cat")</td><td class="mono">[dog, 4, cat]</td><td></td></tr>
+      <tr><td class="mono">d.add_front(true)</td><td class="mono">[dog, 4, cat, true]</td><td></td></tr>
+      <tr><td class="mono">d.add_rear(8.4)</td><td class="mono">[8.4, dog, 4, cat, true]</td><td></td></tr>
+      <tr><td class="mono">d.remove_rear()</td><td class="mono">[dog, 4, cat, true]</td><td class="mono">8.4</td></tr>
+      <tr><td class="mono">d.remove_front()</td><td class="mono">[dog, 4, cat]</td><td class="mono">true</td></tr>
+    </tbody>
+  </table></div>
+  <p style="font-size:.9rem;color:var(--muted);">教學版把 front 放在 vector 尾端，所以
+  addFront／removeFront 是 O(1)，addRear／removeRear 是 O(n)：兩端的成本並不對稱。
+  STL 的 <code>std::deque</code> 用分段連續的儲存做到兩端都 O(1)，實戰直接用它。</p>
   <div class="viz-layout">
     <div>
       <div class="viz-panel">
@@ -809,7 +1033,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <p>把 1, 2, 3 依序 push 進 stack，途中任何時刻都可以 pop。下列哪個輸出序列<strong>不可能</strong>出現？</p>
   
   <div class="quiz-options" id="ex1Options">
-    <div class="quiz-opt" data-correct="true" data-fb="要先輸出 3 必須 1、2 都還在 stack（2 在 1 上面）——之後只能 2 再 1。3 1 2 不可能。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> <code>3 1 2</code></div><div class="quiz-opt" data-correct="false" data-fb="push1 push2 pop2 pop1 push3 pop3 → 可以。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> <code>2 1 3</code></div><div class="quiz-opt" data-correct="false" data-fb="push1 pop1 push2 push3 pop3 pop2 → 可以。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> <code>1 3 2</code></div>
+    <div class="quiz-opt" data-correct="true" data-fb="要先輸出 3 必須 1、2 都還在 stack（2 在 1 上面）：之後只能 2 再 1。3 1 2 不可能。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> <code>3 1 2</code></div><div class="quiz-opt" data-correct="false" data-fb="push1 push2 pop2 pop1 push3 pop3 → 可以。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> <code>2 1 3</code></div><div class="quiz-opt" data-correct="false" data-fb="push1 pop1 push2 push3 pop3 pop2 → 可以。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> <code>1 3 2</code></div>
   </div>
   <div class="quiz-feedback" id="ex1Feedback"></div>
 </div>
@@ -1009,7 +1233,7 @@ function stackPush() {
   stackItems.push(v); stackRender(`push(${v}) → 新 top = ${v}`, 0);
 }
 function stackPop() {
-  if (!stackItems.length) { stackRender('stack 是空的——真實程式這裡要先檢查 isEmpty()！'); return; }
+  if (!stackItems.length) { stackRender('stack 是空的：真實程式這裡要先檢查 isEmpty()！'); return; }
   const v = stackItems.pop(); stackRender(`pop() 回傳 ${v}`);
 }
 function stackPeek() {
@@ -1018,6 +1242,19 @@ function stackPeek() {
 }
 function stackReset() { stackItems = [4, 'dog', true]; stackRender('已重置為 [4, dog, true]。'); }
 stackRender();
+
+/* Stack vs Stack2: count element moves for n pushes + n pops */
+function s2Race() {
+  const n = parseInt($('s2N').value, 10);
+  const s1 = 0;                       // push_back/pop_back never shift others
+  let s2 = 0;
+  for (let i = 0; i < n; i++) s2 += i;   // push #i shifts i elements
+  for (let i = n - 1; i >= 0; i--) s2 += i;  // pop shifts the rest
+  $('s2Out').innerHTML =
+    `Stack（top 在尾端）：搬移 <strong>${s1}</strong> 個元素<br>` +
+    `Stack2（top 在前端）：搬移 <strong>${s2.toLocaleString()}</strong> 個元素（約 n²）`;
+  setStatus('s2Status', `n = ${n}：同樣的介面、同樣的答案，工作量差了 ${s2 === 0 ? 0 : s2.toLocaleString()} 倍不止。第 2 章會把這件事寫成 O(1) 對 O(n)。`);
+}
 
 /* ---------- P02 parens ---------- */
 let parPlayer = null;
