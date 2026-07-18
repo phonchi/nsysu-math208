@@ -270,6 +270,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 .vert-table td.tcell-current{background:#fff3cd;font-weight:700;color:var(--accent);}
 .vert-table td.tcell-done{background:#eafaf1;color:var(--accent3);}
 .vert-table td.tcell-inf{color:#ccc;}
+.sec-badge{font-size:.6em;color:var(--muted);border:1px solid var(--card-border);background:var(--card);padding:2px 10px;border-radius:999px;vertical-align:middle;margin-left:.6rem;font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.02em;white-space:nowrap;}
 </style>
 </head>
 <body>
@@ -312,7 +313,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   </svg>
   <div class="hero-content">
     <h1><span class="blue">圖</span>與<span class="orange">圖演算法</span></h1>
-    <div class="subtitle">Chapter 7 — Graphs &amp; Graphing Algorithms (Interactive Visualization)</div>
+    <div class="subtitle">cppds Chapter 9 — Graphs &amp; Graph Algorithms（對應講義 08）</div>
     <div class="big-formula">頂點 · 邊 · 鄰接表示｜BFS｜DFS｜Dijkstra｜Prim</div>
     <div class="scroll-hint">向下捲動開始互動<span>↓</span></div>
   </div>
@@ -342,7 +343,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="prologue">
   <div class="section-number">PROLOGUE · 開場</div>
-  <h2>圖是什麼？先把術語都講清楚</h2>
+  <h2>圖是什麼？先把術語都講清楚 <span class="sec-badge">cppds §9.1–9.2</span></h2>
   <p><strong>圖（graph）</strong>可以用來描述許多現實世界的關係：道路系統、航班、網際網路連線、課程先修關係等等。一旦我們把問題用圖表示出來，就可以套用<strong>標準的圖演算法</strong>解決原本看似困難的問題！</p>
 
   <div class="info-box">
@@ -378,7 +379,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <div class="ic-title">關鍵概念</div>
         <p style="font-size:.82rem;line-height:1.6;margin:0;">
           <span class="pill pill-blue">Path</span> 由邊串聯的頂點序列 $w_1, w_2, \ldots, w_n$，每個相鄰對 $(w_i, w_{i+1}) \in E$。<br><br>
-          <span class="pill pill-orange">Cycle</span> 起點＝終點的 path（有向圖中）。<br><br>
+          <span class="pill pill-orange">Cycle</span> 起點＝終點的 path 。<br><br>
           <span class="pill pill-green">DAG</span> Directed Acyclic Graph — 沒有 cycle 的有向圖；可解決許多排程／依賴問題。<br><br>
           <span class="pill pill-purple">Tree</span> 連通且無 cycle 的圖；下一章專題討論。
         </p>
@@ -408,8 +409,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="representation">
   <div class="section-number">PART 01 · 圖的表示</div>
-  <h2>怎麼把圖塞進電腦？相鄰矩陣 vs 相鄰串列</h2>
-  <p>圖的 ADT 主要支援以下操作：<code>set_vertex(v)</code>、<code>add_edge(u, v, w)</code>、<code>get_vertex(key)</code>、<code>get_vertices()</code>、<code>v in g</code>。實作方式有兩種主流選擇——<strong>相鄰矩陣（adjacency matrix）</strong>和<strong>相鄰串列（adjacency list）</strong>，兩者各有適用情境。</p>
+  <h2>怎麼把圖塞進電腦？相鄰矩陣 vs 相鄰串列 <span class="sec-badge">cppds §9.3–9.6</span></h2>
+  <p>圖的 ADT 主要支援以下操作：<code>setVertex(v)</code>、<code>addEdge(u, v, w)</code>、<code>getVertex(key)</code>、<code>getVertices()</code>、<code>g.count(v)</code>。實作方式有兩種主流選擇——<strong>相鄰矩陣（adjacency matrix）</strong>和<strong>相鄰串列（adjacency list）</strong>，兩者各有適用情境。</p>
 
   <div class="viz-layout">
     <div>
@@ -472,28 +473,27 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     </div>
   </div>
 
-  <h3>Python 實作：Vertex 與 Graph 類別</h3>
-  <p>每個 <code>Vertex</code> 用 dict 紀錄它的鄰居及邊權重；<code>Graph</code> 再用一個 dict 把 key 對應到 Vertex 物件：</p>
+  <h3>C++ 實作：Vertex 與 Graph 類別 <span class="sec-badge">dscpp/graph.hpp</span></h3>
+  <p>每個 <code>Vertex</code> 用 <code>map</code> 紀錄它的鄰居及邊權重；<code>Graph</code> 再用一個 <code>map</code> 把 key 對應到 Vertex 物件：</p>
   <div class="pseudo-code" style="font-size:.82rem;">
-<span class="line"><span class="kw">class</span> <span class="fn">Vertex</span>:</span>
-<span class="line">    <span class="kw">def</span> <span class="fn">__init__</span>(self, key):</span>
-<span class="line">        self.key = key</span>
-<span class="line">        self.neighbors = {}  <span class="com"># dict: 鄰居 vertex → 權重</span></span>
-<span class="line">    <span class="kw">def</span> <span class="fn">set_neighbor</span>(self, other, weight=<span class="num">0</span>):</span>
-<span class="line">        self.neighbors[other] = weight</span>
-<span class="line">    <span class="kw">def</span> <span class="fn">get_neighbors</span>(self):</span>
-<span class="line">        <span class="kw">return</span> self.neighbors.keys()</span>
-<span class="line"></span>
-<span class="line"><span class="kw">class</span> <span class="fn">Graph</span>:</span>
-<span class="line">    <span class="kw">def</span> <span class="fn">__init__</span>(self):</span>
-<span class="line">        self.vertices = {}</span>
-<span class="line">    <span class="kw">def</span> <span class="fn">set_vertex</span>(self, key):</span>
-<span class="line">        self.vertices[key] = Vertex(key)</span>
-<span class="line">    <span class="kw">def</span> <span class="fn">add_edge</span>(self, from_vert, to_vert, weight=<span class="num">0</span>):</span>
-<span class="line">        <span class="kw">if</span> from_vert <span class="kw">not in</span> self.vertices: self.set_vertex(from_vert)</span>
-<span class="line">        <span class="kw">if</span> to_vert <span class="kw">not in</span> self.vertices: self.set_vertex(to_vert)</span>
-<span class="line">        self.vertices[from_vert].set_neighbor(self.vertices[to_vert], weight)</span>
-  </div>
+<span class="line"><span class="kw">class</span> <span class="fn">Vertex</span> {</span>
+<span class="line">  <span class="kw">public</span>:</span>
+<span class="line">    string key;</span>
+<span class="line">    map&lt;string, int&gt; neighbors;   <span class="com">// 鄰居 key → 權重</span></span>
+<span class="line">    string color = <span class="str">&quot;white&quot;</span>;</span>
+<span class="line">    <span class="fn">Vertex</span>(string k) { key = k; }</span>
+<span class="line">};</span>
+<span class="line"> </span>
+<span class="line"><span class="kw">class</span> <span class="fn">Graph</span> {</span>
+<span class="line">  <span class="kw">public</span>:</span>
+<span class="line">    map&lt;string, Vertex&gt; vertices;</span>
+<span class="line">    <span class="kw">void</span> <span class="fn">setVertex</span>(string key) { vertices[key] = <span class="fn">Vertex</span>(key); }</span>
+<span class="line">    <span class="kw">void</span> <span class="fn">addEdge</span>(string fromVert, string toVert, <span class="kw">int</span> weight = <span class="num">0</span>) {</span>
+<span class="line">        <span class="kw">if</span> (vertices.<span class="fn">count</span>(fromVert) == <span class="num">0</span>) <span class="fn">setVertex</span>(fromVert);</span>
+<span class="line">        <span class="kw">if</span> (vertices.<span class="fn">count</span>(toVert) == <span class="num">0</span>) <span class="fn">setVertex</span>(toVert);</span>
+<span class="line">        vertices[fromVert].neighbors[toVert] = weight;</span>
+<span class="line">    }</span>
+<span class="line">};</span></div>
 
   <div class="info-box green">
     <span class="info-label">小提醒</span>
@@ -507,7 +507,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="bfs">
   <div class="section-number">PART 02 · 廣度優先搜尋</div>
-  <h2>BFS：一層一層往外擴散</h2>
+  <h2>BFS：一層一層往外擴散 <span class="sec-badge">cppds §9.9–9.10</span></h2>
   <p>給定起點 $s$，<strong>廣度優先搜尋（Breadth-First Search）</strong>會找出圖中所有從 $s$ 可達的頂點。它最迷人的性質是：<strong>會先找到所有距離 $s$ 為 $k$ 的頂點，才開始找距離 $k+1$ 的</strong>。換句話說，BFS 自動產生「最少邊數路徑」（在無權圖上就是最短路徑）。</p>
 
   <div class="info-box">
@@ -556,7 +556,21 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="bfsCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">bfs</span>(start):</span><span class="line" data-l="2">    start.color = <span class="str">"gray"</span></span><span class="line" data-l="3">    start.distance = <span class="num">0</span></span><span class="line" data-l="4">    start.previous = <span class="kw">None</span></span><span class="line" data-l="5">    queue = Queue()</span><span class="line" data-l="6">    queue.enqueue(start)</span><span class="line" data-l="7">    <span class="kw">while</span> queue.size() &gt; <span class="num">0</span>:</span><span class="line" data-l="8">        current = queue.dequeue()</span><span class="line" data-l="9">        <span class="kw">for</span> nb <span class="kw">in</span> current.get_neighbors():</span><span class="line" data-l="10">            <span class="kw">if</span> nb.color == <span class="str">"white"</span>:</span><span class="line" data-l="11">                nb.color = <span class="str">"gray"</span></span><span class="line" data-l="12">                nb.distance = current.distance + <span class="num">1</span></span><span class="line" data-l="13">                nb.previous = current</span><span class="line" data-l="14">                queue.enqueue(nb)</span><span class="line" data-l="15">        current.color = <span class="str">"black"</span></span></div>
+        <div class="pseudo-code" id="bfsCode"><span class="line" data-l="1"><span class="fn">bfs</span>(start):</span>
+<span class="line" data-l="2">    start-&gt;color = <span class="str">&quot;gray&quot;</span></span>
+<span class="line" data-l="3">    start-&gt;distance = <span class="num">0</span></span>
+<span class="line" data-l="4">    start-&gt;previous = <span class="num">NULL</span></span>
+<span class="line" data-l="5">    Queue queue</span>
+<span class="line" data-l="6">    queue.<span class="fn">enqueue</span>(start)</span>
+<span class="line" data-l="7">    <span class="kw">while</span> queue.<span class="fn">size</span>() &gt; <span class="num">0</span>:</span>
+<span class="line" data-l="8">        current = queue.<span class="fn">dequeue</span>()</span>
+<span class="line" data-l="9">        <span class="kw">for</span> nb : current-&gt;<span class="fn">getNeighbors</span>():</span>
+<span class="line" data-l="10">            <span class="kw">if</span> nb-&gt;color == <span class="str">&quot;white&quot;</span>:</span>
+<span class="line" data-l="11">                nb-&gt;color = <span class="str">&quot;gray&quot;</span></span>
+<span class="line" data-l="12">                nb-&gt;distance = current-&gt;distance + <span class="num">1</span></span>
+<span class="line" data-l="13">                nb-&gt;previous = current</span>
+<span class="line" data-l="14">                queue.<span class="fn">enqueue</span>(nb)</span>
+<span class="line" data-l="15">        current-&gt;color = <span class="str">&quot;black&quot;</span></span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -585,7 +599,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="word-ladder">
   <div class="section-number">PART 03 · Word Ladder</div>
-  <h2>Word Ladder：把 BFS 應用到「換字謎題」</h2>
+  <h2>Word Ladder：把 BFS 應用到「換字謎題」 <span class="sec-badge">cppds §9.7–9.8</span></h2>
   <p><strong>Word Ladder</strong>：把一個單字一次改一個字母變成另一個單字，每一步都必須是有效單字。經典題目：<code>FOOL → SAGE</code>，最少要幾步？</p>
 
   <div class="pseudo-code" style="font-size:.85rem;text-align:center;background:var(--card);color:var(--ink);border:1px solid var(--card-border);">
@@ -661,7 +675,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="dfs">
   <div class="section-number">PART 04 · 深度優先搜尋</div>
-  <h2>DFS：一條路走到黑，碰壁再回頭</h2>
+  <h2>DFS：一條路走到黑，碰壁再回頭 <span class="sec-badge">cppds §9.15–9.16</span></h2>
   <p>BFS 一層一層擴散，<strong>深度優先搜尋（Depth-First Search）</strong>則是<strong>沿一條分支盡可能往深走</strong>，走不下去才回退（backtrack）到上一個還有未探索鄰居的頂點。BFS 用 queue，DFS 自然用<strong>遞迴（隱式 stack）</strong>。</p>
 
   <div class="info-box">
@@ -709,7 +723,22 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="dfsCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">dfs</span>(graph):</span><span class="line" data-l="2">    <span class="kw">for</span> v <span class="kw">in</span> graph: v.color = <span class="str">"white"</span></span><span class="line" data-l="3">    time = <span class="num">0</span></span><span class="line" data-l="4">    <span class="kw">for</span> v <span class="kw">in</span> graph:</span><span class="line" data-l="5">        <span class="kw">if</span> v.color == <span class="str">"white"</span>:</span><span class="line" data-l="6">            dfs_visit(v)</span><span class="line" data-l="7"></span><span class="line" data-l="8"><span class="kw">def</span> <span class="fn">dfs_visit</span>(u):</span><span class="line" data-l="9">    u.color = <span class="str">"gray"</span></span><span class="line" data-l="10">    time += <span class="num">1</span>; u.discovery = time</span><span class="line" data-l="11">    <span class="kw">for</span> nb <span class="kw">in</span> u.get_neighbors():</span><span class="line" data-l="12">        <span class="kw">if</span> nb.color == <span class="str">"white"</span>:</span><span class="line" data-l="13">            nb.previous = u</span><span class="line" data-l="14">            dfs_visit(nb)  <span class="com"># 遞迴</span></span><span class="line" data-l="15">    u.color = <span class="str">"black"</span></span><span class="line" data-l="16">    time += <span class="num">1</span>; u.closing = time</span></div>
+        <div class="pseudo-code" id="dfsCode"><span class="line" data-l="1"><span class="fn">dfs</span>(graph):</span>
+<span class="line" data-l="2">    <span class="kw">for</span> v : graph: v-&gt;color = <span class="str">&quot;white&quot;</span></span>
+<span class="line" data-l="3">    time = <span class="num">0</span></span>
+<span class="line" data-l="4">    <span class="kw">for</span> v : graph:</span>
+<span class="line" data-l="5">        <span class="kw">if</span> v-&gt;color == <span class="str">&quot;white&quot;</span>:</span>
+<span class="line" data-l="6">            <span class="fn">dfsVisit</span>(v)</span>
+<span class="line" data-l="7"> </span>
+<span class="line" data-l="8"><span class="fn">dfsVisit</span>(u):</span>
+<span class="line" data-l="9">    u-&gt;color = <span class="str">&quot;gray&quot;</span></span>
+<span class="line" data-l="10">    time += <span class="num">1</span>; u-&gt;discovery = time</span>
+<span class="line" data-l="11">    <span class="kw">for</span> nb : u-&gt;<span class="fn">getNeighbors</span>():</span>
+<span class="line" data-l="12">        <span class="kw">if</span> nb-&gt;color == <span class="str">&quot;white&quot;</span>:</span>
+<span class="line" data-l="13">            nb-&gt;previous = u</span>
+<span class="line" data-l="14">            <span class="fn">dfsVisit</span>(nb)  <span class="com">// 遞迴</span></span>
+<span class="line" data-l="15">    u-&gt;color = <span class="str">&quot;black&quot;</span></span>
+<span class="line" data-l="16">    time += <span class="num">1</span>; u-&gt;closing = time</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -721,14 +750,14 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <div class="info-box warm">
     <span class="info-label">為什麼要遍歷所有頂點？(line 4)</span>
-    從單一起點 DFS 可能無法走遍整張圖（特別是有向圖或不連通圖）。外層 <code>for v in graph</code> 確保每個白色頂點都會啟動一次 <code>dfs_visit</code>，最終得到一片<strong>深度優先森林（DF forest）</strong>。
+    從單一起點 DFS 可能無法走遍整張圖（特別是有向圖或不連通圖）。外層 <code>for v : graph</code> 確保每個白色頂點都會啟動一次 <code>dfsVisit</code>，最終得到一片<strong>深度優先森林（DF forest）</strong>。
   </div>
 
   <div class="info-box green">
     <span class="info-label">BFS vs DFS 的程式碼對照</span>
     DFS 與 BFS 的程式碼<strong>幾乎一模一樣</strong>，差別只在內層迴圈最後一行：<br>
     BFS：<code>queue.enqueue(neighbor)</code> — 先把鄰居塞 queue，等以後處理。<br>
-    DFS：<code>dfs_visit(neighbor)</code> — 立刻遞迴下去處理鄰居。<br>
+    DFS：<code>dfsVisit(neighbor)</code> — 立刻遞迴下去處理鄰居。<br>
     這個小差異就決定了「廣度優先 vs 深度優先」的搜尋順序！
   </div>
 </section>
@@ -739,7 +768,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="knight">
   <div class="section-number">PART 05 · 騎士巡邏</div>
-  <h2>Knight's Tour：DFS + Warnsdorff 啟發式</h2>
+  <h2>Knight's Tour：DFS + Warnsdorff 啟發式 <span class="sec-badge">cppds §9.11–9.14</span></h2>
   <p><strong>騎士巡邏</strong>：在 $n \times n$ 棋盤上，騎士能否走 $n^2 - 1$ 步、恰好造訪每格一次？這是 DFS 的經典應用——把每格當頂點、把合法走法當邊，問題變成「找出長度為 $n^2 - 1$ 的簡單路徑」。</p>
 
   <div class="info-box warm">
@@ -793,7 +822,22 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code"><span class="line"><span class="kw">def</span> <span class="fn">knight_tour</span>(n, path, u, limit):</span><span class="line">    u.color = <span class="str">"gray"</span></span><span class="line">    path.append(u)</span><span class="line">    <span class="kw">if</span> n &lt; limit:</span><span class="line">        nbs = order_by_avail(u)  <span class="com"># Warnsdorff!</span></span><span class="line">        done = <span class="kw">False</span></span><span class="line">        <span class="kw">for</span> nb <span class="kw">in</span> nbs:</span><span class="line">            <span class="kw">if</span> nb.color == <span class="str">"white"</span>:</span><span class="line">                done = knight_tour(n+<span class="num">1</span>, path, nb, limit)</span><span class="line">                <span class="kw">if</span> done: <span class="kw">break</span></span><span class="line">        <span class="kw">if not</span> done:  <span class="com"># backtrack</span></span><span class="line">            path.pop()</span><span class="line">            u.color = <span class="str">"white"</span></span><span class="line">        <span class="kw">return</span> done</span><span class="line">    <span class="kw">return</span> <span class="kw">True</span></span></div>
+        <div class="pseudo-code">
+<span class="line"><span class="fn">knightTour</span>(n, path, u, limit):</span>
+<span class="line">    u-&gt;color = <span class="str">&quot;gray&quot;</span></span>
+<span class="line">    path.<span class="fn">push_back</span>(u)</span>
+<span class="line">    <span class="kw">if</span> n &lt; limit:</span>
+<span class="line">        nbs = <span class="fn">orderByAvail</span>(u)  <span class="com">// Warnsdorff!</span></span>
+<span class="line">        done = <span class="num">false</span></span>
+<span class="line">        <span class="kw">for</span> nb : nbs:</span>
+<span class="line">            <span class="kw">if</span> nb-&gt;color == <span class="str">&quot;white&quot;</span>:</span>
+<span class="line">                done = <span class="fn">knightTour</span>(n+<span class="num">1</span>, path, nb, limit)</span>
+<span class="line">                <span class="kw">if</span> done: <span class="kw">break</span></span>
+<span class="line">        <span class="kw">if</span> !done:  <span class="com">// backtrack</span></span>
+<span class="line">            path.<span class="fn">pop_back</span>()</span>
+<span class="line">            u-&gt;color = <span class="str">&quot;white&quot;</span></span>
+<span class="line">        <span class="kw">return</span> done</span>
+<span class="line">    <span class="kw">return</span> <span class="num">true</span></span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -816,7 +860,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="dijkstra">
   <div class="section-number">PART 06 · Dijkstra 最短路徑</div>
-  <h2>Dijkstra：加權圖上的「貪婪式 BFS」</h2>
+  <h2>Dijkstra：加權圖上的「貪婪式 BFS」 <span class="sec-badge">cppds §9.19–9.21</span></h2>
   <p><strong>Dijkstra 演算法</strong>解決<strong>單源最短路徑</strong>問題：給定起點 $s$，求 $s$ 到所有其他頂點的<strong>最小權重總和路徑</strong>。它的精神類似 BFS——但用<strong>優先佇列（priority queue）</strong>取代普通 queue，每次從未處理頂點中挑出當前 distance 最小者。</p>
 
   <div class="info-box warm">
@@ -857,7 +901,21 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="dijCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">dijkstra</span>(graph, start):</span><span class="line" data-l="2">    pq = PriorityQueue()</span><span class="line" data-l="3">    start.distance = <span class="num">0</span></span><span class="line" data-l="4">    pq.insert((<span class="num">0</span>, start))</span><span class="line" data-l="5">    visited = set()</span><span class="line" data-l="6">    <span class="kw">while not</span> pq.is_empty():</span><span class="line" data-l="7">        d, u = pq.delete()  <span class="com"># 取最小</span></span><span class="line" data-l="8">        visited.add(u)</span><span class="line" data-l="9">        <span class="kw">for</span> v <span class="kw">in</span> u.get_neighbors():</span><span class="line" data-l="10">            <span class="kw">if</span> v <span class="kw">in</span> visited: <span class="kw">continue</span></span><span class="line" data-l="11">            new_d = d + u.weight(v)</span><span class="line" data-l="12">            <span class="kw">if</span> new_d &lt; v.distance:</span><span class="line" data-l="13">                v.distance = new_d</span><span class="line" data-l="14">                v.previous = u</span><span class="line" data-l="15">                pq.update(v, new_d)</span></div>
+        <div class="pseudo-code" id="dijCode"><span class="line" data-l="1"><span class="fn">dijkstra</span>(graph, start):</span>
+<span class="line" data-l="2">    PriorityQueue pq</span>
+<span class="line" data-l="3">    start-&gt;distance = <span class="num">0</span></span>
+<span class="line" data-l="4">    pq.<span class="fn">insert</span>({<span class="num">0</span>, start})</span>
+<span class="line" data-l="5">    set&lt;Vertex*&gt; visited</span>
+<span class="line" data-l="6">    <span class="kw">while</span> !pq.<span class="fn">isEmpty</span>():</span>
+<span class="line" data-l="7">        [d, u] = pq.<span class="fn">delete</span>()  <span class="com">// 取最小</span></span>
+<span class="line" data-l="8">        visited.<span class="fn">insert</span>(u)</span>
+<span class="line" data-l="9">        <span class="kw">for</span> v : u-&gt;<span class="fn">getNeighbors</span>():</span>
+<span class="line" data-l="10">            <span class="kw">if</span> visited.<span class="fn">count</span>(v): <span class="kw">continue</span></span>
+<span class="line" data-l="11">            newD = d + u-&gt;<span class="fn">weight</span>(v)</span>
+<span class="line" data-l="12">            <span class="kw">if</span> newD &lt; v-&gt;distance:</span>
+<span class="line" data-l="13">                v-&gt;distance = newD</span>
+<span class="line" data-l="14">                v-&gt;previous = u</span>
+<span class="line" data-l="15">                pq.<span class="fn">update</span>(v, newD)</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -888,7 +946,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="prim">
   <div class="section-number">PART 07 · Prim 最小生成樹</div>
-  <h2>Prim：用最小邊權連通整張圖</h2>
+  <h2>Prim：用最小邊權連通整張圖 <span class="sec-badge">cppds §9.22</span></h2>
   <p>想像線上遊戲要把同一筆訊息傳給所有玩家。最直覺的做法（Host 對每位玩家各送一份）會讓某些路由器重複收到同一個封包。一個更聰明的做法是：找出一棵<strong>最小生成樹（Minimum Spanning Tree, MST）</strong>——一個無循環的子圖，連通所有頂點，且總邊權最小。</p>
 
   <div class="info-box">
@@ -941,7 +999,20 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="primCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">prim</span>(graph, start):</span><span class="line" data-l="2">    pq = PriorityQueue()</span><span class="line" data-l="3">    <span class="kw">for</span> vertex <span class="kw">in</span> graph:</span><span class="line" data-l="4">        vertex.distance = sys.maxsize</span><span class="line" data-l="5">        vertex.previous = <span class="kw">None</span></span><span class="line" data-l="6">    start.distance = <span class="num">0</span></span><span class="line" data-l="7">    pq.heapify([(v.distance, v) <span class="kw">for</span> v <span class="kw">in</span> graph])</span><span class="line" data-l="8">    <span class="kw">while not</span> pq.is_empty():</span><span class="line" data-l="9">        print(pq)</span><span class="line" data-l="10">        distance, current_v = pq.delete()</span><span class="line" data-l="11">        <span class="kw">for</span> next_v <span class="kw">in</span> current_v.get_neighbors():</span><span class="line" data-l="12">            new_distance = current_v.get_neighbor(next_v)</span><span class="line" data-l="13">            <span class="kw">if</span> next_v <span class="kw">in</span> pq <span class="kw">and</span> new_distance &lt; next_v.distance:</span><span class="line" data-l="14">                next_v.previous = current_v</span><span class="line" data-l="15">                next_v.distance = new_distance</span><span class="line" data-l="16">                pq.change_priority(next_v, new_distance)</span></div>
+        <div class="pseudo-code" id="primCode"><span class="line" data-l="1"><span class="fn">prim</span>(graph, start):</span>
+<span class="line" data-l="2">    <span class="kw">for</span> v : graph:</span>
+<span class="line" data-l="3">        v-&gt;distance = ∞</span>
+<span class="line" data-l="4">        v-&gt;previous = <span class="num">NULL</span></span>
+<span class="line" data-l="5">    start-&gt;distance = <span class="num">0</span></span>
+<span class="line" data-l="6">    PriorityQueue pq(graph)</span>
+<span class="line" data-l="7">    <span class="kw">while</span> !pq.<span class="fn">isEmpty</span>():</span>
+<span class="line" data-l="8">        [d, u] = pq.<span class="fn">delete</span>()</span>
+<span class="line" data-l="9">        <span class="kw">for</span> v : u-&gt;<span class="fn">getNeighbors</span>():</span>
+<span class="line" data-l="10">            newD = u-&gt;<span class="fn">weight</span>(v)  <span class="com">// 注意：只看單邊權！</span></span>
+<span class="line" data-l="11">            <span class="kw">if</span> pq.<span class="fn">contains</span>(v) &amp;&amp; newD &lt; v-&gt;distance:</span>
+<span class="line" data-l="12">                v-&gt;previous = u</span>
+<span class="line" data-l="13">                v-&gt;distance = newD</span>
+<span class="line" data-l="14">                pq.<span class="fn">update</span>(v, newD)</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -953,8 +1024,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div class="info-box warm">
     <span class="info-label">Prim vs Dijkstra：一個關鍵差異</span>
     結構幾乎一樣，但<strong>更新規則不同</strong>：<br>
-    <strong>Dijkstra：</strong> <code>new_d = u.distance + w(u,v)</code> — 累加從起點走到 v 的<strong>整條路徑</strong>權重。<br>
-    <strong>Prim：</strong> <code>new_d = w(u,v)</code> — 只看 u 到 v 的<strong>單一邊權</strong>。<br>
+    <strong>Dijkstra：</strong> <code>newD = u-&gt;distance + w(u,v)</code> — 累加從起點走到 v 的<strong>整條路徑</strong>權重。<br>
+    <strong>Prim：</strong> <code>newD = w(u,v)</code> — 只看 u 到 v 的<strong>單一邊權</strong>。<br>
     為什麼？因為 MST 不在乎「離起點多遠」，只在乎「下一個要連入樹的最便宜邊」。
   </div>
 </section>
@@ -1105,7 +1176,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
 <footer>
   <p>圖與圖演算法 · Interactive Visualization · Chapter 7</p>
-  <p style="margin-top:.4rem;font-size:.78rem;">Based on <em>Problem Solving with Algorithms and Data Structures using Python</em> · 互動視覺化版本</p>
+  <p style="margin-top:.4rem;font-size:.78rem;">Based on <em>Problem Solving with Algorithms and Data Structures using C++ (cppds)</em> · 互動視覺化版本</p>
 </footer>
 
 <script>
@@ -1170,7 +1241,7 @@ class GraphRenderer {
     // edges
     const drawn = new Set();
     for (const e of this.config.edges) {
-      const [u, v, w, dirOverride, labelOffset = 0] = e;
+      const [u, v, w, dirOverride] = e;
       const directed = dirOverride !== undefined ? dirOverride : this.opts.directed;
       const u2v = this.edgeKey(u, v);
       const v2u = this.edgeKey(v, u);
@@ -1202,10 +1273,6 @@ class GraphRenderer {
         pathD = `M ${sx} ${sy} L ${ex} ${ey}`;
         labelX = (sx + ex) / 2;
         labelY = (sy + ey) / 2;
-      }
-      if (labelOffset) {
-        labelX += uy * labelOffset;
-        labelY -= ux * labelOffset;
       }
       const path = svgEl('path', { d: pathD, class: 'graph-edge' });
       if (directed) path.setAttribute('marker-end', `url(#${this.markerId})`);
@@ -2256,7 +2323,7 @@ class DijkstraController {
           continue;
         }
         const newD = d + weight;
-        steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：new_d = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv])?dist[vv]:'∞'}`, treeEdges });
+        steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：newD = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv])?dist[vv]:'∞'}`, treeEdges });
         if (newD < dist[vv]) {
           dist[vv] = newD; prev[vv] = u;
           pq = pq.filter(p => p[1] !== vv);
@@ -2367,7 +2434,7 @@ const primGraphConfig = {
     G: { x: 560, y: 180 },
   },
   edges: [
-    ['A','B',2], ['A','C',3, undefined, -26], ['B','C',1], ['B','D',1],
+    ['A','B',2], ['A','C',3], ['B','C',1], ['B','D',1],
     ['B','E',4], ['D','E',1], ['C','F',5], ['E','F',1], ['F','G',1],
   ],
 };
@@ -2384,24 +2451,17 @@ class PrimController {
     for (const v of verts) { dist[v] = Infinity; prev[v] = null; inTree[v] = false; }
     dist[start] = 0;
     let pq = verts.map(v => [dist[v], v]);
-    const sortPq = () => pq.sort((a,b) => {
-      if (a[0] === b[0]) return verts.indexOf(a[1]) - verts.indexOf(b[1]);
-      if (a[0] === Infinity) return 1;
-      if (b[0] === Infinity) return -1;
-      return a[0] - b[0];
-    });
-    const pqIndex = (v) => pq.findIndex(p => p[1] === v);
-    const snapPq = () => pq.map(([key, v]) => [key, v]);
+    const sortPq = () => pq.sort((a,b) => a[0] - b[0]);
     const steps = [];
     const mstEdges = [];
     let total = 0;
     sortPq();
-    steps.push({ kind:'init', codeLine:7, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`heapify：所有頂點都在 PQ；${start}.distance = 0，其餘為 sys.maxsize` });
+    steps.push({ kind:'init', codeLine:5, current:null, pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`初始化：起點 ${start} distance=0；其他全部 ∞` });
 
     while (pq.length > 0) {
       sortPq();
-      steps.push({ kind:'print-pq', codeLine:9, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`print(pq)：目前 PQ = ${pq.map(([key, v]) => `${v}:${key === Infinity ? '∞' : key}`).join(', ')}` });
       const [d, u] = pq.shift();
+      if (d === Infinity) break;
       if (inTree[u]) continue;
       inTree[u] = true;
       // 加入 MST 的邊（除了起點本身）
@@ -2409,18 +2469,21 @@ class PrimController {
         mstEdges.push([prev[u], u, d]);
         total += d;
       }
-      steps.push({ kind:'add', codeLine:10, current:u, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`從 PQ 取出 ${u} (key=${d})，加入 MST。${prev[u] ? `加入邊 ${prev[u]}—${u} (weight=${d})` : '（起點，無邊加入）'}` });
+      steps.push({ kind:'add', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`從 PQ 取出 ${u} (key=${d})，加入 MST。${prev[u] ? `加入邊 ${prev[u]}—${u} (weight=${d})` : '（起點，無邊加入）'}` });
 
       for (const { to: vv, w: weight } of adj[u]) {
+        if (inTree[vv]) {
+          steps.push({ kind:'skip', codeLine:11, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`鄰居 ${vv} 已在 MST 中，跳過` });
+          continue;
+        }
         const newD = weight;  // 注意：Prim 只看單邊權！
-        const idx = pqIndex(vv);
-        const inPq = idx !== -1;
-        steps.push({ kind:'relax-check', codeLine:13, current:u, neighbor:vv, edge:[u,vv], pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`檢查 ${u}—${vv}：new_distance = ${weight}；條件 next_v in pq 為 ${inPq ? 'True' : 'False'}，目前 distance(${vv}) = ${isFinite(dist[vv])?dist[vv]:'∞'}` });
-        if (inPq && newD < dist[vv]) {
+        steps.push({ kind:'relax-check', codeLine:10, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`檢查 ${u}—${vv}：邊權 = ${weight}，目前 key(${vv}) = ${isFinite(dist[vv])?dist[vv]:'∞'}` });
+        if (newD < dist[vv]) {
           dist[vv] = newD; prev[vv] = u;
-          pq[idx][0] = newD;
+          pq = pq.filter(p => p[1] !== vv);
+          pq.push([newD, vv]);
           sortPq();
-          steps.push({ kind:'relax-update', codeLine:16, current:u, neighbor:vv, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`change_priority(${vv}, ${newD})：previous(${vv}) = ${u}，distance(${vv}) = ${newD}` });
+          steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`更新！key(${vv}) = ${newD}，previous(${vv}) = ${u}` });
         }
       }
     }
@@ -2445,11 +2508,12 @@ class PrimController {
     for (const [u, vv] of s.mstEdges || []) primR.setEdgeClassUndirected(u, vv, 'mst');
     // exploring
     if (s.kind === 'relax-check' && s.edge) primR.setEdgeClassUndirected(s.edge[0], s.edge[1], 'exploring');
+    if (s.kind === 'skip' && s.current && s.neighbor) primR.setEdgeClassUndirected(s.current, s.neighbor, 'dotted');
     // PQ
     const pqEl = document.getElementById('primPQ');
-    const visiblePq = s.pq || [];
+    const visiblePq = (s.pq || []).filter(p => isFinite(p[0]));
     if (visiblePq.length === 0) pqEl.innerHTML = '<span class="ds-empty">empty</span>';
-    else pqEl.innerHTML = visiblePq.map((p,i) => `<span class="ds-item pq ${i===0?'min':''}">${p[1]}:${isFinite(p[0]) ? p[0] : '∞'}</span>`).join(' ');
+    else pqEl.innerHTML = visiblePq.map((p,i) => `<span class="ds-item pq ${i===0?'min':''}">${p[1]}:${p[0]}</span>`).join(' ');
     // edges list & total
     const edgesEl = document.getElementById('primEdges');
     if (s.mstEdges.length === 0) edgesEl.innerHTML = '<span style="color:var(--muted);">—</span>';
@@ -2631,7 +2695,7 @@ function quizCheck(quizId, optEl) {
         ⑦ Pop C (key=5)，加入邊 <strong>G-C (5)</strong>　← <strong style="color:var(--accent);">最後一條，權重 5</strong>
         </span><br>
         MST 總權重 = 8 + 1 + 2 + 3 + 4 + 5 = <strong>23</strong>。<br>
-        關鍵理解：<strong>Prim 的更新規則是 <code>new_d = w(u,v)</code></strong>（只看單邊權，不累加）。所以當 G 進樹時，會把 C 的 key 從原本經 B(=7) 改用更便宜的 G-C(5)。`;
+        關鍵理解：<strong>Prim 的更新規則是 <code>newD = w(u,v)</code></strong>（只看單邊權，不累加）。所以當 G 進樹時，會把 C 的 key 從原本經 B(=7) 改用更便宜的 G-C(5)。`;
       ex2R.resetAll();
       ex2R.setEdgeClassUndirected('F','A','mst');
       ex2R.setEdgeClassUndirected('A','B','mst');
@@ -2643,7 +2707,7 @@ function quizCheck(quizId, optEl) {
       ex2R.setNodeClass('F','start');
       ex2R.setNodeClass('C','found');
     } else {
-      fb.innerHTML = `<strong>不對 ✗</strong> 提示：Prim 從 F 開始，每次取 PQ key 最小的點加入樹。注意 Prim 的更新規則是 <code>new_d = w(u,v)</code>（只看當邊權，不累加路徑）。<br>
+      fb.innerHTML = `<strong>不對 ✗</strong> 提示：Prim 從 F 開始，每次取 PQ key 最小的點加入樹。注意 Prim 的更新規則是 <code>newD = w(u,v)</code>（只看當邊權，不累加路徑）。<br>
         逐步追蹤 PQ 內容會發現：F→A(8)、A→B(1)、A→G(2)、G→E(3)、E→D(4) 都先被處理；<strong>C 是最後才進樹的</strong>，要看哪條邊被選為 C 的「進樹邊」。`;
     }
   }

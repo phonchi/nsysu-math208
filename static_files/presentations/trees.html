@@ -249,6 +249,7 @@ code{background:#f0ebe0;padding:1px 6px;border-radius:4px;font-family:'JetBrains
 }
 
 footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border);}
+.sec-badge{font-size:.6em;color:var(--muted);border:1px solid var(--card-border);background:var(--card);padding:2px 10px;border-radius:999px;vertical-align:middle;margin-left:.6rem;font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.02em;white-space:nowrap;}
 </style>
 </head>
 <body>
@@ -265,7 +266,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <a href="#bst" data-target="bst"><span class="fn-num">P06</span><span class="fn-name">二元搜尋樹</span></a>
   <a href="#bst-delete" data-target="bst-delete"><span class="fn-num">P07</span><span class="fn-name">BST 刪除</span></a>
   <a href="#bst-analysis" data-target="bst-analysis"><span class="fn-num">P08</span><span class="fn-name">BST 分析</span></a>
-  <a href="#avl" data-target="avl"><span class="fn-num">P09</span><span class="fn-name">AVL 樹（補充）</span></a>
+  <a href="#avl" data-target="avl"><span class="fn-num">P09</span><span class="fn-name">AVL 樹</span></a>
   <a href="#summary" data-target="summary"><span class="fn-num">REF</span><span class="fn-name">總覽比較</span></a>
   <a href="#top" class="fn-top" title="回到頂端"><span class="fn-num">↑ TOP</span></a>
 </nav>
@@ -274,8 +275,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div class="hero-grid"></div>
   <div class="hero-content">
     <h1><span class="green">樹</span>與<span class="orange">樹</span>的<span class="blue">演算法</span></h1>
-    <div class="subtitle">Chapter 6 — Trees, Heaps, BSTs &amp; AVL (Interactive Visualization)</div>
-    <div class="big-formula">術語｜解析樹｜走訪｜二元堆積｜BST｜AVL（補充）</div>
+    <div class="subtitle">cppds Chapter 8 — Trees, Heaps, BSTs &amp; AVL（對應講義 09）</div>
+    <div class="big-formula">術語｜解析樹｜走訪｜二元堆積｜BST｜AVL</div>
     <div class="scroll-hint">向下捲動開始互動<span>↓</span></div>
   </div>
 </div>
@@ -295,7 +296,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <a href="#bst"><span class="toc-num">P06</span>二元搜尋樹</a>
     <a href="#bst-delete"><span class="toc-num">P07</span>BST 刪除三情境</a>
     <a href="#bst-analysis"><span class="toc-num">P08</span>BST 分析</a>
-    <a href="#avl"><span class="toc-num">P09</span>AVL 樹與旋轉（補充）</a>
+    <a href="#avl"><span class="toc-num">P09</span>AVL 樹與旋轉</a>
     <a href="#summary"><span class="toc-num">REF</span>Map ADT 總覽比較</a>
   </div>
 </div>
@@ -305,7 +306,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="prologue">
   <div class="section-number">PROLOGUE · 開場</div>
-  <h2>樹是電腦科學中最普遍的階層式結構</h2>
+  <h2>樹是電腦科學中最普遍的階層式結構 <span class="sec-badge">cppds §8.1–8.2</span></h2>
   <p>樹（tree）這個資料結構出現在作業系統、編譯器、資料庫、網路路由、機器學習等幾乎每一個領域。不同於我們前面學過的線性結構（list、stack、queue），樹是<strong>階層式</strong>的：一個節點可以連到多個子節點，整體組成一個由根（root）往下分支的層次。</p>
 
   <div class="info-box">
@@ -336,7 +337,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="vocabulary">
   <div class="section-number">PART 01 · 術語與定義</div>
-  <h2>樹的術語：節點、邊、根、葉、層、高度</h2>
+  <h2>樹的術語：節點、邊、根、葉、層、高度 <span class="sec-badge">cppds §8.3</span></h2>
   <p>在進入演算法之前，我們先把語言對齊。把滑鼠移到下方互動樹的任何一個節點上，<strong>右側面板會即時顯示該節點的所有屬性</strong>；點擊節點則會高亮它的「祖先路徑（path-to-root）」與「子樹（subtree）」。</p>
 
   <div class="viz-layout">
@@ -389,7 +390,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   </div>
 
   <h3>二元樹（Binary Tree）</h3>
-  <p>本章我們專注於每個節點最多有<strong>兩個子節點</strong>的樹，稱為二元樹。我們特別命名為 <code>left_child</code> 和 <code>right_child</code>，這個順序在解析樹（運算子的左右運算元）和 BST（小的在左、大的在右）中是有語義的。</p>
+  <p>本章我們專注於每個節點最多有<strong>兩個子節點</strong>的樹，稱為二元樹。我們特別命名為 <code>leftChild</code> 和 <code>rightChild</code>，這個順序在解析樹（運算子的左右運算元）和 BST（小的在左、大的在右）中是有語義的。</p>
 </section>
 
 <!-- ============================================================ -->
@@ -397,8 +398,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="nodes-refs">
   <div class="section-number">PART 02 · 樹的實作</div>
-  <h2>Nodes &amp; References：用類別與遞迴結構表示二元樹</h2>
-  <p>實作二元樹有兩種常見方法：<strong>list of lists</strong>（用巢狀串列）與 <strong>nodes and references</strong>（用節點物件 + 指標）。後者更貼近物件導向的思維 —— 我們定義一個 <code>BinaryTree</code> 類別，每個物件帶 <code>key</code>、<code>left_child</code>、<code>right_child</code> 三個屬性。當 <code>left_child</code> 不是 <code>None</code> 時，它本身就是另一棵 <code>BinaryTree</code> —— 這就是樹的遞迴結構。</p>
+  <h2>Nodes &amp; References：用類別與遞迴結構表示二元樹 <span class="sec-badge">cppds §8.4</span></h2>
+  <p>實作二元樹有兩種常見方法：<strong>list of lists</strong>（用巢狀串列）與 <strong>nodes and references</strong>（用節點物件 + 指標）。後者更貼近物件導向的思維 —— 我們定義一個 <code>BinaryTree</code> 類別，每個物件帶 <code>key</code>、<code>leftChild</code>、<code>rightChild</code> 三個屬性。當 <code>leftChild</code> 不是 <code>NULL</code> 時，它本身就是另一棵 <code>BinaryTree</code> —— 這就是樹的遞迴結構。</p>
 
   <div class="viz-layout">
     <div>
@@ -419,40 +420,38 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <div class="side-panel">
       <div class="info-card">
         <div class="ic-title">當前指令 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="nrCode" style="font-size:.74rem;">
-<span class="line" data-l="1">a_tree = <span class="fn">BinaryTree</span>(<span class="str">"a"</span>)</span>
-<span class="line" data-l="2">a_tree.<span class="fn">insert_left</span>(<span class="str">"b"</span>)</span>
-<span class="line" data-l="3">a_tree.<span class="fn">insert_right</span>(<span class="str">"c"</span>)</span>
-<span class="line" data-l="4">a_tree.<span class="fn">get_left_child</span>().<span class="fn">insert_right</span>(<span class="str">"d"</span>)</span>
-<span class="line" data-l="5">a_tree.<span class="fn">get_right_child</span>().<span class="fn">insert_left</span>(<span class="str">"e"</span>)</span>
-<span class="line" data-l="6">a_tree.<span class="fn">get_right_child</span>().<span class="fn">insert_right</span>(<span class="str">"f"</span>)</span>
-        </div>
+        <div class="pseudo-code" id="nrCode" style="font-size:.74rem;"><span class="line" data-l="1">BinaryTree *aTree = <span class="kw">new</span> <span class="fn">BinaryTree</span>(<span class="str">&quot;a&quot;</span>)</span>
+<span class="line" data-l="2">aTree-&gt;<span class="fn">insertLeft</span>(<span class="str">&quot;b&quot;</span>)</span>
+<span class="line" data-l="3">aTree-&gt;<span class="fn">insertRight</span>(<span class="str">&quot;c&quot;</span>)</span>
+<span class="line" data-l="4">aTree-&gt;<span class="fn">getLeftChild</span>()-&gt;<span class="fn">insertRight</span>(<span class="str">&quot;d&quot;</span>)</span>
+<span class="line" data-l="5">aTree-&gt;<span class="fn">getRightChild</span>()-&gt;<span class="fn">insertLeft</span>(<span class="str">&quot;e&quot;</span>)</span>
+<span class="line" data-l="6">aTree-&gt;<span class="fn">getRightChild</span>()-&gt;<span class="fn">insertRight</span>(<span class="str">&quot;f&quot;</span>)</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">BinaryTree 類別 <span class="ic-badge" style="background:var(--accent3)">CLASS</span></div>
         <div class="pseudo-code" style="font-size:.72rem;">
-<span class="line"><span class="kw">class</span> <span class="fn">BinaryTree</span>:</span>
-<span class="line">    <span class="kw">def</span> <span class="fn">__init__</span>(self, root_obj):</span>
-<span class="line">        self.key = root_obj</span>
-<span class="line">        self.left_child = <span class="kw">None</span></span>
-<span class="line">        self.right_child = <span class="kw">None</span></span>
-<span class="line"></span>
-<span class="line">    <span class="kw">def</span> <span class="fn">insert_left</span>(self, new_node):</span>
-<span class="line">        <span class="kw">if</span> self.left_child <span class="kw">is None</span>:</span>
-<span class="line">            self.left_child = <span class="fn">BinaryTree</span>(new_node)</span>
-<span class="line">        <span class="kw">else</span>:</span>
-<span class="line">            new_child = <span class="fn">BinaryTree</span>(new_node)</span>
-<span class="line">            new_child.left_child = self.left_child</span>
-<span class="line">            self.left_child = new_child</span>
-        </div>
+<span class="line"><span class="kw">class</span> <span class="fn">BinaryTree</span> {</span>
+<span class="line">  <span class="kw">public</span>:</span>
+<span class="line">    string key;</span>
+<span class="line">    BinaryTree *leftChild, *rightChild;</span>
+<span class="line">    <span class="fn">BinaryTree</span>(string rootObj)</span>
+<span class="line">      : key(rootObj), leftChild(<span class="num">NULL</span>), rightChild(<span class="num">NULL</span>) {}</span>
+<span class="line"> </span>
+<span class="line">    <span class="kw">void</span> <span class="fn">insertLeft</span>(string newNode) {</span>
+<span class="line">        BinaryTree *t = <span class="kw">new</span> <span class="fn">BinaryTree</span>(newNode);</span>
+<span class="line">        <span class="kw">if</span> (leftChild != <span class="num">NULL</span>)</span>
+<span class="line">            t-&gt;leftChild = leftChild;   <span class="com">// 舊子樹下推</span></span>
+<span class="line">        leftChild = t;</span>
+<span class="line">    }</span>
+<span class="line">};</span></div>
       </div>
     </div>
   </div>
 
   <div class="info-box warm">
-    <span class="info-label">注意 insert_left 的兩種情況</span>
+    <span class="info-label">注意 insertLeft 的兩種情況</span>
     <strong>Case 1（左邊空）：</strong>直接把新節點掛上去。<br>
-    <strong>Case 2（左邊已有東西）：</strong>新節點插在中間，<strong>把原本的左子樹整個推到新節點的左邊一層</strong>。這個「往下推」的設計避免了破壞原本的子結構。<code>insert_right</code> 對稱地處理右邊。
+    <strong>Case 2（左邊已有東西）：</strong>新節點插在中間，<strong>把原本的左子樹整個推到新節點的左邊一層</strong>。這個「往下推」的設計避免了破壞原本的子結構。<code>insertRight</code> 對稱地處理右邊。
   </div>
 </section>
 
@@ -461,7 +460,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="parse-tree">
   <div class="section-number">PART 03 · 解析樹</div>
-  <h2>解析樹：把數學表達式轉成可遞迴計算的結構</h2>
+  <h2>解析樹：把數學表達式轉成可遞迴計算的結構 <span class="sec-badge">cppds §8.5</span></h2>
   <p>對於完全括號化（fully parenthesized）的表達式，例如 <code>((7 + 3) * (5 - 2))</code>，我們可以把它變成一棵樹：<strong>運算子放在內部節點、運算元放在葉子上</strong>。樹的階層自然就反映了運算優先序 —— 評估時只要遞迴地<em>先算左子樹、再算右子樹、最後套用 root 的運算子</em>。</p>
 
   <p>建構演算法用一個 <strong>stack 追蹤 parent</strong>：當我們往下走進一個 child（看到 <code>(</code> 或運算子）就把當前節點 push 進 stack；當需要回到 parent（看到 <code>)</code> 或讀完一個數字）就 pop。</p>
@@ -536,7 +535,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="traversals">
   <div class="section-number">PART 04 · 樹的走訪</div>
-  <h2>三種走訪：preorder、inorder、postorder</h2>
+  <h2>三種走訪：preorder、inorder、postorder <span class="sec-badge">cppds §8.6</span></h2>
   <p>「走訪」（traversal）就是按某種順序拜訪樹中每個節點。對二元樹有<strong>三種對稱遞迴的走訪</strong>，差別只在「何時拜訪 root」：</p>
 
   <div class="info-box">
@@ -582,13 +581,11 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <div class="side-panel">
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="travCode">
-<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">preorder</span>(tree):</span>
-<span class="line" data-l="2">    <span class="kw">if</span> tree:</span>
-<span class="line" data-l="3">        <span class="fn">print</span>(tree._key, end=<span class="str">" "</span>)</span>
-<span class="line" data-l="4">        <span class="fn">preorder</span>(tree._left_child)</span>
-<span class="line" data-l="5">        <span class="fn">preorder</span>(tree._right_child)</span>
-        </div>
+        <div class="pseudo-code" id="travCode"><span class="line" data-l="1"><span class="fn">preorder</span>(tree):</span>
+<span class="line" data-l="2">    <span class="kw">if</span> tree != <span class="num">NULL</span>:</span>
+<span class="line" data-l="3">        <span class="fn">visit</span>(tree-&gt;key)   <span class="com">// root</span></span>
+<span class="line" data-l="4">        <span class="fn">preorder</span>(tree-&gt;left)</span>
+<span class="line" data-l="5">        <span class="fn">preorder</span>(tree-&gt;right)</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">遞迴呼叫堆疊 <span class="ic-badge" style="background:var(--accent2)">STACK</span></div>
@@ -623,26 +620,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="heap">
   <div class="section-number">PART 05 · 二元堆積</div>
-  <h2>Binary Heap：用陣列實作的優先佇列</h2>
-  <p>優先佇列（priority queue）的核心需求是：每次 <code>dequeue</code> 都要取出<strong>優先序最高</strong>的元素。Min-heap 的慣例是「key 越小，優先序越高」，所以 <code>dequeue</code> 會取出最小 key。</p>
-
-  <p>如果只用一般 list 來做，有兩種很直覺但不理想的實作。第一種是<strong>永遠維持 sorted list</strong>：這樣最小值可以很快拿到，但每次 <code>enqueue</code> 新元素時，都必須找到正確位置並搬移後面的元素，最差要 $O(n)$。第二種是<strong>維持 unsorted list</strong>：插入可以直接 append，成本 $O(1)$，但每次 <code>dequeue</code> 時就必須掃描整個 list 找最小值，成本 $O(n)$；如果每次 dequeue 前乾脆重新 sort，甚至會變成 $O(n\log n)$。問題的本質是：sorted list 讓插入慢，unsorted list 讓取出最高優先序慢。</p>
-
-  <p><strong>Binary heap</strong> 的設計目標就是折衷這兩件事：不要求整個 list 完全排序，只維持足夠的局部順序，讓 <code>enqueue</code> 與 <code>dequeue</code> 都是 $O(\log n)$，而 <code>get-min</code> 可以是 $O(1)$。</p>
-
-  <div class="info-box">
-    <span class="info-label">Priority queue 操作如何用 binary heap 實作？</span>
-    <strong><code>enqueue(x)</code>：</strong>把新元素 append 到陣列最後，然後一路和 parent 比較並 <code>perc_up</code>，成本 $O(\log n)$。<br>
-    <strong><code>dequeue()</code> / <code>delete-min</code>：</strong>取出 root，把最後一個元素搬到 root，再 <code>perc_down</code> 修復 heap order，成本 $O(\log n)$。<br>
-    <strong><code>change-priority(x, newKey)</code>：</strong>先找到元素 $x$ 在 heap 陣列中的位置，更新 key；若 priority 變高（min-heap 中 key 變小）就 <code>perc_up</code>，若 priority 變低（key 變大）就 <code>perc_down</code>。若實作時另外維護一張「元素 $\rightarrow$ index」的對照表，找位置是 $O(1)$，每次 swap 同步更新對照表也是 $O(1)$，所以主要成本只剩上浮或下沉，總成本是 $O(\log n)$。若沒有這張 index 對照表，就必須先在陣列中掃描找 $x$，找位置要 $O(n)$，再加上調整 heap 的 $O(\log n)$，總成本由掃描主導，仍是 $O(n)$。
-  </div>
-
-  <div class="info-box">
-    <span class="info-label">先看編號方式：Level-order traversal (BFS)</span>
-    要把一棵樹放進陣列，最自然的編號方式是 <strong>level-order traversal</strong>，也就是 BFS：先拜訪 root，再由左到右拜訪第 1 層，接著由左到右拜訪第 2 層，依此類推。若用 0-based index 編號，root 是 0，下一層從左到右是 1、2，再下一層是 3、4、5、6。
-    <br><br>
-    因為 heap 的樹形會保持為 complete binary tree，這種 BFS 編號不會在中間留下空洞；所以我們可以直接用 <code>heap[i]</code> 表示「BFS 編號為 $i$ 的節點」。
-  </div>
+  <h2>Binary Heap：用陣列實作的優先佇列 <span class="sec-badge">cppds §8.7–8.10</span></h2>
+  <p>優先佇列（priority queue）每次都要 dequeue<strong>優先序最高</strong>的元素。用 list 的天真實作有兩條路，但都不夠好：<strong>維持已排序的 list</strong>，插入需搬移 $O(n)$；<strong>不排序、每次找最小再 sort</strong>，sort 是 $O(n \log n)$。<strong>Binary heap</strong> 把 enqueue 和 dequeue 都壓到 $O(\log n)$。它有兩個關鍵性質：</p>
 
   <div class="info-box">
     <span class="info-label">堆積的兩個性質</span>
@@ -650,28 +629,6 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <strong>順序性質（heap order property）：</strong>每個節點的 key $\le$ 其子節點 key（min-heap）；對稱地 max-heap 是 $\ge$。
     <br><br>
     結構性質讓我們可以用<strong>單一陣列</strong>儲存整棵樹：節點 $p$ 的左子在 $2p+1$、右子在 $2p+2$、父節點在 $\lfloor (p-1)/2 \rfloor$。完全不需要指標！
-  </div>
-
-  <div class="info-box warm">
-    <span class="info-label">為什麼 child / parent index 是這樣？</span>
-    Heap 使用 <strong>0-based index</strong>，root 在第 $0$ 層。因為 complete binary tree 的前 $l$ 層節點數是
-    $$1 + 2 + 4 + \cdots + 2^l = 2^{l+1}-1,$$
-    所以第 $l$ 層最後一個節點的 index 是
-    $$\text{last}(l) = 2^{l+1}-2.$$
-    也就是說，<code>last(l)</code> 是第 $l$ 層最右邊節點的位置。
-    <br><br>
-    現在從右往左數。假設第 $l$ 層某個 parent 的 index 是
-    $$p = \text{last}(l) - j,$$
-    其中 $j$ 表示它距離該層最右端有幾格。往下一層時，每個 parent 會對應兩個 child；因此它的<strong>右小孩</strong>會距離第 $l+1$ 層最右端 $2j$ 格：
-    $$\text{right}(p) = \text{last}(l+1) - 2j.$$
-    代入 $j=\text{last}(l)-p$：
-    $$\text{right}(p)=\text{last}(l+1)-2(\text{last}(l)-p).$$
-    再代入 $\text{last}(l+1)=2^{l+2}-2$ 與 $\text{last}(l)=2^{l+1}-2$：
-    $$\text{right}(p)=(2^{l+2}-2)-2(2^{l+1}-2-p)=2p+2.$$
-    左小孩就在右小孩前一格，所以
-    $$\text{left}(p)=2p+1,\qquad \text{right}(p)=2p+2.$$
-    反過來看，若某個 child index 是 $i$，它一定是某個 $2p+1$ 或 $2p+2$。兩種情況都會被整數除法合併成同一條 parent 公式：
-    $$\text{parent}(i)=\left\lfloor\frac{i-1}{2}\right\rfloor=(i-1)//2.$$
   </div>
 
   <div class="viz-layout">
@@ -721,43 +678,26 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="heapCode" style="font-size:.74rem;">
-<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_perc_up</span>(self, i):</span>
-<span class="line" data-l="2">    <span class="kw">while</span> (i - <span class="num">1</span>) // <span class="num">2</span> &gt;= <span class="num">0</span>:</span>
-<span class="line" data-l="3">        p = (i - <span class="num">1</span>) // <span class="num">2</span></span>
+        <div class="pseudo-code" id="heapCode" style="font-size:.74rem;"><span class="line" data-l="1"><span class="fn">percUp</span>(i):</span>
+<span class="line" data-l="2">    <span class="kw">while</span> i &gt; <span class="num">0</span>:</span>
+<span class="line" data-l="3">        p = (i - <span class="num">1</span>) / <span class="num">2</span></span>
 <span class="line" data-l="4">        <span class="kw">if</span> heap[i] &lt; heap[p]:</span>
 <span class="line" data-l="5">            <span class="fn">swap</span>(heap[i], heap[p])</span>
-<span class="line" data-l="6">        i = p</span>
-        </div>
+<span class="line" data-l="6">        i = p</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
         <div class="ic-row"><span class="ic-label">insert</span><span class="ic-value">$O(\log n)$</span></div>
         <div class="ic-row"><span class="ic-label">delete-min</span><span class="ic-value">$O(\log n)$</span></div>
-        <div class="ic-row"><span class="ic-label">change-priority</span><span class="ic-value">$O(\log n)$*</span></div>
         <div class="ic-row"><span class="ic-label">get-min</span><span class="ic-value highlight">$O(1)$</span></div>
         <div class="ic-row"><span class="ic-label">heapify</span><span class="ic-value highlight">$O(n)$</span></div>
-        <div style="margin-top:.35rem;font-size:.72rem;color:var(--muted);line-height:1.45;">*需已知道元素 index，或維護元素到 index 的對照表；否則先找元素會是 $O(n)$。</div>
       </div>
     </div>
   </div>
 
   <div class="info-box green">
     <span class="info-label">為什麼 heapify 是 O(n) 而不是 O(n log n)？</span>
-    Naïve 想法是對 $n$ 個元素逐一 <code>insert</code>，每個 $O(\log n)$，總共 $O(n \log n)$。但 <code>heapify</code> 不是反覆插入；它從<strong>最後一個非葉節點 $\lfloor n/2 \rfloor - 1$ 倒著做 perc_down</strong>。證明如下：
-    <ol style="margin:.55rem 0 0 1.3rem;line-height:1.8;">
-      <li>一個節點往下 <code>perc_down</code> 的成本，最多正比於它的高度 $h$，因為每往下一層只做常數次比較與交換。</li>
-      <li>在 complete binary tree 中，高度為 $h$ 的節點數最多是 $\left\lceil n/2^{h+1} \right\rceil$。也就是說，靠近底層的節點很多，但高度很小；靠近 root 的節點高度大，但數量很少。</li>
-      <li>因此總成本可由各高度分組估計：
-        $$
-        T(n) \le c\sum_{h=0}^{\lfloor \log n \rfloor} \frac{n}{2^{h+1}}\cdot h
-        = cn\sum_{h=0}^{\lfloor \log n \rfloor} \frac{h}{2^{h+1}}
-        \le cn\sum_{h=0}^{\infty} \frac{h}{2^{h+1}}
-        = cn = O(n).
-        $$
-      </li>
-    </ol>
-    直觀上：<strong>樹底層節點多但移動少，頂層節點少但移動多，兩者相乘的總和是線性的</strong>。所以 Floyd 的 bottom-up heapify 是 $O(n)$。
+    Naïve 想法是對 $n$ 個元素逐一 <code>insert</code>，每個 $O(\log n)$，總共 $O(n \log n)$。但 <code>heapify</code> 從<strong>陣列中間 $\lfloor n/2 \rfloor - 1$ 倒著做 perc_down</strong>：底層大量節點高度只有 0 或 1，往下移的成本很小。嚴謹分析會用 $\sum_{h=0}^{\log n} \frac{n}{2^{h+1}} \cdot h = O(n)$。直觀上：<strong>樹底層節點多但移動少，頂層節點少但移動多，兩者相乘的總和是 $O(n)$</strong>。
   </div>
 
   <h3>應用：Heap Sort（堆排序）</h3>
@@ -769,8 +709,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="bst">
   <div class="section-number">PART 06 · 二元搜尋樹</div>
-  <h2>Binary Search Tree：實作 Map ADT 的第三種方法</h2>
-  <p>Map ADT 把 key 對應到 value（就像 Python 的 <code>dict</code>）。我們已經學過兩種實作：<strong>排序陣列 + binary search</strong>（搜尋 $O(\log n)$ 但插入 $O(n)$）和<strong>雜湊表</strong>（平均 $O(1)$ 但有衝突風險、無排序）。BST 提供第三條路：</p>
+  <h2>Binary Search Tree：實作 Map ADT 的第三種方法 <span class="sec-badge">cppds §8.11–8.13</span></h2>
+  <p>Map ADT 把 key 對應到 value（就像 `C++` 的 <code>unordered_map</code>）。我們已經學過兩種實作：<strong>排序陣列 + binary search</strong>（搜尋 $O(\log n)$ 但插入 $O(n)$）和<strong>雜湊表</strong>（平均 $O(1)$ 但有衝突風險、無排序）。BST 提供第三條路：</p>
 
   <div class="info-box">
     <span class="info-label">BST 性質（BST property）</span>
@@ -797,11 +737,10 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <div class="input-row">
           <label>操作 key：</label>
           <input type="number" id="bstOpKey" value="40" style="width:80px;">
-          <button class="btn btn-toggle" data-bstop="put">put (插入)</button>
-          <button class="btn btn-toggle" data-bstop="get" style="background:var(--accent2);">get (搜尋)</button>
+          <button class="btn btn-play" data-bstop="put">put (插入)</button>
+          <button class="btn btn-play" data-bstop="get" style="background:var(--accent2);">get (搜尋)</button>
         </div>
         <div class="controls-bar">
-          <button class="btn btn-play" id="bstPlay">▶ 播放</button>
           <button class="btn btn-step" id="bstStep">→ 單步</button>
           <button class="btn btn-reset" id="bstReset">↺ 重置</button>
           <div style="flex:1;min-width:160px;display:flex;align-items:center;gap:.5rem;">
@@ -823,20 +762,18 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <div class="ic-row"><span class="ic-label">結果</span><span class="ic-value" id="bstResult">—</span></div>
       </div>
       <div class="info-card">
-        <div class="ic-title" id="bstCodeTitle">虛擬碼 — _put <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="bstCode" style="font-size:.73rem;">
-<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_put</span>(self, key, value, current_node):</span>
-<span class="line" data-l="2">    <span class="kw">if</span> key &lt; current_node.key:</span>
-<span class="line" data-l="3">        <span class="kw">if</span> current_node.left_child:</span>
-<span class="line" data-l="4">            self.<span class="fn">_put</span>(key, value, current_node.left_child)</span>
+        <div class="ic-title" id="bstCodeTitle">虛擬碼 — put <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="bstCode" style="font-size:.73rem;"><span class="line" data-l="1"><span class="fn">put</span>(key, val, cur):</span>
+<span class="line" data-l="2">    <span class="kw">if</span> key &lt; cur-&gt;key:</span>
+<span class="line" data-l="3">        <span class="kw">if</span> cur-&gt;left != <span class="num">NULL</span>:</span>
+<span class="line" data-l="4">            <span class="fn">put</span>(key, val, cur-&gt;left)</span>
 <span class="line" data-l="5">        <span class="kw">else</span>:</span>
-<span class="line" data-l="6">            current_node.left_child = <span class="fn">TreeNode</span>(key, value, parent=current_node)</span>
+<span class="line" data-l="6">            cur-&gt;left = <span class="kw">new</span> <span class="fn">TreeNode</span>(key, val)</span>
 <span class="line" data-l="7">    <span class="kw">else</span>:</span>
-<span class="line" data-l="8">        <span class="kw">if</span> current_node.right_child:</span>
-<span class="line" data-l="9">            self.<span class="fn">_put</span>(key, value, current_node.right_child)</span>
+<span class="line" data-l="8">        <span class="kw">if</span> cur-&gt;right != <span class="num">NULL</span>:</span>
+<span class="line" data-l="9">            <span class="fn">put</span>(key, val, cur-&gt;right)</span>
 <span class="line" data-l="10">        <span class="kw">else</span>:</span>
-<span class="line" data-l="11">            current_node.right_child = <span class="fn">TreeNode</span>(key, value, parent=current_node)</span>
-        </div>
+<span class="line" data-l="11">            cur-&gt;right = <span class="kw">new</span> <span class="fn">TreeNode</span>(key, val)</span></div>
       </div>
     </div>
   </div>
@@ -852,12 +789,12 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="bst-delete">
   <div class="section-number">PART 07 · BST 刪除三情境</div>
-  <h2>BST 刪除：三種情境，與 in-order successor</h2>
+  <h2>BST 刪除：三種情境，與 in-order successor <span class="sec-badge">cppds §8.13</span></h2>
   <p>BST 的 <code>put</code> 與 <code>get</code> 直觀，但<strong>刪除是最麻煩的操作</strong> —— 因為刪掉一個內部節點後，必須維持 BST 性質。我們把情境分成三類：</p>
 
   <div class="info-box red">
     <span class="info-label">三種刪除情境</span>
-    <strong>Case 1：要刪的是葉節點。</strong>直接把 parent 的指標設為 <code>None</code>。最簡單。<br>
+    <strong>Case 1：要刪的是葉節點。</strong>直接把 parent 的指標設為 <code>NULL</code>。最簡單。<br>
     <strong>Case 2：要刪的節點只有<em>一個</em>子節點。</strong>把這個 child「提升」上來取代被刪節點。<br>
     <strong>Case 3：要刪的節點有<em>兩個</em>子節點。</strong>找它的 <strong>in-order successor（中序後繼）</strong> —— 也就是右子樹中 key 最小的節點 —— 把它的 key 拷貝到當前節點，然後從原位置「splice out」 successor。
   </div>
@@ -902,18 +839,17 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <div class="ic-row"><span class="ic-label">階段</span><span class="ic-value" id="delPhase">—</span></div>
       </div>
       <div class="info-card">
-        <div class="ic-title">find_successor <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="ic-title">findSuccessor <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
         <div class="pseudo-code" style="font-size:.74rem;">
-<span class="line"><span class="kw">def</span> <span class="fn">find_successor</span>(self):</span>
-<span class="line">    <span class="kw">if</span> self.right_child:</span>
-<span class="line">        <span class="kw">return</span> self.right_child.<span class="fn">find_min</span>()</span>
+<span class="line"><span class="fn">findSuccessor</span>():</span>
+<span class="line">    <span class="kw">if</span> rightChild != <span class="num">NULL</span>:</span>
+<span class="line">        <span class="kw">return</span> rightChild-&gt;<span class="fn">findMin</span>()</span>
 <span class="line">    ...</span>
-<span class="line"><span class="kw">def</span> <span class="fn">find_min</span>(self):</span>
-<span class="line">    cur = self</span>
-<span class="line">    <span class="kw">while</span> cur.left_child:</span>
-<span class="line">        cur = cur.left_child</span>
-<span class="line">    <span class="kw">return</span> cur</span>
-        </div>
+<span class="line"><span class="fn">findMin</span>():</span>
+<span class="line">    cur = this</span>
+<span class="line">    <span class="kw">while</span> cur-&gt;leftChild != <span class="num">NULL</span>:</span>
+<span class="line">        cur = cur-&gt;leftChild</span>
+<span class="line">    <span class="kw">return</span> cur</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">圖例</div>
@@ -932,14 +868,12 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="bst-analysis">
   <div class="section-number">PART 08 · BST 分析</div>
-  <h2>BST 的限制：高度決定一切</h2>
+  <h2>BST 的限制：高度決定一切 <span class="sec-badge">cppds §8.14</span></h2>
   <p>BST 所有操作（<code>put</code>、<code>get</code>、<code>in</code>、<code>del</code>）的時間複雜度都正比於<strong>樹的高度 $h$</strong>，而不是節點數 $n$。所以問題變成：給定 $n$ 個節點，$h$ 會是多少？</p>
 
   <div class="info-box">
     <span class="info-label">高度與節點數的關係</span>
-    完美平衡二元樹的意思是：每個節點的 left subtree 和 right subtree 節點數相同（或只差 1），所以每往下一層，剩下要搜尋的子樹大小大約減半。若樹高是 $h$，每層填滿時節點數為
-    $$1+2+4+\cdots+2^h=2^{h+1}-1.$$
-    因此 $n \approx 2^{h+1}$，也就是 $h \approx \log_2 n$。換句話說，<code>put()</code> 不會拜訪整棵樹，而是從 root 開始，每次比較後只往左或往右其中一邊走；在 balanced binary tree 中，最多走約 $\log_2 n$ 層，所以 worst-case performance 是 $O(\log_2 n)$。<br>
+    完美平衡二元樹（每層填滿）有 $2^{h+1}-1$ 個節點，所以 $h \approx \log_2 n$。<br>
     若 keys 隨機插入，高度期望也是 $O(\log n)$，因為大概一半 key 進左、一半進右。<br>
     但<strong>最差情況 $h = n - 1$</strong> —— 把已排序 keys 依序插入就會發生：每個新節點都比當前所有節點大（或小），永遠落到右（或左）這一支，BST 退化成連結串列。
   </div>
@@ -1003,8 +937,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- PART 09: AVL Tree -->
 <!-- ============================================================ -->
 <section id="avl">
-  <div class="section-number">PART 09 · AVL 樹（補充）</div>
-  <h2>AVL Tree（補充）：保證 O(log n) 的自平衡 BST</h2>
+  <div class="section-number">PART 09 · AVL 樹</div>
+  <h2>AVL Tree：保證 O(log n) 的自平衡 BST <span class="sec-badge">cppds §8.15–8.17</span></h2>
   <p>BST 退化的原因是<strong>插入順序</strong>。AVL 樹（Adelson-Velsky 和 Landis，1962）讓樹在每次插入/刪除時<strong>自動旋轉</strong>，保證它一直是「近似平衡」。代價只是常數因子的開銷。</p>
 
   <div class="info-box">
@@ -1081,7 +1015,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="summary">
   <div class="section-number">REFERENCE · 總覽比較</div>
-  <h2>Map ADT 四種實作的對照表</h2>
+  <h2>Map ADT 四種實作的對照表 <span class="sec-badge">cppds §8.18</span></h2>
   <p>過去兩章我們學了四種實作 map ADT 的方式。下表整理 worst-case 複雜度 —— 注意 hash table 的 $O(1)$ 是<strong>平均</strong>，最差情況（全部碰撞）會退化到 $O(n)$。</p>
 
   <table class="cmp-table">
@@ -1135,10 +1069,10 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <div class="info-box">
     <span class="info-label">什麼時候選什麼？</span>
-    <strong>需要 $O(1)$ 平均、不需要排序：</strong>選 <strong>hash table</strong>（Python <code>dict</code>、Java <code>HashMap</code>）。<br>
+    <strong>需要 $O(1)$ 平均、不需要排序：</strong>選 <strong>hash table</strong>（C++ <code>unordered_map</code>、Java <code>HashMap</code>）。<br>
     <strong>需要保證 $O(\log n)$ worst-case、需要排序輸出：</strong>選 <strong>self-balancing BST</strong>（C++ <code>std::map</code>、Java <code>TreeMap</code> 用紅黑樹；AVL 是它的近親）。<br>
     <strong>資料是 read-only 且已排序：</strong>用<strong>陣列 + binary search</strong>，記憶體緊湊、cache 友善。<br>
-    <strong>需要快速取出最小/最大值（優先佇列）：</strong>選 <strong>binary heap</strong>（Python <code>heapq</code>），不需要完整排序就能 $O(\log n)$ 操作。
+    <strong>需要快速取出最小/最大值（優先佇列）：</strong>選 <strong>binary heap</strong>（C++ <code>priority_queue</code>），不需要完整排序就能 $O(\log n)$ 操作。
   </div>
 
   <h3>樹結構在實際系統中的地位</h3>
@@ -1157,7 +1091,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 </div>
 
 <footer>
-  互動式樹與樹的演算法教學 · 基於 Problem Solving with Algorithms and Data Structures (Python) Ch.6<br>
+  互動式樹與樹的演算法教學 · 基於 Problem Solving with Algorithms and Data Structures using C++ (cppds) Ch.8<br>
   <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);">Designed for NSYSU Applied Math · 2026</span>
 </footer>
 
@@ -1537,7 +1471,7 @@ function initNodesRefs() {
       const r = new TNode('a');
       r.left = new TNode('b'); r.left.parent = r;
       return r;
-    }, line: 2, msg: 'insert_left("b")：建立左子並掛上' };
+    }, line: 2, msg: 'insertLeft("b")：建立左子並掛上' };
     steps.push(s1);
 
     let s2 = { tree: () => {
@@ -1688,7 +1622,7 @@ function initParseTree() {
     for (let i = 0; i < tokens.length; i++) {
       const t = tokens[i];
       if (t === '(') {
-        // insert_left then descend
+        // insertLeft then descend
         cur.left = new TNode(''); cur.left.parent = cur;
         stk.push(cur);
         cur = cur.left;
@@ -1830,19 +1764,10 @@ function initParseTree() {
     if (player) player.setDelay(parseInt($('parseSpeed').value, 10));
   });
   $('parseEvalBtn').onclick = () => {
-    if (!player || !player.steps || player.steps.length === 0) regen();
-    if (!player || !player.steps || player.steps.length === 0) return;
-    player.stop();
-    player.idx = player.steps.length - 1;
-    const last = player.steps[player.idx];
-    player.apply(last, player.idx);
-    const resultEl = $('parseResult');
-    if (resultEl && last.evalRes !== undefined && last.evalRes !== null) {
-      resultEl.textContent = last.evalRes;
-    }
-    const statusEl = $('parseStatus');
-    if (statusEl && last.evalRes !== undefined && last.evalRes !== null) {
-      statusEl.textContent = `評估結果 = ${last.evalRes}`;
+    // jump to last step
+    if (player) {
+      player.stop();
+      while (player.step()) {}
     }
   };
 
@@ -1965,21 +1890,21 @@ function initTraversals() {
     player.reset();
     // Update code panel to match traversal
     const codeMap = {
-      preorder: `<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">preorder</span>(tree):</span>
-<span class="line" data-l="2">    <span class="kw">if</span> tree:</span>
-<span class="line" data-l="3">        <span class="fn">print</span>(tree._key, end=<span class="str">" "</span>)</span>
-<span class="line" data-l="4">        <span class="fn">preorder</span>(tree._left_child)</span>
-<span class="line" data-l="5">        <span class="fn">preorder</span>(tree._right_child)</span>`,
-      inorder: `<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">inorder</span>(tree):</span>
-<span class="line" data-l="2">    <span class="kw">if</span> tree:</span>
-<span class="line" data-l="3">        <span class="fn">inorder</span>(tree._left_child)</span>
-<span class="line" data-l="4">        <span class="fn">print</span>(tree._key, end=<span class="str">" "</span>)</span>
-<span class="line" data-l="5">        <span class="fn">inorder</span>(tree._right_child)</span>`,
-      postorder: `<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">postorder</span>(tree):</span>
-<span class="line" data-l="2">    <span class="kw">if</span> tree:</span>
-<span class="line" data-l="3">        <span class="fn">postorder</span>(tree._left_child)</span>
-<span class="line" data-l="4">        <span class="fn">postorder</span>(tree._right_child)</span>
-<span class="line" data-l="5">        <span class="fn">print</span>(tree._key, end=<span class="str">" "</span>)</span>`,
+      preorder: `<span class="line" data-l="1"><span class="fn">preorder</span>(tree):</span>
+<span class="line" data-l="2">    <span class="kw">if</span> tree != <span class="num">NULL</span>:</span>
+<span class="line" data-l="3">        <span class="fn">visit</span>(tree-&gt;key)   <span class="com">// root</span></span>
+<span class="line" data-l="4">        <span class="fn">preorder</span>(tree-&gt;left)</span>
+<span class="line" data-l="5">        <span class="fn">preorder</span>(tree-&gt;right)</span>`,
+      inorder: `<span class="line" data-l="1"><span class="fn">inorder</span>(tree):</span>
+<span class="line" data-l="2">    <span class="kw">if</span> tree != <span class="num">NULL</span>:</span>
+<span class="line" data-l="3">        <span class="fn">inorder</span>(tree-&gt;left)</span>
+<span class="line" data-l="4">        <span class="fn">visit</span>(tree-&gt;key)   <span class="com">// root</span></span>
+<span class="line" data-l="5">        <span class="fn">inorder</span>(tree-&gt;right)</span>`,
+      postorder: `<span class="line" data-l="1"><span class="fn">postorder</span>(tree):</span>
+<span class="line" data-l="2">    <span class="kw">if</span> tree != <span class="num">NULL</span>:</span>
+<span class="line" data-l="3">        <span class="fn">postorder</span>(tree-&gt;left)</span>
+<span class="line" data-l="4">        <span class="fn">postorder</span>(tree-&gt;right)</span>
+<span class="line" data-l="5">        <span class="fn">visit</span>(tree-&gt;key)   <span class="com">// root</span></span>`,
     };
     $('travCode').innerHTML = codeMap[currentTrav];
   }
@@ -2175,10 +2100,11 @@ function initHeap() {
         [a[i], a[p]] = [a[p], a[i]];
         swapCnt++;
         steps.push({arr:a.slice(), hl:{swap:[i,p]}, status:`heap[${i}] < heap[${p}]，交換`, line:5, swap:swapCnt, cmp:cmpCnt, idx:p, par:p>0?Math.floor((p-1)/2):'—'});
+        i = p;
       } else {
-        steps.push({arr:a.slice(), hl:{active:i, parent:p}, status:`heap[${i}] ≥ heap[${p}]，不交換；依 notebook 設 i = parent_idx 繼續`, line:6, swap:swapCnt, cmp:cmpCnt, idx:p, par:p>0?Math.floor((p-1)/2):'—'});
+        steps.push({arr:a.slice(), hl:{active:i}, status:`heap[${i}] ≥ heap[${p}]，停止`, line:4, swap:swapCnt, cmp:cmpCnt, idx:i, par:p});
+        break;
       }
-      i = p;
     }
     steps.push({arr:a.slice(), hl:{}, status:'插入完成 ✓', line:null, swap:swapCnt, cmp:cmpCnt, idx:'—', par:'—', commit:true, finalArr:a.slice()});
     return steps;
@@ -2194,7 +2120,7 @@ function initHeap() {
       let mc = li;
       if (ri <= endI) {
         cmpCnt++;
-        if (!(a[li] < a[ri])) mc = ri;
+        if (a[ri] < a[li]) mc = ri;
       }
       steps.push({arr:a.slice(), hl:{active:i, parent:mc}, status:`找出 heap[${i}]=${a[i]} 的較小子節點：heap[${mc}]=${a[mc]}`, line:null, swap:swapCnt, cmp:cmpCnt, idx:i, par:mc});
       cmpCnt++;
@@ -2364,34 +2290,33 @@ function initBST() {
 
   let root = null;
   let player = null;
-  let currentBstOp = 'put';
 
   // Pseudo-code variants for put vs get; line numbers in genOpSteps refer to these.
   const codeTemplates = {
     put: {
-      title: '虛擬碼 — _put <span class="ic-badge" style="background:var(--accent2)">CODE</span>',
-      html: '<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_put</span>(self, key, value, current_node):</span>\n' +
-            '<span class="line" data-l="2">    <span class="kw">if</span> key &lt; current_node.key:</span>\n' +
-            '<span class="line" data-l="3">        <span class="kw">if</span> current_node.left_child:</span>\n' +
-            '<span class="line" data-l="4">            self.<span class="fn">_put</span>(key, value, current_node.left_child)</span>\n' +
+      title: '虛擬碼 — put <span class="ic-badge" style="background:var(--accent2)">CODE</span>',
+      html: '<span class="line" data-l="1"><span class="fn">put</span>(key, val, cur):</span>\n' +
+            '<span class="line" data-l="2">    <span class="kw">if</span> key &lt; cur-&gt;key:</span>\n' +
+            '<span class="line" data-l="3">        <span class="kw">if</span> cur-&gt;left != <span class="num">NULL</span>:</span>\n' +
+            '<span class="line" data-l="4">            <span class="fn">put</span>(key, val, cur-&gt;left)</span>\n' +
             '<span class="line" data-l="5">        <span class="kw">else</span>:</span>\n' +
-            '<span class="line" data-l="6">            current_node.left_child = <span class="fn">TreeNode</span>(key, value, parent=current_node)</span>\n' +
+            '<span class="line" data-l="6">            cur-&gt;left = <span class="kw">new</span> <span class="fn">TreeNode</span>(key, val)</span>\n' +
             '<span class="line" data-l="7">    <span class="kw">else</span>:</span>\n' +
-            '<span class="line" data-l="8">        <span class="kw">if</span> current_node.right_child:</span>\n' +
-            '<span class="line" data-l="9">            self.<span class="fn">_put</span>(key, value, current_node.right_child)</span>\n' +
+            '<span class="line" data-l="8">        <span class="kw">if</span> cur-&gt;right != <span class="num">NULL</span>:</span>\n' +
+            '<span class="line" data-l="9">            <span class="fn">put</span>(key, val, cur-&gt;right)</span>\n' +
             '<span class="line" data-l="10">        <span class="kw">else</span>:</span>\n' +
-            '<span class="line" data-l="11">            current_node.right_child = <span class="fn">TreeNode</span>(key, value, parent=current_node)</span>'
+            '<span class="line" data-l="11">            cur-&gt;right = <span class="kw">new</span> <span class="fn">TreeNode</span>(key, val)</span>'
     },
     get: {
-      title: '虛擬碼 — _get <span class="ic-badge" style="background:var(--accent2)">CODE</span>',
-      html: '<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_get</span>(self, key, current_node):</span>\n' +
-            '<span class="line" data-l="2">    <span class="kw">if not</span> current_node: <span class="kw">return None</span></span>\n' +
-            '<span class="line" data-l="3">    <span class="kw">if</span> current_node.key == key:</span>\n' +
-            '<span class="line" data-l="4">        <span class="kw">return</span> current_node</span>\n' +
-            '<span class="line" data-l="5">    <span class="kw">elif</span> key &lt; current_node.key:</span>\n' +
-            '<span class="line" data-l="6">        <span class="kw">return</span> self.<span class="fn">_get</span>(key, current_node.left_child)</span>\n' +
+      title: '虛擬碼 — get <span class="ic-badge" style="background:var(--accent2)">CODE</span>',
+      html: '<span class="line" data-l="1"><span class="fn">get</span>(key, cur):</span>\n' +
+            '<span class="line" data-l="2">    <span class="kw">if</span> cur == <span class="num">NULL</span>: <span class="kw">return</span> <span class="num">NULL</span></span>\n' +
+            '<span class="line" data-l="3">    <span class="kw">if</span> cur-&gt;key == key:</span>\n' +
+            '<span class="line" data-l="4">        <span class="kw">return</span> cur</span>\n' +
+            '<span class="line" data-l="5">    <span class="kw">else if</span> key &lt; cur-&gt;key:</span>\n' +
+            '<span class="line" data-l="6">        <span class="kw">return</span> <span class="fn">get</span>(key, cur-&gt;left)</span>\n' +
             '<span class="line" data-l="7">    <span class="kw">else</span>:</span>\n' +
-            '<span class="line" data-l="8">        <span class="kw">return</span> self.<span class="fn">_get</span>(key, current_node.right_child)</span>'
+            '<span class="line" data-l="8">        <span class="kw">return</span> <span class="fn">get</span>(key, cur-&gt;right)</span>'
     }
   };
 
@@ -2403,6 +2328,7 @@ function initBST() {
 
   function bstInsert(r, key) {
     if (!r) return new TNode(key);
+    if (key === r.key) return r;
     if (key < r.key) {
       r.left = bstInsert(r.left, key);
       r.left.parent = r;
@@ -2468,8 +2394,12 @@ function initBST() {
       path.push(cur);
       cmp++;
       steps.push({type:'visit', node:cur, path:path.slice(), status:`比較 key=${key} 與 ${cur.key}`, line: key < cur.key ? L.visitLT : L.visitGTE, cmp});
-      if (key === cur.key && op === 'get') {
-        steps.push({type:'found', node:cur, path:path.slice(), status:`找到 ${key} ✓`, line:L.foundEq, result:'FOUND', cmp});
+      if (key === cur.key) {
+        if (op === 'get') {
+          steps.push({type:'found', node:cur, path:path.slice(), status:`找到 ${key} ✓`, line:L.foundEq, result:'FOUND', cmp});
+        } else {
+          steps.push({type:'dup', node:cur, path:path.slice(), status:`key=${key} 已存在，更新 value（不改結構）`, line:null, cmp});
+        }
         return steps;
       }
       if (key < cur.key) {
@@ -2478,7 +2408,7 @@ function initBST() {
           cur = cur.left;
         } else {
           if (op === 'put') {
-            steps.push({type:'insert-left', node:cur, path:path.slice(), key, status:`${key} < ${cur.key} 且 left_child 為空，插入為左子`, line:L.insertLeft, cmp});
+            steps.push({type:'insert-left', node:cur, path:path.slice(), key, status:`${key} < ${cur.key} 且 left 為空，插入為左子`, line:L.insertLeft, cmp});
             steps.push({type:'commit', node:cur, path:path.slice(), key, side:'left', status:`插入 ${key} 完成 ✓`, line:null, cmp});
           } else {
             steps.push({type:'not-found', node:cur, path:path.slice(), status:`${key} 不在樹中`, line:L.notFound, result:'NOT FOUND', cmp});
@@ -2487,11 +2417,11 @@ function initBST() {
         }
       } else {
         if (cur.right) {
-          steps.push({type:'go-right', node:cur, path:path.slice(), status:`${key} >= ${cur.key}，往右`, line:L.goRight, cmp});
+          steps.push({type:'go-right', node:cur, path:path.slice(), status:`${key} > ${cur.key}，往右`, line:L.goRight, cmp});
           cur = cur.right;
         } else {
           if (op === 'put') {
-            steps.push({type:'insert-right', node:cur, path:path.slice(), key, status:`${key} >= ${cur.key} 且 right_child 為空，插入為右子`, line:L.insertRight, cmp});
+            steps.push({type:'insert-right', node:cur, path:path.slice(), key, status:`${key} > ${cur.key} 且 right 為空，插入為右子`, line:L.insertRight, cmp});
             steps.push({type:'commit', node:cur, path:path.slice(), key, side:'right', status:`插入 ${key} 完成 ✓`, line:null, cmp});
           } else {
             steps.push({type:'not-found', node:cur, path:path.slice(), status:`${key} 不在樹中`, line:L.notFound, result:'NOT FOUND', cmp});
@@ -2523,8 +2453,7 @@ function initBST() {
     hlLine($('bstCode'), s.line);
   }
 
-  function startOp(op, key, autoplay = true) {
-    currentBstOp = op;
+  function startOp(op, key) {
     setCodePanel(op);
     setText($('bstOpName'), op === 'put' ? `put(${key})` : `get(${key})`);
     setText($('bstResult'), '—');
@@ -2537,12 +2466,10 @@ function initBST() {
       delay: parseInt($('bstSpeed').value, 10)
     });
     player.reset();
-    if (autoplay) player.play();
+    player.play();
   }
 
   function rebuild() {
-    if (player) player.stop();
-    player = null;
     const raw = $('bstInitInput').value.split(/[\s,]+/).map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
     root = buildBST(raw);
     render(null, null, `已建立 BST（${raw.length} 個 keys）`);
@@ -2558,18 +2485,9 @@ function initBST() {
     btn.onclick = () => {
       const k = parseInt($('bstOpKey').value, 10);
       if (isNaN(k)) return;
-      startOp(btn.dataset.bstop, k, false);
+      startOp(btn.dataset.bstop, k);
     };
   });
-  $('bstPlay').onclick = () => {
-    const k = parseInt($('bstOpKey').value, 10);
-    if (isNaN(k)) return;
-    if (!player || player.idx >= player.steps.length - 1) {
-      startOp(currentBstOp, k, true);
-    } else {
-      player.play();
-    }
-  };
   $('bstApplyInit').onclick = rebuild;
   $('bstShuffle').onclick = () => {
     const arr = $('bstInitInput').value.split(/[\s,]+/).map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
@@ -2580,15 +2498,7 @@ function initBST() {
     $('bstInitInput').value = arr.join(', ');
     rebuild();
   };
-  $('bstStep').onclick = () => {
-    const k = parseInt($('bstOpKey').value, 10);
-    if (isNaN(k)) return;
-    if (!player || player.idx >= player.steps.length - 1) {
-      startOp(currentBstOp, k, false);
-    } else {
-      player.step();
-    }
-  };
+  $('bstStep').onclick = () => { if (player) player.step(); };
   $('bstReset').onclick = rebuild;
   $('bstSpeed').addEventListener('input', () => {
     if (player) player.setDelay(parseInt($('bstSpeed').value, 10));
@@ -2757,8 +2667,6 @@ function initBSTDelete() {
   }
 
   function rebuild() {
-    if (player) player.stop();
-    player = null;
     const raw = $('delInitInput').value.split(/[\s,]+/).map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
     root = buildBST(raw);
     render({});
@@ -2769,34 +2677,25 @@ function initBSTDelete() {
     $('delPhase').textContent = '—';
   }
 
-  function prepareDel() {
+  function startDel() {
     const k = parseInt($('delKey').value, 10);
-    if (isNaN(k)) return false;
+    if (isNaN(k)) return;
     if (player) player.stop();
     const steps = genDeleteSteps(k);
     player = new Player({ steps, apply: applyStep, delay: 800 });
     player.reset();
-    return true;
-  }
-
-  function startDel() {
-    if (prepareDel()) player.play();
+    player.play();
   }
 
   $('delApplyInit').onclick = rebuild;
   $('delPlay').onclick = startDel;
-  $('delStep').onclick = () => {
-    if (!player) {
-      if (!prepareDel()) return;
-    }
-    player.step();
-  };
+  $('delStep').onclick = () => { if (!player) startDel(); else player.step(); };
   $('delReset').onclick = rebuild;
   document.querySelectorAll('#bst-delete .preset-btn[data-delk]').forEach(btn => {
     btn.onclick = () => {
       $('delKey').value = btn.dataset.delk;
       rebuild();
-      prepareDel();
+      setTimeout(startDel, 50);
     };
   });
 

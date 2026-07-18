@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>線性結構 — Linear Structures Interactive（C++）</title>
+<script>
+  MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1a2e;--paper:#f7f3eb;--accent:#c0392b;--accent2:#2c3e7a;--accent3:#1a6b4a;
+  --muted:#8a8578;--card:#fffdf7;--card-border:#e8e2d6;--highlight:#fff3cd;
+  --code-bg:#2d2d3f;--code-fg:#e8e6df;
+  --node-white:#ffffff;--node-gray:#bdc3c7;--node-black:#34495e;
+  --node-current:#f39c12;--node-found:#16a085;--node-start:#9b59b6;
+  --edge-default:#95a5a6;--edge-tree:#27ae60;--edge-explore:#f39c12;--edge-mst:#1a6b4a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.9;font-size:17px;}
+
+/* Hero */
+.hero{min-height:62vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem;position:relative;overflow:hidden;background:linear-gradient(170deg,#1a1a2e 0%,#2c3e7a 40%,#1a6b4a 100%);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.06) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.04) 0%,transparent 40%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);}
+.hero-content{position:relative;z-index:1;max-width:860px;}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;color:#fff;letter-spacing:.04em;line-height:1.3;margin-bottom:1rem;}
+.hero h1 .green{color:#2ecc71;}
+.hero h1 .blue{color:#5dade2;}
+.hero h1 .orange{color:#f39c12;}
+.hero h1 .purple{color:#bb8fce;}
+.hero .subtitle{font-size:clamp(.95rem,2.2vw,1.2rem);color:rgba(255,255,255,.65);font-weight:300;margin-bottom:2rem;}
+.hero .big-formula{color:#2ecc71;background:rgba(0,0,0,.3);padding:.8rem 2rem;border-radius:12px;display:inline-block;border:1px solid rgba(255,255,255,.1);margin-bottom:2rem;backdrop-filter:blur(4px);font-size:1.05rem;}
+.scroll-hint{color:rgba(255,255,255,.4);font-size:.9rem;animation:bounce 2s infinite;}
+.scroll-hint span{display:block;font-size:1.4rem;margin-top:.3rem;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+/* Hero mini-graph illustration */
+.hero-graph{position:absolute;right:5%;top:50%;transform:translateY(-50%);opacity:.18;pointer-events:none;}
+@media(max-width:900px){.hero-graph{display:none;}}
+
+/* Layout */
+.container{max-width:1180px;margin:0 auto;padding:3rem 1.5rem;}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.5rem;}
+h2{font-family:'Noto Serif TC',serif;font-size:1.65rem;font-weight:700;color:var(--ink);margin-bottom:1.2rem;line-height:1.4;}
+h3{font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:700;color:var(--accent2);margin:1.4rem 0 .8rem;}
+section{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--card-border);}
+section:last-of-type{border-bottom:none;}
+p{margin-bottom:1rem;}
+code{font-family:'JetBrains Mono',monospace;font-size:.92em;background:rgba(44,62,122,.08);padding:1px 6px;border-radius:4px;color:var(--accent2);}
+strong{color:var(--ink);}
+
+/* TOC */
+.toc{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:1.2rem 1.5rem;margin:1rem 0 2rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.toc-title{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.7rem;}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.5rem .8rem;}
+.toc-grid a{color:var(--accent2);text-decoration:none;font-size:.9rem;padding:.3rem 0;display:flex;align-items:center;gap:.4rem;transition:color .2s;}
+.toc-grid a:hover{color:var(--accent);}
+.toc-grid a .toc-num{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);min-width:34px;}
+
+/* Viz layout */
+.viz-layout{display:grid;grid-template-columns:1fr 320px;gap:1.3rem;margin:1.2rem 0;align-items:start;}
+@media(max-width:900px){.viz-layout{grid-template-columns:1fr;}}
+
+.viz-panel{background:linear-gradient(160deg,#fffdf7 0%,#f4efe3 100%);border:1px solid var(--card-border);border-radius:12px;padding:1rem;box-shadow:0 4px 18px rgba(0,0,0,.06);position:relative;}
+
+/* Graph SVG canvas */
+.graph-canvas{position:relative;width:100%;height:380px;background:#fafafa;border-radius:8px;overflow:hidden;border:1px solid #ececec;}
+.graph-canvas svg{width:100%;height:100%;display:block;}
+
+/* SVG elements styles */
+.graph-edge{stroke:var(--edge-default);stroke-width:2;fill:none;transition:stroke .25s, stroke-width .25s;}
+.graph-edge.tree{stroke:var(--edge-tree);stroke-width:3.5;}
+.graph-edge.exploring{stroke:var(--edge-explore);stroke-width:3.5;stroke-dasharray:5 4;animation:dash 1s linear infinite;}
+.graph-edge.mst{stroke:var(--edge-mst);stroke-width:4;}
+.graph-edge.path{stroke:var(--accent);stroke-width:4;}
+.graph-edge.dotted{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:3 4;}
+@keyframes dash{to{stroke-dashoffset:-18;}}
+
+.edge-label{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;fill:var(--ink);pointer-events:none;}
+.edge-label-bg{fill:#fafafa;stroke:#ececec;stroke-width:1;}
+
+.graph-node{cursor:pointer;}
+.graph-node circle{fill:var(--node-white);stroke:var(--ink);stroke-width:2;transition:fill .25s, stroke .25s, r .2s;}
+.graph-node.gray circle{fill:var(--node-gray);}
+.graph-node.black circle{fill:var(--node-black);stroke:var(--node-black);}
+.graph-node.current circle{fill:var(--node-current);stroke:#d68910;stroke-width:3;}
+.graph-node.start circle{fill:var(--node-start);stroke:#7d3c98;stroke-width:3;}
+.graph-node.found circle{fill:var(--node-found);stroke:#117a65;stroke-width:3;}
+.graph-node.in-mst circle{fill:#82e0aa;stroke:var(--accent3);stroke-width:3;}
+.graph-node text.node-key{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;fill:var(--ink);text-anchor:middle;dominant-baseline:central;pointer-events:none;}
+.graph-node.black text.node-key{fill:#fff;}
+.graph-node.current text.node-key{fill:#fff;}
+.graph-node.start text.node-key{fill:#fff;}
+.graph-node.found text.node-key{fill:#fff;}
+.graph-node text.node-meta{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;fill:var(--accent);text-anchor:middle;pointer-events:none;}
+
+/* Status banner */
+.status-banner{margin-top:.8rem;padding:.7rem 1rem;background:var(--code-bg);color:#fff;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.85rem;min-height:42px;display:flex;align-items:center;gap:.6rem;}
+.status-banner .status-icon{color:#2ecc71;font-weight:700;}
+.status-banner .status-text{flex:1;}
+
+/* Controls */
+.controls-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--card-border);}
+.btn{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:600;padding:.45rem 1rem;border-radius:6px;border:none;cursor:pointer;transition:all .2s;}
+.btn-play{background:var(--accent3);color:#fff;}
+.btn-play:hover{background:#22845c;}
+.btn-play.active{background:var(--accent);}
+.btn-step{background:var(--accent2);color:#fff;}
+.btn-step:hover{background:#1f2e5f;}
+.btn-step:disabled{background:#ccc;cursor:not-allowed;}
+.btn-reset{background:var(--card-border);color:var(--ink);}
+.btn-reset:hover{background:#ccc;}
+.btn-toggle{background:var(--accent2);color:#fff;}
+.btn-toggle:hover{background:#1f2e5f;}
+.btn-toggle.off{background:#bbb;color:#555;}
+.btn-shuffle{background:#8e44ad;color:#fff;}
+.btn-shuffle:hover{background:#6c3485;}
+
+/* Slider row */
+.slider-row{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;background:var(--paper);border-radius:8px;margin-bottom:.5rem;}
+.slider-row .slider-label{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent2);font-weight:600;min-width:60px;}
+.slider-row input[type="range"]{flex:1;accent-color:var(--accent3);height:5px;cursor:pointer;}
+.slider-row .slider-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--accent);font-weight:600;min-width:60px;text-align:right;}
+
+/* Side panel */
+.side-panel{display:flex;flex-direction:column;gap:.85rem;}
+.info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.info-card .ic-title{font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem;display:flex;align-items:center;justify-content:space-between;}
+.info-card .ic-title .ic-badge{font-size:.7rem;color:#fff;background:var(--accent3);padding:1px 7px;border-radius:3px;letter-spacing:.05em;font-weight:700;}
+.info-card .ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.83rem;padding:.2rem 0;}
+.info-card .ic-label{color:var(--muted);}
+.info-card .ic-value{color:var(--ink);font-weight:600;}
+.info-card .ic-value.highlight{color:var(--accent);}
+.info-card .ic-value.big{font-size:1.4rem;color:var(--accent2);}
+
+/* Stats grid */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.4rem;}
+.stat-tile{background:var(--paper);border-radius:8px;padding:.5rem .7rem;text-align:center;}
+.stat-tile .stat-label{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;}
+.stat-tile .stat-value{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;color:var(--accent2);}
+
+/* Queue / Stack / PQ visualization */
+.ds-display{font-family:'JetBrains Mono',monospace;font-size:.8rem;background:var(--paper);border-radius:6px;padding:.5rem .7rem;min-height:36px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;border:1px dashed var(--card-border);}
+.ds-display .ds-empty{color:var(--muted);font-style:italic;}
+.ds-item{background:var(--accent2);color:#fff;padding:2px 8px;border-radius:4px;font-weight:600;}
+.ds-item.front{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-item.top{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-item.pq{background:var(--accent3);}
+.ds-item.pq.min{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-arrow{color:var(--muted);}
+
+/* Pseudo code */
+.pseudo-code{background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:.85rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.6;overflow-x:auto;}
+.pseudo-code .line{padding:1px 4px;border-radius:3px;display:block;white-space:pre;}
+.pseudo-code .line.active{background:rgba(243,156,18,.3);color:#fff;border-left:3px solid var(--node-current);padding-left:6px;}
+.pseudo-code .kw{color:#ff79c6;}
+.pseudo-code .fn{color:#50fa7b;}
+.pseudo-code .num{color:#bd93f9;}
+.pseudo-code .com{color:#6272a4;font-style:italic;}
+.pseudo-code .str{color:#f1fa8c;}
+
+/* Adjacency table */
+.adj-display{margin:.5rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.adj-matrix{border-collapse:collapse;margin:.5rem auto;}
+.adj-matrix td,.adj-matrix th{border:1px solid var(--card-border);padding:6px 10px;text-align:center;min-width:34px;background:#fff;}
+.adj-matrix th{background:var(--accent2);color:#fff;font-weight:700;}
+.adj-matrix td.zero{color:#ccc;}
+.adj-matrix td.nonzero{background:#eafaf1;color:var(--accent3);font-weight:700;}
+.adj-matrix td.highlight{background:#fff3cd;}
+.adj-list{background:var(--card);border:1px solid var(--card-border);border-radius:8px;padding:.7rem 1rem;}
+.adj-list .adj-row{padding:3px 0;border-bottom:1px dashed var(--card-border);}
+.adj-list .adj-row:last-child{border-bottom:none;}
+.adj-list .adj-key{color:var(--accent);font-weight:700;display:inline-block;min-width:32px;}
+.adj-list .adj-arrow{color:var(--muted);margin:0 6px;}
+.adj-list .adj-neighbor{background:#eef2ff;color:var(--accent2);padding:1px 8px;border-radius:4px;margin:1px 3px;display:inline-block;font-weight:600;}
+
+/* Chess board for Knight's tour */
+.chess-board{display:grid;background:#fff;border:2px solid var(--ink);border-radius:6px;overflow:hidden;margin:.5rem auto;width:fit-content;}
+.chess-cell{display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:700;position:relative;transition:background .2s;}
+.chess-cell.light{background:#f0d9b5;color:#666;}
+.chess-cell.dark{background:#b58863;color:#fff;}
+.chess-cell.visited{background:#27ae60 !important;color:#fff;}
+.chess-cell.current{background:#f39c12 !important;color:#fff;box-shadow:inset 0 0 0 3px #d68910;}
+.chess-cell.start{background:#9b59b6 !important;color:#fff;}
+.chess-cell .knight{font-size:1.4em;line-height:1;}
+.chess-cell .step-num{font-size:.7em;}
+
+/* Info box */
+.info-box{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1.1rem 1.4rem;margin:1.3rem 0;position:relative;}
+.info-box .info-label{position:absolute;top:-11px;left:14px;background:var(--accent2);color:#fff;font-size:.74rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.05em;}
+.info-box.warm{background:#fef5e7;border-color:#d68910;}
+.info-box.warm .info-label{background:#d68910;}
+.info-box.green{background:#eafaf1;border-color:var(--accent3);}
+.info-box.green .info-label{background:var(--accent3);}
+.info-box.purple{background:#f4ecf7;border-color:#8e44ad;}
+.info-box.purple .info-label{background:#8e44ad;}
+
+/* Pill labels */
+.pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:4px;margin:0 .15rem;vertical-align:1px;}
+.pill-blue{background:rgba(41,128,185,.12);color:#2980b9;border:1px solid rgba(41,128,185,.3);}
+.pill-red{background:rgba(192,57,43,.12);color:var(--accent);border:1px solid rgba(192,57,43,.3);}
+.pill-green{background:rgba(39,174,96,.12);color:var(--accent3);border:1px solid rgba(39,174,96,.3);}
+.pill-orange{background:rgba(243,156,18,.12);color:#d68910;border:1px solid rgba(243,156,18,.3);}
+.pill-purple{background:rgba(142,68,173,.12);color:#8e44ad;border:1px solid rgba(142,68,173,.3);}
+.pill-gray{background:rgba(0,0,0,.06);color:var(--muted);border:1px solid rgba(0,0,0,.12);}
+
+/* Comparison table */
+.cmp-table{width:100%;border-collapse:collapse;font-size:.86rem;margin:.8rem 0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.cmp-table th{background:var(--accent2);color:#fff;padding:.6rem .8rem;text-align:center;font-weight:600;font-size:.82rem;}
+.cmp-table td{padding:.6rem .8rem;text-align:center;border-bottom:1px solid var(--card-border);font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.cmp-table td:first-child{font-family:'Noto Sans TC',sans-serif;color:var(--accent2);font-weight:600;text-align:left;}
+.cmp-table tr:last-child td{border-bottom:none;}
+.cmp-table tr:nth-child(even){background:rgba(0,0,0,.015);}
+.cmp-table .best{color:var(--accent3);font-weight:700;}
+.cmp-table .worst{color:var(--accent);font-weight:700;}
+
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:.6rem;margin:.6rem 0;font-family:'JetBrains Mono',monospace;font-size:.75rem;}
+.legend-item{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .5rem;background:var(--paper);border-radius:5px;}
+.legend-item .lg-swatch{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--ink);}
+.legend-item .lg-edge{width:18px;height:3px;border-radius:2px;}
+
+/* Quiz */
+.quiz-box{background:var(--card);border:2px solid var(--accent2);border-radius:12px;padding:1.3rem 1.5rem;margin:1.5rem 0;}
+.quiz-box .quiz-label{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);font-weight:700;letter-spacing:.1em;margin-bottom:.5rem;}
+.quiz-options{display:flex;flex-direction:column;gap:.5rem;margin:.8rem 0;}
+.quiz-opt{display:flex;align-items:center;gap:.6rem;padding:.55rem .9rem;background:var(--paper);border:2px solid var(--card-border);border-radius:8px;cursor:pointer;transition:all .2s;font-family:'JetBrains Mono',monospace;font-size:.86rem;}
+.quiz-opt:hover{border-color:var(--accent2);}
+.quiz-opt .opt-letter{font-weight:700;color:var(--accent2);min-width:22px;}
+.quiz-opt.correct{background:#eafaf1;border-color:var(--accent3);}
+.quiz-opt.correct .opt-letter{color:var(--accent3);}
+.quiz-opt.wrong{background:#fef5e7;border-color:var(--accent);}
+.quiz-opt.wrong .opt-letter{color:var(--accent);}
+.quiz-feedback{margin-top:.7rem;padding:.7rem 1rem;border-radius:8px;font-size:.88rem;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.correct{background:#eafaf1;color:var(--accent3);border-left:4px solid var(--accent3);}
+.quiz-feedback.wrong{background:#fef5e7;color:var(--accent);border-left:4px solid var(--accent);}
+
+/* Floating sidebar navigation */
+.float-nav{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:2px;background:rgba(255,253,250,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--card-border);border-radius:12px;padding:10px 7px;box-shadow:0 6px 24px rgba(0,0,0,.10);font-family:'JetBrains Mono',monospace;max-height:88vh;overflow-y:auto;transition:padding .25s ease;}
+.float-nav .fn-title{font-family:'Noto Serif TC',serif;font-weight:700;font-size:.68rem;color:var(--accent2);text-align:center;letter-spacing:1.5px;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--card-border);max-width:0;overflow:hidden;transition:max-width .25s ease;}
+.float-nav:hover .fn-title{max-width:220px;}
+.float-nav a{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:7px;color:var(--ink);text-decoration:none;white-space:nowrap;transition:all .2s ease;border-left:3px solid transparent;}
+.float-nav a .fn-num{font-weight:700;font-size:.66rem;color:var(--muted);letter-spacing:.4px;flex-shrink:0;width:30px;text-align:left;}
+.float-nav a .fn-name{font-family:'Noto Sans TC',sans-serif;font-size:.76rem;font-weight:500;max-width:0;overflow:hidden;transition:max-width .25s ease,padding .25s ease;padding:0;}
+.float-nav:hover a .fn-name{max-width:220px;padding-left:2px;}
+.float-nav a:hover{background:var(--card);}
+.float-nav a.active{background:var(--accent2);color:#fff;border-left-color:var(--accent);box-shadow:0 2px 6px rgba(192,57,43,.25);}
+.float-nav a.active .fn-num{color:rgba(255,255,255,.85);}
+.float-nav a.active .fn-name{color:#fff;}
+.float-nav .fn-top{margin-top:6px;padding-top:6px;border-top:1px solid var(--card-border);justify-content:center;}
+.float-nav .fn-top .fn-num{width:auto;color:var(--accent2);font-size:.78rem;}
+@media(max-width:768px){
+  .float-nav{right:8px;top:auto;bottom:14px;transform:none;padding:6px 5px;max-height:70vh;}
+  .float-nav .fn-title{display:none;}
+  .float-nav a{padding:4px 7px;}
+  .float-nav a .fn-num{width:26px;font-size:.62rem;}
+}
+
+footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border);}
+
+/* Distance / table inside graph viz */
+.vert-table{margin-top:.6rem;width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:.78rem;}
+.vert-table th,.vert-table td{padding:4px 6px;text-align:center;border:1px solid var(--card-border);}
+.vert-table th{background:var(--accent2);color:#fff;font-weight:600;font-size:.74rem;}
+.vert-table td.tcell-current{background:#fff3cd;font-weight:700;color:var(--accent);}
+.vert-table td.tcell-done{background:#eafaf1;color:var(--accent3);}
+.vert-table td.tcell-inf{color:#ccc;}
+.sec-badge{font-size:.6em;color:var(--muted);border:1px solid var(--card-border);background:var(--card);padding:2px 10px;border-radius:999px;vertical-align:middle;margin-left:.6rem;font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.02em;white-space:nowrap;}
+
+/* Phase 8 shared widgets */
+.bs-stack{display:flex;flex-direction:column-reverse;align-items:center;gap:4px;min-height:180px;justify-content:flex-start;padding:.6rem;}
+.bs-item{width:110px;text-align:center;padding:.4rem .6rem;background:#5b7eb8;color:#fff;border-radius:6px;font-family:'JetBrains Mono',monospace;font-weight:600;box-shadow:0 2px 5px rgba(0,0,0,.15);}
+.bs-hl{background:#f39c12;}
+.bs-toplabel,.bq-label{font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.bq-row{display:flex;align-items:center;gap:6px;min-height:64px;flex-wrap:wrap;padding:.4rem;}
+.bq-item{min-width:52px;text-align:center;padding:.45rem .5rem;background:#5b7eb8;color:#fff;border-radius:6px;font-family:'JetBrains Mono',monospace;font-weight:600;}
+.char-strip{display:flex;gap:3px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;padding:.4rem 0;}
+.char-cell{min-width:30px;text-align:center;padding:.35rem .25rem;border:1px solid var(--card-border);border-radius:5px;background:var(--card);}
+.char-cur{background:#f39c12;color:#fff;border-color:#f39c12;}
+.char-done{background:#e8f5ec;color:#1a6b4a;border-color:#bfe3cd;}
+.char-bad{background:#c0392b;color:#fff;border-color:#c0392b;}
+.token-out{display:flex;gap:4px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;min-height:40px;padding:.3rem 0;}
+.tok{padding:.3rem .55rem;border-radius:5px;background:#2c3e7a;color:#fff;font-weight:600;}
+.tok-op{background:#8e44ad;}
+.tok-new{outline:3px solid #f39c12;}
+.mono{font-family:'JetBrains Mono',monospace;}
+</style>
+</head>
+<body>
+<nav class="float-nav" id="floatNav" aria-label="章節導覽">
+  <div class="fn-title">章節導覽</div>
+  <a href="#prologue" data-target="prologue"><span class="fn-num">P00</span><span class="fn-name">線性結構總覽</span></a>
+  <a href="#stack" data-target="stack"><span class="fn-num">P01</span><span class="fn-name">堆疊 Stack</span></a>
+  <a href="#parens" data-target="parens"><span class="fn-num">P02</span><span class="fn-name">括號配對</span></a>
+  <a href="#base" data-target="base"><span class="fn-num">P03</span><span class="fn-name">進位轉換</span></a>
+  <a href="#infix" data-target="infix"><span class="fn-num">P04</span><span class="fn-name">中序⇄後序</span></a>
+  <a href="#queue" data-target="queue"><span class="fn-num">P05</span><span class="fn-name">佇列 Queue</span></a>
+  <a href="#hotpotato" data-target="hotpotato"><span class="fn-num">P06</span><span class="fn-name">燙手山芋</span></a>
+  <a href="#printer" data-target="printer"><span class="fn-num">P07</span><span class="fn-name">印表機模擬</span></a>
+  <a href="#deque" data-target="deque"><span class="fn-num">P08</span><span class="fn-name">雙端佇列與迴文</span></a>
+  <a href="#exercises" data-target="exercises"><span class="fn-num">EX</span><span class="fn-name">練習題</span></a>
+  <a href="#reference" data-target="reference"><span class="fn-num">REF</span><span class="fn-name">總覽比較</span></a>
+  <a href="#top" class="fn-top" title="回到頂端"><span class="fn-num">↑ TOP</span></a>
+</nav>
+
+<div class="hero" id="top">
+  <div class="hero-grid"></div>
+  <svg class="hero-graph" width="320" height="280" viewBox="0 0 320 280">
+  <g fill="#fff" opacity=".92">
+    <rect x="40" y="180" width="70" height="26" rx="5"/>
+    <rect x="40" y="148" width="70" height="26" rx="5"/>
+    <rect x="40" y="116" width="70" height="26" rx="5"/>
+    <rect x="150" y="180" width="34" height="26" rx="5"/>
+    <rect x="190" y="180" width="34" height="26" rx="5"/>
+    <rect x="230" y="180" width="34" height="26" rx="5"/>
+  </g>
+  <g stroke="#fff" stroke-width="3" fill="none" opacity=".85">
+    <path d="M75 96 v-30" marker-end="none"/>
+    <path d="M60 96 l15 -20 l15 20"/>
+    <path d="M130 193 h-12"/><path d="M285 193 h-12"/>
+  </g>
+</svg>
+  <div class="hero-content">
+    <h1><span class="blue">堆疊</span>、<span class="orange">佇列</span>與雙端佇列</h1>
+    <div class="subtitle">cppds Chapter 3 — Linear Structures（對應講義 05）</div>
+    <div class="big-formula">LIFO｜FIFO｜括號配對｜進位轉換｜中序→後序｜模擬｜迴文</div>
+    <div class="scroll-hint">向下捲動開始互動<span>↓</span></div>
+  </div>
+</div>
+
+<div class="container">
+<div class="toc">
+  <div class="toc-title">CONTENTS · 內容目錄</div>
+  <div class="toc-grid">
+    <a href="#prologue"><span class="toc-num">P00</span>線性結構總覽</a>
+    <a href="#stack"><span class="toc-num">P01</span>堆疊 Stack</a>
+    <a href="#parens"><span class="toc-num">P02</span>括號配對</a>
+    <a href="#base"><span class="toc-num">P03</span>進位轉換</a>
+    <a href="#infix"><span class="toc-num">P04</span>中序⇄後序</a>
+    <a href="#queue"><span class="toc-num">P05</span>佇列 Queue</a>
+    <a href="#hotpotato"><span class="toc-num">P06</span>燙手山芋</a>
+    <a href="#printer"><span class="toc-num">P07</span>印表機模擬</a>
+    <a href="#deque"><span class="toc-num">P08</span>雙端佇列與迴文</a>
+    <a href="#exercises"><span class="toc-num">EX</span>練習題</a>
+    <a href="#reference"><span class="toc-num">REF</span>總覽比較</a>
+  </div>
+</div>
+
+<section id="prologue">
+  <div class="section-number">PROLOGUE · 開場</div>
+  <h2>線性結構：資料的「排隊學」 <span class="sec-badge">cppds §3.1–3.2</span></h2>
+  <p>堆疊（stack）、佇列（queue）、雙端佇列（deque）都是<strong>線性結構</strong>：元素之間只有「前後」關係，
+  新增與移除發生在<strong>端點</strong>。差別只在「哪一端進、哪一端出」——這個小差別決定了它們完全不同的用途。</p>
+  <div class="info-box">
+    <span class="info-label">本章你會學到的技術</span>
+    <strong>1. 三種 ADT：</strong>stack（LIFO）、queue（FIFO）、deque（兩端皆可）。<br>
+    <strong>2. C++ 實作：</strong>用 <code>vector</code> 自己刻，並理解每個操作的成本。<br>
+    <strong>3. 經典應用：</strong>括號配對、進位轉換、中序轉後序、約瑟夫問題、模擬、迴文。
+  </div>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div style="display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;align-items:flex-end;">
+          <div style="text-align:center;"><div class="bs-stack" id="introStack"></div>
+            <div class="mono" style="font-size:.78rem;color:var(--muted);">Stack：同一端進出（LIFO）</div></div>
+          <div style="text-align:center;"><div class="bq-row" id="introQueue"></div>
+            <div class="mono" style="font-size:.78rem;color:var(--muted);">Queue：尾進頭出（FIFO）</div></div>
+        </div>
+        <div class="status-banner" id="introStatus"><span class="status-icon">›</span><span class="status-text">按下方按鈕，把同一串資料 4→7→2 分別放進 stack 與 queue，再全部取出，觀察順序差異。</span></div>
+        <div class="controls-bar">
+          <button class="btn" onclick="introDemo('push')">放入 4, 7, 2</button>
+          <button class="btn" onclick="introDemo('pop')">全部取出</button>
+          <button class="btn" onclick="introDemo('reset')">重置</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">一句話記住</div>
+        <div style="font-size:.9rem;line-height:2;">
+          <strong>Stack</strong>：後進先出——<em>復原（undo）、呼叫堆疊、括號配對</em>。<br>
+          <strong>Queue</strong>：先進先出——<em>排隊、工作佇列、BFS</em>。<br>
+          <strong>Deque</strong>：兩端皆可——<em>滑動視窗、迴文檢查</em>。
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">為什麼叫「線性」？</div>
+        <div style="font-size:.88rem;line-height:1.9;">元素按加入順序有唯一的前後位置；
+        操作只在<strong>端點</strong>發生。不同結構 = 不同的「進出端」組合。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="section-number">PART 01 · 堆疊</div>
+  <h2>Stack：後進先出的「盤子塔」 <span class="sec-badge">cppds §3.3–3.5</span></h2>
+  <p>堆疊只在同一端（<strong>top</strong>）加入與移除。想像疊盤子：最後放上去的盤子一定最先被拿走
+  —— <strong>LIFO</strong>（last-in first-out）。它天生就是「<strong>反轉順序</strong>」的機器。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="bs-stack" id="stackVis" style="min-height:230px;"></div>
+        <div class="status-banner" id="stackStatus"><span class="status-icon">›</span><span class="status-text">輸入值後按 push；pop 會移除 top。試著觀察 push 4、push "dog"、pop 的效果。</span></div>
+        <div class="controls-bar">
+          <input id="stackInput" class="mono" style="width:90px;padding:.35rem .5rem;border:1px solid var(--card-border);border-radius:6px;" value="8.4">
+          <button class="btn" onclick="stackPush()">push</button>
+          <button class="btn" onclick="stackPop()">pop</button>
+          <button class="btn" onclick="stackPeek()">peek</button>
+          <button class="btn" onclick="stackReset()">重置</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">C++ 實作 <span class="ic-badge">CODE</span></div>
+        <div class="pseudo-code" style="font-size:.78rem;">
+<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">Stack</span> {           <span class="com">// dscpp/stack.hpp（vector 尾端 = top）</span></span>
+<span class="line" data-l="2">    vector&lt;T&gt; items;</span>
+<span class="line" data-l="3">    <span class="kw">bool</span> <span class="fn">isEmpty</span>() { <span class="kw">return</span> items.<span class="fn">empty</span>(); }</span>
+<span class="line" data-l="4">    <span class="kw">void</span> <span class="fn">push</span>(T item) { items.<span class="fn">push_back</span>(item); }</span>
+<span class="line" data-l="5">    T <span class="fn">pop</span>()  { T top = items.<span class="fn">back</span>(); items.<span class="fn">pop_back</span>(); <span class="kw">return</span> top; }</span>
+<span class="line" data-l="6">    T <span class="fn">peek</span>() { <span class="kw">return</span> items.<span class="fn">back</span>(); }</span>
+<span class="line" data-l="7">    <span class="kw">int</span> <span class="fn">size</span>() { <span class="kw">return</span> items.<span class="fn">size</span>(); }</span>
+<span class="line" data-l="8">};</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">操作成本（vector 尾端當 top）</div>
+        <div class="ic-row"><span class="ic-label">push / pop / peek</span><span class="ic-value">O(1)*</span></div>
+        <div class="ic-row"><span class="ic-label">size / isEmpty</span><span class="ic-value">O(1)</span></div>
+        <div style="font-size:.76rem;color:var(--muted);margin-top:.3rem;">* push 為攤銷 O(1)。若改用 vector <strong>前端</strong>當 top（講義的 Stack2），每個操作都變 O(n)！</div>
+      </div>
+    </div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · Stack 行為</div>
+  <p>依序執行 <code>s.push(4); s.push(7); s.pop(); s.push(2); s.peek();</code> 之後，<code>peek()</code> 回傳什麼？stack 內容（由底至頂）是什麼？</p>
+  
+  <div class="quiz-options" id="qStackOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="pop 移除 7，之後 push 2 → 由底至頂為 4, 2，top（peek）= 2。" onclick="quizCheck('qStack', this)"><span class="opt-letter">(A)</span> 回傳 <code>2</code>；內容 <code>[4, 2]</code></div><div class="quiz-opt" data-correct="false" data-fb="7 已經被 pop 掉了；peek 只「看」不移除。" onclick="quizCheck('qStack', this)"><span class="opt-letter">(B)</span> 回傳 <code>7</code>；內容 <code>[4, 7, 2]</code></div><div class="quiz-opt" data-correct="false" data-fb="4 是最早 push 的，在最底層；top 是最後 push 的 2。" onclick="quizCheck('qStack', this)"><span class="opt-letter">(C)</span> 回傳 <code>4</code>；內容 <code>[2, 4]</code></div>
+  </div>
+  <div class="quiz-feedback" id="qStackFeedback"></div>
+</div>
+</section>
+
+<section id="parens">
+  <div class="section-number">PART 02 · 括號配對</div>
+  <h2>括號配對：stack 的第一個殺手級應用 <span class="sec-badge">cppds §3.6–3.7</span></h2>
+  <p>編譯器怎麼知道 <code>(()</code> 少了一個右括號？<strong>由內往外配對</strong>的結構剛好是 LIFO：
+  每個右括號要配的是「<strong>最近一個還沒配對的左括號</strong>」——這就是 stack 的 top。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="char-strip" id="parStrip"></div>
+        <div style="display:flex;gap:1.6rem;align-items:flex-start;">
+          <div><div class="bs-stack" id="parStack" style="min-height:150px;"></div>
+          <div class="mono" style="font-size:.75rem;color:var(--muted);text-align:center;">符號 stack</div></div>
+          <div class="status-banner" id="parStatus" style="flex:1;"><span class="status-icon">›</span><span class="status-text">輸入符號字串後按「開始」。開符號 push、閉符號 pop 配對。</span></div>
+        </div>
+        <div class="controls-bar">
+          <input id="parInput" class="mono" style="width:200px;padding:.35rem .5rem;border:1px solid var(--card-border);border-radius:6px;" value="{[()()]}">
+          <button class="btn" onclick="parStart()">▶ 開始</button>
+          <button class="btn" onclick="parPlayer &amp;&amp; parPlayer.step()">→ 單步</button>
+          <button class="btn" onclick="parLoad('(()')">試試 (()</button>
+          <button class="btn" onclick="parLoad('())(')">試試 ())(</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge">CODE</span></div>
+        <div class="pseudo-code" id="parCode">
+<span class="line" data-l="1"><span class="fn">parChecker</span>(symbolString):</span>
+<span class="line" data-l="2">    Stack&lt;<span class="kw">char</span>&gt; s</span>
+<span class="line" data-l="3">    <span class="kw">for</span> (char symbol : symbolString):</span>
+<span class="line" data-l="4">        <span class="kw">if</span> symbol 是開符號 '(' '[' '{':</span>
+<span class="line" data-l="5">            s.<span class="fn">push</span>(symbol)</span>
+<span class="line" data-l="6">        <span class="kw">else</span>:                    <span class="com">// 閉符號</span></span>
+<span class="line" data-l="7">            <span class="kw">if</span> s.<span class="fn">isEmpty</span>(): <span class="kw">return</span> <span class="num">false</span></span>
+<span class="line" data-l="8">            <span class="kw">if</span> !<span class="fn">matches</span>(s.<span class="fn">pop</span>(), symbol): <span class="kw">return</span> <span class="num">false</span></span>
+<span class="line" data-l="9">    <span class="kw">return</span> s.<span class="fn">isEmpty</span>()   <span class="com">// 有剩 = 沒配完</span></span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">三種失敗方式</div>
+        <div style="font-size:.85rem;line-height:1.9;">
+        ① 閉符號來了但 stack 空（<code>())(</code> 的第 3 步）。<br>
+        ② pop 出來的開符號<strong>種類不合</strong>（<code>[)</code>）。<br>
+        ③ 掃完字串 stack 還有剩（<code>(()</code>）。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="base">
+  <div class="section-number">PART 03 · 進位轉換</div>
+  <h2>十進位 → 任意進位：「除基取餘」與順序反轉 <span class="sec-badge">cppds §3.8</span></h2>
+  <p>反覆「除以基底、記下餘數」會<strong>由低位往高位</strong>產生數字，但我們書寫時要從高位開始——
+  又是一個「<strong>產生順序與使用順序相反</strong>」的問題，stack 出場。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div style="display:flex;gap:1.8rem;align-items:flex-start;justify-content:center;flex-wrap:wrap;">
+          <div class="mono" id="baseTrace" style="font-size:.95rem;line-height:2.2;min-width:220px;"></div>
+          <div><div class="bs-stack" id="baseStack" style="min-height:170px;"></div>
+          <div class="mono" style="font-size:.75rem;color:var(--muted);text-align:center;">餘數 stack</div></div>
+        </div>
+        <div class="status-banner" id="baseStatus"><span class="status-icon">›</span><span class="status-text">選數字與基底，按「開始」逐步觀察：先除到 0，再 pop 出答案。</span></div>
+        <div class="controls-bar">
+          <input id="baseInput" type="number" class="mono" style="width:90px;padding:.35rem .5rem;border:1px solid var(--card-border);border-radius:6px;" value="233">
+          <select id="baseSel" class="mono" style="padding:.35rem;border-radius:6px;border:1px solid var(--card-border);">
+            <option value="2" selected>base 2</option><option value="8">base 8</option><option value="16">base 16</option>
+          </select>
+          <button class="btn" onclick="baseStart()">▶ 開始</button>
+          <button class="btn" onclick="basePlayer &amp;&amp; basePlayer.step()">→ 單步</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge">CODE</span></div>
+        <div class="pseudo-code" id="baseCode">
+<span class="line" data-l="1"><span class="fn">baseConverter</span>(decNumber, base):</span>
+<span class="line" data-l="2">    digits = <span class="str">&quot;0123456789ABCDEF&quot;</span></span>
+<span class="line" data-l="3">    Stack&lt;<span class="kw">int</span>&gt; remStack</span>
+<span class="line" data-l="4">    <span class="kw">while</span> decNumber &gt; <span class="num">0</span>:</span>
+<span class="line" data-l="5">        remStack.<span class="fn">push</span>(decNumber % base)</span>
+<span class="line" data-l="6">        decNumber = decNumber / base   <span class="com">// 整數除法</span></span>
+<span class="line" data-l="7">    newString = <span class="str">&quot;&quot;</span></span>
+<span class="line" data-l="8">    <span class="kw">while</span> !remStack.<span class="fn">isEmpty</span>():</span>
+<span class="line" data-l="9">        newString += digits[remStack.<span class="fn">pop</span>()]</span>
+<span class="line" data-l="10">    <span class="kw">return</span> newString</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">為什麼是 stack？</div>
+        <div style="font-size:.85rem;line-height:1.9;">第一個算出的餘數是<strong>最低位</strong>，最後算出的是<strong>最高位</strong>。
+        pop 的順序剛好把它反過來——高位先出。</div>
+      </div>
+    </div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 進位轉換</div>
+  <p><code>baseConverter(25, 2)</code> 的結果是？（可用上面的動畫驗證）</p>
+  
+  <div class="quiz-options" id="qBaseOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="25 = 16+8+1；餘數依序 1,0,0,1,1，pop 反轉後 11001。" onclick="quizCheck('qBase', this)"><span class="opt-letter">(A)</span> <code>11001</code></div><div class="quiz-opt" data-correct="false" data-fb="這是餘數「產生順序」直接串起來的結果——忘了 stack 的反轉。" onclick="quizCheck('qBase', this)"><span class="opt-letter">(B)</span> <code>10011</code></div><div class="quiz-opt" data-correct="false" data-fb="26 才是 11010；25 是奇數，最低位必為 1。" onclick="quizCheck('qBase', this)"><span class="opt-letter">(C)</span> <code>11010</code></div>
+  </div>
+  <div class="quiz-feedback" id="qBaseFeedback"></div>
+</div>
+</section>
+
+<section id="infix">
+  <div class="section-number">PART 04 · 表達式</div>
+  <h2>中序、前序、後序：把括號「編譯」掉 <span class="sec-badge">cppds §3.9</span></h2>
+  <p>人類習慣<strong>中序</strong>（A + B * C），但機器喜歡<strong>後序</strong>（A B C * +）——
+  完全不需要括號與優先權表就能由左至右直接計算。轉換的核心：<strong>運算元照抄、運算子進 stack 等待</strong>，
+  優先權高的先出來。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="mono" style="font-size:.8rem;color:var(--muted);">infix tokens：</div>
+        <div class="char-strip" id="i2pStrip"></div>
+        <div style="display:flex;gap:1.6rem;align-items:flex-start;">
+          <div><div class="bs-stack" id="i2pStack" style="min-height:130px;"></div>
+          <div class="mono" style="font-size:.75rem;color:var(--muted);text-align:center;">opStack</div></div>
+          <div style="flex:1;">
+            <div class="mono" style="font-size:.8rem;color:var(--muted);">postfix 輸出：</div>
+            <div class="token-out" id="i2pOut"></div>
+            <div class="status-banner" id="i2pStatus"><span class="status-icon">›</span><span class="status-text">按「開始」把中序轉成後序。</span></div>
+          </div>
+        </div>
+        <div class="controls-bar">
+          <select id="i2pSel" class="mono" style="padding:.35rem;border-radius:6px;border:1px solid var(--card-border);">
+            <option value="A * B + C * D">A * B + C * D</option>
+            <option value="( A + B ) * C - ( D - E ) * ( F + G )">( A + B ) * C - ( D - E ) * ( F + G )</option>
+            <option value="5 * 3 ^ ( 4 - 2 )">5 * 3 ^ ( 4 - 2 )</option>
+          </select>
+          <button class="btn" onclick="i2pStart()">▶ 開始</button>
+          <button class="btn" onclick="i2pPlayer &amp;&amp; i2pPlayer.step()">→ 單步</button>
+        </div>
+      </div>
+      <div class="viz-panel" style="margin-top:1rem;">
+        <div class="mono" style="font-size:.8rem;color:var(--muted);">postfix 求值（operand stack）：</div>
+        <div class="char-strip" id="pevalStrip"></div>
+        <div style="display:flex;gap:1.6rem;align-items:flex-start;">
+          <div><div class="bs-stack" id="pevalStack" style="min-height:120px;"></div>
+          <div class="mono" style="font-size:.75rem;color:var(--muted);text-align:center;">operandStack</div></div>
+          <div class="status-banner" id="pevalStatus" style="flex:1;"><span class="status-icon">›</span><span class="status-text">用 7 8 + 3 2 + / 走一次後序求值。</span></div>
+        </div>
+        <div class="controls-bar">
+          <button class="btn" onclick="pevalStart()">▶ 開始（7 8 + 3 2 + /）</button>
+          <button class="btn" onclick="pevalPlayer &amp;&amp; pevalPlayer.step()">→ 單步</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">infix → postfix <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="i2pCode">
+<span class="line" data-l="1"><span class="fn">infixToPostfix</span>(infixExpr):</span>
+<span class="line" data-l="2">    Stack&lt;string&gt; opStack;  postfixList = []</span>
+<span class="line" data-l="3">    <span class="kw">for</span> (token : infixExpr):</span>
+<span class="line" data-l="4">        <span class="kw">if</span> token 是運算元:</span>
+<span class="line" data-l="5">            postfixList.<span class="fn">push_back</span>(token)</span>
+<span class="line" data-l="6">        <span class="kw">else if</span> token == <span class="str">&quot;(&quot;</span>:</span>
+<span class="line" data-l="7">            opStack.<span class="fn">push</span>(token)</span>
+<span class="line" data-l="8">        <span class="kw">else if</span> token == <span class="str">&quot;)&quot;</span>:</span>
+<span class="line" data-l="9">            pop 並輸出，直到遇見 <span class="str">&quot;(&quot;</span></span>
+<span class="line" data-l="10">        <span class="kw">else</span>:   <span class="com">// 運算子</span></span>
+<span class="line" data-l="11">            <span class="kw">while</span> !opStack.<span class="fn">isEmpty</span>() &amp;&amp; prec[opStack.<span class="fn">peek</span>()] &gt;= prec[token]: 輸出 pop</span>
+<span class="line" data-l="12">            opStack.<span class="fn">push</span>(token)</span></div></div>
+      <div class="info-card"><div class="ic-title">postfix 求值 <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="pevalCode">
+<span class="line" data-l="1"><span class="fn">postfixEval</span>(postfixExpr):</span>
+<span class="line" data-l="2">    Stack&lt;<span class="kw">int</span>&gt; operandStack</span>
+<span class="line" data-l="3">    <span class="kw">for</span> (token : postfixExpr):</span>
+<span class="line" data-l="4">        <span class="kw">if</span> token 是數字:</span>
+<span class="line" data-l="5">            operandStack.<span class="fn">push</span>(<span class="fn">toInt</span>(token))</span>
+<span class="line" data-l="6">        <span class="kw">else</span>:</span>
+<span class="line" data-l="7">            right = operandStack.<span class="fn">pop</span>();  left = operandStack.<span class="fn">pop</span>()</span>
+<span class="line" data-l="8">            operandStack.<span class="fn">push</span>(<span class="fn">doMath</span>(token, left, right))</span>
+<span class="line" data-l="9">    <span class="kw">return</span> operandStack.<span class="fn">pop</span>()</span></div></div>
+      <div class="info-card">
+        <div class="ic-title">優先權（prec）</div>
+        <div class="ic-row"><span class="ic-label">^</span><span class="ic-value">4（右結合）</span></div>
+        <div class="ic-row"><span class="ic-label">* /</span><span class="ic-value">3</span></div>
+        <div class="ic-row"><span class="ic-label">+ −</span><span class="ic-value">2</span></div>
+        <div class="ic-row"><span class="ic-label">(</span><span class="ic-value">1（最低）</span></div>
+      </div>
+    </div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 中序轉後序</div>
+  <p><code>( A + B ) * C</code> 的後序表達式是？</p>
+  
+  <div class="quiz-options" id="qInfixOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="括號強迫 + 先輸出；* 最後補上。" onclick="quizCheck('qInfix', this)"><span class="opt-letter">(A)</span> <code>A B + C *</code></div><div class="quiz-opt" data-correct="false" data-fb="這是 A * ( B + C ) 的後序——括號位置不同！" onclick="quizCheck('qInfix', this)"><span class="opt-letter">(B)</span> <code>A B C + *</code></div><div class="quiz-opt" data-correct="false" data-fb="這是「前序」（prefix），不是後序。" onclick="quizCheck('qInfix', this)"><span class="opt-letter">(C)</span> <code>+ A B * C</code></div>
+  </div>
+  <div class="quiz-feedback" id="qInfixFeedback"></div>
+</div>
+</section>
+
+<section id="queue">
+  <div class="section-number">PART 05 · 佇列</div>
+  <h2>Queue：先進先出的公平隊伍 <span class="sec-badge">cppds §3.10–3.12</span></h2>
+  <p>佇列在<strong>rear 加入、front 移除</strong>——先來的先被服務（<strong>FIFO</strong>）。
+  作業系統的工作排程、印表機隊伍、BFS 的「下一層名單」全都是 queue。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="bq-row" id="queueVis" style="min-height:70px;"></div>
+        <div class="status-banner" id="queueStatus"><span class="status-icon">›</span><span class="status-text">enqueue 加到 rear（右）、dequeue 從 front（左）取出。</span></div>
+        <div class="controls-bar">
+          <input id="queueInput" class="mono" style="width:90px;padding:.35rem .5rem;border:1px solid var(--card-border);border-radius:6px;" value="dog">
+          <button class="btn" onclick="queueEnq()">enqueue</button>
+          <button class="btn" onclick="queueDeq()">dequeue</button>
+          <button class="btn" onclick="queueReset()">重置</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">C++ 實作 <span class="ic-badge">CODE</span></div><div class="pseudo-code" style="font-size:.78rem;">
+<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">Queue</span> {           <span class="com">// dscpp/queue.hpp（vector 前端 = rear）</span></span>
+<span class="line" data-l="2">    vector&lt;T&gt; items;</span>
+<span class="line" data-l="3">    <span class="kw">bool</span> <span class="fn">isEmpty</span>() { <span class="kw">return</span> items.<span class="fn">empty</span>(); }</span>
+<span class="line" data-l="4">    <span class="kw">void</span> <span class="fn">enqueue</span>(T item) { items.<span class="fn">insert</span>(items.<span class="fn">begin</span>(), item); }</span>
+<span class="line" data-l="5">    T <span class="fn">dequeue</span>() { T front = items.<span class="fn">back</span>(); items.<span class="fn">pop_back</span>(); <span class="kw">return</span> front; }</span>
+<span class="line" data-l="6">    <span class="kw">int</span> <span class="fn">size</span>() { <span class="kw">return</span> items.<span class="fn">size</span>(); }</span>
+<span class="line" data-l="7">};</span></div></div>
+      <div class="info-card">
+        <div class="ic-title">成本注意！</div>
+        <div class="ic-row"><span class="ic-label">enqueue（insert 前端）</span><span class="ic-value highlight">O(n)</span></div>
+        <div class="ic-row"><span class="ic-label">dequeue（pop_back）</span><span class="ic-value">O(1)</span></div>
+        <div style="font-size:.76rem;color:var(--muted);margin-top:.3rem;">教學版把 rear 放在 vector 前端，enqueue 要整體搬移。工業級請用環形緩衝或 <code>std::deque</code>。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="hotpotato">
+  <div class="section-number">PART 06 · 模擬</div>
+  <h2>燙手山芋（約瑟夫問題）：用 queue 模擬傳遞 <span class="sec-badge">cppds §3.13</span></h2>
+  <p>一群人圍圈傳山芋，數到第 <em>num</em> 下的人出局。queue 的「dequeue 再 enqueue」剛好模擬
+  <strong>把手上的東西傳給下一個人</strong>：front 的人傳完就排到隊伍最尾。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="bq-row" id="hpVis" style="min-height:70px;"></div>
+        <div class="status-banner" id="hpStatus"><span class="status-icon">›</span><span class="status-text">Bill、David、Susan、Jane、Kent、Brad 圍圈，num=7。按「開始」看誰活到最後。</span></div>
+        <div class="controls-bar">
+          <label class="mono" style="font-size:.8rem;">num: <input id="hpNum" type="number" min="1" max="20" value="7" style="width:60px;padding:.3rem;border:1px solid var(--card-border);border-radius:6px;"></label>
+          <button class="btn" onclick="hpStart()">▶ 開始</button>
+          <button class="btn" onclick="hpPlayer &amp;&amp; hpPlayer.step()">→ 單步</button>
+          <span class="mono" style="font-size:.8rem;color:var(--muted);">速度<input id="hpSpeed" type="range" min="120" max="1200" value="450" style="vertical-align:middle;"></span>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">虛擬碼 <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="hpCode">
+<span class="line" data-l="1"><span class="fn">hotPotato</span>(nameList, num):</span>
+<span class="line" data-l="2">    Queue&lt;string&gt; simQueue</span>
+<span class="line" data-l="3">    <span class="kw">for</span> (name : nameList): simQueue.<span class="fn">enqueue</span>(name)</span>
+<span class="line" data-l="4">    <span class="kw">while</span> simQueue.<span class="fn">size</span>() &gt; <span class="num">1</span>:</span>
+<span class="line" data-l="5">        <span class="kw">for</span> i = <span class="num">0</span>; i &lt; num; i++:</span>
+<span class="line" data-l="6">            simQueue.<span class="fn">enqueue</span>(simQueue.<span class="fn">dequeue</span>())  <span class="com">// 傳一次</span></span>
+<span class="line" data-l="7">        simQueue.<span class="fn">dequeue</span>()               <span class="com">// 淘汰 front</span></span>
+<span class="line" data-l="8">    <span class="kw">return</span> simQueue.<span class="fn">dequeue</span>()</span></div></div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">每輪傳遞</span><span class="ic-value">num 次</span></div>
+        <div class="ic-row"><span class="ic-label">總計</span><span class="ic-value">O(n · num)</span></div>
+      </div>
+    </div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 燙手山芋</div>
+  <p>六人 [Bill, David, Susan, Jane, Kent, Brad]、num = 7 時，最後留下來的是誰？（動畫可驗證）</p>
+  
+  <div class="quiz-options" id="qHpOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="每輪傳 7 次後淘汰 front；依序出局 David→Kent→Brad→Bill→Jane，剩 Susan。" onclick="quizCheck('qHp', this)"><span class="opt-letter">(A)</span> Susan</div><div class="quiz-opt" data-correct="false" data-fb="Bill 是第 4 個出局的。" onclick="quizCheck('qHp', this)"><span class="opt-letter">(B)</span> Bill</div><div class="quiz-opt" data-correct="false" data-fb="Brad 是第 3 個出局的。" onclick="quizCheck('qHp', this)"><span class="opt-letter">(C)</span> Brad</div>
+  </div>
+  <div class="quiz-feedback" id="qHpFeedback"></div>
+</div>
+</section>
+
+<section id="printer">
+  <div class="section-number">PART 07 · 模擬</div>
+  <h2>印表機模擬：用機率+queue 回答容量問題 <span class="sec-badge">cppds §3.14</span></h2>
+  <p>實驗室 10 台電腦共用一台印表機：低品質模式印得快（10 頁/分）但粗糙、高品質慢（5 頁/分）但精美。
+  <strong>學生平均要等多久？</strong>這種「容量規劃」問題用 queue 模擬最自然。</p>
+  <div class="info-box">
+    <span class="info-label">模擬的主要步驟（每秒一個 tick）</span>
+    1. 以 1/180 機率產生新列印工作（每小時約 20 個工作），頁數 1~20 隨機，進 queue。<br>
+    2. 印表機空閒且 queue 非空 → 取出 front 工作，記錄它<strong>等了多久</strong>。<br>
+    3. 印表機每 tick 消化「每秒頁數」的工作量，直到當前工作印完。
+  </div>
+  <div class="viz-panel">
+    <div style="overflow-x:auto;">
+    <table class="cmp-table" id="printerTable" style="width:100%;font-size:.85rem;">
+      <thead><tr><th>run</th><th>5 頁/分 平均等待（秒）</th><th>10 頁/分 平均等待（秒）</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    </div>
+    <div class="status-banner" id="printerStatus"><span class="status-icon">›</span><span class="status-text">按下方按鈕各跑 5 次 3600 秒的模擬（固定亂數種子，可重現）。</span></div>
+    <div class="controls-bar">
+      <button class="btn" onclick="printerRun()">▶ 跑 5 × 3600 秒模擬</button>
+    </div>
+  </div>
+  <div class="info-box warm" style="margin-top:.8rem;">
+    <span class="info-label">結論怎麼讀？</span>
+    10 頁/分的平均等待明顯較短且穩定——如果多數列印是草稿，切低品質模式能顯著縮短排隊時間；
+    決策依據不是直覺，是<strong>模擬數據</strong>。
+  </div>
+</section>
+
+<section id="deque">
+  <div class="section-number">PART 08 · 雙端佇列</div>
+  <h2>Deque 與迴文檢查：兩端都能進出 <span class="sec-badge">cppds §3.15–3.18</span></h2>
+  <p>雙端佇列（deque，唸作 "deck"）兩端都可以加入與移除——它一個人就能扮演 stack 或 queue。
+  代價是<strong>使用者要自己維持紀律</strong>，否則就失去了結構帶來的「防呆」。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="char-strip" id="palStrip"></div>
+        <div class="bq-row" id="palVis" style="min-height:64px;"></div>
+        <div class="status-banner" id="palStatus"><span class="status-icon">›</span><span class="status-text">radar 是迴文嗎？兩端同時取出比較。</span></div>
+        <div class="controls-bar">
+          <input id="palInput" class="mono" style="width:150px;padding:.35rem .5rem;border:1px solid var(--card-border);border-radius:6px;" value="radar">
+          <button class="btn" onclick="palStart()">▶ 開始</button>
+          <button class="btn" onclick="palPlayer &amp;&amp; palPlayer.step()">→ 單步</button>
+          <button class="btn" onclick="$('palInput').value='lsdkjfskf';palStart()">試試非迴文</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">C++ 實作 <span class="ic-badge">CODE</span></div><div class="pseudo-code" style="font-size:.76rem;">
+<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">Deque</span> {           <span class="com">// dscpp/deque.hpp（vector 尾端 = front）</span></span>
+<span class="line" data-l="2">    vector&lt;T&gt; items;</span>
+<span class="line" data-l="3">    <span class="kw">void</span> <span class="fn">addFront</span>(T item) { items.<span class="fn">push_back</span>(item); }</span>
+<span class="line" data-l="4">    <span class="kw">void</span> <span class="fn">addRear</span>(T item)  { items.<span class="fn">insert</span>(items.<span class="fn">begin</span>(), item); }</span>
+<span class="line" data-l="5">    T <span class="fn">removeFront</span>() { T f = items.<span class="fn">back</span>(); items.<span class="fn">pop_back</span>(); <span class="kw">return</span> f; }</span>
+<span class="line" data-l="6">    T <span class="fn">removeRear</span>()  { T r = items.<span class="fn">front</span>(); items.<span class="fn">erase</span>(items.<span class="fn">begin</span>()); <span class="kw">return</span> r; }</span>
+<span class="line" data-l="7">};</span></div></div>
+      <div class="info-card"><div class="ic-title">迴文檢查 <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="palCode">
+<span class="line" data-l="1"><span class="fn">palChecker</span>(aString):</span>
+<span class="line" data-l="2">    Deque&lt;<span class="kw">char</span>&gt; charDeque</span>
+<span class="line" data-l="3">    <span class="kw">for</span> (ch : aString): charDeque.<span class="fn">addRear</span>(ch)</span>
+<span class="line" data-l="4">    <span class="kw">while</span> charDeque.<span class="fn">size</span>() &gt; <span class="num">1</span>:</span>
+<span class="line" data-l="5">        first = charDeque.<span class="fn">removeFront</span>()</span>
+<span class="line" data-l="6">        last  = charDeque.<span class="fn">removeRear</span>()</span>
+<span class="line" data-l="7">        <span class="kw">if</span> first != last:</span>
+<span class="line" data-l="8">            <span class="kw">return</span> <span class="num">false</span></span>
+<span class="line" data-l="9">    <span class="kw">return</span> <span class="num">true</span></span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="exercises">
+  <div class="section-number">EXERCISES · 練習</div>
+  <h2>動手驗證：三個經典考點 <span class="sec-badge">cppds §3 綜合</span></h2>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 1 · stack 輸出序列</div>
+  <p>把 1, 2, 3 依序 push 進 stack，途中任何時刻都可以 pop。下列哪個輸出序列<strong>不可能</strong>出現？</p>
+  
+  <div class="quiz-options" id="ex1Options">
+    <div class="quiz-opt" data-correct="true" data-fb="要先輸出 3 必須 1、2 都還在 stack（2 在 1 上面）——之後只能 2 再 1。3 1 2 不可能。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> <code>3 1 2</code></div><div class="quiz-opt" data-correct="false" data-fb="push1 push2 pop2 pop1 push3 pop3 → 可以。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> <code>2 1 3</code></div><div class="quiz-opt" data-correct="false" data-fb="push1 pop1 push2 push3 pop3 pop2 → 可以。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> <code>1 3 2</code></div>
+  </div>
+  <div class="quiz-feedback" id="ex1Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 2 · 中序轉後序＋求值</div>
+  <p><code>10 + 3 * 5 / ( 16 - 4 )</code> 的後序是 <code>10 3 5 * 16 4 - / +</code>。用後序求值，答案是？（整數除法）</p>
+  
+  <div class="quiz-options" id="ex2Options">
+    <div class="quiz-opt" data-correct="true" data-fb="3*5=15；16−4=12；15/12=1（整數除法）；10+1=11。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(A)</span> <code>11</code></div><div class="quiz-opt" data-correct="false" data-fb="C++ 的 int 除法會截斷：15/12 = 1，不是 1.25。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(B)</span> <code>11.25</code></div><div class="quiz-opt" data-correct="false" data-fb="檢查運算順序：先 3*5，再 16−4，相除後才加 10。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(C)</span> <code>13</code></div>
+  </div>
+  <div class="quiz-feedback" id="ex2Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 3 · deque 成本</div>
+  <p>用「vector 尾端當 front」的 Deque 實作，下列哪組操作<strong>都是 O(1)</strong>？</p>
+  
+  <div class="quiz-options" id="ex3Options">
+    <div class="quiz-opt" data-correct="true" data-fb="兩者都在 vector 尾端（push_back / pop_back）。addRear/removeRear 在前端，是 O(n)。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(A)</span> <code>addFront</code> 與 <code>removeFront</code></div><div class="quiz-opt" data-correct="false" data-fb="這兩個在 vector 前端操作，要整體搬移 → O(n)。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(B)</span> <code>addRear</code> 與 <code>removeRear</code></div><div class="quiz-opt" data-correct="false" data-fb="vector 只有尾端操作是 O(1)；兩端都 O(1) 需要 std::deque 或環形緩衝。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(C)</span> 四個操作全部</div>
+  </div>
+  <div class="quiz-feedback" id="ex3Feedback"></div>
+</div>
+</section>
+
+<section id="reference">
+  <div class="section-number">REFERENCE · 總覽</div>
+  <h2>三種線性 ADT 一次比較 <span class="sec-badge">cppds §3 總覽</span></h2>
+  <div style="overflow-x:auto;">
+  <table class="cmp-table" style="width:100%;font-size:.88rem;">
+    <thead><tr><th>ADT</th><th>進</th><th>出</th><th>紀律</th><th>經典應用</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Stack</strong></td><td>top</td><td>top</td><td>LIFO</td><td>括號配對、進位轉換、undo、呼叫堆疊、DFS</td></tr>
+      <tr><td><strong>Queue</strong></td><td>rear</td><td>front</td><td>FIFO</td><td>排程、模擬（燙手山芋、印表機）、BFS</td></tr>
+      <tr><td><strong>Deque</strong></td><td>兩端</td><td>兩端</td><td>使用者自律</td><td>迴文、滑動視窗、工作竊取排程</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <h3 style="margin-top:1.4rem;">教學版實作成本（以 vector 為底）</h3>
+  <div style="overflow-x:auto;">
+  <table class="cmp-table" style="width:100%;font-size:.88rem;">
+    <thead><tr><th>操作</th><th>vector 尾端</th><th>vector 前端</th></tr></thead>
+    <tbody>
+      <tr><td>加入 / 移除</td><td>O(1)（攤銷）</td><td>O(n)（整體搬移）</td></tr>
+      <tr><td>本章的選擇</td><td>Stack top、Queue front、Deque front</td><td>Queue rear、Deque rear</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="info-box" style="margin-top:1rem;">
+    <span class="info-label">關鍵概念複習</span>
+    ① stack = 反轉機器；queue = 公平機器；deque = 萬用但要自律。<br>
+    ② 「產生順序 ≠ 使用順序」→ stack；「先來先服務」→ queue。<br>
+    ③ ADT 與實作分離：介面不變，底層可以換 vector、linked list 或環形緩衝。
+  </div>
+</section></div>
+<footer>
+  互動式線性結構教學 · 基於 Problem Solving with Algorithms and Data Structures using C++ (cppds) Ch.3<br>
+  <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);">Designed for NSYSU · Interactive C++ self-study</span>
+</footer>
+<script>
+/* ============ shared utilities ============ */
+const $ = id => document.getElementById(id);
+
+function quizCheck(quizId, optEl) {
+  const isCorrect = optEl.dataset.correct === 'true';
+  optEl.parentElement.querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('correct','wrong'));
+  optEl.classList.add(isCorrect ? 'correct' : 'wrong');
+  const fb = $(quizId + 'Feedback');
+  fb.classList.remove('correct','wrong');
+  fb.classList.add('show', isCorrect ? 'correct' : 'wrong');
+  fb.innerHTML = (isCorrect ? '<strong>正確 ✓</strong> ' : '<strong>不對 ✗</strong> ') + (optEl.dataset.fb || '');
+}
+
+function hlLine(rootId, n) {
+  const root = $(rootId);
+  if (!root) return;
+  root.querySelectorAll('.line').forEach(l => l.classList.remove('active'));
+  if (n != null) {
+    const line = root.querySelector(`.line[data-l="${n}"]`);
+    if (line) line.classList.add('active');
+  }
+}
+
+/* step player: frames = [{...}], apply(frame) renders */
+class Player {
+  constructor({frames, apply, delayInput, onDone}) {
+    this.frames = frames; this.apply = apply;
+    this.delayInput = delayInput; this.i = -1; this.timer = null;
+    this.onDone = onDone || (()=>{});
+  }
+  step() {
+    if (this.i + 1 >= this.frames.length) { this.stop(); this.onDone(); return; }
+    this.i += 1; this.apply(this.frames[this.i]);
+  }
+  play() {
+    this.stop();
+    const tick = () => {
+      if (this.i + 1 >= this.frames.length) { this.stop(); this.onDone(); return; }
+      this.step();
+      this.timer = setTimeout(tick, this.delayInput ? parseInt(this.delayInput.value,10) : 700);
+    };
+    tick();
+  }
+  stop() { if (this.timer) { clearTimeout(this.timer); this.timer = null; } }
+  reset() { this.stop(); this.i = -1; if (this.frames.length) this.apply(this.frames[0]); }
+}
+
+function setStatus(id, html) {
+  const el = $(id); if (el) el.querySelector('.status-text').innerHTML = html;
+}
+
+/* vertical box stack renderer (DOM) */
+function renderBoxStack(containerId, items, opts={}) {
+  const el = $(containerId); if (!el) return;
+  const hl = opts.highlight ?? -1;   // index from top (0 = top)
+  el.innerHTML = '';
+  const label = document.createElement('div');
+  label.className = 'bs-toplabel';
+  label.textContent = items.length ? 'top ↓' : '(empty)';
+  el.appendChild(label);
+  items.slice().reverse().forEach((v, idx) => {
+    const d = document.createElement('div');
+    d.className = 'bs-item' + (idx === hl ? ' bs-hl' : '');
+    d.textContent = v;
+    el.appendChild(d);
+  });
+}
+
+/* horizontal queue renderer: front at left */
+function renderBoxQueue(containerId, items, opts={}) {
+  const el = $(containerId); if (!el) return;
+  el.innerHTML = '';
+  const front = document.createElement('div');
+  front.className = 'bq-label'; front.textContent = items.length ? 'front →' : '(empty)';
+  el.appendChild(front);
+  items.forEach((v, idx) => {
+    const d = document.createElement('div');
+    d.className = 'bq-item' + (idx === (opts.highlight ?? -1) ? ' bs-hl' : '');
+    d.textContent = v;
+    el.appendChild(d);
+  });
+  const rear = document.createElement('div');
+  rear.className = 'bq-label'; rear.textContent = items.length ? '← rear' : '';
+  el.appendChild(rear);
+}
+
+/* floating nav scroll spy */
+(function setupNav() {
+  const nav = $('floatNav');
+  const links = nav.querySelectorAll('a[data-target]');
+  const sections = Array.from(links).map(a => document.getElementById(a.dataset.target)).filter(Boolean);
+  function update() {
+    const y = window.scrollY + window.innerHeight * 0.3;
+    let active = sections[0]?.id;
+    for (const s of sections) if (s.offsetTop <= y) active = s.id;
+    links.forEach(a => a.classList.toggle('active', a.dataset.target === active));
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+
+/* ---------- P00 intro ---------- */
+let introS = [], introQ = [];
+function introRender(msg) {
+  renderBoxStack('introStack', introS);
+  renderBoxQueue('introQueue', introQ);
+  if (msg) setStatus('introStatus', msg);
+}
+function introDemo(mode) {
+  if (mode === 'push') {
+    introS = []; introQ = [];
+    const vals = [4, 7, 2]; let i = 0;
+    const t = setInterval(() => {
+      if (i >= vals.length) { clearInterval(t); introRender('放入順序都是 4 → 7 → 2。現在按「全部取出」。'); return; }
+      introS.push(vals[i]); introQ.push(vals[i]); i++; introRender(`放入 ${vals[i-1]}`);
+    }, 500);
+  } else if (mode === 'pop') {
+    const outS = [], outQ = [];
+    const t = setInterval(() => {
+      let moved = false;
+      if (introS.length) { outS.push(introS.pop()); moved = true; }
+      if (introQ.length) { outQ.push(introQ.shift()); moved = true; }
+      introRender(`stack 取出：${outS.join(' ')}　|　queue 取出：${outQ.join(' ')}`);
+      if (!moved) { clearInterval(t);
+        setStatus('introStatus', `<strong>stack 取出 2 7 4（反轉！）；queue 取出 4 7 2（保序）。</strong>這就是 LIFO 與 FIFO 的全部差別。`); }
+    }, 600);
+  } else { introS = []; introQ = []; introRender('已重置。'); }
+}
+introRender();
+
+/* ---------- P01 stack ---------- */
+let stackItems = [4, 'dog', true];
+function stackRender(msg, hl=-1) { renderBoxStack('stackVis', stackItems, {highlight: hl}); if (msg) setStatus('stackStatus', msg); }
+function stackPush() {
+  const v = $('stackInput').value.trim() || '?';
+  stackItems.push(v); stackRender(`push(${v}) → 新 top = ${v}`, 0);
+}
+function stackPop() {
+  if (!stackItems.length) { stackRender('stack 是空的——真實程式這裡要先檢查 isEmpty()！'); return; }
+  const v = stackItems.pop(); stackRender(`pop() 回傳 ${v}`);
+}
+function stackPeek() {
+  if (!stackItems.length) { stackRender('空 stack 沒有 top。'); return; }
+  stackRender(`peek() = ${stackItems[stackItems.length-1]}（只看不拿）`, 0);
+}
+function stackReset() { stackItems = [4, 'dog', true]; stackRender('已重置為 [4, dog, true]。'); }
+stackRender();
+
+/* ---------- P02 parens ---------- */
+let parPlayer = null;
+const OPENS = '([{', CLOSES = ')]}';
+const MATCH = { ')':'(', ']':'[', '}':'{' };
+function parFrames(s) {
+  const frames = [{stack:[], i:-1, cls:{}, msg:'開始掃描。', line:1}];
+  const st = [];
+  const cls = {};
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (OPENS.includes(c)) {
+      st.push(c); cls[i]='done';
+      frames.push({stack:[...st], i, cls:{...cls}, msg:`'${c}' 是開符號 → push`, line:5});
+    } else if (CLOSES.includes(c)) {
+      if (!st.length) { cls[i]='bad';
+        frames.push({stack:[], i, cls:{...cls}, msg:`'${c}' 來了但 stack 是空的 → <strong>不平衡 ✗</strong>`, line:7, fail:true});
+        return frames; }
+      const top = st.pop();
+      if (top !== MATCH[c]) { cls[i]='bad';
+        frames.push({stack:[...st], i, cls:{...cls}, msg:`pop 出 '${top}' 但要配 '${c}' → 種類不合 → <strong>不平衡 ✗</strong>`, line:8, fail:true});
+        return frames; }
+      cls[i]='done';
+      frames.push({stack:[...st], i, cls:{...cls}, msg:`'${c}' 與 pop 出的 '${top}' 配對成功`, line:8});
+    } else {
+      cls[i]='done';
+      frames.push({stack:[...st], i, cls:{...cls}, msg:`忽略非括號字元 '${c}'`, line:3});
+    }
+  }
+  const ok = st.length === 0;
+  frames.push({stack:[...st], i:s.length, cls, line:9,
+    msg: ok ? '<strong>掃描完成且 stack 空 → 平衡 ✓</strong>'
+            : `<strong>掃描完成但 stack 還有 ${st.length} 個開符號 → 不平衡 ✗</strong>`});
+  return frames;
+}
+function parApply(f) {
+  const s = $('parInput').value;
+  const strip = $('parStrip'); strip.innerHTML = '';
+  for (let i = 0; i < s.length; i++) {
+    const d = document.createElement('div');
+    d.className = 'char-cell' + (i === f.i ? ' char-cur' : (f.cls[i] ? ' char-' + f.cls[i] : ''));
+    d.textContent = s[i]; strip.appendChild(d);
+  }
+  renderBoxStack('parStack', f.stack);
+  setStatus('parStatus', f.msg); hlLine('parCode', f.line);
+}
+function parStart() {
+  parPlayer = new Player({frames: parFrames($('parInput').value), apply: parApply});
+  parPlayer.reset(); parPlayer.play();
+}
+function parLoad(s) { $('parInput').value = s; parStart(); }
+
+/* ---------- P03 base ---------- */
+let basePlayer = null;
+function baseFrames(n0, base) {
+  const digits = '0123456789ABCDEF';
+  const frames = [{trace:[], stack:[], out:'', msg:`把 ${n0} 轉成 base ${base}。`, line:1}];
+  let n = n0; const st = []; const tr = [];
+  while (n > 0) {
+    const rem = n % base; const q = Math.floor(n / base);
+    st.push(digits[rem]); tr.push(`${n} ÷ ${base} = ${q} … 餘 <strong>${digits[rem]}</strong>`);
+    frames.push({trace:[...tr], stack:[...st], out:'', msg:`餘數 ${digits[rem]} push 進 stack`, line:5});
+    n = q;
+    frames.push({trace:[...tr], stack:[...st], out:'', msg:`商變成 ${n}`, line:6});
+  }
+  let out = '';
+  const st2 = [...st];
+  while (st2.length) {
+    out += st2.pop();
+    frames.push({trace:tr, stack:[...st2], out, msg:`pop → 目前結果 "${out}"`, line:9});
+  }
+  frames.push({trace:tr, stack:[], out, msg:`<strong>${n0} (base 10) = ${out} (base ${base}) ✓</strong>`, line:10});
+  return frames;
+}
+function baseApply(f) {
+  $('baseTrace').innerHTML = f.trace.join('<br>') + (f.out ? `<br>結果：<strong>${f.out}</strong>` : '');
+  renderBoxStack('baseStack', f.stack);
+  setStatus('baseStatus', f.msg); hlLine('baseCode', f.line);
+}
+function baseStart() {
+  const n = Math.max(1, parseInt($('baseInput').value || '233', 10));
+  const b = parseInt($('baseSel').value, 10);
+  basePlayer = new Player({frames: baseFrames(n, b), apply: baseApply});
+  basePlayer.reset(); basePlayer.play();
+}
+
+/* ---------- P04 infix→postfix ---------- */
+let i2pPlayer = null, pevalPlayer = null;
+const PREC = {'^':4, '*':3, '/':3, '+':2, '-':2, '(':1};
+function i2pFrames(expr) {
+  const tokens = expr.split(/\s+/);
+  const frames = [{i:-1, stack:[], out:[], msg:'開始逐 token 掃描。', line:1}];
+  const st = [], out = [];
+  for (let i = 0; i < tokens.length; i++) {
+    const t = tokens[i];
+    if (/^[A-Za-z0-9]+$/.test(t)) {
+      out.push(t);
+      frames.push({i, stack:[...st], out:[...out], msg:`運算元 ${t} 直接輸出`, line:5});
+    } else if (t === '(') {
+      st.push(t);
+      frames.push({i, stack:[...st], out:[...out], msg:`'(' push 進 opStack`, line:7});
+    } else if (t === ')') {
+      while (st.length && st[st.length-1] !== '(') {
+        out.push(st.pop());
+        frames.push({i, stack:[...st], out:[...out], msg:`')' → pop 輸出 ${out[out.length-1]}`, line:9});
+      }
+      st.pop();
+      frames.push({i, stack:[...st], out:[...out], msg:`丟棄 '('`, line:9});
+    } else {
+      while (st.length && PREC[st[st.length-1]] >= PREC[t] && !(t === '^' && st[st.length-1] === '^')) {
+        out.push(st.pop());
+        frames.push({i, stack:[...st], out:[...out], msg:`stack 頂 ${out[out.length-1]} 優先權 ≥ ${t} → 先輸出`, line:11});
+      }
+      st.push(t);
+      frames.push({i, stack:[...st], out:[...out], msg:`${t} push 進 opStack`, line:12});
+    }
+  }
+  while (st.length) {
+    out.push(st.pop());
+    frames.push({i:tokens.length, stack:[...st], out:[...out], msg:`收尾：pop 輸出 ${out[out.length-1]}`, line:11});
+  }
+  frames.push({i:tokens.length, stack:[], out, msg:`<strong>後序：${out.join(' ')} ✓</strong>`, line:12});
+  return frames;
+}
+function tokenStrip(id, tokens, cur) {
+  const strip = $(id); strip.innerHTML = '';
+  tokens.forEach((t, i) => {
+    const d = document.createElement('div');
+    d.className = 'char-cell' + (i === cur ? ' char-cur' : (i < cur ? ' char-done' : ''));
+    d.textContent = t; strip.appendChild(d);
+  });
+}
+function i2pApply(f) {
+  tokenStrip('i2pStrip', $('i2pSel').value.split(/\s+/), f.i);
+  renderBoxStack('i2pStack', f.stack);
+  const out = $('i2pOut'); out.innerHTML = '';
+  f.out.forEach((t, k) => {
+    const d = document.createElement('div');
+    d.className = 'tok' + (/[+\-*\/^]/.test(t) && t.length === 1 ? ' tok-op' : '') + (k === f.out.length-1 ? ' tok-new' : '');
+    d.textContent = t; out.appendChild(d);
+  });
+  setStatus('i2pStatus', f.msg); hlLine('i2pCode', f.line);
+}
+function i2pStart() {
+  i2pPlayer = new Player({frames: i2pFrames($('i2pSel').value), apply: i2pApply});
+  i2pPlayer.reset(); i2pPlayer.play();
+}
+function pevalFrames() {
+  const tokens = '7 8 + 3 2 + /'.split(' ');
+  const frames = [{i:-1, stack:[], msg:'後序求值開始。', line:1}];
+  const st = [];
+  for (let i = 0; i < tokens.length; i++) {
+    const t = tokens[i];
+    if (/^\d+$/.test(t)) {
+      st.push(parseInt(t,10));
+      frames.push({i, stack:[...st], msg:`數字 ${t} push`, line:5});
+    } else {
+      const r = st.pop(), l = st.pop();
+      const v = t==='+'? l+r : t==='-'? l-r : t==='*'? l*r : Math.floor(l/r);
+      st.push(v);
+      frames.push({i, stack:[...st], msg:`pop 出 right=${r}、left=${l} → ${l} ${t} ${r} = ${v}，push 回去`, line:8});
+    }
+  }
+  frames.push({i:tokens.length, stack:st, msg:`<strong>答案 = ${st[0]}（注意 15/5=3：pop 順序 right 先！）</strong>`, line:9});
+  return frames;
+}
+function pevalApply(f) {
+  tokenStrip('pevalStrip', '7 8 + 3 2 + /'.split(' '), f.i);
+  renderBoxStack('pevalStack', f.stack);
+  setStatus('pevalStatus', f.msg); hlLine('pevalCode', f.line);
+}
+function pevalStart() {
+  pevalPlayer = new Player({frames: pevalFrames(), apply: pevalApply});
+  pevalPlayer.reset(); pevalPlayer.play();
+}
+
+/* ---------- P05 queue ---------- */
+let queueItems = ['4', 'dog', 'true'];
+function queueRender(msg, hl=-1) { renderBoxQueue('queueVis', queueItems, {highlight:hl}); if (msg) setStatus('queueStatus', msg); }
+function queueEnq() {
+  const v = $('queueInput').value.trim() || '?';
+  queueItems.push(v); queueRender(`enqueue(${v}) → 排到 rear`, queueItems.length-1);
+}
+function queueDeq() {
+  if (!queueItems.length) { queueRender('queue 是空的。'); return; }
+  const v = queueItems.shift(); queueRender(`dequeue() 回傳 ${v}（front 先出）`);
+}
+function queueReset() { queueItems = ['4','dog','true']; queueRender('已重置。'); }
+queueRender();
+
+/* ---------- P06 hot potato ---------- */
+let hpPlayer = null;
+function hpFrames(names, num) {
+  const frames = [{q:[...names], msg:`開始！queue = [${names.join(', ')}]`, line:3, out:null}];
+  const q = [...names];
+  while (q.length > 1) {
+    for (let i = 0; i < num; i++) {
+      q.push(q.shift());
+      if (q.length <= 8 || i === num-1)
+        frames.push({q:[...q], msg:`傳遞 ${i+1}/${num}：${q[q.length-1]} 傳完排到隊尾`, line:6, out:null});
+    }
+    const out = q.shift();
+    frames.push({q:[...q], msg:`數到 ${num} → <strong style="color:var(--accent);">${out} 出局！</strong>`, line:7, out});
+  }
+  frames.push({q, msg:`<strong>倖存者：${q[0]} 🎉</strong>`, line:8, out:null});
+  return frames;
+}
+function hpApply(f) {
+  renderBoxQueue('hpVis', f.q);
+  setStatus('hpStatus', f.msg); hlLine('hpCode', f.line);
+}
+function hpStart() {
+  const names = ['Bill','David','Susan','Jane','Kent','Brad'];
+  const num = Math.max(1, parseInt($('hpNum').value||'7',10));
+  hpPlayer = new Player({frames: hpFrames(names, num), apply: hpApply, delayInput: $('hpSpeed')});
+  hpPlayer.reset(); hpPlayer.play();
+}
+
+/* ---------- P07 printer ---------- */
+function lcg(seed) { let s = seed >>> 0; return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; }
+function printerSim(ppm, seed) {
+  const rand = lcg(seed);
+  const q = []; let currentTask = null, remain = 0;
+  const waits = [];
+  const rate = ppm / 60; // pages per second
+  for (let sec = 0; sec < 3600; sec++) {
+    if (Math.floor(rand() * 180) === 0) q.push({born: sec, pages: 1 + Math.floor(rand()*20)});
+    if (!currentTask && q.length) {
+      currentTask = q.shift(); waits.push(sec - currentTask.born);
+      remain = currentTask.pages;
+    }
+    if (currentTask) { remain -= rate; if (remain <= 0) currentTask = null; }
+  }
+  return waits.length ? waits.reduce((a,b)=>a+b,0) / waits.length : 0;
+}
+function printerRun() {
+  const tb = $('printerTable').querySelector('tbody'); tb.innerHTML = '';
+  let s5 = 0, s10 = 0;
+  for (let r = 0; r < 5; r++) {
+    const w5 = printerSim(5, 42 + r), w10 = printerSim(10, 42 + r);
+    s5 += w5; s10 += w10;
+    tb.insertAdjacentHTML('beforeend',
+      `<tr><td>${r+1}</td><td>${w5.toFixed(1)}</td><td>${w10.toFixed(1)}</td></tr>`);
+  }
+  tb.insertAdjacentHTML('beforeend',
+    `<tr style="font-weight:700;background:var(--highlight);"><td>平均</td><td>${(s5/5).toFixed(1)}</td><td>${(s10/5).toFixed(1)}</td></tr>`);
+  setStatus('printerStatus', `同一組工作到達序列下，10 頁/分的平均等待約為 5 頁/分的 ${(s5/s10).toFixed(1)} 分之一。`);
+}
+
+/* ---------- P08 deque / palindrome ---------- */
+let palPlayer = null;
+function palFrames(s) {
+  const frames = [{dq:[...s], i:-1, j:s.length, msg:'字元全部 addRear 進 deque。', line:3, cls:{}}];
+  let dq = [...s]; const cls = {};
+  let li = 0, ri = s.length - 1;
+  while (dq.length > 1) {
+    const first = dq.shift(); const last = dq.pop();
+    if (first !== last) {
+      cls[li]='bad'; cls[ri]='bad';
+      frames.push({dq:[...dq], msg:`removeFront '${first}' ≠ removeRear '${last}' → <strong>不是迴文 ✗</strong>`, line:8, cls:{...cls}});
+      return frames;
+    }
+    cls[li]='done'; cls[ri]='done';
+    frames.push({dq:[...dq], msg:`'${first}' == '${last}' ✓ 繼續往內`, line:7, cls:{...cls}});
+    li++; ri--;
+  }
+  if (dq.length === 1) cls[li]='done';
+  frames.push({dq, msg:'<strong>全部配對成功 → 是迴文 ✓</strong>', line:9, cls});
+  return frames;
+}
+function palApply(f) {
+  const s = $('palInput').value;
+  const strip = $('palStrip'); strip.innerHTML = '';
+  for (let i = 0; i < s.length; i++) {
+    const d = document.createElement('div');
+    d.className = 'char-cell' + (f.cls[i] ? ' char-' + f.cls[i] : '');
+    d.textContent = s[i]; strip.appendChild(d);
+  }
+  renderBoxQueue('palVis', f.dq);
+  setStatus('palStatus', f.msg); hlLine('palCode', f.line);
+}
+function palStart() {
+  palPlayer = new Player({frames: palFrames($('palInput').value.trim()), apply: palApply});
+  palPlayer.reset(); palPlayer.play();
+}
+</script>
+</body>
+</html>

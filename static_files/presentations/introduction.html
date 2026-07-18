@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C++ 導論 — Introduction Interactive</title>
+<script>
+  MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1a2e;--paper:#f7f3eb;--accent:#c0392b;--accent2:#2c3e7a;--accent3:#1a6b4a;
+  --muted:#8a8578;--card:#fffdf7;--card-border:#e8e2d6;--highlight:#fff3cd;
+  --code-bg:#2d2d3f;--code-fg:#e8e6df;
+  --node-white:#ffffff;--node-gray:#bdc3c7;--node-black:#34495e;
+  --node-current:#f39c12;--node-found:#16a085;--node-start:#9b59b6;
+  --edge-default:#95a5a6;--edge-tree:#27ae60;--edge-explore:#f39c12;--edge-mst:#1a6b4a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.9;font-size:17px;}
+
+/* Hero */
+.hero{min-height:62vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem;position:relative;overflow:hidden;background:linear-gradient(170deg,#1a1a2e 0%,#2c3e7a 40%,#1a6b4a 100%);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.06) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.04) 0%,transparent 40%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);}
+.hero-content{position:relative;z-index:1;max-width:860px;}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;color:#fff;letter-spacing:.04em;line-height:1.3;margin-bottom:1rem;}
+.hero h1 .green{color:#2ecc71;}
+.hero h1 .blue{color:#5dade2;}
+.hero h1 .orange{color:#f39c12;}
+.hero h1 .purple{color:#bb8fce;}
+.hero .subtitle{font-size:clamp(.95rem,2.2vw,1.2rem);color:rgba(255,255,255,.65);font-weight:300;margin-bottom:2rem;}
+.hero .big-formula{color:#2ecc71;background:rgba(0,0,0,.3);padding:.8rem 2rem;border-radius:12px;display:inline-block;border:1px solid rgba(255,255,255,.1);margin-bottom:2rem;backdrop-filter:blur(4px);font-size:1.05rem;}
+.scroll-hint{color:rgba(255,255,255,.4);font-size:.9rem;animation:bounce 2s infinite;}
+.scroll-hint span{display:block;font-size:1.4rem;margin-top:.3rem;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+/* Hero mini-graph illustration */
+.hero-graph{position:absolute;right:5%;top:50%;transform:translateY(-50%);opacity:.18;pointer-events:none;}
+@media(max-width:900px){.hero-graph{display:none;}}
+
+/* Layout */
+.container{max-width:1180px;margin:0 auto;padding:3rem 1.5rem;}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.5rem;}
+h2{font-family:'Noto Serif TC',serif;font-size:1.65rem;font-weight:700;color:var(--ink);margin-bottom:1.2rem;line-height:1.4;}
+h3{font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:700;color:var(--accent2);margin:1.4rem 0 .8rem;}
+section{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--card-border);}
+section:last-of-type{border-bottom:none;}
+p{margin-bottom:1rem;}
+code{font-family:'JetBrains Mono',monospace;font-size:.92em;background:rgba(44,62,122,.08);padding:1px 6px;border-radius:4px;color:var(--accent2);}
+strong{color:var(--ink);}
+
+/* TOC */
+.toc{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:1.2rem 1.5rem;margin:1rem 0 2rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.toc-title{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.7rem;}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.5rem .8rem;}
+.toc-grid a{color:var(--accent2);text-decoration:none;font-size:.9rem;padding:.3rem 0;display:flex;align-items:center;gap:.4rem;transition:color .2s;}
+.toc-grid a:hover{color:var(--accent);}
+.toc-grid a .toc-num{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);min-width:34px;}
+
+/* Viz layout */
+.viz-layout{display:grid;grid-template-columns:1fr 320px;gap:1.3rem;margin:1.2rem 0;align-items:start;}
+@media(max-width:900px){.viz-layout{grid-template-columns:1fr;}}
+
+.viz-panel{background:linear-gradient(160deg,#fffdf7 0%,#f4efe3 100%);border:1px solid var(--card-border);border-radius:12px;padding:1rem;box-shadow:0 4px 18px rgba(0,0,0,.06);position:relative;}
+
+/* Graph SVG canvas */
+.graph-canvas{position:relative;width:100%;height:380px;background:#fafafa;border-radius:8px;overflow:hidden;border:1px solid #ececec;}
+.graph-canvas svg{width:100%;height:100%;display:block;}
+
+/* SVG elements styles */
+.graph-edge{stroke:var(--edge-default);stroke-width:2;fill:none;transition:stroke .25s, stroke-width .25s;}
+.graph-edge.tree{stroke:var(--edge-tree);stroke-width:3.5;}
+.graph-edge.exploring{stroke:var(--edge-explore);stroke-width:3.5;stroke-dasharray:5 4;animation:dash 1s linear infinite;}
+.graph-edge.mst{stroke:var(--edge-mst);stroke-width:4;}
+.graph-edge.path{stroke:var(--accent);stroke-width:4;}
+.graph-edge.dotted{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:3 4;}
+@keyframes dash{to{stroke-dashoffset:-18;}}
+
+.edge-label{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;fill:var(--ink);pointer-events:none;}
+.edge-label-bg{fill:#fafafa;stroke:#ececec;stroke-width:1;}
+
+.graph-node{cursor:pointer;}
+.graph-node circle{fill:var(--node-white);stroke:var(--ink);stroke-width:2;transition:fill .25s, stroke .25s, r .2s;}
+.graph-node.gray circle{fill:var(--node-gray);}
+.graph-node.black circle{fill:var(--node-black);stroke:var(--node-black);}
+.graph-node.current circle{fill:var(--node-current);stroke:#d68910;stroke-width:3;}
+.graph-node.start circle{fill:var(--node-start);stroke:#7d3c98;stroke-width:3;}
+.graph-node.found circle{fill:var(--node-found);stroke:#117a65;stroke-width:3;}
+.graph-node.in-mst circle{fill:#82e0aa;stroke:var(--accent3);stroke-width:3;}
+.graph-node text.node-key{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;fill:var(--ink);text-anchor:middle;dominant-baseline:central;pointer-events:none;}
+.graph-node.black text.node-key{fill:#fff;}
+.graph-node.current text.node-key{fill:#fff;}
+.graph-node.start text.node-key{fill:#fff;}
+.graph-node.found text.node-key{fill:#fff;}
+.graph-node text.node-meta{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;fill:var(--accent);text-anchor:middle;pointer-events:none;}
+
+/* Status banner */
+.status-banner{margin-top:.8rem;padding:.7rem 1rem;background:var(--code-bg);color:#fff;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.85rem;min-height:42px;display:flex;align-items:center;gap:.6rem;}
+.status-banner .status-icon{color:#2ecc71;font-weight:700;}
+.status-banner .status-text{flex:1;}
+
+/* Controls */
+.controls-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--card-border);}
+.btn{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:600;padding:.45rem 1rem;border-radius:6px;border:none;cursor:pointer;transition:all .2s;}
+.btn-play{background:var(--accent3);color:#fff;}
+.btn-play:hover{background:#22845c;}
+.btn-play.active{background:var(--accent);}
+.btn-step{background:var(--accent2);color:#fff;}
+.btn-step:hover{background:#1f2e5f;}
+.btn-step:disabled{background:#ccc;cursor:not-allowed;}
+.btn-reset{background:var(--card-border);color:var(--ink);}
+.btn-reset:hover{background:#ccc;}
+.btn-toggle{background:var(--accent2);color:#fff;}
+.btn-toggle:hover{background:#1f2e5f;}
+.btn-toggle.off{background:#bbb;color:#555;}
+.btn-shuffle{background:#8e44ad;color:#fff;}
+.btn-shuffle:hover{background:#6c3485;}
+
+/* Slider row */
+.slider-row{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;background:var(--paper);border-radius:8px;margin-bottom:.5rem;}
+.slider-row .slider-label{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent2);font-weight:600;min-width:60px;}
+.slider-row input[type="range"]{flex:1;accent-color:var(--accent3);height:5px;cursor:pointer;}
+.slider-row .slider-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--accent);font-weight:600;min-width:60px;text-align:right;}
+
+/* Side panel */
+.side-panel{display:flex;flex-direction:column;gap:.85rem;}
+.info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.info-card .ic-title{font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem;display:flex;align-items:center;justify-content:space-between;}
+.info-card .ic-title .ic-badge{font-size:.7rem;color:#fff;background:var(--accent3);padding:1px 7px;border-radius:3px;letter-spacing:.05em;font-weight:700;}
+.info-card .ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.83rem;padding:.2rem 0;}
+.info-card .ic-label{color:var(--muted);}
+.info-card .ic-value{color:var(--ink);font-weight:600;}
+.info-card .ic-value.highlight{color:var(--accent);}
+.info-card .ic-value.big{font-size:1.4rem;color:var(--accent2);}
+
+/* Stats grid */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.4rem;}
+.stat-tile{background:var(--paper);border-radius:8px;padding:.5rem .7rem;text-align:center;}
+.stat-tile .stat-label{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;}
+.stat-tile .stat-value{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;color:var(--accent2);}
+
+/* Queue / Stack / PQ visualization */
+.ds-display{font-family:'JetBrains Mono',monospace;font-size:.8rem;background:var(--paper);border-radius:6px;padding:.5rem .7rem;min-height:36px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;border:1px dashed var(--card-border);}
+.ds-display .ds-empty{color:var(--muted);font-style:italic;}
+.ds-item{background:var(--accent2);color:#fff;padding:2px 8px;border-radius:4px;font-weight:600;}
+.ds-item.front{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-item.top{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-item.pq{background:var(--accent3);}
+.ds-item.pq.min{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-arrow{color:var(--muted);}
+
+/* Pseudo code */
+.pseudo-code{background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:.85rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.6;overflow-x:auto;}
+.pseudo-code .line{padding:1px 4px;border-radius:3px;display:block;white-space:pre;}
+.pseudo-code .line.active{background:rgba(243,156,18,.3);color:#fff;border-left:3px solid var(--node-current);padding-left:6px;}
+.pseudo-code .kw{color:#ff79c6;}
+.pseudo-code .fn{color:#50fa7b;}
+.pseudo-code .num{color:#bd93f9;}
+.pseudo-code .com{color:#6272a4;font-style:italic;}
+.pseudo-code .str{color:#f1fa8c;}
+
+/* Adjacency table */
+.adj-display{margin:.5rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.adj-matrix{border-collapse:collapse;margin:.5rem auto;}
+.adj-matrix td,.adj-matrix th{border:1px solid var(--card-border);padding:6px 10px;text-align:center;min-width:34px;background:#fff;}
+.adj-matrix th{background:var(--accent2);color:#fff;font-weight:700;}
+.adj-matrix td.zero{color:#ccc;}
+.adj-matrix td.nonzero{background:#eafaf1;color:var(--accent3);font-weight:700;}
+.adj-matrix td.highlight{background:#fff3cd;}
+.adj-list{background:var(--card);border:1px solid var(--card-border);border-radius:8px;padding:.7rem 1rem;}
+.adj-list .adj-row{padding:3px 0;border-bottom:1px dashed var(--card-border);}
+.adj-list .adj-row:last-child{border-bottom:none;}
+.adj-list .adj-key{color:var(--accent);font-weight:700;display:inline-block;min-width:32px;}
+.adj-list .adj-arrow{color:var(--muted);margin:0 6px;}
+.adj-list .adj-neighbor{background:#eef2ff;color:var(--accent2);padding:1px 8px;border-radius:4px;margin:1px 3px;display:inline-block;font-weight:600;}
+
+/* Chess board for Knight's tour */
+.chess-board{display:grid;background:#fff;border:2px solid var(--ink);border-radius:6px;overflow:hidden;margin:.5rem auto;width:fit-content;}
+.chess-cell{display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:700;position:relative;transition:background .2s;}
+.chess-cell.light{background:#f0d9b5;color:#666;}
+.chess-cell.dark{background:#b58863;color:#fff;}
+.chess-cell.visited{background:#27ae60 !important;color:#fff;}
+.chess-cell.current{background:#f39c12 !important;color:#fff;box-shadow:inset 0 0 0 3px #d68910;}
+.chess-cell.start{background:#9b59b6 !important;color:#fff;}
+.chess-cell .knight{font-size:1.4em;line-height:1;}
+.chess-cell .step-num{font-size:.7em;}
+
+/* Info box */
+.info-box{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1.1rem 1.4rem;margin:1.3rem 0;position:relative;}
+.info-box .info-label{position:absolute;top:-11px;left:14px;background:var(--accent2);color:#fff;font-size:.74rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.05em;}
+.info-box.warm{background:#fef5e7;border-color:#d68910;}
+.info-box.warm .info-label{background:#d68910;}
+.info-box.green{background:#eafaf1;border-color:var(--accent3);}
+.info-box.green .info-label{background:var(--accent3);}
+.info-box.purple{background:#f4ecf7;border-color:#8e44ad;}
+.info-box.purple .info-label{background:#8e44ad;}
+
+/* Pill labels */
+.pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:4px;margin:0 .15rem;vertical-align:1px;}
+.pill-blue{background:rgba(41,128,185,.12);color:#2980b9;border:1px solid rgba(41,128,185,.3);}
+.pill-red{background:rgba(192,57,43,.12);color:var(--accent);border:1px solid rgba(192,57,43,.3);}
+.pill-green{background:rgba(39,174,96,.12);color:var(--accent3);border:1px solid rgba(39,174,96,.3);}
+.pill-orange{background:rgba(243,156,18,.12);color:#d68910;border:1px solid rgba(243,156,18,.3);}
+.pill-purple{background:rgba(142,68,173,.12);color:#8e44ad;border:1px solid rgba(142,68,173,.3);}
+.pill-gray{background:rgba(0,0,0,.06);color:var(--muted);border:1px solid rgba(0,0,0,.12);}
+
+/* Comparison table */
+.cmp-table{width:100%;border-collapse:collapse;font-size:.86rem;margin:.8rem 0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.cmp-table th{background:var(--accent2);color:#fff;padding:.6rem .8rem;text-align:center;font-weight:600;font-size:.82rem;}
+.cmp-table td{padding:.6rem .8rem;text-align:center;border-bottom:1px solid var(--card-border);font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.cmp-table td:first-child{font-family:'Noto Sans TC',sans-serif;color:var(--accent2);font-weight:600;text-align:left;}
+.cmp-table tr:last-child td{border-bottom:none;}
+.cmp-table tr:nth-child(even){background:rgba(0,0,0,.015);}
+.cmp-table .best{color:var(--accent3);font-weight:700;}
+.cmp-table .worst{color:var(--accent);font-weight:700;}
+
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:.6rem;margin:.6rem 0;font-family:'JetBrains Mono',monospace;font-size:.75rem;}
+.legend-item{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .5rem;background:var(--paper);border-radius:5px;}
+.legend-item .lg-swatch{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--ink);}
+.legend-item .lg-edge{width:18px;height:3px;border-radius:2px;}
+
+/* Quiz */
+.quiz-box{background:var(--card);border:2px solid var(--accent2);border-radius:12px;padding:1.3rem 1.5rem;margin:1.5rem 0;}
+.quiz-box .quiz-label{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);font-weight:700;letter-spacing:.1em;margin-bottom:.5rem;}
+.quiz-options{display:flex;flex-direction:column;gap:.5rem;margin:.8rem 0;}
+.quiz-opt{display:flex;align-items:center;gap:.6rem;padding:.55rem .9rem;background:var(--paper);border:2px solid var(--card-border);border-radius:8px;cursor:pointer;transition:all .2s;font-family:'JetBrains Mono',monospace;font-size:.86rem;}
+.quiz-opt:hover{border-color:var(--accent2);}
+.quiz-opt .opt-letter{font-weight:700;color:var(--accent2);min-width:22px;}
+.quiz-opt.correct{background:#eafaf1;border-color:var(--accent3);}
+.quiz-opt.correct .opt-letter{color:var(--accent3);}
+.quiz-opt.wrong{background:#fef5e7;border-color:var(--accent);}
+.quiz-opt.wrong .opt-letter{color:var(--accent);}
+.quiz-feedback{margin-top:.7rem;padding:.7rem 1rem;border-radius:8px;font-size:.88rem;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.correct{background:#eafaf1;color:var(--accent3);border-left:4px solid var(--accent3);}
+.quiz-feedback.wrong{background:#fef5e7;color:var(--accent);border-left:4px solid var(--accent);}
+
+/* Floating sidebar navigation */
+.float-nav{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:2px;background:rgba(255,253,250,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--card-border);border-radius:12px;padding:10px 7px;box-shadow:0 6px 24px rgba(0,0,0,.10);font-family:'JetBrains Mono',monospace;max-height:88vh;overflow-y:auto;transition:padding .25s ease;}
+.float-nav .fn-title{font-family:'Noto Serif TC',serif;font-weight:700;font-size:.68rem;color:var(--accent2);text-align:center;letter-spacing:1.5px;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--card-border);max-width:0;overflow:hidden;transition:max-width .25s ease;}
+.float-nav:hover .fn-title{max-width:220px;}
+.float-nav a{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:7px;color:var(--ink);text-decoration:none;white-space:nowrap;transition:all .2s ease;border-left:3px solid transparent;}
+.float-nav a .fn-num{font-weight:700;font-size:.66rem;color:var(--muted);letter-spacing:.4px;flex-shrink:0;width:30px;text-align:left;}
+.float-nav a .fn-name{font-family:'Noto Sans TC',sans-serif;font-size:.76rem;font-weight:500;max-width:0;overflow:hidden;transition:max-width .25s ease,padding .25s ease;padding:0;}
+.float-nav:hover a .fn-name{max-width:220px;padding-left:2px;}
+.float-nav a:hover{background:var(--card);}
+.float-nav a.active{background:var(--accent2);color:#fff;border-left-color:var(--accent);box-shadow:0 2px 6px rgba(192,57,43,.25);}
+.float-nav a.active .fn-num{color:rgba(255,255,255,.85);}
+.float-nav a.active .fn-name{color:#fff;}
+.float-nav .fn-top{margin-top:6px;padding-top:6px;border-top:1px solid var(--card-border);justify-content:center;}
+.float-nav .fn-top .fn-num{width:auto;color:var(--accent2);font-size:.78rem;}
+@media(max-width:768px){
+  .float-nav{right:8px;top:auto;bottom:14px;transform:none;padding:6px 5px;max-height:70vh;}
+  .float-nav .fn-title{display:none;}
+  .float-nav a{padding:4px 7px;}
+  .float-nav a .fn-num{width:26px;font-size:.62rem;}
+}
+
+footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border);}
+
+/* Distance / table inside graph viz */
+.vert-table{margin-top:.6rem;width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:.78rem;}
+.vert-table th,.vert-table td{padding:4px 6px;text-align:center;border:1px solid var(--card-border);}
+.vert-table th{background:var(--accent2);color:#fff;font-weight:600;font-size:.74rem;}
+.vert-table td.tcell-current{background:#fff3cd;font-weight:700;color:var(--accent);}
+.vert-table td.tcell-done{background:#eafaf1;color:var(--accent3);}
+.vert-table td.tcell-inf{color:#ccc;}
+.sec-badge{font-size:.6em;color:var(--muted);border:1px solid var(--card-border);background:var(--card);padding:2px 10px;border-radius:999px;vertical-align:middle;margin-left:.6rem;font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.02em;white-space:nowrap;}
+
+/* Phase 8 shared widgets */
+.bs-stack{display:flex;flex-direction:column-reverse;align-items:center;gap:4px;min-height:180px;justify-content:flex-start;padding:.6rem;}
+.bs-item{width:110px;text-align:center;padding:.4rem .6rem;background:#5b7eb8;color:#fff;border-radius:6px;font-family:'JetBrains Mono',monospace;font-weight:600;box-shadow:0 2px 5px rgba(0,0,0,.15);}
+.bs-hl{background:#f39c12;}
+.bs-toplabel,.bq-label{font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.bq-row{display:flex;align-items:center;gap:6px;min-height:64px;flex-wrap:wrap;padding:.4rem;}
+.bq-item{min-width:52px;text-align:center;padding:.45rem .5rem;background:#5b7eb8;color:#fff;border-radius:6px;font-family:'JetBrains Mono',monospace;font-weight:600;}
+.char-strip{display:flex;gap:3px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;padding:.4rem 0;}
+.char-cell{min-width:30px;text-align:center;padding:.35rem .25rem;border:1px solid var(--card-border);border-radius:5px;background:var(--card);}
+.char-cur{background:#f39c12;color:#fff;border-color:#f39c12;}
+.char-done{background:#e8f5ec;color:#1a6b4a;border-color:#bfe3cd;}
+.char-bad{background:#c0392b;color:#fff;border-color:#c0392b;}
+.token-out{display:flex;gap:4px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;min-height:40px;padding:.3rem 0;}
+.tok{padding:.3rem .55rem;border-radius:5px;background:#2c3e7a;color:#fff;font-weight:600;}
+.tok-op{background:#8e44ad;}
+.tok-new{outline:3px solid #f39c12;}
+.mono{font-family:'JetBrains Mono',monospace;}
+</style>
+</head>
+<body>
+<nav class="float-nav" id="floatNav" aria-label="章節導覽">
+  <div class="fn-title">章節導覽</div>
+  <a href="#prologue" data-target="prologue"><span class="fn-num">P00</span><span class="fn-name">為什麼學資料結構？</span></a>
+  <a href="#types" data-target="types"><span class="fn-num">P01</span><span class="fn-name">原子型別與記憶體</span></a>
+  <a href="#pointers" data-target="pointers"><span class="fn-num">P02</span><span class="fn-name">指標</span></a>
+  <a href="#collections" data-target="collections"><span class="fn-num">P03</span><span class="fn-name">集合型別</span></a>
+  <a href="#functions" data-target="functions"><span class="fn-num">P04</span><span class="fn-name">函式與傳參</span></a>
+  <a href="#classes" data-target="classes"><span class="fn-num">P05</span><span class="fn-name">類別：Fraction</span></a>
+  <a href="#inherit" data-target="inherit"><span class="fn-num">P06</span><span class="fn-name">繼承：邏輯閘</span></a>
+  <a href="#exercises" data-target="exercises"><span class="fn-num">EX</span><span class="fn-name">練習題</span></a>
+  <a href="#reference" data-target="reference"><span class="fn-num">REF</span><span class="fn-name">總覽比較</span></a>
+  <a href="#top" class="fn-top" title="回到頂端"><span class="fn-num">↑ TOP</span></a>
+</nav>
+
+<div class="hero" id="top">
+  <div class="hero-grid"></div>
+  <svg class="hero-graph" width="320" height="250" viewBox="0 0 320 250">
+  <g stroke="#fff" stroke-width="2.5" fill="none" opacity=".9">
+    <rect x="45" y="40" width="230" height="60" rx="9"/>
+    <rect x="45" y="140" width="100" height="60" rx="9"/>
+    <rect x="175" y="140" width="100" height="60" rx="9"/>
+    <path d="M160 100 v18 m0 0 l-60 22 m60-22 l60 22"/>
+  </g>
+  <g fill="#fff" opacity=".9"><circle cx="160" cy="70" r="7"/><circle cx="95" cy="170" r="7"/><circle cx="225" cy="170" r="7"/></g>
+</svg>
+  <div class="hero-content">
+    <h1><span class="blue">C++</span> 導論：型別、<span class="orange">指標</span>與物件</h1>
+    <div class="subtitle">cppds Chapter 1 — Introduction（對應講義 01）</div>
+    <div class="big-formula">ADT｜原子型別｜指標｜集合｜傳值vs傳參考｜Fraction｜邏輯閘</div>
+    <div class="scroll-hint">向下捲動開始互動<span>↓</span></div>
+  </div>
+</div>
+
+<div class="container">
+<div class="toc">
+  <div class="toc-title">CONTENTS · 內容目錄</div>
+  <div class="toc-grid">
+    <a href="#prologue"><span class="toc-num">P00</span>為什麼學資料結構？</a>
+    <a href="#types"><span class="toc-num">P01</span>原子型別與記憶體</a>
+    <a href="#pointers"><span class="toc-num">P02</span>指標</a>
+    <a href="#collections"><span class="toc-num">P03</span>集合型別</a>
+    <a href="#functions"><span class="toc-num">P04</span>函式與傳參</a>
+    <a href="#classes"><span class="toc-num">P05</span>類別：Fraction</a>
+    <a href="#inherit"><span class="toc-num">P06</span>繼承：邏輯閘</a>
+    <a href="#exercises"><span class="toc-num">EX</span>練習題</a>
+    <a href="#reference"><span class="toc-num">REF</span>總覽比較</a>
+  </div>
+</div>
+
+<section id="prologue">
+  <div class="section-number">PROLOGUE · 開場</div>
+  <h2>抽象化、ADT 與這門課的地圖 <span class="sec-badge">cppds §1.1–1.6</span></h2>
+  <p>寫程式 = 把問題的<strong>資料</strong>與<strong>過程</strong>編碼進電腦。
+  <strong>抽象資料型別（ADT）</strong>只告訴你「能做什麼操作」（介面），把「怎麼做到」（實作）藏起來——
+  同一個 ADT 可以有很多實作，效能各不相同。<strong>資料結構 = ADT 的實作</strong>。</p>
+  <div class="info-box">
+    <span class="info-label">為什麼要學？</span>
+    ① 大問題靠抽象化管理複雜度；② 同一問題的不同解法差距可以是「秒 vs 年」（第 2 章起量化）；
+    ③ 這些結構是所有系統的積木：OS、資料庫、編譯器、AI 框架。
+  </div>
+  <div class="info-box warm">
+    <span class="info-label">C++ 的定位</span>
+    C++ 讓我們<strong>貼著記憶體</strong>學資料結構：指標、手動配置（new/delete）、值語意——
+    Python 幫你藏起來的細節，這裡全部攤開。懂了底層，回頭用什麼語言都更強。
+  </div>
+</section>
+
+<section id="types">
+  <div class="section-number">PART 01 · 原子型別</div>
+  <h2>內建原子型別：每個變數都是「固定大小的格子」 <span class="sec-badge">cppds §1.8</span></h2>
+  <p>C++ 是<strong>靜態型別</strong>語言：宣告變數就固定了型別與大小。
+  <code>int</code>、<code>double</code>、<code>char</code>、<code>bool</code> 是最基本的「原子」。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="bq-row" id="typeVis" style="min-height:96px;"></div>
+        <div class="status-banner" id="typeStatus"><span class="status-icon">›</span><span class="status-text">點型別卡看它的大小與取值範圍。</span></div>
+        <div class="controls-bar" id="typeBtns"></div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">與 Python 的分野</div>
+        <div style="font-size:.86rem;line-height:1.9;">Python 的 int 無上限、變數可隨時換型別；
+        C++ 的 int 通常 4 bytes、溢位不會報錯（21 億再 +1 變負的！）。<strong>大小固定</strong>正是陣列 O(1) 定址的前提。</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">整數除法陷阱</div>
+        <div class="mono" style="font-size:.85rem;line-height:2;">9 / 5&nbsp;&nbsp;→ 1&nbsp;&nbsp;// int ÷ int = int<br>9.0 / 5 → 1.8<br>9 % 5&nbsp;&nbsp;→ 4</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pointers">
+  <div class="section-number">PART 02 · 指標</div>
+  <h2>指標：存「位址」的變數 <span class="sec-badge">cppds §1.8（Pointers）</span></h2>
+  <p>指標是整門課的關鍵道具（第 4 章串列、第 8 章樹全靠它）。
+  兩個運算子：<code>&amp;</code> 取位址、<code>*</code> 解參考（沿位址取值）。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="bq-row" id="ptrVis" style="min-height:100px;"></div>
+        <div class="status-banner" id="ptrStatus"><span class="status-icon">›</span><span class="status-text">按步驟按鈕，看變數格與指標格的變化。</span></div>
+        <div class="controls-bar">
+          <button class="btn" onclick="ptrStep(1)">① int varN=100</button>
+          <button class="btn" onclick="ptrStep(2)">② ptrN=&amp;varN</button>
+          <button class="btn" onclick="ptrStep(3)">③ *ptrN=50</button>
+          <button class="btn" onclick="ptrStep(4)">④ ptrN=NULL</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">程式對照 <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="ptrCode">
+<span class="line" data-l="1"><span class="kw">int</span> varN = <span class="num">100</span>;      <span class="com">// 一般變數：住著值</span></span>
+<span class="line" data-l="2"><span class="kw">int</span> *ptrN = &amp;varN;    <span class="com">// 指標：住著位址</span></span>
+<span class="line" data-l="3">cout &lt;&lt; ptrN;          <span class="com">// 印出位址（如 0x7ffe...）</span></span>
+<span class="line" data-l="4">cout &lt;&lt; *ptrN;         <span class="com">// 解參考：順著位址取值 → 100</span></span>
+<span class="line" data-l="5">*ptrN = <span class="num">50</span>;            <span class="com">// 透過指標改 varN</span></span>
+<span class="line" data-l="6">ptrN = <span class="num">NULL</span>;           <span class="com">// 指向「無」；解參考 NULL = 當機</span></span></div></div>
+    </div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 讀指標</div>
+  <p>接上面 ③ 之後執行 <code>cout &lt;&lt; varN;</code> 印出什麼？</p>
+  
+  <div class="quiz-options" id="qPtrOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="*ptrN = 50 透過位址改的就是 varN 本人——一塊記憶體、兩個名字。" onclick="quizCheck('qPtr', this)"><span class="opt-letter">(A)</span> <code>50</code></div><div class="quiz-opt" data-correct="false" data-fb="指標不是複製品：*ptrN 與 varN 是同一格記憶體。" onclick="quizCheck('qPtr', this)"><span class="opt-letter">(B)</span> <code>100</code></div><div class="quiz-opt" data-correct="false" data-fb="印位址要 cout << ptrN（不加 *）。" onclick="quizCheck('qPtr', this)"><span class="opt-letter">(C)</span> 位址（0x…）</div>
+  </div>
+  <div class="quiz-feedback" id="qPtrFeedback"></div>
+</div>
+</section>
+
+<section id="collections">
+  <div class="section-number">PART 03 · 集合型別</div>
+  <h2>集合總覽：有序四兄弟＋無序雙雄 <span class="sec-badge">cppds §1.9</span></h2>
+  <p>有序（sequence）：<strong>array、vector、string</strong>（＋第 4 章的 list）；
+  無序（unordered）：<strong>set、unordered_map（hash table）</strong>。
+  這張表整學期都用得到：</p>
+  <div class="viz-panel">
+    <div style="overflow-x:auto;">
+    <table class="cmp-table" style="width:100%;font-size:.86rem;">
+      <thead><tr><th>容器</th><th>特性</th><th>常用操作</th><th>本課登場</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">int a[10]</td><td>固定長度、最原始</td><td>a[i]</td><td>附錄 A 低階陣列</td></tr>
+        <tr><td class="mono">vector&lt;T&gt;</td><td>可成長陣列</td><td>push_back、[i]、size</td><td>全書主力容器</td></tr>
+        <tr><td class="mono">string</td><td>字元序列</td><td>+=、[i]、substr</td><td>§3 迴文、§6 雜湊</td></tr>
+        <tr><td class="mono">set&lt;T&gt;</td><td>不重複、自動排序</td><td>insert、count</td><td>§9 Dijkstra visited</td></tr>
+        <tr><td class="mono">unordered_map&lt;K,V&gt;</td><td>key→value、平均 O(1)</td><td>[key]、count</td><td>§2 分析、§6 雜湊原理</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="status-banner" id="colStatus"><span class="status-icon">›</span><span class="status-text">按按鈕跑一段 vector 示範。</span></div>
+    <div class="controls-bar">
+      <button class="btn" onclick="colDemo()">▶ vector 示範：push_back ×3 → [1] → size</button>
+    </div>
+    <div class="bq-row" id="colVis" style="min-height:64px;"></div>
+  </div>
+</section>
+
+<section id="functions">
+  <div class="section-number">PART 04 · 函式</div>
+  <h2>傳值 vs 傳參考：影本還是本人？ <span class="sec-badge">cppds §1.10</span></h2>
+  <p>C++ 預設<strong>傳值</strong>（複製一份）；加 <code>&amp;</code> 變<strong>傳參考</strong>（操作原變數）。
+  大型容器傳值會整包複製——所以慣例寫 <code>const vector&lt;int&gt;&amp; v</code>（借看不借改）。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="bq-row" id="fnVis" style="min-height:96px;"></div>
+        <div class="status-banner" id="fnStatus"><span class="status-icon">›</span><span class="status-text">比較三種傳法對呼叫端變數 a 的影響。</span></div>
+        <div class="controls-bar">
+          <button class="btn" onclick="fnDemo('value')">byValue(a)</button>
+          <button class="btn" onclick="fnDemo('ref')">byRef(a)</button>
+          <button class="btn" onclick="fnDemo('ptr')">byPtr(&amp;a)</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">三種傳法 <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="fnCode">
+<span class="line" data-l="1"><span class="kw">void</span> <span class="fn">byValue</span>(<span class="kw">int</span> x)&nbsp;&nbsp;{ x = <span class="num">99</span>; }   <span class="com">// 拿到影本</span></span>
+<span class="line" data-l="2"><span class="kw">void</span> <span class="fn">byRef</span>(<span class="kw">int</span> &amp;x)&nbsp;{ x = <span class="num">99</span>; }   <span class="com">// 拿到本人</span></span>
+<span class="line" data-l="3"><span class="kw">void</span> <span class="fn">byPtr</span>(<span class="kw">int</span> *x)&nbsp;{ *x = <span class="num">99</span>; }  <span class="com">// 拿到地址</span></span>
+<span class="line" data-l="4"><span class="kw">int</span> a = <span class="num">1</span>;</span>
+<span class="line" data-l="5"><span class="fn">byValue</span>(a);   <span class="com">// a 仍是 1</span></span>
+<span class="line" data-l="6"><span class="fn">byRef</span>(a);     <span class="com">// a 變 99</span></span>
+<span class="line" data-l="7"><span class="fn">byPtr</span>(&amp;a);    <span class="com">// a 變 99</span></span></div></div>
+      <div class="info-card">
+        <div class="ic-title">陣列參數的特例</div>
+        <div style="font-size:.86rem;line-height:1.9;">C 風格陣列當參數會<strong>退化成指標</strong>——
+        函式裡改 a[i] 就是改原陣列，且 sizeof 資訊遺失。vector 沒這個坑。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="classes">
+  <div class="section-number">PART 05 · 類別</div>
+  <h2>自訂型別：Fraction 與運算子多載 <span class="sec-badge">cppds §1.11</span></h2>
+  <p>類別 = 狀態（成員變數）＋行為（成員函式）。<strong>運算子多載</strong>讓
+  <code>f1 + f2</code>、<code>f1 == f2</code> 對自訂型別也成立——這是把 Fraction 變成「一等公民」的關鍵。
+  建構子裡先約分（gcd），確保 <code>3/6</code> 一進門就變 <code>1/2</code>。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div style="display:flex;gap:.6rem;align-items:center;justify-content:center;flex-wrap:wrap;" class="mono">
+          <input id="frA" style="width:64px;padding:.35rem;border:1px solid var(--card-border);border-radius:6px;" value="1/4">
+          <span id="frOp" style="font-size:1.2rem;">+</span>
+          <input id="frB" style="width:64px;padding:.35rem;border:1px solid var(--card-border);border-radius:6px;" value="1/2">
+          <span>=</span><span id="frOut" style="font-size:1.25rem;font-weight:700;color:var(--accent2);">?</span>
+        </div>
+        <div class="status-banner" id="frStatus"><span class="status-icon">›</span><span class="status-text">輸入兩個分數（a/b 格式），選運算。</span></div>
+        <div class="controls-bar">
+          <button class="btn" onclick="frCalc('+')">operator+</button>
+          <button class="btn" onclick="frCalc('*')">operator*</button>
+          <button class="btn" onclick="frCalc('==')">operator==</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">Fraction <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="fracCode" style="font-size:.78rem;">
+<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">Fraction</span> {          <span class="com">// dscpp/fraction.hpp</span></span>
+<span class="line" data-l="2">  <span class="kw">private</span>:</span>
+<span class="line" data-l="3">    <span class="kw">int</span> num, den;             <span class="com">// 狀態（private：封裝）</span></span>
+<span class="line" data-l="4">  <span class="kw">public</span>:</span>
+<span class="line" data-l="5">    <span class="fn">Fraction</span>(<span class="kw">int</span> t, <span class="kw">int</span> b) { num = t/<span class="fn">gcd</span>(t,b); den = b/<span class="fn">gcd</span>(t,b); }</span>
+<span class="line" data-l="6">    Fraction <span class="kw">operator</span>+(Fraction o) {</span>
+<span class="line" data-l="7">        <span class="kw">return</span> <span class="fn">Fraction</span>(num*o.den + o.num*den, den*o.den);</span>
+<span class="line" data-l="8">    }</span>
+<span class="line" data-l="9">    <span class="kw">bool</span> <span class="kw">operator</span>==(Fraction o) {</span>
+<span class="line" data-l="10">        <span class="kw">return</span> num*o.den == o.num*den;</span>
+<span class="line" data-l="11">    }</span>
+<span class="line" data-l="12">};</span></div></div>
+      <div class="info-card">
+        <div class="ic-title">封裝的意義</div>
+        <div style="font-size:.86rem;line-height:1.9;">num/den 設成 private：外界只能走公開介面，
+        「永遠是最簡分數」這個<strong>不變量</strong>就有人守門。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="inherit">
+  <div class="section-number">PART 06 · 繼承</div>
+  <h2>繼承與多型：邏輯閘電路 <span class="sec-badge">cppds §1.12</span></h2>
+  <p>LogicGate（共同行為）→ BinaryGate/UnaryGate（輸入腳位數）→ AndGate/OrGate/NotGate（各自的
+  <code>performGateLogic</code>）。<strong>IS-A</strong> 層級讓新閘只需要寫「差異」那一小段。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div style="display:flex;gap:1.2rem;justify-content:center;align-items:center;flex-wrap:wrap;" class="mono" id="circuitVis">
+          <div style="text-align:center;">A <select id="gInA" class="mono"><option>0</option><option selected>1</option></select>
+          B <select id="gInB" class="mono"><option>0</option><option selected>1</option></select>
+          <div class="bq-item" style="margin-top:.4rem;">AND</div><div id="gAndOut">?</div></div>
+          <div style="text-align:center;">C <select id="gInC" class="mono"><option selected>0</option><option>1</option></select>
+          D <select id="gInD" class="mono"><option selected>0</option><option>1</option></select>
+          <div class="bq-item" style="margin-top:.4rem;">AND</div><div id="gAnd2Out">?</div></div>
+          <div style="text-align:center;">→ <div class="bq-item" style="background:#8e44ad;">OR</div><div id="gOrOut">?</div></div>
+          <div style="text-align:center;">→ <div class="bq-item" style="background:#1a6b4a;">NOT</div><div id="gNotOut" style="font-size:1.3rem;font-weight:700;">?</div></div>
+        </div>
+        <div class="status-banner" id="gateStatus"><span class="status-icon">›</span><span class="status-text">這是講義的 NOT((A AND B) OR (C AND D)) 電路（= NAND·NOR 定理示範）。改輸入按「執行」。</span></div>
+        <div class="controls-bar"><button class="btn" onclick="gateRun()">▶ 執行電路</button></div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">類別層級 <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="gateCode" style="font-size:.78rem;">
+<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">LogicGate</span> { ... <span class="fn">getOutput</span>() 呼叫 <span class="fn">performGateLogic</span>() ... };</span>
+<span class="line" data-l="2"><span class="kw">class</span> <span class="fn">BinaryGate</span> : <span class="kw">public</span> LogicGate { ... 兩個輸入腳位 ... };</span>
+<span class="line" data-l="3"><span class="kw">class</span> <span class="fn">AndGate</span> : <span class="kw">public</span> BinaryGate {</span>
+<span class="line" data-l="4">    <span class="kw">int</span> <span class="fn">performGateLogic</span>() { <span class="kw">return</span> getPinA() &amp;&amp; getPinB(); }</span>
+<span class="line" data-l="5">};</span>
+<span class="line" data-l="6"><span class="com">// Connector 把 fromGate 的輸出接到 toGate 的輸入 → 組合電路</span></span></div></div>
+      <div class="info-card">
+        <div class="ic-title">多型在哪？</div>
+        <div style="font-size:.86rem;line-height:1.9;">父類的 <code>getOutput()</code> 呼叫
+        <code>performGateLogic()</code>，但實際執行的是<strong>子類</strong>的版本
+        （C++ 用 <code>virtual</code> 實現）——同一介面、各自行為。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="exercises">
+  <div class="section-number">EXERCISES · 練習</div>
+  <h2>動手驗證 <span class="sec-badge">cppds §1 綜合</span></h2>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 1 · 型別</div>
+  <p><code>int n = 7; double d = n / 2;</code> 之後 d 是？</p>
+  
+  <div class="quiz-options" id="ex1Options">
+    <div class="quiz-opt" data-correct="true" data-fb="7/2 先做「int ÷ int」得 3，才轉成 double——除法當下的型別決定一切。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> <code>3.0</code></div><div class="quiz-opt" data-correct="false" data-fb="想要 3.5 要寫 n / 2.0 或 double(n) / 2。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> <code>3.5</code></div><div class="quiz-opt" data-correct="false" data-fb="int 塞給 double 是合法的隱式轉換。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> 編譯錯誤</div>
+  </div>
+  <div class="quiz-feedback" id="ex1Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 2 · 指標</div>
+  <p><code>int *p; cout &lt;&lt; *p;</code> 的問題是？</p>
+  
+  <div class="quiz-options" id="ex2Options">
+    <div class="quiz-opt" data-correct="true" data-fb="p 沒指向任何有效位址（wild pointer）。好習慣：宣告即初始化，暫時沒目標就設 NULL。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(A)</span> 解參考未初始化的指標 → 未定義行為</div><div class="quiz-opt" data-correct="false" data-fb="語法完全合法——這正是 C++ 可怕之處：合法但爆炸。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(B)</span> 語法錯誤</div><div class="quiz-opt" data-correct="false" data-fb="未定義行為：可能亂數、可能當機，什麼都可能。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(C)</span> 一定印出 0</div>
+  </div>
+  <div class="quiz-feedback" id="ex2Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 3 · 傳參</div>
+  <p>要寫 <code>void swap2(?, ?)</code> 讓呼叫端兩變數真的交換，参數應該是？</p>
+  
+  <div class="quiz-options" id="ex3Options">
+    <div class="quiz-opt" data-correct="true" data-fb="傳參考拿到本人才能交換；傳值只是交換影本。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(A)</span> <code>int &amp;a, int &amp;b</code></div><div class="quiz-opt" data-correct="false" data-fb="函式裡交換的是影本，呼叫端不動如山——經典陷阱。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(B)</span> <code>int a, int b</code></div><div class="quiz-opt" data-correct="false" data-fb="const 參考「借看不借改」，不能賦值。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(C)</span> <code>const int &amp;a, const int &amp;b</code></div>
+  </div>
+  <div class="quiz-feedback" id="ex3Feedback"></div>
+</div>
+</section>
+
+<section id="reference">
+  <div class="section-number">REFERENCE · 總覽</div>
+  <h2>第 1 章總覽 <span class="sec-badge">cppds §1 總覽</span></h2>
+  <div style="overflow-x:auto;">
+  <table class="cmp-table" style="width:100%;font-size:.88rem;">
+    <thead><tr><th>主題</th><th>cppds</th><th>本頁</th><th>整學期會再遇到</th></tr></thead>
+    <tbody>
+      <tr><td>抽象化 / ADT</td><td>§1.5–1.6</td><td>P00</td><td>每一章的開場白</td></tr>
+      <tr><td>原子型別</td><td>§1.8</td><td>P01</td><td>位址計算（附錄 A）</td></tr>
+      <tr><td>指標</td><td>§1.8</td><td>P02</td><td>串列（ch4）、樹（ch8）、圖（ch9）</td></tr>
+      <tr><td>集合型別</td><td>§1.9</td><td>P03</td><td>vector/map 全書主力</td></tr>
+      <tr><td>函式與傳參</td><td>§1.10</td><td>P04</td><td>所有演算法的簽名</td></tr>
+      <tr><td>類別與多載</td><td>§1.11</td><td>P05</td><td>自訂 Stack/Queue/BST…</td></tr>
+      <tr><td>繼承</td><td>§1.12</td><td>P06</td><td>LogicGate 家族、OOP 設計</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="info-box" style="margin-top:1rem;">
+    <span class="info-label">關鍵概念複習</span>
+    ① ADT = 介面；資料結構 = 實作；效能 = 選擇的理由。<br>
+    ② 指標三件套：<code>&amp;</code> 取址、<code>*</code> 解參考、NULL 表「無」。<br>
+    ③ 傳值複製、傳參考同體；大容器用 <code>const &amp;</code>。<br>
+    ④ 封裝守不變量；繼承寫差異；多型讓同一介面各自表述。
+  </div>
+</section></div>
+<footer>
+  互動式 C++ 導論教學 · 基於 Problem Solving with Algorithms and Data Structures using C++ (cppds) Ch.1<br>
+  <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);">Designed for NSYSU · Interactive C++ self-study</span>
+</footer>
+<script>
+/* ============ shared utilities ============ */
+const $ = id => document.getElementById(id);
+
+function quizCheck(quizId, optEl) {
+  const isCorrect = optEl.dataset.correct === 'true';
+  optEl.parentElement.querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('correct','wrong'));
+  optEl.classList.add(isCorrect ? 'correct' : 'wrong');
+  const fb = $(quizId + 'Feedback');
+  fb.classList.remove('correct','wrong');
+  fb.classList.add('show', isCorrect ? 'correct' : 'wrong');
+  fb.innerHTML = (isCorrect ? '<strong>正確 ✓</strong> ' : '<strong>不對 ✗</strong> ') + (optEl.dataset.fb || '');
+}
+
+function hlLine(rootId, n) {
+  const root = $(rootId);
+  if (!root) return;
+  root.querySelectorAll('.line').forEach(l => l.classList.remove('active'));
+  if (n != null) {
+    const line = root.querySelector(`.line[data-l="${n}"]`);
+    if (line) line.classList.add('active');
+  }
+}
+
+/* step player: frames = [{...}], apply(frame) renders */
+class Player {
+  constructor({frames, apply, delayInput, onDone}) {
+    this.frames = frames; this.apply = apply;
+    this.delayInput = delayInput; this.i = -1; this.timer = null;
+    this.onDone = onDone || (()=>{});
+  }
+  step() {
+    if (this.i + 1 >= this.frames.length) { this.stop(); this.onDone(); return; }
+    this.i += 1; this.apply(this.frames[this.i]);
+  }
+  play() {
+    this.stop();
+    const tick = () => {
+      if (this.i + 1 >= this.frames.length) { this.stop(); this.onDone(); return; }
+      this.step();
+      this.timer = setTimeout(tick, this.delayInput ? parseInt(this.delayInput.value,10) : 700);
+    };
+    tick();
+  }
+  stop() { if (this.timer) { clearTimeout(this.timer); this.timer = null; } }
+  reset() { this.stop(); this.i = -1; if (this.frames.length) this.apply(this.frames[0]); }
+}
+
+function setStatus(id, html) {
+  const el = $(id); if (el) el.querySelector('.status-text').innerHTML = html;
+}
+
+/* vertical box stack renderer (DOM) */
+function renderBoxStack(containerId, items, opts={}) {
+  const el = $(containerId); if (!el) return;
+  const hl = opts.highlight ?? -1;   // index from top (0 = top)
+  el.innerHTML = '';
+  const label = document.createElement('div');
+  label.className = 'bs-toplabel';
+  label.textContent = items.length ? 'top ↓' : '(empty)';
+  el.appendChild(label);
+  items.slice().reverse().forEach((v, idx) => {
+    const d = document.createElement('div');
+    d.className = 'bs-item' + (idx === hl ? ' bs-hl' : '');
+    d.textContent = v;
+    el.appendChild(d);
+  });
+}
+
+/* horizontal queue renderer: front at left */
+function renderBoxQueue(containerId, items, opts={}) {
+  const el = $(containerId); if (!el) return;
+  el.innerHTML = '';
+  const front = document.createElement('div');
+  front.className = 'bq-label'; front.textContent = items.length ? 'front →' : '(empty)';
+  el.appendChild(front);
+  items.forEach((v, idx) => {
+    const d = document.createElement('div');
+    d.className = 'bq-item' + (idx === (opts.highlight ?? -1) ? ' bs-hl' : '');
+    d.textContent = v;
+    el.appendChild(d);
+  });
+  const rear = document.createElement('div');
+  rear.className = 'bq-label'; rear.textContent = items.length ? '← rear' : '';
+  el.appendChild(rear);
+}
+
+/* floating nav scroll spy */
+(function setupNav() {
+  const nav = $('floatNav');
+  const links = nav.querySelectorAll('a[data-target]');
+  const sections = Array.from(links).map(a => document.getElementById(a.dataset.target)).filter(Boolean);
+  function update() {
+    const y = window.scrollY + window.innerHeight * 0.3;
+    let active = sections[0]?.id;
+    for (const s of sections) if (s.offsetTop <= y) active = s.id;
+    links.forEach(a => a.classList.toggle('active', a.dataset.target === active));
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+
+/* ---------- P01 types ---------- */
+const TYPES = {
+  'int':    {size: 4, range: '−2,147,483,648 ～ 2,147,483,647', note: '溢位不報錯，直接繞回負數！'},
+  'double': {size: 8, range: '±1.7×10³⁰⁸（15~16 位有效數字）', note: '0.1 + 0.2 != 0.3——浮點誤差。'},
+  'char':   {size: 1, range: "'a' 其實是整數 97（ASCII）", note: "ch - 'a' 可算字母序——anagram 解法 4 用過。"},
+  'bool':   {size: 1, range: 'true / false', note: '非零即 true；cout 印出 1/0。'},
+};
+function typeShow(name) {
+  const t = TYPES[name];
+  const el = $('typeVis'); el.innerHTML = '';
+  for (let i = 0; i < t.size; i++) {
+    const d = document.createElement('div');
+    d.className = 'bq-item'; d.style.minWidth = '40px';
+    d.textContent = 'B' + i;
+    el.appendChild(d);
+  }
+  setStatus('typeStatus', `<strong>${name}</strong>：${t.size} byte${t.size>1?'s':''}｜範圍：${t.range}｜${t.note}`);
+}
+(function initTypes(){
+  const bar = $('typeBtns');
+  Object.keys(TYPES).forEach(name => {
+    const b = document.createElement('button');
+    b.className = 'btn'; b.textContent = name;
+    b.onclick = () => typeShow(name);
+    bar.appendChild(b);
+  });
+  typeShow('int');
+})();
+
+/* ---------- P02 pointers ---------- */
+let ptrState = 0;
+function ptrRender(varVal, ptrVal, msg, line) {
+  const el = $('ptrVis'); el.innerHTML = '';
+  const mk = (label, val, addr, color) => {
+    const d = document.createElement('div'); d.className = 'bq-item';
+    d.style.background = color;
+    d.innerHTML = `<div style="font-size:.62rem;opacity:.8;">${label} @ ${addr}</div>${val}`;
+    return d;
+  };
+  el.appendChild(mk('varN', varVal, '0x1000', '#5b7eb8'));
+  const arrow = document.createElement('div'); arrow.className = 'bq-label';
+  arrow.textContent = ptrVal === '0x1000' ? '← 指著' : '';
+  el.appendChild(arrow);
+  el.appendChild(mk('ptrN', ptrVal, '0x2000', '#8e44ad'));
+  setStatus('ptrStatus', msg); hlLine('ptrCode', line);
+}
+function ptrStep(s) {
+  ptrState = s;
+  if (s === 1) ptrRender('100', '?', 'varN 拿到一格 4B 記憶體（0x1000），放入 100。ptrN 還沒登場。', 1);
+  if (s === 2) ptrRender('100', '0x1000', 'ptrN 的「值」是 varN 的位址——它指著 varN。*ptrN 讀出 100。', 2);
+  if (s === 3) ptrRender('50', '0x1000', '*ptrN = 50：順著位址把 varN 本人改成 50。一塊記憶體、兩個名字。', 5);
+  if (s === 4) ptrRender('50', 'NULL', 'ptrN = NULL：不再指向任何東西。此時 *ptrN 會 segfault——先檢查再解參考！', 6);
+}
+ptrStep(1);
+
+/* ---------- P03 collections demo ---------- */
+function colDemo() {
+  const steps = [
+    {v: ['17'], msg: 'v.push_back(17) → size 1'},
+    {v: ['17','26'], msg: 'v.push_back(26) → size 2'},
+    {v: ['17','26','31'], msg: 'v.push_back(31) → size 3'},
+    {v: ['17','26','31'], hl: 1, msg: 'v[1] → 26（O(1) 直達）'},
+    {v: ['17','26','31'], msg: 'v.size() → 3'},
+  ];
+  let i = 0;
+  const t = setInterval(() => {
+    if (i >= steps.length) { clearInterval(t); return; }
+    const s = steps[i];
+    renderBoxQueue('colVis', s.v, {highlight: s.hl ?? -1});
+    setStatus('colStatus', s.msg);
+    i++;
+  }, 700);
+}
+
+/* ---------- P04 functions ---------- */
+function fnDemo(mode) {
+  const el = $('fnVis'); el.innerHTML = '';
+  const mk = (label, val, color) => {
+    const d = document.createElement('div'); d.className = 'bq-item';
+    d.style.background = color;
+    d.innerHTML = `<div style="font-size:.62rem;opacity:.8;">${label}</div>${val}`;
+    return d;
+  };
+  if (mode === 'value') {
+    el.appendChild(mk('呼叫端 a', '1', '#5b7eb8'));
+    el.appendChild(mk('函式內 x（影本）', '1 → 99', '#e67e22'));
+    setStatus('fnStatus', 'byValue：x 是 a 的影本；函式內改成 99，呼叫端 a 依然是 1。');
+    hlLine('fnCode', 5);
+  } else if (mode === 'ref') {
+    el.appendChild(mk('a ＝ x（同一格）', '1 → 99', '#1a6b4a'));
+    setStatus('fnStatus', 'byRef：x 是 a 的別名——函式內的修改就是修改 a。回來後 a = 99。');
+    hlLine('fnCode', 6);
+  } else {
+    el.appendChild(mk('呼叫端 a', '1 → 99', '#5b7eb8'));
+    el.appendChild(mk('函式內 x（位址）', '&a', '#8e44ad'));
+    setStatus('fnStatus', 'byPtr：傳位址，*x = 99 改到 a。效果同傳參考，但呼叫端要寫 &a、函式內要解參考。');
+    hlLine('fnCode', 7);
+  }
+}
+fnDemo('value');
+
+/* ---------- P05 fraction ---------- */
+function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b]; } return a || 1; }
+function parseFrac(s) {
+  const m = s.trim().match(/^(-?\d+)\s*\/\s*(\d+)$/);
+  if (!m) return null;
+  return [parseInt(m[1],10), parseInt(m[2],10)];
+}
+function frCalc(op) {
+  const A = parseFrac($('frA').value), B = parseFrac($('frB').value);
+  $('frOp').textContent = op;
+  if (!A || !B || !A[1] || !B[1]) { $('frOut').textContent = '?'; setStatus('frStatus', '請用 a/b 格式（分母非 0）。'); return; }
+  const [an, ad] = A, [bn, bd] = B;
+  if (op === '==') {
+    const eq = an * bd === bn * ad;
+    $('frOut').textContent = eq ? 'true' : 'false';
+    setStatus('frStatus', `operator==：交叉相乘 ${an}×${bd} ${eq?'==':'≠'} ${bn}×${ad} → ${eq}。不必先通分！`);
+    return;
+  }
+  let n, d;
+  if (op === '+') { n = an*bd + bn*ad; d = ad*bd; }
+  else { n = an*bn; d = ad*bd; }
+  const g = gcd(n, d);
+  $('frOut').textContent = `${n/g}/${d/g}`;
+  setStatus('frStatus', `operator${op}：先算出 ${n}/${d}，建構子用 gcd=${g} 約分 → <strong>${n/g}/${d/g}</strong>。不變量：永遠最簡。`);
+}
+frCalc('+');
+
+/* ---------- P06 gates ---------- */
+function gateRun() {
+  const A = +$('gInA').value, B = +$('gInB').value, C = +$('gInC').value, D = +$('gInD').value;
+  const and1 = A && B ? 1 : 0, and2 = C && D ? 1 : 0;
+  const or1 = (and1 || and2) ? 1 : 0, out = or1 ? 0 : 1;
+  $('gAndOut').textContent = and1; $('gAnd2Out').textContent = and2;
+  $('gOrOut').textContent = or1; $('gNotOut').textContent = out;
+  setStatus('gateStatus', `AND(${A},${B})=${and1}、AND(${C},${D})=${and2} → OR=${or1} → NOT=<strong>${out}</strong>。` +
+    ' Connector 物件把訊號一路往前送——每個閘只負責自己的 performGateLogic()。');
+}
+gateRun();
+</script>
+</body>
+</html>

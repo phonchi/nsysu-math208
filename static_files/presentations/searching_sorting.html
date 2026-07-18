@@ -82,7 +82,7 @@ p{margin-bottom:1rem;}
 .idx-label{position:absolute;bottom:24px;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#999;text-align:center;transition:left .35s cubic-bezier(.4,0,.2,1),color .2s;font-weight:500;}
 .idx-label.highlight{color:var(--accent);font-weight:700;}
 
-/* Pointers (low/mid/high, left_mark/right_mark) */
+/* Pointers (low/mid/high, leftMark/rightMark) */
 .pointer{position:absolute;bottom:0;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.74rem;font-weight:700;transition:left .35s cubic-bezier(.4,0,.2,1),opacity .2s;}
 .pointer .arrow{width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;display:inline-block;margin-bottom:1px;}
 .pointer.low{color:#2980b9;}
@@ -258,6 +258,7 @@ p{margin-bottom:1rem;}
 }
 
 footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border);}
+.sec-badge{font-size:.6em;color:var(--muted);border:1px solid var(--card-border);background:var(--card);padding:2px 10px;border-radius:999px;vertical-align:middle;margin-left:.6rem;font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.02em;white-space:nowrap;}
 </style>
 </head>
 <body>
@@ -285,7 +286,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div class="hero-grid"></div>
   <div class="hero-content">
     <h1><span class="blue">搜尋</span>與<span class="orange">排序</span>演算法</h1>
-    <div class="subtitle">Chapter 5 — Searching, Hashing &amp; Sorting (Interactive Visualization)</div>
+    <div class="subtitle">cppds Chapters 6–7 — Searching, Hashing &amp; Sorting（對應講義 07）</div>
     <div class="big-formula">循序搜尋｜二分搜尋｜雜湊｜氣泡｜選擇｜插入｜希爾｜合併｜快速</div>
     <div class="scroll-hint">向下捲動開始互動<span>↓</span></div>
   </div>
@@ -318,8 +319,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="prologue">
   <div class="section-number">PROLOGUE · 開場</div>
-  <h2>先看懂：演算法分析的「比較」與「目標」</h2>
-  <p>本章探討兩件事：<strong>搜尋（searching）</strong> 從一堆資料中找出特定元素，<strong>排序（sorting）</strong> 把資料重新排列成有序狀態。我們會從 Python <code>in</code> 運算子開始，逐步揭開背後的演算法，並且<strong>用「比較次數」當作分析的單位</strong>。</p>
+  <h2>先看懂：演算法分析的「比較」與「目標」 <span class="sec-badge">cppds §6.1–6.2</span></h2>
+  <p>本章探討兩件事：<strong>搜尋（searching）</strong> 從一堆資料中找出特定元素，<strong>排序（sorting）</strong> 把資料重新排列成有序狀態。我們會從最樸素的「逐一比對」開始，逐步揭開背後的演算法，並且<strong>用「比較次數」當作分析的單位</strong>。</p>
 
   <div class="info-box">
     <span class="info-label">分析的兩個約定</span>
@@ -334,7 +335,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <span class="legend-item"><span class="lg-swatch" style="background:var(--bar-swap)"></span>正在交換</span>
     <span class="legend-item"><span class="lg-swatch" style="background:var(--bar-sorted)"></span>已排序</span>
     <span class="legend-item"><span class="lg-swatch" style="background:var(--bar-pivot)"></span>樞紐值 (pivot)</span>
-    <span class="legend-item"><span class="lg-swatch" style="background:var(--bar-key)"></span>插入鍵值 (cur_val)</span>
+    <span class="legend-item"><span class="lg-swatch" style="background:var(--bar-key)"></span>插入鍵值 (curVal)</span>
     <span class="legend-item"><span class="lg-swatch" style="background:var(--bar-found)"></span>找到目標</span>
   </div>
 
@@ -347,7 +348,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="seq-search">
   <div class="section-number">PART 01 · 循序搜尋</div>
-  <h2>循序搜尋：從頭到尾一個一個比</h2>
+  <h2>循序搜尋：從頭到尾一個一個比 <span class="sec-badge">cppds §6.3</span></h2>
   <p>把資料想像成一排櫃子，要找某個物件，最直覺的辦法就是<strong>從第 0 格開始、一格一格打開來看</strong>。這就是 <em>sequential search</em>，也叫 linear search。它<strong>不要求資料有序</strong>，是處理一般 list 時最基本的搜尋方法。</p>
 
   <div class="viz-layout">
@@ -385,7 +386,13 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="seqCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">sequential_search</span>(a_list, item):</span><span class="line" data-l="2">    pos = <span class="num">0</span></span><span class="line" data-l="3">    <span class="kw">while</span> pos &lt; <span class="fn">len</span>(a_list):</span><span class="line" data-l="4">        <span class="kw">if</span> a_list[pos] == item:</span><span class="line" data-l="5">            <span class="kw">return</span> <span class="num">True</span></span><span class="line" data-l="6">        pos = pos + <span class="num">1</span></span><span class="line" data-l="7">    <span class="kw">return</span> <span class="num">False</span></span></div>
+        <div class="pseudo-code" id="seqCode"><span class="line" data-l="1"><span class="fn">sequentialSearch</span>(aList, item):</span>
+<span class="line" data-l="2">    pos = <span class="num">0</span></span>
+<span class="line" data-l="3">    <span class="kw">while</span> pos &lt; aList.<span class="fn">size</span>():</span>
+<span class="line" data-l="4">        <span class="kw">if</span> aList[pos] == item:</span>
+<span class="line" data-l="5">            <span class="kw">return</span> <span class="num">true</span></span>
+<span class="line" data-l="6">        pos = pos + <span class="num">1</span></span>
+<span class="line" data-l="7">    <span class="kw">return</span> <span class="num">false</span></span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -405,18 +412,17 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <p>如果 list 已經<strong>排序好</strong>了，就有捷徑：當看到的元素已經比目標大（升冪情況下），後面就不可能有了，可以立刻回傳 <code>False</code>。雖然找到的時候沒省到比較次數，但<strong>找不到時平均能少做一半</strong>——預期比較次數降到 $n/2$（仍是 $O(n)$，但常數變小）。</p>
 
   <div class="info-card" style="margin-top:.8rem;">
-    <div class="ic-title">虛擬碼 — ordered_sequential_search <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+    <div class="ic-title">虛擬碼 — orderedSequentialSearch <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
     <div class="pseudo-code">
-      <span class="line"><span class="kw">def</span> <span class="fn">ordered_sequential_search</span>(a_list, item):</span>
-      <span class="line">    pos = <span class="num">0</span></span>
-      <span class="line">    <span class="kw">while</span> pos &lt; <span class="fn">len</span>(a_list):</span>
-      <span class="line">        <span class="kw">if</span> a_list[pos] == item:</span>
-      <span class="line">            <span class="kw">return</span> <span class="num">True</span></span>
-      <span class="line">        <span class="kw">if</span> a_list[pos] &gt; item:    <span class="com"># 提前結束的關鍵</span></span>
-      <span class="line">            <span class="kw">return</span> <span class="num">False</span></span>
-      <span class="line">        pos = pos + <span class="num">1</span></span>
-      <span class="line">    <span class="kw">return</span> <span class="num">False</span></span>
-    </div>
+<span class="line"><span class="fn">orderedSequentialSearch</span>(aList, item):</span>
+<span class="line">    pos = <span class="num">0</span></span>
+<span class="line">    <span class="kw">while</span> pos &lt; aList.<span class="fn">size</span>():</span>
+<span class="line">        <span class="kw">if</span> aList[pos] == item:</span>
+<span class="line">            <span class="kw">return</span> <span class="num">true</span></span>
+<span class="line">        <span class="kw">if</span> aList[pos] &gt; item:    <span class="com">// 提前結束的關鍵</span></span>
+<span class="line">            <span class="kw">return</span> <span class="num">false</span></span>
+<span class="line">        pos = pos + <span class="num">1</span></span>
+<span class="line">    <span class="kw">return</span> <span class="num">false</span></span></div>
   </div>
 
   <div class="info-box green" style="margin-top:.8rem;">
@@ -440,7 +446,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="bin-search">
   <div class="section-number">PART 02 · 二分搜尋</div>
-  <h2>二分搜尋：每次砍掉一半的可能位置</h2>
+  <h2>二分搜尋：每次砍掉一半的可能位置 <span class="sec-badge">cppds §6.4</span></h2>
   <p>當 list <strong>已排序</strong>，可以用更聰明的策略：直接看<strong>正中間</strong>那一個。比目標大就往左半找；比目標小就往右半找；剛好相等就找到了。每次比較<strong>排除掉一半</strong>，所以總比較次數最多 $\lceil \log_2 n \rceil + 1$。</p>
 
   <div class="viz-layout">
@@ -478,7 +484,18 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="binCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">binary_search</span>(a_list, item):</span><span class="line" data-l="2">    first = <span class="num">0</span></span><span class="line" data-l="3">    last = <span class="fn">len</span>(a_list) - <span class="num">1</span></span><span class="line" data-l="4">    <span class="kw">while</span> first &lt;= last:</span><span class="line" data-l="5">        midpoint = (first + last) // <span class="num">2</span></span><span class="line" data-l="6">        <span class="kw">if</span> a_list[midpoint] == item:</span><span class="line" data-l="7">            <span class="kw">return</span> <span class="num">True</span></span><span class="line" data-l="8">        <span class="kw">elif</span> item &lt; a_list[midpoint]:</span><span class="line" data-l="9">            last = midpoint - <span class="num">1</span></span><span class="line" data-l="10">        <span class="kw">else</span>:</span><span class="line" data-l="11">            first = midpoint + <span class="num">1</span></span><span class="line" data-l="12">    <span class="kw">return</span> <span class="num">False</span></span></div>
+        <div class="pseudo-code" id="binCode"><span class="line" data-l="1"><span class="fn">binarySearch</span>(aList, item):</span>
+<span class="line" data-l="2">    first = <span class="num">0</span></span>
+<span class="line" data-l="3">    last = aList.<span class="fn">size</span>() - <span class="num">1</span></span>
+<span class="line" data-l="4">    <span class="kw">while</span> first &lt;= last:</span>
+<span class="line" data-l="5">        midpoint = (first + last) / <span class="num">2</span></span>
+<span class="line" data-l="6">        <span class="kw">if</span> aList[midpoint] == item:</span>
+<span class="line" data-l="7">            <span class="kw">return</span> <span class="num">true</span></span>
+<span class="line" data-l="8">        <span class="kw">else if</span> item &lt; aList[midpoint]:</span>
+<span class="line" data-l="9">            last = midpoint - <span class="num">1</span></span>
+<span class="line" data-l="10">        <span class="kw">else</span>:</span>
+<span class="line" data-l="11">            first = midpoint + <span class="num">1</span></span>
+<span class="line" data-l="12">    <span class="kw">return</span> <span class="num">false</span></span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -504,24 +521,23 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <p>講義也提供 <strong>recursive binary search</strong>，本質上和迴圈版本完全等價，但更能體現「<em>divide and conquer</em>」的概念——把問題切成更小的子問題，再對其中一邊遞迴呼叫。</p>
 
   <div class="info-card" style="margin-top:.5rem;">
-    <div class="ic-title">虛擬碼 — binary_search_rec <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+    <div class="ic-title">虛擬碼 — binarySearchRec <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
     <div class="pseudo-code">
-      <span class="line"><span class="kw">def</span> <span class="fn">binary_search_rec</span>(a_list, item):</span>
-      <span class="line">    <span class="kw">if</span> <span class="fn">len</span>(a_list) == <span class="num">0</span>:           <span class="com"># base case: 找不到</span></span>
-      <span class="line">        <span class="kw">return</span> <span class="num">False</span></span>
-      <span class="line">    midpoint = (<span class="fn">len</span>(a_list) - <span class="num">1</span>) // <span class="num">2</span></span>
-      <span class="line">    <span class="kw">if</span> a_list[midpoint] == item:</span>
-      <span class="line">        <span class="kw">return</span> <span class="num">True</span></span>
-      <span class="line">    <span class="kw">elif</span> item &lt; a_list[midpoint]:</span>
-      <span class="line">        <span class="kw">return</span> <span class="fn">binary_search_rec</span>(a_list[:midpoint], item)        <span class="com"># 左半</span></span>
-      <span class="line">    <span class="kw">else</span>:</span>
-      <span class="line">        <span class="kw">return</span> <span class="fn">binary_search_rec</span>(a_list[midpoint+<span class="num">1</span>:], item)      <span class="com"># 右半</span></span>
-    </div>
+<span class="line"><span class="fn">binarySearchRec</span>(aList, item):</span>
+<span class="line">    <span class="kw">if</span> aList.<span class="fn">size</span>() == <span class="num">0</span>:           <span class="com">// base case: 找不到</span></span>
+<span class="line">        <span class="kw">return</span> <span class="num">false</span></span>
+<span class="line">    midpoint = (aList.<span class="fn">size</span>() - <span class="num">1</span>) / <span class="num">2</span></span>
+<span class="line">    <span class="kw">if</span> aList[midpoint] == item:</span>
+<span class="line">        <span class="kw">return</span> <span class="num">true</span></span>
+<span class="line">    <span class="kw">else if</span> item &lt; aList[midpoint]:</span>
+<span class="line">        <span class="kw">return</span> <span class="fn">binarySearchRec</span>({aList.begin(), aList.begin()+midpoint}, item)   <span class="com">// 左半</span></span>
+<span class="line">    <span class="kw">else</span>:</span>
+<span class="line">        <span class="kw">return</span> <span class="fn">binarySearchRec</span>({aList.begin()+midpoint+<span class="num">1</span>, aList.end()}, item)  <span class="com">// 右半</span></span></div>
   </div>
 
   <div class="info-box">
     <span class="info-label">小細節</span>
-    這個版本用 <strong>list slicing</strong>（<code>a_list[:midpoint]</code>），看起來簡潔，但每次切片其實會<strong>複製整個子陣列</strong>，多花 $O(n)$ 空間，整體變 $O(n \log n)$ 而不是 $O(\log n)$！更乾淨的寫法是傳入 <code>start</code>、<code>end</code> 索引（講義 Exercise 1：<code>binary_search_rec2(a_list, item, start, last)</code>），不切片就能保留 $O(\log n)$ 空間複雜度。
+    這個版本用 <strong>list slicing</strong>（<code>aList[:midpoint]</code>），看起來簡潔，但每次切片其實會<strong>複製整個子陣列</strong>，多花 $O(n)$ 空間，整體變 $O(n \log n)$ 而不是 $O(\log n)$！更乾淨的寫法是傳入 <code>start</code>、<code>end</code> 索引（講義 Exercise 1：<code>binarySearchRec2(aList, item, start, last)</code>），不切片就能保留 $O(\log n)$ 空間複雜度。
   </div>
 </section>
 
@@ -531,7 +547,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="hashing">
   <div class="section-number">PART 03 · 雜湊</div>
-  <h2>雜湊：用「函數」一次跳到該去的位置</h2>
+  <h2>雜湊：用「函數」一次跳到該去的位置 <span class="sec-badge">cppds §6.5</span></h2>
   <p>有沒有可能讓搜尋變成 $O(1)$？只要我們<strong>事先決定每個值該存哪裡</strong>就行。<em>hash function</em> $h(\text{item})$ 把每個值對應到一個槽（slot）的索引。最簡單的 hash 函數是 <strong>remainder method</strong>：$h(\text{item}) = \text{item} \bmod m$，其中 $m$ 是表的大小。</p>
 
   <div class="info-box">
@@ -627,9 +643,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <div style="font-size:.84rem;line-height:1.65;">
           字串可以用每個字元的 <strong>ordinal value</strong>（ASCII 碼）來算：
           <div class="pseudo-code" style="margin-top:.4rem;">
-            <span class="line"><span class="kw">def</span> <span class="fn">hash_str</span>(s, m):</span>
-            <span class="line">    <span class="kw">return</span> <span class="fn">sum</span>(<span class="fn">ord</span>(c) <span class="kw">for</span> c <span class="kw">in</span> s) % m</span>
-          </div>
+<span class="line"><span class="fn">hashStr</span>(s, m):</span>
+<span class="line">    sum = <span class="num">0</span>; <span class="kw">for</span> (char c : s) sum += <span class="fn">int</span>(c); <span class="kw">return</span> sum % m</span></div>
           <strong>陷阱：</strong>"cat"、"act"、"tac" 全是同樣 ord 總和，會撞在一起（anagrams 衝突）。改良：<strong>用位置當權重</strong>，例如 $\sum i \cdot \text{ord}(c_i) \bmod m$。
         </div>
       </div>
@@ -657,14 +672,14 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <h3 style="margin-top:1.5rem;">應用：Map ADT (字典/HashTable)</h3>
   <div class="info-box warm">
     <span class="info-label">用 hash 表實作 key-value 字典</span>
-    Python 的 <code>dict</code> 背後就是 hash table。Map ADT 定義為「key 與 data value 之間關聯的無序集合」，包含 6 個核心操作：
+    `C++` 的 <code>unordered_map</code> 背後就是 hash table。Map ADT 定義為「key 與 data value 之間關聯的無序集合」，包含 6 個核心操作：
     <div style="font-size:.84rem;line-height:1.7;margin:.5rem 0;">
       <table style="width:100%;font-family:'JetBrains Mono',monospace;font-size:.78rem;border-collapse:collapse;">
         <thead><tr style="background:var(--paper);border-bottom:2px solid var(--card-border);"><th style="text-align:left;padding:.35rem;">操作</th><th style="text-align:left;padding:.35rem;">語意</th></tr></thead>
         <tbody>
           <tr><td style="padding:.3rem;color:var(--accent2);font-weight:600;">Map()</td><td>建立一個新的空 map</td></tr>
           <tr style="background:#fff;"><td style="padding:.3rem;color:var(--accent2);font-weight:600;">put(key, val)</td><td>新增 key–value 對；若 key 已存在則覆寫舊值</td></tr>
-          <tr><td style="padding:.3rem;color:var(--accent2);font-weight:600;">get(key)</td><td>傳回對應 value，找不到則回傳 <code>None</code></td></tr>
+          <tr><td style="padding:.3rem;color:var(--accent2);font-weight:600;">get(key)</td><td>傳回對應 value，找不到則回傳空字串 <code>""</code></td></tr>
           <tr style="background:#fff;"><td style="padding:.3rem;color:var(--accent2);font-weight:600;">del map[key]</td><td>刪除指定的 key–value 對</td></tr>
           <tr><td style="padding:.3rem;color:var(--accent2);font-weight:600;">size()</td><td>回傳目前儲存的 key–value 對總數</td></tr>
           <tr style="background:#fff;"><td style="padding:.3rem;color:var(--accent2);font-weight:600;">in</td><td><code>key in map</code> 回傳 True/False</td></tr>
@@ -672,19 +687,17 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </table>
     </div>
     <div class="pseudo-code" style="margin-top:.4rem;">
-      <span class="line"><span class="kw">class</span> <span class="fn">HashTable</span>:</span>
-      <span class="line">    <span class="kw">def</span> <span class="fn">__init__</span>(self):</span>
-      <span class="line">        self.size = <span class="num">11</span></span>
-      <span class="line">        self.slots = [<span class="num">None</span>] * self.size  <span class="com"># 存 key</span></span>
-      <span class="line">        self.data  = [<span class="num">None</span>] * self.size  <span class="com"># 平行陣列存 value</span></span>
-      <span class="line">    <span class="kw">def</span> <span class="fn">hash_function</span>(self, key, size): <span class="kw">return</span> key % size</span>
-      <span class="line">    <span class="kw">def</span> <span class="fn">rehash</span>(self, old_hash, size):  <span class="kw">return</span> (old_hash + <span class="num">1</span>) % size</span>
-      <span class="line">    <span class="kw">def</span> <span class="fn">put</span>(self, key, val): <span class="com"># 用 hash + rehash 找空位插入；若 key 已存在則覆寫</span></span>
-      <span class="line">    <span class="kw">def</span> <span class="fn">get</span>(self, key):       <span class="com"># 同樣的 probe 路徑找回，position == start_slot 時停止</span></span>
-      <span class="line">    <span class="kw">def</span> <span class="fn">__getitem__</span>(self, key): <span class="kw">return</span> self.<span class="fn">get</span>(key)  <span class="com"># 支援 h[key]</span></span>
-      <span class="line">    <span class="kw">def</span> <span class="fn">__setitem__</span>(self, key, data): self.<span class="fn">put</span>(key, data)  <span class="com"># 支援 h[key] = v</span></span>
-    </div>
-    <strong>關鍵：</strong>用兩個平行 list (<code>slots</code>、<code>data</code>) 分別存 key 和 value，索引位置必須對齊。<code>get</code> 時要走和 <code>put</code> 一樣的 rehash 路徑，且要偵測「<strong>繞回起點</strong>」(<code>position == start_slot</code>) 以結束搜尋（代表整個探查鏈都沒有該 key）。
+<span class="line"><span class="kw">class</span> <span class="fn">HashTable</span>:</span>
+<span class="line">    <span class="kw">int</span> size = <span class="num">11</span></span>
+<span class="line">    vector&lt;<span class="kw">int</span>&gt;    slots   <span class="com">// 存 key（-1 = 空位）</span></span>
+<span class="line">    vector&lt;string&gt; data    <span class="com">// 平行陣列存 value</span></span>
+<span class="line">    <span class="fn">hashFunction</span>(key): <span class="kw">return</span> key % size</span>
+<span class="line">    <span class="fn">rehash</span>(oldHash):   <span class="kw">return</span> (oldHash + <span class="num">1</span>) % size</span>
+<span class="line">    <span class="fn">put</span>(key, val): <span class="com">// 用 hash + rehash 找空位插入；若 key 已存在則覆寫</span></span>
+<span class="line">    <span class="fn">get</span>(key):      <span class="com">// 同樣的 probe 路徑找回，position == startSlot 時繞回即停</span></span>
+<span class="line">    <span class="com">// C++ 版讀寫都走 h.put(key, val) 與 h.get(key)</span></span>
+<span class="line">    <span class="com">//（完整實作見 dscpp/hashtable.hpp，-1 標記空槽）</span></span></div>
+    <strong>關鍵：</strong>用兩個平行 list (<code>slots</code>、<code>data</code>) 分別存 key 和 value，索引位置必須對齊。<code>get</code> 時要走和 <code>put</code> 一樣的 rehash 路徑，且要偵測「<strong>繞回起點</strong>」(<code>position == startSlot</code>) 以結束搜尋（代表整個探查鏈都沒有該 key）。
   </div>
 
   <h3 style="margin-top:1.5rem;">分析：載入因子 $\lambda$ 與比較次數</h3>
@@ -711,7 +724,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="bubble">
   <div class="section-number">PART 04 · 氣泡排序</div>
-  <h2>氣泡排序：相鄰兩個比一比，大的往後送</h2>
+  <h2>氣泡排序：相鄰兩個比一比，大的往後送 <span class="sec-badge">cppds §7.2–7.3</span></h2>
   <p><strong>Bubble sort</strong> 的想法很單純：每一輪從頭走到尾，遇到「左邊比右邊大」就交換。經過一輪之後，<strong>最大的元素一定會被送到最右邊</strong>——就像氣泡浮到水面一樣。下一輪只要處理剩下的部分，依此類推。</p>
 
   <div class="viz-layout">
@@ -748,7 +761,11 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="bubbleCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">bubble_sort</span>(a):</span><span class="line" data-l="2">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(a)-<span class="num">1</span>, <span class="num">0</span>, -<span class="num">1</span>):</span><span class="line" data-l="3">        <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(i):</span><span class="line" data-l="4">            <span class="kw">if</span> a[j] &gt; a[j+<span class="num">1</span>]:</span><span class="line" data-l="5">                a[j], a[j+<span class="num">1</span>] = a[j+<span class="num">1</span>], a[j]</span></div>
+        <div class="pseudo-code" id="bubbleCode"><span class="line" data-l="1"><span class="fn">bubbleSort</span>(a):</span>
+<span class="line" data-l="2">    <span class="kw">for</span> i = a.<span class="fn">size</span>()-<span class="num">1</span>; i &gt; <span class="num">0</span>; i--:</span>
+<span class="line" data-l="3">        <span class="kw">for</span> j = <span class="num">0</span>; j &lt; i; j++:</span>
+<span class="line" data-l="4">            <span class="kw">if</span> a[j] &gt; a[j+<span class="num">1</span>]:</span>
+<span class="line" data-l="5">                <span class="fn">swap</span>(a[j], a[j+<span class="num">1</span>])</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -765,18 +782,17 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   </div>
 
   <div class="info-card" style="margin-top:.8rem;">
-    <div class="ic-title">虛擬碼 — bubble_sort_short <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+    <div class="ic-title">虛擬碼 — bubbleSortShort <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
     <div class="pseudo-code">
-      <span class="line"><span class="kw">def</span> <span class="fn">bubble_sort_short</span>(a_list):</span>
-      <span class="line">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(a_list)-<span class="num">1</span>, <span class="num">0</span>, -<span class="num">1</span>):</span>
-      <span class="line">        exchanges = <span class="num">False</span></span>
-      <span class="line">        <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(i):</span>
-      <span class="line">            <span class="kw">if</span> a_list[j] &gt; a_list[j+<span class="num">1</span>]:</span>
-      <span class="line">                exchanges = <span class="num">True</span></span>
-      <span class="line">                a_list[j], a_list[j+<span class="num">1</span>] = a_list[j+<span class="num">1</span>], a_list[j]</span>
-      <span class="line">        <span class="kw">if</span> <span class="kw">not</span> exchanges:</span>
-      <span class="line">            <span class="kw">break</span>    <span class="com"># 已經排序好，可以離開</span></span>
-    </div>
+<span class="line"><span class="fn">bubbleSortShort</span>(aList):</span>
+<span class="line">    <span class="kw">for</span> i = aList.<span class="fn">size</span>()-<span class="num">1</span>; i &gt; <span class="num">0</span>; i--:</span>
+<span class="line">        exchanges = <span class="num">false</span></span>
+<span class="line">        <span class="kw">for</span> j = <span class="num">0</span>; j &lt; i; j++:</span>
+<span class="line">            <span class="kw">if</span> aList[j] &gt; aList[j+<span class="num">1</span>]:</span>
+<span class="line">                exchanges = <span class="num">true</span></span>
+<span class="line">                <span class="fn">swap</span>(aList[j], aList[j+<span class="num">1</span>])</span>
+<span class="line">        <span class="kw">if</span> !exchanges:</span>
+<span class="line">            <span class="kw">break</span>    <span class="com">// 已經排序好，可以離開</span></span></div>
   </div>
 </section>
 
@@ -785,7 +801,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="selection">
   <div class="section-number">PART 05 · 選擇排序</div>
-  <h2>選擇排序：每一輪挑出最小者放到前面</h2>
+  <h2>選擇排序：每一輪挑出最小者放到前面 <span class="sec-badge">cppds §7.4</span></h2>
   <p><strong>Selection sort</strong> 跟氣泡排序的<strong>比較次數一樣多</strong>，但聰明在「<strong>每一輪只交換一次</strong>」：先掃一遍找出未排序區裡<strong>最小</strong>的元素，再把它和未排序區的<strong>第一格</strong>直接交換，就完成一輪。氣泡排序每比一次就可能交換，selection sort 把交換成本壓到最低。<small>（講義版本以「找最小放前面」實作；也有等價的「找最大放後面」變體。）</small></p>
 
   <div class="viz-layout">
@@ -822,7 +838,14 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼</div>
-        <div class="pseudo-code" id="selCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">selection_sort</span>(a_list):</span><span class="line" data-l="2">    <span class="kw">for</span> i, item <span class="kw">in</span> <span class="fn">enumerate</span>(a_list):</span><span class="line" data-l="3">        min_idx = <span class="fn">len</span>(a_list) - <span class="num">1</span></span><span class="line" data-l="4">        <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(i, <span class="fn">len</span>(a_list)):</span><span class="line" data-l="5">            <span class="kw">if</span> a_list[j] &lt; a_list[min_idx]:</span><span class="line" data-l="6">                min_idx = j</span><span class="line" data-l="7">        <span class="kw">if</span> min_idx != i:</span><span class="line" data-l="8">            a_list[min_idx], a_list[i] = a_list[i], a_list[min_idx]</span></div>
+        <div class="pseudo-code" id="selCode"><span class="line" data-l="1"><span class="fn">selectionSort</span>(aList):</span>
+<span class="line" data-l="2">    <span class="kw">for</span> i = <span class="num">0</span>; i &lt; aList.<span class="fn">size</span>(); i++:</span>
+<span class="line" data-l="3">        minIdx = aList.<span class="fn">size</span>() - <span class="num">1</span></span>
+<span class="line" data-l="4">        <span class="kw">for</span> j = i; j &lt; aList.<span class="fn">size</span>(); j++:</span>
+<span class="line" data-l="5">            <span class="kw">if</span> aList[j] &lt; aList[minIdx]:</span>
+<span class="line" data-l="6">                minIdx = j</span>
+<span class="line" data-l="7">        <span class="kw">if</span> minIdx != i:</span>
+<span class="line" data-l="8">            <span class="fn">swap</span>(aList[minIdx], aList[i])</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -844,8 +867,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="insertion">
   <div class="section-number">PART 06 · 插入排序</div>
-  <h2>插入排序：像整理撲克牌</h2>
-  <p><strong>Insertion sort</strong> 把陣列分成「已排序」（左半）和「未排序」（右半）兩區。每一輪取出未排序的第一張當 <em>cur_val</em>（current value，當前要插入的值），往左在已排序區裡找出該插入的位置——遇到比它大的，就把它<strong>右移一格</strong>讓出空間。注意：這裡做的是<strong>位移（shift）而不是交換</strong>，所以可能比氣泡排序快一點。</p>
+  <h2>插入排序：像整理撲克牌 <span class="sec-badge">cppds §7.5</span></h2>
+  <p><strong>Insertion sort</strong> 把陣列分成「已排序」（左半）和「未排序」（右半）兩區。每一輪取出未排序的第一張當 <em>curVal</em>（current value，當前要插入的值），往左在已排序區裡找出該插入的位置——遇到比它大的，就把它<strong>右移一格</strong>讓出空間。注意：這裡做的是<strong>位移（shift）而不是交換</strong>，所以可能比氣泡排序快一點。</p>
 
   <div class="viz-layout">
     <div>
@@ -877,11 +900,18 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
           <div class="stat-tile compare"><div class="stat-label">比較</div><div class="stat-value" id="insCmp">0</div></div>
           <div class="stat-tile" style="background:#fef0e7;"><div class="stat-label">位移 shift</div><div class="stat-value" id="insShift" style="color:#d68910;">0</div></div>
         </div>
-        <div class="ic-row" style="margin-top:.6rem;"><span class="ic-label">當前 cur_val</span><span class="ic-value highlight" id="insKey">—</span></div>
+        <div class="ic-row" style="margin-top:.6rem;"><span class="ic-label">當前 curVal</span><span class="ic-value highlight" id="insKey">—</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼</div>
-        <div class="pseudo-code" id="insCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">insertion_sort</span>(a_list):</span><span class="line" data-l="2">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="fn">len</span>(a_list)):</span><span class="line" data-l="3">        cur_val = a_list[i]</span><span class="line" data-l="4">        cur_pos = i</span><span class="line" data-l="5">        <span class="kw">while</span> cur_pos &gt; <span class="num">0</span> <span class="kw">and</span> a_list[cur_pos-<span class="num">1</span>] &gt; cur_val:</span><span class="line" data-l="6">            a_list[cur_pos] = a_list[cur_pos-<span class="num">1</span>]</span><span class="line" data-l="7">            cur_pos = cur_pos - <span class="num">1</span></span><span class="line" data-l="8">        a_list[cur_pos] = cur_val</span></div>
+        <div class="pseudo-code" id="insCode"><span class="line" data-l="1"><span class="fn">insertionSort</span>(aList):</span>
+<span class="line" data-l="2">    <span class="kw">for</span> i = <span class="num">1</span>; i &lt; aList.<span class="fn">size</span>(); i++:</span>
+<span class="line" data-l="3">        curVal = aList[i]</span>
+<span class="line" data-l="4">        curPos = i</span>
+<span class="line" data-l="5">        <span class="kw">while</span> curPos &gt; <span class="num">0</span> &amp;&amp; aList[curPos-<span class="num">1</span>] &gt; curVal:</span>
+<span class="line" data-l="6">            aList[curPos] = aList[curPos-<span class="num">1</span>]</span>
+<span class="line" data-l="7">            curPos = curPos - <span class="num">1</span></span>
+<span class="line" data-l="8">        aList[curPos] = curVal</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -903,7 +933,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="shell">
   <div class="section-number">PART 07 · 希爾排序</div>
-  <h2>希爾排序：插入排序的「跳格」加速版</h2>
+  <h2>希爾排序：插入排序的「跳格」加速版 <span class="sec-badge">cppds §7.6</span></h2>
   <p><strong>Shell sort</strong> 是 1959 年 Donald Shell 提出的方法。觀察到 insertion sort 對「幾乎排序好」的資料很快，但對亂序資料慢。Shell sort 的策略：先用一個<strong>較大的 gap</strong> 把陣列拆成數個「子陣列」（每個子陣列的元素彼此相距 gap），對每個子陣列各自做插入排序；接著縮小 gap 再做一次；最後 gap = 1（變成普通的 insertion sort），但<strong>此時資料已經幾乎排序好</strong>。</p>
 
   <div class="viz-layout">
@@ -944,8 +974,22 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         </div>
       </div>
       <div class="info-card">
-        <div class="ic-title">虛擬碼 (對齊講義 cell 194)</div>
-        <div class="pseudo-code" id="shellCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">shell_sort</span>(a_list):</span><span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;sublist_count = <span class="fn">len</span>(a_list) // <span class="num">2</span></span><span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> sublist_count &gt; <span class="num">0</span>:</span><span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> pos_start <span class="kw">in</span> <span class="fn">range</span>(sublist_count):</span><span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">gap_insertion_sort</span>(a_list, pos_start, sublist_count)</span><span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sublist_count = sublist_count // <span class="num">2</span></span><span class="line" data-l="7">&nbsp;</span><span class="line" data-l="8"><span class="kw">def</span> <span class="fn">gap_insertion_sort</span>(a_list, start, gap):</span><span class="line" data-l="9">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(start + gap, <span class="fn">len</span>(a_list), gap):</span><span class="line" data-l="10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur_val = a_list[i]</span><span class="line" data-l="11">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur_pos = i</span><span class="line" data-l="12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> cur_pos &gt;= gap <span class="kw">and</span> a_list[cur_pos - gap] &gt; cur_val:</span><span class="line" data-l="13">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a_list[cur_pos] = a_list[cur_pos - gap]</span><span class="line" data-l="14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur_pos = cur_pos - gap</span><span class="line" data-l="15">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a_list[cur_pos] = cur_val</span></div>
+        <div class="ic-title">虛擬碼 (對齊講義 §7.6)</div>
+        <div class="pseudo-code" id="shellCode"><span class="line" data-l="1"><span class="fn">shellSort</span>(aList):</span>
+<span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;sublistCount = aList.<span class="fn">size</span>() / <span class="num">2</span></span>
+<span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> sublistCount &gt; <span class="num">0</span>:</span>
+<span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> posStart = <span class="num">0</span>; posStart &lt; sublistCount; posStart++:</span>
+<span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">gapInsertionSort</span>(aList, posStart, sublistCount)</span>
+<span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sublistCount = sublistCount / <span class="num">2</span></span>
+<span class="line" data-l="7">&nbsp;</span>
+<span class="line" data-l="8"><span class="fn">gapInsertionSort</span>(aList, start, gap):</span>
+<span class="line" data-l="9">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> i = start + gap; i &lt; aList.<span class="fn">size</span>(); i += gap:</span>
+<span class="line" data-l="10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curVal = aList[i]</span>
+<span class="line" data-l="11">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curPos = i</span>
+<span class="line" data-l="12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> curPos &gt;= gap &amp;&amp; aList[curPos - gap] &gt; curVal:</span>
+<span class="line" data-l="13">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aList[curPos] = aList[curPos - gap]</span>
+<span class="line" data-l="14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curPos = curPos - gap</span>
+<span class="line" data-l="15">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aList[curPos] = curVal</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -963,30 +1007,38 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     Shell sort 不像 merge / quick sort 那麼快，但<strong>程式碼短、不需要遞迴、空間 $O(1)$</strong>，是嵌入式系統與小型應用常見的選擇。
   </div>
 
-  <h3 style="margin-top:1.5rem;">講義原始實作（cell 194）</h3>
-  <p>外層 <code>shell_sort</code> 維護當前 <code>sublist_count</code>（折半），對每個 <code>pos_start</code> 呼叫 <code>gap_insertion_sort</code>，把該子陣列做插入排序。</p>
-<pre style="background:#2d2d3f;color:#e8e6df;font-family:'JetBrains Mono',monospace;font-size:.82rem;padding:.85rem 1rem;border-radius:10px;line-height:1.6;overflow-x:auto;"><span style="color:#c678dd;">def</span> <span style="color:#61afef;">shell_sort</span>(a_list):
-    sublist_count = <span style="color:#61afef;">len</span>(a_list) // <span style="color:#d19a66;">2</span>
-    <span style="color:#c678dd;">while</span> sublist_count &gt; <span style="color:#d19a66;">0</span>:
-        <span style="color:#c678dd;">for</span> pos_start <span style="color:#c678dd;">in</span> <span style="color:#61afef;">range</span>(sublist_count):
-            <span style="color:#61afef;">gap_insertion_sort</span>(a_list, pos_start, sublist_count)
-        <span style="color:#61afef;">print</span>(<span style="color:#98c379;">"After increments of size"</span>, sublist_count, <span style="color:#98c379;">"the list is"</span>, a_list)
-        sublist_count = sublist_count // <span style="color:#d19a66;">2</span>
+  <h3 style="margin-top:1.5rem;">講義原始實作（§7.6 Shell Sort）</h3>
+  <p>外層 <code>shellSort</code> 維護當前 <code>sublistCount</code>（折半），對每個 <code>posStart</code> 呼叫 <code>gapInsertionSort</code>，把該子陣列做插入排序。</p>
+<pre style="background:#2d2d3f;color:#e8e6df;font-family:'JetBrains Mono',monospace;font-size:.82rem;padding:.85rem 1rem;border-radius:10px;line-height:1.6;overflow-x:auto;"><span style="color:#c678dd;">void</span> <span style="color:#61afef;">gapInsertionSort</span>(vector&lt;<span style="color:#c678dd;">int</span>&gt;&amp; aList, <span style="color:#c678dd;">int</span> start, <span style="color:#c678dd;">int</span> gap) {
+    <span style="color:#c678dd;">for</span> (<span style="color:#c678dd;">unsigned</span> i = start + gap; i &lt; aList.size(); i += gap) {
+        <span style="color:#c678dd;">int</span> curVal = aList[i];
+        <span style="color:#c678dd;">int</span> curPos = i;
+        <span style="color:#c678dd;">while</span> (curPos &gt;= gap &amp;&amp; aList[curPos - gap] &gt; curVal) {
+            aList[curPos] = aList[curPos - gap];
+            curPos = curPos - gap;
+        }
+        aList[curPos] = curVal;
+    }
+}
 
+<span style="color:#c678dd;">void</span> <span style="color:#61afef;">shellSort</span>(vector&lt;<span style="color:#c678dd;">int</span>&gt;&amp; aList) {
+    <span style="color:#c678dd;">int</span> sublistCount = aList.size() / <span style="color:#d19a66;">2</span>;
+    <span style="color:#c678dd;">while</span> (sublistCount &gt; <span style="color:#d19a66;">0</span>) {
+        <span style="color:#c678dd;">for</span> (<span style="color:#c678dd;">int</span> posStart = <span style="color:#d19a66;">0</span>; posStart &lt; sublistCount; posStart++) {
+            gapInsertionSort(aList, posStart, sublistCount);
+        }
+        cout &lt;&lt; <span style="color:#98c379;">"</span><span style="color:#98c379;">After increments of size </span><span style="color:#98c379;">"</span> &lt;&lt; sublistCount
+             &lt;&lt; <span style="color:#98c379;">"</span><span style="color:#98c379;"> the list is </span><span style="color:#98c379;">"</span>;
+        printl(aList);
+        sublistCount = sublistCount / <span style="color:#d19a66;">2</span>;
+    }
+}
 
-<span style="color:#c678dd;">def</span> <span style="color:#61afef;">gap_insertion_sort</span>(a_list, start, gap):
-    <span style="color:#c678dd;">for</span> i <span style="color:#c678dd;">in</span> <span style="color:#61afef;">range</span>(start + gap, <span style="color:#61afef;">len</span>(a_list), gap):
-        cur_val = a_list[i]
-        cur_pos = i
-        <span style="color:#c678dd;">while</span> cur_pos &gt;= gap <span style="color:#c678dd;">and</span> a_list[cur_pos - gap] &gt; cur_val:
-            a_list[cur_pos] = a_list[cur_pos - gap]
-            cur_pos = cur_pos - gap
-        a_list[cur_pos] = cur_val
-
-
-a_list = [<span style="color:#d19a66;">5</span>, <span style="color:#d19a66;">16</span>, <span style="color:#d19a66;">20</span>, <span style="color:#d19a66;">12</span>, <span style="color:#d19a66;">3</span>, <span style="color:#d19a66;">8</span>, <span style="color:#d19a66;">9</span>, <span style="color:#d19a66;">17</span>, <span style="color:#d19a66;">19</span>, <span style="color:#d19a66;">7</span>, <span style="color:#d19a66;">11</span>]
-<span style="color:#61afef;">shell_sort</span>(a_list)
-<span style="color:#61afef;">print</span>(a_list)</pre>
+<span style="color:#c678dd;">int</span> <span style="color:#61afef;">main</span>() {
+    vector&lt;<span style="color:#c678dd;">int</span>&gt; aList = {<span style="color:#d19a66;">5</span>, <span style="color:#d19a66;">16</span>, <span style="color:#d19a66;">20</span>, <span style="color:#d19a66;">12</span>, <span style="color:#d19a66;">3</span>, <span style="color:#d19a66;">8</span>, <span style="color:#d19a66;">9</span>, <span style="color:#d19a66;">17</span>, <span style="color:#d19a66;">19</span>, <span style="color:#d19a66;">7</span>, <span style="color:#d19a66;">11</span>};
+    shellSort(aList);
+    printl(aList);
+}</pre>
 </section>
 
 
@@ -995,7 +1047,7 @@ a_list = [<span style="color:#d19a66;">5</span>, <span style="color:#d19a66;">16
 <!-- ============================================================ -->
 <section id="merge">
   <div class="section-number">PART 08 · 合併排序</div>
-  <h2>合併排序：分而治之的經典範例</h2>
+  <h2>合併排序：分而治之的經典範例 <span class="sec-badge">cppds §7.7</span></h2>
   <p><strong>Merge sort</strong> 是一個遞迴演算法，分成兩個動作：<br>
   <strong>(1) Divide 切：</strong> 把 list 從中間切成左、右兩半，各自呼叫 merge sort。<br>
   <strong>(2) Conquer + Merge 合：</strong> 兩半都排序好之後，<em>合併</em>成一個有序的大 list——用兩個指標分別走過左、右，每次把較小的那個寫進新 list。<br>
@@ -1038,7 +1090,20 @@ a_list = [<span style="color:#d19a66;">5</span>, <span style="color:#d19a66;">16
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼</div>
-        <div class="pseudo-code" id="mergeCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">merge_sort</span>(a):</span><span class="line" data-l="2">    <span class="kw">if</span> <span class="fn">len</span>(a) &lt;= <span class="num">1</span>: <span class="kw">return</span></span><span class="line" data-l="3">    mid = <span class="fn">len</span>(a) // <span class="num">2</span></span><span class="line" data-l="4">    L, R = a[:mid], a[mid:]</span><span class="line" data-l="5">    <span class="fn">merge_sort</span>(L)</span><span class="line" data-l="6">    <span class="fn">merge_sort</span>(R)</span><span class="line" data-l="7">    <span class="com"># merge L and R back into a</span></span><span class="line" data-l="8">    i = j = k = <span class="num">0</span></span><span class="line" data-l="9">    <span class="kw">while</span> i &lt; <span class="fn">len</span>(L) <span class="kw">and</span> j &lt; <span class="fn">len</span>(R):</span><span class="line" data-l="10">        <span class="kw">if</span> L[i] &lt;= R[j]:</span><span class="line" data-l="11">            a[k] = L[i]; i += <span class="num">1</span></span><span class="line" data-l="12">        <span class="kw">else</span>:</span><span class="line" data-l="13">            a[k] = R[j]; j += <span class="num">1</span></span><span class="line" data-l="14">        k += <span class="num">1</span></span></div>
+        <div class="pseudo-code" id="mergeCode"><span class="line" data-l="1"><span class="fn">mergeSort</span>(a):</span>
+<span class="line" data-l="2">    <span class="kw">if</span> a.<span class="fn">size</span>() &lt;= <span class="num">1</span>: <span class="kw">return</span></span>
+<span class="line" data-l="3">    mid = a.<span class="fn">size</span>() / <span class="num">2</span></span>
+<span class="line" data-l="4">    L = {a.begin(), a.begin()+mid};  R = {a.begin()+mid, a.end()}</span>
+<span class="line" data-l="5">    <span class="fn">mergeSort</span>(L)</span>
+<span class="line" data-l="6">    <span class="fn">mergeSort</span>(R)</span>
+<span class="line" data-l="7">    <span class="com">// merge L and R back into a</span></span>
+<span class="line" data-l="8">    i = j = k = <span class="num">0</span></span>
+<span class="line" data-l="9">    <span class="kw">while</span> i &lt; L.<span class="fn">size</span>() &amp;&amp; j &lt; R.<span class="fn">size</span>():</span>
+<span class="line" data-l="10">        <span class="kw">if</span> L[i] &lt;= R[j]:</span>
+<span class="line" data-l="11">            a[k] = L[i]; i += <span class="num">1</span></span>
+<span class="line" data-l="12">        <span class="kw">else</span>:</span>
+<span class="line" data-l="13">            a[k] = R[j]; j += <span class="num">1</span></span>
+<span class="line" data-l="14">        k += <span class="num">1</span></span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -1057,7 +1122,7 @@ a_list = [<span style="color:#d19a66;">5</span>, <span style="color:#d19a66;">16
 
   <div class="info-box warm">
     <span class="info-label">代價：額外空間</span>
-    merge sort 需要<strong>額外 $O(n)$ 的暫存空間</strong>來存 L、R 半段（Python 的 slicing 也會建立新 list）。處理超大資料時，這個記憶體開銷可能成為問題。
+    merge sort 需要<strong>額外 $O(n)$ 的暫存空間</strong>來存 L、R 半段（實作中需額外配置 L、R 兩段暫存 vector）。處理超大資料時，這個記憶體開銷可能成為問題。
   </div>
 </section>
 
@@ -1067,12 +1132,12 @@ a_list = [<span style="color:#d19a66;">5</span>, <span style="color:#d19a66;">16
 <!-- ============================================================ -->
 <section id="quick">
   <div class="section-number">PART 09 · 快速排序</div>
-  <h2>快速排序：選一個 pivot，把比它小、比它大的分開</h2>
+  <h2>快速排序：選一個 pivot，把比它小、比它大的分開 <span class="sec-badge">cppds §7.8</span></h2>
   <p><strong>Quicksort</strong> 也是分而治之，但策略不同：先選一個元素當 <em>pivot</em>（樞紐值），用一個 <strong>partition</strong> 過程把陣列重新排成「<span class="pill pill-blue">比 pivot 小</span> ｜ <span class="pill pill-purple">pivot</span> ｜ <span class="pill pill-orange">比 pivot 大</span>」三段——pivot 就<strong>確定到了它的最終位置</strong>。接著對左、右兩段各自遞迴呼叫 quicksort。和 merge sort 不一樣，<strong>不需要額外陣列</strong>，partition 就地完成。</p>
 
   <div class="info-box">
     <span class="info-label">partition 的雙指標技術</span>
-    從 pivot 右邊開始：<span class="pill pill-green">left_mark</span> 從左往右走、找<strong>大於 pivot 的</strong>；<span class="pill pill-orange">right_mark</span> 從右往左走、找<strong>小於 pivot 的</strong>。兩者都停下時就交換它們。當 left_mark 越過 right_mark 之後，把 pivot 和 right_mark 交換——pivot 就到位了。
+    從 pivot 右邊開始：<span class="pill pill-green">leftMark</span> 從左往右走、找<strong>大於 pivot 的</strong>；<span class="pill pill-orange">rightMark</span> 從右往左走、找<strong>小於 pivot 的</strong>。兩者都停下時就交換它們。當 leftMark 越過 rightMark 之後，把 pivot 和 rightMark 交換——pivot 就到位了。
   </div>
 
   <div class="viz-layout">
@@ -1108,8 +1173,8 @@ a_list = [<span style="color:#d19a66;">5</span>, <span style="color:#d19a66;">16
         <div class="ic-title">即時狀態 <span class="ic-badge">LIVE</span></div>
         <div class="ic-row"><span class="ic-label">當前 pivot</span><span class="ic-value highlight" id="quickPivot">—</span></div>
         <div class="ic-row"><span class="ic-label">左右範圍 [first, last]</span><span class="ic-value" id="quickRange">—</span></div>
-        <div class="ic-row"><span class="ic-label">left_mark</span><span class="ic-value" id="quickLM" style="color:#16a085;">—</span></div>
-        <div class="ic-row"><span class="ic-label">right_mark</span><span class="ic-value" id="quickRM" style="color:#d35400;">—</span></div>
+        <div class="ic-row"><span class="ic-label">leftMark</span><span class="ic-value" id="quickLM" style="color:#16a085;">—</span></div>
+        <div class="ic-row"><span class="ic-label">rightMark</span><span class="ic-value" id="quickRM" style="color:#d35400;">—</span></div>
         <div class="stats-grid" style="margin-top:.5rem;">
           <div class="stat-tile compare"><div class="stat-label">比較</div><div class="stat-value" id="quickCmp">0</div></div>
           <div class="stat-tile swap"><div class="stat-label">交換</div><div class="stat-value" id="quickSwp">0</div></div>
@@ -1117,7 +1182,26 @@ a_list = [<span style="color:#d19a66;">5</span>, <span style="color:#d19a66;">16
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼</div>
-        <div class="pseudo-code" id="quickCode"><span class="line" data-l="0"><span class="kw">def</span> <span class="fn">quick_sort_helper</span>(a_list, first, last):</span><span class="line" data-l="0a">    <span class="kw">if</span> first &lt; last:</span><span class="line" data-l="0b">        split = <span class="fn">partition</span>(a_list, first, last)</span><span class="line" data-l="0c">        <span class="fn">quick_sort_helper</span>(a_list, first, split-<span class="num">1</span>)</span><span class="line" data-l="0d">        <span class="fn">quick_sort_helper</span>(a_list, split+<span class="num">1</span>, last)</span><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">partition</span>(a_list, first, last):</span><span class="line" data-l="2">    pivot_val = a_list[first]</span><span class="line" data-l="3">    left_mark, right_mark = first+<span class="num">1</span>, last</span><span class="line" data-l="4">    done = <span class="num">False</span></span><span class="line" data-l="5">    <span class="kw">while</span> <span class="kw">not</span> done:</span><span class="line" data-l="6">        <span class="kw">while</span> left_mark &lt;= right_mark <span class="kw">and</span> a_list[left_mark] &lt;= pivot_val:</span><span class="line" data-l="7">            left_mark += <span class="num">1</span></span><span class="line" data-l="8">        <span class="kw">while</span> left_mark &lt;= right_mark <span class="kw">and</span> a_list[right_mark] &gt;= pivot_val:</span><span class="line" data-l="9">            right_mark -= <span class="num">1</span></span><span class="line" data-l="10">        <span class="kw">if</span> right_mark &lt; left_mark:</span><span class="line" data-l="11">            done = <span class="num">True</span></span><span class="line" data-l="12">        <span class="kw">else</span>:</span><span class="line" data-l="13">            a_list[left_mark], a_list[right_mark] = a_list[right_mark], a_list[left_mark]</span><span class="line" data-l="14">    a_list[first], a_list[right_mark] = a_list[right_mark], a_list[first]</span><span class="line" data-l="15">    <span class="kw">return</span> right_mark  <span class="com"># split point</span></span></div>
+        <div class="pseudo-code" id="quickCode"><span class="line" data-l="1"><span class="fn">quickSortHelper</span>(aList, first, last):</span>
+<span class="line" data-l="2">    <span class="kw">if</span> first &lt; last:</span>
+<span class="line" data-l="3">        split = <span class="fn">partition</span>(aList, first, last)</span>
+<span class="line" data-l="4">        <span class="fn">quickSortHelper</span>(aList, first, split-<span class="num">1</span>)</span>
+<span class="line" data-l="5">        <span class="fn">quickSortHelper</span>(aList, split+<span class="num">1</span>, last)</span>
+<span class="line" data-l="6"><span class="fn">partition</span>(aList, first, last):</span>
+<span class="line" data-l="7">    pivotVal = aList[first]</span>
+<span class="line" data-l="8">    leftMark = first+<span class="num">1</span>;  rightMark = last</span>
+<span class="line" data-l="9">    done = <span class="num">false</span></span>
+<span class="line" data-l="10">    <span class="kw">while</span> !done:</span>
+<span class="line" data-l="11">        <span class="kw">while</span> leftMark &lt;= rightMark &amp;&amp; aList[leftMark] &lt;= pivotVal:</span>
+<span class="line" data-l="12">            leftMark += <span class="num">1</span></span>
+<span class="line" data-l="13">        <span class="kw">while</span> leftMark &lt;= rightMark &amp;&amp; aList[rightMark] &gt;= pivotVal:</span>
+<span class="line" data-l="14">            rightMark -= <span class="num">1</span></span>
+<span class="line" data-l="15">        <span class="kw">if</span> rightMark &lt; leftMark:</span>
+<span class="line" data-l="16">            done = <span class="num">true</span></span>
+<span class="line" data-l="17">        <span class="kw">else</span>:</span>
+<span class="line" data-l="18">            <span class="fn">swap</span>(aList[leftMark], aList[rightMark])</span>
+<span class="line" data-l="19">    <span class="fn">swap</span>(aList[first], aList[rightMark])</span>
+<span class="line" data-l="20">    <span class="kw">return</span> rightMark  <span class="com">// split point</span></span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -1135,7 +1219,7 @@ a_list = [<span style="color:#d19a66;">5</span>, <span style="color:#d19a66;">16
 
   <div class="info-box">
     <span class="info-label">vs. merge sort</span>
-    quicksort <strong>就地排序，不需要 $O(n)$ 額外空間</strong>，常數係數也比 merge sort 小，<strong>實務上通常更快</strong>。但 quicksort 不穩定、且最差是 $O(n^2)$；merge sort 任何情況都是 $O(n\log n)$ 且穩定。Python 的 <code>list.sort()</code> 用的是 <em>Timsort</em>，正是 merge sort 的最佳化變種。
+    quicksort <strong>就地排序，不需要 $O(n)$ 額外空間</strong>，常數係數也比 merge sort 小，<strong>實務上通常更快</strong>。但 quicksort 不穩定、且最差是 $O(n^2)$；merge sort 任何情況都是 $O(n\log n)$ 且穩定。`C++` 的 <code>std::sort()</code> 用 <em>introsort</em>（quicksort 混合變種）；<code>std::stable_sort()</code> 則基於 merge sort。
   </div>
 </section>
 
@@ -1145,7 +1229,7 @@ a_list = [<span style="color:#d19a66;">5</span>, <span style="color:#d19a66;">16
 <!-- ============================================================ -->
 <section id="depends">
   <div class="section-number">PART 10 · 依賴的資料結構</div>
-  <h2>每個演算法需要什麼底層支援？</h2>
+  <h2>每個演算法需要什麼底層支援？ <span class="sec-badge">課程補充</span></h2>
   <p>同樣的演算法，搬到不同的資料結構上效能可能截然不同——甚至根本跑不動。本節整理本章九個演算法各自<strong>能在哪些資料結構上有效執行</strong>，重點放在「為什麼某些演算法<em>必須</em>用 Array 而不能用 Linked List」這個關鍵差異上。</p>
 
   <h3>兩種基本存取模式</h3>
@@ -1155,7 +1239,7 @@ a_list = [<span style="color:#d19a66;">5</span>, <span style="color:#d19a66;">16
         <div class="ic-title">Random Access — 隨機存取 <span class="ic-badge" style="background:#2980b9;">FAST</span></div>
         <div style="font-size:.86rem;line-height:1.7;">
           可以用「索引」<strong>$O(1)$ 跳到任意位置</strong>。陣列 (Array) 最典型——記憶體連續，<code>a[i]</code> 直接用 <code>base + i × sizeof(T)</code> 算出位址即可。<br><br>
-          <span class="pill pill-blue">代表結構</span> Python <code>list</code>、NumPy <code>ndarray</code>、C 風格 array、Java <code>ArrayList</code><br>
+          <span class="pill pill-blue">代表結構</span> C++ <code>vector</code>、C 風格 array、Java <code>ArrayList</code><br>
           <span class="pill pill-green">關鍵動作</span> <code>a[i]</code> = $O(1)$，<code>a[i] = v</code> = $O(1)$，連續走訪 cache 友善
         </div>
       </div>
@@ -1224,14 +1308,14 @@ a_list = [<span style="color:#d19a66;">5</span>, <span style="color:#d19a66;">16
         <td>隨機存取 + 可交換</td>
         <td class="best">✓</td>
         <td>△ 慢但可</td>
-        <td>找到 min_idx 後 swap a[i] ↔ a[min_idx]</td>
+        <td>找到 minIdx 後 swap a[i] ↔ a[minIdx]</td>
       </tr>
       <tr>
         <td>插入排序</td>
         <td>隨機存取（位移）</td>
         <td class="best">✓</td>
         <td>△ 變體可行</td>
-        <td>位移 a[cur_pos-1] → a[cur_pos] 在 array 是 $O(1)$</td>
+        <td>位移 a[curPos-1] → a[curPos] 在 array 是 $O(1)$</td>
       </tr>
       <tr style="background:#fef0e7;">
         <td><strong>希爾排序</strong></td>
@@ -1274,8 +1358,8 @@ a_list = [<span style="color:#d19a66;">5</span>, <span style="color:#d19a66;">16
 
   <div class="info-box warm">
     <span class="info-label">為何「Quick Sort 不能用 Singly Linked List」？</span>
-    Partition 需要兩個指標 <code>left_mark</code>、<code>right_mark</code> ——一個從左往右、一個<strong>從右往左</strong>走。<br><br>
-    但<strong>單向鏈結串列只能從左往右</strong>（每個 node 只有 <code>next</code>，沒有 <code>prev</code>），<code>right_mark--</code> 沒有有效率的實作方式。雖然 <em>doubly-linked list</em> 可以雙向走，但每次比較都要追指標、cache miss 嚴重，常數係數比 Array 大太多。<br><br>
+    Partition 需要兩個指標 <code>leftMark</code>、<code>rightMark</code> ——一個從左往右、一個<strong>從右往左</strong>走。<br><br>
+    但<strong>單向鏈結串列只能從左往右</strong>（每個 node 只有 <code>next</code>，沒有 <code>prev</code>），<code>rightMark--</code> 沒有有效率的實作方式。雖然 <em>doubly-linked list</em> 可以雙向走，但每次比較都要追指標、cache miss 嚴重，常數係數比 Array 大太多。<br><br>
     這就是為什麼<strong>快速排序的教科書版本永遠用 Array 來講</strong>——partition 的優美只在 Array 上才成立。
   </div>
 
@@ -1304,7 +1388,7 @@ a_list = [<span style="color:#d19a66;">5</span>, <span style="color:#d19a66;">16
         <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;">兩個平行 Array：<code>slots[]</code> 存 key、<code>data[]</code> 存 value，索引位置一一對齊</span>
       </div>
     </div>
-    這就是為何 Python <code>dict</code>、Java <code>HashMap</code> 內部都看得到 Array — 雜湊表離不開 random access。
+    這就是為何 C++ <code>unordered_map</code>、Java <code>HashMap</code> 內部都看得到 Array — 雜湊表離不開 random access。
   </div>
 
   <h3>選擇底層結構的決策樹</h3>
@@ -1350,7 +1434,7 @@ a_list = [<span style="color:#d19a66;">5</span>, <span style="color:#d19a66;">16
 <!-- ============================================================ -->
 <section id="reference">
   <div class="section-number">REFERENCE · 比較總覽</div>
-  <h2>九個演算法一次比較</h2>
+  <h2>九個演算法一次比較 <span class="sec-badge">總覽</span></h2>
 
   <h3>搜尋演算法</h3>
   <table class="cmp-table">
@@ -1412,7 +1496,7 @@ a_list = [<span style="color:#d19a66;">5</span>, <span style="color:#d19a66;">16
 <!-- ============================================================ -->
 <section id="supplement">
   <div class="section-number">SUP · 補充</div>
-  <h2>補充：兩個 PDF 上不容易看出來的細節</h2>
+  <h2>補充：兩個 PDF 上不容易看出來的細節 <span class="sec-badge">課程補充</span></h2>
   <p>這一節針對 PDF 講義中兩個容易卡住的點補完整的逐步追蹤：（A）quadratic probing 把 77、44、55 放到表裡時為什麼會落在那個位置；（B）Map ADT 的 <code>put()</code> 為什麼有 4 個 if/else 分支、每個分支什麼時候會被觸發，以及哪個才是真正的 collision。</p>
 
   <!-- ============= PART A : quadratic probing trace ============= -->
@@ -1485,7 +1569,7 @@ val : 77   44   20   55   26   93   17    .    .   31    54</pre>
   <div class="info-box warm">
     <span class="info-label">先講清楚：什麼是 collision、什麼不是？</span>
     <strong style="display:block;font-size:1.05em;color:var(--accent);">Collision 的判準是「<u>hash 值</u>相同」，不是「key 相同」 — 千萬別搞反。</strong>
-    <p style="margin-top:.5rem;">正式定義：<strong>兩個<u>不同的 item</u> 經過 <code>hash_function</code> 後得到<u>同一個 hash 值</u></strong>（也就是 <code>hash(k₁) == hash(k₂)</code>，因此被映射到同一個 slot），這才叫 collision。判 collision 看的是「hash 值」這個運算結果，不是「key 本身」。</p>
+    <p style="margin-top:.5rem;">正式定義：<strong>兩個<u>不同的 item</u> 經過 <code>hashFunction</code> 後得到<u>同一個 hash 值</u></strong>（也就是 <code>hash(k₁) == hash(k₂)</code>，因此被映射到同一個 slot），這才叫 collision。判 collision 看的是「hash 值」這個運算結果，不是「key 本身」。</p>
     <p>同一個 key 重複 <code>put</code>（如 <code>h[77]="bird"</code> 然後 <code>h[77]="eagle"</code>）— hash 值當然會相同，<strong>但兩次塞的是同一個 item</strong>，只是更新同一個 entry，<strong>這不是 collision，也不會觸發任何 rehash</strong>。collision 必須是「兩個不同 item 撞到同一格」。</p>
     <table class="cmp-table" style="margin-top:.8rem;">
       <thead><tr><th>狀況</th><th>兩個 item 的 hash 值</th><th>是同一個 key 嗎？</th><th>這算 collision 嗎？</th><th><code>put</code> 要做的事</th></tr></thead>
@@ -1500,27 +1584,26 @@ val : 77   44   20   55   26   93   17    .    .   31    54</pre>
 
   <h4 style="margin-top:1.2rem;color:var(--accent2);font-family:'Noto Serif TC',serif;">教科書版本的 <code>put()</code></h4>
   <div class="pseudo-code">
-<span class="line"><span class="kw">def</span> <span class="fn">put</span>(self, key, data):</span>
-<span class="line">    hash_value = self.<span class="fn">hash_function</span>(key, <span class="fn">len</span>(self.slots))</span>
+<span class="line"><span class="fn">put</span>(key, val):</span>
+<span class="line">    hashValue = <span class="fn">hashFunction</span>(key, slots.<span class="fn">size</span>())</span>
 <span class="line">&nbsp;</span>
-<span class="line">    <span class="kw">if</span> self.slots[hash_value] <span class="kw">is</span> <span class="num">None</span>:           <span class="com"># ① 外層 if</span></span>
-<span class="line">        self.slots[hash_value] = key</span>
-<span class="line">        self.data[hash_value]  = data</span>
-<span class="line">    <span class="kw">else</span>:                                      <span class="com">#    外層 else：slot 被佔了，但被誰佔？</span></span>
-<span class="line">        <span class="kw">if</span> self.slots[hash_value] == key:      <span class="com"># ② 內層 if：被「同一個 key」佔（不是 collision）</span></span>
-<span class="line">            self.data[hash_value] = data</span>
-<span class="line">        <span class="kw">else</span>:                                  <span class="com">#    內層 else：hash 值撞到別人的 key → 真 collision</span></span>
-<span class="line">            next_slot = self.<span class="fn">rehash</span>(hash_value, <span class="fn">len</span>(self.slots))</span>
-<span class="line">            <span class="kw">while</span> (self.slots[next_slot] <span class="kw">is not</span> <span class="num">None</span></span>
-<span class="line">                   <span class="kw">and</span> self.slots[next_slot] != key):</span>
-<span class="line">                next_slot = self.<span class="fn">rehash</span>(next_slot, <span class="fn">len</span>(self.slots))</span>
+<span class="line">    <span class="kw">if</span> slots[hashValue] == -<span class="num">1</span>:           <span class="com">// ① 外層 if（-1 = 空位）</span></span>
+<span class="line">        slots[hashValue] = key</span>
+<span class="line">        data[hashValue]  = val</span>
+<span class="line">    <span class="kw">else</span>:                                  <span class="com">//    外層 else：slot 被佔了，但被誰佔？</span></span>
+<span class="line">        <span class="kw">if</span> slots[hashValue] == key:        <span class="com">// ② 內層 if：被「同一個 key」佔（不是 collision）</span></span>
+<span class="line">            data[hashValue] = val</span>
+<span class="line">        <span class="kw">else</span>:                              <span class="com">//    內層 else：hash 值撞到別人的 key → 真 collision</span></span>
+<span class="line">            nextSlot = <span class="fn">rehash</span>(hashValue, slots.<span class="fn">size</span>())</span>
+<span class="line">            <span class="kw">while</span> slots[nextSlot] != -<span class="num">1</span></span>
+<span class="line">                   &amp;&amp; slots[nextSlot] != key:</span>
+<span class="line">                nextSlot = <span class="fn">rehash</span>(nextSlot, slots.<span class="fn">size</span>())</span>
 <span class="line">&nbsp;</span>
-<span class="line">            <span class="kw">if</span> self.slots[next_slot] <span class="kw">is</span> <span class="num">None</span>:    <span class="com"># ③ 探查後 if：路徑上撞到空槽 → 新插入</span></span>
-<span class="line">                self.slots[next_slot] = key</span>
-<span class="line">                self.data[next_slot]  = data</span>
-<span class="line">            <span class="kw">else</span>:                                <span class="com"># ④ 探查後 else：路徑上撞到「同 key」 → 覆寫</span></span>
-<span class="line">                self.data[next_slot] = data</span>
-  </div>
+<span class="line">            <span class="kw">if</span> slots[nextSlot] == -<span class="num">1</span>:    <span class="com">// ③ 探查後 if：路徑上撞到空槽 → 新插入</span></span>
+<span class="line">                slots[nextSlot] = key</span>
+<span class="line">                data[nextSlot]  = val</span>
+<span class="line">            <span class="kw">else</span>:                          <span class="com">// ④ 探查後 else：路徑上撞到「同 key」 → 覆寫</span></span>
+<span class="line">                data[nextSlot] = val</span></div>
 
   <h4 style="margin-top:1.2rem;color:var(--accent2);font-family:'Noto Serif TC',serif;">把 4 個分支按「碰撞 / 探查」分類</h4>
   <table class="cmp-table">
@@ -1537,9 +1620,9 @@ val : 77   44   20   55   26   93   17    .    .   31    54</pre>
   <table class="cmp-table">
     <thead><tr><th>步驟</th><th>操作</th><th>hash</th><th>slots[hash]</th><th>走哪條分支</th><th>是 collision 嗎？</th><th>為何</th></tr></thead>
     <tbody>
-      <tr><td>1</td><td><code>h[77]="bird"</code></td><td>0</td><td><code>None</code></td><td><strong>① 外層 if</strong></td><td>—</td><td style="text-align:left;font-family:'Noto Sans TC',sans-serif;">slot 0 空，直接寫入，不必探查</td></tr>
+      <tr><td>1</td><td><code>h[77]="bird"</code></td><td>0</td><td><code>-1</code></td><td><strong>① 外層 if</strong></td><td>—</td><td style="text-align:left;font-family:'Noto Sans TC',sans-serif;">slot 0 空，直接寫入，不必探查</td></tr>
       <tr><td>2</td><td><code>h[77]="eagle"</code></td><td>0</td><td><code>77</code></td><td><strong>② 內層 if</strong></td><td><span class="pill pill-green">否</span></td><td style="text-align:left;font-family:'Noto Sans TC',sans-serif;">slot 0 已有的 key 就是 77 → 同 key 重新賦值，直接覆寫，<strong>不啟動 rehash</strong></td></tr>
-      <tr><td>3</td><td><code>h[44]="goat"</code></td><td>0</td><td><code>77</code> (≠ 44)</td><td><strong>③ 探查後 if</strong></td><td><span class="pill pill-orange">是</span></td><td style="text-align:left;font-family:'Noto Sans TC',sans-serif;">44 和 77 hash 值都是 0（不同 key、相同 hash） → 真 collision → 進 while：<code>next_slot = 1</code>、<code>slots[1] is None</code> → 退出 → 在 slot 1 新插入</td></tr>
+      <tr><td>3</td><td><code>h[44]="goat"</code></td><td>0</td><td><code>77</code> (≠ 44)</td><td><strong>③ 探查後 if</strong></td><td><span class="pill pill-orange">是</span></td><td style="text-align:left;font-family:'Noto Sans TC',sans-serif;">44 和 77 hash 值都是 0（不同 key、相同 hash） → 真 collision → 進 while：<code>nextSlot = 1</code>、<code>slots[1] == -1</code> → 退出 → 在 slot 1 新插入</td></tr>
       <tr><td>4</td><td><code>h[44]="lamb"</code></td><td>0</td><td><code>77</code> (≠ 44)</td><td><strong>④ 探查後 else</strong></td><td><span class="pill pill-green">否（很容易被誤認）</span></td><td style="text-align:left;font-family:'Noto Sans TC',sans-serif;">hash slot 雖然被別人佔，但 44 真正的家在 slot 1（步驟 3 放的）→ while 沿著 rehash 路徑走到 slot 1 找到 key 44 → 退出 → 覆寫 slot 1 的值</td></tr>
     </tbody>
   </table>
@@ -1577,13 +1660,13 @@ step 4 (④ h[44]="lamb"):   ← 不是 collision，沿著 rehash 路徑找到�
   </div>
 
   <div class="info-box">
-    <span class="info-label">為什麼 while 要同時檢查 <code>is not None</code> 和 <code>!= key</code>？</span>
+    <span class="info-label">為什麼 while 要同時檢查 <code>!= -1</code> 和 <code>!= key</code>？</span>
     迴圈兩個條件<strong>任一</strong>不滿足就停：
     <ul style="margin:.4rem 0 .4rem 1.4rem;line-height:1.8;">
-      <li>撞到 <code>None</code> 停 → 落到分支 ③（新插入）</li>
+      <li>撞到 <code>-1</code>（空槽）停 → 落到分支 ③（新插入）</li>
       <li>撞到 <code>== key</code> 停 → 落到分支 ④（覆寫）</li>
     </ul>
-    <strong>不能只檢查 <code>is not None</code></strong> — 否則「同 key 已在路徑上」（步驟 4 那種情況）時會繼續往下走，最後在另一個 slot 又寫一次，<strong>製造出兩個 slots 都是同一個 key</strong>。字典就壞掉了：<code>get</code> 查回來的值會看 rehash 路徑長度而異。這就是分支 ④ 必須存在、while 必須帶 <code>!= key</code> 條件的原因。
+    <strong>不能只檢查 <code>!= -1</code></strong> — 否則「同 key 已在路徑上」（步驟 4 那種情況）時會繼續往下走，最後在另一個 slot 又寫一次，<strong>製造出兩個 slots 都是同一個 key</strong>。字典就壞掉了：<code>get</code> 查回來的值會看 rehash 路徑長度而異。這就是分支 ④ 必須存在、while 必須帶 <code>!= key</code> 條件的原因。
   </div>
 </section>
 
@@ -1591,7 +1674,7 @@ step 4 (④ h[44]="lamb"):   ← 不是 collision，沿著 rehash 路徑找到�
 
 <footer>
   <p>Prepared for the Department of Applied Mathematics, NSYSU.<br>
-  Data Structures &amp; Algorithms — Chapter 5: Searching, Hashing &amp; Sorting.</p>
+  Data Structures &amp; Algorithms — Chapters 6–7: Searching, Hashing &amp; Sorting.</p>
 </footer>
 
 
@@ -1884,10 +1967,10 @@ function genBinarySearch(arr, target) {
     cmp++;
     const elimL = range(0, first);
     const elimR = range(last+1, sorted.length);
-    frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'compare'}, eliminated:[...elimL,...elimR], pointers:{low:{idx:first,label:'first',cls:'low'},high:{idx:last,label:'last',cls:'high'},mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`midpoint = (${first}+${last})//2 = ${midpoint}，比較 a_list[${midpoint}] = ${sorted[midpoint]} 與 ${target}`, stats:{cmp,low:first,high:last,mid:midpoint,result:'搜尋中...'}, pcLine:5});
+    frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'compare'}, eliminated:[...elimL,...elimR], pointers:{low:{idx:first,label:'first',cls:'low'},high:{idx:last,label:'last',cls:'high'},mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`midpoint = (${first}+${last})//2 = ${midpoint}，比較 aList[${midpoint}] = ${sorted[midpoint]} 與 ${target}`, stats:{cmp,low:first,high:last,mid:midpoint,result:'搜尋中...'}, pcLine:5});
 
     if (sorted[midpoint] === target) {
-      frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'found'}, eliminated:[...elimL,...elimR], pointers:{mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`★ 命中！a_list[${midpoint}] = ${target}`, stats:{cmp,low:first,high:last,mid:midpoint,result:`True (位置 ${midpoint})`}, pcLine:7});
+      frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'found'}, eliminated:[...elimL,...elimR], pointers:{mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`★ 命中！aList[${midpoint}] = ${target}`, stats:{cmp,low:first,high:last,mid:midpoint,result:`True (位置 ${midpoint})`}, pcLine:7});
       return frames;
     } else if (target < sorted[midpoint]) {
       frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'compare'}, eliminated:[...elimL,...elimR,...range(midpoint,sorted.length)], pointers:{low:{idx:first,label:'first',cls:'low'},high:{idx:last,label:'last',cls:'high'},mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`${target} < ${sorted[midpoint]} → 右半全部排除，last = ${midpoint-1}`, stats:{cmp,low:first,high:last,mid:midpoint,result:'搜尋中...'}, pcLine:9});
@@ -1936,16 +2019,16 @@ function genSelectionSort(initial) {
   let cmp = 0, swp = 0;
   frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:'初始陣列', stats:{cmp,swp,minIdx:'—'}, pcLine:1});
   for (let i = 0; i < N - 1; i++) {
-    // Lecture's exact init: min_idx = len(a_list) - 1
+    // Lecture's exact init: minIdx = aList.size() - 1
     let minIdx = N - 1;
     const sortedSet = range(0, i);
-    frames.push({arr:[...a], origIdx:[...oi], highlights:{[minIdx]:'active'}, sorted:sortedSet, message:`pass ${i+1}: 從 a[${i}..${N-1}] 找最小值，依講義初始 min_idx = ${N-1}（最末端），a[${minIdx}]=${a[minIdx]}`, stats:{cmp,swp,minIdx}, pcLine:3});
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{[minIdx]:'active'}, sorted:sortedSet, message:`pass ${i+1}: 從 a[${i}..${N-1}] 找最小值，依講義初始 minIdx = ${N-1}（最末端），a[${minIdx}]=${a[minIdx]}`, stats:{cmp,swp,minIdx}, pcLine:3});
     for (let j = i; j < N; j++) {
       cmp++;
       frames.push({arr:[...a], origIdx:[...oi], highlights:{[minIdx]:'active',[j]:'compare'}, sorted:sortedSet, message:`比較 a[${j}]=${a[j]} 與目前最小 a[${minIdx}]=${a[minIdx]}`, stats:{cmp,swp,minIdx}, pcLine:5});
       if (a[j] < a[minIdx]) {
         minIdx = j;
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[minIdx]:'active'}, sorted:sortedSet, message:`更小！更新 min_idx = ${minIdx}（值 ${a[minIdx]}）`, stats:{cmp,swp,minIdx}, pcLine:6});
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[minIdx]:'active'}, sorted:sortedSet, message:`更小！更新 minIdx = ${minIdx}（值 ${a[minIdx]}）`, stats:{cmp,swp,minIdx}, pcLine:6});
       }
     }
     if (minIdx !== i) {
@@ -1954,7 +2037,7 @@ function genSelectionSort(initial) {
       swp++;
       frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'swap',[minIdx]:'swap'}, sorted:sortedSet, message:`交換 a[${minIdx}] ↔ a[${i}]：最小值歸位到 a[${i}]`, stats:{cmp,swp,minIdx}, pcLine:8});
     } else {
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'sorted'}, sorted:sortedSet, message:`min_idx == i，已在正確位置，無需交換`, stats:{cmp,swp,minIdx}, pcLine:7});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'sorted'}, sorted:sortedSet, message:`minIdx == i，已在正確位置，無需交換`, stats:{cmp,swp,minIdx}, pcLine:7});
     }
     frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(0, i+1), message:`pass ${i+1} 結束：a[${i}]=${a[i]} 已就位`, stats:{cmp,swp,minIdx:'—'}, pcLine:1});
   }
@@ -1971,38 +2054,38 @@ function genInsertionSort(initial) {
   let cmp = 0, sft = 0;
   frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:[0], message:'初始：a[0] 自成一個已排序區', stats:{cmp,sft,key:'—'}, pcLine:1});
   for (let i = 1; i < N; i++) {
-    const cur_val = a[i];
+    const curVal = a[i];
     const oiKey = oi[i];
-    let cur_pos = i;
+    let curPos = i;
     const sortedSet = range(0, i);
-    frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, sorted:sortedSet, message:`取出 cur_val = a_list[${i}] = ${cur_val}, cur_pos = ${i}`, stats:{cmp,sft,key:cur_val}, pcLine:3});
-    while (cur_pos > 0 && a[cur_pos-1] > cur_val) {
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, sorted:sortedSet, message:`取出 curVal = aList[${i}] = ${curVal}, curPos = ${i}`, stats:{cmp,sft,key:curVal}, pcLine:3});
+    while (curPos > 0 && a[curPos-1] > curVal) {
       cmp++;
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos-1]:'compare',[cur_pos]:'key'}, sorted:sortedSet, message:`比較 a_list[${cur_pos-1}]=${a[cur_pos-1]} 與 cur_val=${cur_val}：${a[cur_pos-1]} > ${cur_val}`, stats:{cmp,sft,key:cur_val}, pcLine:5});
-      a[cur_pos] = a[cur_pos-1];
-      oi[cur_pos] = oi[cur_pos-1];
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos-1]:'compare',[curPos]:'key'}, sorted:sortedSet, message:`比較 aList[${curPos-1}]=${a[curPos-1]} 與 curVal=${curVal}：${a[curPos-1]} > ${curVal}`, stats:{cmp,sft,key:curVal}, pcLine:5});
+      a[curPos] = a[curPos-1];
+      oi[curPos] = oi[curPos-1];
       sft++;
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'swap'}, sorted:sortedSet, message:`位移 a_list[${cur_pos-1}] → a_list[${cur_pos}]，cur_pos = ${cur_pos-1}`, stats:{cmp,sft,key:cur_val}, pcLine:6});
-      cur_pos--;
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos]:'swap'}, sorted:sortedSet, message:`位移 aList[${curPos-1}] → aList[${curPos}]，curPos = ${curPos-1}`, stats:{cmp,sft,key:curVal}, pcLine:6});
+      curPos--;
     }
-    if (cur_pos > 0) {
+    if (curPos > 0) {
       cmp++;
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos-1]:'compare'}, sorted:sortedSet, message:`比較 a_list[${cur_pos-1}]=${a[cur_pos-1]} 與 cur_val=${cur_val}：${a[cur_pos-1]} ≤ ${cur_val}，停止位移`, stats:{cmp,sft,key:cur_val}, pcLine:5});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos-1]:'compare'}, sorted:sortedSet, message:`比較 aList[${curPos-1}]=${a[curPos-1]} 與 curVal=${curVal}：${a[curPos-1]} ≤ ${curVal}，停止位移`, stats:{cmp,sft,key:curVal}, pcLine:5});
     }
-    a[cur_pos] = cur_val;
-    oi[cur_pos] = oiKey;
-    frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'sorted'}, sorted:range(0, i+1), message:`把 cur_val=${cur_val} 插入 a_list[${cur_pos}]`, stats:{cmp,sft,key:cur_val}, pcLine:8});
+    a[curPos] = curVal;
+    oi[curPos] = oiKey;
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos]:'sorted'}, sorted:range(0, i+1), message:`把 curVal=${curVal} 插入 aList[${curPos}]`, stats:{cmp,sft,key:curVal}, pcLine:8});
   }
   frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(0, N), message:`★ 排序完成！${cmp} 次比較、${sft} 次位移`, stats:{cmp,sft,key:'—'}, pcLine:1});
   return frames;
 }
 
 // --- Shell Sort ---
-// 嚴格對齊講義（07_Searching and Sorting.ipynb cell 194）的兩個函式架構：
-//   shell_sort(a_list)：外層 while sublist_count，對每個 pos_start 呼叫 gap_insertion_sort
-//   gap_insertion_sort(a_list, start, gap)：對子列 [start, start+gap, start+2gap, ...] 做 insertion sort
-// 變數命名 (cur_val / cur_pos / pos_start / sublist_count) 全照講義 snake_case。
-// origIdx 在 shift 過程中必須保持 permutation：把 oi[cur_pos-gap] 暫填 oiKey (cur_val 之 hole)
+// 嚴格對齊講義（07_Searching and Sorting.ipynb §7.6）的兩個函式架構：
+//   shellSort(aList)：外層 while sublistCount，對每個 posStart 呼叫 gapInsertionSort
+//   gapInsertionSort(aList, start, gap)：對子列 [start, start+gap, start+2gap, ...] 做 insertion sort
+// 變數命名 (curVal / curPos / posStart / sublistCount) 全照講義 camelCase。
+// origIdx 在 shift 過程中必須保持 permutation：把 oi[curPos-gap] 暫填 oiKey (curVal 之 hole)
 // 否則 BarVis 會把同一個 DOM bar 畫在兩個 pos，視覺上「位置不對」。
 function genShellSort(initial, gapSeq) {
   const frames = [];
@@ -2018,89 +2101,89 @@ function genShellSort(initial, gapSeq) {
     while ((1 << k) - 1 <= N) k++;
     for (let i = k - 1; i >= 1; i--) gaps.push((1 << i) - 1);
   } else {
-    // 講義版：sublist_count = N // 2，每輪折半
+    // 講義版：sublistCount = N / 2，每輪折半
     gaps = [];
     let g = Math.floor(N / 2);
     while (g > 0) { gaps.push(g); g = Math.floor(g / 2); }
   }
 
-  // === 講義版 gap_insertion_sort：對 a_list 從 start 開始、stride = gap 的子列做 insertion sort ===
-  function gap_insertion_sort(start, gap) {
-    // pcLine 9: for i in range(start + gap, len(a_list), gap)
+  // === 講義版 gapInsertionSort：對 aList 從 start 開始、stride = gap 的子列做 insertion sort ===
+  function gapInsertionSort(start, gap) {
+    // pcLine 9: for i = start + gap; i < aList.size(); i += gap
     for (let i = start + gap; i < N; i += gap) {
       frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, message:`for i in range(${start}+${gap}, ${N}, ${gap})：i = ${i}`, stats:{cmp,swp,gap}, pcLine:9});
 
-      const cur_val = a[i];
+      const curVal = a[i];
       const oiKey = oi[i];
-      let cur_pos = i;
+      let curPos = i;
 
-      // pcLine 10: cur_val = a_list[i]
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, message:`cur_val = a_list[${i}] = ${cur_val}`, stats:{cmp,swp,gap}, pcLine:10});
-      // pcLine 11: cur_pos = i
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'key'}, message:`cur_pos = i = ${cur_pos}`, stats:{cmp,swp,gap}, pcLine:11});
+      // pcLine 10: curVal = aList[i]
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, message:`curVal = aList[${i}] = ${curVal}`, stats:{cmp,swp,gap}, pcLine:10});
+      // pcLine 11: curPos = i
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos]:'key'}, message:`curPos = i = ${curPos}`, stats:{cmp,swp,gap}, pcLine:11});
 
-      while (cur_pos >= gap && a[cur_pos - gap] > cur_val) {
+      while (curPos >= gap && a[curPos - gap] > curVal) {
         cmp++;
         // pcLine 12: while-condition 為真
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos-gap]:'compare',[cur_pos]:'key'}, message:`while ${cur_pos} >= ${gap} and a_list[${cur_pos-gap}]=${a[cur_pos-gap]} > cur_val=${cur_val} → 進入迴圈`, stats:{cmp,swp,gap}, pcLine:12});
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos-gap]:'compare',[curPos]:'key'}, message:`while ${curPos} >= ${gap} and aList[${curPos-gap}]=${a[curPos-gap]} > curVal=${curVal} → 進入迴圈`, stats:{cmp,swp,gap}, pcLine:12});
 
-        // SHIFT: a[cur_pos] ← a[cur_pos - gap]
+        // SHIFT: a[curPos] ← a[curPos - gap]
         // 同步維持 moving key 的 visual hole，讓 origIdx 與 arr 一致。
-        a[cur_pos] = a[cur_pos - gap];
-        a[cur_pos - gap] = cur_val;
-        oi[cur_pos] = oi[cur_pos - gap];
-        oi[cur_pos - gap] = oiKey;
+        a[curPos] = a[curPos - gap];
+        a[curPos - gap] = curVal;
+        oi[curPos] = oi[curPos - gap];
+        oi[curPos - gap] = oiKey;
         swp++;
-        // pcLine 13: a_list[cur_pos] = a_list[cur_pos - gap]
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'swap',[cur_pos-gap]:'key'}, message:`a_list[${cur_pos}] = a_list[${cur_pos-gap}] = ${a[cur_pos]} (位移)`, stats:{cmp,swp,gap}, pcLine:13});
+        // pcLine 13: aList[curPos] = aList[curPos - gap]
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos]:'swap',[curPos-gap]:'key'}, message:`aList[${curPos}] = aList[${curPos-gap}] = ${a[curPos]} (位移)`, stats:{cmp,swp,gap}, pcLine:13});
 
-        cur_pos -= gap;
-        // pcLine 14: cur_pos = cur_pos - gap
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'key'}, message:`cur_pos = cur_pos - gap = ${cur_pos}`, stats:{cmp,swp,gap}, pcLine:14});
+        curPos -= gap;
+        // pcLine 14: curPos = curPos - gap
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos]:'key'}, message:`curPos = curPos - gap = ${curPos}`, stats:{cmp,swp,gap}, pcLine:14});
       }
 
-      // while exit: 兩種情況都 highlight cur_pos
-      if (cur_pos >= gap) {
+      // while exit: 兩種情況都 highlight curPos
+      if (curPos >= gap) {
         cmp++;
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos-gap]:'compare',[cur_pos]:'key'}, message:`while: a_list[${cur_pos-gap}]=${a[cur_pos-gap]} ≤ cur_val=${cur_val} → 停止`, stats:{cmp,swp,gap}, pcLine:12});
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos-gap]:'compare',[curPos]:'key'}, message:`while: aList[${curPos-gap}]=${a[curPos-gap]} ≤ curVal=${curVal} → 停止`, stats:{cmp,swp,gap}, pcLine:12});
       } else {
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'key'}, message:`while: cur_pos=${cur_pos} < gap=${gap} → 停止（已到子列開頭）`, stats:{cmp,swp,gap}, pcLine:12});
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos]:'key'}, message:`while: curPos=${curPos} < gap=${gap} → 停止（已到子列開頭）`, stats:{cmp,swp,gap}, pcLine:12});
       }
 
-      // pcLine 15: a_list[cur_pos] = cur_val
-      // shift 中 arr[cur_pos] 與 oi[cur_pos] 已同步代表 moving key；此處保留講義的插入步驟。
-      a[cur_pos] = cur_val;
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[cur_pos]:'sorted'}, message:`a_list[${cur_pos}] = cur_val = ${cur_val}`, stats:{cmp,swp,gap}, pcLine:15});
+      // pcLine 15: aList[curPos] = curVal
+      // shift 中 arr[curPos] 與 oi[curPos] 已同步代表 moving key；此處保留講義的插入步驟。
+      a[curPos] = curVal;
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos]:'sorted'}, message:`aList[${curPos}] = curVal = ${curVal}`, stats:{cmp,swp,gap}, pcLine:15});
     }
   }
 
-  // === 講義版 shell_sort：外層折半 + 對每個 pos_start 呼叫 gap_insertion_sort ===
-  // pcLine 2: sublist_count 初始化
-  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublist_count = len(a_list) // 2 = ${gaps[0]}`, stats:{cmp,swp,gap:'—'}, pcLine:2});
+  // === 講義版 shellSort：外層折半 + 對每個 posStart 呼叫 gapInsertionSort ===
+  // pcLine 2: sublistCount 初始化
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublistCount = aList.size() / 2 = ${gaps[0]}`, stats:{cmp,swp,gap:'—'}, pcLine:2});
 
   for (let gIdx = 0; gIdx < gaps.length; gIdx++) {
-    const sublist_count = gaps[gIdx];
-    // pcLine 3: while sublist_count > 0
-    frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`while sublist_count > 0：sublist_count = ${sublist_count}`, stats:{cmp,swp,gap:sublist_count}, pcLine:3});
+    const sublistCount = gaps[gIdx];
+    // pcLine 3: while sublistCount > 0
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`while sublistCount > 0：sublistCount = ${sublistCount}`, stats:{cmp,swp,gap:sublistCount}, pcLine:3});
 
-    for (let pos_start = 0; pos_start < sublist_count; pos_start++) {
-      // pcLine 4: for pos_start in range(sublist_count)
+    for (let posStart = 0; posStart < sublistCount; posStart++) {
+      // pcLine 4: for posStart in range(sublistCount)
       const indices = [];
-      for (let k = pos_start; k < N; k += sublist_count) indices.push(k);
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`for pos_start in range(${sublist_count})：pos_start = ${pos_start}, 子列索引 = [${indices.join(', ')}]`, stats:{cmp,swp,gap:sublist_count}, pcLine:4});
-      // pcLine 5: 呼叫 gap_insertion_sort
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`gap_insertion_sort(a_list, ${pos_start}, ${sublist_count})`, stats:{cmp,swp,gap:sublist_count}, pcLine:5});
+      for (let k = posStart; k < N; k += sublistCount) indices.push(k);
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`for posStart in range(${sublistCount})：posStart = ${posStart}, 子列索引 = [${indices.join(', ')}]`, stats:{cmp,swp,gap:sublistCount}, pcLine:4});
+      // pcLine 5: 呼叫 gapInsertionSort
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`gapInsertionSort(aList, ${posStart}, ${sublistCount})`, stats:{cmp,swp,gap:sublistCount}, pcLine:5});
 
       // 真正呼叫子函式（不再 inline 展開）
-      gap_insertion_sort(pos_start, sublist_count);
+      gapInsertionSort(posStart, sublistCount);
     }
 
-    // pcLine 6: sublist_count = sublist_count // 2 (outer while 收尾)
+    // pcLine 6: sublistCount = sublistCount // 2 (outer while 收尾)
     if (gIdx < gaps.length - 1) {
       const newGap = gaps[gIdx + 1];
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublist_count = sublist_count // 2 = ${newGap}`, stats:{cmp,swp,gap:newGap}, pcLine:6});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublistCount = sublistCount // 2 = ${newGap}`, stats:{cmp,swp,gap:newGap}, pcLine:6});
     } else {
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublist_count = sublist_count // 2 = 0 → while 結束`, stats:{cmp,swp,gap:'—'}, pcLine:6});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublistCount = sublistCount // 2 = 0 → while 結束`, stats:{cmp,swp,gap:'—'}, pcLine:6});
     }
   }
 
@@ -2117,7 +2200,7 @@ function genMergeSort(initial) {
   const oi = a.map((_,i)=>i);
   let cmp = 0, wr = 0;
   const treeNodes = []; // {level, from, to, status}
-  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:'初始：呼叫 merge_sort(0, n-1)', stats:{cmp,wr,phase:'初始化'}, brackets:[{from:0,to:N-1,row:0,label:`[0..${N-1}]`}], tree:[{level:0,from:0,to:N-1,status:'active'}], pcLine:1});
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:'初始：呼叫 mergeSort(0, n-1)', stats:{cmp,wr,phase:'初始化'}, brackets:[{from:0,to:N-1,row:0,label:`[0..${N-1}]`}], tree:[{level:0,from:0,to:N-1,status:'active'}], pcLine:1});
 
   function snapshotTree(extras) {
     return treeNodes.map(n => ({...n, status: extras[`${n.from}-${n.to}`] || n.status}));
@@ -2183,7 +2266,7 @@ function genQuickSort(initial, pivotMode) {
   const oi = a.map((_,i)=>i);
   let cmp = 0, swp = 0;
   const finalSorted = new Set();
-  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:'初始：呼叫 quick_sort(0, n-1)', stats:{cmp,swp,pivot:'—',rangeStr:`[0..${N-1}]`,lm:'—',rm:'—'}, brackets:[{from:0,to:N-1,row:0,label:`[0..${N-1}]`}], pcLine:1});
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:'初始：呼叫 quickSort(0, n-1)', stats:{cmp,swp,pivot:'—',rangeStr:`[0..${N-1}]`,lm:'—',rm:'—'}, brackets:[{from:0,to:N-1,row:0,label:`[0..${N-1}]`}], pcLine:1});
 
   function partition(first, last) {
     let pivotIdx = first;
