@@ -514,11 +514,40 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   </div>
   <div class="quiz-feedback" id="qStackFeedback"></div>
 </div>
+
+  <h3 style="margin-top:1.5rem;">講義練習：用 stack 反轉字串</h3>
+  <p>講義在這裡留了一題：寫一個 <code>revString(myStr)</code>，用 stack 把字串反過來。
+  期待輸出：<code>revString("NSYSU")</code> 得到 <code>"USYSN"</code>。
+  原題挖了兩個空（push 迴圈與 pop 拼接），完整解答如下：</p>
+  <div class="info-card" style="max-width:560px;"><div class="ic-title">revString：進去一趟就反了 <span class="ic-badge">CODE</span></div>
+    <div class="pseudo-code" style="font-size:.74rem;">
+<span class="line">string <span class="fn">revString</span>(string myStr) {</span>
+<span class="line">    stack&lt;<span class="kw">char</span>&gt; s;</span>
+<span class="line">    <span class="kw">for</span> (<span class="kw">char</span> ch : myStr) s.<span class="fn">push</span>(ch);  <span class="com">// ① 逐字推上去</span></span>
+<span class="line">    string rStr = <span class="str">&quot;&quot;</span>;</span>
+<span class="line">    <span class="kw">while</span> (!s.<span class="fn">empty</span>()) {</span>
+<span class="line">        rStr = rStr + s.<span class="fn">top</span>();       <span class="com">// ② 彈出順序 = 反序</span></span>
+<span class="line">        s.<span class="fn">pop</span>();</span>
+<span class="line">    }</span>
+<span class="line">    <span class="kw">return</span> rStr;</span>
+<span class="line">}</span></div></div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 為什麼 stack 天生會反轉？</div>
+  <p>revString 只是「全部 push、再全部 pop」就完成反轉。背後的原因是？</p>
+  
+  <div class="quiz-options" id="qRevOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="push 的順序是 N,S,Y,S,U；pop 出來就是 U,S,Y,S,N。任何「先進後出」的容器都自帶反轉效果，之後的十進位轉二進位（§3.8）用的是同一招。" onclick="quizCheck('qRev', this)"><span class="opt-letter">(A)</span> LIFO：最後進去的最先出來，順序自然顛倒</div><div class="quiz-opt" data-correct="false" data-fb="stack 不排序：它只管進出順序。" onclick="quizCheck('qRev', this)"><span class="opt-letter">(B)</span> stack 內部把字串排序了</div><div class="quiz-opt" data-correct="false" data-fb="top 永遠只看頂端；兩端進出的是 deque（§3.15）。" onclick="quizCheck('qRev', this)"><span class="opt-letter">(C)</span> top() 會從兩端輪流取</div>
+  </div>
+  <div class="quiz-feedback" id="qRevFeedback"></div>
+</div>
 </section>
 
 <section id="parens">
   <div class="section-number">PART 02 · 括號配對</div>
-  <h2>括號配對：stack 的第一個殺手級應用 <span class="sec-badge">cppds §3.6–3.7</span></h2>
+  <h2>括號配對：stack 的第一個殺手級應用 <span class="sec-badge">cppds §3.6–3.7 · 講義補充</span></h2>
+  <p style="font-size:.88rem;color:var(--muted);">課堂投影片跳過這兩節（RISE skip）：屬自學補充，
+  但它是 stack 最經典的應用，編譯器每天都在做這件事，建議別跳。</p>
   <p>編譯器怎麼知道 <code>(()</code> 少了一個右括號？<strong>由內往外配對</strong>的結構剛好是 LIFO：
   每個右括號要配的是「<strong>最近一個還沒配對的左括號</strong>」：這就是 stack 的 top。</p>
   <div class="viz-layout">
@@ -871,7 +900,9 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
 <section id="printer">
   <div class="section-number">PART 07 · 模擬</div>
-  <h2>印表機模擬：用機率與 queue 回答容量問題 <span class="sec-badge">cppds §3.14</span></h2>
+  <h2>印表機模擬：用機率與 queue 回答容量問題 <span class="sec-badge">cppds §3.14 · 講義補充</span></h2>
+  <p style="font-size:.88rem;color:var(--muted);">課堂投影片跳過本節（RISE skip）：屬自學補充。
+  它是 queue 在「容量規劃」上的完整實戰，也是全章唯一用到隨機模擬的地方。</p>
   <p>實驗室的印表機可以切兩種模式：草稿模式一分鐘 10 頁，高品質模式一分鐘只剩 5 頁。
   切高品質的話，學生會不會等到天荒地老？這是個真實的容量規劃問題，
   而且沒辦法用公式直接算，因為「什麼時候有人送印、一次印幾頁」都是隨機的。
@@ -941,17 +972,23 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       <tbody></tbody>
     </table>
     </div>
-    <div class="status-banner" id="printerStatus"><span class="status-icon">›</span><span class="status-text">按下方按鈕各跑 5 次 3600 秒的模擬（固定亂數種子，可重現）。</span></div>
+    <div class="status-banner" id="printerStatus"><span class="status-icon">›</span><span class="status-text">按下方按鈕各跑 10 次 3600 秒的模擬（固定亂數種子，可重現），跟講義同規模。</span></div>
     <div class="controls-bar">
-      <button class="btn" onclick="printerRun()">▶ 跑 5 × 3600 秒模擬</button>
+      <button class="btn" onclick="printerRun()">▶ 跑 10 × 3600 秒模擬</button>
     </div>
   </div>
   <div class="info-box warm" style="margin-top:.8rem;">
     <span class="info-label">結論怎麼讀？</span>
     講義跑了 10 次 3600 秒：5 頁/分的平均等待起伏很大，動輒好幾分鐘還常留下未完成的工作；
     10 頁/分則穩定壓在半分鐘以內、隊伍清空。等六分鐘拿一份報告，學生下一堂課都要遲到了，
-    所以「切高品質」這個提案大概不可行。注意這個結論的效力完全建立在假設上（10 個人、每人印兩次、1 到 20 頁均勻分布），
-    人數若成長兩成、或週六沒課大家不趕時間，都要改假設重跑。模擬的價值就在這裡：改參數比改現實便宜太多。
+    所以「切高品質」這個提案大概不可行。注意這個結論的效力完全建立在假設上
+    （10 個人、每人每小時印兩次、1 到 20 頁均勻分布）。講義接著丟出三個 what-if，每一個都只要改參數重跑就能回答：
+    <ul style="margin:.4rem 0 0 1.4rem;line-height:1.9;">
+      <li>選課人數增加、實驗室平均<strong>多 20 個人</strong>呢？（到達率 1/180 要重算）</li>
+      <li><strong>週六</strong>沒課，學生不趕時間呢？（同樣的等待時間，結論可能翻盤）</li>
+      <li>程式越寫越短、<strong>平均頁數下降</strong>呢？（頁數分布不再是 1 到 20 均勻）</li>
+    </ul>
+    模擬的價值就在這裡：改參數比改現實便宜太多，但模擬的可信度永遠不會超過它的假設。
   </div>
   
 <div class="quiz-box">
@@ -1493,14 +1530,15 @@ function printerSim(ppm, seed) {
 function printerRun() {
   const tb = $('printerTable').querySelector('tbody'); tb.innerHTML = '';
   let s5 = 0, s10 = 0;
-  for (let r = 0; r < 5; r++) {
+  const RUNS = 10;
+  for (let r = 0; r < RUNS; r++) {
     const w5 = printerSim(5, 42 + r), w10 = printerSim(10, 42 + r);
     s5 += w5; s10 += w10;
     tb.insertAdjacentHTML('beforeend',
       `<tr><td>${r+1}</td><td>${w5.toFixed(1)}</td><td>${w10.toFixed(1)}</td></tr>`);
   }
   tb.insertAdjacentHTML('beforeend',
-    `<tr style="font-weight:700;background:var(--highlight);"><td>平均</td><td>${(s5/5).toFixed(1)}</td><td>${(s10/5).toFixed(1)}</td></tr>`);
+    `<tr style="font-weight:700;background:var(--highlight);"><td>平均</td><td>${(s5/RUNS).toFixed(1)}</td><td>${(s10/RUNS).toFixed(1)}</td></tr>`);
   setStatus('printerStatus', `同一組工作到達序列下，10 頁/分的平均等待約為 5 頁/分的 ${(s5/s10).toFixed(1)} 分之一。`);
 }
 

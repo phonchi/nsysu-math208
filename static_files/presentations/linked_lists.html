@@ -471,8 +471,10 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   都建立在同一個技巧上：<strong>走訪</strong>（traversal），也就是從 head 出發、
   一個節點一個節點地拜訪到 NULL 為止。</p>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:.8rem;">
-    <div class="info-card"><div class="ic-title">size：邊走邊數 <span class="ic-badge">CODE</span></div>
+    <div class="info-card"><div class="ic-title">isEmpty / size <span class="ic-badge">CODE</span></div>
       <div class="pseudo-code" style="font-size:.74rem;">
+<span class="line"><span class="kw">bool</span> <span class="fn">isEmpty</span>() { <span class="kw">return</span> head == <span class="num">NULL</span>; }  <span class="com">// O(1)：只看 head</span></span>
+<span class="line"> </span>
 <span class="line"><span class="kw">int</span> <span class="fn">size</span>() {</span>
 <span class="line">    Node&lt;T&gt; *current = head;</span>
 <span class="line">    <span class="kw">int</span> count = <span class="num">0</span>;</span>
@@ -562,6 +564,36 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
     </div>
   </div>
+
+  <h3 style="margin-top:1.5rem;">分析：哪些操作 O(1)、哪些逃不掉走訪（cppds §4.4.1）</h3>
+  <p>判斷準則一句話：<strong>只碰 head 的操作是 O(1)，其他都要走訪</strong>。
+  search 平均找到目標時走了 n/2 步：聽起來省一半，但 Big-O 只看成長率，
+  係數 1/2 會被丟掉，而且最壞情況（不在串列裡、或排在最後）還是得走完全程，所以仍是 O(n)。
+  下表是講義列的完整 List ADT，一次看清楚每個方法的代價：</p>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>方法</th><th>做什麼</th><th>未排序</th><th>排序</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">is_empty()</td><td>串列是空的嗎（看 head）</td><td>O(1)</td><td>O(1)</td></tr>
+      <tr><td class="mono">add(item)</td><td>加入元素</td><td><strong>O(1)</strong>（插 head）</td><td>O(n)（找位置）</td></tr>
+      <tr><td class="mono">size()</td><td>邊走邊數</td><td>O(n)</td><td>O(n)</td></tr>
+      <tr><td class="mono">search(item)</td><td>找得到嗎</td><td>O(n)</td><td>O(n)，可提前停</td></tr>
+      <tr><td class="mono">remove(item)</td><td>prev/cur 找到後摘除</td><td>O(n)</td><td>O(n)</td></tr>
+      <tr><td class="mono">append(item)</td><td>接在尾端（補充練習）</td><td>O(n)；有 tail 指標可 O(1)</td><td>不適用（位置由大小決定）</td></tr>
+      <tr><td class="mono">index(item)</td><td>回報元素排第幾</td><td>O(n)</td><td>O(n)</td></tr>
+      <tr><td class="mono">insert(pos, item)</td><td>插到指定位置</td><td>O(n)（走到 pos）</td><td>不適用</td></tr>
+      <tr><td class="mono">pop() / pop(pos)</td><td>移除尾端／指定位置並回傳</td><td>O(n)</td><td>O(n)</td></tr>
+    </tbody>
+  </table></div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 平均走一半，為什麼還是 O(n)？</div>
+  <p>search 平均只要走 n/2 個節點就找到目標。為什麼複雜度不寫成 O(n/2)？</p>
+  
+  <div class="quiz-options" id="qAnaOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="n/2 與 n 的成長率相同：n 加倍、時間都加倍。Big-O 抓的是成長率，1/2 這種常數係數一律丟掉；何況目標不在串列裡時一步都少不了。" onclick="quizCheck('qAna', this)"><span class="opt-letter">(A)</span> 係數在 Big-O 裡沒有意義，且最壞情況要走完全程</div><div class="quiz-opt" data-correct="false" data-fb="Big-O 不是四捨五入：是「成長率相同的函數視為同類」。" onclick="quizCheck('qAna', this)"><span class="opt-letter">(B)</span> 因為 n/2 四捨五入之後就是 n</div><div class="quiz-opt" data-correct="false" data-fb="平均情況可以分析（第 2 章的 average case）；只是它跟最壞情況同為線性，結論不變。" onclick="quizCheck('qAna', this)"><span class="opt-letter">(C)</span> 平均情況根本不能分析</div>
+  </div>
+  <div class="quiz-feedback" id="qAnaFeedback"></div>
+</div>
 </section>
 
 <section id="variants">
@@ -676,6 +708,30 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <div class="quiz-opt" data-correct="true" data-fb="節點脫鉤後若不 delete，這塊 heap 記憶體永遠拿不回來：Python/Java 有 GC，C++ 沒有。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(A)</span> 少 <code>delete cur</code> → 記憶體洩漏</div><div class="quiz-opt" data-correct="false" data-fb="不設 NULL 不影響編譯；dangling pointer 是執行期風險。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(B)</span> 少 <code>cur = NULL</code> → 編譯錯誤</div><div class="quiz-opt" data-correct="false" data-fb="單次洩漏也許無感，長時間執行的服務會被漏死。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(C)</span> 什麼都不會發生</div>
   </div>
   <div class="quiz-feedback" id="ex3Feedback"></div>
+</div>
+
+  <h3 style="margin-top:1.5rem;">補充練習：實作 append() <span class="sec-badge">講義補充（課堂跳過）</span></h3>
+  <p>講義留了一題課後練習：替 UnorderedList 加上 <code>append(item)</code>，把新元素接在<strong>尾端</strong>。
+  走訪版的解答長這樣：</p>
+  <div class="info-card" style="max-width:560px;"><div class="ic-title">append：一路走到尾 <span class="ic-badge">CODE</span></div>
+    <div class="pseudo-code" style="font-size:.74rem;">
+<span class="line"><span class="kw">void</span> <span class="fn">append</span>(T item) {</span>
+<span class="line">    Node&lt;T&gt; *temp = <span class="kw">new</span> <span class="fn">Node</span>&lt;T&gt;(item);</span>
+<span class="line">    <span class="kw">if</span> (head == <span class="num">NULL</span>) { head = temp; <span class="kw">return</span>; }  <span class="com">// 空串列：直接當 head</span></span>
+<span class="line">    Node&lt;T&gt; *current = head;</span>
+<span class="line">    <span class="kw">while</span> (current-&gt;<span class="fn">getNext</span>() != <span class="num">NULL</span>)</span>
+<span class="line">        current = current-&gt;<span class="fn">getNext</span>();       <span class="com">// 一路走到最後一個節點</span></span>
+<span class="line">    current-&gt;<span class="fn">setNext</span>(temp);</span>
+<span class="line">}</span></div></div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">補充練習 · append 的成本</div>
+  <p>上面這個 <code>append()</code> 是 O(n)。要讓它變成 O(1)，正確的做法是？</p>
+  
+  <div class="quiz-options" id="ex4Options">
+    <div class="quiz-opt" data-correct="true" data-fb="tail 一步定位尾端：接上新節點、tail 往後搬即可。代價是 add/remove 都要順手維護 tail（尤其刪到尾端節點時），這是「空間與維護成本換時間」的老交易。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(A)</span> 類別多存一根 tail 指標，append 直接接在 tail 後面</div><div class="quiz-opt" data-correct="false" data-fb="這只是把問題鏡射：append 變快了，原本 O(1) 的頭端 add 就變 O(n)。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(B)</span> 把串列改成從尾端往頭端指</div><div class="quiz-opt" data-correct="false" data-fb="兩次反轉各 O(n)，比原本更慢。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(C)</span> 先把串列反轉、插入、再反轉回來</div>
+  </div>
+  <div class="quiz-feedback" id="ex4Feedback"></div>
 </div>
 </section>
 

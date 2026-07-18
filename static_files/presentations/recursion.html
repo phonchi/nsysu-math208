@@ -407,7 +407,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
 <section id="tostr">
   <div class="section-number">PART 02 · 進位轉換（遞迴版）</div>
-  <h2>整數轉任意進位字串：遞迴自帶「反轉」 <span class="sec-badge">cppds §5.5–5.6</span></h2>
+  <h2>整數轉任意進位字串：遞迴自帶「反轉」 <span class="sec-badge">cppds §5.5</span></h2>
   <p>第 3 章用 stack 反轉餘數順序；遞迴版<strong>連 stack 都不用自己管</strong>：
   「先遞迴處理商、回來再接上自己的餘數」的順序天然就是高位在前。因為 <strong>call stack 就是那個 stack</strong>。</p>
   <div class="viz-layout">
@@ -441,11 +441,38 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
     </div>
   </div>
+
+  <h3 style="margin-top:1.5rem;">講義練習：用遞迴反轉字串</h3>
+  <p>講義在這裡留了一題填空：寫一個遞迴的 <code>reverse(s)</code>，讓
+  <code>reverse("hello")</code> 回傳 <code>"olleh"</code>。原題挖掉兩個空，解答是：</p>
+  <div class="info-card" style="max-width:560px;"><div class="ic-title">reverse：尾巴先反、頭字殿後 <span class="ic-badge">CODE</span></div>
+    <div class="pseudo-code" style="font-size:.74rem;">
+<span class="line">string <span class="fn">reverse</span>(string s) {</span>
+<span class="line">    <span class="kw">if</span> (s.<span class="fn">length</span>() == <span class="num">1</span>) {</span>
+<span class="line">        <span class="kw">return</span> s;                  <span class="com">// base case：一個字元不用反</span></span>
+<span class="line">    }</span>
+<span class="line">    <span class="kw">return</span> <span class="fn">reverse</span>(s.<span class="fn">substr</span>(<span class="num">1</span>)) + s[<span class="num">0</span>];</span>
+<span class="line">}                                <span class="com">// 「剩下的反轉」接上「第一個字」</span></span>
+<span class="line"> </span>
+<span class="line"><span class="fn">assert</span>(<span class="fn">reverse</span>(<span class="str">&quot;hello&quot;</span>) == <span class="str">&quot;olleh&quot;</span>);  <span class="com">// Pass</span></span></div></div>
+  <p style="font-size:.88rem;color:var(--muted);">用三法則檢查：base case 是長度 1；
+  <code>s.substr(1)</code> 每次少一個字元，確實朝 base case 前進；而且它呼叫自己。
+  跟 toStr 同一個骨架：<strong>把「接字元」延後到遞迴回來之後</strong>，順序就自動反了。</p>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 換個接法</div>
+  <p>把最後一行改成 <code>return s[0] + reverse(s.substr(1));</code>，會得到什麼？</p>
+  
+  <div class="quiz-options" id="qRevRecOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="頭字接在「前面」就是維持原順序：反轉的關鍵正是把 s[0] 排到遞迴結果「後面」。跟 toStr 的心得一樣：接的位置決定順序。" onclick="quizCheck('qRevRec', this)"><span class="opt-letter">(A)</span> 原字串（一點都沒反）</div><div class="quiz-opt" data-correct="false" data-fb="接的順序就是輸出順序：s[0] 在前，結果就以 s[0] 開頭，沒反。" onclick="quizCheck('qRevRec', this)"><span class="opt-letter">(B)</span> 一樣是反轉</div><div class="quiz-opt" data-correct="false" data-fb="語法沒問題（string 支援 char 的串接）：這是邏輯差異，編譯器不會攔。" onclick="quizCheck('qRevRec', this)"><span class="opt-letter">(C)</span> 編譯錯誤</div>
+  </div>
+  <div class="quiz-feedback" id="qRevRecFeedback"></div>
+</div>
 </section>
 
 <section id="frames">
   <div class="section-number">PART 03 · 呼叫堆疊</div>
-  <h2>Stack frame：遞迴在記憶體裡長什麼樣 <span class="sec-badge">cppds §5.6–5.7</span></h2>
+  <h2>Stack frame：遞迴在記憶體裡長什麼樣 <span class="sec-badge">cppds §5.6</span></h2>
   <p>每次函式呼叫，系統就在 <strong>call stack</strong> 推入一個 <strong>stack frame</strong>（區域變數＋返回位址）。
   遞迴深 n 層 = 同時存在 n 個 frame。<strong>return 就是 pop</strong>：把值交回上一層 frame 停住的位置。</p>
   <div class="viz-layout">
@@ -476,7 +503,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
 <section id="viz">
   <div class="section-number">PART 04 · 視覺化</div>
-  <h2>視覺化遞迴：螺旋與碎形樹 <span class="sec-badge">cppds §5.7</span></h2>
+  <h2>視覺化遞迴：螺旋與碎形樹 <span class="sec-badge">cppds §5.7 · 講義補充</span></h2>
+  <p style="font-size:.88rem;color:var(--muted);">課堂投影片跳過本節（RISE skip）：屬自學補充。</p>
   <p>遞迴難學，常常是因為腦中缺一張圖。講義用 turtle 畫圖建立直覺（課堂上跑
   <code>python turtle_example.py</code>），這裡用 canvas 重現同一套邏輯，原理一個字都沒變。</p>
   <p>先看螺旋：每一步往前畫一段線、右轉 90 度，然後<strong>用短一點的長度呼叫自己</strong>。
@@ -531,7 +559,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
 <section id="sierpinski">
   <div class="section-number">PART 05 · 三路遞迴</div>
-  <h2>Sierpinski 三角形：一次生三個自己 <span class="sec-badge">cppds §5.8</span></h2>
+  <h2>Sierpinski 三角形：一次生三個自己 <span class="sec-badge">cppds §5.8 · 講義補充</span></h2>
+  <p style="font-size:.88rem;color:var(--muted);">課堂投影片跳過本節（RISE skip）：屬自學補充。</p>
   <p>手繪流程只有三句話：畫一個大三角形；連接三邊中點，得到四個小三角形；
   中間那個不管，對三個角落的小三角形重複同樣程序。
   base case 是人為設定的<strong>degree（碎形深度）</strong>：每遞迴一層減 1，減到 0 就停。</p>
@@ -684,7 +713,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
 <section id="dp">
   <div class="section-number">PART 06 · 動態規劃</div>
-  <h2>找零錢：從貪婪、天真遞迴，一路走到 DP <span class="sec-badge">cppds §5.12</span></h2>
+  <h2>找零錢：從貪婪、天真遞迴，一路走到 DP <span class="sec-badge">cppds §5.12 · 講義補充</span></h2>
+  <p style="font-size:.88rem;color:var(--muted);">課堂投影片跳過本節（RISE skip，講義也標 Optional）：屬自學補充，但 DP 是後續演算法課的重要橋段。</p>
   <p>自動販賣機要用最少的硬幣找零。37 分怎麼找？兩個 25 太多，一個 25、一個 10、三個 1，共六枚。
   這種「先拿最大的」叫<strong>貪婪法</strong>，美國硬幣（1、5、10、25）下它剛好都對。
   但假設某國多了一種 21 分硬幣：63 分的最佳解是三枚 21，貪婪法卻還是給你六枚（25+25+10+1+1+1）。

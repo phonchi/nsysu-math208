@@ -393,9 +393,11 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   以及取值都要多跳一次記憶體。</p>
 
   <h3>手刻一個 compact 動態陣列：ArrayList</h3>
-  <p>講義用原生 <code>new[]</code> 自己刻了一個簡化版 vector，把「動態陣列到底在做什麼」攤開來看。
+  <p>講義用原生 <code>new[]</code> 自己刻了一個簡化版 vector（<code>dscpp/arraylist.hpp</code>），
+  把「動態陣列到底在做什麼」攤開來看。
   幾個值得停下來看的細節：解構子要 <code>delete[]</code>（自己配置的自己收）、
-  <code>operator[]</code> 回傳<strong>參考</strong>（讀寫共用一個運算子）、insert 與 remove 都要搬移元素。</p>
+  <code>operator[]</code> 回傳<strong>參考</strong>（讀寫共用一個運算子）、insert 與 remove 都要搬移元素，
+  而且容量滿了 <code>grow()</code> 會開一個兩倍大的新陣列搬家：vector 的 push_back 底下就是這件事。</p>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:.8rem;">
     <div class="info-card"><div class="ic-title">骨架與索引 <span class="ic-badge">CODE</span></div>
       <div class="pseudo-code" style="font-size:.72rem;">
@@ -408,14 +410,34 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <span class="line">        myArray = <span class="kw">new</span> <span class="kw">int</span>[maxSize];</span>
 <span class="line">    }</span>
 <span class="line">    ~<span class="fn">ArrayList</span>() { <span class="kw">delete</span>[] myArray; }  <span class="com">// 誰配置誰釋放</span></span>
+<span class="line">    <span class="kw">int</span> <span class="fn">size</span>() { <span class="kw">return</span> lastIndex; }</span>
+<span class="line">    <span class="kw">bool</span> <span class="fn">isEmpty</span>() { <span class="kw">return</span> lastIndex == <span class="num">0</span>; }</span>
 <span class="line">    <span class="kw">int</span>&amp; <span class="kw">operator</span>[](<span class="kw">int</span> idx) {</span>
 <span class="line">        <span class="kw">if</span> (<span class="num">0</span> &lt;= idx &amp;&amp; idx &lt; lastIndex) <span class="kw">return</span> myArray[idx];</span>
 <span class="line">        <span class="kw">throw</span> <span class="fn">out_of_range</span>(<span class="str">&quot;index out of bounds&quot;</span>);</span>
 <span class="line">    }   <span class="com">// 回傳參考：a[i] 讀寫都通</span></span>
 <span class="line">};</span></div></div>
+    <div class="info-card"><div class="ic-title">append 與 grow()：滿了就搬兩倍大的家 <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line"><span class="kw">void</span> <span class="fn">append</span>(<span class="kw">int</span> val) {</span>
+<span class="line">    <span class="kw">if</span> (lastIndex == maxSize) <span class="fn">grow</span>();  <span class="com">// 滿了先搬家</span></span>
+<span class="line">    myArray[lastIndex] = val;</span>
+<span class="line">    lastIndex++;</span>
+<span class="line">}</span>
+<span class="line"><span class="kw">private</span>:</span>
+<span class="line"><span class="kw">void</span> <span class="fn">grow</span>() {               <span class="com">// 容量加倍</span></span>
+<span class="line">    maxSize = maxSize * <span class="num">2</span>;</span>
+<span class="line">    <span class="kw">int</span>* bigger = <span class="kw">new</span> <span class="kw">int</span>[maxSize];</span>
+<span class="line">    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; lastIndex; i++)</span>
+<span class="line">        bigger[i] = myArray[i];      <span class="com">// 整批搬過去</span></span>
+<span class="line">    <span class="kw">delete</span>[] myArray;            <span class="com">// 舊屋退租</span></span>
+<span class="line">    myArray = bigger;</span>
+<span class="line">}</span></div>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">搬一次是 O(n)，但加倍策略讓搬家越來越少發生：平均每次 append 攤到 O(1)。第 2 章用「n 加倍、量時間」抓 push_back 的行為，抓到的就是這個。</div></div>
     <div class="info-card"><div class="ic-title">insert / remove：搬移的真面目 <span class="ic-badge">CODE</span></div>
       <div class="pseudo-code" style="font-size:.72rem;">
 <span class="line"><span class="kw">void</span> <span class="fn">insert</span>(<span class="kw">int</span> idx, <span class="kw">int</span> val) {</span>
+<span class="line">    <span class="kw">if</span> (lastIndex == maxSize) <span class="fn">grow</span>();</span>
 <span class="line">    <span class="kw">for</span> (<span class="kw">int</span> i = lastIndex; i &gt; idx; i--)</span>
 <span class="line">        myArray[i] = myArray[i - <span class="num">1</span>];   <span class="com">// 右移讓位</span></span>
 <span class="line">    myArray[idx] = val;  lastIndex++;</span>
@@ -426,7 +448,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <span class="line">        myArray[j] = myArray[j + <span class="num">1</span>];   <span class="com">// 左移補洞</span></span>
 <span class="line">    lastIndex--;</span>
 <span class="line">}</span></div>
-      <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">第 2 章說 vector 的 insert/erase 是 O(n)，這兩個迴圈就是那個 n 的本體。</div></div>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">第 2 章說 vector 的 insert/erase 是 O(n)，這兩個迴圈就是那個 n 的本體。講義的完整版還有 <code>erase(idx)</code>（照索引左移補洞）與 <code>display()</code>。</div></div>
   </div>
   <div class="viz-panel">
     <div class="bq-row" id="cmpVis" style="min-height:110px;"></div>
@@ -445,6 +467,16 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <div class="quiz-opt" data-correct="true" data-fb="compact 版一次 cache line 載入 16 個 int；referential 版每個元素都要多跳一次指標、位置又分散：cache miss 連發。" onclick="quizCheck('qCmp', this)"><span class="opt-letter">(A)</span> 連續記憶體對 CPU cache 友善</div><div class="quiz-opt" data-correct="false" data-fb="大小差異是次要；殺手是「跳來跳去」造成的 cache miss。" onclick="quizCheck('qCmp', this)"><span class="opt-letter">(B)</span> 指標比 int 大</div><div class="quiz-opt" data-correct="false" data-fb="轉換成本極小：記憶體階層才是主戰場。" onclick="quizCheck('qCmp', this)"><span class="opt-letter">(C)</span> referential 版要多做型別轉換</div>
   </div>
   <div class="quiz-feedback" id="qCmpFeedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · grow() 的攤銷成本</div>
+  <p>從空的 ArrayList 連續 append n 個元素（容量 8 起跳、滿了加倍）。總共搬移了大約幾個元素？</p>
+  
+  <div class="quiz-options" id="qGrowOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="搬家發生在容量 8、16、32、…時，各搬當時的元素數，等比級數加總 ≈ 2n。攤到每次 append 頭上是常數：這就是「攤銷 O(1)」。" onclick="quizCheck('qGrow', this)"><span class="opt-letter">(A)</span> 約 n 個：平均每次 append 攤到 O(1)</div><div class="quiz-opt" data-correct="false" data-fb="那是「每次只加 1 格容量」的下場：每次 append 都得整批搬。加倍策略正是為了逃離 n²。" onclick="quizCheck('qGrow', this)"><span class="opt-letter">(B)</span> 約 n² 個</div><div class="quiz-opt" data-correct="false" data-fb="搬家次數確實是 log₂n 次，但每次搬的量呈等比縮小（往回看），總和收斂在 2n，不是 n log n。" onclick="quizCheck('qGrow', this)"><span class="opt-letter">(C)</span> 約 n log n 個</div>
+  </div>
+  <div class="quiz-feedback" id="qGrowFeedback"></div>
 </div>
 </section>
 
@@ -504,16 +536,19 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <div class="side-panel">
       <div class="info-card"><div class="ic-title">DOK 實作 <span class="ic-badge">CODE</span></div><div class="pseudo-code" style="font-size:.76rem;">
 <span class="line" data-l="1"><span class="kw">class</span> <span class="fn">SparseMatrix</span> {     <span class="com">// dscpp/sparsematrix.hpp（DOK）</span></span>
-<span class="line" data-l="2">    <span class="kw">int</span> rows, cols;</span>
-<span class="line" data-l="3">    map&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;, <span class="kw">double</span>&gt; data;  <span class="com">// (r,c) → 值</span></span>
-<span class="line" data-l="4">    <span class="kw">void</span> <span class="fn">set</span>(<span class="kw">int</span> r, <span class="kw">int</span> c, <span class="kw">double</span> v) {</span>
-<span class="line" data-l="5">        <span class="kw">if</span> (v != <span class="num">0</span>) data[{r, c}] = v;</span>
-<span class="line" data-l="6">        <span class="kw">else</span> data.<span class="fn">erase</span>({r, c});   <span class="com">// 存 0 = 刪掉</span></span>
+<span class="line" data-l="2">    map&lt;pair&lt;size_t,size_t&gt;, <span class="kw">double</span>&gt; data;  <span class="com">// (r,c) → 值</span></span>
+<span class="line" data-l="3">  <span class="kw">public</span>:  <span class="com">// 讀：const 版，查不到回 0</span></span>
+<span class="line" data-l="4">    <span class="kw">double</span> <span class="kw">operator</span>()(size_t i, size_t j) <span class="kw">const</span> {</span>
+<span class="line" data-l="5">        <span class="kw">auto</span> it = data.<span class="fn">find</span>({i, j});</span>
+<span class="line" data-l="6">        <span class="kw">return</span> it != data.<span class="fn">end</span>() ? it-&gt;second : <span class="num">0.0</span>;</span>
 <span class="line" data-l="7">    }</span>
-<span class="line" data-l="8">    <span class="kw">double</span> <span class="fn">get</span>(<span class="kw">int</span> r, <span class="kw">int</span> c) {</span>
-<span class="line" data-l="9">        <span class="kw">return</span> data.<span class="fn">count</span>({r, c}) ? data[{r, c}] : <span class="num">0</span>;</span>
-<span class="line" data-l="10">    }</span>
-<span class="line" data-l="11">};</span></div></div>
+<span class="line" data-l="8">    <span class="com">// 寫：非 const 版，m(i,j)=v 查無此位置時插入</span></span>
+<span class="line" data-l="9">    <span class="kw">double</span>&amp; <span class="kw">operator</span>()(size_t i, size_t j) { <span class="kw">return</span> data[{i, j}]; }</span>
+<span class="line" data-l="10">    size_t <span class="fn">nnz</span>() <span class="kw">const</span> { <span class="kw">return</span> data.<span class="fn">size</span>(); }</span>
+<span class="line" data-l="11">    <span class="kw">double</span> <span class="fn">sparsity</span>(size_t rows, size_t cols) <span class="kw">const</span> {</span>
+<span class="line" data-l="12">        <span class="kw">return</span> <span class="num">1.0</span> - <span class="kw">double</span>(data.<span class="fn">size</span>()) / (rows * cols);</span>
+<span class="line" data-l="13">    }   <span class="com">// 維度用參數傳入，類別本身不存 rows/cols</span></span>
+<span class="line" data-l="14">};</span></div></div>
       <div class="info-card">
         <div class="ic-title">密度（sparsity）</div>
         <div class="mono" id="spDensity" style="font-size:.9rem;"></div>
@@ -523,7 +558,9 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <h3 style="margin-top:1.4rem;">完整的 SparseMatrix 類別（dscpp/sparsematrix.hpp）</h3>
   <p>講義把 DOK 寫成一個可運算的類別：讀寫共用 <code>operator()</code>（const 版查不到回 0、
   非 const 版會插入）、<code>nnz()</code> 數非零項、<code>sparsity()</code> 算密度，
-  連加法和乘法都直接在稀疏表示上做，完全不用把矩陣展開：</p>
+  連加法和乘法都直接在稀疏表示上做，完全不用把矩陣展開。
+  一個容易誤會的細節：<code>m(i,j) = 0</code> 寫進去的 0 也會佔一個項目，
+  類別不會自動把它刪掉（上面的互動格子「點一下歸零」是示範用的簡化）：</p>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:.8rem;">
     <div class="info-card"><div class="ic-title">稀疏加法 <span class="ic-badge">CODE</span></div>
       <div class="pseudo-code" style="font-size:.72rem;">

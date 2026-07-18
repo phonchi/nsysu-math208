@@ -286,6 +286,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <a href="#knight" data-target="knight"><span class="fn-num">P05</span><span class="fn-name">騎士巡邏</span></a>
   <a href="#dijkstra" data-target="dijkstra"><span class="fn-num">P06</span><span class="fn-name">Dijkstra 最短路徑</span></a>
   <a href="#prim" data-target="prim"><span class="fn-num">P07</span><span class="fn-name">Prim 最小生成樹</span></a>
+  <a href="#topsort" data-target="topsort"><span class="fn-num">P08</span><span class="fn-name">拓撲排序（補充）</span></a>
+  <a href="#scc" data-target="scc"><span class="fn-num">P09</span><span class="fn-name">強連通元件（補充）</span></a>
   <a href="#exercises" data-target="exercises"><span class="fn-num">EX</span><span class="fn-name">練習題</span></a>
   <a href="#reference" data-target="reference"><span class="fn-num">REF</span><span class="fn-name">總覽比較</span></a>
   <a href="#top" class="fn-top" title="回到頂端"><span class="fn-num">↑ TOP</span></a>
@@ -333,6 +335,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <a href="#knight"><span class="toc-num">P05</span>騎士巡邏 Knight's Tour</a>
     <a href="#dijkstra"><span class="toc-num">P06</span>Dijkstra 最短路徑</a>
     <a href="#prim"><span class="toc-num">P07</span>Prim 最小生成樹</a>
+    <a href="#topsort"><span class="toc-num">P08</span>拓撲排序（補充）</a>
+    <a href="#scc"><span class="toc-num">P09</span>強連通元件（補充）</a>
     <a href="#exercises"><span class="toc-num">EX</span>練習題</a>
     <a href="#reference"><span class="toc-num">REF</span>總覽比較表</a>
   </div>
@@ -380,7 +384,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <p style="font-size:.82rem;line-height:1.6;margin:0;">
           <span class="pill pill-blue">Path</span> 由邊串聯的頂點序列 $w_1, w_2, \ldots, w_n$，每個相鄰對 $(w_i, w_{i+1}) \in E$。<br><br>
           <span class="pill pill-orange">Cycle</span> 起點＝終點的 path 。<br><br>
-          <span class="pill pill-green">DAG</span> Directed Acyclic Graph — 沒有 cycle 的有向圖；可解決許多排程／依賴問題。<br><br>
+          <span class="pill pill-green">DAG</span> Directed Acyclic Graph：沒有 cycle 的有向圖；可解決許多排程／依賴問題。<br><br>
           <span class="pill pill-purple">Tree</span> 連通且無 cycle 的圖；下一章專題討論。
         </p>
       </div>
@@ -410,7 +414,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="representation">
   <div class="section-number">PART 01 · 圖的表示</div>
   <h2>怎麼把圖塞進電腦？相鄰矩陣 vs 相鄰串列 <span class="sec-badge">cppds §9.3–9.6</span></h2>
-  <p>圖的 ADT 主要支援以下操作：<code>setVertex(v)</code>、<code>addEdge(u, v, w)</code>、<code>getVertex(key)</code>、<code>getVertices()</code>、<code>g.count(v)</code>。實作方式有兩種主流選擇——<strong>相鄰矩陣（adjacency matrix）</strong>和<strong>相鄰串列（adjacency list）</strong>，兩者各有適用情境。</p>
+  <p>圖的 ADT 主要支援以下操作：<code>setVertex(v)</code>、<code>addEdge(u, v, w)</code>、<code>getVertex(key)</code>、<code>getVertices()</code>、<code>g.count(v)</code>。實作方式有兩種主流選擇：<strong>相鄰矩陣（adjacency matrix）</strong>和<strong>相鄰串列（adjacency list）</strong>，兩者各有適用情境。</p>
 
   <div class="viz-layout">
     <div>
@@ -583,13 +587,13 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <div class="info-box warm">
     <span class="info-label">為什麼是 $O(|V|+|E|)$？</span>
-    外層 <code>while</code> 每個頂點最多進 queue 一次（白色才會被加），所以是 $O(|V|)$。內層 <code>for</code> 走每個被 dequeue 出來的點的所有鄰居——整體加總就是<strong>每條邊被檢查一次</strong>，也就是 $O(|E|)$。兩者相加：$O(|V|+|E|)$。
+    外層 <code>while</code> 每個頂點最多進 queue 一次（白色才會被加），所以是 $O(|V|)$。內層 <code>for</code> 走每個被 dequeue 出來的點的所有鄰居，整體加總就是<strong>每條邊被檢查一次</strong>，也就是 $O(|E|)$。兩者相加：$O(|V|+|E|)$。
   </div>
 
   <div class="info-box green">
     <span class="info-label">BFS 的兩個重要性質</span>
     <strong>(1) 最短路徑樹：</strong>沿著 <code>previous</code> 指標往回走，可以重建從任何可達頂點回到起點的<strong>最少邊數路徑</strong>。<br>
-    <strong>(2) 一次解多個問題：</strong>一次 BFS 同時得到起點到「所有可達頂點」的最短距離——不需要重新跑 $|V|$ 次！
+    <strong>(2) 一次解多個問題：</strong>一次 BFS 同時得到起點到「所有可達頂點」的最短距離，不需要重新跑 $|V|$ 次！
   </div>
 </section>
 
@@ -606,10 +610,10 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <span class="line">FOOL → POOL → POLL → POLE → PALE → SALE → SAGE</span>
   </div>
 
-  <p>把每個單字當頂點、把「只差一個字母」的單字對連邊，問題就變成<strong>「在這張圖上找最短路徑」</strong>——正是 BFS 的拿手好戲！</p>
+  <p>把每個單字當頂點、把「只差一個字母」的單字對連邊，問題就變成<strong>「在這張圖上找最短路徑」</strong>，正是 BFS 的拿手好戲！</p>
 
   <h3>建圖技巧：bucket 法（避免 $O(n^2)$ 比對）</h3>
-  <p>若有 $n=5{,}110$ 個四字母單字，兩兩比對需要約 $\binom{n}{2} \approx 1.3 \times 10^7$ 次——太慢。聰明的做法：<strong>用 bucket 標籤</strong>，將每個字母位置依次替換成底線 <code>_</code>，把所有共用同一個 bucket 的單字連起來。</p>
+  <p>若有 $n=5{,}110$ 個四字母單字，兩兩比對需要約 $\binom{n}{2} \approx 1.3 \times 10^7$ 次，太慢。聰明的做法：<strong>用 bucket 標籤</strong>，將每個字母位置依次替換成底線 <code>_</code>，把所有共用同一個 bucket 的單字連起來。</p>
 
   <div class="info-box">
     <span class="info-label">Bucket 構造範例</span>
@@ -683,7 +687,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     除了 <code>color</code> 與 <code>previous</code>，DFS 還記錄：<br>
     <strong>discovery_time（發現時間）：</strong>頂點從 white 變 gray 的時間步。<br>
     <strong>closing_time（結束時間）：</strong>頂點從 gray 變 black 的時間步。<br>
-    這兩個時間滿足<strong>括號性質（parenthesis property）</strong>——每個子節點的 [discovery, closing] 區間都完全嵌套在父節點的區間內。
+    這兩個時間滿足<strong>括號性質（parenthesis property）</strong>：每個子節點的 [discovery, closing] 區間都完全嵌套在父節點的區間內。
   </div>
 
   <div class="viz-layout">
@@ -749,15 +753,15 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   </div>
 
   <div class="info-box warm">
-    <span class="info-label">為什麼要遍歷所有頂點？(line 4)</span>
+    <span class="info-label">為什麼要走訪所有頂點？(line 4)</span>
     從單一起點 DFS 可能無法走遍整張圖（特別是有向圖或不連通圖）。外層 <code>for v : graph</code> 確保每個白色頂點都會啟動一次 <code>dfsVisit</code>，最終得到一片<strong>深度優先森林（DF forest）</strong>。
   </div>
 
   <div class="info-box green">
     <span class="info-label">BFS vs DFS 的程式碼對照</span>
     DFS 與 BFS 的程式碼<strong>幾乎一模一樣</strong>，差別只在內層迴圈最後一行：<br>
-    BFS：<code>queue.enqueue(neighbor)</code> — 先把鄰居塞 queue，等以後處理。<br>
-    DFS：<code>dfsVisit(neighbor)</code> — 立刻遞迴下去處理鄰居。<br>
+    BFS：<code>queue.enqueue(neighbor)</code>：先把鄰居塞 queue，等以後處理。<br>
+    DFS：<code>dfsVisit(neighbor)</code>：立刻遞迴下去處理鄰居。<br>
     這個小差異就決定了「廣度優先 vs 深度優先」的搜尋順序！
   </div>
 </section>
@@ -769,7 +773,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="knight">
   <div class="section-number">PART 05 · 騎士巡邏</div>
   <h2>Knight's Tour：DFS + Warnsdorff 啟發式 <span class="sec-badge">cppds §9.11–9.14</span></h2>
-  <p><strong>騎士巡邏</strong>：在 $n \times n$ 棋盤上，騎士能否走 $n^2 - 1$ 步、恰好造訪每格一次？這是 DFS 的經典應用——把每格當頂點、把合法走法當邊，問題變成「找出長度為 $n^2 - 1$ 的簡單路徑」。</p>
+  <p><strong>騎士巡邏</strong>：在 $n \times n$ 棋盤上，騎士能否走 $n^2 - 1$ 步、恰好造訪每格一次？這是 DFS 的經典應用：把每格當頂點、把合法走法當邊，問題變成「找出長度為 $n^2 - 1$ 的簡單路徑」。</p>
 
   <div class="info-box warm">
     <span class="info-label">指數爆炸</span>
@@ -779,7 +783,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div class="info-box purple">
     <span class="info-label">Warnsdorff 啟發式</span>
     <strong>下一步永遠選「可走鄰居最少」的格子</strong>。直覺：先去角落、邊緣那些「難救援」的格子，避免它們被孤立；中間格子鄰居多，留到最後當跳板。<br>
-    這個簡單規則讓 8x8 從「跑不完」變成<strong>不到一秒就完成</strong>——一個經典的 heuristic 範例。
+    這個簡單規則讓 8x8 從「跑不完」變成<strong>不到一秒就完成</strong>：經典的 heuristic 範例。
   </div>
 
   <div class="viz-layout">
@@ -850,7 +854,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <div class="info-box">
     <span class="info-label">為什麼選「鄰居最少」而不是「最多」？</span>
-    若每次選鄰居最多的格子，騎士會傾向往中間擠（中間格鄰居多）。一旦中間都用完，<strong>四角的孤立格子就再也走不到</strong>。反過來「先解決鄰居最少的」，等於先掃完邊角這些「燙手山芋」，中間格子鄰居多、機動性高，留到後段當跳板使用——這就是 Warnsdorff 規則奏效的根本原因。
+    若每次選鄰居最多的格子，騎士會傾向往中間擠（中間格鄰居多）。一旦中間都用完，<strong>四角的孤立格子就再也走不到</strong>。反過來「先解決鄰居最少的」，等於先掃完邊角這些「燙手山芋」，中間格子鄰居多、機動性高，留到後段當跳板使用：這就是 Warnsdorff 規則奏效的根本原因。
   </div>
 </section>
 
@@ -861,11 +865,11 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="dijkstra">
   <div class="section-number">PART 06 · Dijkstra 最短路徑</div>
   <h2>Dijkstra：加權圖上的「貪婪式 BFS」 <span class="sec-badge">cppds §9.19–9.21</span></h2>
-  <p><strong>Dijkstra 演算法</strong>解決<strong>單源最短路徑</strong>問題：給定起點 $s$，求 $s$ 到所有其他頂點的<strong>最小權重總和路徑</strong>。它的精神類似 BFS——但用<strong>優先佇列（priority queue）</strong>取代普通 queue，每次從未處理頂點中挑出當前 distance 最小者。</p>
+  <p><strong>Dijkstra 演算法</strong>解決<strong>單源最短路徑</strong>問題：給定起點 $s$，求 $s$ 到所有其他頂點的<strong>最小權重總和路徑</strong>。它的精神類似 BFS，但用<strong>優先佇列（priority queue）</strong>取代普通 queue，每次從未處理頂點中挑出當前 distance 最小者。</p>
 
   <div class="info-box warm">
     <span class="info-label">前提：邊權必須非負</span>
-    Dijkstra <strong>不適用於有負邊權的圖</strong>。負邊會讓「拿出最小者就確定其最終距離」這個貪婪假設失效——詳見練習題 1。對於有負邊但無負環的情況請改用 <strong>Bellman-Ford</strong>。
+    Dijkstra <strong>不適用於有負邊權的圖</strong>。負邊會讓「拿出最小者就確定其最終距離」這個貪婪假設失效，詳見練習題 1。對於有負邊但無負環的情況請改用 <strong>Bellman-Ford</strong>。
   </div>
 
   <div class="viz-layout">
@@ -928,7 +932,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <div class="info-box green">
     <span class="info-label">關鍵概念：邊鬆弛 (relaxation)</span>
-    第 11–14 行稱為<strong>邊鬆弛</strong>：對 $u$ 的每個鄰居 $v$，檢查是否可以透過 $u$ 走到 $v$ 比目前已知更近——
+    第 11–14 行稱為<strong>邊鬆弛</strong>：對 $u$ 的每個鄰居 $v$，檢查是否可以透過 $u$ 走到 $v$ 比目前已知更近：
     $$\text{new\_d} = d(u) + w(u,v),\quad \text{若 new\_d} < d(v)\text{，更新 } d(v) \text{ 並把 }u\text{ 設為 previous}.$$
     每條邊最多鬆弛一次（因為頂點只會從 PQ 取出一次），所以總共 $O(|E|)$ 次鬆弛，配合 PQ 的 $O(\log|V|)$ 操作，總時間 $O((|V|+|E|)\log|V|)$。
   </div>
@@ -947,7 +951,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="prim">
   <div class="section-number">PART 07 · Prim 最小生成樹</div>
   <h2>Prim：用最小邊權連通整張圖 <span class="sec-badge">cppds §9.22</span></h2>
-  <p>想像線上遊戲要把同一筆訊息傳給所有玩家。最直覺的做法（Host 對每位玩家各送一份）會讓某些路由器重複收到同一個封包。一個更聰明的做法是：找出一棵<strong>最小生成樹（Minimum Spanning Tree, MST）</strong>——一個無循環的子圖，連通所有頂點，且總邊權最小。</p>
+  <p>想像線上遊戲要把同一筆訊息傳給所有玩家。最直覺的做法（Host 對每位玩家各送一份）會讓某些路由器重複收到同一個封包。一個更聰明的做法是：找出一棵<strong>最小生成樹（Minimum Spanning Tree, MST）</strong>：一個無循環的子圖，連通所有頂點，且總邊權最小。</p>
 
   <div class="info-box">
     <span class="info-label">MST 的定義</span>
@@ -957,7 +961,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <div class="info-box purple">
     <span class="info-label">Prim 是貪婪演算法</span>
-    Prim 每一步都選<strong>「安全邊（safe edge）」</strong>——一條跨越「已加入樹的頂點集合」與「尚未加入的頂點」的<strong>最小權重邊</strong>。每次加入一條，直到所有頂點都進樹為止。<br>
+    Prim 每一步都選<strong>「安全邊（safe edge）」</strong>：一條跨越「已加入樹的頂點集合」與「尚未加入的頂點」的<strong>最小權重邊</strong>。每次加入一條，直到所有頂點都進樹為止。<br>
     （在實作中我們用 PQ 維護「每個未加入頂點到已加入集合的最小距離」，跟 Dijkstra 結構非常類似！）
   </div>
 
@@ -1024,9 +1028,143 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div class="info-box warm">
     <span class="info-label">Prim vs Dijkstra：一個關鍵差異</span>
     結構幾乎一樣，但<strong>更新規則不同</strong>：<br>
-    <strong>Dijkstra：</strong> <code>newD = u-&gt;distance + w(u,v)</code> — 累加從起點走到 v 的<strong>整條路徑</strong>權重。<br>
-    <strong>Prim：</strong> <code>newD = w(u,v)</code> — 只看 u 到 v 的<strong>單一邊權</strong>。<br>
+    <strong>Dijkstra：</strong> <code>newD = u-&gt;distance + w(u,v)</code>：累加從起點走到 v 的<strong>整條路徑</strong>權重。<br>
+    <strong>Prim：</strong> <code>newD = w(u,v)</code>：只看 u 到 v 的<strong>單一邊權</strong>。<br>
     為什麼？因為 MST 不在乎「離起點多遠」，只在乎「下一個要連入樹的最便宜邊」。
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART 08: Topological Sort (supplemental) -->
+<!-- ============================================================ -->
+<section id="topsort">
+  <div class="section-number">PART 08 · 拓撲排序</div>
+  <h2>拓撲排序：把 DAG 攤平成一條合法的待辦順序 <span class="sec-badge">cppds §9.17 · 講義補充</span></h2>
+  <p style="font-size:.88rem;color:var(--muted);">課堂投影片跳過本節（RISE skip，講義標 Optional）：屬自學補充。</p>
+  <p>講義用煎鬆餅開場：食譜很簡單（1 顆蛋、1 杯鬆餅粉、1 匙油、3/4 杯牛奶），
+  難的是<strong>先做哪一步</strong>。加熱煎鍋和打蛋都可以先做，但「倒麵糊」一定要等鍋熱了、糊攪好了。
+  把每個步驟當頂點、「必須先做」當有向邊，就得到一張 <strong>DAG</strong>（有向無環圖）。
+  <strong>拓撲排序</strong>（topological sort）吃進一張 DAG，吐出一個線性順序，
+  保證圖中每條邊 $(v, w)$ 的 $v$ 都排在 $w$ 前面。凡是「事件有先後依賴」的問題都用得上：
+  軟體專案排程、資料庫查詢最佳化、矩陣連乘的順序安排。</p>
+  <div class="info-box">
+    <span class="info-label">演算法：DFS 的一個小改裝</span>
+    ① 對圖跑 <code>dfs(g)</code>，目的是替每個頂點算出 <strong>closing time</strong>（結束時間）。<br>
+    ② 把頂點依 closing time <strong>遞減</strong>排成一列。<br>
+    ③ 這一列就是拓撲排序的結果。
+  </div>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="graph-canvas" id="canvas-ts" style="height:400px;"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="tsStatus">按「① 跑 DFS」開始：節點上會標出 start/close 時間。</span></div>
+        <div class="controls-bar">
+          <button class="btn btn-play" onclick="tsRunDFS()">▶ ① 跑 DFS 標 closing time</button>
+          <button class="btn btn-step" onclick="tsOrder()">② 依 closing 遞減排出順序</button>
+          <button class="btn btn-reset" onclick="tsReset()">↺ 重置</button>
+        </div>
+        <div class="mono" id="tsOrderOut" style="font-size:.85rem;line-height:1.9;min-height:34px;padding:.4rem .2rem;"></div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">節點代號</div>
+        <div style="font-size:.84rem;line-height:1.95;">
+        奶＝3/4 杯牛奶｜蛋＝1 顆蛋｜油＝1 匙油<br>
+        鍋＝加熱煎鍋｜糊＝攪 1 杯鬆餅糊<br>
+        漿＝加熱糖漿｜倒＝倒 1/4 杯麵糊<br>
+        翻＝冒泡就翻面｜吃＝開動</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">怎麼讀動畫</div>
+        <div style="font-size:.84rem;line-height:1.9;">
+        節點下方的 <span class="mono">s/f</span> 是 DFS 的 start／closing time。
+        灰＝已發現、黑＝已完成。第 ② 步只是把黑點照 f 由大到小唸出來，
+        合法的做事順序就出現了。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-label">QUIZ · 為什麼「closing time 遞減」就是答案？</div>
+    <p>對 DAG 跑完 DFS 後，依 closing time 遞減排序，為什麼保證每條邊 $(v,w)$ 的 $v$ 都排在 $w$ 前面？</p>
+    <div class="quiz-options" id="ts1Options">
+      <div class="quiz-opt" data-correct="true"  onclick="quizCheck('ts1', this)"><span class="opt-letter">(A)</span> 因為 DAG 上有邊 $(v,w)$ 時，$v$ 的 closing time 一定比 $w$ 大</div>
+      <div class="quiz-opt" data-correct="false" onclick="quizCheck('ts1', this)"><span class="opt-letter">(B)</span> 因為 closing time 大代表這個點的鄰居比較多</div>
+      <div class="quiz-opt" data-correct="false" onclick="quizCheck('ts1', this)"><span class="opt-letter">(C)</span> 因為 DFS 一定會先造訪 $v$ 再造訪 $w$</div>
+    </div>
+    <div class="quiz-feedback" id="ts1Feedback"></div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART 09: Strongly Connected Components (supplemental) -->
+<!-- ============================================================ -->
+<section id="scc">
+  <div class="section-number">PART 09 · 強連通元件</div>
+  <h2>強連通元件（SCC）：找出「彼此都到得了」的頂點群 <span class="sec-badge">cppds §9.18 · 講義補充</span></h2>
+  <p style="font-size:.88rem;color:var(--muted);">課堂投影片跳過本節（RISE skip，講義標 Optional）：屬自學補充。</p>
+  <p>把全球資訊網當成一張超大的有向圖：網頁是頂點、超連結是邊。Google 這類搜尋引擎正是在這張圖上做演算法。
+  觀察這種圖會發現：內容相近的網站常常<strong>互相連來連去</strong>，形成高度互連的群集。
+  抓出這種群集的工具就是<strong>強連通元件</strong>演算法。
+  正式定義：SCC 是頂點的最大子集 $C \subseteq V$，使得其中任兩點 $v, w$ 都<strong>互相可達</strong>
+  （$v$ 到得了 $w$，$w$ 也到得了 $v$）。找到 SCC 之後，把每個 SCC 縮成一顆大點，
+  就得到一張簡化的「元件圖」，原圖的巨觀結構一眼可見。</p>
+  <div class="info-box">
+    <span class="info-label">先備定義：轉置圖 $G^T$</span>
+    把 $G$ 的每條邊反向就得到 $G^T$（A→B 變成 B→A）。
+    關鍵觀察：<strong>$G$ 和 $G^T$ 的 SCC 一模一樣</strong>（「互相可達」反向後仍互相可達），
+    但「跨 SCC」的單向連結會反向。演算法要鑽的正是這個縫。
+  </div>
+  <div class="info-box">
+    <span class="info-label">SCC 演算法四步（Kosaraju）</span>
+    ① 對 $G$ 跑 <code>dfs()</code>，算每個頂點的 closing time。<br>
+    ② 算出轉置圖 $G^T$。<br>
+    ③ 對 $G^T$ 跑 <code>dfs()</code>，但主迴圈<strong>依 closing time 遞減</strong>的順序挑起點。<br>
+    ④ 步驟 ③ 長出的森林中，<strong>每一棵樹就是一個 SCC</strong>。
+  </div>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="graph-canvas" id="canvas-scc" style="height:400px;"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="sccStatus">照按鈕順序 ①→②→③ 走一遍演算法。</span></div>
+        <div class="controls-bar">
+          <button class="btn btn-play" onclick="sccStep1()">▶ ① DFS on G</button>
+          <button class="btn btn-step" onclick="sccStep2()">② 轉置成 G&#7488;</button>
+          <button class="btn btn-step" onclick="sccStep3()">③ G&#7488; 上依 closing 遞減 DFS</button>
+          <button class="btn btn-reset" onclick="sccReset()">↺ 重置</button>
+        </div>
+        <div class="mono" id="sccOut" style="font-size:.85rem;line-height:1.9;min-height:34px;padding:.4rem .2rem;"></div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">這張例圖</div>
+        <div style="font-size:.84rem;line-height:1.9;">
+        8 個頂點、3 個 SCC：A B E 一圈、C F G 一圈、H I 一圈，
+        圈與圈之間只有單向通道。跑到第 ③ 步會用三種顏色框出三棵樹。</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">為什麼跑不出去？</div>
+        <div style="font-size:.84rem;line-height:1.9;">
+        第 ③ 步從「closing time 最大」的點出發。在 $G^T$ 裡，
+        通往其他 SCC 的邊全被反向了，DFS 只能在自己的 SCC 裡打轉：
+        一棵樹剛好框住一個元件。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-label">QUIZ · 第二次 DFS 的兩個講究</div>
+    <p>SCC 演算法的第二次 DFS 為什麼要（i）換到 $G^T$ 上跑、（ii）依 closing time 遞減挑起點？</p>
+    <div class="quiz-options" id="scc1Options">
+      <div class="quiz-opt" data-correct="true"  onclick="quizCheck('scc1', this)"><span class="opt-letter">(A)</span> 兩個條件合起來，讓每棵 DFS 樹恰好「困」在一個 SCC 裡</div>
+      <div class="quiz-opt" data-correct="false" onclick="quizCheck('scc1', this)"><span class="opt-letter">(B)</span> $G^T$ 的邊比較少，跑起來比較快</div>
+      <div class="quiz-opt" data-correct="false" onclick="quizCheck('scc1', this)"><span class="opt-letter">(C)</span> 只是慣例，從任何點開始、在原圖上跑也一樣對</div>
+    </div>
+    <div class="quiz-feedback" id="scc1Feedback"></div>
   </div>
 </section>
 
@@ -1166,9 +1304,9 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div class="info-box green">
     <span class="info-label">學習路線建議</span>
     <strong>1.</strong> 先牢記三色語義（white/gray/black），這是 BFS 與 DFS 共通的骨架。<br>
-    <strong>2.</strong> 動手追幾遍 BFS 與 DFS 的虛擬碼——它們<strong>程式碼幾乎一樣</strong>，差別只在 queue/stack。<br>
+    <strong>2.</strong> 動手追幾遍 BFS 與 DFS 的虛擬碼：它們<strong>程式碼幾乎一樣</strong>，差別只在 queue/stack。<br>
     <strong>3.</strong> Dijkstra 與 Prim 同樣是 PQ-based 演算法，只差在<strong>更新規則</strong>，一起記憶事半功倍。<br>
-    <strong>4.</strong> Knight's Tour 是欣賞「啟發式排序」威力的最佳範例——同樣的 DFS 骨架，加上 Warnsdorff 規則就能把 8x8 從「跑不完」變「秒解」。
+    <strong>4.</strong> Knight's Tour 是欣賞「啟發式排序」威力的最佳範例：同樣的 DFS 骨架，加上 Warnsdorff 規則就能把 8x8 從「跑不完」變「秒解」。
   </div>
 </section>
 
@@ -1514,7 +1652,7 @@ function buildAdjacency(config, undirected=true) {
     adj[e[0]].push({ to: e[1], w: e[2] });
     if (undirected) adj[e[1]].push({ to: e[0], w: e[2] });
   }
-  // 排序使遍歷順序穩定
+  // 排序使走訪順序穩定
   for (const k in adj) adj[k].sort((a,b) => a.to.localeCompare(b.to));
   return adj;
 }
@@ -2639,6 +2777,211 @@ const ex2R = new GraphRenderer('canvas-ex2', ex2Config, {
 });
 
 /* =============================================================
+   PART 08: TOPOLOGICAL SORT (supplemental, cppds 9.17)
+   ============================================================= */
+function dfsCloseEvents(vertKeys, adj) {
+  // 回傳 DFS 事件串（start/close 各一次），root 依 vertKeys 順序
+  const state = {}, events = [];
+  let t = 0;
+  const visit = v => {
+    state[v] = 1; t++; events.push({ v, act: 'start', t });
+    (adj[v] || []).forEach(w => { if (!state[w]) visit(w); });
+    state[v] = 2; t++; events.push({ v, act: 'close', t });
+  };
+  vertKeys.forEach(v => { if (!state[v]) visit(v); });
+  return events;
+}
+
+const TS_FULL = { '奶':'加 3/4 杯牛奶', '蛋':'打 1 顆蛋', '油':'加 1 匙油',
+  '鍋':'加熱煎鍋', '糊':'攪鬆餅糊', '漿':'加熱糖漿', '倒':'倒 1/4 杯',
+  '翻':'冒泡翻面', '吃':'開動' };
+const tsConfig = {
+  vertices: {
+    '奶': { x: 70,  y: 60  },
+    '蛋': { x: 215, y: 60  },
+    '油': { x: 360, y: 60  },
+    '鍋': { x: 520, y: 60  },
+    '糊': { x: 215, y: 170 },
+    '漿': { x: 80,  y: 260 },
+    '倒': { x: 445, y: 210 },
+    '翻': { x: 445, y: 320 },
+    '吃': { x: 255, y: 350 },
+  },
+  edges: [
+    ['奶','糊'], ['蛋','糊'], ['油','糊'],
+    ['糊','倒'], ['糊','漿'], ['鍋','倒'],
+    ['倒','翻'], ['翻','吃'], ['漿','吃'],
+  ],
+};
+const tsAdj = {};
+tsConfig.edges.forEach(([u, v]) => { (tsAdj[u] = tsAdj[u] || []).push(v); });
+const tsR = new GraphRenderer('canvas-ts', tsConfig, {
+  directed: true, showWeights: false, width: 600, height: 400,
+});
+let tsTimer = null, tsClose = null;
+
+function tsStatus(html) {
+  document.querySelector('#tsStatus').innerHTML = html;
+}
+function tsRunDFS() {
+  tsReset(true);
+  const events = dfsCloseEvents(Object.keys(tsConfig.vertices), tsAdj);
+  const startT = {};
+  tsClose = {};
+  let i = 0;
+  tsTimer = setInterval(() => {
+    if (i >= events.length) {
+      clearInterval(tsTimer); tsTimer = null;
+      tsStatus('DFS 完成：每個節點都有 start/close time。接著按 ②。');
+      return;
+    }
+    const e = events[i++];
+    if (e.act === 'start') {
+      startT[e.v] = e.t;
+      tsR.setNodeClass(e.v, 'gray');
+      tsR.setNodeMeta(e.v, e.t + '/…');
+      tsStatus(`t=${e.t}：發現「${TS_FULL[e.v]}」（灰）`);
+    } else {
+      tsClose[e.v] = e.t;
+      tsR.setNodeClass(e.v, 'black');
+      tsR.setNodeMeta(e.v, startT[e.v] + '/' + e.t);
+      tsStatus(`t=${e.t}：「${TS_FULL[e.v]}」完成（黑），closing time = ${e.t}`);
+    }
+  }, 420);
+}
+function tsOrder() {
+  if (!tsClose || !Object.keys(tsClose).length) {
+    tsStatus('要先按 ① 跑 DFS，才有 closing time 可排。'); return;
+  }
+  if (tsTimer) { clearInterval(tsTimer); tsTimer = null; }
+  const order = Object.keys(tsClose).sort((a, b) => tsClose[b] - tsClose[a]);
+  const out = document.getElementById('tsOrderOut');
+  out.innerHTML = '';
+  let i = 0;
+  tsTimer = setInterval(() => {
+    if (i >= order.length) {
+      clearInterval(tsTimer); tsTimer = null;
+      tsStatus('完成！這一列保證每條邊的起點都排在終點前面：照著做就不會把生麵糊吃下肚。');
+      return;
+    }
+    const v = order[i++];
+    tsR.setNodeClass(v, 'found');
+    out.innerHTML = order.slice(0, i)
+      .map(k => `${TS_FULL[k]}<span style="opacity:.55;">(f=${tsClose[k]})</span>`)
+      .join(' → ');
+    tsStatus(`第 ${i} 位：「${TS_FULL[v]}」（closing time ${tsClose[v]}）`);
+  }, 520);
+}
+function tsReset(keepStatus) {
+  if (tsTimer) { clearInterval(tsTimer); tsTimer = null; }
+  tsR.resetAll();
+  tsClose = null;
+  document.getElementById('tsOrderOut').innerHTML = '';
+  if (!keepStatus) tsStatus('按「① 跑 DFS」開始：節點上會標出 start/close 時間。');
+}
+
+/* =============================================================
+   PART 09: STRONGLY CONNECTED COMPONENTS (supplemental, cppds 9.18)
+   ============================================================= */
+const sccPos = {
+  A: { x: 95,  y: 80  }, B: { x: 260, y: 60  }, E: { x: 175, y: 195 },
+  C: { x: 420, y: 90  }, F: { x: 545, y: 175 }, G: { x: 420, y: 235 },
+  H: { x: 255, y: 330 }, I: { x: 470, y: 350 },
+};
+const sccEdges = [
+  ['A','B'], ['B','E'], ['E','A'],          // SCC 1：A B E
+  ['B','C'],                                 // 跨元件單向通道
+  ['C','F'], ['F','G'], ['G','C'],          // SCC 2：C F G
+  ['G','H'],                                 // 跨元件單向通道
+  ['H','I'], ['I','H'],                      // SCC 3：H I
+];
+const sccOpts = { directed: true, showWeights: false, width: 600, height: 400 };
+let sccR = new GraphRenderer('canvas-scc', { vertices: sccPos, edges: sccEdges }, sccOpts);
+let sccTimer = null, sccCloseT = null, sccOnGT = false;
+
+function sccStatus(html) { document.querySelector('#sccStatus').innerHTML = html; }
+function sccAdjOf(edges) {
+  const adj = {};
+  edges.forEach(([u, v]) => { (adj[u] = adj[u] || []).push(v); });
+  return adj;
+}
+function sccStep1() {
+  sccReset(true);
+  const events = dfsCloseEvents(Object.keys(sccPos), sccAdjOf(sccEdges));
+  const startT = {};
+  sccCloseT = {};
+  let i = 0;
+  sccTimer = setInterval(() => {
+    if (i >= events.length) {
+      clearInterval(sccTimer); sccTimer = null;
+      sccStatus('第 ① 步完成：每個頂點都有 closing time。接著按 ② 轉置。');
+      return;
+    }
+    const e = events[i++];
+    if (e.act === 'start') {
+      startT[e.v] = e.t;
+      sccR.setNodeClass(e.v, 'gray');
+      sccR.setNodeMeta(e.v, e.t + '/…');
+    } else {
+      sccCloseT[e.v] = e.t;
+      sccR.setNodeClass(e.v, 'black');
+      sccR.setNodeMeta(e.v, startT[e.v] + '/' + e.t);
+    }
+    sccStatus(`t=${e.t}：${e.act === 'start' ? '發現' : '完成'} ${e.v}`);
+  }, 380);
+}
+function sccStep2() {
+  if (!sccCloseT || !Object.keys(sccCloseT).length) {
+    sccStatus('要先按 ① 在 G 上跑 DFS。'); return;
+  }
+  if (sccTimer) { clearInterval(sccTimer); sccTimer = null; }
+  const rev = sccEdges.map(([u, v]) => [v, u]);
+  sccR = new GraphRenderer('canvas-scc', { vertices: sccPos, edges: rev }, sccOpts);
+  Object.keys(sccCloseT).forEach(v => sccR.setNodeMeta(v, 'f=' + sccCloseT[v]));
+  sccOnGT = true;
+  sccStatus('這是轉置圖 G&#7488;：所有邊都反向了，closing time 保留在節點下方。接著按 ③。');
+}
+function sccStep3() {
+  if (!sccOnGT) { sccStatus('要先按 ② 轉置成 G&#7488;。'); return; }
+  if (sccTimer) { clearInterval(sccTimer); sccTimer = null; }
+  const revAdj = sccAdjOf(sccEdges.map(([u, v]) => [v, u]));
+  const roots = Object.keys(sccCloseT).sort((a, b) => sccCloseT[b] - sccCloseT[a]);
+  // 依 closing 遞減長森林；每棵樹＝一個 SCC
+  const seen = {}, trees = [];
+  const collect = (v, tree) => {
+    seen[v] = true; tree.push(v);
+    (revAdj[v] || []).forEach(w => { if (!seen[w]) collect(w, tree); });
+  };
+  roots.forEach(r => {
+    if (!seen[r]) { const tree = []; collect(r, tree); trees.push(tree); }
+  });
+  const treeCls = ['start', 'found', 'current'];
+  const steps = [];
+  trees.forEach((tree, ti) => tree.forEach(v => steps.push({ v, ti })));
+  const out = document.getElementById('sccOut');
+  out.innerHTML = '';
+  let i = 0;
+  sccTimer = setInterval(() => {
+    if (i >= steps.length) {
+      clearInterval(sccTimer); sccTimer = null;
+      out.innerHTML = trees.map((t, k) => `SCC${k + 1} = { ${t.join(', ')} }`).join('　｜　');
+      sccStatus(`完成：${trees.length} 棵樹＝${trees.length} 個強連通元件。跨元件的邊在 G&#7488; 裡走不出去，樹被「困」在元件內。`);
+      return;
+    }
+    const s = steps[i++];
+    sccR.setNodeClass(s.v, treeCls[s.ti % treeCls.length]);
+    sccStatus(`第 ${s.ti + 1} 棵樹收下 ${s.v}（起點是剩餘 closing time 最大者）`);
+  }, 380);
+}
+function sccReset(keepStatus) {
+  if (sccTimer) { clearInterval(sccTimer); sccTimer = null; }
+  sccR = new GraphRenderer('canvas-scc', { vertices: sccPos, edges: sccEdges }, sccOpts);
+  sccCloseT = null; sccOnGT = false;
+  document.getElementById('sccOut').innerHTML = '';
+  if (!keepStatus) sccStatus('照按鈕順序 ①→②→③ 走一遍演算法。');
+}
+
+/* =============================================================
    QUIZ HANDLER
    ============================================================= */
 function quizCheck(quizId, optEl) {
@@ -2709,6 +3052,28 @@ function quizCheck(quizId, optEl) {
     } else {
       fb.innerHTML = `<strong>不對 ✗</strong> 提示：Prim 從 F 開始，每次取 PQ key 最小的點加入樹。注意 Prim 的更新規則是 <code>newD = w(u,v)</code>（只看當邊權，不累加路徑）。<br>
         逐步追蹤 PQ 內容會發現：F→A(8)、A→B(1)、A→G(2)、G→E(3)、E→D(4) 都先被處理；<strong>C 是最後才進樹的</strong>，要看哪條邊被選為 C 的「進樹邊」。`;
+    }
+  } else if (quizId === 'ts1') {
+    if (isCorrect) {
+      fb.innerHTML = `<strong>正確 ✓</strong> 對 DAG 上任一條邊 (v, w)，DFS 只有兩種可能：<br>
+        ① w 在 v 的子樹裡（從 v 探進去）：w 先關閉、v 後關閉。<br>
+        ② w 早已在別的子樹／別棵樹完成：w 的 closing time 當然更小。<br>
+        「w 是 v 的祖先」不可能發生：那需要一條 w → … → v 的路徑，再加上邊 v → w 就成了循環，DAG 沒有循環。
+        所以 <code>f(v) &gt; f(w)</code> 恆成立，依 f 遞減排序自然把 v 排在 w 前面。<br>
+        順帶一提：拓撲排序通常<strong>不唯一</strong>。DFS 的起點與鄰居順序不同，會得到不同但同樣合法的順序。`;
+    } else {
+      fb.innerHTML = `<strong>不對 ✗</strong> closing time 跟鄰居數量、也跟「誰先被造訪」沒有必然關係（w 可能在另一棵 DFS 樹裡比 v 更早被造訪）。<br>
+        關鍵是邊 (v, w) 在 DFS 中只有兩種結局：w 是 v 子樹的一員（先關），或 w 早已完成（更早關）。兩種情況 w 都比 v 先關閉。`;
+    }
+  } else if (quizId === 'scc1') {
+    if (isCorrect) {
+      fb.innerHTML = `<strong>正確 ✓</strong> 第一次 DFS 的 closing time 有個關鍵性質：位在「上游」的 SCC（能通往別人、別人回不來的那群）一定包含全圖最大的 f。<br>
+        換到 G<sup>T</sup> 之後，跨 SCC 的邊全部反向：從剩餘 f 最大的頂點出發，DFS <strong>只能在自己的 SCC 裡打轉</strong>，走不進下游元件。
+        走完一棵樹、剛好收掉一個 SCC，再從剩下 f 最大的點開新樹，直到收完為止。`;
+    } else {
+      fb.innerHTML = `<strong>不對 ✗</strong> (B) 轉置只是把邊反向，邊數一模一樣。(C) 順序與圖都不能亂換：
+        在原圖 G 上從 A 跑 DFS，一棵樹就會吃掉全部 8 個頂點（A 到得了每個點），三個 SCC 全糊在一起。
+        「G<sup>T</sup> ＋ closing time 遞減」兩個條件缺一不可。`;
     }
   }
 }

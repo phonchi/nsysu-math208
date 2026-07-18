@@ -386,7 +386,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <strong>定義一（集合式）：</strong>樹是節點集合 $V$ 與邊集合 $E$ 的二元組，滿足：(1) 恰有一個 root，(2) 除 root 外每個節點恰有一個 incoming edge，(3) 從 root 到每個節點存在唯一路徑。<br>
     <strong>定義二（遞迴式）：</strong>樹要嘛是空的；要嘛由一個 root 連接到零或多個 subtree，每個 subtree 本身也是一棵樹。
     <br><br>
-    遞迴定義對寫程式特別友善 —— 它直接告訴你 base case（空樹）和 recursive step（處理 root + 遞迴處理子樹），這也是後面所有走訪、評估、刪除演算法的骨架。
+    遞迴定義對寫程式特別友善：它直接告訴你 base case（空樹）和 recursive step（處理 root + 遞迴處理子樹），這也是後面所有走訪、評估、刪除演算法的骨架。
   </div>
 
   <h3>二元樹（Binary Tree）</h3>
@@ -399,7 +399,24 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="nodes-refs">
   <div class="section-number">PART 02 · 樹的實作</div>
   <h2>Nodes &amp; References：用類別與遞迴結構表示二元樹 <span class="sec-badge">cppds §8.4</span></h2>
-  <p>實作二元樹有兩種常見方法：<strong>list of lists</strong>（用巢狀串列）與 <strong>nodes and references</strong>（用節點物件 + 指標）。後者更貼近物件導向的思維 —— 我們定義一個 <code>BinaryTree</code> 類別，每個物件帶 <code>key</code>、<code>leftChild</code>、<code>rightChild</code> 三個屬性。當 <code>leftChild</code> 不是 <code>NULL</code> 時，它本身就是另一棵 <code>BinaryTree</code> —— 這就是樹的遞迴結構。</p>
+  <p>實作二元樹有兩種常見方法：<strong>list of lists</strong>（用巢狀串列）與 <strong>nodes and references</strong>（用節點物件 + 指標）。後者更貼近物件導向的思維：我們定義一個 <code>BinaryTree</code> 類別，每個物件帶 <code>key</code>、<code>leftChild</code>、<code>rightChild</code> 三個屬性。當 <code>leftChild</code> 不是 <code>NULL</code> 時，它本身就是另一棵 <code>BinaryTree</code>，這就是樹的遞迴結構。</p>
+
+  <h3>先看另一種表示：List of Lists <span class="sec-badge">講義補充（課堂跳過）</span></h3>
+  <p>巢狀串列版把「根的值」放在第 0 格、左子樹放第 1 格、右子樹放第 2 格；
+  每個子樹自己又是同樣格式的串列，<strong>結構本身就是遞迴的</strong>。
+  葉節點就是「值＋兩個空串列」。它還有個好處：要表示多元樹（超過兩個子樹），再多掛一個串列就好。</p>
+  <div class="info-card" style="max-width:600px;"><div class="ic-title">巢狀串列表示（Python 慣用寫法） <span class="ic-badge">CODE</span></div>
+    <div class="pseudo-code" style="font-size:.74rem;">
+<span class="line">my_tree = [<span class="num">"a"</span>,                        <span class="com">// [0] 根的值</span></span>
+<span class="line">    [<span class="num">"b"</span>, [<span class="num">"d"</span>,[],[]], [<span class="num">"e"</span>,[],[]]],  <span class="com">// [1] 左子樹</span></span>
+<span class="line">    [<span class="num">"c"</span>, [<span class="num">"f"</span>,[],[]], []        ]]   <span class="com">// [2] 右子樹</span></span>
+<span class="line"> </span>
+<span class="line">my_tree[<span class="num">0</span>]  <span class="com">// "a"：根</span></span>
+<span class="line">my_tree[<span class="num">1</span>]  <span class="com">// 整個左子樹（又是一個同構的串列）</span></span>
+<span class="line">my_tree[<span class="num">2</span>]  <span class="com">// 整個右子樹</span></span></div></div>
+  <p style="font-size:.88rem;color:var(--muted);">C++ 是靜態型別語言，寫不出這種「值和串列混住」的巢狀字面值，
+  所以我們直接採用下面的 nodes and references 表示法（對 C++ 來說本來就更自然）。
+  課堂投影片跳過這一小節（RISE skip），列為自學補充。</p>
 
   <div class="viz-layout">
     <div>
@@ -461,7 +478,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="parse-tree">
   <div class="section-number">PART 03 · 解析樹</div>
   <h2>解析樹：把數學表達式轉成可遞迴計算的結構 <span class="sec-badge">cppds §8.5</span></h2>
-  <p>對於完全括號化（fully parenthesized）的表達式，例如 <code>((7 + 3) * (5 - 2))</code>，我們可以把它變成一棵樹：<strong>運算子放在內部節點、運算元放在葉子上</strong>。樹的階層自然就反映了運算優先序 —— 評估時只要遞迴地<em>先算左子樹、再算右子樹、最後套用 root 的運算子</em>。</p>
+  <p>對於完全括號化（fully parenthesized）的表達式，例如 <code>((7 + 3) * (5 - 2))</code>，我們可以把它變成一棵樹：<strong>運算子放在內部節點、運算元放在葉子上</strong>。樹的階層自然就反映了運算優先序：評估時只要遞迴地<em>先算左子樹、再算右子樹、最後套用 root 的運算子</em>。</p>
 
   <p>建構演算法用一個 <strong>stack 追蹤 parent</strong>：當我們往下走進一個 child（看到 <code>(</code> 或運算子）就把當前節點 push 進 stack；當需要回到 parent（看到 <code>)</code> 或讀完一個數字）就 pop。</p>
 
@@ -526,7 +543,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <div class="info-box green">
     <span class="info-label">為什麼評估要用 postorder？</span>
-    要計算一個運算子節點的值，必須先有<strong>左右兩個子樹的值</strong>。這正好符合 <strong>postorder（後序）</strong>的訪問順序：先左子樹、再右子樹、最後 root。實際上<code>evaluate</code> 函式就是 postorder 走訪 + 在 root 執行運算 —— 解析樹的計算演算法就是走訪演算法的特例。
+    要計算一個運算子節點的值，必須先有<strong>左右兩個子樹的值</strong>。這正好符合 <strong>postorder（後序）</strong>的訪問順序：先左子樹、再右子樹、最後 root。實際上<code>evaluate</code> 函式就是 postorder 走訪 + 在 root 執行運算：解析樹的計算演算法就是走訪演算法的特例。
   </div>
 </section>
 
@@ -544,7 +561,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <strong>Inorder（中序）：</strong>左子樹 → root → 右子樹<br>
     <strong>Postorder（後序）：</strong>左子樹 → 右子樹 → root
     <br><br>
-    寫成程式碼<strong>幾乎是逐字翻譯</strong>定義 —— 這正是樹的遞迴定義帶來的優雅：
+    寫成程式碼<strong>幾乎是逐字翻譯</strong>定義，這正是樹的遞迴定義帶來的優雅：
   </div>
 
   <div class="viz-layout">
@@ -700,6 +717,66 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     Naïve 想法是對 $n$ 個元素逐一 <code>insert</code>，每個 $O(\log n)$，總共 $O(n \log n)$。但 <code>heapify</code> 從<strong>陣列中間 $\lfloor n/2 \rfloor - 1$ 倒著做 perc_down</strong>：底層大量節點高度只有 0 或 1，往下移的成本很小。嚴謹分析會用 $\sum_{h=0}^{\log n} \frac{n}{2^{h+1}} \cdot h = O(n)$。直觀上：<strong>樹底層節點多但移動少，頂層節點少但移動多，兩者相乘的總和是 $O(n)$</strong>。
   </div>
 
+  <h3>完整的 BinaryHeap 類別（cppds §8.9–8.10）</h3>
+  <p>動畫側欄只放了 percUp 的骨架；講義的完整類別把六個方法全部攤開。
+  整個類別只有一個成員 <code>vector&lt;int&gt; heap</code>：樹形是用索引「算」出來的
+  （左子 2i+1、右子 2i+2、父 (i-1)/2），從頭到尾不需要指標。</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:.8rem;">
+    <div class="info-card"><div class="ic-title">percUp ＋ insert：新元素往上浮 <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line"><span class="kw">void</span> <span class="fn">percUp</span>(<span class="kw">int</span> i) {</span>
+<span class="line">    <span class="kw">while</span> (i &gt; <span class="num">0</span>) {</span>
+<span class="line">        <span class="kw">int</span> parentIdx = (i - <span class="num">1</span>) / <span class="num">2</span>;</span>
+<span class="line">        <span class="kw">if</span> (heap[i] &lt; heap[parentIdx])</span>
+<span class="line">            <span class="fn">swap</span>(heap[i], heap[parentIdx]);</span>
+<span class="line">        <span class="kw">else</span> <span class="kw">break</span>;   <span class="com">// 不再比父小就停</span></span>
+<span class="line">        i = parentIdx;</span>
+<span class="line">    }</span>
+<span class="line">}</span>
+<span class="line"><span class="kw">void</span> <span class="fn">insert</span>(<span class="kw">int</span> item) {</span>
+<span class="line">    heap.<span class="fn">push_back</span>(item);      <span class="com">// 先掛最尾（保結構性質）</span></span>
+<span class="line">    <span class="fn">percUp</span>(heap.<span class="fn">size</span>() - <span class="num">1</span>);  <span class="com">// 再浮上去（修順序性質）</span></span>
+<span class="line">}</span></div></div>
+    <div class="info-card"><div class="ic-title">getMinChild ＋ percDown：往下沉 <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line"><span class="kw">int</span> <span class="fn">getMinChild</span>(<span class="kw">int</span> i) {</span>
+<span class="line">    <span class="kw">if</span> (<span class="num">2</span>*i + <span class="num">2</span> &gt; (<span class="kw">int</span>)heap.<span class="fn">size</span>() - <span class="num">1</span>)</span>
+<span class="line">        <span class="kw">return</span> <span class="num">2</span>*i + <span class="num">1</span>;   <span class="com">// 只有左子</span></span>
+<span class="line">    <span class="kw">if</span> (heap[<span class="num">2</span>*i+<span class="num">1</span>] &lt; heap[<span class="num">2</span>*i+<span class="num">2</span>])</span>
+<span class="line">        <span class="kw">return</span> <span class="num">2</span>*i + <span class="num">1</span>;</span>
+<span class="line">    <span class="kw">return</span> <span class="num">2</span>*i + <span class="num">2</span>;</span>
+<span class="line">}</span>
+<span class="line"><span class="kw">void</span> <span class="fn">percDown</span>(<span class="kw">int</span> i) {</span>
+<span class="line">    <span class="kw">while</span> (<span class="num">2</span>*i + <span class="num">1</span> &lt; (<span class="kw">int</span>)heap.<span class="fn">size</span>()) {</span>
+<span class="line">        <span class="kw">int</span> smChild = <span class="fn">getMinChild</span>(i);</span>
+<span class="line">        <span class="kw">if</span> (heap[i] &gt; heap[smChild])</span>
+<span class="line">            <span class="fn">swap</span>(heap[i], heap[smChild]);</span>
+<span class="line">        <span class="kw">else</span> <span class="kw">break</span>;</span>
+<span class="line">        i = smChild;   <span class="com">// 跟較小的子交換後繼續沉</span></span>
+<span class="line">    }</span>
+<span class="line">}</span></div></div>
+    <div class="info-card"><div class="ic-title">delet ＋ heapify：取最小、批次建堆 <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line"><span class="kw">int</span> <span class="fn">delet</span>() {                <span class="com">// 取出最小值</span></span>
+<span class="line">    <span class="fn">swap</span>(heap[<span class="num">0</span>], heap[heap.<span class="fn">size</span>() - <span class="num">1</span>]);</span>
+<span class="line">    <span class="kw">int</span> result = heap.<span class="fn">back</span>();</span>
+<span class="line">    heap.<span class="fn">pop_back</span>();</span>
+<span class="line">    <span class="fn">percDown</span>(<span class="num">0</span>);             <span class="com">// 新根往下沉</span></span>
+<span class="line">    <span class="kw">return</span> result;</span>
+<span class="line">}</span>
+<span class="line"><span class="kw">void</span> <span class="fn">heapify</span>(vector&lt;<span class="kw">int</span>&gt; notAHeap) {</span>
+<span class="line">    heap = notAHeap;</span>
+<span class="line">    <span class="kw">int</span> i = heap.<span class="fn">size</span>() / <span class="num">2</span> - <span class="num">1</span>;  <span class="com">// 最後一個非葉</span></span>
+<span class="line">    <span class="kw">while</span> (i &gt;= <span class="num">0</span>) {</span>
+<span class="line">        <span class="fn">percDown</span>(i);</span>
+<span class="line">        i = i - <span class="num">1</span>;   <span class="com">// 倒著做，正是 O(n) 的關鍵</span></span>
+<span class="line">    }</span>
+<span class="line">}</span></div></div>
+  </div>
+  <p style="font-size:.85rem;color:var(--muted);margin-top:.5rem;">講義的 demo 依序 insert
+  {10, 4, 9, 8, 12, 15, 3, 5, 14, 18}：不管插入順序怎麼亂，<code>heap[0]</code> 永遠是目前最小值，
+  <code>delet()</code> 也總是取出最小者。名字用 <code>delet</code> 是因為 <code>delete</code> 在 C++ 是保留字。</p>
+
   <h3>應用：Heap Sort（堆排序）</h3>
   <p>有了 <code>heapify</code>（$O(n)$）和 $n$ 次 <code>delete-min</code>（每次 $O(\log n)$），就能寫出 $O(n \log n)$ 的排序：把所有元素丟進 heap，然後不斷 delete-min 拿出來。這是<strong>不需要額外 $O(n)$ 空間</strong>的就地排序變體（直接在原陣列上做 heap 操作）的核心。</p>
 </section>
@@ -780,7 +857,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <div class="info-box warm">
     <span class="info-label">build BST 的順序很重要</span>
-    把 keys $70, 31, 93, 94, 14, 23, 73$ 依序插入會得到一棵漂亮的「平衡」BST；但若插入順序是 $14, 23, 31, 70, 73, 93, 94$（已排序），<strong>新樹會退化成一條鏈</strong> —— 高度從 $O(\log n)$ 變成 $O(n)$。試試上面的「隨機」按鈕和輸入排序的 keys 比較看看。這就是下一節要解決的問題。
+    把 keys $70, 31, 93, 94, 14, 23, 73$ 依序插入會得到一棵漂亮的「平衡」BST；但若插入順序是 $14, 23, 31, 70, 73, 93, 94$（已排序），<strong>新樹會退化成一條鏈</strong>：高度從 $O(\log n)$ 變成 $O(n)$。試試上面的「隨機」按鈕和輸入排序的 keys 比較看看。這就是下一節要解決的問題。
   </div>
 </section>
 
@@ -790,16 +867,16 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="bst-delete">
   <div class="section-number">PART 07 · BST 刪除三情境</div>
   <h2>BST 刪除：三種情境，與 in-order successor <span class="sec-badge">cppds §8.13</span></h2>
-  <p>BST 的 <code>put</code> 與 <code>get</code> 直觀，但<strong>刪除是最麻煩的操作</strong> —— 因為刪掉一個內部節點後，必須維持 BST 性質。我們把情境分成三類：</p>
+  <p>BST 的 <code>put</code> 與 <code>get</code> 直觀，但<strong>刪除是最麻煩的操作</strong>，因為刪掉一個內部節點後，必須維持 BST 性質。我們把情境分成三類：</p>
 
   <div class="info-box red">
     <span class="info-label">三種刪除情境</span>
     <strong>Case 1：要刪的是葉節點。</strong>直接把 parent 的指標設為 <code>NULL</code>。最簡單。<br>
     <strong>Case 2：要刪的節點只有<em>一個</em>子節點。</strong>把這個 child「提升」上來取代被刪節點。<br>
-    <strong>Case 3：要刪的節點有<em>兩個</em>子節點。</strong>找它的 <strong>in-order successor（中序後繼）</strong> —— 也就是右子樹中 key 最小的節點 —— 把它的 key 拷貝到當前節點，然後從原位置「splice out」 successor。
+    <strong>Case 3：要刪的節點有<em>兩個</em>子節點。</strong>找它的 <strong>in-order successor（中序後繼）</strong>（也就是右子樹中 key 最小的節點），把它的 key 拷貝到當前節點，然後從原位置「splice out」 successor。
   </div>
 
-  <p>為什麼 successor 一定有<strong>最多一個 child</strong>？因為它是右子樹中的<em>最左</em>節點 —— 如果它還有左 child，那個 child 一定更小、應該才是 successor。所以 splice out successor 一定是 case 1 或 case 2，可以遞迴處理。</p>
+  <p>為什麼 successor 一定有<strong>最多一個 child</strong>？因為它是右子樹中的<em>最左</em>節點：如果它還有左 child，那個 child 一定更小、應該才是 successor。所以 splice out successor 一定是 case 1 或 case 2，可以遞迴處理。</p>
 
   <div class="viz-layout">
     <div>
@@ -861,6 +938,52 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
     </div>
   </div>
+
+  <h3>講義的完整拼圖：findSuccessor 三情境與 spliceOut</h3>
+  <p>側欄的 findSuccessor 是刪除專用的精簡版（刪除時節點必有右子樹，successor 就是右子樹的最小值）。
+  講義的完整版其實處理三種情境，另外兩種在中序走訪相關的練習會用到。
+  successor 找到之後，用 <code>spliceOut()</code> 把它從原位置「縫」出來：
+  successor 保證最多一個 child，所以只有兩種縫法。</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:.8rem;">
+    <div class="info-card"><div class="ic-title">findSuccessor 完整版（TreeNode 的方法） <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line">TreeNode* <span class="fn">findSuccessor</span>() {</span>
+<span class="line">    TreeNode* successor = <span class="num">NULL</span>;</span>
+<span class="line">    <span class="kw">if</span> (rightChild != <span class="num">NULL</span>) {          <span class="com">// 情境 1：有右子樹</span></span>
+<span class="line">        successor = rightChild-&gt;<span class="fn">findMin</span>();</span>
+<span class="line">    } <span class="kw">else if</span> (parent != <span class="num">NULL</span>) {</span>
+<span class="line">        <span class="kw">if</span> (<span class="fn">isLeftChild</span>()) {           <span class="com">// 情境 2：自己是左子 → 父就是後繼</span></span>
+<span class="line">            successor = parent;</span>
+<span class="line">        } <span class="kw">else</span> {                       <span class="com">// 情境 3：暫時斷開自己，問父親</span></span>
+<span class="line">            parent-&gt;rightChild = <span class="num">NULL</span>;</span>
+<span class="line">            successor = parent-&gt;<span class="fn">findSuccessor</span>();</span>
+<span class="line">            parent-&gt;rightChild = <span class="kw">this</span>;</span>
+<span class="line">        }</span>
+<span class="line">    }</span>
+<span class="line">    <span class="kw">return</span> successor;</span>
+<span class="line">}</span></div>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">刪除只會用到情境 1：Case 3 的節點一定有右子樹。</div></div>
+    <div class="info-card"><div class="ic-title">spliceOut ＋ Case 3 呼叫端 <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line"><span class="kw">void</span> <span class="fn">spliceOut</span>() {</span>
+<span class="line">    <span class="kw">if</span> (<span class="fn">isLeaf</span>()) {                    <span class="com">// 縫法 1：葉節點直接拆</span></span>
+<span class="line">        <span class="kw">if</span> (<span class="fn">isLeftChild</span>()) parent-&gt;leftChild = <span class="num">NULL</span>;</span>
+<span class="line">        <span class="kw">else</span>               parent-&gt;rightChild = <span class="num">NULL</span>;</span>
+<span class="line">    } <span class="kw">else if</span> (<span class="fn">hasAnyChild</span>()) {        <span class="com">// 縫法 2：孩子上位</span></span>
+<span class="line">        TreeNode* child = (leftChild != <span class="num">NULL</span>) ? leftChild : rightChild;</span>
+<span class="line">        <span class="kw">if</span> (<span class="fn">isLeftChild</span>()) parent-&gt;leftChild = child;</span>
+<span class="line">        <span class="kw">else</span>               parent-&gt;rightChild = child;</span>
+<span class="line">        child-&gt;parent = parent;</span>
+<span class="line">    }</span>
+<span class="line">}</span>
+<span class="line"> </span>
+<span class="line"><span class="com">// remove 的 Case 3 分支長這樣：</span></span>
+<span class="line">TreeNode* successor = currentNode-&gt;<span class="fn">findSuccessor</span>();</span>
+<span class="line">successor-&gt;<span class="fn">spliceOut</span>();</span>
+<span class="line">currentNode-&gt;key   = successor-&gt;key;   <span class="com">// 只搬 key/value</span></span>
+<span class="line">currentNode-&gt;value = successor-&gt;value; <span class="com">// 節點本身不動</span></span>
+<span class="line"><span class="kw">delete</span> successor;</span></div></div>
+  </div>
 </section>
 
 <!-- ============================================================ -->
@@ -875,7 +998,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <span class="info-label">高度與節點數的關係</span>
     完美平衡二元樹（每層填滿）有 $2^{h+1}-1$ 個節點，所以 $h \approx \log_2 n$。<br>
     若 keys 隨機插入，高度期望也是 $O(\log n)$，因為大概一半 key 進左、一半進右。<br>
-    但<strong>最差情況 $h = n - 1$</strong> —— 把已排序 keys 依序插入就會發生：每個新節點都比當前所有節點大（或小），永遠落到右（或左）這一支，BST 退化成連結串列。
+    但<strong>最差情況 $h = n - 1$</strong>：把已排序 keys 依序插入就會發生：每個新節點都比當前所有節點大（或小），永遠落到右（或左）這一支，BST 退化成連結串列。
   </div>
 
   <div class="viz-layout">
@@ -926,7 +1049,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       <div class="info-card">
         <div class="ic-title">應用：Tree Sort</div>
         <div style="font-size:.83rem;line-height:1.55;">
-          把 $n$ 個 keys 全部 <code>put</code> 進 BST 再做 inorder traversal，平均得到 $O(n \log n)$ 的排序。但最差情況退化為 $O(n^2)$ —— 這也是 quick sort 在最差情況下退化的同一個原因（pivot 選不好等於插入排序好的 keys 進 BST）。
+          把 $n$ 個 keys 全部 <code>put</code> 進 BST 再做 inorder traversal，平均得到 $O(n \log n)$ 的排序。但最差情況退化為 $O(n^2)$，這也是 quick sort 在最差情況下退化的同一個原因（pivot 選不好等於插入排序好的 keys 進 BST）。
         </div>
       </div>
     </div>
@@ -957,10 +1080,10 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         </div>
         <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="avlStatus">選擇旋轉情境並按「執行」</span></div>
         <div class="preset-row">
-          <button class="preset-btn active" data-avlcase="LL">LL — 右旋</button>
-          <button class="preset-btn" data-avlcase="RR">RR — 左旋</button>
-          <button class="preset-btn" data-avlcase="LR">LR — 左右旋</button>
-          <button class="preset-btn" data-avlcase="RL">RL — 右左旋</button>
+          <button class="preset-btn active" data-avlcase="LL">LL：右旋</button>
+          <button class="preset-btn" data-avlcase="RR">RR：左旋</button>
+          <button class="preset-btn" data-avlcase="LR">LR：左右旋</button>
+          <button class="preset-btn" data-avlcase="RL">RL：右左旋</button>
         </div>
         <div class="controls-bar">
           <button class="btn btn-play" id="avlPlay">▶ 執行旋轉</button>
@@ -1008,6 +1131,81 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     $$ h \approx \frac{1}{\log_2 \Phi} \log_2 n \approx 1.44 \log_2 n $$
     這比完美平衡的 $\log_2 n$ 只大了一個常數因子，<strong>所有 BST 操作仍是 $O(\log n)$</strong>。
   </div>
+
+  <h3>實作內幕：updateBalance、rotateLeft、rebalance <span class="sec-badge">cppds §8.16–8.17 · 講義補充</span></h3>
+  <p style="font-size:.88rem;color:var(--muted);">課堂投影片跳過 §8.16（AVL 效能）與 §8.17（AVL 實作）這兩節（RISE skip，講義標 Optional）：屬自學補充。</p>
+  <p>AVL 的 <code>_put</code> 跟 BST 幾乎一樣，唯一差別是掛上新節點後多呼叫一次
+  <code>updateBalance()</code>：它沿著 parent 指標往上修正平衡因子，
+  一發現 |bf| &gt; 1 就地 <code>rebalance()</code>。旋轉最多兩次、每次 O(1)，
+  往上修正最多走 log n 層，所以 <strong>put 整體仍是 O(log n)</strong>。
+  上面的動畫可以對照著看：四個按鈕（LL/RR/LR/RL）正是 rebalance 的四個分支。刪除後的重平衡，講義留作練習。</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:.8rem;">
+    <div class="info-card"><div class="ic-title">_put 的差異 ＋ updateBalance <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line"><span class="com">// _put 掛上新葉之後，多做一件事：</span></span>
+<span class="line">currentNode-&gt;leftChild =</span>
+<span class="line">    <span class="kw">new</span> <span class="fn">AVLTreeNode</span>(key, value, <span class="num">0</span>, currentNode);</span>
+<span class="line"><span class="fn">updateBalance</span>(currentNode-&gt;leftChild);</span>
+<span class="line"> </span>
+<span class="line"><span class="kw">void</span> <span class="fn">updateBalance</span>(AVLTreeNode* node) {</span>
+<span class="line">    <span class="kw">if</span> (node-&gt;balanceFactor &gt; <span class="num">1</span> ||</span>
+<span class="line">        node-&gt;balanceFactor &lt; -<span class="num">1</span>) {</span>
+<span class="line">        <span class="fn">rebalance</span>(node);   <span class="com">// 就地修，不再往上</span></span>
+<span class="line">        <span class="kw">return</span>;</span>
+<span class="line">    }</span>
+<span class="line">    <span class="kw">if</span> (node-&gt;parent != <span class="num">NULL</span>) {</span>
+<span class="line">        <span class="kw">if</span> (node-&gt;<span class="fn">isLeftChild</span>())</span>
+<span class="line">            node-&gt;parent-&gt;balanceFactor += <span class="num">1</span>;</span>
+<span class="line">        <span class="kw">else if</span> (node-&gt;<span class="fn">isRightChild</span>())</span>
+<span class="line">            node-&gt;parent-&gt;balanceFactor -= <span class="num">1</span>;</span>
+<span class="line">        <span class="kw">if</span> (node-&gt;parent-&gt;balanceFactor != <span class="num">0</span>)</span>
+<span class="line">            <span class="fn">updateBalance</span>(node-&gt;parent);  <span class="com">// 繼續往上</span></span>
+<span class="line">    }</span>
+<span class="line">}</span></div></div>
+    <div class="info-card"><div class="ic-title">rotateLeft（rotateRight 對稱） <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.7rem;">
+<span class="line"><span class="kw">void</span> <span class="fn">rotateLeft</span>(AVLTreeNode* rotationRoot) {</span>
+<span class="line">    AVLTreeNode* newRoot = rotationRoot-&gt;rightChild;</span>
+<span class="line">    rotationRoot-&gt;rightChild = newRoot-&gt;leftChild;</span>
+<span class="line">    <span class="kw">if</span> (newRoot-&gt;leftChild != <span class="num">NULL</span>)</span>
+<span class="line">        newRoot-&gt;leftChild-&gt;parent = rotationRoot;</span>
+<span class="line">    newRoot-&gt;parent = rotationRoot-&gt;parent;</span>
+<span class="line">    <span class="kw">if</span> (rotationRoot-&gt;<span class="fn">isRoot</span>())</span>
+<span class="line">        root = newRoot;</span>
+<span class="line">    <span class="kw">else if</span> (rotationRoot-&gt;<span class="fn">isLeftChild</span>())</span>
+<span class="line">        rotationRoot-&gt;parent-&gt;leftChild = newRoot;</span>
+<span class="line">    <span class="kw">else</span></span>
+<span class="line">        rotationRoot-&gt;parent-&gt;rightChild = newRoot;</span>
+<span class="line">    newRoot-&gt;leftChild = rotationRoot;</span>
+<span class="line">    rotationRoot-&gt;parent = newRoot;</span>
+<span class="line">    rotationRoot-&gt;balanceFactor = rotationRoot-&gt;balanceFactor</span>
+<span class="line">        + <span class="num">1</span> - <span class="fn">min</span>(newRoot-&gt;balanceFactor, <span class="num">0</span>);</span>
+<span class="line">    newRoot-&gt;balanceFactor = newRoot-&gt;balanceFactor</span>
+<span class="line">        + <span class="num">1</span> + <span class="fn">max</span>(rotationRoot-&gt;balanceFactor, <span class="num">0</span>);</span>
+<span class="line">}</span></div>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">難點有二：parent 指標要全部接對；
+      最後兩行用 min/max 直接推出新的平衡因子，不用重算高度。</div></div>
+    <div class="info-card"><div class="ic-title">rebalance：四情境對照動畫按鈕 <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line"><span class="kw">void</span> <span class="fn">rebalance</span>(AVLTreeNode* node) {</span>
+<span class="line">    <span class="kw">if</span> (node-&gt;balanceFactor &lt; <span class="num">0</span>) {          <span class="com">// right-heavy</span></span>
+<span class="line">        <span class="kw">if</span> (node-&gt;rightChild-&gt;balanceFactor &gt; <span class="num">0</span>) {</span>
+<span class="line">            <span class="fn">rotateRight</span>(node-&gt;rightChild);   <span class="com">// RL：先右旋子</span></span>
+<span class="line">            <span class="fn">rotateLeft</span>(node);                <span class="com">//     再左旋根</span></span>
+<span class="line">        } <span class="kw">else</span> {</span>
+<span class="line">            <span class="fn">rotateLeft</span>(node);                <span class="com">// RR：單一左旋</span></span>
+<span class="line">        }</span>
+<span class="line">    } <span class="kw">else if</span> (node-&gt;balanceFactor &gt; <span class="num">0</span>) {   <span class="com">// left-heavy</span></span>
+<span class="line">        <span class="kw">if</span> (node-&gt;leftChild-&gt;balanceFactor &lt; <span class="num">0</span>) {</span>
+<span class="line">            <span class="fn">rotateLeft</span>(node-&gt;leftChild);     <span class="com">// LR：先左旋子</span></span>
+<span class="line">            <span class="fn">rotateRight</span>(node);               <span class="com">//     再右旋根</span></span>
+<span class="line">        } <span class="kw">else</span> {</span>
+<span class="line">            <span class="fn">rotateRight</span>(node);               <span class="com">// LL：單一右旋</span></span>
+<span class="line">        }</span>
+<span class="line">    }</span>
+<span class="line">}</span></div>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">先看「歪向哪邊」，再看「子節點歪向哪邊」決定要不要先轉子節點：跟上面動畫的四個 preset 一一對應。</div></div>
+  </div>
 </section>
 
 <!-- ============================================================ -->
@@ -1016,7 +1214,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="summary">
   <div class="section-number">REFERENCE · 總覽比較</div>
   <h2>Map ADT 四種實作的對照表 <span class="sec-badge">cppds §8.18</span></h2>
-  <p>過去兩章我們學了四種實作 map ADT 的方式。下表整理 worst-case 複雜度 —— 注意 hash table 的 $O(1)$ 是<strong>平均</strong>，最差情況（全部碰撞）會退化到 $O(n)$。</p>
+  <p>過去兩章我們學了四種實作 map ADT 的方式。下表整理 worst-case 複雜度；注意 hash table 的 $O(1)$ 是<strong>平均</strong>，最差情況（全部碰撞）會退化到 $O(n)$。</p>
 
   <table class="cmp-table">
     <thead>
@@ -1085,7 +1283,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <li><strong>Heap 在演算法中的核心地位</strong>：Dijkstra 最短路徑、Huffman 編碼、$k$ 路合併、top-$k$ 問題全都靠 priority queue。</li>
   </ul>
 
-  <p style="margin-top:1.5rem;text-align:center;font-style:italic;color:var(--muted);">「<strong>看到階層、想到遞迴、寫成樹</strong>」—— 這是這一章最值得帶走的思考方式。</p>
+  <p style="margin-top:1.5rem;text-align:center;font-style:italic;color:var(--muted);">「<strong>看到階層、想到遞迴、寫成樹</strong>」：這是這一章最值得帶走的思考方式。</p>
 </section>
 
 </div>
@@ -1509,7 +1707,7 @@ function initNodesRefs() {
       r.right.left = new TNode('e'); r.right.left.parent = r.right;
       r.right.right = new TNode('f'); r.right.right.parent = r.right;
       return r;
-    }, line: 6, msg: 'c 的右邊掛上 f — 完成', highlight: 'f' };
+    }, line: 6, msg: 'c 的右邊掛上 f，完成', highlight: 'f' };
     steps.push(s5);
     return steps;
   }
@@ -2787,7 +2985,7 @@ function initAVL() {
   // We use letter labels A, B, C, x, y, z to make rotations didactic.
   const cases = {
     LL: {
-      label: 'LL — 右旋 (Right Rotate)',
+      label: 'LL：右旋 (Right Rotate)',
       fix: '對 z 做單一右旋',
       // Before (left-left heavy): z(top), y=z.left, x=y.left, A=x.left, B=x.right, C=y.right, D=z.right
       buildBefore: () => build(['z','y','x','A',null,null,'B',null,null,'C',null,null,'D',null,null]),
@@ -2801,7 +2999,7 @@ function initAVL() {
       buildAfter: () => build(['y','x','A',null,null,'B',null,null,'z','C',null,null,'D',null,null])
     },
     RR: {
-      label: 'RR — 左旋 (Left Rotate)',
+      label: 'RR：左旋 (Left Rotate)',
       fix: '對 z 做單一左旋',
       buildBefore: () => build(['z','A',null,null,'y','B',null,null,'x','C',null,null,'D',null,null]),
       narrate: [
@@ -2814,7 +3012,7 @@ function initAVL() {
       buildAfter: () => build(['y','z','A',null,null,'B',null,null,'x','C',null,null,'D',null,null])
     },
     LR: {
-      label: 'LR — 左右旋 (Left-Right)',
+      label: 'LR：左右旋 (Left-Right)',
       fix: '先對 y 左旋，再對 z 右旋',
       buildBefore: () => build(['z','y','A',null,null,'x','B',null,null,'C',null,null,'D',null,null]),
       narrate: [
@@ -2827,7 +3025,7 @@ function initAVL() {
       buildAfter: () => build(['x','y','A',null,null,'B',null,null,'z','C',null,null,'D',null,null])
     },
     RL: {
-      label: 'RL — 右左旋 (Right-Left)',
+      label: 'RL：右左旋 (Right-Left)',
       fix: '先對 y 右旋，再對 z 左旋',
       buildBefore: () => build(['z','A',null,null,'y','x','B',null,null,'C',null,null,'D',null,null]),
       narrate: [
