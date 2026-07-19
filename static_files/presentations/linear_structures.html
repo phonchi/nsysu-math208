@@ -496,16 +496,6 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   </div>
   
 <div class="quiz-box">
-  <div class="quiz-label">QUIZ · 講義練習：revString</div>
-  <p>用 stack 反轉字串：把 "NSYSU" 逐字 push，再逐字 pop 接起來。結果與原理是？</p>
-  
-  <div class="quiz-options" id="qRevOptions">
-    <div class="quiz-opt" data-correct="true" data-fb="進去的順序 N,S,Y,S,U，出來的順序 U,S,Y,S,N。任何「產生順序與使用順序相反」的問題，先想 stack。" onclick="quizCheck('qRev', this)"><span class="opt-letter">(A)</span> 得到 "USYSN"；stack 天生就是反轉機器</div><div class="quiz-opt" data-correct="false" data-fb="LIFO 的意思就是後進先出，順序一定反過來。保序的是 queue。" onclick="quizCheck('qRev', this)"><span class="opt-letter">(B)</span> 得到 "NSYSU"；順序不變</div><div class="quiz-opt" data-correct="false" data-fb="Stack&lt;char&gt; 完全合法，STL 的 stack&lt;char&gt; 也行。" onclick="quizCheck('qRev', this)"><span class="opt-letter">(C)</span> 會當機，字元不能放 stack</div>
-  </div>
-  <div class="quiz-feedback" id="qRevFeedback"></div>
-</div>
-  
-<div class="quiz-box">
   <div class="quiz-label">QUIZ · Stack 行為</div>
   <p>依序執行 <code>s.push(4); s.push(7); s.pop(); s.push(2); s.peek();</code> 之後，<code>peek()</code> 回傳什麼？stack 內容（由底至頂）是什麼？</p>
   
