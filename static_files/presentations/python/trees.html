@@ -1,0 +1,3159 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>樹與樹的演算法 — Trees &amp; Tree Algorithms Interactive（Python）</title>
+<script>
+  MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1a2e;--paper:#f7f3eb;--accent:#c0392b;--accent2:#2c3e7a;--accent3:#1a6b4a;
+  --muted:#8a8578;--card:#fffdf7;--card-border:#e8e2d6;--highlight:#fff3cd;
+  --code-bg:#2d2d3f;--code-fg:#e8e6df;
+  --node-default:#5b7eb8;--node-active:#f39c12;--node-visited:#27ae60;
+  --node-target:#16a085;--node-key:#e67e22;--node-parent:#8e44ad;
+  --node-current:#c0392b;--node-success:#27ae60;
+  --edge-default:#8a8578;--edge-active:#f39c12;--edge-visited:#27ae60;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.9;font-size:17px;}
+
+/* Hero */
+.hero{min-height:62vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem;position:relative;overflow:hidden;background:linear-gradient(170deg,#1a1a2e 0%,#2c3e7a 40%,#1a6b4a 100%);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.06) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.04) 0%,transparent 40%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);}
+.hero-content{position:relative;z-index:1;max-width:860px;}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;color:#fff;letter-spacing:.04em;line-height:1.3;margin-bottom:1rem;}
+.hero h1 .green{color:#2ecc71;}
+.hero h1 .blue{color:#5dade2;}
+.hero h1 .orange{color:#f39c12;}
+.hero .subtitle{font-size:clamp(.95rem,2.2vw,1.2rem);color:rgba(255,255,255,.65);font-weight:300;margin-bottom:2rem;}
+.hero .big-formula{color:#2ecc71;background:rgba(0,0,0,.3);padding:.8rem 2rem;border-radius:12px;display:inline-block;border:1px solid rgba(255,255,255,.1);margin-bottom:2rem;backdrop-filter:blur(4px);font-size:1.05rem;}
+.scroll-hint{color:rgba(255,255,255,.4);font-size:.9rem;animation:bounce 2s infinite;}
+.scroll-hint span{display:block;font-size:1.4rem;margin-top:.3rem;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+/* Layout */
+.container{max-width:1180px;margin:0 auto;padding:3rem 1.5rem;}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.5rem;}
+h2{font-family:'Noto Serif TC',serif;font-size:1.65rem;font-weight:700;color:var(--ink);margin-bottom:1.2rem;line-height:1.4;}
+h3{font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:700;color:var(--accent2);margin:1.4rem 0 .8rem;}
+section{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--card-border);}
+section:last-of-type{border-bottom:none;}
+p{margin-bottom:1rem;}
+code{background:#f0ebe0;padding:1px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.88em;color:var(--accent2);}
+
+/* TOC */
+.toc{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:1.2rem 1.5rem;margin:1rem 0 2rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.toc-title{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.7rem;}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.5rem .8rem;}
+.toc-grid a{color:var(--accent2);text-decoration:none;font-size:.9rem;padding:.3rem 0;display:flex;align-items:center;gap:.4rem;transition:color .2s;}
+.toc-grid a:hover{color:var(--accent);}
+.toc-grid a .toc-num{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);min-width:34px;}
+
+/* Viz layout */
+.viz-layout{display:grid;grid-template-columns:1fr 320px;gap:1.3rem;margin:1.2rem 0;align-items:start;}
+@media(max-width:900px){.viz-layout{grid-template-columns:1fr;}}
+
+.viz-panel{background:linear-gradient(160deg,#fffdf7 0%,#f4efe3 100%);border:1px solid var(--card-border);border-radius:12px;padding:1rem;box-shadow:0 4px 18px rgba(0,0,0,.06);position:relative;}
+
+/* Tree canvas */
+.tree-canvas{position:relative;width:100%;height:380px;background:#fafafa;border-radius:8px;overflow:hidden;border:1px solid #ececec;}
+.tree-canvas svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
+.tree-canvas .nodes-layer{position:absolute;inset:0;}
+
+/* Tree nodes */
+.t-node{position:absolute;width:42px;height:42px;border-radius:50%;background:var(--node-default);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:700;transform:translate(-50%,-50%);transition:left .35s cubic-bezier(.4,0,.2,1),top .35s cubic-bezier(.4,0,.2,1),background .25s,box-shadow .25s,transform .25s;box-shadow:0 2px 6px rgba(0,0,0,.15);cursor:pointer;border:2px solid transparent;z-index:2;}
+.t-node:hover{transform:translate(-50%,-50%) scale(1.1);}
+.t-node.active{background:var(--node-active);box-shadow:0 0 0 4px rgba(243,156,18,.3),0 4px 12px rgba(243,156,18,.4);transform:translate(-50%,-50%) scale(1.1);z-index:5;}
+.t-node.visited{background:var(--node-visited);}
+.t-node.target{background:var(--node-target);box-shadow:0 0 0 4px rgba(22,160,133,.3),0 4px 14px rgba(22,160,133,.4);animation:pulse-found 1s ease-out;}
+.t-node.current{background:var(--node-current);box-shadow:0 0 0 4px rgba(192,57,43,.3),0 4px 12px rgba(192,57,43,.4);}
+.t-node.parent-hl{background:var(--node-parent);}
+.t-node.path{background:#e67e22;}
+.t-node.subtree{background:#9b59b6;}
+.t-node.faded{opacity:.3;}
+.t-node.leaf-ind{border-color:#16a085;}
+.t-node.deleted{opacity:.2;background:#aaa;text-decoration:line-through;}
+@keyframes pulse-found{0%{box-shadow:0 0 0 0 rgba(22,160,133,.6);}50%{box-shadow:0 0 0 18px rgba(22,160,133,0);}100%{box-shadow:0 0 0 4px rgba(22,160,133,.3),0 4px 14px rgba(22,160,133,.4);}}
+
+/* Tree edges (svg lines) */
+.t-edge{stroke:var(--edge-default);stroke-width:2;transition:stroke .3s,stroke-width .3s,opacity .3s;}
+.t-edge.active{stroke:var(--edge-active);stroke-width:3;}
+.t-edge.visited{stroke:var(--edge-visited);stroke-width:2.5;}
+.t-edge.path{stroke:#e67e22;stroke-width:3;}
+.t-edge.subtree{stroke:#9b59b6;stroke-width:2.5;}
+.t-edge.faded{opacity:.2;}
+
+/* Status banner */
+.status-banner{margin-top:.8rem;padding:.7rem 1rem;background:var(--code-bg);color:#fff;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.85rem;min-height:42px;display:flex;align-items:center;gap:.6rem;}
+.status-banner .status-icon{color:#2ecc71;font-weight:700;}
+.status-banner .status-text{flex:1;}
+
+/* Controls */
+.controls-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--card-border);}
+.btn{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:600;padding:.45rem 1rem;border-radius:6px;border:none;cursor:pointer;transition:all .2s;}
+.btn-play{background:var(--accent3);color:#fff;}
+.btn-play:hover{background:#22845c;}
+.btn-play.active{background:var(--accent);}
+.btn-step{background:var(--accent2);color:#fff;}
+.btn-step:hover{background:#1f2e5f;}
+.btn-step:disabled{background:#ccc;cursor:not-allowed;}
+.btn-reset{background:var(--card-border);color:var(--ink);}
+.btn-reset:hover{background:#ccc;}
+.btn-toggle{background:var(--accent2);color:#fff;}
+.btn-toggle:hover{background:#1f2e5f;}
+.btn-toggle.off{background:#bbb;color:#555;}
+.btn-shuffle{background:#8e44ad;color:#fff;}
+.btn-shuffle:hover{background:#6c3485;}
+
+/* Side panel */
+.side-panel{display:flex;flex-direction:column;gap:.85rem;}
+.info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.info-card .ic-title{font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem;display:flex;align-items:center;justify-content:space-between;}
+.info-card .ic-title .ic-badge{font-size:.7rem;color:#fff;background:var(--accent3);padding:1px 7px;border-radius:3px;letter-spacing:.05em;font-weight:700;}
+.info-card .ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.83rem;padding:.2rem 0;}
+.info-card .ic-label{color:var(--muted);}
+.info-card .ic-value{color:var(--ink);font-weight:600;}
+.info-card .ic-value.highlight{color:var(--accent);}
+.info-card .ic-value.big{font-size:1.4rem;color:var(--accent2);}
+
+/* Stats grid */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.4rem;}
+.stat-tile{background:var(--paper);border-radius:8px;padding:.5rem .7rem;text-align:center;}
+.stat-tile .stat-label{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;}
+.stat-tile .stat-value{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;color:var(--accent2);}
+
+.eq-card{background:var(--code-bg);border-radius:10px;padding:.95rem 1.1rem;color:#fff;}
+.eq-card .eq-label{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#2ecc71;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;}
+.eq-card .eq-formula{font-size:1.0rem;color:#fff;text-align:center;}
+.eq-card .eq-sub{font-size:.78rem;color:rgba(255,255,255,.55);margin-top:.4rem;text-align:center;}
+
+/* Pseudo code */
+.pseudo-code{background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:.85rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.6;overflow-x:auto;}
+.pseudo-code .line{padding:1px 4px;border-radius:3px;display:block;white-space:pre;}
+.pseudo-code .line.active{background:rgba(243,156,18,.3);color:#fff;border-left:3px solid var(--node-active);padding-left:6px;}
+.pseudo-code .kw{color:#ff79c6;}
+.pseudo-code .fn{color:#50fa7b;}
+.pseudo-code .num{color:#bd93f9;}
+.pseudo-code .com{color:#6272a4;font-style:italic;}
+.pseudo-code .str{color:#f1fa8c;}
+
+/* Token list (parse tree) */
+.token-strip{display:flex;flex-wrap:wrap;gap:.3rem;margin:.5rem 0;padding:.5rem;background:var(--paper);border-radius:8px;}
+.token{font-family:'JetBrains Mono',monospace;font-size:.85rem;padding:.3rem .55rem;border-radius:5px;background:#fff;border:2px solid var(--card-border);font-weight:600;color:var(--ink);transition:all .25s;}
+.token.active{background:var(--node-active);color:#fff;border-color:var(--node-active);transform:translateY(-3px);box-shadow:0 4px 10px rgba(243,156,18,.4);}
+.token.done{background:#eafaf1;border-color:var(--accent3);color:var(--accent3);opacity:.7;}
+
+/* Stack visualization */
+.stack-vis{display:flex;flex-direction:column-reverse;gap:3px;min-height:120px;background:var(--paper);border-radius:8px;padding:.4rem;border:2px dashed var(--card-border);}
+.stack-vis .stack-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);text-align:center;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.2rem;border-bottom:1px solid var(--card-border);padding-bottom:.2rem;}
+.stack-frame{font-family:'JetBrains Mono',monospace;font-size:.78rem;background:var(--accent2);color:#fff;padding:.25rem .5rem;border-radius:5px;text-align:center;font-weight:600;animation:slideIn .25s ease;}
+.stack-frame.top{background:var(--accent);}
+@keyframes slideIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+
+/* Heap list view */
+.heap-list{display:flex;gap:3px;padding:.5rem;background:var(--paper);border-radius:8px;margin-top:.5rem;flex-wrap:wrap;}
+.heap-cell{position:relative;min-width:38px;height:38px;background:#fff;border:2px solid var(--card-border);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.85rem;color:var(--ink);transition:all .25s;}
+.heap-cell .cell-idx{position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:.62rem;color:var(--muted);font-weight:500;}
+.heap-cell.active{background:var(--node-active);color:#fff;border-color:var(--node-active);transform:translateY(-3px);}
+.heap-cell.parent{background:var(--node-parent);color:#fff;border-color:var(--node-parent);}
+.heap-cell.swap{background:var(--node-current);color:#fff;border-color:var(--node-current);}
+.heap-cell.sorted{background:#eafaf1;border-color:var(--accent3);color:var(--accent3);}
+
+/* Traversal output strip */
+.traversal-output{margin-top:.5rem;padding:.55rem .8rem;background:var(--code-bg);color:#2ecc71;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.95rem;letter-spacing:.1em;min-height:40px;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;}
+.traversal-output .out-key{background:rgba(46,204,113,.2);padding:1px 7px;border-radius:4px;animation:slideIn .25s ease;}
+
+/* Three traversal grid */
+.trav-grid{display:grid;grid-template-columns:1fr;gap:1rem;}
+.trav-mini{background:#fff;border:1px solid var(--card-border);border-radius:8px;padding:.7rem;}
+.trav-mini h4{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent2);margin-bottom:.4rem;}
+.trav-mini .mini-canvas{position:relative;width:100%;height:200px;background:#fafafa;border-radius:6px;border:1px solid #eee;overflow:hidden;}
+.trav-mini .mini-canvas svg{position:absolute;inset:0;width:100%;height:100%;}
+.trav-mini .mini-output{margin-top:.4rem;padding:.4rem .6rem;background:var(--code-bg);color:#2ecc71;font-family:'JetBrains Mono',monospace;font-size:.85rem;border-radius:6px;min-height:30px;}
+
+/* AVL rotation labels */
+.rotation-label{position:absolute;font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:700;color:var(--accent);background:#fff5f0;padding:2px 8px;border-radius:5px;border:1px solid var(--accent);pointer-events:none;}
+
+/* Info box */
+.info-box{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1.1rem 1.4rem;margin:1.3rem 0;position:relative;}
+.info-box .info-label{position:absolute;top:-11px;left:14px;background:var(--accent2);color:#fff;font-size:.74rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.05em;}
+.info-box.warm{background:#fef5e7;border-color:#d68910;}
+.info-box.warm .info-label{background:#d68910;}
+.info-box.green{background:#eafaf1;border-color:var(--accent3);}
+.info-box.green .info-label{background:var(--accent3);}
+.info-box.red{background:#fdf2f0;border-color:var(--accent);}
+.info-box.red .info-label{background:var(--accent);}
+
+/* Pill labels */
+.pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:4px;margin:0 .15rem;vertical-align:1px;}
+.pill-blue{background:rgba(41,128,185,.12);color:#2980b9;border:1px solid rgba(41,128,185,.3);}
+.pill-red{background:rgba(192,57,43,.12);color:var(--accent);border:1px solid rgba(192,57,43,.3);}
+.pill-green{background:rgba(39,174,96,.12);color:var(--accent3);border:1px solid rgba(39,174,96,.3);}
+.pill-orange{background:rgba(243,156,18,.12);color:#d68910;border:1px solid rgba(243,156,18,.3);}
+.pill-purple{background:rgba(142,68,173,.12);color:#8e44ad;border:1px solid rgba(142,68,173,.3);}
+
+/* Comparison table */
+.cmp-table{width:100%;border-collapse:collapse;font-size:.86rem;margin:.8rem 0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.cmp-table th{background:var(--accent2);color:#fff;padding:.6rem .8rem;text-align:center;font-weight:600;font-size:.82rem;}
+.cmp-table td{padding:.6rem .8rem;text-align:center;border-bottom:1px solid var(--card-border);font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.cmp-table td:first-child{font-family:'Noto Sans TC',sans-serif;color:var(--accent2);font-weight:600;text-align:left;}
+.cmp-table tr:last-child td{border-bottom:none;}
+.cmp-table tr:nth-child(even){background:rgba(0,0,0,.015);}
+.cmp-table .best{color:var(--accent3);font-weight:700;}
+.cmp-table .worst{color:var(--accent);font-weight:700;}
+
+/* Color legend */
+.legend{display:flex;flex-wrap:wrap;gap:.6rem;margin:.6rem 0;font-family:'JetBrains Mono',monospace;font-size:.75rem;}
+.legend-item{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .5rem;background:var(--paper);border-radius:5px;}
+.legend-item .lg-swatch{width:14px;height:14px;border-radius:50%;}
+
+/* Preset row */
+.preset-row{display:flex;gap:.4rem;flex-wrap:wrap;margin:.6rem 0 1rem;}
+.preset-btn{font-family:'JetBrains Mono',monospace;font-size:.78rem;padding:.4rem .85rem;border-radius:6px;border:2px solid var(--card-border);background:var(--card);cursor:pointer;transition:all .2s;color:var(--ink);}
+.preset-btn:hover{border-color:var(--accent2);}
+.preset-btn.active{background:var(--accent2);color:#fff;border-color:var(--accent2);}
+
+/* Input row */
+.input-row{display:flex;gap:.5rem;align-items:center;margin:.5rem 0;flex-wrap:wrap;}
+.input-row label{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--accent2);font-weight:600;}
+.input-row input[type="text"],.input-row input[type="number"]{font-family:'JetBrains Mono',monospace;font-size:.85rem;padding:.4rem .6rem;border:1px solid var(--card-border);border-radius:6px;background:#fff;}
+.input-row input[type="text"]{flex:1;min-width:160px;}
+.input-row input[type="number"]{width:80px;}
+
+/* Floating sidebar navigation */
+.float-nav{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:2px;background:rgba(255,253,250,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--card-border);border-radius:12px;padding:10px 7px;box-shadow:0 6px 24px rgba(0,0,0,.10);font-family:'JetBrains Mono',monospace;max-height:88vh;overflow-y:auto;transition:padding .25s ease;}
+.float-nav .fn-title{font-family:'Noto Serif TC',serif;font-weight:700;font-size:.68rem;color:var(--accent2);text-align:center;letter-spacing:1.5px;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--card-border);max-width:0;overflow:hidden;transition:max-width .25s ease;}
+.float-nav:hover .fn-title{max-width:220px;}
+.float-nav a{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:7px;color:var(--ink);text-decoration:none;white-space:nowrap;transition:all .2s ease;border-left:3px solid transparent;}
+.float-nav a .fn-num{font-weight:700;font-size:.66rem;color:var(--muted);letter-spacing:.4px;flex-shrink:0;width:30px;text-align:left;}
+.float-nav a .fn-name{font-family:'Noto Sans TC',sans-serif;font-size:.76rem;font-weight:500;max-width:0;overflow:hidden;transition:max-width .25s ease,padding .25s ease;padding:0;}
+.float-nav:hover a .fn-name{max-width:220px;padding-left:2px;}
+.float-nav a:hover{background:var(--card);}
+.float-nav a.active{background:var(--accent2);color:#fff;border-left-color:var(--accent);box-shadow:0 2px 6px rgba(192,57,43,.25);}
+.float-nav a.active .fn-num{color:rgba(255,255,255,.85);}
+.float-nav a.active .fn-name{color:#fff;}
+.float-nav .fn-top{margin-top:6px;padding-top:6px;border-top:1px solid var(--card-border);justify-content:center;}
+.float-nav .fn-top .fn-num{width:auto;color:var(--accent2);font-size:.78rem;}
+@media(max-width:768px){
+  .float-nav{right:8px;top:auto;bottom:14px;transform:none;padding:6px 5px;max-height:70vh;}
+  .float-nav .fn-title{display:none;}
+  .float-nav a{padding:4px 7px;}
+  .float-nav a .fn-num{width:26px;font-size:.62rem;}
+}
+
+footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border);}
+.sec-badge{font-size:.6em;color:var(--muted);border:1px solid var(--card-border);background:var(--card);padding:2px 10px;border-radius:999px;vertical-align:middle;margin-left:.6rem;font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.02em;white-space:nowrap;}
+</style>
+</head>
+<body>
+
+<!-- Floating navigation sidebar -->
+<nav class="float-nav" id="floatNav" aria-label="章節導覽">
+  <div class="fn-title">章節導覽</div>
+  <a href="#prologue" data-target="prologue"><span class="fn-num">P00</span><span class="fn-name">引言</span></a>
+  <a href="#vocabulary" data-target="vocabulary"><span class="fn-num">P01</span><span class="fn-name">術語與定義</span></a>
+  <a href="#nodes-refs" data-target="nodes-refs"><span class="fn-num">P02</span><span class="fn-name">Nodes &amp; References</span></a>
+  <a href="#parse-tree" data-target="parse-tree"><span class="fn-num">P03</span><span class="fn-name">解析樹</span></a>
+  <a href="#traversals" data-target="traversals"><span class="fn-num">P04</span><span class="fn-name">樹的走訪</span></a>
+  <a href="#heap" data-target="heap"><span class="fn-num">P05</span><span class="fn-name">二元堆積</span></a>
+  <a href="#bst" data-target="bst"><span class="fn-num">P06</span><span class="fn-name">二元搜尋樹</span></a>
+  <a href="#bst-delete" data-target="bst-delete"><span class="fn-num">P07</span><span class="fn-name">BST 刪除</span></a>
+  <a href="#bst-analysis" data-target="bst-analysis"><span class="fn-num">P08</span><span class="fn-name">BST 分析</span></a>
+  <a href="#avl" data-target="avl"><span class="fn-num">P09</span><span class="fn-name">AVL 樹</span></a>
+  <a href="#summary" data-target="summary"><span class="fn-num">REF</span><span class="fn-name">總覽比較</span></a>
+  <a href="#top" class="fn-top" title="回到頂端"><span class="fn-num">↑ TOP</span></a>
+</nav>
+
+<div class="hero" id="top">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <h1><span class="green">樹</span>與<span class="orange">樹</span>的<span class="blue">演算法</span></h1>
+    <div class="subtitle">pythonds Chapter 6 — Trees, Heaps, BSTs &amp; AVL（對應講義 09）</div>
+    <div class="big-formula">術語｜解析樹｜走訪｜二元堆積｜BST｜AVL</div>
+    <div class="scroll-hint">向下捲動開始互動<span>↓</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-title">CONTENTS · 內容目錄</div>
+  <div class="toc-grid">
+    <a href="#prologue"><span class="toc-num">P00</span>引言：為什麼需要樹？</a>
+    <a href="#vocabulary"><span class="toc-num">P01</span>術語與定義</a>
+    <a href="#nodes-refs"><span class="toc-num">P02</span>Nodes &amp; References</a>
+    <a href="#parse-tree"><span class="toc-num">P03</span>解析樹 Parse Tree</a>
+    <a href="#traversals"><span class="toc-num">P04</span>樹的走訪</a>
+    <a href="#heap"><span class="toc-num">P05</span>二元堆積</a>
+    <a href="#bst"><span class="toc-num">P06</span>二元搜尋樹</a>
+    <a href="#bst-delete"><span class="toc-num">P07</span>BST 刪除三情境</a>
+    <a href="#bst-analysis"><span class="toc-num">P08</span>BST 分析</a>
+    <a href="#avl"><span class="toc-num">P09</span>AVL 樹與旋轉</a>
+    <a href="#summary"><span class="toc-num">REF</span>Map ADT 總覽比較</a>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PROLOGUE -->
+<!-- ============================================================ -->
+<section id="prologue">
+  <div class="section-number">PROLOGUE · 開場</div>
+  <h2>樹是電腦科學中最普遍的階層式結構 <span class="sec-badge">pythonds §6.1–6.2</span></h2>
+  <p>樹（tree）這個資料結構出現在作業系統、編譯器、資料庫、網路路由、機器學習等幾乎每一個領域。不同於我們前面學過的線性結構（list、stack、queue），樹是<strong>階層式</strong>的：一個節點可以連到多個子節點，整體組成一個由根（root）往下分支的層次。</p>
+
+  <div class="info-box">
+    <span class="info-label">本章你會學到的技術</span>
+    <strong>1. 抽象結構：</strong>樹的術語、Tree ADT、用 nodes &amp; references 實作。<br>
+    <strong>2. 應用：</strong>解析樹（parse tree）將數學表達式轉成可遞迴計算的結構。<br>
+    <strong>3. 三種走訪：</strong>preorder、inorder、postorder，全部都是遞迴的優雅實作。<br>
+    <strong>4. 兩個經典樹型 ADT：</strong>用陣列實作的 <strong>Binary Heap</strong>（優先佇列）與用節點實作的 <strong>Binary Search Tree</strong>（map）。<br>
+    <strong>5. 平衡的代價：</strong>BST 在最差情況退化為 $O(n)$，AVL 樹用旋轉維持 $O(\log n)$ 上界。
+  </div>
+
+  <h3>顏色語義（整頁通用）</h3>
+  <div class="legend">
+    <span class="legend-item"><span class="lg-swatch" style="background:var(--node-default)"></span>未處理</span>
+    <span class="legend-item"><span class="lg-swatch" style="background:var(--node-active)"></span>正在處理 / 比較</span>
+    <span class="legend-item"><span class="lg-swatch" style="background:var(--node-current)"></span>當前 / 交換</span>
+    <span class="legend-item"><span class="lg-swatch" style="background:var(--node-visited)"></span>已訪問 / 完成</span>
+    <span class="legend-item"><span class="lg-swatch" style="background:var(--node-parent)"></span>父節點</span>
+    <span class="legend-item"><span class="lg-swatch" style="background:var(--node-target)"></span>找到目標</span>
+    <span class="legend-item"><span class="lg-swatch" style="background:#e67e22"></span>路徑</span>
+  </div>
+
+  <p>每一節都採相同的版面：左邊是<strong>視覺化畫布與控制列</strong>，右邊是<strong>即時統計、虛擬碼與複雜度分析</strong>。請大膽地按 <span class="pill pill-green">▶ 開始</span> 觀察完整動畫，或按 <span class="pill pill-blue">→ 單步</span> 一格一格觀察。</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- PART 01: Vocabulary -->
+<!-- ============================================================ -->
+<section id="vocabulary">
+  <div class="section-number">PART 01 · 術語與定義</div>
+  <h2>樹的術語：節點、邊、根、葉、層、高度 <span class="sec-badge">pythonds §6.3</span></h2>
+  <p>在進入演算法之前，我們先把語言對齊。把滑鼠移到下方互動樹的任何一個節點上，<strong>右側面板會即時顯示該節點的所有屬性</strong>；點擊節點則會高亮它的「祖先路徑（path-to-root）」與「子樹（subtree）」。</p>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="tree-canvas" id="canvas-vocab">
+          <svg class="edges-layer"></svg>
+          <div class="nodes-layer"></div>
+        </div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="vocabStatus">將滑鼠移到節點上看屬性，點擊節點高亮路徑與子樹</span></div>
+        <div class="controls-bar">
+          <button class="btn btn-reset" id="vocabReset">↺ 清除高亮</button>
+          <span style="font-size:.78rem;color:var(--muted);margin-left:.5rem;">點擊不同節點觀察 path-to-root 與 subtree 的差異</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">節點屬性 <span class="ic-badge">LIVE</span></div>
+        <div class="ic-row"><span class="ic-label">key</span><span class="ic-value highlight" id="vocabKey">—</span></div>
+        <div class="ic-row"><span class="ic-label">parent</span><span class="ic-value" id="vocabParent">—</span></div>
+        <div class="ic-row"><span class="ic-label">children</span><span class="ic-value" id="vocabChildren">—</span></div>
+        <div class="ic-row"><span class="ic-label">siblings</span><span class="ic-value" id="vocabSibs">—</span></div>
+        <div class="ic-row"><span class="ic-label">level</span><span class="ic-value" id="vocabLevel">—</span></div>
+        <div class="ic-row"><span class="ic-label">subtree height</span><span class="ic-value" id="vocabHeight">—</span></div>
+        <div class="ic-row"><span class="ic-label">is leaf?</span><span class="ic-value" id="vocabLeaf">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">關鍵術語</div>
+        <div style="font-size:.83rem;line-height:1.55;color:var(--ink);">
+          <strong>Root</strong>：唯一沒有 parent 的節點。<br>
+          <strong>Edge</strong>：連接 parent 與 child 的單向連結。<br>
+          <strong>Path</strong>：邊串成的節點序列。<br>
+          <strong>Leaf</strong>：沒有 children 的節點。<br>
+          <strong>Subtree</strong>：某節點與其所有後代。<br>
+          <strong>Level</strong>：root 到該節點的邊數。<br>
+          <strong>Height</strong>：樹中任何節點的最大 level。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <span class="info-label">兩個等價的定義</span>
+    <strong>定義一（集合式）：</strong>樹是節點集合 $V$ 與邊集合 $E$ 的二元組，滿足：(1) 恰有一個 root，(2) 除 root 外每個節點恰有一個 incoming edge，(3) 從 root 到每個節點存在唯一路徑。<br>
+    <strong>定義二（遞迴式）：</strong>樹要嘛是空的；要嘛由一個 root 連接到零或多個 subtree，每個 subtree 本身也是一棵樹。
+    <br><br>
+    遞迴定義對寫程式特別友善：它直接告訴你 base case（空樹）和 recursive step（處理 root + 遞迴處理子樹），這也是後面所有走訪、評估、刪除演算法的骨架。
+  </div>
+
+  <h3>二元樹（Binary Tree）</h3>
+  <p>本章我們專注於每個節點最多有<strong>兩個子節點</strong>的樹，稱為二元樹。我們特別命名為 <code>left_child</code> 和 <code>right_child</code>，這個順序在解析樹（運算子的左右運算元）和 BST（小的在左、大的在右）中是有語義的。</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- PART 02: Nodes and References -->
+<!-- ============================================================ -->
+<section id="nodes-refs">
+  <div class="section-number">PART 02 · 樹的實作</div>
+  <h2>Nodes &amp; References：用類別與遞迴結構表示二元樹 <span class="sec-badge">pythonds §6.6</span></h2>
+  <p>實作二元樹有兩種常見方法：<strong>list of lists</strong>（用巢狀串列）與 <strong>nodes and references</strong>（用節點物件 + 指標）。後者更貼近物件導向的思維：我們定義一個 <code>BinaryTree</code> 類別，每個物件帶 <code>key</code>、<code>left_child</code>、<code>right_child</code> 三個屬性。當 <code>left_child</code> 不是 <code>None</code> 時，它本身就是另一棵 <code>BinaryTree</code>，這就是樹的遞迴結構。</p>
+
+  <h3>先看另一種表示：List of Lists <span class="sec-badge">pythonds §6.5 · 講義補充</span></h3>
+  <p>巢狀串列版把「根的值」放在第 0 格、左子樹放第 1 格、右子樹放第 2 格；
+  每個子樹自己又是同樣格式的串列，<strong>結構本身就是遞迴的</strong>。
+  葉節點就是「值＋兩個空串列」。它還有個好處：要表示多元樹（超過兩個子樹），再多掛一個串列就好。</p>
+  <div class="info-card" style="max-width:600px;"><div class="ic-title">巢狀串列表示（list of lists） <span class="ic-badge">CODE</span></div>
+    <div class="pseudo-code" style="font-size:.74rem;">
+<span class="line">my_tree = [<span class="num">"a"</span>,                        <span class="com"># [0] 根的值</span></span>
+<span class="line">    [<span class="num">"b"</span>, [<span class="num">"d"</span>,[],[]], [<span class="num">"e"</span>,[],[]]],  <span class="com"># [1] 左子樹</span></span>
+<span class="line">    [<span class="num">"c"</span>, [<span class="num">"f"</span>,[],[]], []        ]]   <span class="com"># [2] 右子樹</span></span>
+<span class="line"> </span>
+<span class="line">my_tree[<span class="num">0</span>]  <span class="com"># "a"：根</span></span>
+<span class="line">my_tree[<span class="num">1</span>]  <span class="com"># 整個左子樹（又是一個同構的串列）</span></span>
+<span class="line">my_tree[<span class="num">2</span>]  <span class="com"># 整個右子樹</span></span></div></div>
+  <p style="font-size:.88rem;color:var(--muted);">講義還附了 make_binary_tree／insert_left 這組輔助函式，純用串列手術就能長出一棵樹。
+  不過接下來的章節都採用下面的 nodes and references 表示法：物件與參考更利於掛方法、也更好推廣。
+  課堂投影片跳過這一小節（RISE skip），列為自學補充。</p>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="tree-canvas" id="canvas-nr" style="height:320px;">
+          <svg class="edges-layer"></svg>
+          <div class="nodes-layer"></div>
+        </div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="nrStatus">按「下一步」逐行執行程式碼，看樹如何長出來</span></div>
+        <div class="controls-bar">
+          <button class="btn btn-step" id="nrStep">→ 下一步</button>
+          <button class="btn btn-reset" id="nrReset">↺ 重置</button>
+          <button class="btn btn-play" id="nrPlay">▶ 自動播放</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">當前指令 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="nrCode" style="font-size:.74rem;">
+<span class="line" data-l="1">a_tree = <span class="fn">BinaryTree</span>(<span class="str">"a"</span>)</span>
+<span class="line" data-l="2">a_tree.<span class="fn">insert_left</span>(<span class="str">"b"</span>)</span>
+<span class="line" data-l="3">a_tree.<span class="fn">insert_right</span>(<span class="str">"c"</span>)</span>
+<span class="line" data-l="4">a_tree.<span class="fn">get_left_child</span>().<span class="fn">insert_right</span>(<span class="str">"d"</span>)</span>
+<span class="line" data-l="5">a_tree.<span class="fn">get_right_child</span>().<span class="fn">insert_left</span>(<span class="str">"e"</span>)</span>
+<span class="line" data-l="6">a_tree.<span class="fn">get_right_child</span>().<span class="fn">insert_right</span>(<span class="str">"f"</span>)</span>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">BinaryTree 類別 <span class="ic-badge" style="background:var(--accent3)">CLASS</span></div>
+        <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line"><span class="kw">class</span> <span class="fn">BinaryTree</span>:</span>
+<span class="line">    <span class="kw">def</span> <span class="fn">__init__</span>(self, root_obj):</span>
+<span class="line">        self.key = root_obj</span>
+<span class="line">        self.left_child = <span class="kw">None</span></span>
+<span class="line">        self.right_child = <span class="kw">None</span></span>
+<span class="line"></span>
+<span class="line">    <span class="kw">def</span> <span class="fn">insert_left</span>(self, new_node):</span>
+<span class="line">        <span class="kw">if</span> self.left_child <span class="kw">is None</span>:</span>
+<span class="line">            self.left_child = <span class="fn">BinaryTree</span>(new_node)</span>
+<span class="line">        <span class="kw">else</span>:</span>
+<span class="line">            new_child = <span class="fn">BinaryTree</span>(new_node)</span>
+<span class="line">            new_child.left_child = self.left_child</span>
+<span class="line">            self.left_child = new_child</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box warm">
+    <span class="info-label">注意 insert_left 的兩種情況</span>
+    <strong>Case 1（左邊空）：</strong>直接把新節點掛上去。<br>
+    <strong>Case 2（左邊已有東西）：</strong>新節點插在中間，<strong>把原本的左子樹整個推到新節點的左邊一層</strong>。這個「往下推」的設計避免了破壞原本的子結構。<code>insert_right</code> 對稱地處理右邊。
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- PART 03: Parse Tree -->
+<!-- ============================================================ -->
+<section id="parse-tree">
+  <div class="section-number">PART 03 · 解析樹</div>
+  <h2>解析樹：把數學表達式轉成可遞迴計算的結構 <span class="sec-badge">pythonds §6.7</span></h2>
+  <p>對於完全括號化（fully parenthesized）的表達式，例如 <code>((7 + 3) * (5 - 2))</code>，我們可以把它變成一棵樹：<strong>運算子放在內部節點、運算元放在葉子上</strong>。樹的階層自然就反映了運算優先序：評估時只要遞迴地<em>先算左子樹、再算右子樹、最後套用 root 的運算子</em>。</p>
+
+  <p>建構演算法用一個 <strong>stack 追蹤 parent</strong>：當我們往下走進一個 child（看到 <code>(</code> 或運算子）就把當前節點 push 進 stack；當需要回到 parent（看到 <code>)</code> 或讀完一個數字）就 pop。</p>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="tree-canvas" id="canvas-parse" style="height:340px;">
+          <svg class="edges-layer"></svg>
+          <div class="nodes-layer"></div>
+        </div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="parseStatus">按「開始」逐 token 建構解析樹</span></div>
+        <div class="token-strip" id="parseTokens"></div>
+        <div class="input-row">
+          <label>表達式：</label>
+          <input type="text" id="parseInput" value="( ( 7 + 3 ) * ( 5 - 2 ) )">
+          <button class="btn btn-shuffle" id="parseApply">套用</button>
+        </div>
+        <div class="preset-row">
+          <button class="preset-btn active" data-expr="( ( 7 + 3 ) * ( 5 - 2 ) )">((7+3)*(5-2))</button>
+          <button class="preset-btn" data-expr="( 3 + ( 4 * 5 ) )">(3+(4*5))</button>
+          <button class="preset-btn" data-expr="( ( 1 + 2 ) + ( 3 + 4 ) )">((1+2)+(3+4))</button>
+          <button class="preset-btn" data-expr="( ( 10 / 2 ) - ( 6 - 3 ) )">((10/2)-(6-3))</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="parsePlay">▶ 開始建構</button>
+          <button class="btn btn-step" id="parseStep">→ 單步</button>
+          <button class="btn btn-reset" id="parseReset">↺ 重置</button>
+          <button class="btn btn-toggle" id="parseEvalBtn">⊕ 評估表達式</button>
+          <div style="flex:1;min-width:120px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);">速度</span>
+            <input type="range" id="parseSpeed" min="200" max="2000" step="100" value="700" style="flex:1;accent-color:var(--accent3);">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時狀態 <span class="ic-badge">LIVE</span></div>
+        <div class="ic-row"><span class="ic-label">當前 token</span><span class="ic-value highlight" id="parseTok">—</span></div>
+        <div class="ic-row"><span class="ic-label">當前 node</span><span class="ic-value" id="parseCur">—</span></div>
+        <div class="ic-row"><span class="ic-label">stack 深度</span><span class="ic-value" id="parseStackD">0</span></div>
+        <div class="ic-row"><span class="ic-label">評估結果</span><span class="ic-value highlight" id="parseResult">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">parent stack <span class="ic-badge" style="background:var(--accent2)">STACK</span></div>
+        <div class="stack-vis" id="parseStack">
+          <div class="stack-label">parent ↓</div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">建構規則 <span class="ic-badge" style="background:var(--accent2)">RULES</span></div>
+        <div style="font-size:.78rem;line-height:1.55;">
+          <strong>1.</strong> <code>(</code> → 新增 left child，下移到 left；push parent。<br>
+          <strong>2.</strong> <code>+ - * /</code> → 設 root 為運算子，新增 right child，下移到 right；push parent。<br>
+          <strong>3.</strong> 數字 → 設 root 為數字，pop 回到 parent。<br>
+          <strong>4.</strong> <code>)</code> → pop 回到 parent。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">為什麼評估要用 postorder？</span>
+    要計算一個運算子節點的值，必須先有<strong>左右兩個子樹的值</strong>。這正好符合 <strong>postorder（後序）</strong>的訪問順序：先左子樹、再右子樹、最後 root。實際上<code>evaluate</code> 函式就是 postorder 走訪 + 在 root 執行運算：解析樹的計算演算法就是走訪演算法的特例。
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- PART 04: Tree Traversals -->
+<!-- ============================================================ -->
+<section id="traversals">
+  <div class="section-number">PART 04 · 樹的走訪</div>
+  <h2>三種走訪：preorder、inorder、postorder <span class="sec-badge">pythonds §6.8</span></h2>
+  <p>「走訪」（traversal）就是按某種順序拜訪樹中每個節點。對二元樹有<strong>三種對稱遞迴的走訪</strong>，差別只在「何時拜訪 root」：</p>
+
+  <div class="info-box">
+    <span class="info-label">三種走訪的定義</span>
+    <strong>Preorder（前序）：</strong>root → 左子樹 → 右子樹<br>
+    <strong>Inorder（中序）：</strong>左子樹 → root → 右子樹<br>
+    <strong>Postorder（後序）：</strong>左子樹 → 右子樹 → root
+    <br><br>
+    寫成程式碼<strong>幾乎是逐字翻譯</strong>定義，這正是樹的遞迴定義帶來的優雅：
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="tree-canvas" id="canvas-trav" style="height:300px;">
+          <svg class="edges-layer"></svg>
+          <div class="nodes-layer"></div>
+        </div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="travStatus">選擇走訪方式並按「開始」</span></div>
+        <div class="traversal-output" id="travOutput"><span style="color:rgba(255,255,255,.4)">輸出將顯示在此 →</span></div>
+        <div class="preset-row">
+          <button class="preset-btn active" data-trav="preorder">Preorder 前序</button>
+          <button class="preset-btn" data-trav="inorder">Inorder 中序</button>
+          <button class="preset-btn" data-trav="postorder">Postorder 後序</button>
+        </div>
+        <div class="preset-row">
+          <button class="preset-btn active" data-tree="parse">解析樹 (3+(4*5))</button>
+          <button class="preset-btn" data-tree="bst">BST 範例</button>
+          <button class="preset-btn" data-tree="balanced">完整二元樹</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="travPlay">▶ 開始</button>
+          <button class="btn btn-step" id="travStep">→ 單步</button>
+          <button class="btn btn-reset" id="travReset">↺ 重置</button>
+          <div style="flex:1;min-width:160px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);">速度</span>
+            <input type="range" id="travSpeed" min="200" max="1800" step="100" value="700" style="flex:1;accent-color:var(--accent3);">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="travCode">
+<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">preorder</span>(tree):</span>
+<span class="line" data-l="2">    <span class="kw">if</span> tree:</span>
+<span class="line" data-l="3">        <span class="fn">visit</span>(tree.key)   <span class="com"># root</span></span>
+<span class="line" data-l="4">        <span class="fn">preorder</span>(tree.left)</span>
+<span class="line" data-l="5">        <span class="fn">preorder</span>(tree.right)</span>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">遞迴呼叫堆疊 <span class="ic-badge" style="background:var(--accent2)">STACK</span></div>
+        <div class="stack-vis" id="travStack">
+          <div class="stack-label">call stack ↓</div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">用途</div>
+        <div style="font-size:.83rem;line-height:1.55;">
+          <strong>Preorder</strong>：複製樹、序列化、目錄列表（先列父再進子）。<br>
+          <strong>Inorder</strong>：BST 上得到<strong>排序輸出</strong>；解析樹上得到中序表達式。<br>
+          <strong>Postorder</strong>：解析樹的<strong>表達式評估</strong>、刪除整棵樹（先刪 child 才能釋放 parent）。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box warm">
+    <span class="info-label">小實驗：對解析樹 (3+(4*5)) 做三種走訪</span>
+    <table style="width:100%;font-family:'JetBrains Mono',monospace;font-size:.86rem;margin-top:.4rem;">
+      <tr><td style="padding:.3rem;width:35%;"><strong>Preorder</strong></td><td>+ 3 * 4 5</td><td style="color:var(--muted);">前綴表達式</td></tr>
+      <tr style="background:#fef0e7;"><td style="padding:.3rem;"><strong>Inorder</strong></td><td>3 + 4 * 5</td><td style="color:var(--muted);">中序（沒括號會失精度）</td></tr>
+      <tr><td style="padding:.3rem;"><strong>Postorder</strong></td><td>3 4 5 * +</td><td style="color:var(--muted);">後綴表達式</td></tr>
+    </table>
+    這也說明了為什麼<strong>後綴表達式（RPN）</strong>能用 stack 直接計算：postorder 的順序就是「邊計算邊累積」的最佳順序。
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- PART 05: Binary Heap -->
+<!-- ============================================================ -->
+<section id="heap">
+  <div class="section-number">PART 05 · 二元堆積</div>
+  <h2>Binary Heap：用陣列實作的優先佇列 <span class="sec-badge">pythonds §6.9–6.11</span></h2>
+  <p>優先佇列（priority queue）每次都要 dequeue<strong>優先序最高</strong>的元素。用 list 的天真實作有兩條路，但都不夠好：<strong>維持已排序的 list</strong>，插入需搬移 $O(n)$；<strong>不排序、每次找最小再 sort</strong>，sort 是 $O(n \log n)$。<strong>Binary heap</strong> 把 enqueue 和 dequeue 都壓到 $O(\log n)$。它有兩個關鍵性質：</p>
+
+  <div class="info-box">
+    <span class="info-label">堆積的兩個性質</span>
+    <strong>結構性質（structure property）：</strong>是一棵 <strong>complete binary tree</strong>（除最底層外每層填滿，最底層由左到右填）。<br>
+    <strong>順序性質（heap order property）：</strong>每個節點的 key $\le$ 其子節點 key（min-heap）；對稱地 max-heap 是 $\ge$。
+    <br><br>
+    結構性質讓我們可以用<strong>單一陣列</strong>儲存整棵樹：節點 $p$ 的左子在 $2p+1$、右子在 $2p+2$、父節點在 $\lfloor (p-1)/2 \rfloor$。完全不需要指標！
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="tree-canvas" id="canvas-heap" style="height:280px;">
+          <svg class="edges-layer"></svg>
+          <div class="nodes-layer"></div>
+        </div>
+        <div style="margin-top:.5rem;font-family:'JetBrains Mono',monospace;font-size:.74rem;color:var(--muted);">陣列表示（heap[i]）：</div>
+        <div class="heap-list" id="heapList"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="heapStatus">選擇操作後按「開始」</span></div>
+        <div class="preset-row">
+          <button class="preset-btn active" data-op="insert">Insert</button>
+          <button class="preset-btn" data-op="delete">Delete-min</button>
+          <button class="preset-btn" data-op="heapify">Heapify (建堆積)</button>
+        </div>
+        <div class="input-row" id="heapInsertRow">
+          <label>插入 key：</label>
+          <input type="number" id="heapInsertKey" value="2" style="width:80px;">
+          <button class="btn btn-shuffle" id="heapInsertBtn">插入</button>
+          <span style="font-size:.78rem;color:var(--muted);">當前 heap：</span>
+          <input type="text" id="heapArrInput" value="3, 5, 9, 7, 11, 15, 14" style="flex:1;min-width:140px;">
+          <button class="btn btn-reset" id="heapApplyArr">套用</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="heapPlay">▶ 開始</button>
+          <button class="btn btn-step" id="heapStep">→ 單步</button>
+          <button class="btn btn-reset" id="heapReset">↺ 重置</button>
+          <div style="flex:1;min-width:160px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);">速度</span>
+            <input type="range" id="heapSpeed" min="200" max="2000" step="100" value="700" style="flex:1;accent-color:var(--accent3);">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="stats-grid">
+          <div class="stat-tile"><div class="stat-label">交換次數</div><div class="stat-value" id="heapSwap">0</div></div>
+          <div class="stat-tile"><div class="stat-label">比較次數</div><div class="stat-value" id="heapCmp">0</div></div>
+        </div>
+        <div class="ic-row" style="margin-top:.6rem;"><span class="ic-label">當前索引 i</span><span class="ic-value highlight" id="heapIdx">—</span></div>
+        <div class="ic-row"><span class="ic-label">parent (i-1)//2</span><span class="ic-value" id="heapPar">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="heapCode" style="font-size:.74rem;">
+<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_perc_up</span>(self, i):</span>
+<span class="line" data-l="2">    <span class="kw">while</span> (i - <span class="num">1</span>) // <span class="num">2</span> &gt;= <span class="num">0</span>:</span>
+<span class="line" data-l="3">        p = (i - <span class="num">1</span>) // <span class="num">2</span></span>
+<span class="line" data-l="4">        <span class="kw">if</span> heap[i] &lt; heap[p]:</span>
+<span class="line" data-l="5">            <span class="fn">swap</span>(heap[i], heap[p])</span>
+<span class="line" data-l="6">        i = p</span>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">insert</span><span class="ic-value">$O(\log n)$</span></div>
+        <div class="ic-row"><span class="ic-label">delete-min</span><span class="ic-value">$O(\log n)$</span></div>
+        <div class="ic-row"><span class="ic-label">get-min</span><span class="ic-value highlight">$O(1)$</span></div>
+        <div class="ic-row"><span class="ic-label">heapify</span><span class="ic-value highlight">$O(n)$</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">為什麼 heapify 是 O(n) 而不是 O(n log n)？</span>
+    Naïve 想法是對 $n$ 個元素逐一 <code>insert</code>，每個 $O(\log n)$，總共 $O(n \log n)$。但 <code>heapify</code> 從<strong>陣列中間 $\lfloor n/2 \rfloor - 1$ 倒著做 perc_down</strong>：底層大量節點高度只有 0 或 1，往下移的成本很小。嚴謹分析會用 $\sum_{h=0}^{\log n} \frac{n}{2^{h+1}} \cdot h = O(n)$。直觀上：<strong>樹底層節點多但移動少，頂層節點少但移動多，兩者相乘的總和是 $O(n)$</strong>。
+  </div>
+
+  <h3>完整的 BinaryHeap 類別（pythonds §6.10–6.11）</h3>
+  <p>動畫側欄只放了 _perc_up 的骨架；講義的完整類別把六個方法全部攤開。
+  整個類別只有一個成員 <code>self._heap</code>（一個 list）：樹形是用索引「算」出來的
+  （左子 2i+1、右子 2i+2、父 (i-1)//2），從頭到尾不需要另設節點物件。</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:.8rem;">
+    <div class="info-card"><div class="ic-title">_perc_up ＋ insert：新元素往上浮 <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;"><span class="line"><span class="kw">def</span> <span class="fn">_perc_up</span>(<span class="kw">self</span>, i):</span>
+<span class="line">    <span class="kw">while</span> (i - <span class="num">1</span>) // <span class="num">2</span> &gt;= <span class="num">0</span>:</span>
+<span class="line">        parent_idx = (i - <span class="num">1</span>) // <span class="num">2</span></span>
+<span class="line">        <span class="kw">if</span> <span class="kw">self</span>._heap[i] &lt; <span class="kw">self</span>._heap[parent_idx]:</span>
+<span class="line">            <span class="kw">self</span>._heap[i], <span class="kw">self</span>._heap[parent_idx] = \</span>
+<span class="line">                <span class="kw">self</span>._heap[parent_idx], <span class="kw">self</span>._heap[i]</span>
+<span class="line">        <span class="kw">else</span>: <span class="kw">break</span>   <span class="com"># 不再比父小就停</span></span>
+<span class="line">        i = parent_idx</span>
+<span class="line"><span class="kw">def</span> <span class="fn">insert</span>(<span class="kw">self</span>, item):</span>
+<span class="line">    <span class="kw">self</span>._heap.<span class="fn">append</span>(item)      <span class="com"># 先掛最尾（保結構性質）</span></span>
+<span class="line">    <span class="kw">self</span>.<span class="fn">_perc_up</span>(<span class="fn">len</span>(<span class="kw">self</span>._heap) - <span class="num">1</span>)  <span class="com"># 再浮上去</span></span></div></div>
+    <div class="info-card"><div class="ic-title">_get_min_child ＋ _perc_down：往下沉 <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;"><span class="line"><span class="kw">def</span> <span class="fn">_get_min_child</span>(<span class="kw">self</span>, i):</span>
+<span class="line">    <span class="kw">if</span> <span class="num">2</span> * i + <span class="num">2</span> &gt; <span class="fn">len</span>(<span class="kw">self</span>._heap) - <span class="num">1</span>:</span>
+<span class="line">        <span class="kw">return</span> <span class="num">2</span> * i + <span class="num">1</span>   <span class="com"># 只有左子</span></span>
+<span class="line">    <span class="kw">if</span> <span class="kw">self</span>._heap[<span class="num">2</span> * i + <span class="num">1</span>] &lt; <span class="kw">self</span>._heap[<span class="num">2</span> * i + <span class="num">2</span>]:</span>
+<span class="line">        <span class="kw">return</span> <span class="num">2</span> * i + <span class="num">1</span></span>
+<span class="line">    <span class="kw">return</span> <span class="num">2</span> * i + <span class="num">2</span></span>
+<span class="line"><span class="kw">def</span> <span class="fn">_perc_down</span>(<span class="kw">self</span>, i):</span>
+<span class="line">    <span class="kw">while</span> <span class="num">2</span> * i + <span class="num">1</span> &lt; <span class="fn">len</span>(<span class="kw">self</span>._heap):</span>
+<span class="line">        sm_child = <span class="kw">self</span>.<span class="fn">_get_min_child</span>(i)</span>
+<span class="line">        <span class="kw">if</span> <span class="kw">self</span>._heap[i] &gt; <span class="kw">self</span>._heap[sm_child]:</span>
+<span class="line">            <span class="kw">self</span>._heap[i], <span class="kw">self</span>._heap[sm_child] = \</span>
+<span class="line">                <span class="kw">self</span>._heap[sm_child], <span class="kw">self</span>._heap[i]</span>
+<span class="line">        <span class="kw">else</span>: <span class="kw">break</span></span>
+<span class="line">        i = sm_child   <span class="com"># 跟較小的子交換後繼續沉</span></span></div></div>
+    <div class="info-card"><div class="ic-title">delete ＋ heapify：取最小、批次建堆 <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;"><span class="line"><span class="kw">def</span> <span class="fn">delete</span>(<span class="kw">self</span>):        <span class="com"># 取出最小值</span></span>
+<span class="line">    <span class="kw">self</span>._heap[<span class="num">0</span>], <span class="kw">self</span>._heap[<span class="num">-1</span>] = \</span>
+<span class="line">        <span class="kw">self</span>._heap[<span class="num">-1</span>], <span class="kw">self</span>._heap[<span class="num">0</span>]</span>
+<span class="line">    result = <span class="kw">self</span>._heap.<span class="fn">pop</span>()</span>
+<span class="line">    <span class="kw">self</span>.<span class="fn">_perc_down</span>(<span class="num">0</span>)   <span class="com"># 新根往下沉</span></span>
+<span class="line">    <span class="kw">return</span> result</span>
+<span class="line"><span class="kw">def</span> <span class="fn">heapify</span>(<span class="kw">self</span>, not_a_heap):</span>
+<span class="line">    <span class="kw">self</span>._heap = not_a_heap[:]</span>
+<span class="line">    i = <span class="fn">len</span>(<span class="kw">self</span>._heap) // <span class="num">2</span> - <span class="num">1</span>  <span class="com"># 最後一個非葉</span></span>
+<span class="line">    <span class="kw">while</span> i &gt;= <span class="num">0</span>:</span>
+<span class="line">        <span class="kw">self</span>.<span class="fn">_perc_down</span>(i)</span>
+<span class="line">        i = i - <span class="num">1</span>   <span class="com"># 倒著做，正是 O(n) 的關鍵</span></span></div></div>
+  </div>
+  <p style="font-size:.85rem;color:var(--muted);margin-top:.5rem;">講義的 demo 依序 insert
+  {10, 4, 9, 8, 12, 15, 3, 5, 14, 18}：不管插入順序怎麼亂，<code>heap[0]</code> 永遠是目前最小值，
+  <code>delete()</code> 也總是取出最小者（在 Python，delete 不是保留字，講義就直接這樣命名）。</p>
+
+  <h3>應用：Heap Sort（堆排序）</h3>
+  <p>有了 <code>heapify</code>（$O(n)$）和 $n$ 次 <code>delete-min</code>（每次 $O(\log n)$），就能寫出 $O(n \log n)$ 的排序：把所有元素丟進 heap，然後不斷 delete-min 拿出來。這是<strong>不需要額外 $O(n)$ 空間</strong>的就地排序變體（直接在原陣列上做 heap 操作）的核心。</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- PART 06: Binary Search Tree -->
+<!-- ============================================================ -->
+<section id="bst">
+  <div class="section-number">PART 06 · 二元搜尋樹</div>
+  <h2>Binary Search Tree：實作 Map ADT 的第三種方法 <span class="sec-badge">pythonds §6.12–6.14</span></h2>
+  <p>Map ADT 把 key 對應到 value（就像 Python 的 <code>dict</code>）。我們已經學過兩種實作：<strong>排序陣列 + binary search</strong>（搜尋 $O(\log n)$ 但插入 $O(n)$）和<strong>雜湊表</strong>（平均 $O(1)$ 但有衝突風險、無排序）。BST 提供第三條路：</p>
+
+  <div class="info-box">
+    <span class="info-label">BST 性質（BST property）</span>
+    對樹中每個節點 $x$：<strong>left subtree 內所有 key &lt; $x$.key &lt; right subtree 內所有 key</strong>。<br>
+    這個簡單的性質導致兩個強大結果：<br>
+    1. 從 root 出發比較 key，每一步可以<strong>排除一半的子樹</strong> → 搜尋平均 $O(\log n)$。<br>
+    2. 對 BST 做 <strong>inorder traversal 直接得到排序的 key 序列</strong>。
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="tree-canvas" id="canvas-bst" style="height:380px;">
+          <svg class="edges-layer"></svg>
+          <div class="nodes-layer"></div>
+        </div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="bstStatus">輸入 key 並選擇操作</span></div>
+        <div class="input-row">
+          <label>初始 keys：</label>
+          <input type="text" id="bstInitInput" value="70, 31, 93, 94, 14, 23, 73">
+          <button class="btn btn-reset" id="bstApplyInit">建立樹</button>
+          <button class="btn btn-shuffle" id="bstShuffle">隨機</button>
+        </div>
+        <div class="input-row">
+          <label>操作 key：</label>
+          <input type="number" id="bstOpKey" value="40" style="width:80px;">
+          <button class="btn btn-play" data-bstop="put">put (插入)</button>
+          <button class="btn btn-play" data-bstop="get" style="background:var(--accent2);">get (搜尋)</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-step" id="bstStep">→ 單步</button>
+          <button class="btn btn-reset" id="bstReset">↺ 重置</button>
+          <div style="flex:1;min-width:160px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);">速度</span>
+            <input type="range" id="bstSpeed" min="200" max="1800" step="100" value="700" style="flex:1;accent-color:var(--accent3);">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時狀態 <span class="ic-badge">LIVE</span></div>
+        <div class="ic-row"><span class="ic-label">當前操作</span><span class="ic-value highlight" id="bstOpName">—</span></div>
+        <div class="ic-row"><span class="ic-label">比較次數</span><span class="ic-value" id="bstCmp">0</span></div>
+        <div class="ic-row"><span class="ic-label">當前 node</span><span class="ic-value" id="bstCur">—</span></div>
+        <div class="ic-row"><span class="ic-label">樹高度</span><span class="ic-value" id="bstHeight">—</span></div>
+        <div class="ic-row"><span class="ic-label">節點數</span><span class="ic-value" id="bstSize">—</span></div>
+        <div class="ic-row"><span class="ic-label">結果</span><span class="ic-value" id="bstResult">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title" id="bstCodeTitle">虛擬碼 — put <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="bstCode" style="font-size:.73rem;">
+<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_put</span>(key, val, cur):</span>
+<span class="line" data-l="2">    <span class="kw">if</span> key &lt; cur.key:</span>
+<span class="line" data-l="3">        <span class="kw">if</span> cur.left:</span>
+<span class="line" data-l="4">            <span class="fn">_put</span>(key, val, cur.left)</span>
+<span class="line" data-l="5">        <span class="kw">else</span>:</span>
+<span class="line" data-l="6">            cur.left = <span class="fn">TreeNode</span>(key, val)</span>
+<span class="line" data-l="7">    <span class="kw">else</span>:</span>
+<span class="line" data-l="8">        <span class="kw">if</span> cur.right:</span>
+<span class="line" data-l="9">            <span class="fn">_put</span>(key, val, cur.right)</span>
+<span class="line" data-l="10">        <span class="kw">else</span>:</span>
+<span class="line" data-l="11">            cur.right = <span class="fn">TreeNode</span>(key, val)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box warm">
+    <span class="info-label">build BST 的順序很重要</span>
+    把 keys $70, 31, 93, 94, 14, 23, 73$ 依序插入會得到一棵漂亮的「平衡」BST；但若插入順序是 $14, 23, 31, 70, 73, 93, 94$（已排序），<strong>新樹會退化成一條鏈</strong>：高度從 $O(\log n)$ 變成 $O(n)$。試試上面的「隨機」按鈕和輸入排序的 keys 比較看看。這就是下一節要解決的問題。
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- PART 07: BST Delete -->
+<!-- ============================================================ -->
+<section id="bst-delete">
+  <div class="section-number">PART 07 · BST 刪除三情境</div>
+  <h2>BST 刪除：三種情境，與 in-order successor <span class="sec-badge">pythonds §6.14</span></h2>
+  <p>BST 的 <code>put</code> 與 <code>get</code> 直觀，但<strong>刪除是最麻煩的操作</strong>，因為刪掉一個內部節點後，必須維持 BST 性質。我們把情境分成三類：</p>
+
+  <div class="info-box red">
+    <span class="info-label">三種刪除情境</span>
+    <strong>Case 1：要刪的是葉節點。</strong>直接把 parent 的參考設為 <code>None</code>。最簡單。<br>
+    <strong>Case 2：要刪的節點只有<em>一個</em>子節點。</strong>把這個 child「提升」上來取代被刪節點。<br>
+    <strong>Case 3：要刪的節點有<em>兩個</em>子節點。</strong>找它的 <strong>in-order successor（中序後繼）</strong>（也就是右子樹中 key 最小的節點），把它的 key 拷貝到當前節點，然後從原位置「splice out」 successor。
+  </div>
+
+  <p>為什麼 successor 一定有<strong>最多一個 child</strong>？因為它是右子樹中的<em>最左</em>節點：如果它還有左 child，那個 child 一定更小、應該才是 successor。所以 splice out successor 一定是 case 1 或 case 2，可以遞迴處理。</p>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="tree-canvas" id="canvas-bstdel" style="height:360px;">
+          <svg class="edges-layer"></svg>
+          <div class="nodes-layer"></div>
+        </div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="delStatus">點選樹中節點選擇要刪除的 key</span></div>
+        <div class="input-row">
+          <label>樹結構（依序插入）：</label>
+          <input type="text" id="delInitInput" value="50, 30, 70, 20, 40, 60, 80, 35, 45, 75">
+          <button class="btn btn-reset" id="delApplyInit">建立樹</button>
+        </div>
+        <div class="input-row">
+          <label>刪除 key：</label>
+          <input type="number" id="delKey" value="30" style="width:80px;">
+          <button class="btn btn-play" id="delPlay">▶ 刪除</button>
+          <button class="btn btn-step" id="delStep">→ 單步</button>
+          <button class="btn btn-reset" id="delReset">↺ 重建</button>
+        </div>
+        <div class="preset-row">
+          <button class="preset-btn" data-delk="20">Case 1：刪 20（葉）</button>
+          <button class="preset-btn" data-delk="80">Case 2：刪 80（一子）</button>
+          <button class="preset-btn" data-delk="30">Case 3：刪 30（兩子）</button>
+          <button class="preset-btn" data-delk="50">Case 3：刪 50（root）</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">當前情境 <span class="ic-badge">CASE</span></div>
+        <div class="ic-row"><span class="ic-label">情境</span><span class="ic-value highlight" id="delCase">—</span></div>
+        <div class="ic-row"><span class="ic-label">target key</span><span class="ic-value" id="delTarget">—</span></div>
+        <div class="ic-row"><span class="ic-label">successor</span><span class="ic-value" id="delSucc">—</span></div>
+        <div class="ic-row"><span class="ic-label">階段</span><span class="ic-value" id="delPhase">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">find_successor <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" style="font-size:.74rem;">
+<span class="line"><span class="kw">def</span> <span class="fn">find_successor</span>(self):</span>
+<span class="line">    <span class="kw">if</span> self.right_child:</span>
+<span class="line">        <span class="kw">return</span> self.right_child.<span class="fn">find_min</span>()</span>
+<span class="line">    ...</span>
+<span class="line"><span class="kw">def</span> <span class="fn">find_min</span>(self):</span>
+<span class="line">    cur = self</span>
+<span class="line">    <span class="kw">while</span> cur.left_child:</span>
+<span class="line">        cur = cur.left_child</span>
+<span class="line">    <span class="kw">return</span> cur</span>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">圖例</div>
+        <div style="font-size:.78rem;line-height:1.55;">
+          <span class="legend-item"><span class="lg-swatch" style="background:var(--node-current)"></span>要刪除的節點</span><br>
+          <span class="legend-item"><span class="lg-swatch" style="background:var(--node-target)"></span>successor</span><br>
+          <span class="legend-item"><span class="lg-swatch" style="background:#e67e22"></span>搜尋路徑</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>講義的完整拼圖：find_successor 三情境與 splice_out</h3>
+  <p>側欄的 find_successor 是刪除專用的精簡版（刪除時節點必有右子樹，successor 就是右子樹的最小值）。
+  講義的完整版其實處理三種情境，另外兩種在中序走訪相關的練習會用到。
+  successor 找到之後，用 <code>splice_out()</code> 把它從原位置「縫」出來：
+  successor 保證最多一個 child，所以只有兩種縫法。</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:.8rem;">
+    <div class="info-card"><div class="ic-title">find_successor 完整版（TreeNode 的方法） <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;"><span class="line"><span class="kw">def</span> <span class="fn">find_successor</span>(<span class="kw">self</span>):</span>
+<span class="line">    successor = <span class="num">None</span></span>
+<span class="line">    <span class="kw">if</span> <span class="kw">self</span>.right_child:          <span class="com"># 情境 1：有右子樹</span></span>
+<span class="line">        successor = <span class="kw">self</span>.right_child.<span class="fn">find_min</span>()</span>
+<span class="line">    <span class="kw">elif</span> <span class="kw">self</span>.parent:</span>
+<span class="line">        <span class="kw">if</span> <span class="kw">self</span>.<span class="fn">is_left_child</span>():   <span class="com"># 情境 2：自己是左子 → 父就是後繼</span></span>
+<span class="line">            successor = <span class="kw">self</span>.parent</span>
+<span class="line">        <span class="kw">else</span>:                     <span class="com"># 情境 3：暫時斷開自己，問父親</span></span>
+<span class="line">            <span class="kw">self</span>.parent.right_child = <span class="num">None</span></span>
+<span class="line">            successor = <span class="kw">self</span>.parent.<span class="fn">find_successor</span>()</span>
+<span class="line">            <span class="kw">self</span>.parent.right_child = <span class="kw">self</span></span>
+<span class="line">    <span class="kw">return</span> successor</span></div>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">刪除只會用到情境 1：Case 3 的節點一定有右子樹。</div></div>
+    <div class="info-card"><div class="ic-title">splice_out ＋ Case 3 呼叫端 <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;"><span class="line"><span class="kw">def</span> <span class="fn">splice_out</span>(<span class="kw">self</span>):</span>
+<span class="line">    <span class="kw">if</span> <span class="kw">self</span>.<span class="fn">is_leaf</span>():           <span class="com"># 縫法 1：葉節點直接拆</span></span>
+<span class="line">        <span class="kw">if</span> <span class="kw">self</span>.<span class="fn">is_left_child</span>(): <span class="kw">self</span>.parent.left_child = <span class="num">None</span></span>
+<span class="line">        <span class="kw">else</span>: <span class="kw">self</span>.parent.right_child = <span class="num">None</span></span>
+<span class="line">    <span class="kw">elif</span> <span class="kw">self</span>.<span class="fn">has_any_child</span>():   <span class="com"># 縫法 2：孩子上位</span></span>
+<span class="line">        child = <span class="kw">self</span>.left_child <span class="kw">or</span> <span class="kw">self</span>.right_child</span>
+<span class="line">        <span class="kw">if</span> <span class="kw">self</span>.<span class="fn">is_left_child</span>(): <span class="kw">self</span>.parent.left_child = child</span>
+<span class="line">        <span class="kw">else</span>: <span class="kw">self</span>.parent.right_child = child</span>
+<span class="line">        child.parent = <span class="kw">self</span>.parent</span>
+<span class="line"> </span>
+<span class="line"><span class="com"># remove 的 Case 3 分支長這樣：</span></span>
+<span class="line">successor = current_node.<span class="fn">find_successor</span>()</span>
+<span class="line">successor.<span class="fn">splice_out</span>()</span>
+<span class="line">current_node.key = successor.key     <span class="com"># 只搬 key/value</span></span>
+<span class="line">current_node.value = successor.value <span class="com"># 節點本身不動</span></span></div></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- PART 08: BST Analysis -->
+<!-- ============================================================ -->
+<section id="bst-analysis">
+  <div class="section-number">PART 08 · BST 分析</div>
+  <h2>BST 的限制：高度決定一切 <span class="sec-badge">pythonds §6.15</span></h2>
+  <p>BST 所有操作（<code>put</code>、<code>get</code>、<code>in</code>、<code>del</code>）的時間複雜度都正比於<strong>樹的高度 $h$</strong>，而不是節點數 $n$。所以問題變成：給定 $n$ 個節點，$h$ 會是多少？</p>
+
+  <div class="info-box">
+    <span class="info-label">高度與節點數的關係</span>
+    完美平衡二元樹（每層填滿）有 $2^{h+1}-1$ 個節點，所以 $h \approx \log_2 n$。<br>
+    若 keys 隨機插入，高度期望也是 $O(\log n)$，因為大概一半 key 進左、一半進右。<br>
+    但<strong>最差情況 $h = n - 1$</strong>：把已排序 keys 依序插入就會發生：每個新節點都比當前所有節點大（或小），永遠落到右（或左）這一支，BST 退化成連結串列。
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div>
+            <h4 style="font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent3);margin-bottom:.4rem;">隨機順序插入</h4>
+            <div class="tree-canvas" id="canvas-bstrand" style="height:280px;">
+              <svg class="edges-layer"></svg>
+              <div class="nodes-layer"></div>
+            </div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:.78rem;text-align:center;margin-top:.4rem;">
+              height = <span id="bstRandH" style="color:var(--accent3);font-weight:700;font-size:1.1rem;">—</span>
+            </div>
+          </div>
+          <div>
+            <h4 style="font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent);margin-bottom:.4rem;">已排序順序插入</h4>
+            <div class="tree-canvas" id="canvas-bstsorted" style="height:280px;">
+              <svg class="edges-layer"></svg>
+              <div class="nodes-layer"></div>
+            </div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:.78rem;text-align:center;margin-top:.4rem;">
+              height = <span id="bstSortedH" style="color:var(--accent);font-weight:700;font-size:1.1rem;">—</span>
+            </div>
+          </div>
+        </div>
+        <div class="input-row">
+          <label>節點數 n：</label>
+          <input type="number" id="bstAnalN" value="10" min="3" max="20" style="width:70px;">
+          <button class="btn btn-shuffle" id="bstAnalRegen">重新產生並比較</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">複雜度對照</div>
+        <table class="cmp-table" style="font-size:.78rem;">
+          <thead><tr><th>操作</th><th>平均</th><th>最差</th></tr></thead>
+          <tbody>
+            <tr><td>put</td><td class="best">$O(\log n)$</td><td class="worst">$O(n)$</td></tr>
+            <tr><td>get</td><td class="best">$O(\log n)$</td><td class="worst">$O(n)$</td></tr>
+            <tr><td>del</td><td class="best">$O(\log n)$</td><td class="worst">$O(n)$</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">應用：Tree Sort</div>
+        <div style="font-size:.83rem;line-height:1.55;">
+          把 $n$ 個 keys 全部 <code>put</code> 進 BST 再做 inorder traversal，平均得到 $O(n \log n)$ 的排序。但最差情況退化為 $O(n^2)$，這也是 quick sort 在最差情況下退化的同一個原因（pivot 選不好等於插入排序好的 keys 進 BST）。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- PART 09: AVL Tree -->
+<!-- ============================================================ -->
+<section id="avl">
+  <div class="section-number">PART 09 · AVL 樹</div>
+  <h2>AVL Tree：保證 O(log n) 的自平衡 BST <span class="sec-badge">pythonds §6.16–6.18</span></h2>
+  <p>BST 退化的原因是<strong>插入順序</strong>。AVL 樹（Adelson-Velsky 和 Landis，1962）讓樹在每次插入/刪除時<strong>自動旋轉</strong>，保證它一直是「近似平衡」。代價只是常數因子的開銷。</p>
+
+  <div class="info-box">
+    <span class="info-label">balance factor（平衡因子）</span>
+    對每個節點 $x$，定義 $\text{bf}(x) = \text{height}(x.\text{left}) - \text{height}(x.\text{right})$。<br>
+    AVL 規則：<strong>每個節點的 bf 必須是 $-1$、$0$ 或 $+1$</strong>。任何超出這個範圍的節點觸發旋轉來「修正」。<br>
+    bf $&gt; 0$：left-heavy；bf $&lt; 0$：right-heavy；bf $= 0$：完美平衡。
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="tree-canvas" id="canvas-avl" style="height:380px;">
+          <svg class="edges-layer"></svg>
+          <div class="nodes-layer"></div>
+        </div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="avlStatus">選擇旋轉情境並按「執行」</span></div>
+        <div class="preset-row">
+          <button class="preset-btn active" data-avlcase="LL">LL：右旋</button>
+          <button class="preset-btn" data-avlcase="RR">RR：左旋</button>
+          <button class="preset-btn" data-avlcase="LR">LR：左右旋</button>
+          <button class="preset-btn" data-avlcase="RL">RL：右左旋</button>
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="avlPlay">▶ 執行旋轉</button>
+          <button class="btn btn-step" id="avlStep">→ 單步</button>
+          <button class="btn btn-reset" id="avlReset">↺ 重置</button>
+          <div style="flex:1;min-width:160px;display:flex;align-items:center;gap:.5rem;">
+            <span style="font-size:.78rem;color:var(--muted);">速度</span>
+            <input type="range" id="avlSpeed" min="300" max="2000" step="100" value="900" style="flex:1;accent-color:var(--accent3);">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">當前情境 <span class="ic-badge">CASE</span></div>
+        <div class="ic-row"><span class="ic-label">不平衡類型</span><span class="ic-value highlight" id="avlCase">LL</span></div>
+        <div class="ic-row"><span class="ic-label">解法</span><span class="ic-value" id="avlFix">右旋 (Right Rotate)</span></div>
+        <div class="ic-row"><span class="ic-label">當前節點 bf</span><span class="ic-value" id="avlBf">—</span></div>
+        <div class="ic-row"><span class="ic-label">階段</span><span class="ic-value" id="avlPhase">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">四種旋轉</div>
+        <div style="font-size:.8rem;line-height:1.55;">
+          <strong>LL（左左不平衡）：</strong>對 root 做<strong>單一右旋</strong>。<br>
+          <strong>RR（右右不平衡）：</strong>對 root 做<strong>單一左旋</strong>。<br>
+          <strong>LR（左右不平衡）：</strong>先對 left child 左旋，再對 root 右旋。<br>
+          <strong>RL（右左不平衡）：</strong>先對 right child 右旋，再對 root 左旋。
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">高度上界</div>
+        <div class="eq-card">
+          <div class="eq-label">AVL HEIGHT BOUND</div>
+          <div class="eq-formula">$h \le 1.44 \log_2 n$</div>
+          <div class="eq-sub">由 Fibonacci 樹（最瘦的 AVL 樹）推導</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">為什麼是 1.44 log n？</span>
+    最瘦的 AVL 樹（每個節點 bf 都是 $\pm 1$）滿足遞迴 $N_h = 1 + N_{h-1} + N_{h-2}$，這正是 Fibonacci 數列的型式。當 $h$ 很大時 $N_h \approx \Phi^{h+2}/\sqrt 5$（黃金比例 $\Phi = (1+\sqrt 5)/2$）。對兩邊取 $\log_2$ 並解 $h$ 得到：
+    $$ h \approx \frac{1}{\log_2 \Phi} \log_2 n \approx 1.44 \log_2 n $$
+    這比完美平衡的 $\log_2 n$ 只大了一個常數因子，<strong>所有 BST 操作仍是 $O(\log n)$</strong>。
+  </div>
+
+  <h3>實作內幕：update_balance、rotate_left、rebalance <span class="sec-badge">pythonds §6.17–6.18 · 講義補充</span></h3>
+  <p style="font-size:.88rem;color:var(--muted);">課堂投影片跳過 §6.17（AVL 效能）與 §6.18（AVL 實作）這兩節（RISE skip，講義標 Optional）：屬自學補充。</p>
+  <p>AVL 的 <code>_put</code> 跟 BST 幾乎一樣，唯一差別是掛上新節點後多呼叫一次
+  <code>update_balance()</code>：它沿著 parent 參考往上修正平衡因子，
+  一發現 |bf| &gt; 1 就地 <code>rebalance()</code>。旋轉最多兩次、每次 O(1)，
+  往上修正最多走 log n 層，所以 <strong>put 整體仍是 O(log n)</strong>。
+  上面的動畫可以對照著看：四個按鈕（LL/RR/LR/RL）正是 rebalance 的四個分支。刪除後的重平衡，講義留作練習。</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:.8rem;">
+    <div class="info-card"><div class="ic-title">_put 的差異 ＋ update_balance <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;"><span class="line"><span class="com"># _put 掛上新葉之後，多做一件事：</span></span>
+<span class="line">current_node.left_child = <span class="fn">AVLTreeNode</span>(</span>
+<span class="line">    key, value, <span class="num">0</span>, parent=current_node)</span>
+<span class="line"><span class="kw">self</span>.<span class="fn">update_balance</span>(current_node.left_child)</span>
+<span class="line"> </span>
+<span class="line"><span class="kw">def</span> <span class="fn">update_balance</span>(<span class="kw">self</span>, node):</span>
+<span class="line">    <span class="kw">if</span> node.balance_factor &gt; <span class="num">1</span> <span class="kw">or</span> node.balance_factor &lt; <span class="num">-1</span>:</span>
+<span class="line">        <span class="kw">self</span>.<span class="fn">rebalance</span>(node)   <span class="com"># 就地修，不再往上</span></span>
+<span class="line">        <span class="kw">return</span></span>
+<span class="line">    <span class="kw">if</span> node.parent:</span>
+<span class="line">        <span class="kw">if</span> node.<span class="fn">is_left_child</span>():</span>
+<span class="line">            node.parent.balance_factor += <span class="num">1</span></span>
+<span class="line">        <span class="kw">elif</span> node.<span class="fn">is_right_child</span>():</span>
+<span class="line">            node.parent.balance_factor -= <span class="num">1</span></span>
+<span class="line">        <span class="kw">if</span> node.parent.balance_factor != <span class="num">0</span>:</span>
+<span class="line">            <span class="kw">self</span>.<span class="fn">update_balance</span>(node.parent)  <span class="com"># 繼續往上</span></span></div></div>
+    <div class="info-card"><div class="ic-title">rotate_left（rotate_right 對稱） <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.7rem;"><span class="line"><span class="kw">def</span> <span class="fn">rotate_left</span>(<span class="kw">self</span>, rotation_root):</span>
+<span class="line">    new_root = rotation_root.right_child</span>
+<span class="line">    rotation_root.right_child = new_root.left_child</span>
+<span class="line">    <span class="kw">if</span> new_root.left_child:</span>
+<span class="line">        new_root.left_child.parent = rotation_root</span>
+<span class="line">    new_root.parent = rotation_root.parent</span>
+<span class="line">    <span class="kw">if</span> rotation_root.<span class="fn">is_root</span>():</span>
+<span class="line">        <span class="kw">self</span>._root = new_root</span>
+<span class="line">    <span class="kw">elif</span> rotation_root.<span class="fn">is_left_child</span>():</span>
+<span class="line">        rotation_root.parent.left_child = new_root</span>
+<span class="line">    <span class="kw">else</span>:</span>
+<span class="line">        rotation_root.parent.right_child = new_root</span>
+<span class="line">    new_root.left_child = rotation_root</span>
+<span class="line">    rotation_root.parent = new_root</span>
+<span class="line">    rotation_root.balance_factor = (rotation_root.balance_factor</span>
+<span class="line">        + <span class="num">1</span> - <span class="fn">min</span>(new_root.balance_factor, <span class="num">0</span>))</span>
+<span class="line">    new_root.balance_factor = (new_root.balance_factor</span>
+<span class="line">        + <span class="num">1</span> + <span class="fn">max</span>(rotation_root.balance_factor, <span class="num">0</span>))</span></div>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">難點有二：parent 參考要全部接對；
+      最後兩行用 min/max 直接推出新的平衡因子，不用重算高度。</div></div>
+    <div class="info-card"><div class="ic-title">rebalance：四情境對照動畫按鈕 <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;"><span class="line"><span class="kw">def</span> <span class="fn">rebalance</span>(<span class="kw">self</span>, node):</span>
+<span class="line">    <span class="kw">if</span> node.balance_factor &lt; <span class="num">0</span>:          <span class="com"># right-heavy</span></span>
+<span class="line">        <span class="kw">if</span> node.right_child.balance_factor &gt; <span class="num">0</span>:</span>
+<span class="line">            <span class="kw">self</span>.<span class="fn">rotate_right</span>(node.right_child)  <span class="com"># RL：先右旋子</span></span>
+<span class="line">            <span class="kw">self</span>.<span class="fn">rotate_left</span>(node)               <span class="com">#     再左旋根</span></span>
+<span class="line">        <span class="kw">else</span>:</span>
+<span class="line">            <span class="kw">self</span>.<span class="fn">rotate_left</span>(node)               <span class="com"># RR：單一左旋</span></span>
+<span class="line">    <span class="kw">elif</span> node.balance_factor &gt; <span class="num">0</span>:        <span class="com"># left-heavy</span></span>
+<span class="line">        <span class="kw">if</span> node.left_child.balance_factor &lt; <span class="num">0</span>:</span>
+<span class="line">            <span class="kw">self</span>.<span class="fn">rotate_left</span>(node.left_child)    <span class="com"># LR：先左旋子</span></span>
+<span class="line">            <span class="kw">self</span>.<span class="fn">rotate_right</span>(node)              <span class="com">#     再右旋根</span></span>
+<span class="line">        <span class="kw">else</span>:</span>
+<span class="line">            <span class="kw">self</span>.<span class="fn">rotate_right</span>(node)              <span class="com"># LL：單一右旋</span></span></div>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">先看「歪向哪邊」，再看「子節點歪向哪邊」決定要不要先轉子節點：跟上面動畫的四個 preset 一一對應。</div></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- PART 10: Summary -->
+<!-- ============================================================ -->
+<section id="summary">
+  <div class="section-number">REFERENCE · 總覽比較</div>
+  <h2>Map ADT 四種實作的對照表 <span class="sec-badge">pythonds §6.19</span></h2>
+  <p>過去兩章我們學了四種實作 map ADT 的方式。下表整理 worst-case 複雜度；注意 hash table 的 $O(1)$ 是<strong>平均</strong>，最差情況（全部碰撞）會退化到 $O(n)$。</p>
+
+  <table class="cmp-table">
+    <thead>
+      <tr>
+        <th>operation</th>
+        <th>Sorted List<br><small>(binary search)</small></th>
+        <th>Hash Table<br><small>(平均)</small></th>
+        <th>BST<br><small>(最差)</small></th>
+        <th>AVL Tree</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>put(key, val)</td>
+        <td class="worst">$O(n)$</td>
+        <td class="best">$O(1)$</td>
+        <td class="worst">$O(n)$</td>
+        <td class="best">$O(\log n)$</td>
+      </tr>
+      <tr>
+        <td>get(key)</td>
+        <td>$O(\log n)$</td>
+        <td class="best">$O(1)$</td>
+        <td class="worst">$O(n)$</td>
+        <td class="best">$O(\log n)$</td>
+      </tr>
+      <tr>
+        <td>in (key in m)</td>
+        <td>$O(\log n)$</td>
+        <td class="best">$O(1)$</td>
+        <td class="worst">$O(n)$</td>
+        <td class="best">$O(\log n)$</td>
+      </tr>
+      <tr>
+        <td>del m[key]</td>
+        <td class="best">$O(1)$</td>
+        <td class="best">$O(1)$</td>
+        <td class="worst">$O(n)$</td>
+        <td class="best">$O(\log n)$</td>
+      </tr>
+      <tr>
+        <td>排序輸出 (in-order)</td>
+        <td class="best">$O(n)$</td>
+        <td class="worst">$O(n \log n)$</td>
+        <td class="best">$O(n)$</td>
+        <td class="best">$O(n)$</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="info-box">
+    <span class="info-label">什麼時候選什麼？</span>
+    <strong>需要 $O(1)$ 平均、不需要排序：</strong>選 <strong>hash table</strong>（Python <code>dict</code>、Java <code>HashMap</code>）。<br>
+    <strong>需要保證 $O(\log n)$ worst-case、需要排序輸出：</strong>選 <strong>self-balancing BST</strong>（Java <code>TreeMap</code> 與多數語言的 sorted map 用紅黑樹；AVL 是它的近親）。<br>
+    <strong>資料是 read-only 且已排序：</strong>用<strong>陣列 + binary search</strong>，記憶體緊湊、cache 友善。<br>
+    <strong>需要快速取出最小/最大值（優先佇列）：</strong>選 <strong>binary heap</strong>（Python <code>heapq</code> 模組），不需要完整排序就能 $O(\log n)$ 操作。
+  </div>
+
+  <h3>樹結構在實際系統中的地位</h3>
+  <p>這一章你學到的概念是現代軟體系統的基石：</p>
+  <ul style="margin-left:1.5rem;line-height:1.9;">
+    <li><strong>檔案系統</strong>（樹）：每個目錄一個節點，檔案是葉子。</li>
+    <li><strong>編譯器與直譯器</strong>（解析樹 / AST）：源碼解析成抽象語法樹，遞迴走訪做型別檢查、最佳化、產生機器碼。</li>
+    <li><strong>資料庫索引</strong>（B-tree / B+tree）：BST 的多路推廣，每個節點容納上百個 keys，是磁碟導向的設計。</li>
+    <li><strong>路由表 / IP lookup</strong>（Trie）：另一種樹型結構，依字元逐層走訪。</li>
+    <li><strong>Heap 在演算法中的核心地位</strong>：Dijkstra 最短路徑、Huffman 編碼、$k$ 路合併、top-$k$ 問題全都靠 priority queue。</li>
+  </ul>
+
+  <p style="margin-top:1.5rem;text-align:center;font-style:italic;color:var(--muted);">「<strong>看到階層、想到遞迴、寫成樹</strong>」：這是這一章最值得帶走的思考方式。</p>
+</section>
+
+</div>
+
+<footer>
+  互動式樹與樹的演算法教學 · 基於 Problem Solving with Algorithms and Data Structures using Python (pythonds) Ch.8<br>
+  <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);">Designed for NSYSU Applied Math · 2026</span>
+</footer>
+
+<script>
+/* ============================================================
+   COMMON UTILITIES
+   ============================================================ */
+const $ = (id) => document.getElementById(id);
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const LAYOUT_X_PAD = 30;
+
+/* Tree node data structure for visualizations */
+class TNode {
+  constructor(key) {
+    this.key = key;
+    this.left = null;
+    this.right = null;
+    this.parent = null;
+    this.x = 0; this.y = 0;  // computed layout coords (relative to canvas)
+    this.id = TNode._id++;
+  }
+}
+TNode._id = 0;
+
+/* Compute (x, y) layout for a tree using a simple level-by-level
+   horizontal split. Returns the depth. */
+function layoutTree(root, w, h, topPad=40, botPad=40) {
+  if (!root) return 0;
+  let depth = 0;
+  function getDepth(n, d) {
+    if (!n) return;
+    depth = Math.max(depth, d);
+    getDepth(n.left, d+1);
+    getDepth(n.right, d+1);
+  }
+  getDepth(root, 0);
+  const dy = depth === 0 ? 0 : (h - topPad - botPad) / depth;
+  function place(n, d, lo, hi) {
+    if (!n) return;
+    n.x = (lo + hi) / 2;
+    n.y = topPad + d * dy;
+    const mid = n.x;
+    place(n.left,  d+1, lo, mid);
+    place(n.right, d+1, mid, hi);
+  }
+  const xPad = LAYOUT_X_PAD;
+  place(root, 0, xPad, Math.max(xPad, w - xPad));
+  return depth;
+}
+
+/* Iterate all nodes (preorder) */
+function* allNodes(root) {
+  if (!root) return;
+  yield root;
+  yield* allNodes(root.left);
+  yield* allNodes(root.right);
+}
+
+function nodeCount(root) {
+  let n = 0;
+  for (const _ of allNodes(root)) n++;
+  return n;
+}
+
+function treeHeight(root) {
+  if (!root) return -1;
+  return 1 + Math.max(treeHeight(root.left), treeHeight(root.right));
+}
+
+/* Render tree to a canvas: creates DOM nodes for each TNode and
+   SVG <line> for each edge. Positions are read from .x / .y. */
+function renderTree(canvas, root, opts={}) {
+  const nodesLayer = canvas.querySelector('.nodes-layer');
+  const svg = canvas.querySelector('svg');
+  // Clear
+  nodesLayer.innerHTML = '';
+  svg.innerHTML = '';
+  if (!root) return;
+
+  // Edges first (so they sit under nodes)
+  function drawEdges(n) {
+    if (!n) return;
+    if (n.left) {
+      const ln = document.createElementNS(SVG_NS, 'line');
+      ln.setAttribute('x1', n.x); ln.setAttribute('y1', n.y);
+      ln.setAttribute('x2', n.left.x); ln.setAttribute('y2', n.left.y);
+      ln.setAttribute('class', 't-edge edge-' + n.id + '-' + n.left.id);
+      ln.dataset.from = n.id; ln.dataset.to = n.left.id;
+      svg.appendChild(ln);
+      drawEdges(n.left);
+    }
+    if (n.right) {
+      const ln = document.createElementNS(SVG_NS, 'line');
+      ln.setAttribute('x1', n.x); ln.setAttribute('y1', n.y);
+      ln.setAttribute('x2', n.right.x); ln.setAttribute('y2', n.right.y);
+      ln.setAttribute('class', 't-edge edge-' + n.id + '-' + n.right.id);
+      ln.dataset.from = n.id; ln.dataset.to = n.right.id;
+      svg.appendChild(ln);
+      drawEdges(n.right);
+    }
+  }
+  drawEdges(root);
+
+  // Nodes
+  for (const n of allNodes(root)) {
+    const div = document.createElement('div');
+    div.className = 't-node node-' + n.id;
+    div.dataset.id = n.id;
+    div.style.left = n.x + 'px';
+    div.style.top = n.y + 'px';
+    div.textContent = n.key;
+    if (opts.onClick) div.addEventListener('click', () => opts.onClick(n));
+    if (opts.onHover) {
+      div.addEventListener('mouseenter', () => opts.onHover(n));
+      div.addEventListener('mouseleave', () => opts.onHover(null));
+    }
+    nodesLayer.appendChild(div);
+  }
+}
+
+/* Update edges when nodes have moved (animation between layouts) */
+function updateEdges(canvas, root) {
+  const svg = canvas.querySelector('svg');
+  if (!root) { svg.innerHTML = ''; return; }
+  // Remove existing
+  svg.innerHTML = '';
+  function drawEdges(n) {
+    if (!n) return;
+    for (const child of [n.left, n.right]) {
+      if (!child) continue;
+      const ln = document.createElementNS(SVG_NS, 'line');
+      ln.setAttribute('x1', n.x); ln.setAttribute('y1', n.y);
+      ln.setAttribute('x2', child.x); ln.setAttribute('y2', child.y);
+      ln.setAttribute('class', 't-edge edge-' + n.id + '-' + child.id);
+      ln.dataset.from = n.id; ln.dataset.to = child.id;
+      svg.appendChild(ln);
+      drawEdges(child);
+    }
+  }
+  drawEdges(root);
+}
+
+/* Highlight nodes / edges by id list */
+function clearHL(canvas) {
+  canvas.querySelectorAll('.t-node').forEach(el =>
+    el.classList.remove('active', 'visited', 'target', 'current', 'parent-hl', 'path', 'subtree', 'faded', 'leaf-ind', 'deleted'));
+  canvas.querySelectorAll('.t-edge').forEach(el =>
+    el.classList.remove('active', 'visited', 'path', 'subtree', 'faded'));
+}
+
+function setNodeClass(canvas, id, cls, on=true) {
+  const el = canvas.querySelector('.node-' + id);
+  if (el) el.classList.toggle(cls, on);
+}
+
+function setEdgeClass(canvas, fromId, toId, cls, on=true) {
+  const el = canvas.querySelector('.edge-' + fromId + '-' + toId);
+  if (el) el.classList.toggle(cls, on);
+}
+
+function setText(el, value) {
+  if (el) el.textContent = value;
+}
+
+/* Re-run a render closure once the canvas actually has non-zero size.
+   Init time may fire when the panel is in a hidden reveal section or
+   before layout has flushed — clientWidth is 0, layoutTree falls back
+   to 600px, and nodes get clipped by the narrower real canvas. We
+   call the closure once now (so something paints); if the canvas was
+   zero-sized we hook a ResizeObserver to re-call it the moment the
+   canvas is laid out. */
+function _ensurePanelReady(canvas, rerender) {
+  if (!canvas) return;
+  if (canvas.clientWidth > 0) return;
+  if (typeof ResizeObserver === 'undefined') {
+    const tick = () => {
+      if (canvas.clientWidth > 0) rerender();
+      else setTimeout(tick, 100);
+    };
+    setTimeout(tick, 100);
+    return;
+  }
+  const ro = new ResizeObserver(() => {
+    if (canvas.clientWidth > 0) {
+      ro.disconnect();
+      rerender();
+    }
+  });
+  ro.observe(canvas);
+}
+
+/* Build tree from preorder array (use null for empty). Helper. */
+function buildFromArr(arr, idx={i:0}) {
+  if (idx.i >= arr.length || arr[idx.i] === null) {
+    idx.i++;
+    return null;
+  }
+  const n = new TNode(arr[idx.i++]);
+  n.left = buildFromArr(arr, idx);
+  if (n.left) n.left.parent = n;
+  n.right = buildFromArr(arr, idx);
+  if (n.right) n.right.parent = n;
+  return n;
+}
+
+/* Highlight pseudo-code line */
+function hlLine(codeEl, lineNum) {
+  if (!codeEl) return;
+  codeEl.querySelectorAll('.line').forEach(el => el.classList.remove('active'));
+  if (lineNum != null) {
+    const el = codeEl.querySelector(`.line[data-l="${lineNum}"]`);
+    if (el) el.classList.add('active');
+  }
+}
+
+/* Generic step-based animation player */
+class Player {
+  constructor(opts) {
+    this.steps = opts.steps;          // array of step objects
+    this.apply = opts.apply;          // (step, idx) => void
+    this.delay = opts.delay || 700;
+    this.idx = 0;
+    this.timer = null;
+    this.onEnd = opts.onEnd;
+    this.onIdxChange = opts.onIdxChange;
+  }
+  reset(steps) {
+    this.stop();
+    if (steps) this.steps = steps;
+    this.idx = 0;
+    if (this.steps.length) this.apply(this.steps[0], 0);
+    if (this.onIdxChange) this.onIdxChange(this.idx);
+  }
+  step() {
+    if (this.idx + 1 >= this.steps.length) { this.stop(); return false; }
+    this.idx++;
+    this.apply(this.steps[this.idx], this.idx);
+    if (this.onIdxChange) this.onIdxChange(this.idx);
+    return true;
+  }
+  play() {
+    if (this.timer) return;
+    const tick = () => {
+      if (!this.step()) {
+        this.timer = null;
+        if (this.onEnd) this.onEnd();
+        return;
+      }
+      this.timer = setTimeout(tick, this.delay);
+    };
+    this.timer = setTimeout(tick, this.delay);
+  }
+  stop() {
+    if (this.timer) { clearTimeout(this.timer); this.timer = null; }
+  }
+  setDelay(d) { this.delay = d; }
+}
+
+/* ============================================================
+   PART 01 — VOCABULARY (Interactive Tree)
+   ============================================================ */
+function initVocabulary() {
+  const canvas = $('canvas-vocab');
+  if (!canvas) return;
+  // Sample tree (Mammalia style)
+  // Use same tree as PDF: root with several layers
+  const root = buildFromArr(['A',
+    'B', 'D', null, null, 'E', 'H', null, null, null,
+    'C', 'F', null, null, 'G', null, null
+  ]);
+
+  function render() {
+    layoutTree(root, canvas.clientWidth, canvas.clientHeight, 35, 35);
+    renderTree(canvas, root, {
+      onClick: (n) => clickNode(n),
+      onHover: (n) => hoverNode(n),
+    });
+  }
+
+  // Compute properties for a node
+  function nodeProps(n) {
+    let level = 0;
+    for (let p = n.parent; p; p = p.parent) level++;
+    function h(x) { return x ? 1 + Math.max(h(x.left), h(x.right)) : -1; }
+    let children = [];
+    if (n.left) children.push(n.left.key);
+    if (n.right) children.push(n.right.key);
+    let siblings = [];
+    if (n.parent) {
+      if (n.parent.left && n.parent.left !== n) siblings.push(n.parent.left.key);
+      if (n.parent.right && n.parent.right !== n) siblings.push(n.parent.right.key);
+    }
+    return {
+      key: n.key,
+      parent: n.parent ? n.parent.key : '(root)',
+      children: children.length ? children.join(', ') : '(leaf)',
+      siblings: siblings.length ? siblings.join(', ') : '—',
+      level: level,
+      height: h(n),
+      isLeaf: !n.left && !n.right,
+    };
+  }
+
+  function hoverNode(n) {
+    if (!n) {
+      $('vocabKey').textContent = '—';
+      $('vocabParent').textContent = '—';
+      $('vocabChildren').textContent = '—';
+      $('vocabSibs').textContent = '—';
+      $('vocabLevel').textContent = '—';
+      $('vocabHeight').textContent = '—';
+      $('vocabLeaf').textContent = '—';
+      return;
+    }
+    const p = nodeProps(n);
+    $('vocabKey').textContent = p.key;
+    $('vocabParent').textContent = p.parent;
+    $('vocabChildren').textContent = p.children;
+    $('vocabSibs').textContent = p.siblings;
+    $('vocabLevel').textContent = p.level;
+    $('vocabHeight').textContent = p.height;
+    $('vocabLeaf').textContent = p.isLeaf ? '✓ yes' : '✗ no';
+  }
+
+  function clickNode(n) {
+    clearHL(canvas);
+    // Highlight subtree
+    function markSub(x) {
+      if (!x) return;
+      setNodeClass(canvas, x.id, 'subtree');
+      if (x.left) { setEdgeClass(canvas, x.id, x.left.id, 'subtree'); markSub(x.left); }
+      if (x.right) { setEdgeClass(canvas, x.id, x.right.id, 'subtree'); markSub(x.right); }
+    }
+    markSub(n);
+    // Highlight path-to-root
+    let cur = n;
+    while (cur.parent) {
+      setEdgeClass(canvas, cur.parent.id, cur.id, 'path');
+      setNodeClass(canvas, cur.parent.id, 'path');
+      cur = cur.parent;
+    }
+    // Current node
+    setNodeClass(canvas, n.id, 'current');
+    const p = nodeProps(n);
+    $('vocabStatus').textContent =
+      `${p.key}: level=${p.level}, height=${p.height}, ${p.isLeaf ? '葉節點' : 'children=[' + p.children + ']'}`;
+  }
+
+  $('vocabReset').onclick = () => {
+    clearHL(canvas);
+    $('vocabStatus').textContent = '將滑鼠移到節點上看屬性，點擊節點高亮路徑與子樹';
+  };
+
+  render();
+  _ensurePanelReady(canvas, render);
+  return { resize: render };
+}
+
+/* ============================================================
+   PART 02 — NODES & REFERENCES (build tree step-by-step)
+   ============================================================ */
+function initNodesRefs() {
+  const canvas = $('canvas-nr');
+  if (!canvas) return;
+
+  // Build steps: each step describes the tree state and which line is active
+  function buildSteps() {
+    const steps = [];
+    // Step 0: just root 'a'
+    let s0 = { tree: () => {
+      const r = new TNode('a');
+      return r;
+    }, line: 1, msg: 'a_tree = BinaryTree("a")：建立根節點' };
+    steps.push(s0);
+
+    let s1 = { tree: () => {
+      const r = new TNode('a');
+      r.left = new TNode('b'); r.left.parent = r;
+      return r;
+    }, line: 2, msg: 'insert_left("b")：建立左子並掛上' };
+    steps.push(s1);
+
+    let s2 = { tree: () => {
+      const r = new TNode('a');
+      r.left = new TNode('b'); r.left.parent = r;
+      r.right = new TNode('c'); r.right.parent = r;
+      return r;
+    }, line: 3, msg: 'insert_right("c")：建立右子並掛上' };
+    steps.push(s2);
+
+    let s3 = { tree: () => {
+      const r = new TNode('a');
+      r.left = new TNode('b'); r.left.parent = r;
+      r.left.right = new TNode('d'); r.left.right.parent = r.left;
+      r.right = new TNode('c'); r.right.parent = r;
+      return r;
+    }, line: 4, msg: 'b 的右邊掛上 d', highlight: 'd' };
+    steps.push(s3);
+
+    let s4 = { tree: () => {
+      const r = new TNode('a');
+      r.left = new TNode('b'); r.left.parent = r;
+      r.left.right = new TNode('d'); r.left.right.parent = r.left;
+      r.right = new TNode('c'); r.right.parent = r;
+      r.right.left = new TNode('e'); r.right.left.parent = r.right;
+      return r;
+    }, line: 5, msg: 'c 的左邊掛上 e', highlight: 'e' };
+    steps.push(s4);
+
+    let s5 = { tree: () => {
+      const r = new TNode('a');
+      r.left = new TNode('b'); r.left.parent = r;
+      r.left.right = new TNode('d'); r.left.right.parent = r.left;
+      r.right = new TNode('c'); r.right.parent = r;
+      r.right.left = new TNode('e'); r.right.left.parent = r.right;
+      r.right.right = new TNode('f'); r.right.right.parent = r.right;
+      return r;
+    }, line: 6, msg: 'c 的右邊掛上 f，完成', highlight: 'f' };
+    steps.push(s5);
+    return steps;
+  }
+
+  const steps = buildSteps();
+  let stepIdx = 0;
+  let timer = null;
+
+  function applyStep(i) {
+    const s = steps[i];
+    const root = s.tree();
+    layoutTree(root, canvas.clientWidth, canvas.clientHeight, 35, 35);
+    renderTree(canvas, root);
+    if (s.highlight) {
+      // find node with that key and mark
+      for (const n of allNodes(root)) {
+        if (n.key === s.highlight) {
+          setNodeClass(canvas, n.id, 'target');
+        }
+      }
+    }
+    hlLine($('nrCode'), s.line);
+    $('nrStatus').textContent = `Step ${i+1}/${steps.length}: ${s.msg}`;
+  }
+
+  function reset() {
+    if (timer) { clearTimeout(timer); timer = null; }
+    $('nrPlay').classList.remove('active');
+    $('nrPlay').textContent = '▶ 自動播放';
+    stepIdx = 0;
+    applyStep(0);
+  }
+
+  $('nrStep').onclick = () => {
+    if (stepIdx + 1 < steps.length) {
+      stepIdx++;
+      applyStep(stepIdx);
+    }
+  };
+
+  $('nrReset').onclick = reset;
+
+  $('nrPlay').onclick = () => {
+    if (timer) {
+      clearTimeout(timer); timer = null;
+      $('nrPlay').classList.remove('active');
+      $('nrPlay').textContent = '▶ 自動播放';
+      return;
+    }
+    if (stepIdx + 1 >= steps.length) reset();
+    $('nrPlay').classList.add('active');
+    $('nrPlay').textContent = '⏸ 暫停';
+    function tick() {
+      if (stepIdx + 1 < steps.length) {
+        stepIdx++;
+        applyStep(stepIdx);
+        timer = setTimeout(tick, 900);
+      } else {
+        timer = null;
+        $('nrPlay').classList.remove('active');
+        $('nrPlay').textContent = '▶ 自動播放';
+      }
+    }
+    timer = setTimeout(tick, 900);
+  };
+
+  reset();
+  _ensurePanelReady(canvas, () => applyStep(stepIdx));
+  return { resize: () => applyStep(stepIdx) };
+}
+
+/* ============================================================
+   PART 03 — PARSE TREE (build + evaluate)
+   ============================================================ */
+function initParseTree() {
+  const canvas = $('canvas-parse');
+  if (!canvas) return;
+
+  let currentTokens = [];
+  let player = null;
+
+  function tokenize(expr) {
+    return expr.trim().split(/\s+/).filter(t => t.length);
+  }
+
+  function genBuildSteps(tokens) {
+    /* Simulate the build_parse_tree algorithm and emit a
+       step for each token + intermediate state. */
+    const steps = [];
+    // We'll keep root as a TNode tree. Each node has a 'cur' marker.
+    const root = new TNode('');
+    let cur = root;
+    const stk = [root];
+    let nodeCounter = 0;
+    function snapshot(activeIdx, msg, highlightCur=true, finished=false, evalRes=null) {
+      // Deep copy tree structure with node ids preserved by serialization
+      // Simpler: each step keeps a reference to the same root (since we mutate);
+      // but for animation we need a "frame": serialize keys per id.
+      const frame = { activeIdx, msg, finished, evalRes };
+      // Snapshot: for each node id, record key
+      frame.keys = new Map();
+      frame.parents = new Map();
+      frame.struct = serializeTree(root);
+      frame.cur = cur ? cur.id : null;
+      frame.stk = stk.map(n => n.id);
+      steps.push(frame);
+    }
+    snapshot(-1, '初始化：空根節點，stack=[root]');
+
+    for (let i = 0; i < tokens.length; i++) {
+      const t = tokens[i];
+      if (t === '(') {
+        // insert_left then descend
+        cur.left = new TNode(''); cur.left.parent = cur;
+        stk.push(cur);
+        cur = cur.left;
+        snapshot(i, `'(': 新增 left child，下移；push parent (stack 深度=${stk.length})`);
+      } else if (['+','-','*','/'].includes(t)) {
+        cur.key = t;
+        cur.right = new TNode(''); cur.right.parent = cur;
+        stk.push(cur);
+        cur = cur.right;
+        snapshot(i, `'${t}': 設 root，新增 right child，下移；push parent`);
+      } else if (/^-?\d+$/.test(t)) {
+        cur.key = parseInt(t, 10);
+        const parent = stk.pop();
+        cur = parent;
+        snapshot(i, `'${t}': 設葉節點為數字，pop 回 parent`);
+      } else if (t === ')') {
+        cur = stk.pop();
+        snapshot(i, `')': pop 回 parent`);
+      }
+    }
+    snapshot(tokens.length, '建構完成', true, true);
+    // Compute evaluation
+    function evalT(n) {
+      if (n.left && n.right) {
+        const a = evalT(n.left), b = evalT(n.right);
+        switch(n.key) {
+          case '+': return a+b;
+          case '-': return a-b;
+          case '*': return a*b;
+          case '/': return a/b;
+        }
+      }
+      return n.key;
+    }
+    let evalResult = '—';
+    try { evalResult = evalT(root); } catch(e) {}
+    steps[steps.length-1].evalRes = evalResult;
+    return { steps, root };
+  }
+
+  function serializeTree(root) {
+    // Returns array of {id, key, left, right} representing the tree
+    const nodes = [];
+    function visit(n) {
+      if (!n) return null;
+      nodes.push({
+        id: n.id,
+        key: n.key,
+        leftId: n.left ? n.left.id : null,
+        rightId: n.right ? n.right.id : null,
+      });
+      visit(n.left); visit(n.right);
+    }
+    visit(root);
+    return { rootId: root ? root.id : null, nodes };
+  }
+
+  function applyFrame(frame) {
+    // Reconstruct tree from struct
+    const struct = frame.struct;
+    if (!struct) return;
+    const map = new Map();
+    for (const nd of struct.nodes) {
+      const n = new TNode(nd.key === '' ? '?' : nd.key);
+      n.id = nd.id;  // preserve id
+      map.set(nd.id, n);
+    }
+    for (const nd of struct.nodes) {
+      const n = map.get(nd.id);
+      if (nd.leftId != null) { n.left = map.get(nd.leftId); n.left.parent = n; }
+      if (nd.rightId != null) { n.right = map.get(nd.rightId); n.right.parent = n; }
+    }
+    const root = map.get(struct.rootId);
+    layoutTree(root, canvas.clientWidth, canvas.clientHeight, 35, 35);
+    renderTree(canvas, root);
+
+    // Highlight cur
+    if (frame.cur != null) setNodeClass(canvas, frame.cur, 'current');
+
+    // Update side panel
+    $('parseTok').textContent = frame.activeIdx >= 0 && frame.activeIdx < currentTokens.length ?
+      currentTokens[frame.activeIdx] : '—';
+    $('parseCur').textContent = (frame.cur != null) ? (map.get(frame.cur).key || '?') : '—';
+    $('parseStackD').textContent = frame.stk.length;
+    $('parseResult').textContent = frame.finished ? frame.evalRes : '—';
+
+    // Tokens strip
+    const tokEl = $('parseTokens');
+    tokEl.innerHTML = '';
+    currentTokens.forEach((t, i) => {
+      const sp = document.createElement('span');
+      sp.className = 'token' + (i === frame.activeIdx ? ' active' : '') +
+                     (i < frame.activeIdx ? ' done' : '');
+      sp.textContent = t;
+      tokEl.appendChild(sp);
+    });
+
+    // Stack
+    const stkEl = $('parseStack');
+    stkEl.innerHTML = '<div class="stack-label">parent ↓</div>';
+    frame.stk.forEach((id, i) => {
+      const fr = document.createElement('div');
+      fr.className = 'stack-frame' + (i === frame.stk.length - 1 ? ' top' : '');
+      const node = map.get(id);
+      fr.textContent = `[${i}] ${node ? (node.key === '?' ? '_' : node.key) : '_'}`;
+      stkEl.appendChild(fr);
+    });
+
+    $('parseStatus').textContent = frame.msg;
+  }
+
+  function regen() {
+    const expr = $('parseInput').value;
+    currentTokens = tokenize(expr);
+    const { steps } = genBuildSteps(currentTokens);
+    if (player) player.stop();
+    player = new Player({
+      steps,
+      apply: (frame) => applyFrame(frame),
+      delay: parseInt($('parseSpeed').value, 10),
+    });
+    player.reset();
+  }
+
+  $('parseApply').onclick = regen;
+  $('parseInput').addEventListener('change', regen);
+  document.querySelectorAll('#parse-tree .preset-btn[data-expr]').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('#parse-tree .preset-btn[data-expr]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      $('parseInput').value = btn.dataset.expr;
+      regen();
+    };
+  });
+  $('parsePlay').onclick = () => { if (player) player.play(); };
+  $('parseStep').onclick = () => { if (player) player.step(); };
+  $('parseReset').onclick = () => { if (player) player.reset(); };
+  $('parseSpeed').addEventListener('input', () => {
+    if (player) player.setDelay(parseInt($('parseSpeed').value, 10));
+  });
+  $('parseEvalBtn').onclick = () => {
+    // jump to last step
+    if (player) {
+      player.stop();
+      while (player.step()) {}
+    }
+  };
+
+  regen();
+  _ensurePanelReady(canvas, () => {
+    if (player && player.steps && player.steps[player.idx]) {
+      player.apply(player.steps[player.idx], player.idx);
+    } else regen();
+  });
+  return { resize: regen };
+}
+
+/* ============================================================
+   PART 04 — TREE TRAVERSALS
+   ============================================================ */
+function initTraversals() {
+  const canvas = $('canvas-trav');
+  if (!canvas) return;
+
+  // Three sample trees
+  const trees = {
+    parse: () => {
+      // (3 + (4 * 5))
+      const r = new TNode('+');
+      r.left = new TNode(3); r.left.parent = r;
+      r.right = new TNode('*'); r.right.parent = r;
+      r.right.left = new TNode(4); r.right.left.parent = r.right;
+      r.right.right = new TNode(5); r.right.right.parent = r.right;
+      return r;
+    },
+    bst: () => {
+      const r = new TNode(50);
+      r.left = new TNode(30); r.left.parent = r;
+      r.right = new TNode(70); r.right.parent = r;
+      r.left.left = new TNode(20); r.left.left.parent = r.left;
+      r.left.right = new TNode(40); r.left.right.parent = r.left;
+      r.right.right = new TNode(80); r.right.right.parent = r.right;
+      return r;
+    },
+    balanced: () => {
+      const arr = ['F','B','A',null,null,'D','C',null,null,'E',null,null,'G',null,'H',null,null];
+      return buildFromArr(arr);
+    }
+  };
+
+  let currentTree = trees.parse();
+  let currentTrav = 'preorder';
+  let player = null;
+
+  function genTraversalSteps(root, kind) {
+    const steps = [];
+    const callStack = [];
+    const output = [];
+    function visit(n, depth) {
+      if (!n) return;
+      callStack.push(n.key);
+      steps.push({ active: n.id, callStack: [...callStack], output: [...output], phase: 'enter', msg: `進入 ${n.key}（深度 ${depth}）` });
+      if (kind === 'preorder') {
+        output.push(n.key);
+        steps.push({ active: n.id, callStack: [...callStack], output: [...output], phase: 'visit', msg: `visit ${n.key}` });
+      }
+      visit(n.left, depth+1);
+      if (kind === 'inorder') {
+        output.push(n.key);
+        steps.push({ active: n.id, callStack: [...callStack], output: [...output], phase: 'visit', msg: `visit ${n.key}` });
+      }
+      visit(n.right, depth+1);
+      if (kind === 'postorder') {
+        output.push(n.key);
+        steps.push({ active: n.id, callStack: [...callStack], output: [...output], phase: 'visit', msg: `visit ${n.key}` });
+      }
+      callStack.pop();
+      steps.push({ active: n.id, callStack: [...callStack], output: [...output], phase: 'exit', visited: true, msg: `離開 ${n.key}` });
+    }
+    visit(root, 0);
+    steps.push({ active: null, callStack: [], output: [...output], phase: 'done', msg: `${kind} 完成` });
+    return steps;
+  }
+
+  function applyFrame(frame) {
+    // Clear
+    canvas.querySelectorAll('.t-node').forEach(el => el.classList.remove('active','visited','target'));
+    // Mark visited (any node whose key already in output)
+    const outputSet = new Set(frame.output);
+    for (const n of allNodes(currentTree)) {
+      if (outputSet.has(n.key)) setNodeClass(canvas, n.id, 'visited');
+    }
+    if (frame.active != null) {
+      setNodeClass(canvas, frame.active, frame.phase === 'visit' ? 'target' : 'active');
+    }
+    // Output strip
+    const out = $('travOutput');
+    if (frame.output.length === 0) {
+      out.innerHTML = '<span style="color:rgba(255,255,255,.4)">尚未訪問任何節點</span>';
+    } else {
+      out.innerHTML = frame.output.map(k => `<span class="out-key">${k}</span>`).join('');
+    }
+    // Stack
+    const stkEl = $('travStack');
+    stkEl.innerHTML = '<div class="stack-label">call stack ↓</div>';
+    frame.callStack.forEach((k, i) => {
+      const fr = document.createElement('div');
+      fr.className = 'stack-frame' + (i === frame.callStack.length - 1 ? ' top' : '');
+      fr.textContent = `${currentTrav}(${k})`;
+      stkEl.appendChild(fr);
+    });
+    $('travStatus').textContent = frame.msg;
+  }
+
+  function regen() {
+    layoutTree(currentTree, canvas.clientWidth, canvas.clientHeight, 35, 35);
+    renderTree(canvas, currentTree);
+    const steps = genTraversalSteps(currentTree, currentTrav);
+    if (player) player.stop();
+    player = new Player({
+      steps,
+      apply: applyFrame,
+      delay: parseInt($('travSpeed').value, 10),
+    });
+    player.reset();
+    // Update code panel to match traversal
+    const codeMap = {
+      preorder: `<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">preorder</span>(tree):</span>
+<span class="line" data-l="2">    <span class="kw">if</span> tree:</span>
+<span class="line" data-l="3">        <span class="fn">visit</span>(tree.key)   <span class="com"># root</span></span>
+<span class="line" data-l="4">        <span class="fn">preorder</span>(tree.left)</span>
+<span class="line" data-l="5">        <span class="fn">preorder</span>(tree.right)</span>`,
+      inorder: `<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">inorder</span>(tree):</span>
+<span class="line" data-l="2">    <span class="kw">if</span> tree:</span>
+<span class="line" data-l="3">        <span class="fn">inorder</span>(tree.left)</span>
+<span class="line" data-l="4">        <span class="fn">visit</span>(tree.key)   <span class="com"># root</span></span>
+<span class="line" data-l="5">        <span class="fn">inorder</span>(tree.right)</span>`,
+      postorder: `<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">postorder</span>(tree):</span>
+<span class="line" data-l="2">    <span class="kw">if</span> tree:</span>
+<span class="line" data-l="3">        <span class="fn">postorder</span>(tree.left)</span>
+<span class="line" data-l="4">        <span class="fn">postorder</span>(tree.right)</span>
+<span class="line" data-l="5">        <span class="fn">visit</span>(tree.key)   <span class="com"># root</span></span>`,
+    };
+    $('travCode').innerHTML = codeMap[currentTrav];
+  }
+
+  function relayoutCurrentFrame() {
+    const w = canvas.clientWidth || 600;
+    const h = canvas.clientHeight || parseInt(canvas.style.height, 10) || 280;
+    layoutTree(currentTree, w, h, 35, 35);
+    renderTree(canvas, currentTree);
+    if (player && player.steps && player.steps[player.idx]) {
+      applyFrame(player.steps[player.idx], player.idx);
+    }
+  }
+
+  document.querySelectorAll('#traversals .preset-btn[data-trav]').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('#traversals .preset-btn[data-trav]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentTrav = btn.dataset.trav;
+      regen();
+    };
+  });
+  document.querySelectorAll('#traversals .preset-btn[data-tree]').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('#traversals .preset-btn[data-tree]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentTree = trees[btn.dataset.tree]();
+      regen();
+    };
+  });
+  $('travPlay').onclick = () => { if (player) player.play(); };
+  $('travStep').onclick = () => { if (player) player.step(); };
+  $('travReset').onclick = () => { if (player) player.reset(); };
+  $('travSpeed').addEventListener('input', () => {
+    if (player) player.setDelay(parseInt($('travSpeed').value, 10));
+  });
+
+  regen();
+  _ensurePanelReady(canvas, () => {
+    if (player && player.steps && player.steps[player.idx]) {
+      relayoutCurrentFrame();
+    } else regen();
+  });
+  return { resize: regen };
+}
+
+/* ============================================================
+   PART 05 — BINARY HEAP
+   ============================================================ */
+function initHeap() {
+  const canvas = $('canvas-heap');
+  if (!canvas) return;
+  const listEl = $('heapList');
+
+  let heapArr = [3, 5, 9, 7, 11, 15, 14];
+  let currentOp = 'insert';
+  let player = null;
+  let stats = { swap: 0, cmp: 0 };
+
+  // Build a TNode tree from heap array (parallel structure for visualization)
+  function arrToTree(arr) {
+    if (arr.length === 0) return null;
+    const nodes = arr.map(k => new TNode(k));
+    for (let i = 0; i < arr.length; i++) {
+      const li = 2*i + 1, ri = 2*i + 2;
+      if (li < arr.length) { nodes[i].left = nodes[li]; nodes[li].parent = nodes[i]; }
+      if (ri < arr.length) { nodes[i].right = nodes[ri]; nodes[ri].parent = nodes[i]; }
+    }
+    return nodes[0];
+  }
+
+  function renderHeapBoth(arr, hl) {
+    hl = hl || {};
+    const root = arrToTree(arr);
+    const w = canvas.clientWidth || 600;
+    const h = parseInt(canvas.style.height) || 280;
+    if (root) {
+      layoutTree(root, w, h, 36, 36);
+      renderTree(canvas, root);
+      // Apply highlights based on array index
+      const allTNodes = [];
+      (function walk(n){ if(!n) return; allTNodes.push(n); walk(n.left); walk(n.right); })(root);
+      // The order in allTNodes is preorder, but our nodes were created in array order
+      // Re-grab by index using the original index of creation
+      arr.forEach((_, i) => {
+        const el = canvas.querySelectorAll('.t-node')[i];
+        if (!el) return;
+        if (hl.active === i) el.classList.add('active');
+        if (hl.parent === i) el.classList.add('parent-hl');
+        if (hl.swap && hl.swap.includes(i)) el.classList.add('current');
+      });
+    } else {
+      renderTree(canvas, null);
+    }
+
+    // Render array list
+    listEl.innerHTML = '';
+    arr.forEach((k, i) => {
+      const cell = document.createElement('div');
+      cell.className = 'heap-cell';
+      cell.innerHTML = `<span class="cell-idx">${i}</span>${k}`;
+      if (hl.active === i) cell.classList.add('active');
+      if (hl.parent === i) cell.classList.add('parent');
+      if (hl.swap && hl.swap.includes(i)) cell.classList.add('swap');
+      listEl.appendChild(cell);
+    });
+  }
+
+  // Re-render relying on creation order: rebuild the tree so nodes-layer order matches array index
+  function renderHeap(arr, hl) {
+    hl = hl || {};
+    TNode._id = 0;
+    const root = arrToTree(arr);
+    const w = canvas.clientWidth || 600;
+    const h = parseInt(canvas.style.height) || 280;
+    if (root) layoutTree(root, w, h, 36, 36);
+
+    const nodesLayer = canvas.querySelector('.nodes-layer');
+    const svg = canvas.querySelector('svg');
+    nodesLayer.innerHTML = '';
+    svg.innerHTML = '';
+
+    // Build node DOMs in array order
+    const nodeEls = [];
+    arr.forEach((k, i) => {
+      const div = document.createElement('div');
+      div.className = 't-node';
+      div.style.left = '0px';
+      div.style.top = '0px';
+      div.textContent = k;
+      nodeEls.push(div);
+      nodesLayer.appendChild(div);
+    });
+    // Now position by walking tree (mapping order: BFS = array order)
+    if (root) {
+      // Use BFS to map index -> tnode
+      const q = [root]; const tnodes = [];
+      while (q.length) { const n = q.shift(); tnodes.push(n); if (n.left) q.push(n.left); if (n.right) q.push(n.right); }
+      tnodes.forEach((n, i) => {
+        nodeEls[i].style.left = n.x + 'px';
+        nodeEls[i].style.top = n.y + 'px';
+      });
+      // Edges
+      tnodes.forEach((n, i) => {
+        const li = 2*i+1, ri = 2*i+2;
+        for (const ci of [li, ri]) {
+          if (ci >= tnodes.length) continue;
+          const child = tnodes[ci];
+          const ln = document.createElementNS(SVG_NS, 'line');
+          ln.setAttribute('x1', n.x); ln.setAttribute('y1', n.y);
+          ln.setAttribute('x2', child.x); ln.setAttribute('y2', child.y);
+          ln.setAttribute('class', 't-edge');
+          if (hl.activeEdge && hl.activeEdge[0]===i && hl.activeEdge[1]===ci) ln.classList.add('active');
+          svg.appendChild(ln);
+        }
+      });
+    }
+
+    // Highlights
+    arr.forEach((_, i) => {
+      const el = nodeEls[i]; if (!el) return;
+      if (hl.active === i) el.classList.add('active');
+      if (hl.parent === i) el.classList.add('parent-hl');
+      if (hl.swap && hl.swap.includes(i)) el.classList.add('current');
+      if (hl.fixed && hl.fixed.includes(i)) el.classList.add('visited');
+    });
+
+    listEl.innerHTML = '';
+    arr.forEach((k, i) => {
+      const cell = document.createElement('div');
+      cell.className = 'heap-cell';
+      cell.innerHTML = `<span class="cell-idx">${i}</span>${k}`;
+      if (hl.active === i) cell.classList.add('active');
+      if (hl.parent === i) cell.classList.add('parent');
+      if (hl.swap && hl.swap.includes(i)) cell.classList.add('swap');
+      if (hl.fixed && hl.fixed.includes(i)) cell.classList.add('sorted');
+      listEl.appendChild(cell);
+    });
+  }
+
+  // Generate steps for percolate up from index i
+  function genPercUp(arr, startI) {
+    const a = arr.slice();
+    const steps = [];
+    let i = startI;
+    let swapCnt = 0, cmpCnt = 0;
+    steps.push({arr:a.slice(), hl:{active:i}, status:`插入新元素 ${a[i]} 到位置 ${i}（最後）`, line:1, swap:swapCnt, cmp:cmpCnt, idx:i, par:i>0?Math.floor((i-1)/2):'—'});
+    while (Math.floor((i-1)/2) >= 0 && i > 0) {
+      const p = Math.floor((i-1)/2);
+      cmpCnt++;
+      steps.push({arr:a.slice(), hl:{active:i, parent:p}, status:`比較 heap[${i}]=${a[i]} 與 parent heap[${p}]=${a[p]}`, line:4, swap:swapCnt, cmp:cmpCnt, idx:i, par:p});
+      if (a[i] < a[p]) {
+        [a[i], a[p]] = [a[p], a[i]];
+        swapCnt++;
+        steps.push({arr:a.slice(), hl:{swap:[i,p]}, status:`heap[${i}] < heap[${p}]，交換`, line:5, swap:swapCnt, cmp:cmpCnt, idx:p, par:p>0?Math.floor((p-1)/2):'—'});
+        i = p;
+      } else {
+        steps.push({arr:a.slice(), hl:{active:i}, status:`heap[${i}] ≥ heap[${p}]，停止`, line:4, swap:swapCnt, cmp:cmpCnt, idx:i, par:p});
+        break;
+      }
+    }
+    steps.push({arr:a.slice(), hl:{}, status:'插入完成 ✓', line:null, swap:swapCnt, cmp:cmpCnt, idx:'—', par:'—', commit:true, finalArr:a.slice()});
+    return steps;
+  }
+
+  function genPercDown(arr, startI, endI, baseSwap, baseCmp) {
+    const a = arr.slice();
+    const steps = [];
+    let i = startI;
+    let swapCnt = baseSwap || 0, cmpCnt = baseCmp || 0;
+    while (2*i + 1 <= endI) {
+      const li = 2*i + 1, ri = 2*i + 2;
+      let mc = li;
+      if (ri <= endI) {
+        cmpCnt++;
+        if (a[ri] < a[li]) mc = ri;
+      }
+      steps.push({arr:a.slice(), hl:{active:i, parent:mc}, status:`找出 heap[${i}]=${a[i]} 的較小子節點：heap[${mc}]=${a[mc]}`, line:null, swap:swapCnt, cmp:cmpCnt, idx:i, par:mc});
+      cmpCnt++;
+      if (a[i] > a[mc]) {
+        [a[i], a[mc]] = [a[mc], a[i]];
+        swapCnt++;
+        steps.push({arr:a.slice(), hl:{swap:[i,mc]}, status:`heap[${i}] > heap[${mc}]，下沉`, line:null, swap:swapCnt, cmp:cmpCnt, idx:mc, par:i});
+        i = mc;
+      } else {
+        steps.push({arr:a.slice(), hl:{active:i}, status:`heap 性質已滿足，停止`, line:null, swap:swapCnt, cmp:cmpCnt, idx:i, par:mc});
+        break;
+      }
+    }
+    return { steps, finalArr: a, swapCnt, cmpCnt };
+  }
+
+  function genInsertSteps(arr, key) {
+    const a = arr.concat([key]);
+    return genPercUp(a, a.length - 1);
+  }
+
+  function genDeleteSteps(arr) {
+    if (arr.length === 0) return [{arr:[], hl:{}, status:'空 heap，無法 delete', line:null, swap:0, cmp:0, idx:'—', par:'—', commit:true, finalArr:[]}];
+    const a = arr.slice();
+    const steps = [];
+    steps.push({arr:a.slice(), hl:{active:0}, status:`記下 root = ${a[0]}（min 值）`, line:null, swap:0, cmp:0, idx:0, par:'—'});
+    const last = a.length - 1;
+    if (last === 0) {
+      a.pop();
+      steps.push({arr:a.slice(), hl:{}, status:'只有一個元素，移除即可 ✓', line:null, swap:0, cmp:0, idx:'—', par:'—', commit:true, finalArr:[]});
+      return steps;
+    }
+    steps.push({arr:a.slice(), hl:{swap:[0,last]}, status:`把最後元素 heap[${last}]=${a[last]} 換到 root`, line:null, swap:1, cmp:0, idx:last, par:0});
+    [a[0], a[last]] = [a[last], a[0]];
+    steps.push({arr:a.slice(), hl:{active:0}, status:`移除原 root（現在在最後位置）`, line:null, swap:1, cmp:0, idx:0, par:'—'});
+    a.pop();
+    steps.push({arr:a.slice(), hl:{active:0}, status:'對 root 做 perc_down 修復 heap 性質', line:null, swap:1, cmp:0, idx:0, par:'—'});
+    const r = genPercDown(a, 0, a.length-1, 1, 0);
+    steps.push(...r.steps);
+    steps.push({arr:r.finalArr.slice(), hl:{}, status:'delete-min 完成 ✓', line:null, swap:r.swapCnt, cmp:r.cmpCnt, idx:'—', par:'—', commit:true, finalArr:r.finalArr.slice()});
+    return steps;
+  }
+
+  function genHeapifySteps(arr) {
+    const a = arr.slice();
+    const steps = [];
+    const start = Math.floor(a.length / 2) - 1;
+    steps.push({arr:a.slice(), hl:{}, status:`從中間 i = ⌊n/2⌋ - 1 = ${start} 開始倒著做 perc_down`, line:null, swap:0, cmp:0, idx:start, par:'—'});
+    let totalSwap = 0, totalCmp = 0;
+    let cur = a.slice();
+    const fixed = [];
+    for (let i = start; i >= 0; i--) {
+      steps.push({arr:cur.slice(), hl:{active:i, fixed:fixed.slice()}, status:`對 heap[${i}]=${cur[i]} 做 perc_down`, line:null, swap:totalSwap, cmp:totalCmp, idx:i, par:'—'});
+      const r = genPercDown(cur, i, cur.length-1, totalSwap, totalCmp);
+      // Inject fixed indices into each step
+      r.steps.forEach(s => {
+        s.hl = Object.assign({}, s.hl, {fixed: fixed.slice()});
+        steps.push(s);
+      });
+      cur = r.finalArr;
+      totalSwap = r.swapCnt;
+      totalCmp = r.cmpCnt;
+      fixed.push(i);
+    }
+    steps.push({arr:cur.slice(), hl:{fixed:cur.map((_,i)=>i)}, status:'heapify 完成，整棵樹滿足 heap 性質 ✓', line:null, swap:totalSwap, cmp:totalCmp, idx:'—', par:'—', commit:true, finalArr:cur.slice()});
+    return steps;
+  }
+
+  function applyStep(s) {
+    renderHeap(s.arr, s.hl || {});
+    setText($('heapStatus'), s.status || '');
+    setText($('heapSwap'), s.swap);
+    setText($('heapCmp'), s.cmp);
+    setText($('heapIdx'), s.idx);
+    setText($('heapPar'), s.par);
+    hlLine($('heapCode'), s.line);
+    if (s.commit && s.finalArr) {
+      heapArr = s.finalArr.slice();
+      $('heapArrInput').value = heapArr.join(', ');
+    }
+  }
+
+  function regen(steps) {
+    if (player) player.stop();
+    player = new Player({
+      steps,
+      apply: applyStep,
+      delay: parseInt($('heapSpeed').value, 10)
+    });
+    player.reset();
+  }
+
+  function startOp() {
+    if (currentOp === 'insert') {
+      const k = parseInt($('heapInsertKey').value, 10);
+      if (isNaN(k)) return;
+      regen(genInsertSteps(heapArr, k));
+    } else if (currentOp === 'delete') {
+      regen(genDeleteSteps(heapArr));
+    } else if (currentOp === 'heapify') {
+      // Use the input array as-is (unsorted)
+      const raw = $('heapArrInput').value.split(/[\s,]+/).map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
+      heapArr = raw;
+      regen(genHeapifySteps(raw));
+    }
+  }
+
+  // Wire up controls
+  document.querySelectorAll('#heap .preset-btn[data-op]').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('#heap .preset-btn[data-op]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentOp = btn.dataset.op;
+      $('heapStatus').textContent = currentOp === 'insert' ? '輸入 key 後按「插入」或「開始」' :
+                                     currentOp === 'delete' ? '按「開始」執行 delete-min' :
+                                     '陣列當作未排序輸入，按「開始」做 heapify';
+    };
+  });
+
+  $('heapInsertBtn').onclick = startOp;
+  $('heapApplyArr').onclick = () => {
+    const raw = $('heapArrInput').value.split(/[\s,]+/).map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
+    heapArr = raw;
+    renderHeap(heapArr, {});
+    $('heapStatus').textContent = '已套用陣列。若要 heapify 修復，選擇「Heapify」並按「開始」';
+  };
+  $('heapPlay').onclick = () => {
+    if (player && player.idx > 0 && player.idx < player.steps.length - 1) {
+      player.play();
+    } else {
+      startOp();
+      if (player) player.play();
+    }
+  };
+  $('heapStep').onclick = () => {
+    if (!player || player.idx >= player.steps.length - 1) startOp();
+    else player.step();
+  };
+  $('heapReset').onclick = () => {
+    if (player) player.stop();
+    heapArr = $('heapArrInput').value.split(/[\s,]+/).map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
+    renderHeap(heapArr, {});
+    setText($('heapStatus'), '已重置。');
+    setText($('heapSwap'), '0'); setText($('heapCmp'), '0');
+    setText($('heapIdx'), '—'); setText($('heapPar'), '—');
+    hlLine($('heapCode'), null);
+  };
+  $('heapSpeed').addEventListener('input', () => {
+    if (player) player.setDelay(parseInt($('heapSpeed').value, 10));
+  });
+
+  renderHeap(heapArr, {});
+  _ensurePanelReady(canvas, () => {
+    if (player && player.steps && player.steps[player.idx]) {
+      player.apply(player.steps[player.idx], player.idx);
+    } else renderHeap(heapArr, {});
+  });
+  return { resize: () => renderHeap(heapArr, {}) };
+}
+
+/* ============================================================
+   PART 06 — BINARY SEARCH TREE (BST)
+   ============================================================ */
+function initBST() {
+  const canvas = $('canvas-bst');
+  if (!canvas) return;
+
+  let root = null;
+  let player = null;
+
+  // Pseudo-code variants for put vs get; line numbers in genOpSteps refer to these.
+  const codeTemplates = {
+    put: {
+      title: '虛擬碼 — _put <span class="ic-badge" style="background:var(--accent2)">CODE</span>',
+      html: '<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_put</span>(key, val, cur):</span>\n' +
+            '<span class="line" data-l="2">    <span class="kw">if</span> key &lt; cur.key:</span>\n' +
+            '<span class="line" data-l="3">        <span class="kw">if</span> cur.left:</span>\n' +
+            '<span class="line" data-l="4">            <span class="fn">_put</span>(key, val, cur.left)</span>\n' +
+            '<span class="line" data-l="5">        <span class="kw">else</span>:</span>\n' +
+            '<span class="line" data-l="6">            cur.left = <span class="fn">TreeNode</span>(key, val)</span>\n' +
+            '<span class="line" data-l="7">    <span class="kw">else</span>:</span>\n' +
+            '<span class="line" data-l="8">        <span class="kw">if</span> cur.right:</span>\n' +
+            '<span class="line" data-l="9">            <span class="fn">_put</span>(key, val, cur.right)</span>\n' +
+            '<span class="line" data-l="10">        <span class="kw">else</span>:</span>\n' +
+            '<span class="line" data-l="11">            cur.right = <span class="fn">TreeNode</span>(key, val)</span>'
+    },
+    get: {
+      title: '虛擬碼 — _get <span class="ic-badge" style="background:var(--accent2)">CODE</span>',
+      html: '<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">_get</span>(key, cur):</span>\n' +
+            '<span class="line" data-l="2">    <span class="kw">if not</span> cur: <span class="kw">return None</span></span>\n' +
+            '<span class="line" data-l="3">    <span class="kw">if</span> cur.key == key:</span>\n' +
+            '<span class="line" data-l="4">        <span class="kw">return</span> cur</span>\n' +
+            '<span class="line" data-l="5">    <span class="kw">elif</span> key &lt; cur.key:</span>\n' +
+            '<span class="line" data-l="6">        <span class="kw">return</span> <span class="fn">_get</span>(key, cur.left)</span>\n' +
+            '<span class="line" data-l="7">    <span class="kw">else</span>:</span>\n' +
+            '<span class="line" data-l="8">        <span class="kw">return</span> <span class="fn">_get</span>(key, cur.right)</span>'
+    }
+  };
+
+  function setCodePanel(opName) {
+    const tpl = codeTemplates[opName] || codeTemplates.put;
+    $('bstCodeTitle').innerHTML = tpl.title;
+    $('bstCode').innerHTML = tpl.html;
+  }
+
+  function bstInsert(r, key) {
+    if (!r) return new TNode(key);
+    if (key === r.key) return r;
+    if (key < r.key) {
+      r.left = bstInsert(r.left, key);
+      r.left.parent = r;
+    } else {
+      r.right = bstInsert(r.right, key);
+      r.right.parent = r;
+    }
+    return r;
+  }
+
+  function buildBST(keys) {
+    let r = null;
+    for (const k of keys) r = bstInsert(r, k);
+    return r;
+  }
+
+  function render(hlPath, currentNode, status) {
+    const w = canvas.clientWidth || 600;
+    const h = parseInt(canvas.style.height) || 380;
+    if (root) layoutTree(root, w, h, 38, 36);
+    renderTree(canvas, root);
+    clearHL(canvas);
+    if (hlPath) {
+      hlPath.forEach(n => {
+        if (n) setNodeClass(canvas, n.id, 'path');
+      });
+      // Edges along path
+      for (let i = 0; i < hlPath.length - 1; i++) {
+        if (hlPath[i] && hlPath[i+1]) {
+          setEdgeClass(canvas, hlPath[i].id, hlPath[i+1].id, 'path');
+        }
+      }
+    }
+    if (currentNode) setNodeClass(canvas, currentNode.id, 'current');
+    if (status != null) setText($('bstStatus'), status);
+    setText($('bstHeight'), treeHeight(root));
+    setText($('bstSize'), nodeCount(root));
+  }
+
+  // Generate steps for a put or get operation
+  // Line-number maps for the two pseudo-code templates
+  const lineMap = {
+    put: { visitLT: 2, visitGTE: 7, goLeft: 4, goRight: 9, insert_left: 6, insert_right: 11, foundEq: null, notFound: null },
+    get: { visitLT: 5, visitGTE: 7, goLeft: 6, goRight: 8, insert_left: null, insert_right: null, foundEq: 4, notFound: 2 }
+  };
+
+  function genOpSteps(op, key) {
+    const L = lineMap[op] || lineMap.put;
+    const steps = [];
+    if (!root) {
+      if (op === 'put') {
+        steps.push({type:'init-empty', key, status:`空樹，建立 root = ${key}`, line:null});
+        steps.push({type:'commit-root', key, status:`插入完成 ✓`, line:null});
+      } else {
+        steps.push({type:'noop', status:`空樹，找不到 ${key}`, result:'NOT FOUND', line:L.notFound});
+      }
+      return steps;
+    }
+    let cur = root;
+    const path = [];
+    let cmp = 0;
+    while (cur) {
+      path.push(cur);
+      cmp++;
+      steps.push({type:'visit', node:cur, path:path.slice(), status:`比較 key=${key} 與 ${cur.key}`, line: key < cur.key ? L.visitLT : L.visitGTE, cmp});
+      if (key === cur.key) {
+        if (op === 'get') {
+          steps.push({type:'found', node:cur, path:path.slice(), status:`找到 ${key} ✓`, line:L.foundEq, result:'FOUND', cmp});
+        } else {
+          steps.push({type:'dup', node:cur, path:path.slice(), status:`key=${key} 已存在，更新 value（不改結構）`, line:null, cmp});
+        }
+        return steps;
+      }
+      if (key < cur.key) {
+        if (cur.left) {
+          steps.push({type:'go-left', node:cur, path:path.slice(), status:`${key} < ${cur.key}，往左`, line:L.goLeft, cmp});
+          cur = cur.left;
+        } else {
+          if (op === 'put') {
+            steps.push({type:'insert-left', node:cur, path:path.slice(), key, status:`${key} < ${cur.key} 且 left 為空，插入為左子`, line:L.insert_left, cmp});
+            steps.push({type:'commit', node:cur, path:path.slice(), key, side:'left', status:`插入 ${key} 完成 ✓`, line:null, cmp});
+          } else {
+            steps.push({type:'not-found', node:cur, path:path.slice(), status:`${key} 不在樹中`, line:L.notFound, result:'NOT FOUND', cmp});
+          }
+          return steps;
+        }
+      } else {
+        if (cur.right) {
+          steps.push({type:'go-right', node:cur, path:path.slice(), status:`${key} > ${cur.key}，往右`, line:L.goRight, cmp});
+          cur = cur.right;
+        } else {
+          if (op === 'put') {
+            steps.push({type:'insert-right', node:cur, path:path.slice(), key, status:`${key} > ${cur.key} 且 right 為空，插入為右子`, line:L.insert_right, cmp});
+            steps.push({type:'commit', node:cur, path:path.slice(), key, side:'right', status:`插入 ${key} 完成 ✓`, line:null, cmp});
+          } else {
+            steps.push({type:'not-found', node:cur, path:path.slice(), status:`${key} 不在樹中`, line:L.notFound, result:'NOT FOUND', cmp});
+          }
+          return steps;
+        }
+      }
+    }
+    return steps;
+  }
+
+  function applyStep(s) {
+    if (s.type === 'commit-root') {
+      root = new TNode(s.key);
+      render(null, null, s.status);
+    } else if (s.type === 'commit') {
+      const newN = new TNode(s.key);
+      newN.parent = s.node;
+      if (s.side === 'left') s.node.left = newN; else s.node.right = newN;
+      render(s.path.concat([newN]), newN, s.status);
+    } else if (s.type === 'init-empty') {
+      setText($('bstStatus'), s.status);
+    } else {
+      render(s.path || null, s.node || null, s.status);
+    }
+    if (s.cmp != null) setText($('bstCmp'), s.cmp);
+    if (s.node) setText($('bstCur'), s.node.key);
+    if (s.result) setText($('bstResult'), s.result);
+    hlLine($('bstCode'), s.line);
+  }
+
+  function startOp(op, key) {
+    setCodePanel(op);
+    setText($('bstOpName'), op === 'put' ? `put(${key})` : `get(${key})`);
+    setText($('bstResult'), '—');
+    setText($('bstCmp'), '0');
+    if (player) player.stop();
+    const steps = genOpSteps(op, key);
+    player = new Player({
+      steps,
+      apply: applyStep,
+      delay: parseInt($('bstSpeed').value, 10)
+    });
+    player.reset();
+    player.play();
+  }
+
+  function rebuild() {
+    const raw = $('bstInitInput').value.split(/[\s,]+/).map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
+    root = buildBST(raw);
+    render(null, null, `已建立 BST（${raw.length} 個 keys）`);
+    setText($('bstOpName'), '—');
+    setText($('bstResult'), '—');
+    setText($('bstCmp'), '0');
+    setText($('bstCur'), '—');
+    hlLine($('bstCode'), null);
+  }
+
+  // Wire
+  document.querySelectorAll('#bst button[data-bstop]').forEach(btn => {
+    btn.onclick = () => {
+      const k = parseInt($('bstOpKey').value, 10);
+      if (isNaN(k)) return;
+      startOp(btn.dataset.bstop, k);
+    };
+  });
+  $('bstApplyInit').onclick = rebuild;
+  $('bstShuffle').onclick = () => {
+    const arr = $('bstInitInput').value.split(/[\s,]+/).map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random()*(i+1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    $('bstInitInput').value = arr.join(', ');
+    rebuild();
+  };
+  $('bstStep').onclick = () => { if (player) player.step(); };
+  $('bstReset').onclick = rebuild;
+  $('bstSpeed').addEventListener('input', () => {
+    if (player) player.setDelay(parseInt($('bstSpeed').value, 10));
+  });
+
+  rebuild();
+  _ensurePanelReady(canvas, () => {
+    // Do not replay commit / commit-root frames here: they create TNode and mutate root.
+    if (player && player.steps && player.steps[player.idx]) {
+      const s = player.steps[player.idx];
+      if (s.type === 'commit' && s.node && s.side) {
+        const child = s.node[s.side];
+        render(child ? s.path.concat([child]) : s.path, child || s.node, s.status ?? null);
+      } else {
+        render(s.path || null, s.node || null, s.status ?? null);
+      }
+    } else render(null, null, null);
+  });
+  return { resize: () => render(null, null, null) };
+}
+
+/* ============================================================
+   PART 07 — BST DELETE (three cases)
+   ============================================================ */
+function initBSTDelete() {
+  const canvas = $('canvas-bstdel');
+  if (!canvas) return;
+
+  let root = null;
+  let player = null;
+
+  function bstInsert(r, key) {
+    if (!r) return new TNode(key);
+    if (key === r.key) return r;
+    if (key < r.key) { r.left = bstInsert(r.left, key); r.left.parent = r; }
+    else { r.right = bstInsert(r.right, key); r.right.parent = r; }
+    return r;
+  }
+  function buildBST(keys) { let r=null; for (const k of keys) r = bstInsert(r, k); return r; }
+
+  function findMin(n) { while (n.left) n = n.left; return n; }
+
+  function findNode(r, key) {
+    let cur = r; const path = [];
+    while (cur) {
+      path.push(cur);
+      if (key === cur.key) return { node: cur, path };
+      cur = key < cur.key ? cur.left : cur.right;
+    }
+    return { node: null, path };
+  }
+
+  function classifyCase(node) {
+    if (!node.left && !node.right) return 1;
+    if (!node.left || !node.right) return 2;
+    return 3;
+  }
+
+  function render(hl) {
+    hl = hl || {};
+    const w = canvas.clientWidth || 600;
+    const h = parseInt(canvas.style.height) || 360;
+    if (root) layoutTree(root, w, h, 38, 36);
+    renderTree(canvas, root);
+    clearHL(canvas);
+    if (hl.path) {
+      hl.path.forEach(n => { if (n) setNodeClass(canvas, n.id, 'path'); });
+      for (let i = 0; i < hl.path.length-1; i++) {
+        if (hl.path[i] && hl.path[i+1]) setEdgeClass(canvas, hl.path[i].id, hl.path[i+1].id, 'path');
+      }
+    }
+    if (hl.target) setNodeClass(canvas, hl.target.id, 'current');
+    if (hl.successor) setNodeClass(canvas, hl.successor.id, 'target');
+    if (hl.deleted) setNodeClass(canvas, hl.deleted.id, 'deleted');
+  }
+
+  function genDeleteSteps(key) {
+    const steps = [];
+    if (!root) {
+      steps.push({status:'空樹，無法刪除', case:'—'});
+      return steps;
+    }
+    const { node: target, path } = findNode(root, key);
+    if (!target) {
+      steps.push({status:`key=${key} 不在樹中`, case:'—', hl:{path}});
+      return steps;
+    }
+    steps.push({status:`從 root 出發找 key=${key}`, hl:{path:[path[0]]}, case:'?', target:key, succ:'—', phase:'搜尋'});
+    for (let i = 1; i < path.length; i++) {
+      steps.push({status:`下移到節點 ${path[i].key}`, hl:{path:path.slice(0,i+1), target: i===path.length-1 ? path[i] : null}, case:'?', target:key, succ:'—', phase:'搜尋'});
+    }
+    const c = classifyCase(target);
+    steps.push({status:`找到 target=${target.key}，分類為 Case ${c}`, hl:{path, target}, case:`Case ${c}`, target:target.key, succ:'—', phase:'分類'});
+    if (c === 1) {
+      steps.push({status:`葉節點：直接從 parent 把它的 link 設為 null`, hl:{path, deleted:target}, case:'Case 1', target:target.key, succ:'—', phase:'splice'});
+      steps.push({status:'刪除完成 ✓', commit:'remove-leaf', target, case:'Case 1', phase:'完成', succ:'—'});
+    } else if (c === 2) {
+      const child = target.left || target.right;
+      const side = target.left ? 'left' : 'right';
+      steps.push({status:`只有一個子（${side}=${child.key}），把它「提升」上來取代 target`, hl:{path, target, successor:child}, case:'Case 2', target:target.key, succ:'—', phase:'lift'});
+      steps.push({status:'刪除完成 ✓', commit:'lift-child', target, child, case:'Case 2', phase:'完成', succ:'—'});
+    } else {
+      steps.push({status:`兩個子節點 → 找 in-order successor（右子樹中最小）`, hl:{path, target}, case:'Case 3', target:target.key, succ:'?', phase:'找 successor'});
+      // Walk right subtree to find min
+      let cur = target.right;
+      const succPath = [target, cur];
+      steps.push({status:`進入右子樹 → ${cur.key}`, hl:{path, target, successor:cur}, case:'Case 3', target:target.key, succ:cur.key, phase:'找 successor'});
+      while (cur.left) {
+        cur = cur.left;
+        succPath.push(cur);
+        steps.push({status:`往左：→ ${cur.key}`, hl:{path, target, successor:cur}, case:'Case 3', target:target.key, succ:cur.key, phase:'找 successor'});
+      }
+      const succ = cur;
+      steps.push({status:`找到 successor = ${succ.key}（必為 case 1 或 case 2）`, hl:{path, target, successor:succ}, case:'Case 3', target:target.key, succ:succ.key, phase:'splice succ'});
+      steps.push({status:`把 successor 的 key=${succ.key} 拷貝到 target 位置`, hl:{path, target, successor:succ}, case:'Case 3', target:target.key, succ:succ.key, phase:'copy key', commit:'copy-key', target, succNode:succ});
+      steps.push({status:`從原位置 splice out successor（最多一個 right child）`, hl:{deleted:succ}, case:'Case 3', target:succ.key, succ:succ.key, phase:'splice succ'});
+      steps.push({status:'刪除完成 ✓', commit:'splice-succ', succNode:succ, case:'Case 3', phase:'完成', target:succ.key, succ:succ.key});
+    }
+    return steps;
+  }
+
+  function applyStep(s) {
+    function spliceNode(node, child) {
+      if (!node) return false;
+      const p = node.parent;
+      if (p) {
+        if (p.left === node) p.left = child;
+        else if (p.right === node) p.right = child;
+        else return false;
+        if (child) child.parent = p;
+      } else {
+        if (root !== node) return false;
+        root = child;
+        if (child) child.parent = null;
+      }
+      node.parent = null;
+      return true;
+    }
+
+    if (s.commit === 'remove-leaf') {
+      const t = s.target;
+      spliceNode(t, null);
+      render({});
+    } else if (s.commit === 'lift-child') {
+      const t = s.target, c = s.child;
+      spliceNode(t, c);
+      render({});
+    } else if (s.commit === 'copy-key') {
+      const succ = s.succNode || s.succ;
+      s.target.key = succ.key;
+      render({target: s.target, successor: succ});
+    } else if (s.commit === 'splice-succ') {
+      const succ = s.succNode || s.succ;
+      // succ has at most a right child
+      const child = succ.right;
+      spliceNode(succ, child);
+      render({});
+    } else {
+      render(s.hl || {});
+    }
+    if (s.status != null) $('delStatus').textContent = s.status;
+    if (s.case != null) $('delCase').textContent = s.case;
+    if (s.target != null) $('delTarget').textContent = s.target;
+    if (s.succ != null) $('delSucc').textContent = s.succ;
+    if (s.phase != null) $('delPhase').textContent = s.phase;
+  }
+
+  function rebuild() {
+    const raw = $('delInitInput').value.split(/[\s,]+/).map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
+    root = buildBST(raw);
+    render({});
+    $('delStatus').textContent = `已建立 BST（${raw.length} 個 keys）。選擇 key 並按「刪除」`;
+    $('delCase').textContent = '—';
+    $('delTarget').textContent = '—';
+    $('delSucc').textContent = '—';
+    $('delPhase').textContent = '—';
+  }
+
+  function startDel() {
+    const k = parseInt($('delKey').value, 10);
+    if (isNaN(k)) return;
+    if (player) player.stop();
+    const steps = genDeleteSteps(k);
+    player = new Player({ steps, apply: applyStep, delay: 800 });
+    player.reset();
+    player.play();
+  }
+
+  $('delApplyInit').onclick = rebuild;
+  $('delPlay').onclick = startDel;
+  $('delStep').onclick = () => { if (!player) startDel(); else player.step(); };
+  $('delReset').onclick = rebuild;
+  document.querySelectorAll('#bst-delete .preset-btn[data-delk]').forEach(btn => {
+    btn.onclick = () => {
+      $('delKey').value = btn.dataset.delk;
+      rebuild();
+      setTimeout(startDel, 50);
+    };
+  });
+
+  rebuild();
+  _ensurePanelReady(canvas, () => {
+    // Do not call player.apply(): commit steps mutate root, and replaying them
+    // during resize can delete or reconnect nodes twice.
+    if (player && player.steps && player.steps[player.idx]) {
+      render(player.steps[player.idx].hl || {});
+    } else render({});
+  });
+  return { resize: () => render({}) };
+}
+
+/* ============================================================
+   PART 08 — BST ANALYSIS (random vs sorted)
+   ============================================================ */
+function initBSTAnalysis() {
+  const cRand = $('canvas-bstrand');
+  const cSorted = $('canvas-bstsorted');
+  if (!cRand || !cSorted) return;
+
+  function bstInsert(r, key) {
+    if (!r) return new TNode(key);
+    if (key === r.key) return r;
+    if (key < r.key) { r.left = bstInsert(r.left, key); r.left.parent = r; }
+    else { r.right = bstInsert(r.right, key); r.right.parent = r; }
+    return r;
+  }
+  function buildBST(keys) { TNode._id = 0; let r=null; for (const k of keys) r = bstInsert(r, k); return r; }
+
+  function avgDepth(root) {
+    if (!root) return 0;
+    let total = 0, count = 0;
+    (function walk(n, d) {
+      if (!n) return;
+      total += d; count++;
+      walk(n.left, d+1); walk(n.right, d+1);
+    })(root, 0);
+    return count > 0 ? (total / count) : 0;
+  }
+
+  function regen() {
+    const n = parseInt($('bstAnalN').value, 10) || 10;
+    // Random distinct integers between 1 and 99
+    const arr = [];
+    while (arr.length < n) {
+      const x = Math.floor(Math.random()*99) + 1;
+      if (!arr.includes(x)) arr.push(x);
+    }
+    const sortedArr = arr.slice().sort((a,b)=>a-b);
+
+    const rRoot = buildBST(arr);
+    const sRoot = buildBST(sortedArr);
+
+    const wR = cRand.clientWidth || 380, hR = parseInt(cRand.style.height) || 280;
+    const wS = cSorted.clientWidth || 380, hS = parseInt(cSorted.style.height) || 280;
+
+    if (rRoot) layoutTree(rRoot, wR, hR, 30, 30);
+    renderTree(cRand, rRoot);
+    if (sRoot) layoutTree(sRoot, wS, hS, 30, 30);
+    renderTree(cSorted, sRoot);
+
+    $('bstRandH').textContent = treeHeight(rRoot);
+    $('bstSortedH').textContent = treeHeight(sRoot);
+  }
+
+  $('bstAnalRegen').onclick = regen;
+  regen();
+  _ensurePanelReady(cRand, regen);
+  _ensurePanelReady(cSorted, regen);
+  return { resize: regen };
+}
+
+/* ============================================================
+   PART 09 — AVL ROTATIONS
+   ============================================================ */
+function initAVL() {
+  const canvas = $('canvas-avl');
+  if (!canvas) return;
+
+  let currentCase = 'LL';
+  let player = null;
+
+  // Build a tree using preorder array form. null = empty.
+  function build(arr) { TNode._id = 0; const idx={i:0}; return buildFromArr(arr, idx); }
+
+  // For each case, define the BEFORE tree, the rotation steps, and the AFTER labels.
+  // We use letter labels A, B, C, x, y, z to make rotations didactic.
+  const cases = {
+    LL: {
+      label: 'LL：右旋 (Right Rotate)',
+      fix: '對 z 做單一右旋',
+      // Before (left-left heavy): z(top), y=z.left, x=y.left, A=x.left, B=x.right, C=y.right, D=z.right
+      buildBefore: () => build(['z','y','x','A',null,null,'B',null,null,'C',null,null,'D',null,null]),
+      narrate: [
+        '初始：z 的 left subtree (rooted at y) 比 right (D) 高 2。',
+        'bf(z) = +2，且 bf(y) = +1，屬於 LL → 右旋',
+        '右旋：把 y 拉上來當 root，z 變成 y 的 right child。',
+        '原本 y 的 right (C) 變成 z 的 left。',
+        '完成：bf(y) = 0，所有節點都平衡 ✓'
+      ],
+      buildAfter: () => build(['y','x','A',null,null,'B',null,null,'z','C',null,null,'D',null,null])
+    },
+    RR: {
+      label: 'RR：左旋 (Left Rotate)',
+      fix: '對 z 做單一左旋',
+      buildBefore: () => build(['z','A',null,null,'y','B',null,null,'x','C',null,null,'D',null,null]),
+      narrate: [
+        '初始：z 的 right subtree (rooted at y) 比 left (A) 高 2。',
+        'bf(z) = -2，且 bf(y) = -1，屬於 RR → 左旋',
+        '左旋：把 y 拉上來當 root，z 變成 y 的 left child。',
+        '原本 y 的 left (B) 變成 z 的 right。',
+        '完成：bf(y) = 0，所有節點都平衡 ✓'
+      ],
+      buildAfter: () => build(['y','z','A',null,null,'B',null,null,'x','C',null,null,'D',null,null])
+    },
+    LR: {
+      label: 'LR：左右旋 (Left-Right)',
+      fix: '先對 y 左旋，再對 z 右旋',
+      buildBefore: () => build(['z','y','A',null,null,'x','B',null,null,'C',null,null,'D',null,null]),
+      narrate: [
+        '初始：z left-heavy (bf=+2)，但 y right-heavy (bf=-1)，屬於 LR',
+        '步驟一：對 y 做左旋 → 變成 LL 形狀',
+        '步驟二：對 z 做右旋',
+        '完成：x 成為新 root，所有節點都平衡 ✓'
+      ],
+      mid: () => build(['z','x','y','A',null,null,'B',null,null,'C',null,null,'D',null,null]),
+      buildAfter: () => build(['x','y','A',null,null,'B',null,null,'z','C',null,null,'D',null,null])
+    },
+    RL: {
+      label: 'RL：右左旋 (Right-Left)',
+      fix: '先對 y 右旋，再對 z 左旋',
+      buildBefore: () => build(['z','A',null,null,'y','x','B',null,null,'C',null,null,'D',null,null]),
+      narrate: [
+        '初始：z right-heavy (bf=-2)，但 y left-heavy (bf=+1)，屬於 RL',
+        '步驟一：對 y 做右旋 → 變成 RR 形狀',
+        '步驟二：對 z 做左旋',
+        '完成：x 成為新 root，所有節點都平衡 ✓'
+      ],
+      mid: () => build(['z','A',null,null,'x','B',null,null,'y','C',null,null,'D',null,null]),
+      buildAfter: () => build(['x','z','A',null,null,'B',null,null,'y','C',null,null,'D',null,null])
+    }
+  };
+
+  function render(root, status) {
+    const w = canvas.clientWidth || 600;
+    const h = parseInt(canvas.style.height) || 380;
+    if (root) layoutTree(root, w, h, 38, 36);
+    renderTree(canvas, root);
+    if (status != null) $('avlStatus').textContent = status;
+  }
+
+  function genSteps() {
+    const c = cases[currentCase];
+    const steps = [];
+    steps.push({tree: c.buildBefore(), status: c.narrate[0], phase:'BEFORE', bf:'+2 / -2'});
+    steps.push({tree: c.buildBefore(), status: c.narrate[1], phase:'分類', bf:'判斷'});
+    if (c.mid) {
+      steps.push({tree: c.mid(), status: c.narrate[2], phase:'第一次旋轉', bf:'中繼'});
+      steps.push({tree: c.buildAfter(), status: c.narrate[3], phase:'完成', bf:'0'});
+    } else {
+      steps.push({tree: c.buildAfter(), status: c.narrate[2], phase:'旋轉', bf:'進行中'});
+      steps.push({tree: c.buildAfter(), status: c.narrate[3], phase:'更新', bf:'0'});
+      steps.push({tree: c.buildAfter(), status: c.narrate[4], phase:'完成', bf:'0'});
+    }
+    return steps;
+  }
+
+  function applyStep(s) {
+    render(s.tree, s.status);
+    if (s.phase != null) $('avlPhase').textContent = s.phase;
+    if (s.bf != null) $('avlBf').textContent = s.bf;
+  }
+
+  function regen() {
+    const c = cases[currentCase];
+    $('avlCase').textContent = currentCase;
+    $('avlFix').textContent = c.fix;
+    $('avlPhase').textContent = '—';
+    $('avlBf').textContent = '—';
+    if (player) player.stop();
+    player = new Player({
+      steps: genSteps(),
+      apply: applyStep,
+      delay: parseInt($('avlSpeed').value, 10)
+    });
+    player.reset();
+  }
+
+  document.querySelectorAll('#avl .preset-btn[data-avlcase]').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('#avl .preset-btn[data-avlcase]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentCase = btn.dataset.avlcase;
+      regen();
+    };
+  });
+  $('avlPlay').onclick = () => { if (player) player.play(); };
+  $('avlStep').onclick = () => { if (player) player.step(); };
+  $('avlReset').onclick = regen;
+  $('avlSpeed').addEventListener('input', () => {
+    if (player) player.setDelay(parseInt($('avlSpeed').value, 10));
+  });
+
+  regen();
+  _ensurePanelReady(canvas, () => {
+    if (player && player.steps && player.steps[player.idx]) {
+      player.apply(player.steps[player.idx], player.idx);
+    } else regen();
+  });
+  return { resize: regen };
+}
+
+/* ============================================================
+   FLOATING NAV — scroll-tracking active link
+   ============================================================ */
+function setupFloatNav() {
+  const nav = $('floatNav');
+  if (!nav) return;
+  const links = Array.from(nav.querySelectorAll('a'));
+  const sections = links.map(a => {
+    const href = a.getAttribute('href');
+    if (!href || !href.startsWith('#')) return null;
+    return document.getElementById(href.slice(1));
+  });
+  function update() {
+    const y = window.scrollY + 120;
+    let active = 0;
+    for (let i = 0; i < sections.length; i++) {
+      if (sections[i] && sections[i].offsetTop <= y) active = i;
+    }
+    links.forEach((a, i) => a.classList.toggle('active', i === active));
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  links.forEach(a => {
+    a.addEventListener('click', e => {
+      const href = a.getAttribute('href');
+      if (!href || !href.startsWith('#')) return;
+      const t = document.getElementById(href.slice(1));
+      if (t) {
+        e.preventDefault();
+        window.scrollTo({ top: t.offsetTop - 20, behavior: 'smooth' });
+      }
+    });
+  });
+  update();
+}
+
+/* ============================================================
+   BOOTSTRAP
+   ============================================================ */
+const __resizers = [];
+function debounce(fn, ms) {
+  let h = null;
+  return function(...args) {
+    if (h) clearTimeout(h);
+    h = setTimeout(() => fn.apply(this, args), ms);
+  };
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const r1 = initVocabulary();    if (r1) __resizers.push(r1);
+  const r2 = initNodesRefs();     if (r2) __resizers.push(r2);
+  const r3 = initParseTree();     if (r3) __resizers.push(r3);
+  const r4 = initTraversals();    if (r4) __resizers.push(r4);
+  const r5 = initHeap();          if (r5) __resizers.push(r5);
+  const r6 = initBST();           if (r6) __resizers.push(r6);
+  const r7 = initBSTDelete();     if (r7) __resizers.push(r7);
+  const r8 = initBSTAnalysis();   if (r8) __resizers.push(r8);
+  const r9 = initAVL();           if (r9) __resizers.push(r9);
+  setupFloatNav();
+  // MathJax retypeset
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise().catch(()=>{});
+  }
+});
+
+window.addEventListener('resize', debounce(() => {
+  __resizers.forEach(r => { try { if (r && r.resize) r.resize(); } catch(e) {} });
+}, 200));
+</script>
+</body>
+</html>

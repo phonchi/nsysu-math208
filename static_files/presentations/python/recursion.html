@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>遞迴 — Recursion Interactive（Python）</title>
+<script>
+  MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1a2e;--paper:#f7f3eb;--accent:#c0392b;--accent2:#2c3e7a;--accent3:#1a6b4a;
+  --muted:#8a8578;--card:#fffdf7;--card-border:#e8e2d6;--highlight:#fff3cd;
+  --code-bg:#2d2d3f;--code-fg:#e8e6df;
+  --node-white:#ffffff;--node-gray:#bdc3c7;--node-black:#34495e;
+  --node-current:#f39c12;--node-found:#16a085;--node-start:#9b59b6;
+  --edge-default:#95a5a6;--edge-tree:#27ae60;--edge-explore:#f39c12;--edge-mst:#1a6b4a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.9;font-size:17px;}
+
+/* Hero */
+.hero{min-height:62vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem;position:relative;overflow:hidden;background:linear-gradient(170deg,#1a1a2e 0%,#2c3e7a 40%,#1a6b4a 100%);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.06) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.04) 0%,transparent 40%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);}
+.hero-content{position:relative;z-index:1;max-width:860px;}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;color:#fff;letter-spacing:.04em;line-height:1.3;margin-bottom:1rem;}
+.hero h1 .green{color:#2ecc71;}
+.hero h1 .blue{color:#5dade2;}
+.hero h1 .orange{color:#f39c12;}
+.hero h1 .purple{color:#bb8fce;}
+.hero .subtitle{font-size:clamp(.95rem,2.2vw,1.2rem);color:rgba(255,255,255,.65);font-weight:300;margin-bottom:2rem;}
+.hero .big-formula{color:#2ecc71;background:rgba(0,0,0,.3);padding:.8rem 2rem;border-radius:12px;display:inline-block;border:1px solid rgba(255,255,255,.1);margin-bottom:2rem;backdrop-filter:blur(4px);font-size:1.05rem;}
+.scroll-hint{color:rgba(255,255,255,.4);font-size:.9rem;animation:bounce 2s infinite;}
+.scroll-hint span{display:block;font-size:1.4rem;margin-top:.3rem;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+/* Hero mini-graph illustration */
+.hero-graph{position:absolute;right:5%;top:50%;transform:translateY(-50%);opacity:.18;pointer-events:none;}
+@media(max-width:900px){.hero-graph{display:none;}}
+
+/* Layout */
+.container{max-width:1180px;margin:0 auto;padding:3rem 1.5rem;}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.5rem;}
+h2{font-family:'Noto Serif TC',serif;font-size:1.65rem;font-weight:700;color:var(--ink);margin-bottom:1.2rem;line-height:1.4;}
+h3{font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:700;color:var(--accent2);margin:1.4rem 0 .8rem;}
+section{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--card-border);}
+section:last-of-type{border-bottom:none;}
+p{margin-bottom:1rem;}
+code{font-family:'JetBrains Mono',monospace;font-size:.92em;background:rgba(44,62,122,.08);padding:1px 6px;border-radius:4px;color:var(--accent2);}
+strong{color:var(--ink);}
+
+/* TOC */
+.toc{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:1.2rem 1.5rem;margin:1rem 0 2rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.toc-title{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.7rem;}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.5rem .8rem;}
+.toc-grid a{color:var(--accent2);text-decoration:none;font-size:.9rem;padding:.3rem 0;display:flex;align-items:center;gap:.4rem;transition:color .2s;}
+.toc-grid a:hover{color:var(--accent);}
+.toc-grid a .toc-num{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);min-width:34px;}
+
+/* Viz layout */
+.viz-layout{display:grid;grid-template-columns:1fr 320px;gap:1.3rem;margin:1.2rem 0;align-items:start;}
+@media(max-width:900px){.viz-layout{grid-template-columns:1fr;}}
+
+.viz-panel{background:linear-gradient(160deg,#fffdf7 0%,#f4efe3 100%);border:1px solid var(--card-border);border-radius:12px;padding:1rem;box-shadow:0 4px 18px rgba(0,0,0,.06);position:relative;}
+
+/* Graph SVG canvas */
+.graph-canvas{position:relative;width:100%;height:380px;background:#fafafa;border-radius:8px;overflow:hidden;border:1px solid #ececec;}
+.graph-canvas svg{width:100%;height:100%;display:block;}
+
+/* SVG elements styles */
+.graph-edge{stroke:var(--edge-default);stroke-width:2;fill:none;transition:stroke .25s, stroke-width .25s;}
+.graph-edge.tree{stroke:var(--edge-tree);stroke-width:3.5;}
+.graph-edge.exploring{stroke:var(--edge-explore);stroke-width:3.5;stroke-dasharray:5 4;animation:dash 1s linear infinite;}
+.graph-edge.mst{stroke:var(--edge-mst);stroke-width:4;}
+.graph-edge.path{stroke:var(--accent);stroke-width:4;}
+.graph-edge.dotted{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:3 4;}
+@keyframes dash{to{stroke-dashoffset:-18;}}
+
+.edge-label{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;fill:var(--ink);pointer-events:none;}
+.edge-label-bg{fill:#fafafa;stroke:#ececec;stroke-width:1;}
+
+.graph-node{cursor:pointer;}
+.graph-node circle{fill:var(--node-white);stroke:var(--ink);stroke-width:2;transition:fill .25s, stroke .25s, r .2s;}
+.graph-node.gray circle{fill:var(--node-gray);}
+.graph-node.black circle{fill:var(--node-black);stroke:var(--node-black);}
+.graph-node.current circle{fill:var(--node-current);stroke:#d68910;stroke-width:3;}
+.graph-node.start circle{fill:var(--node-start);stroke:#7d3c98;stroke-width:3;}
+.graph-node.found circle{fill:var(--node-found);stroke:#117a65;stroke-width:3;}
+.graph-node.in-mst circle{fill:#82e0aa;stroke:var(--accent3);stroke-width:3;}
+.graph-node text.node-key{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;fill:var(--ink);text-anchor:middle;dominant-baseline:central;pointer-events:none;}
+.graph-node.black text.node-key{fill:#fff;}
+.graph-node.current text.node-key{fill:#fff;}
+.graph-node.start text.node-key{fill:#fff;}
+.graph-node.found text.node-key{fill:#fff;}
+.graph-node text.node-meta{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;fill:var(--accent);text-anchor:middle;pointer-events:none;}
+
+/* Status banner */
+.status-banner{margin-top:.8rem;padding:.7rem 1rem;background:var(--code-bg);color:#fff;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.85rem;min-height:42px;display:flex;align-items:center;gap:.6rem;}
+.status-banner .status-icon{color:#2ecc71;font-weight:700;}
+.status-banner .status-text{flex:1;}
+
+/* Controls */
+.controls-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--card-border);}
+.btn{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:600;padding:.45rem 1rem;border-radius:6px;border:none;cursor:pointer;transition:all .2s;}
+.btn-play{background:var(--accent3);color:#fff;}
+.btn-play:hover{background:#22845c;}
+.btn-play.active{background:var(--accent);}
+.btn-step{background:var(--accent2);color:#fff;}
+.btn-step:hover{background:#1f2e5f;}
+.btn-step:disabled{background:#ccc;cursor:not-allowed;}
+.btn-reset{background:var(--card-border);color:var(--ink);}
+.btn-reset:hover{background:#ccc;}
+.btn-toggle{background:var(--accent2);color:#fff;}
+.btn-toggle:hover{background:#1f2e5f;}
+.btn-toggle.off{background:#bbb;color:#555;}
+.btn-shuffle{background:#8e44ad;color:#fff;}
+.btn-shuffle:hover{background:#6c3485;}
+
+/* Slider row */
+.slider-row{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;background:var(--paper);border-radius:8px;margin-bottom:.5rem;}
+.slider-row .slider-label{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent2);font-weight:600;min-width:60px;}
+.slider-row input[type="range"]{flex:1;accent-color:var(--accent3);height:5px;cursor:pointer;}
+.slider-row .slider-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--accent);font-weight:600;min-width:60px;text-align:right;}
+
+/* Side panel */
+.side-panel{display:flex;flex-direction:column;gap:.85rem;}
+.info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.info-card .ic-title{font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem;display:flex;align-items:center;justify-content:space-between;}
+.info-card .ic-title .ic-badge{font-size:.7rem;color:#fff;background:var(--accent3);padding:1px 7px;border-radius:3px;letter-spacing:.05em;font-weight:700;}
+.info-card .ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.83rem;padding:.2rem 0;}
+.info-card .ic-label{color:var(--muted);}
+.info-card .ic-value{color:var(--ink);font-weight:600;}
+.info-card .ic-value.highlight{color:var(--accent);}
+.info-card .ic-value.big{font-size:1.4rem;color:var(--accent2);}
+
+/* Stats grid */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.4rem;}
+.stat-tile{background:var(--paper);border-radius:8px;padding:.5rem .7rem;text-align:center;}
+.stat-tile .stat-label{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;}
+.stat-tile .stat-value{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;color:var(--accent2);}
+
+/* Queue / Stack / PQ visualization */
+.ds-display{font-family:'JetBrains Mono',monospace;font-size:.8rem;background:var(--paper);border-radius:6px;padding:.5rem .7rem;min-height:36px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;border:1px dashed var(--card-border);}
+.ds-display .ds-empty{color:var(--muted);font-style:italic;}
+.ds-item{background:var(--accent2);color:#fff;padding:2px 8px;border-radius:4px;font-weight:600;}
+.ds-item.front{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-item.top{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-item.pq{background:var(--accent3);}
+.ds-item.pq.min{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-arrow{color:var(--muted);}
+
+/* Pseudo code */
+.pseudo-code{background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:.85rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.6;overflow-x:auto;}
+.pseudo-code .line{padding:1px 4px;border-radius:3px;display:block;white-space:pre;}
+.pseudo-code .line.active{background:rgba(243,156,18,.3);color:#fff;border-left:3px solid var(--node-current);padding-left:6px;}
+.pseudo-code .kw{color:#ff79c6;}
+.pseudo-code .fn{color:#50fa7b;}
+.pseudo-code .num{color:#bd93f9;}
+.pseudo-code .com{color:#6272a4;font-style:italic;}
+.pseudo-code .str{color:#f1fa8c;}
+
+/* Adjacency table */
+.adj-display{margin:.5rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.adj-matrix{border-collapse:collapse;margin:.5rem auto;}
+.adj-matrix td,.adj-matrix th{border:1px solid var(--card-border);padding:6px 10px;text-align:center;min-width:34px;background:#fff;}
+.adj-matrix th{background:var(--accent2);color:#fff;font-weight:700;}
+.adj-matrix td.zero{color:#ccc;}
+.adj-matrix td.nonzero{background:#eafaf1;color:var(--accent3);font-weight:700;}
+.adj-matrix td.highlight{background:#fff3cd;}
+.adj-list{background:var(--card);border:1px solid var(--card-border);border-radius:8px;padding:.7rem 1rem;}
+.adj-list .adj-row{padding:3px 0;border-bottom:1px dashed var(--card-border);}
+.adj-list .adj-row:last-child{border-bottom:none;}
+.adj-list .adj-key{color:var(--accent);font-weight:700;display:inline-block;min-width:32px;}
+.adj-list .adj-arrow{color:var(--muted);margin:0 6px;}
+.adj-list .adj-neighbor{background:#eef2ff;color:var(--accent2);padding:1px 8px;border-radius:4px;margin:1px 3px;display:inline-block;font-weight:600;}
+
+/* Chess board for Knight's tour */
+.chess-board{display:grid;background:#fff;border:2px solid var(--ink);border-radius:6px;overflow:hidden;margin:.5rem auto;width:fit-content;}
+.chess-cell{display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:700;position:relative;transition:background .2s;}
+.chess-cell.light{background:#f0d9b5;color:#666;}
+.chess-cell.dark{background:#b58863;color:#fff;}
+.chess-cell.visited{background:#27ae60 !important;color:#fff;}
+.chess-cell.current{background:#f39c12 !important;color:#fff;box-shadow:inset 0 0 0 3px #d68910;}
+.chess-cell.start{background:#9b59b6 !important;color:#fff;}
+.chess-cell .knight{font-size:1.4em;line-height:1;}
+.chess-cell .step-num{font-size:.7em;}
+
+/* Info box */
+.info-box{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1.1rem 1.4rem;margin:1.3rem 0;position:relative;}
+.info-box .info-label{position:absolute;top:-11px;left:14px;background:var(--accent2);color:#fff;font-size:.74rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.05em;}
+.info-box.warm{background:#fef5e7;border-color:#d68910;}
+.info-box.warm .info-label{background:#d68910;}
+.info-box.green{background:#eafaf1;border-color:var(--accent3);}
+.info-box.green .info-label{background:var(--accent3);}
+.info-box.purple{background:#f4ecf7;border-color:#8e44ad;}
+.info-box.purple .info-label{background:#8e44ad;}
+
+/* Pill labels */
+.pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:4px;margin:0 .15rem;vertical-align:1px;}
+.pill-blue{background:rgba(41,128,185,.12);color:#2980b9;border:1px solid rgba(41,128,185,.3);}
+.pill-red{background:rgba(192,57,43,.12);color:var(--accent);border:1px solid rgba(192,57,43,.3);}
+.pill-green{background:rgba(39,174,96,.12);color:var(--accent3);border:1px solid rgba(39,174,96,.3);}
+.pill-orange{background:rgba(243,156,18,.12);color:#d68910;border:1px solid rgba(243,156,18,.3);}
+.pill-purple{background:rgba(142,68,173,.12);color:#8e44ad;border:1px solid rgba(142,68,173,.3);}
+.pill-gray{background:rgba(0,0,0,.06);color:var(--muted);border:1px solid rgba(0,0,0,.12);}
+
+/* Comparison table */
+.cmp-table{width:100%;border-collapse:collapse;font-size:.86rem;margin:.8rem 0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.cmp-table th{background:var(--accent2);color:#fff;padding:.6rem .8rem;text-align:center;font-weight:600;font-size:.82rem;}
+.cmp-table td{padding:.6rem .8rem;text-align:center;border-bottom:1px solid var(--card-border);font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.cmp-table td:first-child{font-family:'Noto Sans TC',sans-serif;color:var(--accent2);font-weight:600;text-align:left;}
+.cmp-table tr:last-child td{border-bottom:none;}
+.cmp-table tr:nth-child(even){background:rgba(0,0,0,.015);}
+.cmp-table .best{color:var(--accent3);font-weight:700;}
+.cmp-table .worst{color:var(--accent);font-weight:700;}
+
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:.6rem;margin:.6rem 0;font-family:'JetBrains Mono',monospace;font-size:.75rem;}
+.legend-item{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .5rem;background:var(--paper);border-radius:5px;}
+.legend-item .lg-swatch{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--ink);}
+.legend-item .lg-edge{width:18px;height:3px;border-radius:2px;}
+
+/* Quiz */
+.quiz-box{background:var(--card);border:2px solid var(--accent2);border-radius:12px;padding:1.3rem 1.5rem;margin:1.5rem 0;}
+.quiz-box .quiz-label{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);font-weight:700;letter-spacing:.1em;margin-bottom:.5rem;}
+.quiz-options{display:flex;flex-direction:column;gap:.5rem;margin:.8rem 0;}
+.quiz-opt{display:flex;align-items:center;gap:.6rem;padding:.55rem .9rem;background:var(--paper);border:2px solid var(--card-border);border-radius:8px;cursor:pointer;transition:all .2s;font-family:'JetBrains Mono',monospace;font-size:.86rem;}
+.quiz-opt:hover{border-color:var(--accent2);}
+.quiz-opt .opt-letter{font-weight:700;color:var(--accent2);min-width:22px;}
+.quiz-opt.correct{background:#eafaf1;border-color:var(--accent3);}
+.quiz-opt.correct .opt-letter{color:var(--accent3);}
+.quiz-opt.wrong{background:#fef5e7;border-color:var(--accent);}
+.quiz-opt.wrong .opt-letter{color:var(--accent);}
+.quiz-feedback{margin-top:.7rem;padding:.7rem 1rem;border-radius:8px;font-size:.88rem;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.correct{background:#eafaf1;color:var(--accent3);border-left:4px solid var(--accent3);}
+.quiz-feedback.wrong{background:#fef5e7;color:var(--accent);border-left:4px solid var(--accent);}
+
+/* Floating sidebar navigation */
+.float-nav{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:2px;background:rgba(255,253,250,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--card-border);border-radius:12px;padding:10px 7px;box-shadow:0 6px 24px rgba(0,0,0,.10);font-family:'JetBrains Mono',monospace;max-height:88vh;overflow-y:auto;transition:padding .25s ease;}
+.float-nav .fn-title{font-family:'Noto Serif TC',serif;font-weight:700;font-size:.68rem;color:var(--accent2);text-align:center;letter-spacing:1.5px;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--card-border);max-width:0;overflow:hidden;transition:max-width .25s ease;}
+.float-nav:hover .fn-title{max-width:220px;}
+.float-nav a{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:7px;color:var(--ink);text-decoration:none;white-space:nowrap;transition:all .2s ease;border-left:3px solid transparent;}
+.float-nav a .fn-num{font-weight:700;font-size:.66rem;color:var(--muted);letter-spacing:.4px;flex-shrink:0;width:30px;text-align:left;}
+.float-nav a .fn-name{font-family:'Noto Sans TC',sans-serif;font-size:.76rem;font-weight:500;max-width:0;overflow:hidden;transition:max-width .25s ease,padding .25s ease;padding:0;}
+.float-nav:hover a .fn-name{max-width:220px;padding-left:2px;}
+.float-nav a:hover{background:var(--card);}
+.float-nav a.active{background:var(--accent2);color:#fff;border-left-color:var(--accent);box-shadow:0 2px 6px rgba(192,57,43,.25);}
+.float-nav a.active .fn-num{color:rgba(255,255,255,.85);}
+.float-nav a.active .fn-name{color:#fff;}
+.float-nav .fn-top{margin-top:6px;padding-top:6px;border-top:1px solid var(--card-border);justify-content:center;}
+.float-nav .fn-top .fn-num{width:auto;color:var(--accent2);font-size:.78rem;}
+@media(max-width:768px){
+  .float-nav{right:8px;top:auto;bottom:14px;transform:none;padding:6px 5px;max-height:70vh;}
+  .float-nav .fn-title{display:none;}
+  .float-nav a{padding:4px 7px;}
+  .float-nav a .fn-num{width:26px;font-size:.62rem;}
+}
+
+footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border);}
+
+/* Distance / table inside graph viz */
+.vert-table{margin-top:.6rem;width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:.78rem;}
+.vert-table th,.vert-table td{padding:4px 6px;text-align:center;border:1px solid var(--card-border);}
+.vert-table th{background:var(--accent2);color:#fff;font-weight:600;font-size:.74rem;}
+.vert-table td.tcell-current{background:#fff3cd;font-weight:700;color:var(--accent);}
+.vert-table td.tcell-done{background:#eafaf1;color:var(--accent3);}
+.vert-table td.tcell-inf{color:#ccc;}
+.sec-badge{font-size:.6em;color:var(--muted);border:1px solid var(--card-border);background:var(--card);padding:2px 10px;border-radius:999px;vertical-align:middle;margin-left:.6rem;font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.02em;white-space:nowrap;}
+
+/* Phase 8 shared widgets */
+.bs-stack{display:flex;flex-direction:column-reverse;align-items:center;gap:4px;min-height:180px;justify-content:flex-start;padding:.6rem;}
+.bs-item{width:110px;text-align:center;padding:.4rem .6rem;background:#5b7eb8;color:#fff;border-radius:6px;font-family:'JetBrains Mono',monospace;font-weight:600;box-shadow:0 2px 5px rgba(0,0,0,.15);}
+.bs-hl{background:#f39c12;}
+.bs-toplabel,.bq-label{font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.bq-row{display:flex;align-items:center;gap:6px;min-height:64px;flex-wrap:wrap;padding:.4rem;}
+.bq-item{min-width:52px;text-align:center;padding:.45rem .5rem;background:#5b7eb8;color:#fff;border-radius:6px;font-family:'JetBrains Mono',monospace;font-weight:600;}
+.char-strip{display:flex;gap:3px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;padding:.4rem 0;}
+.char-cell{min-width:30px;text-align:center;padding:.35rem .25rem;border:1px solid var(--card-border);border-radius:5px;background:var(--card);}
+.char-cur{background:#f39c12;color:#fff;border-color:#f39c12;}
+.char-done{background:#e8f5ec;color:#1a6b4a;border-color:#bfe3cd;}
+.char-bad{background:#c0392b;color:#fff;border-color:#c0392b;}
+.token-out{display:flex;gap:4px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;min-height:40px;padding:.3rem 0;}
+.tok{padding:.3rem .55rem;border-radius:5px;background:#2c3e7a;color:#fff;font-weight:600;}
+.tok-op{background:#8e44ad;}
+.tok-new{outline:3px solid #f39c12;}
+.mono{font-family:'JetBrains Mono',monospace;}
+</style>
+</head>
+<body>
+<nav class="float-nav" id="floatNav" aria-label="章節導覽">
+  <div class="fn-title">章節導覽</div>
+  <a href="#prologue" data-target="prologue"><span class="fn-num">P00</span><span class="fn-name">什麼是遞迴？</span></a>
+  <a href="#laws" data-target="laws"><span class="fn-num">P01</span><span class="fn-name">遞迴三法則</span></a>
+  <a href="#tostr" data-target="tostr"><span class="fn-num">P02</span><span class="fn-name">整數轉字串</span></a>
+  <a href="#frames" data-target="frames"><span class="fn-num">P03</span><span class="fn-name">呼叫堆疊</span></a>
+  <a href="#viz" data-target="viz"><span class="fn-num">P04</span><span class="fn-name">視覺化遞迴</span></a>
+  <a href="#sierpinski" data-target="sierpinski"><span class="fn-num">P05</span><span class="fn-name">Sierpinski 三角形</span></a>
+  <a href="#hanoi" data-target="hanoi"><span class="fn-num">P06</span><span class="fn-name">河內塔</span></a>
+  <a href="#maze" data-target="maze"><span class="fn-num">P07</span><span class="fn-name">走迷宮</span></a>
+  <a href="#dp" data-target="dp"><span class="fn-num">P08</span><span class="fn-name">動態規劃</span></a>
+  <a href="#exercises" data-target="exercises"><span class="fn-num">EX</span><span class="fn-name">練習題</span></a>
+  <a href="#reference" data-target="reference"><span class="fn-num">REF</span><span class="fn-name">總覽比較</span></a>
+  <a href="#top" class="fn-top" title="回到頂端"><span class="fn-num">↑ TOP</span></a>
+</nav>
+
+<div class="hero" id="top">
+  <div class="hero-grid"></div>
+  <svg class="hero-graph" width="300" height="260" viewBox="0 0 300 260">
+  <g stroke="#fff" stroke-width="2.5" fill="none" opacity=".9">
+    <rect x="40" y="30" width="220" height="190" rx="10"/>
+    <rect x="65" y="55" width="170" height="140" rx="9"/>
+    <rect x="90" y="80" width="120" height="90" rx="8"/>
+    <rect x="115" y="105" width="70" height="42" rx="7"/>
+  </g>
+</svg>
+  <div class="hero-content">
+    <h1><span class="blue">遞迴</span>：把問題交給更小的自己</h1>
+    <div class="subtitle">pythonds Chapter 4 — Recursion（對應講義 06）</div>
+    <div class="big-formula">三法則｜call stack｜to_str｜河內塔｜迷宮回溯｜動態規劃</div>
+    <div class="scroll-hint">向下捲動開始互動<span>↓</span></div>
+  </div>
+</div>
+
+<div class="container">
+<div class="toc">
+  <div class="toc-title">CONTENTS · 內容目錄</div>
+  <div class="toc-grid">
+    <a href="#prologue"><span class="toc-num">P00</span>什麼是遞迴？</a>
+    <a href="#laws"><span class="toc-num">P01</span>遞迴三法則</a>
+    <a href="#tostr"><span class="toc-num">P02</span>整數轉字串</a>
+    <a href="#frames"><span class="toc-num">P03</span>呼叫堆疊</a>
+    <a href="#viz"><span class="toc-num">P04</span>視覺化遞迴</a>
+    <a href="#sierpinski"><span class="toc-num">P05</span>Sierpinski 三角形</a>
+    <a href="#hanoi"><span class="toc-num">P06</span>河內塔</a>
+    <a href="#maze"><span class="toc-num">P07</span>走迷宮</a>
+    <a href="#dp"><span class="toc-num">P08</span>動態規劃</a>
+    <a href="#exercises"><span class="toc-num">EX</span>練習題</a>
+    <a href="#reference"><span class="toc-num">REF</span>總覽比較</a>
+  </div>
+</div>
+
+<section id="prologue">
+  <div class="section-number">PROLOGUE · 開場</div>
+  <h2>遞迴：把問題交給「更小的自己」 <span class="sec-badge">pythonds §4.1–4.3</span></h2>
+  <p>遞迴（recursion）= 函式呼叫自己，每次都處理<strong>更小的同型問題</strong>，
+  直到小到可以直接回答（<strong>base case</strong>）。
+  <code>sum([1,3,5,7,9])</code> 其實就是 <code>1 + sum([3,5,7,9])</code> ：括號一路往內，再一路往外收。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="mono" id="sumTrace" style="font-size:.95rem;line-height:2.2;min-height:150px;"></div>
+        <div class="status-banner" id="sumStatus"><span class="status-icon">›</span><span class="status-text">按「開始」看 listSum([1,3,5,7,9]) 怎麼展開再收合。</span></div>
+        <div class="controls-bar">
+          <button class="btn" onclick="sumStart()">▶ 開始</button>
+          <button class="btn" onclick="sumPlayer &amp;&amp; sumPlayer.step()">→ 單步</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">虛擬碼 <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="sumCode">
+<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">list_sum</span>(num_list):</span>
+<span class="line" data-l="2">    <span class="kw">if</span> <span class="fn">len</span>(num_list) == <span class="num">1</span>:   <span class="com"># base case</span></span>
+<span class="line" data-l="3">        <span class="kw">return</span> num_list[<span class="num">0</span>]</span>
+<span class="line" data-l="4">    <span class="kw">else</span>:                    <span class="com"># 縮小問題</span></span>
+<span class="line" data-l="5">        <span class="kw">return</span> num_list[<span class="num">0</span>] + <span class="fn">list_sum</span>(num_list[<span class="num">1</span>:])</span></div></div>
+      <div class="info-card">
+        <div class="ic-title">遞迴 vs 迴圈</div>
+        <div style="font-size:.86rem;line-height:1.9;">凡是遞迴能算的，迴圈都能算（反之亦然）。
+        遞迴的價值是<strong>讓程式長得像問題的定義</strong>：樹、分治、回溯問題上特別優雅。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="laws">
+  <div class="section-number">PART 01 · 三法則</div>
+  <h2>遞迴三法則：寫對遞迴的檢查清單 <span class="sec-badge">pythonds §4.4</span></h2>
+  <div class="viz-panel">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem;">
+      <div class="info-card"><div class="ic-title">法則 1</div>
+        <div style="font-size:.95rem;line-height:1.9;"><strong>必須有 base case</strong><br>
+        <span style="color:var(--muted);font-size:.85rem;">小到能直接回答的情況（listSum：長度 1）。</span></div></div>
+      <div class="info-card"><div class="ic-title">法則 2</div>
+        <div style="font-size:.95rem;line-height:1.9;"><strong>必須朝 base case 前進</strong><br>
+        <span style="color:var(--muted);font-size:.85rem;">每次呼叫都要改變狀態、縮小問題（串列變短、n 變小）。</span></div></div>
+      <div class="info-card"><div class="ic-title">法則 3</div>
+        <div style="font-size:.95rem;line-height:1.9;"><strong>必須呼叫自己</strong><br>
+        <span style="color:var(--muted);font-size:.85rem;">用「相信小問題已解決」的心法組合出大問題的答案。</span></div></div>
+    </div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 抓出壞遞迴</div>
+  <p><code>def f(n): return n + f(n - 1)</code> 違反了哪條法則？執行會怎樣？</p>
+  
+  <div class="quiz-options" id="qLawsOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="沒有終止條件，每次呼叫都疊一層新 frame；Python 在預設約 1000 層的深度上限攔下來，丟 RecursionError: maximum recursion depth exceeded。" onclick="quizCheck('qLaws', this)"><span class="opt-letter">(A)</span> 缺 base case → RecursionError</div><div class="quiz-opt" data-correct="false" data-fb="它有呼叫自己（法則 3 沒問題），缺的是法則 1。" onclick="quizCheck('qLaws', this)"><span class="opt-letter">(B)</span> 沒有呼叫自己</div><div class="quiz-opt" data-correct="false" data-fb="n-1 有在縮小；問題是縮到底也沒有停下來的條件。" onclick="quizCheck('qLaws', this)"><span class="opt-letter">(C)</span> 沒有縮小問題</div>
+  </div>
+  <div class="quiz-feedback" id="qLawsFeedback"></div>
+</div>
+</section>
+
+<section id="tostr">
+  <div class="section-number">PART 02 · 進位轉換（遞迴版）</div>
+  <h2>整數轉任意進位字串：遞迴自帶「反轉」 <span class="sec-badge">pythonds §4.5</span></h2>
+  <p>第 3 章用 stack 反轉餘數順序；遞迴版<strong>連 stack 都不用自己管</strong>：
+  「先遞迴處理商、回來再接上自己的餘數」的順序天然就是高位在前。因為 <strong>call stack 就是那個 stack</strong>。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="mono" id="tostrTrace" style="font-size:.92rem;line-height:2.1;min-height:160px;"></div>
+        <div class="status-banner" id="tostrStatus"><span class="status-icon">›</span><span class="status-text">to_str(769, 10) 的展開與回傳。</span></div>
+        <div class="controls-bar">
+          <input id="tostrN" type="number" class="mono" style="width:90px;padding:.35rem .5rem;border:1px solid var(--card-border);border-radius:6px;" value="769">
+          <select id="tostrB" class="mono" style="padding:.35rem;border-radius:6px;border:1px solid var(--card-border);">
+            <option value="10" selected>base 10</option><option value="2">base 2</option><option value="16">base 16</option>
+          </select>
+          <button class="btn" onclick="tostrStart()">▶ 開始</button>
+          <button class="btn" onclick="tostrPlayer &amp;&amp; tostrPlayer.step()">→ 單步</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">虛擬碼 <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="tostrCode">
+<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">to_str</span>(n, base):</span>
+<span class="line" data-l="2">    digits = <span class="str">&quot;0123456789ABCDEF&quot;</span></span>
+<span class="line" data-l="3">    <span class="kw">if</span> n &lt; base:                <span class="com"># base case：一位數</span></span>
+<span class="line" data-l="4">        <span class="kw">return</span> digits[n]</span>
+<span class="line" data-l="5">    <span class="kw">else</span>:</span>
+<span class="line" data-l="6">        <span class="kw">return</span> <span class="fn">to_str</span>(n // base, base) + digits[n % base]</span></div></div>
+      <div class="info-card">
+        <div class="ic-title">跟第 3 章比一比</div>
+        <div style="font-size:.86rem;line-height:1.9;">
+        stack 版：自己 push 餘數、自己 pop。<br>
+        遞迴版：<strong>把餘數留在「回來之後」處理</strong>：call stack 代勞。</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:1.5rem;">講義練習：用遞迴反轉字串</h3>
+  <p>講義在這裡留了一題填空：寫一個遞迴的 <code>reverse(s)</code>，讓
+  <code>reverse("hello")</code> 回傳 <code>"olleh"</code>。原題挖掉兩個空，解答是：</p>
+  <div class="info-card" style="max-width:560px;"><div class="ic-title">reverse：尾巴先反、頭字殿後 <span class="ic-badge">CODE</span></div>
+    <div class="pseudo-code" style="font-size:.74rem;">
+<span class="line"><span class="kw">def</span> <span class="fn">reverse</span>(s):</span>
+<span class="line">    <span class="kw">if</span> <span class="fn">len</span>(s) == <span class="num">1</span>:</span>
+<span class="line">        <span class="kw">return</span> s                  <span class="com"># base case：一個字元不用反</span></span>
+<span class="line">    <span class="kw">return</span> <span class="fn">reverse</span>(s[<span class="num">1</span>:]) + s[<span class="num">0</span>]</span>
+<span class="line"><span class="com"># 「剩下的反轉」接上「第一個字」</span></span>
+<span class="line"> </span>
+<span class="line"><span class="kw">assert</span> <span class="fn">reverse</span>(<span class="str">&quot;hello&quot;</span>) == <span class="str">&quot;olleh&quot;</span>  <span class="com"># Pass</span></span></div></div>
+  <p style="font-size:.88rem;color:var(--muted);">用三法則檢查：base case 是長度 1；
+  <code>s[1:]</code> 每次少一個字元，確實朝 base case 前進；而且它呼叫自己。
+  跟 to_str 同一個骨架：<strong>把「接字元」延後到遞迴回來之後</strong>，順序就自動反了。</p>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 換個接法</div>
+  <p>把最後一行改成 <code>return s[0] + reverse(s[1:])</code>，會得到什麼？</p>
+  
+  <div class="quiz-options" id="qRevRecOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="頭字接在「前面」就是維持原順序：反轉的關鍵正是把 s[0] 排到遞迴結果「後面」。跟 to_str 的心得一樣：接的位置決定順序。" onclick="quizCheck('qRevRec', this)"><span class="opt-letter">(A)</span> 原字串（一點都沒反）</div><div class="quiz-opt" data-correct="false" data-fb="接的順序就是輸出順序：s[0] 在前，結果就以 s[0] 開頭，沒反。" onclick="quizCheck('qRevRec', this)"><span class="opt-letter">(B)</span> 一樣是反轉</div><div class="quiz-opt" data-correct="false" data-fb="語法沒問題（字串本來就支援串接）：這是邏輯差異，直譯器不會攔。" onclick="quizCheck('qRevRec', this)"><span class="opt-letter">(C)</span> 丟出例外</div>
+  </div>
+  <div class="quiz-feedback" id="qRevRecFeedback"></div>
+</div>
+</section>
+
+<section id="frames">
+  <div class="section-number">PART 03 · 呼叫堆疊</div>
+  <h2>Stack frame：遞迴在記憶體裡長什麼樣 <span class="sec-badge">pythonds §4.6</span></h2>
+  <p>每次函式呼叫，系統就在 <strong>call stack</strong> 推入一個 <strong>stack frame</strong>（區域變數＋返回位址）。
+  遞迴深 n 層 = 同時存在 n 個 frame。<strong>return 就是 pop</strong>：把值交回上一層 frame 停住的位置。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="bs-stack" id="frameVis" style="min-height:230px;"></div>
+        <div class="status-banner" id="frameStatus"><span class="status-icon">›</span><span class="status-text">觀察 fact(4) 的 frame 推入與彈出。</span></div>
+        <div class="controls-bar">
+          <button class="btn" onclick="frameStart()">▶ fact(4)</button>
+          <button class="btn" onclick="framePlayer &amp;&amp; framePlayer.step()">→ 單步</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">為什麼會 RecursionError？</div>
+        <div style="font-size:.86rem;line-height:1.9;">CPython 用<strong>遞迴深度上限</strong>（預設約 1000 層）
+        保護 call stack：base case 寫錯，還沒撞穿記憶體就先被攔下來。深遞迴（如 n=10⁶ 的線性遞迴）
+        要改寫成迴圈，或用 sys.setrecursionlimit 謹慎放寬。</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">尾遞迴？</div>
+        <div style="font-size:.86rem;line-height:1.9;">有些語言會把「遞迴是最後一步」的呼叫最佳化成迴圈。
+        <strong>CPython 刻意不做</strong>：完整的 traceback 比省一層 frame 更有價值（官方立場）。
+        所以深遞迴在 Python 的正解永遠是改寫成迴圈。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="viz">
+  <div class="section-number">PART 04 · 視覺化</div>
+  <h2>視覺化遞迴：螺旋與碎形樹 <span class="sec-badge">pythonds §4.7 · 講義補充</span></h2>
+  <p style="font-size:.88rem;color:var(--muted);">課堂投影片跳過本節（RISE skip）：屬自學補充。</p>
+  <p>遞迴難學，常常是因為腦中缺一張圖。講義用內建的 turtle 模組畫圖建立直覺（課堂跑 <code>python turtle_example.py</code>），這裡用 canvas 重現同一套邏輯，原理一個字都沒變。</p>
+  <p>先看螺旋：每一步往前畫一段線、右轉 90 度，然後<strong>用短一點的長度呼叫自己</strong>。
+  長度歸零就是 base case。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
+          <canvas id="spiralCv" width="300" height="300" style="background:#fff;border-radius:8px;max-width:100%;"></canvas>
+          <canvas id="treeCv" width="330" height="300" style="background:#fff;border-radius:8px;max-width:100%;"></canvas>
+        </div>
+        <div class="status-banner" id="vizStatus"><span class="status-icon">›</span><span class="status-text">左邊是螺旋（draw_spiral），右邊是碎形樹（tree）。拉樹深度滑桿觀察「樹 = 樹幹 + 兩棵小樹」。</span></div>
+        <div class="controls-bar">
+          <button class="btn" onclick="spiralStart()">▶ 畫螺旋</button>
+          <label class="mono" style="font-size:.8rem;">樹的深度 <input id="treeDepth" type="range" min="1" max="9" value="7" style="vertical-align:middle;"></label>
+          <button class="btn" onclick="treeDraw()">▶ 畫樹</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">螺旋 <span class="ic-badge">CODE</span></div>
+        <div class="pseudo-code" style="font-size:.78rem;">
+<span class="line"><span class="kw">def</span> <span class="fn">draw_spiral</span>(my_turtle, line_len):</span>
+<span class="line">    <span class="kw">if</span> line_len &gt; <span class="num">0</span>:      <span class="com"># base case：長度歸零</span></span>
+<span class="line">        my_turtle.<span class="fn">forward</span>(line_len)</span>
+<span class="line">        my_turtle.<span class="fn">right</span>(<span class="num">90</span>)</span>
+<span class="line">        <span class="fn">draw_spiral</span>(my_turtle, line_len - <span class="num">5</span>)</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">碎形樹 <span class="ic-badge">CODE</span></div>
+        <div class="pseudo-code" style="font-size:.78rem;">
+<span class="line"><span class="kw">def</span> <span class="fn">tree</span>(branch_len, t):</span>
+<span class="line">    <span class="kw">if</span> branch_len &gt; <span class="num">5</span>:</span>
+<span class="line">        t.<span class="fn">forward</span>(branch_len)</span>
+<span class="line">        t.<span class="fn">right</span>(<span class="num">20</span>)</span>
+<span class="line">        <span class="fn">tree</span>(branch_len - <span class="num">15</span>, t)   <span class="com"># 右子樹</span></span>
+<span class="line">        t.<span class="fn">left</span>(<span class="num">40</span>)            <span class="com"># 退掉 20 再左轉 20</span></span>
+<span class="line">        <span class="fn">tree</span>(branch_len - <span class="num">15</span>, t)   <span class="com"># 左子樹</span></span>
+<span class="line">        t.<span class="fn">right</span>(<span class="num">20</span>)</span>
+<span class="line">        t.<span class="fn">backward</span>(branch_len)   <span class="com"># 退回分岔點</span></span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">碎形是什麼？</div>
+        <div style="font-size:.86rem;line-height:1.9;">不管放大多少倍，長相都跟整體一樣：海岸線、雪花、樹。
+        「一棵樹 = 樹幹 + 右邊一棵小樹 + 左邊一棵小樹」，這句話本身就是遞迴定義。
+        注意畫的順序：先一路往右畫到最細的枝，才回頭補左邊，跟呼叫堆疊的展開順序一致。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sierpinski">
+  <div class="section-number">PART 05 · 三路遞迴</div>
+  <h2>Sierpinski 三角形：一次生三個自己 <span class="sec-badge">pythonds §4.8 · 講義補充</span></h2>
+  <p style="font-size:.88rem;color:var(--muted);">課堂投影片跳過本節（RISE skip）：屬自學補充。</p>
+  <p>手繪流程只有三句話：畫一個大三角形；連接三邊中點，得到四個小三角形；
+  中間那個不管，對三個角落的小三角形重複同樣程序。
+  base case 是人為設定的<strong>degree（碎形深度）</strong>：每遞迴一層減 1，減到 0 就停。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <canvas id="sierCv" width="560" height="360" style="background:#fff;border-radius:8px;max-width:100%;"></canvas>
+        <div class="status-banner" id="sierStatus"><span class="status-icon">›</span><span class="status-text">拉 degree 滑桿。三角形個數是 3 的 degree 次方，長得快得很。</span></div>
+        <div class="controls-bar">
+          <label class="mono" style="font-size:.8rem;">degree <input id="sierDeg" type="range" min="0" max="6" value="3" style="vertical-align:middle;"> <span id="sierDegLbl">3</span></label>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">三路遞迴 <span class="ic-badge">CODE</span></div>
+        <div class="pseudo-code" style="font-size:.75rem;">
+<span class="line"><span class="kw">def</span> <span class="fn">sierpinski</span>(points, degree, t):</span>
+<span class="line">    <span class="fn">draw_triangle</span>(points, color[degree], t)</span>
+<span class="line">    <span class="kw">if</span> degree &gt; <span class="num">0</span>:</span>
+<span class="line">        <span class="fn">sierpinski</span>(左下角 + 兩個中點, degree-<span class="num">1</span>, t)</span>
+<span class="line">        <span class="fn">sierpinski</span>(頂角 + 兩個中點, degree-<span class="num">1</span>, t)</span>
+<span class="line">        <span class="fn">sierpinski</span>(右下角 + 兩個中點, degree-<span class="num">1</span>, t)</span>
+<span class="line"><span class="kw">def</span> <span class="fn">get_mid</span>(p1, p2): <span class="kw">return</span> ((p1[0]+p2[0])/<span class="num">2</span>, (p1[1]+p2[1])/<span class="num">2</span>)</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">畫的順序</div>
+        <div style="font-size:.86rem;line-height:1.9;">程式會先鑽到左下角最小的三角形，把左下角整片畫完，
+        再處理頂角、最後右下角。想像函式呼叫圖：越往下三角形越小，一次收完一整支子樹。
+        河內塔、樹的走訪（第 6 章）都是同一種「多路遞迴」的親戚。</div>
+      </div>
+    </div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 數三角形</div>
+  <p>degree = 3 時，sierpinski 總共呼叫了幾次（含最外層那一次）？</p>
+  
+  <div class="quiz-options" id="qSierOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="每層是前一層的 3 倍：3⁰+3¹+3²+3³。三路遞迴的呼叫數呈 3 的冪次成長，這也預告了第 2 章說的指數複雜度。" onclick="quizCheck('qSier', this)"><span class="opt-letter">(A)</span> 1 + 3 + 9 + 27 = 40 次</div><div class="quiz-opt" data-correct="false" data-fb="每一次呼叫都會再生三次，直到 degree 歸零，是連乘不是一次相乘。" onclick="quizCheck('qSier', this)"><span class="opt-letter">(B)</span> 3 × 3 = 9 次</div><div class="quiz-opt" data-correct="false" data-fb="27 只是最深那層；上面每一層的呼叫也要算。" onclick="quizCheck('qSier', this)"><span class="opt-letter">(C)</span> 27 次</div>
+  </div>
+  <div class="quiz-feedback" id="qSierFeedback"></div>
+</div>
+</section>
+
+<section id="hanoi">
+  <div class="section-number">PART 04 · 河內塔</div>
+  <h2>河內塔：三行遞迴解千年謎題 <span class="sec-badge">pythonds §4.10</span></h2>
+  <p>把 n 個盤子從 A 搬到 C（大盤不能壓小盤）：<strong>相信</strong> n−1 盤的搬法已存在，
+  那 n 盤 = 先把 n−1 盤挪到中繼柱、搬最大盤、再把 n−1 盤疊回來。移動次數 $2^n - 1$。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div style="display:flex;justify-content:space-around;align-items:flex-end;min-height:170px;" id="hanoiVis"></div>
+        <div class="status-banner" id="hanoiStatus"><span class="status-icon">›</span><span class="status-text">選盤數後開始。</span></div>
+        <div class="controls-bar">
+          <select id="hanoiN" class="mono" style="padding:.35rem;border-radius:6px;border:1px solid var(--card-border);">
+            <option value="3" selected>3 盤</option><option value="4">4 盤</option><option value="5">5 盤</option>
+          </select>
+          <button class="btn" onclick="hanoiStart()">▶ 開始</button>
+          <button class="btn" onclick="hanoiPlayer &amp;&amp; hanoiPlayer.step()">→ 單步</button>
+          <span class="mono" style="font-size:.8rem;color:var(--muted);">速度<input id="hanoiSpeed" type="range" min="120" max="1000" value="420" style="vertical-align:middle;"></span>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">虛擬碼 <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="hanoiCode">
+<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">move_tower</span>(height, from_pole, to_pole, with_pole):</span>
+<span class="line" data-l="2">    <span class="kw">if</span> height &lt; <span class="num">1</span>: <span class="kw">return</span>        <span class="com"># base case</span></span>
+<span class="line" data-l="3">    <span class="fn">move_tower</span>(height-<span class="num">1</span>, from_pole, with_pole, to_pole)  <span class="com"># ①</span></span>
+<span class="line" data-l="4">    <span class="fn">move_disk</span>(from_pole, to_pole)               <span class="com"># ② 最大盤直達</span></span>
+<span class="line" data-l="5">    <span class="fn">move_tower</span>(height-<span class="num">1</span>, with_pole, to_pole, from_pole)  <span class="com"># ③</span></span></div></div>
+      <div class="info-card">
+        <div class="ic-title">移動次數</div>
+        <div class="ic-row"><span class="ic-label">3 盤</span><span class="ic-value">7</span></div>
+        <div class="ic-row"><span class="ic-label">5 盤</span><span class="ic-value">31</span></div>
+        <div class="ic-row"><span class="ic-label">n 盤</span><span class="ic-value">2ⁿ − 1</span></div>
+        <div style="font-size:.76rem;color:var(--muted);margin-top:.3rem;">64 盤 ≈ 1.8×10¹⁹ 步：傳說中僧侶搬完，世界末日。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="maze">
+  <div class="section-number">PART 05 · 走迷宮</div>
+  <h2>迷宮探索：遞迴回溯（backtracking） <span class="sec-badge">pythonds §4.11</span></h2>
+  <p>希臘神話裡忒修斯進迷宮殺牛頭人，靠一團線找到回頭路。我們的演算法用的是另一個道具：
+  <strong>麵包屑</strong>。從起點問「往北一步之後，能走出去嗎」，這又是一個一模一樣的迷宮問題，
+  於是遞迴。北邊不行換南邊，再換西邊、東邊。走過的格子撒麵包屑，下次踩到就立刻回頭，
+  不然兩格之間會互相呼叫到天荒地老。回溯（backtrack）在程式裡就一件事：<strong>從遞迴呼叫 return</strong>。</p>
+  <p>四個 base case 要背起來：撞牆、踩到麵包屑（走過或死路）、到達邊緣（出口）、四個方向全部失敗。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div id="mazeVis" class="mono" style="line-height:1.15;font-size:1.05rem;letter-spacing:.1em;padding:.5rem;"></div>
+        <div class="status-banner" id="mazeStatus"><span class="status-icon">›</span><span class="status-text">S=起點；按「開始」看探索與回溯。</span></div>
+        <div class="controls-bar">
+          <button class="btn" onclick="mazeStart()">▶ 開始</button>
+          <button class="btn" onclick="mazePlayer &amp;&amp; mazePlayer.step()">→ 單步</button>
+          <span class="mono" style="font-size:.8rem;color:var(--muted);">速度<input id="mazeSpeed" type="range" min="60" max="600" value="180" style="vertical-align:middle;"></span>
+        </div>
+        <div class="mono" style="font-size:.78rem;color:var(--muted);">圖例：<span style="color:#f39c12;">●</span> 目前｜<span style="color:#1a6b4a;">＋</span> 路徑｜<span style="color:#c0392b;">−</span> 死路</div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">虛擬碼 <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="mazeCode">
+<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">search_from</span>(maze, row, col):</span>
+<span class="line" data-l="2">    <span class="kw">if</span> 是牆:            <span class="kw">return</span> <span class="num">False</span></span>
+<span class="line" data-l="3">    <span class="kw">if</span> 走過/死路:       <span class="kw">return</span> <span class="num">False</span></span>
+<span class="line" data-l="4">    <span class="kw">if</span> 到達出口:        <span class="kw">return</span> <span class="num">True</span></span>
+<span class="line" data-l="5">    標記「走過」</span>
+<span class="line" data-l="6">    found = 往北 <span class="kw">or</span> 往南 <span class="kw">or</span> 往西 <span class="kw">or</span> 往東   <span class="com"># 短路：找到就停</span></span>
+<span class="line" data-l="7">    <span class="kw">if</span> found: 標記「路徑」</span>
+<span class="line" data-l="8">    <span class="kw">else</span>:  標記「死路」</span>
+<span class="line" data-l="9">    <span class="kw">return</span> found</span></div></div>
+      <div class="info-card">
+        <div class="ic-title">Maze 類別 <span class="ic-badge">CODE</span></div>
+        <div class="pseudo-code" style="font-size:.73rem;">
+<span class="line">OBSTACLE = <span class="str">&quot;+&quot;</span>; TRIED = <span class="str">&quot;.&quot;</span></span>
+<span class="line">DEAD_END = <span class="str">&quot;-&quot;</span>; PART_OF_PATH = <span class="str">&quot;O&quot;</span></span>
+<span class="line"><span class="kw">class</span> <span class="fn">Maze</span>:          <span class="com"># 課堂版 maze.py</span></span>
+<span class="line">    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, maze_filename):</span>
+<span class="line">        <span class="kw">for</span> line <span class="kw">in</span> <span class="fn">open</span>(maze_filename):</span>
+<span class="line">            <span class="kw">self</span>.maze_list.<span class="fn">append</span>(<span class="fn">list</span>(line))</span>
+<span class="line">        <span class="com"># 掃每一列找 'S' → start_row / start_col</span></span>
+<span class="line">    <span class="kw">def</span> <span class="fn">is_exit</span>(<span class="kw">self</span>, row, col):  <span class="com"># 任一邊緣就是出口</span></span>
+<span class="line">        <span class="kw">return</span> (row == <span class="num">0</span> <span class="kw">or</span> row == <span class="kw">self</span>.rows_in_maze - <span class="num">1</span> <span class="kw">or</span></span>
+<span class="line">                col == <span class="num">0</span> <span class="kw">or</span> col == <span class="kw">self</span>.columns_in_maze - <span class="num">1</span>)</span>
+<span class="line">    <span class="kw">def</span> <span class="fn">update_position</span>(<span class="kw">self</span>, row, col, val):</span>
+<span class="line">        <span class="kw">self</span>.maze_list[row][col] = val</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">search_from 的短路技巧 <span class="ic-badge">CODE</span></div>
+        <div class="pseudo-code" style="font-size:.74rem;">
+<span class="line">found = (<span class="fn">search_from</span>(maze, row - <span class="num">1</span>, col)  <span class="com"># 北</span></span>
+<span class="line">     <span class="kw">or</span> <span class="fn">search_from</span>(maze, row + <span class="num">1</span>, col)  <span class="com"># 南</span></span>
+<span class="line">     <span class="kw">or</span> <span class="fn">search_from</span>(maze, row, col - <span class="num">1</span>)  <span class="com"># 西</span></span>
+<span class="line">     <span class="kw">or</span> <span class="fn">search_from</span>(maze, row, col + <span class="num">1</span>)) <span class="com"># 東</span></span>
+<span class="line">maze.<span class="fn">update_position</span>(row, col,</span>
+<span class="line">    PART_OF_PATH <span class="kw">if</span> found <span class="kw">else</span> DEAD_END)</span>
+<span class="line"><span class="kw">return</span> found</span></div>
+        <div style="font-size:.82rem;line-height:1.8;color:var(--muted);margin-top:.4rem;">四個呼叫用 or 串起來：
+        北邊一旦回報 True，剩下三個方向連試都不試（短路求值）。找到路的格子標 O、全敗的標 −，
+        印出來就是完整的探索地圖。課堂版把這個 Maze 跑在 maze2.txt 上（<code>python maze.py</code>）。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="dp">
+  <div class="section-number">PART 06 · 動態規劃</div>
+  <h2>找零錢：從貪婪、天真遞迴，一路走到 DP <span class="sec-badge">pythonds §4.12 · 講義補充</span></h2>
+  <p style="font-size:.88rem;color:var(--muted);">課堂投影片跳過本節（RISE skip，講義也標 Optional）：屬自學補充，但 DP 是後續演算法課的重要橋段。</p>
+  <p>自動販賣機要用最少的硬幣找零。37 分怎麼找？兩個 25 太多，一個 25、一個 10、三個 1，共六枚。
+  這種「先拿最大的」叫<strong>貪婪法</strong>，美國硬幣（1、5、10、25）下它剛好都對。
+  但假設某國多了一種 21 分硬幣：63 分的最佳解是三枚 21，貪婪法卻還是給你六枚（25+25+10+1+1+1）。
+  貪婪法死在「當下最好」不等於「整體最好」。</p>
+  <p>那就老實遞迴：63 分的最少硬幣數，是「拿一枚 1 分之後 62 分的最少」「拿一枚 5 分之後 58 分的最少」……
+  之中最小的那個加一。這個定義完全正確，卻慢得離譜：<strong>63 分要 67,716,925 次遞迴呼叫</strong>，
+  因為同樣的子問題（例如 15 分）被翻來覆去重算了幾十次。講義給了三帖藥，一帖比一帖徹底：</p>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>版本</th><th>策略</th><th>63 分的呼叫數</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">make_change_1</td><td>天真遞迴：每次都重算</td><td>67,716,925</td></tr>
+      <tr><td class="mono">make_change_2</td><td>memoization：算過的存進表，先查表再遞迴</td><td>221</td></tr>
+      <tr><td class="mono">make_change_3</td><td>DP：乾脆從 1 分由小到大把表填滿，不遞迴</td><td>迴圈 63 × 4 步</td></tr>
+    </tbody>
+  </table></div>
+  <p style="margin-top:.6rem;">memoization（也叫 caching）已經把爆炸壓下來了，但表裡還有洞、邏輯像補丁。
+  真正的 DP 換一個角度：<strong>從 1 分開始，由小到大把每個金額的最佳解填進表格</strong>。
+  填到第 c 分時，所有更小的金額都已經有答案，每格只要看「扣掉一枚硬幣後查表」哪個最小。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="char-strip" id="dpStrip" style="max-width:100%;overflow-x:auto;flex-wrap:nowrap;"></div>
+        <div class="status-banner" id="dpStatus"><span class="status-icon">›</span><span class="status-text">按「開始」填 0~23 分的最少硬幣表（示範用 23 分）。</span></div>
+        <div class="controls-bar">
+          <button class="btn" onclick="dpStart()">▶ 填表（coins = 1,5,10,21,25；target 23）</button>
+          <button class="btn" onclick="dpPlayer &amp;&amp; dpPlayer.step()">→ 單步</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">make_change_3（DP 本體）<span class="ic-badge">CODE</span></div><div class="pseudo-code" id="dpCode">
+<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">make_change_3</span>(coins, change, min_coins):</span>
+<span class="line" data-l="2">    <span class="kw">for</span> cents <span class="kw">in</span> <span class="fn">range</span>(change + <span class="num">1</span>):</span>
+<span class="line" data-l="3">        best = cents               <span class="com"># 全用 1 元</span></span>
+<span class="line" data-l="4">        <span class="kw">for</span> c <span class="kw">in</span> [c <span class="kw">for</span> c <span class="kw">in</span> coins <span class="kw">if</span> c &lt;= cents]:</span>
+<span class="line" data-l="5">            best = <span class="fn">min</span>(best, min_coins[cents - c] + <span class="num">1</span>)</span>
+<span class="line" data-l="6">        min_coins[cents] = best    <span class="com"># 只依賴更小的子問題</span></span>
+<span class="line" data-l="7">    <span class="kw">return</span> min_coins[change]</span></div></div>
+      <div class="info-card">
+        <div class="ic-title">make_change_4：把「用了哪些硬幣」也記下來 <span class="ic-badge">CODE</span></div>
+        <div class="pseudo-code" style="font-size:.74rem;">
+<span class="line"><span class="com"># 填表時多記一筆：這格最後拿的是哪枚硬幣</span></span>
+<span class="line">min_coins[cents] = coin_count</span>
+<span class="line">coins_used[cents] = new_coin</span>
+<span class="line"> </span>
+<span class="line"><span class="kw">def</span> <span class="fn">print_coins</span>(coins_used, change):</span>
+<span class="line">    coin = change</span>
+<span class="line">    <span class="kw">while</span> coin &gt; <span class="num">0</span>:</span>
+<span class="line">        <span class="fn">print</span>(coins_used[coin], end=<span class="str">&quot; &quot;</span>)</span>
+<span class="line">        coin = coin - coins_used[coin]  <span class="com"># 沿表回溯</span></span></div>
+        <div style="font-size:.82rem;line-height:1.8;color:var(--muted);margin-top:.4rem;">63 那格記著 21，
+        跳到 42 又是 21，再跳到 21 還是 21：印出「21 21 21」。只多存一個陣列，就能把答案的內容也還原出來。</div>
+      </div>
+    </div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · DP vs 天真遞迴</div>
+  <p>天真遞迴解 63 分要 6.7 億次呼叫、DP 只要幾千步。DP 快的核心原因是？</p>
+  
+  <div class="quiz-options" id="qDpOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="重疊子問題 + 最優子結構 = DP 的適用條件；表格（或 memo）消滅重複計算。" onclick="quizCheck('qDp', this)"><span class="opt-letter">(A)</span> 每個子問題只算一次（記住答案）</div><div class="quiz-opt" data-correct="false" data-fb="順序無關，快的關鍵是「不重算」，計算量從指數掉到多項式。" onclick="quizCheck('qDp', this)"><span class="opt-letter">(B)</span> DP 用了更聰明的硬幣順序</div><div class="quiz-opt" data-correct="false" data-fb="函式呼叫的常數差距沒那麼大；差在計算量的量級。" onclick="quizCheck('qDp', this)"><span class="opt-letter">(C)</span> 遞迴本身比迴圈慢 1000 倍</div>
+  </div>
+  <div class="quiz-feedback" id="qDpFeedback"></div>
+</div>
+</section>
+
+<section id="exercises">
+  <div class="section-number">EXERCISES · 練習</div>
+  <h2>動手驗證 <span class="sec-badge">pythonds §4 綜合</span></h2>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 1 · 追蹤遞迴</div>
+  <p><code>to_str(10, 2)</code> 的回傳值是？（動畫可驗證）</p>
+  
+  <div class="quiz-options" id="ex1Options">
+    <div class="quiz-opt" data-correct="true" data-fb="to_str(10,2)=to_str(5,2)+&quot;0&quot;=（to_str(2,2)+&quot;1&quot;）+&quot;0&quot;=（（to_str(1,2)+&quot;0&quot;）+&quot;1&quot;）+&quot;0&quot;=&quot;1010&quot;。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> <code>"1010"</code></div><div class="quiz-opt" data-correct="false" data-fb="這是把餘數照產生順序串起來：遞迴版不會發生這種事，因為餘數是「回來之後」才接上。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> <code>"0101"</code></div><div class="quiz-opt" data-correct="false" data-fb="少了最後一位 0：n%base 的餘數每一層都要接上。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> <code>"101"</code></div>
+  </div>
+  <div class="quiz-feedback" id="ex1Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 2 · 河內塔</div>
+  <p>4 盤河內塔最少要移動幾次？其中「最大盤」移動幾次？</p>
+  
+  <div class="quiz-options" id="ex2Options">
+    <div class="quiz-opt" data-correct="true" data-fb="2⁴−1 = 15；最大盤永遠只在「中間那一步」直達目的柱，1 次。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(A)</span> 15 次；最大盤 1 次</div><div class="quiz-opt" data-correct="false" data-fb="公式是 2ⁿ−1，不是 2ⁿ；最大盤只搬一次是遞迴分解的關鍵洞察。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(B)</span> 16 次；最大盤 2 次</div><div class="quiz-opt" data-correct="false" data-fb="次數對了，但最大盤只動 1 次：動它之前上面必須清空。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(C)</span> 15 次；最大盤 4 次</div>
+  </div>
+  <div class="quiz-feedback" id="ex2Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 3 · 迷宮 base case</div>
+  <p>迷宮遞迴少寫「走過的格子直接 return false」會怎樣？</p>
+  
+  <div class="quiz-options" id="ex3Options">
+    <div class="quiz-opt" data-correct="true" data-fb="A 問 B、B 又問 A：沒有「走過」標記就沒有前進性，違反法則 2。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(A)</span> 相鄰兩格互相呼叫，無窮遞迴</div><div class="quiz-opt" data-correct="false" data-fb="不會停，這是最典型的無窮遞迴來源。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(B)</span> 答案錯但會停</div><div class="quiz-opt" data-correct="false" data-fb="不是慢，是 stack overflow 當機。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(C)</span> 只是變慢</div>
+  </div>
+  <div class="quiz-feedback" id="ex3Feedback"></div>
+</div>
+</section>
+
+<section id="reference">
+  <div class="section-number">REFERENCE · 總覽</div>
+  <h2>本章遞迴問題一覽 <span class="sec-badge">pythonds §4 總覽</span></h2>
+  <div style="overflow-x:auto;">
+  <table class="cmp-table" style="width:100%;font-size:.88rem;">
+    <thead><tr><th>問題</th><th>base case</th><th>縮小方式</th><th>複雜度</th></tr></thead>
+    <tbody>
+      <tr><td>listSum</td><td>長度 1</td><td>去掉第一個元素</td><td>O(n)</td></tr>
+      <tr><td>to_str(n, base)</td><td>n &lt; base</td><td>n // base</td><td>O(log n)</td></tr>
+      <tr><td>河內塔</td><td>height &lt; 1</td><td>height − 1（兩次）</td><td>O(2ⁿ)</td></tr>
+      <tr><td>迷宮</td><td>牆／走過／出口</td><td>相鄰格子</td><td>O(格子數)</td></tr>
+      <tr><td>找零錢（DP）</td><td>金額 0</td><td>金額 − 硬幣面額</td><td>O(金額×硬幣種)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="info-box" style="margin-top:1rem;">
+    <span class="info-label">關鍵概念複習</span>
+    ① 三法則：base case、朝它前進、呼叫自己。<br>
+    ② call stack 是隱形的 stack：第 3 章手動管理的，遞迴讓系統代管。<br>
+    ③ 分支遞迴（河內塔 2 支、迷宮 4 支）容易指數爆炸；<strong>重疊子問題</strong>時用 DP/memoization 收服。<br>
+    ④ Sierpinski 三角形等碎形：圖形的自相似 = 視覺化的遞迴（見講義 §5.8 turtle 圖）。
+  </div>
+</section></div>
+<footer>
+  互動式遞迴教學 · 基於 Problem Solving with Algorithms and Data Structures using Python (pythonds) Ch.4<br>
+  <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);">Designed for NSYSU · Interactive Python self-study</span>
+</footer>
+<script>
+/* ============ shared utilities ============ */
+const $ = id => document.getElementById(id);
+
+function quizCheck(quizId, optEl) {
+  const isCorrect = optEl.dataset.correct === 'true';
+  optEl.parentElement.querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('correct','wrong'));
+  optEl.classList.add(isCorrect ? 'correct' : 'wrong');
+  const fb = $(quizId + 'Feedback');
+  fb.classList.remove('correct','wrong');
+  fb.classList.add('show', isCorrect ? 'correct' : 'wrong');
+  fb.innerHTML = (isCorrect ? '<strong>正確 ✓</strong> ' : '<strong>不對 ✗</strong> ') + (optEl.dataset.fb || '');
+}
+
+function hlLine(rootId, n) {
+  const root = $(rootId);
+  if (!root) return;
+  root.querySelectorAll('.line').forEach(l => l.classList.remove('active'));
+  if (n != null) {
+    const line = root.querySelector(`.line[data-l="${n}"]`);
+    if (line) line.classList.add('active');
+  }
+}
+
+/* step player: frames = [{...}], apply(frame) renders */
+class Player {
+  constructor({frames, apply, delayInput, onDone}) {
+    this.frames = frames; this.apply = apply;
+    this.delayInput = delayInput; this.i = -1; this.timer = null;
+    this.onDone = onDone || (()=>{});
+  }
+  step() {
+    if (this.i + 1 >= this.frames.length) { this.stop(); this.onDone(); return; }
+    this.i += 1; this.apply(this.frames[this.i]);
+  }
+  play() {
+    this.stop();
+    const tick = () => {
+      if (this.i + 1 >= this.frames.length) { this.stop(); this.onDone(); return; }
+      this.step();
+      this.timer = setTimeout(tick, this.delayInput ? parseInt(this.delayInput.value,10) : 700);
+    };
+    tick();
+  }
+  stop() { if (this.timer) { clearTimeout(this.timer); this.timer = null; } }
+  reset() { this.stop(); this.i = -1; if (this.frames.length) this.apply(this.frames[0]); }
+}
+
+function setStatus(id, html) {
+  const el = $(id); if (el) el.querySelector('.status-text').innerHTML = html;
+}
+
+/* vertical box stack renderer (DOM) */
+function renderBoxStack(containerId, items, opts={}) {
+  const el = $(containerId); if (!el) return;
+  const hl = opts.highlight ?? -1;   // index from top (0 = top)
+  el.innerHTML = '';
+  const label = document.createElement('div');
+  label.className = 'bs-toplabel';
+  label.textContent = items.length ? 'top ↓' : '(empty)';
+  el.appendChild(label);
+  items.slice().reverse().forEach((v, idx) => {
+    const d = document.createElement('div');
+    d.className = 'bs-item' + (idx === hl ? ' bs-hl' : '');
+    d.textContent = v;
+    el.appendChild(d);
+  });
+}
+
+/* horizontal queue renderer: front at left */
+function renderBoxQueue(containerId, items, opts={}) {
+  const el = $(containerId); if (!el) return;
+  el.innerHTML = '';
+  const front = document.createElement('div');
+  front.className = 'bq-label'; front.textContent = items.length ? 'front →' : '(empty)';
+  el.appendChild(front);
+  items.forEach((v, idx) => {
+    const d = document.createElement('div');
+    d.className = 'bq-item' + (idx === (opts.highlight ?? -1) ? ' bs-hl' : '');
+    d.textContent = v;
+    el.appendChild(d);
+  });
+  const rear = document.createElement('div');
+  rear.className = 'bq-label'; rear.textContent = items.length ? '← rear' : '';
+  el.appendChild(rear);
+}
+
+/* floating nav scroll spy */
+(function setupNav() {
+  const nav = $('floatNav');
+  const links = nav.querySelectorAll('a[data-target]');
+  const sections = Array.from(links).map(a => document.getElementById(a.dataset.target)).filter(Boolean);
+  function update() {
+    const y = window.scrollY + window.innerHeight * 0.3;
+    let active = sections[0]?.id;
+    for (const s of sections) if (s.offsetTop <= y) active = s.id;
+    links.forEach(a => a.classList.toggle('active', a.dataset.target === active));
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+
+/* ---------- P00 listSum ---------- */
+let sumPlayer = null;
+function sumFrames() {
+  const arr = [1,3,5,7,9];
+  const frames = [];
+  const rows = [];
+  for (let i = 0; i < arr.length; i++) {
+    const rest = arr.slice(i);
+    if (rest.length === 1) {
+      rows.push(`${'&nbsp;'.repeat(i*4)}listSum([9]) = 9　<span style="color:var(--accent3);">← base case</span>`);
+      frames.push({html: rows.join('<br>'), msg: '碰到 base case，開始回傳。', line: 3});
+    } else {
+      rows.push(`${'&nbsp;'.repeat(i*4)}listSum([${rest.join(',')}]) = ${rest[0]} + listSum([${rest.slice(1).join(',')}])`);
+      frames.push({html: rows.join('<br>'), msg: `展開：先解決更小的 listSum([${rest.slice(1).join(',')}])`, line: 5});
+    }
+  }
+  let acc = 9;
+  for (let i = arr.length - 2; i >= 0; i--) {
+    const rest = arr.slice(i);
+    acc = rest[0] + acc;
+    rows.push(`${'&nbsp;'.repeat(i*4)}<span style="color:var(--accent2);">↩ listSum([${rest.join(',')}]) = ${rest[0]} + ${acc - rest[0]} = ${acc}</span>`);
+    frames.push({html: rows.join('<br>'), msg: `收合：往外回傳 ${acc}`, line: 5});
+  }
+  frames.push({html: rows.join('<br>'), msg: '<strong>listSum([1,3,5,7,9]) = 25 ✓</strong>', line: 5});
+  return frames;
+}
+function sumStart() {
+  sumPlayer = new Player({frames: sumFrames(), apply: f => {
+    $('sumTrace').innerHTML = f.html; setStatus('sumStatus', f.msg); hlLine('sumCode', f.line);
+  }});
+  sumPlayer.reset(); sumPlayer.play();
+}
+
+/* ---------- P02 to_str ---------- */
+let tostrPlayer = null;
+function tostrFrames(n0, base) {
+  const digits = '0123456789ABCDEF';
+  const frames = []; const rows = [];
+  const chain = [];
+  let n = n0;
+  while (n >= base) { chain.push(n); n = Math.floor(n / base); }
+  chain.push(n);
+  chain.forEach((v, i) => {
+    if (v < base) {
+      rows.push(`${'&nbsp;'.repeat(i*4)}to_str(${v}) = "${digits[v]}"　<span style="color:var(--accent3);">← base case</span>`);
+      frames.push({html: rows.join('<br>'), msg: `${v} < ${base}，直接查 digits 表。`, line: 4});
+    } else {
+      rows.push(`${'&nbsp;'.repeat(i*4)}to_str(${v}) = to_str(${Math.floor(v/base)}) + "${digits[v%base]}"`);
+      frames.push({html: rows.join('<br>'), msg: `${v} = ${Math.floor(v/base)}×${base} + ${v%base} → 先處理商，餘數等回來再接。`, line: 6});
+    }
+  });
+  let s = digits[chain[chain.length-1]];
+  for (let i = chain.length - 2; i >= 0; i--) {
+    s = s + digits[chain[i] % base];
+    rows.push(`${'&nbsp;'.repeat(i*4)}<span style="color:var(--accent2);">↩ to_str(${chain[i]}) = "${s}"</span>`);
+    frames.push({html: rows.join('<br>'), msg: `收合：目前字串 "${s}"`, line: 6});
+  }
+  frames.push({html: rows.join('<br>'), msg: `<strong>to_str(${n0}, ${base}) = "${s}" ✓（高位天然在前）</strong>`, line: 6});
+  return frames;
+}
+function tostrStart() {
+  const n = Math.max(0, parseInt($('tostrN').value || '769', 10));
+  const b = parseInt($('tostrB').value, 10);
+  tostrPlayer = new Player({frames: tostrFrames(n, b), apply: f => {
+    $('tostrTrace').innerHTML = f.html; setStatus('tostrStatus', f.msg); hlLine('tostrCode', f.line);
+  }});
+  tostrPlayer.reset(); tostrPlayer.play();
+}
+
+/* ---------- P03 call stack fact(4) ---------- */
+let framePlayer = null;
+function frameFrames() {
+  const frames = [];
+  const st = [];
+  for (let n = 4; n >= 1; n--) {
+    st.push(`fact(${n})${n === 1 ? ' = 1' : ''}`);
+    frames.push({stack: [...st], msg: n === 1 ? 'base case：fact(1) = 1，開始 pop。' : `push frame：fact(${n}) 等待 fact(${n-1}) 的結果`});
+  }
+  let acc = 1;
+  for (let n = 2; n <= 4; n++) {
+    st.pop();
+    acc *= n;
+    st[st.length-1] = `fact(${n}) = ${n}·${acc/n} = ${acc}`;
+    frames.push({stack: [...st], msg: `pop：fact(${n-1}) 回傳，fact(${n}) 算出 ${acc}`});
+  }
+  st.pop();
+  frames.push({stack: [], msg: '<strong>fact(4) = 24；call stack 清空。</strong>'});
+  return frames;
+}
+function frameStart() {
+  framePlayer = new Player({frames: frameFrames(), apply: f => {
+    renderBoxStack('frameVis', f.stack); setStatus('frameStatus', f.msg);
+  }});
+  framePlayer.reset(); framePlayer.play();
+}
+
+/* ---------- P04 hanoi ---------- */
+let hanoiPlayer = null;
+function hanoiRender(pegs, msg) {
+  const el = $('hanoiVis'); el.innerHTML = '';
+  ['A','B','C'].forEach((name, pi) => {
+    const col = document.createElement('div');
+    col.style.cssText = 'display:flex;flex-direction:column-reverse;align-items:center;gap:3px;min-width:130px;';
+    const base = document.createElement('div');
+    base.className = 'mono'; base.style.cssText = 'font-size:.8rem;color:var(--muted);';
+    base.textContent = name;
+    col.appendChild(base);
+    pegs[pi].forEach(d => {
+      const disk = document.createElement('div');
+      disk.style.cssText = `height:20px;border-radius:5px;background:${['#5b7eb8','#2c3e7a','#1a6b4a','#8e44ad','#e67e22'][d-1]};width:${34 + d*18}px;color:#fff;font-size:.7rem;text-align:center;line-height:20px;`;
+      disk.textContent = d;
+      col.appendChild(disk);
+    });
+    el.appendChild(col);
+  });
+  if (msg) setStatus('hanoiStatus', msg);
+}
+function hanoiFrames(n) {
+  const pegs = [[...Array(n)].map((_,i)=>n-i), [], []];
+  const frames = [{pegs: pegs.map(p=>[...p]), msg: `開始：${n} 盤在 A。目標 C。共需 ${2**n - 1} 步。`, line: 1}];
+  let step = 0;
+  function move(h, from, to, via) {
+    if (h < 1) return;
+    move(h-1, from, via, to);
+    const d = pegs[from].pop(); pegs[to].push(d);
+    step++;
+    frames.push({pegs: pegs.map(p=>[...p]), msg: `第 ${step} 步：盤 ${d} 從 ${'ABC'[from]} → ${'ABC'[to]}`, line: d === h ? 4 : 3});
+    move(h-1, via, to, from);
+  }
+  move(n, 0, 2, 1);
+  frames.push({pegs: pegs.map(p=>[...p]), msg: `<strong>完成！共 ${step} 步 = 2^${n} − 1 ✓</strong>`, line: 5});
+  return frames;
+}
+function hanoiStart() {
+  const n = parseInt($('hanoiN').value, 10);
+  hanoiPlayer = new Player({frames: hanoiFrames(n), apply: f => {
+    hanoiRender(f.pegs, f.msg); hlLine('hanoiCode', f.line);
+  }, delayInput: $('hanoiSpeed')});
+  hanoiPlayer.reset(); hanoiPlayer.play();
+}
+hanoiRender([[3,2,1],[],[]], null);
+
+/* ---------- P05 maze ---------- */
+let mazePlayer = null;
+const MAZE_ROWS = [
+  '++++++++++++',
+  '+   +   ++ +',
+  '+ +++ + ++ +',
+  '+ +   +    +',
+  '+ + +++ ++++',
+  '+S+     +  E',
+  '++++++++++++',
+];
+function mazeFrames() {
+  const g = MAZE_ROWS.map(r => r.split(''));
+  const R = g.length, C = g[0].length;
+  let sr, sc;
+  for (let r = 0; r < R; r++) for (let c = 0; c < C; c++) if (g[r][c] === 'S') { sr = r; sc = c; }
+  const state = g.map(r => [...r]);
+  const frames = [{grid: state.map(r=>[...r]), cur: [sr,sc], msg: '從 S 出發。', line: 1}];
+  function push(cur, msg, line) { frames.push({grid: state.map(r=>[...r]), cur, msg, line}); }
+  function search(r, c) {
+    if (r < 0 || r >= R || c < 0 || c >= C) return false;
+    if (g[r][c] === '+') { push([r,c], `(${r},${c}) 是牆 → false`, 2); return false; }
+    if (state[r][c] === '.' || state[r][c] === '-') return false;
+    if (c === C - 1 || g[r][c] === 'E') { state[r][c] = 'P'; push([r,c], `(${r},${c}) 到達出口 → true！`, 4); return true; }
+    state[r][c] = '.';
+    push([r,c], `走到 (${r},${c})，標記走過，依序試 北/南/西/東`, 5);
+    const found = search(r-1,c) || search(r+1,c) || search(r,c-1) || search(r,c+1);
+    state[r][c] = found ? 'P' : '-';
+    push([r,c], found ? `(${r},${c}) 在成功路徑上 ＋` : `(${r},${c}) 四方向皆敗 → 死路 −，回溯`, found ? 7 : 8);
+    return found;
+  }
+  search(sr, sc);
+  frames.push({grid: state.map(r=>[...r]), cur: null, msg: '<strong>綠色 ＋ 就是找到的路徑 ✓</strong>', line: 9});
+  return frames;
+}
+function mazeApply(f) {
+  const colors = {'+':'#8a8578', ' ':'#e8e2d6', '.':'#d5c9a8', '-':'#c0392b', 'P':'#1a6b4a', 'S':'#2c3e7a', 'E':'#2c3e7a'};
+  let html = '';
+  f.grid.forEach((row, r) => {
+    row.forEach((ch, c) => {
+      const cur = f.cur && f.cur[0] === r && f.cur[1] === c;
+      const shown = ch === '+' ? '█' : (ch === ' ' ? '·' : (ch === '.' ? '·' : (ch === '-' ? '−' : (ch === 'P' ? '＋' : ch))));
+      html += `<span style="color:${cur ? '#f39c12' : colors[ch] || '#333'};font-weight:${cur||ch==='P'?'700':'400'};">${cur ? '●' : shown}</span>`;
+    });
+    html += '<br>';
+  });
+  $('mazeVis').innerHTML = html;
+  setStatus('mazeStatus', f.msg); hlLine('mazeCode', f.line);
+}
+function mazeStart() {
+  mazePlayer = new Player({frames: mazeFrames(), apply: mazeApply, delayInput: $('mazeSpeed')});
+  mazePlayer.reset(); mazePlayer.play();
+}
+mazeApply({grid: MAZE_ROWS.map(r=>r.split('')), cur: null, msg: 'S=起點、E=出口。', line: 1});
+
+/* ---------- P08 DP make change (with coinsUsed traceback) ---------- */
+let dpPlayer = null;
+function dpFrames() {
+  const coins = [1,5,10,21,25], target = 23;
+  const mc = [0], used = [0];
+  const frames = [{vals: [...mc], cur: -1, msg: 'minCoins[0] = 0（不用任何硬幣）。', line: 2}];
+  for (let cents = 1; cents <= target; cents++) {
+    let best = cents, pick = 1;
+    for (const c of coins) if (c <= cents && mc[cents - c] + 1 < best) { best = mc[cents - c] + 1; pick = c; }
+    mc.push(best); used.push(pick);
+    frames.push({vals: [...mc], cur: cents,
+      msg: `minCoins[${cents}] = ${best}（最後拿一枚 ${pick}，剩 ${cents-pick} 分查表 = ${mc[cents-pick]} 枚）`, line: 6});
+  }
+  // coinsUsed traceback
+  let coin = target; const picks = [];
+  while (coin > 0) { picks.push(used[coin]); coin -= used[coin]; }
+  frames.push({vals: mc, cur: target,
+    msg: `<strong>23 分最少 ${mc[target]} 枚。coinsUsed 回溯：${picks.join(' → ')}（貪婪法會拿 5 枚：10+10+1+1+1）</strong>`, line: 8});
+  return frames;
+}
+function dpApply(f) {
+  const strip = $('dpStrip'); strip.innerHTML = '';
+  f.vals.forEach((v, i) => {
+    const d = document.createElement('div');
+    d.className = 'char-cell' + (i === f.cur ? ' char-cur' : ' char-done');
+    d.innerHTML = `<div style="font-size:.6rem;color:${i===f.cur?'#fff':'var(--muted)'};">${i}</div>${v}`;
+    strip.appendChild(d);
+  });
+  setStatus('dpStatus', f.msg); hlLine('dpCode', f.line);
+}
+function dpStart() {
+  dpPlayer = new Player({frames: dpFrames(), apply: dpApply});
+  dpPlayer.reset(); dpPlayer.play();
+}
+
+/* ---------- P04 spiral + fractal tree ---------- */
+let spiralTimer = null;
+function spiralStart() {
+  const cv = $('spiralCv'), ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  ctx.strokeStyle = '#2c3e7a'; ctx.lineWidth = 2;
+  let x = 90, y = 90, angle = 0, len = 210;
+  if (spiralTimer) clearInterval(spiralTimer);
+  spiralTimer = setInterval(() => {
+    if (len <= 0) { clearInterval(spiralTimer);
+      setStatus('vizStatus', '螺旋畫完：每次遞迴長度減 5，直到歸零（base case）。總共呼叫了 43 次。'); return; }
+    const rad = angle * Math.PI / 180;
+    const nx = x + len * Math.cos(rad), ny = y + len * Math.sin(rad);
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(nx, ny); ctx.stroke();
+    x = nx; y = ny; angle += 90; len -= 5;
+  }, 60);
+}
+function treeDraw() {
+  const cv = $('treeCv'), ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  const maxDepth = parseInt($('treeDepth').value, 10);
+  let calls = 0;
+  function tree(x, y, angle, len, depth) {
+    calls++;
+    if (len <= 5 || depth <= 0) return;
+    const rad = angle * Math.PI / 180;
+    const nx = x + len * Math.cos(rad), ny = y - len * Math.sin(rad);
+    ctx.strokeStyle = depth > 3 ? '#7a5c3e' : '#1a6b4a';
+    ctx.lineWidth = Math.max(1, depth * 0.8);
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(nx, ny); ctx.stroke();
+    tree(nx, ny, angle - 20, len - 13, depth - 1);   // 右子樹
+    tree(nx, ny, angle + 20, len - 13, depth - 1);   // 左子樹
+  }
+  tree(cv.width / 2, cv.height - 8, 90, 78, maxDepth);
+  setStatus('vizStatus', `深度 ${maxDepth}：tree() 被呼叫 ${calls} 次。每個分岔點就是一次遞迴呼叫，先右後左。`);
+}
+$('treeDepth').addEventListener('input', treeDraw);
+spiralStart(); treeDraw();
+
+/* ---------- P05 sierpinski ---------- */
+function sierDraw() {
+  const cv = $('sierCv'), ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  const degree = parseInt($('sierDeg').value, 10);
+  $('sierDegLbl').textContent = degree;
+  const colors = ['#2c3e7a', '#c0392b', '#1a6b4a', '#8e44ad', '#e67e22', '#16a085', '#5b7eb8'];
+  let count = 0;
+  const mid = (a, b) => [(a[0]+b[0])/2, (a[1]+b[1])/2];
+  function drawTri(p, color) {
+    ctx.fillStyle = color;
+    ctx.beginPath(); ctx.moveTo(p[0][0], p[0][1]);
+    ctx.lineTo(p[1][0], p[1][1]); ctx.lineTo(p[2][0], p[2][1]);
+    ctx.closePath(); ctx.fill();
+  }
+  function sier(p, deg) {
+    count++;
+    drawTri(p, colors[deg % colors.length]);
+    if (deg > 0) {
+      sier([p[0], mid(p[0], p[1]), mid(p[0], p[2])], deg - 1);
+      sier([p[1], mid(p[0], p[1]), mid(p[1], p[2])], deg - 1);
+      sier([p[2], mid(p[2], p[1]), mid(p[0], p[2])], deg - 1);
+    }
+  }
+  sier([[30, 340], [280, 20], [530, 340]], degree);
+  setStatus('sierStatus', `degree = ${degree}：sierpinski() 呼叫 ${count} 次（= 3⁰ + 3¹ + … + 3^${degree}）。`);
+}
+$('sierDeg').addEventListener('input', sierDraw);
+sierDraw();
+</script>
+</body>
+</html>

@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>陣列與稀疏矩陣 — Arrays Interactive（Python）</title>
+<script>
+  MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1a2e;--paper:#f7f3eb;--accent:#c0392b;--accent2:#2c3e7a;--accent3:#1a6b4a;
+  --muted:#8a8578;--card:#fffdf7;--card-border:#e8e2d6;--highlight:#fff3cd;
+  --code-bg:#2d2d3f;--code-fg:#e8e6df;
+  --node-white:#ffffff;--node-gray:#bdc3c7;--node-black:#34495e;
+  --node-current:#f39c12;--node-found:#16a085;--node-start:#9b59b6;
+  --edge-default:#95a5a6;--edge-tree:#27ae60;--edge-explore:#f39c12;--edge-mst:#1a6b4a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.9;font-size:17px;}
+
+/* Hero */
+.hero{min-height:62vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem;position:relative;overflow:hidden;background:linear-gradient(170deg,#1a1a2e 0%,#2c3e7a 40%,#1a6b4a 100%);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.06) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.04) 0%,transparent 40%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);}
+.hero-content{position:relative;z-index:1;max-width:860px;}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;color:#fff;letter-spacing:.04em;line-height:1.3;margin-bottom:1rem;}
+.hero h1 .green{color:#2ecc71;}
+.hero h1 .blue{color:#5dade2;}
+.hero h1 .orange{color:#f39c12;}
+.hero h1 .purple{color:#bb8fce;}
+.hero .subtitle{font-size:clamp(.95rem,2.2vw,1.2rem);color:rgba(255,255,255,.65);font-weight:300;margin-bottom:2rem;}
+.hero .big-formula{color:#2ecc71;background:rgba(0,0,0,.3);padding:.8rem 2rem;border-radius:12px;display:inline-block;border:1px solid rgba(255,255,255,.1);margin-bottom:2rem;backdrop-filter:blur(4px);font-size:1.05rem;}
+.scroll-hint{color:rgba(255,255,255,.4);font-size:.9rem;animation:bounce 2s infinite;}
+.scroll-hint span{display:block;font-size:1.4rem;margin-top:.3rem;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+/* Hero mini-graph illustration */
+.hero-graph{position:absolute;right:5%;top:50%;transform:translateY(-50%);opacity:.18;pointer-events:none;}
+@media(max-width:900px){.hero-graph{display:none;}}
+
+/* Layout */
+.container{max-width:1180px;margin:0 auto;padding:3rem 1.5rem;}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.5rem;}
+h2{font-family:'Noto Serif TC',serif;font-size:1.65rem;font-weight:700;color:var(--ink);margin-bottom:1.2rem;line-height:1.4;}
+h3{font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:700;color:var(--accent2);margin:1.4rem 0 .8rem;}
+section{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--card-border);}
+section:last-of-type{border-bottom:none;}
+p{margin-bottom:1rem;}
+code{font-family:'JetBrains Mono',monospace;font-size:.92em;background:rgba(44,62,122,.08);padding:1px 6px;border-radius:4px;color:var(--accent2);}
+strong{color:var(--ink);}
+
+/* TOC */
+.toc{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:1.2rem 1.5rem;margin:1rem 0 2rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.toc-title{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.7rem;}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.5rem .8rem;}
+.toc-grid a{color:var(--accent2);text-decoration:none;font-size:.9rem;padding:.3rem 0;display:flex;align-items:center;gap:.4rem;transition:color .2s;}
+.toc-grid a:hover{color:var(--accent);}
+.toc-grid a .toc-num{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);min-width:34px;}
+
+/* Viz layout */
+.viz-layout{display:grid;grid-template-columns:1fr 320px;gap:1.3rem;margin:1.2rem 0;align-items:start;}
+@media(max-width:900px){.viz-layout{grid-template-columns:1fr;}}
+
+.viz-panel{background:linear-gradient(160deg,#fffdf7 0%,#f4efe3 100%);border:1px solid var(--card-border);border-radius:12px;padding:1rem;box-shadow:0 4px 18px rgba(0,0,0,.06);position:relative;}
+
+/* Graph SVG canvas */
+.graph-canvas{position:relative;width:100%;height:380px;background:#fafafa;border-radius:8px;overflow:hidden;border:1px solid #ececec;}
+.graph-canvas svg{width:100%;height:100%;display:block;}
+
+/* SVG elements styles */
+.graph-edge{stroke:var(--edge-default);stroke-width:2;fill:none;transition:stroke .25s, stroke-width .25s;}
+.graph-edge.tree{stroke:var(--edge-tree);stroke-width:3.5;}
+.graph-edge.exploring{stroke:var(--edge-explore);stroke-width:3.5;stroke-dasharray:5 4;animation:dash 1s linear infinite;}
+.graph-edge.mst{stroke:var(--edge-mst);stroke-width:4;}
+.graph-edge.path{stroke:var(--accent);stroke-width:4;}
+.graph-edge.dotted{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:3 4;}
+@keyframes dash{to{stroke-dashoffset:-18;}}
+
+.edge-label{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;fill:var(--ink);pointer-events:none;}
+.edge-label-bg{fill:#fafafa;stroke:#ececec;stroke-width:1;}
+
+.graph-node{cursor:pointer;}
+.graph-node circle{fill:var(--node-white);stroke:var(--ink);stroke-width:2;transition:fill .25s, stroke .25s, r .2s;}
+.graph-node.gray circle{fill:var(--node-gray);}
+.graph-node.black circle{fill:var(--node-black);stroke:var(--node-black);}
+.graph-node.current circle{fill:var(--node-current);stroke:#d68910;stroke-width:3;}
+.graph-node.start circle{fill:var(--node-start);stroke:#7d3c98;stroke-width:3;}
+.graph-node.found circle{fill:var(--node-found);stroke:#117a65;stroke-width:3;}
+.graph-node.in-mst circle{fill:#82e0aa;stroke:var(--accent3);stroke-width:3;}
+.graph-node text.node-key{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;fill:var(--ink);text-anchor:middle;dominant-baseline:central;pointer-events:none;}
+.graph-node.black text.node-key{fill:#fff;}
+.graph-node.current text.node-key{fill:#fff;}
+.graph-node.start text.node-key{fill:#fff;}
+.graph-node.found text.node-key{fill:#fff;}
+.graph-node text.node-meta{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;fill:var(--accent);text-anchor:middle;pointer-events:none;}
+
+/* Status banner */
+.status-banner{margin-top:.8rem;padding:.7rem 1rem;background:var(--code-bg);color:#fff;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.85rem;min-height:42px;display:flex;align-items:center;gap:.6rem;}
+.status-banner .status-icon{color:#2ecc71;font-weight:700;}
+.status-banner .status-text{flex:1;}
+
+/* Controls */
+.controls-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--card-border);}
+.btn{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:600;padding:.45rem 1rem;border-radius:6px;border:none;cursor:pointer;transition:all .2s;}
+.btn-play{background:var(--accent3);color:#fff;}
+.btn-play:hover{background:#22845c;}
+.btn-play.active{background:var(--accent);}
+.btn-step{background:var(--accent2);color:#fff;}
+.btn-step:hover{background:#1f2e5f;}
+.btn-step:disabled{background:#ccc;cursor:not-allowed;}
+.btn-reset{background:var(--card-border);color:var(--ink);}
+.btn-reset:hover{background:#ccc;}
+.btn-toggle{background:var(--accent2);color:#fff;}
+.btn-toggle:hover{background:#1f2e5f;}
+.btn-toggle.off{background:#bbb;color:#555;}
+.btn-shuffle{background:#8e44ad;color:#fff;}
+.btn-shuffle:hover{background:#6c3485;}
+
+/* Slider row */
+.slider-row{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;background:var(--paper);border-radius:8px;margin-bottom:.5rem;}
+.slider-row .slider-label{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent2);font-weight:600;min-width:60px;}
+.slider-row input[type="range"]{flex:1;accent-color:var(--accent3);height:5px;cursor:pointer;}
+.slider-row .slider-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--accent);font-weight:600;min-width:60px;text-align:right;}
+
+/* Side panel */
+.side-panel{display:flex;flex-direction:column;gap:.85rem;}
+.info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.info-card .ic-title{font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem;display:flex;align-items:center;justify-content:space-between;}
+.info-card .ic-title .ic-badge{font-size:.7rem;color:#fff;background:var(--accent3);padding:1px 7px;border-radius:3px;letter-spacing:.05em;font-weight:700;}
+.info-card .ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.83rem;padding:.2rem 0;}
+.info-card .ic-label{color:var(--muted);}
+.info-card .ic-value{color:var(--ink);font-weight:600;}
+.info-card .ic-value.highlight{color:var(--accent);}
+.info-card .ic-value.big{font-size:1.4rem;color:var(--accent2);}
+
+/* Stats grid */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.4rem;}
+.stat-tile{background:var(--paper);border-radius:8px;padding:.5rem .7rem;text-align:center;}
+.stat-tile .stat-label{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;}
+.stat-tile .stat-value{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;color:var(--accent2);}
+
+/* Queue / Stack / PQ visualization */
+.ds-display{font-family:'JetBrains Mono',monospace;font-size:.8rem;background:var(--paper);border-radius:6px;padding:.5rem .7rem;min-height:36px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;border:1px dashed var(--card-border);}
+.ds-display .ds-empty{color:var(--muted);font-style:italic;}
+.ds-item{background:var(--accent2);color:#fff;padding:2px 8px;border-radius:4px;font-weight:600;}
+.ds-item.front{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-item.top{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-item.pq{background:var(--accent3);}
+.ds-item.pq.min{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-arrow{color:var(--muted);}
+
+/* Pseudo code */
+.pseudo-code{background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:.85rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.6;overflow-x:auto;}
+.pseudo-code .line{padding:1px 4px;border-radius:3px;display:block;white-space:pre;}
+.pseudo-code .line.active{background:rgba(243,156,18,.3);color:#fff;border-left:3px solid var(--node-current);padding-left:6px;}
+.pseudo-code .kw{color:#ff79c6;}
+.pseudo-code .fn{color:#50fa7b;}
+.pseudo-code .num{color:#bd93f9;}
+.pseudo-code .com{color:#6272a4;font-style:italic;}
+.pseudo-code .str{color:#f1fa8c;}
+
+/* Adjacency table */
+.adj-display{margin:.5rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.adj-matrix{border-collapse:collapse;margin:.5rem auto;}
+.adj-matrix td,.adj-matrix th{border:1px solid var(--card-border);padding:6px 10px;text-align:center;min-width:34px;background:#fff;}
+.adj-matrix th{background:var(--accent2);color:#fff;font-weight:700;}
+.adj-matrix td.zero{color:#ccc;}
+.adj-matrix td.nonzero{background:#eafaf1;color:var(--accent3);font-weight:700;}
+.adj-matrix td.highlight{background:#fff3cd;}
+.adj-list{background:var(--card);border:1px solid var(--card-border);border-radius:8px;padding:.7rem 1rem;}
+.adj-list .adj-row{padding:3px 0;border-bottom:1px dashed var(--card-border);}
+.adj-list .adj-row:last-child{border-bottom:none;}
+.adj-list .adj-key{color:var(--accent);font-weight:700;display:inline-block;min-width:32px;}
+.adj-list .adj-arrow{color:var(--muted);margin:0 6px;}
+.adj-list .adj-neighbor{background:#eef2ff;color:var(--accent2);padding:1px 8px;border-radius:4px;margin:1px 3px;display:inline-block;font-weight:600;}
+
+/* Chess board for Knight's tour */
+.chess-board{display:grid;background:#fff;border:2px solid var(--ink);border-radius:6px;overflow:hidden;margin:.5rem auto;width:fit-content;}
+.chess-cell{display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:700;position:relative;transition:background .2s;}
+.chess-cell.light{background:#f0d9b5;color:#666;}
+.chess-cell.dark{background:#b58863;color:#fff;}
+.chess-cell.visited{background:#27ae60 !important;color:#fff;}
+.chess-cell.current{background:#f39c12 !important;color:#fff;box-shadow:inset 0 0 0 3px #d68910;}
+.chess-cell.start{background:#9b59b6 !important;color:#fff;}
+.chess-cell .knight{font-size:1.4em;line-height:1;}
+.chess-cell .step-num{font-size:.7em;}
+
+/* Info box */
+.info-box{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1.1rem 1.4rem;margin:1.3rem 0;position:relative;}
+.info-box .info-label{position:absolute;top:-11px;left:14px;background:var(--accent2);color:#fff;font-size:.74rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.05em;}
+.info-box.warm{background:#fef5e7;border-color:#d68910;}
+.info-box.warm .info-label{background:#d68910;}
+.info-box.green{background:#eafaf1;border-color:var(--accent3);}
+.info-box.green .info-label{background:var(--accent3);}
+.info-box.purple{background:#f4ecf7;border-color:#8e44ad;}
+.info-box.purple .info-label{background:#8e44ad;}
+
+/* Pill labels */
+.pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:4px;margin:0 .15rem;vertical-align:1px;}
+.pill-blue{background:rgba(41,128,185,.12);color:#2980b9;border:1px solid rgba(41,128,185,.3);}
+.pill-red{background:rgba(192,57,43,.12);color:var(--accent);border:1px solid rgba(192,57,43,.3);}
+.pill-green{background:rgba(39,174,96,.12);color:var(--accent3);border:1px solid rgba(39,174,96,.3);}
+.pill-orange{background:rgba(243,156,18,.12);color:#d68910;border:1px solid rgba(243,156,18,.3);}
+.pill-purple{background:rgba(142,68,173,.12);color:#8e44ad;border:1px solid rgba(142,68,173,.3);}
+.pill-gray{background:rgba(0,0,0,.06);color:var(--muted);border:1px solid rgba(0,0,0,.12);}
+
+/* Comparison table */
+.cmp-table{width:100%;border-collapse:collapse;font-size:.86rem;margin:.8rem 0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.cmp-table th{background:var(--accent2);color:#fff;padding:.6rem .8rem;text-align:center;font-weight:600;font-size:.82rem;}
+.cmp-table td{padding:.6rem .8rem;text-align:center;border-bottom:1px solid var(--card-border);font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.cmp-table td:first-child{font-family:'Noto Sans TC',sans-serif;color:var(--accent2);font-weight:600;text-align:left;}
+.cmp-table tr:last-child td{border-bottom:none;}
+.cmp-table tr:nth-child(even){background:rgba(0,0,0,.015);}
+.cmp-table .best{color:var(--accent3);font-weight:700;}
+.cmp-table .worst{color:var(--accent);font-weight:700;}
+
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:.6rem;margin:.6rem 0;font-family:'JetBrains Mono',monospace;font-size:.75rem;}
+.legend-item{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .5rem;background:var(--paper);border-radius:5px;}
+.legend-item .lg-swatch{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--ink);}
+.legend-item .lg-edge{width:18px;height:3px;border-radius:2px;}
+
+/* Quiz */
+.quiz-box{background:var(--card);border:2px solid var(--accent2);border-radius:12px;padding:1.3rem 1.5rem;margin:1.5rem 0;}
+.quiz-box .quiz-label{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);font-weight:700;letter-spacing:.1em;margin-bottom:.5rem;}
+.quiz-options{display:flex;flex-direction:column;gap:.5rem;margin:.8rem 0;}
+.quiz-opt{display:flex;align-items:center;gap:.6rem;padding:.55rem .9rem;background:var(--paper);border:2px solid var(--card-border);border-radius:8px;cursor:pointer;transition:all .2s;font-family:'JetBrains Mono',monospace;font-size:.86rem;}
+.quiz-opt:hover{border-color:var(--accent2);}
+.quiz-opt .opt-letter{font-weight:700;color:var(--accent2);min-width:22px;}
+.quiz-opt.correct{background:#eafaf1;border-color:var(--accent3);}
+.quiz-opt.correct .opt-letter{color:var(--accent3);}
+.quiz-opt.wrong{background:#fef5e7;border-color:var(--accent);}
+.quiz-opt.wrong .opt-letter{color:var(--accent);}
+.quiz-feedback{margin-top:.7rem;padding:.7rem 1rem;border-radius:8px;font-size:.88rem;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.correct{background:#eafaf1;color:var(--accent3);border-left:4px solid var(--accent3);}
+.quiz-feedback.wrong{background:#fef5e7;color:var(--accent);border-left:4px solid var(--accent);}
+
+/* Floating sidebar navigation */
+.float-nav{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:2px;background:rgba(255,253,250,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--card-border);border-radius:12px;padding:10px 7px;box-shadow:0 6px 24px rgba(0,0,0,.10);font-family:'JetBrains Mono',monospace;max-height:88vh;overflow-y:auto;transition:padding .25s ease;}
+.float-nav .fn-title{font-family:'Noto Serif TC',serif;font-weight:700;font-size:.68rem;color:var(--accent2);text-align:center;letter-spacing:1.5px;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--card-border);max-width:0;overflow:hidden;transition:max-width .25s ease;}
+.float-nav:hover .fn-title{max-width:220px;}
+.float-nav a{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:7px;color:var(--ink);text-decoration:none;white-space:nowrap;transition:all .2s ease;border-left:3px solid transparent;}
+.float-nav a .fn-num{font-weight:700;font-size:.66rem;color:var(--muted);letter-spacing:.4px;flex-shrink:0;width:30px;text-align:left;}
+.float-nav a .fn-name{font-family:'Noto Sans TC',sans-serif;font-size:.76rem;font-weight:500;max-width:0;overflow:hidden;transition:max-width .25s ease,padding .25s ease;padding:0;}
+.float-nav:hover a .fn-name{max-width:220px;padding-left:2px;}
+.float-nav a:hover{background:var(--card);}
+.float-nav a.active{background:var(--accent2);color:#fff;border-left-color:var(--accent);box-shadow:0 2px 6px rgba(192,57,43,.25);}
+.float-nav a.active .fn-num{color:rgba(255,255,255,.85);}
+.float-nav a.active .fn-name{color:#fff;}
+.float-nav .fn-top{margin-top:6px;padding-top:6px;border-top:1px solid var(--card-border);justify-content:center;}
+.float-nav .fn-top .fn-num{width:auto;color:var(--accent2);font-size:.78rem;}
+@media(max-width:768px){
+  .float-nav{right:8px;top:auto;bottom:14px;transform:none;padding:6px 5px;max-height:70vh;}
+  .float-nav .fn-title{display:none;}
+  .float-nav a{padding:4px 7px;}
+  .float-nav a .fn-num{width:26px;font-size:.62rem;}
+}
+
+footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border);}
+
+/* Distance / table inside graph viz */
+.vert-table{margin-top:.6rem;width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:.78rem;}
+.vert-table th,.vert-table td{padding:4px 6px;text-align:center;border:1px solid var(--card-border);}
+.vert-table th{background:var(--accent2);color:#fff;font-weight:600;font-size:.74rem;}
+.vert-table td.tcell-current{background:#fff3cd;font-weight:700;color:var(--accent);}
+.vert-table td.tcell-done{background:#eafaf1;color:var(--accent3);}
+.vert-table td.tcell-inf{color:#ccc;}
+.sec-badge{font-size:.6em;color:var(--muted);border:1px solid var(--card-border);background:var(--card);padding:2px 10px;border-radius:999px;vertical-align:middle;margin-left:.6rem;font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.02em;white-space:nowrap;}
+
+/* Phase 8 shared widgets */
+.bs-stack{display:flex;flex-direction:column-reverse;align-items:center;gap:4px;min-height:180px;justify-content:flex-start;padding:.6rem;}
+.bs-item{width:110px;text-align:center;padding:.4rem .6rem;background:#5b7eb8;color:#fff;border-radius:6px;font-family:'JetBrains Mono',monospace;font-weight:600;box-shadow:0 2px 5px rgba(0,0,0,.15);}
+.bs-hl{background:#f39c12;}
+.bs-toplabel,.bq-label{font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.bq-row{display:flex;align-items:center;gap:6px;min-height:64px;flex-wrap:wrap;padding:.4rem;}
+.bq-item{min-width:52px;text-align:center;padding:.45rem .5rem;background:#5b7eb8;color:#fff;border-radius:6px;font-family:'JetBrains Mono',monospace;font-weight:600;}
+.char-strip{display:flex;gap:3px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;padding:.4rem 0;}
+.char-cell{min-width:30px;text-align:center;padding:.35rem .25rem;border:1px solid var(--card-border);border-radius:5px;background:var(--card);}
+.char-cur{background:#f39c12;color:#fff;border-color:#f39c12;}
+.char-done{background:#e8f5ec;color:#1a6b4a;border-color:#bfe3cd;}
+.char-bad{background:#c0392b;color:#fff;border-color:#c0392b;}
+.token-out{display:flex;gap:4px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;min-height:40px;padding:.3rem 0;}
+.tok{padding:.3rem .55rem;border-radius:5px;background:#2c3e7a;color:#fff;font-weight:600;}
+.tok-op{background:#8e44ad;}
+.tok-new{outline:3px solid #f39c12;}
+.mono{font-family:'JetBrains Mono',monospace;}
+</style>
+</head>
+<body>
+<nav class="float-nav" id="floatNav" aria-label="章節導覽">
+  <div class="fn-title">章節導覽</div>
+  <a href="#prologue" data-target="prologue"><span class="fn-num">P00</span><span class="fn-name">低階陣列</span></a>
+  <a href="#layout" data-target="layout"><span class="fn-num">P01</span><span class="fn-name">位址計算</span></a>
+  <a href="#compact" data-target="compact"><span class="fn-num">P02</span><span class="fn-name">compact vs referential</span></a>
+  <a href="#multidim" data-target="multidim"><span class="fn-num">P03</span><span class="fn-name">多維陣列</span></a>
+  <a href="#sparse" data-target="sparse"><span class="fn-num">P04</span><span class="fn-name">稀疏矩陣</span></a>
+  <a href="#exercises" data-target="exercises"><span class="fn-num">EX</span><span class="fn-name">練習題</span></a>
+  <a href="#reference" data-target="reference"><span class="fn-num">REF</span><span class="fn-name">總覽比較</span></a>
+  <a href="#top" class="fn-top" title="回到頂端"><span class="fn-num">↑ TOP</span></a>
+</nav>
+
+<div class="hero" id="top">
+  <div class="hero-grid"></div>
+  <svg class="hero-graph" width="330" height="240" viewBox="0 0 330 240">
+  <g fill="#fff" opacity=".92">
+    <rect x="30" y="70" width="40" height="40" rx="4"/><rect x="74" y="70" width="40" height="40" rx="4"/>
+    <rect x="118" y="70" width="40" height="40" rx="4"/><rect x="162" y="70" width="40" height="40" rx="4"/>
+    <rect x="206" y="70" width="40" height="40" rx="4"/><rect x="250" y="70" width="40" height="40" rx="4"/>
+  </g>
+  <g stroke="#fff" stroke-width="2.5" fill="none" opacity=".85">
+    <path d="M50 140 v20 h220 v-20"/><path d="M160 175 v18"/>
+  </g>
+</svg>
+  <div class="hero-content">
+    <h1><span class="blue">陣列</span>的底層世界與<span class="orange">稀疏矩陣</span></h1>
+    <div class="subtitle">課程補充教材 A — Arrays（對應講義 03；pythonds §2.5/§8.2 延伸）</div>
+    <div class="big-formula">位址公式｜compact vs referential｜row-major｜COO / DOK</div>
+    <div class="scroll-hint">向下捲動開始互動<span>↓</span></div>
+  </div>
+</div>
+
+<div class="container">
+<div class="toc">
+  <div class="toc-title">CONTENTS · 內容目錄</div>
+  <div class="toc-grid">
+    <a href="#prologue"><span class="toc-num">P00</span>低階陣列</a>
+    <a href="#layout"><span class="toc-num">P01</span>位址計算</a>
+    <a href="#compact"><span class="toc-num">P02</span>compact vs referential</a>
+    <a href="#multidim"><span class="toc-num">P03</span>多維陣列</a>
+    <a href="#sparse"><span class="toc-num">P04</span>稀疏矩陣</a>
+    <a href="#exercises"><span class="toc-num">EX</span>練習題</a>
+    <a href="#reference"><span class="toc-num">REF</span>總覽比較</a>
+  </div>
+</div>
+
+<section id="prologue">
+  <div class="section-number">PROLOGUE · 開場</div>
+  <h2>低階陣列：連續記憶體是一切的起點 <span class="sec-badge">課程補充 A.1</span></h2>
+  <p>本章是<strong>課程補充教材</strong>（pythonds 書中散見於 §2.5 與 §8.2「Python Lists Revisited」）：往下鑽一層，
+  看陣列在記憶體裡的真實長相。電腦記憶體 = 一長條可編號的位元組（byte）；
+  <strong>陣列 = 一段連續的、等寬的格子</strong>。這個「連續＋等寬」就是 O(1) 隨機存取的全部秘密。</p>
+  <div class="info-box">
+    <span class="info-label">本章路線</span>
+    A.1 低階陣列與位址計算 → A.2 compact vs referential → A.3 多維陣列與 row-major → A.4 稀疏矩陣（COO/DOK）。
+  </div>
+</section>
+
+<section id="layout">
+  <div class="section-number">PART 01 · 位址計算</div>
+  <h2>a[i] 為什麼是 O(1)：一條乘法公式 <span class="sec-badge">課程補充 A.1</span></h2>
+  <p style="text-align:center;" class="mono"><strong>addr(a[i]) = base + i × itemsize（每格 bytes）</strong></p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="bq-row" id="addrVis" style="min-height:80px;"></div>
+        <div class="status-banner" id="addrStatus"><span class="status-icon">›</span><span class="status-text">int32 陣列（4 bytes/格）從位址 1000 開始。點任一格看位址怎麼算。</span></div>
+        <div class="controls-bar">
+          <span class="mono" style="font-size:.85rem;">itemsize：</span>
+          <select id="addrSize" class="mono" style="padding:.35rem;border-radius:6px;border:1px solid var(--card-border);" onchange="addrRender(-1)">
+            <option value="4" selected>int32（4B）</option><option value="8">float64（8B）</option><option value="1">int8（1B）</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">兩個直接推論</div>
+        <div style="font-size:.87rem;line-height:1.9;">
+        ① 存取任何 a[i] 成本相同：<strong>不用走訪</strong>。<br>
+        ② 格子必須<strong>等寬</strong>：所以 numpy 陣列要指定 dtype、元素同型別。</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">Python 對照（numpy）</div>
+        <div class="mono" style="font-size:.83rem;line-height:2;">primes = array([2,3,5,7,11,13,17,19],<br>&nbsp;&nbsp;dtype=int32)<br>primes.itemsize&nbsp;# 4（每格 bytes）<br>primes.nbytes&nbsp;&nbsp;&nbsp;# 32（8×4，連續一片）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="compact">
+  <div class="section-number">PART 02 · 兩種存法</div>
+  <h2>Compact vs Referential：值放格子裡，還是放「別處」？ <span class="sec-badge">課程補充 A.2</span></h2>
+  <p><strong>Compact array</strong>：元素的值直接躺在連續格子裡，Python 世界的代表是
+  numpy 的 <code>ndarray</code>（dtype 固定）與 <code>array</code> 模組。
+  <strong>Referential array</strong>：格子裡放的是<strong>物件參考</strong>，真正的物件散落在 heap，
+  這正是 Python <code>list</code> 的長相。想存一排長短不一的名字（"Rene"、"Joseph"、"Virginia"…）
+  又要維持 O(1) 索引，格子就必須等寬，於是「什麼都能裝」的 list 一律存 8 byte 的參考。
+  代價有二：每個元素多付 8 byte 的參考稅，以及取值都要多跳一次記憶體。</p>
+
+  <h3>手刻一個 compact 動態陣列：ArrayList</h3>
+  <p>講義用固定長度的 <code>[None] * capacity</code> 自己刻了一個簡化版 list
+  （<code>pythonds3.basic.ArrayList</code>），把「動態陣列到底在做什麼」攤開來看。
+  幾個值得停下來看的細節：<code>__getitem__</code>／<code>__setitem__</code> 讓
+  <code>a[i]</code> 語法接上自訂類別（越界丟 LookupError）、insert 與 remove 都要搬移元素。
+  講義的簡化版<strong>容量固定</strong>；真正的 list 滿了會自動過度配置搬家，
+  這正是第 2 章 append 攤銷 O(1) 的來源。</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:.8rem;">
+    <div class="info-card"><div class="ic-title">骨架與 append <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line"><span class="kw">class</span> <span class="fn">ArrayList</span>:</span>
+<span class="line">    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, initial_capacity=<span class="num">8</span>):</span>
+<span class="line">        <span class="kw">self</span>._max_size = initial_capacity</span>
+<span class="line">        <span class="kw">self</span>._last_index = <span class="num">0</span></span>
+<span class="line">        <span class="kw">self</span>._my_array = [<span class="num">None</span>] * <span class="kw">self</span>._max_size</span>
+<span class="line">        <span class="com"># 容量先開好：一段等寬的連續格子</span></span>
+<span class="line">    <span class="kw">def</span> <span class="fn">append</span>(<span class="kw">self</span>, val):</span>
+<span class="line">        <span class="kw">self</span>._my_array[<span class="kw">self</span>._last_index] = val</span>
+<span class="line">        <span class="kw">self</span>._last_index += <span class="num">1</span></span>
+<span class="line">    <span class="kw">def</span> <span class="fn">size</span>(<span class="kw">self</span>):</span>
+<span class="line">        <span class="kw">return</span> <span class="kw">self</span>._last_index</span>
+<span class="line">    <span class="kw">def</span> <span class="fn">is_empty</span>(<span class="kw">self</span>):</span>
+<span class="line">        <span class="kw">return</span> <span class="kw">self</span>._last_index == <span class="num">0</span></span></div></div>
+    <div class="info-card"><div class="ic-title">__getitem__ / __setitem__：讓 a[i] 語法接上 <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line"><span class="kw">def</span> <span class="fn">__getitem__</span>(<span class="kw">self</span>, idx):</span>
+<span class="line">    <span class="kw">if</span> <span class="num">0</span> &lt;= idx &lt; <span class="kw">self</span>._last_index:</span>
+<span class="line">        <span class="kw">return</span> <span class="kw">self</span>._my_array[idx]</span>
+<span class="line">    <span class="kw">raise</span> <span class="fn">LookupError</span>(<span class="str">&quot;index out of bounds&quot;</span>)</span>
+<span class="line"> </span>
+<span class="line"><span class="kw">def</span> <span class="fn">__setitem__</span>(<span class="kw">self</span>, idx, val):</span>
+<span class="line">    <span class="kw">if</span> <span class="num">0</span> &lt;= idx &lt; <span class="kw">self</span>._last_index:</span>
+<span class="line">        <span class="kw">self</span>._my_array[idx] = val</span>
+<span class="line">    <span class="kw">else</span>:</span>
+<span class="line">        <span class="kw">raise</span> <span class="fn">LookupError</span>(<span class="str">&quot;index out of bounds&quot;</span>)</span></div>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">定義這兩個魔術方法之後，<code>my_array[3]</code> 和 <code>my_array[0] = 50</code> 就直接可用：自訂類別長出了內建容器的語法。界限檢查由我們自己把關。</div></div>
+    <div class="info-card"><div class="ic-title">insert / remove：搬移的真面目 <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line"><span class="kw">def</span> <span class="fn">insert</span>(<span class="kw">self</span>, idx, val):</span>
+<span class="line">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="kw">self</span>._last_index, idx, <span class="num">-1</span>):</span>
+<span class="line">        <span class="kw">self</span>._my_array[i] = <span class="kw">self</span>._my_array[i - <span class="num">1</span>]  <span class="com"># 右移讓位</span></span>
+<span class="line">    <span class="kw">self</span>._my_array[idx] = val</span>
+<span class="line">    <span class="kw">self</span>._last_index += <span class="num">1</span></span>
+<span class="line"> </span>
+<span class="line"><span class="kw">def</span> <span class="fn">remove</span>(<span class="kw">self</span>, val):</span>
+<span class="line">    找到 val 所在的 i</span>
+<span class="line">    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(i, <span class="kw">self</span>._last_index - <span class="num">1</span>):</span>
+<span class="line">        <span class="kw">self</span>._my_array[j] = <span class="kw">self</span>._my_array[j + <span class="num">1</span>]  <span class="com"># 左移補洞</span></span>
+<span class="line">    <span class="kw">self</span>._last_index -= <span class="num">1</span></span></div>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">第 2 章說 list 的 insert(0)/pop(0) 是 O(n)，這兩個迴圈就是那個 n 的本體。講義的完整版還有 <code>erase(idx)</code>（照索引左移補洞）與 <code>__str__</code>。</div></div>
+  </div>
+  <div class="viz-panel">
+    <div class="bq-row" id="cmpVis" style="min-height:110px;"></div>
+    <div class="status-banner" id="cmpStatus"><span class="status-icon">›</span><span class="status-text">切換兩種視角。</span></div>
+    <div class="controls-bar">
+      <button class="btn" onclick="cmpShow('compact')">compact（值內嵌）</button>
+      <button class="btn" onclick="cmpShow('ref')">referential（存指標）</button>
+    </div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · cache 效應</div>
+  <p>走訪加總 10⁶ 個整數，numpy（compact）版比 list（referential）版快很多，主因是？</p>
+  
+  <div class="quiz-options" id="qCmpOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="compact 版一次 cache line 載入 16 個 int32；referential 版每個元素都要多跳一次參考、位置又分散：cache miss 連發。" onclick="quizCheck('qCmp', this)"><span class="opt-letter">(A)</span> 連續記憶體對 CPU cache 友善</div><div class="quiz-opt" data-correct="false" data-fb="大小差異是次要；殺手是「跳來跳去」造成的 cache miss。" onclick="quizCheck('qCmp', this)"><span class="opt-letter">(B)</span> 參考比 int 大</div><div class="quiz-opt" data-correct="false" data-fb="檢查成本是其次：記憶體階層才是主戰場。" onclick="quizCheck('qCmp', this)"><span class="opt-letter">(C)</span> referential 版要多做型別檢查</div>
+  </div>
+  <div class="quiz-feedback" id="qCmpFeedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 容量滿了會怎樣？</div>
+  <p>講義的 ArrayList 容量 8。append 第 9 個元素時會發生什麼事？</p>
+  
+  <div class="quiz-options" id="qGrowOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="_my_array[8] 超出 [None]*8 的範圍，直接炸。真正的 list 會在滿載時自動配一塊更大的記憶體、整批搬過去（過度配置），所以 append 平均是攤銷 O(1)：第 2 章量過這件事。" onclick="quizCheck('qGrow', this)"><span class="opt-letter">(A)</span> IndexError：簡化版沒有搬家機制</div><div class="quiz-opt" data-correct="false" data-fb="那是內建 list 的本事。講義的簡化版刻意不做搬家，就是要讓你看到「固定容量」的極限。" onclick="quizCheck('qGrow', this)"><span class="opt-letter">(B)</span> 自動變成 16 格</div><div class="quiz-opt" data-correct="false" data-fb="Python 的越界寫入不會安靜通過：IndexError 當場丟出來。" onclick="quizCheck('qGrow', this)"><span class="opt-letter">(C)</span> 靜靜地覆蓋最後一格</div>
+  </div>
+  <div class="quiz-feedback" id="qGrowFeedback"></div>
+</div>
+</section>
+
+<section id="multidim">
+  <div class="section-number">PART 03 · 多維</div>
+  <h2>多維陣列：row-major 的攤平公式 <span class="sec-badge">課程補充 A.3</span></h2>
+  <p>記憶體是一維的，二維陣列只是「攤平」。numpy 預設 <strong>C order（row-major）</strong>：
+  <code>M[0,0], M[0,1], M[1,0]</code> 在記憶體裡連續排列，<code>M.flags</code> 印出來就看得到。定位公式：</p>
+  <p style="text-align:center;" class="mono"><strong>y = x + Cols × i + j</strong>（x 是起始位址、Cols 是每列的欄數）</p>
+  <p>Fortran 和 MATLAB 用 column-major（整欄放完才放下一欄）；numpy 一個參數就能切換：
+  <code>array(..., order="F")</code>，再看 <code>M.flags</code> 會發現 F_CONTIGUOUS 變成 True。
+  記住一個原則就夠了：<strong>走訪順序跟佈局一致才快</strong>。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div id="mdGrid" style="display:grid;grid-template-columns:repeat(4, 64px);gap:5px;justify-content:center;padding:.5rem;"></div>
+        <div class="bq-row" id="mdFlat" style="min-height:56px;"></div>
+        <div class="status-banner" id="mdStatus"><span class="status-icon">›</span><span class="status-text">3×4 的 int 陣列。點上面格子，看它攤平後的位置；或播放兩種走訪順序。</span></div>
+        <div class="controls-bar">
+          <button class="btn" onclick="mdWalk('row')">▶ row-major 走訪</button>
+          <button class="btn" onclick="mdWalk('col')">▶ column 走訪（跳格！）</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">效能後果</div>
+        <div style="font-size:.87rem;line-height:1.9;">row-major 佈局下，<code>for i: for j: M[i, j]</code>
+        是順著記憶體走（cache 友善）；內外圈對調就變成每步跳 4×行數 bytes：
+        大矩陣可差 <strong>5~10 倍</strong>。講義還示範了 numpy 的向量化寫法 <code>b = b + 1</code>：連迴圈都省了，快一個數量級。</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">Python 寫法</div>
+        <div class="mono" style="font-size:.82rem;line-height:2;">M = array([[1,1],[2,2]])&nbsp;# 真 2D、連續<br>M[0,:] 列、M[:,0] 欄、M.shape<br>L = [[1,1],[2,2]]&nbsp;# 巢狀 list：列各自散落！</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sparse">
+  <div class="section-number">PART 04 · 稀疏矩陣</div>
+  <h2>稀疏矩陣：只存非零，空間從 O(mn) 降到 O(nnz) <span class="sec-badge">課程補充 A.4</span></h2>
+  <p>推薦系統的「使用者×商品」矩陣 99.9% 是 0：整片存起來是浪費。
+  <strong>COO</strong>（座標表：三條平行陣列 row/col/val）適合建構與批次運算；
+  <strong>DOK</strong>（dictionary of keys：map 以 (r,c) 當 key）適合隨機讀寫。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div id="spGrid" style="display:grid;grid-template-columns:repeat(6, 52px);gap:4px;justify-content:center;padding:.5rem;"></div>
+        <div class="mono" id="spStore" style="font-size:.82rem;line-height:1.9;min-height:70px;"></div>
+        <div class="status-banner" id="spStatus"><span class="status-icon">›</span><span class="status-text">點格子輸入非零值（再點一次歸零），下方即時顯示 COO 與 DOK 兩種儲存內容。</span></div>
+        <div class="controls-bar">
+          <button class="btn" onclick="spRandom()">隨機放 4 個非零</button>
+          <button class="btn" onclick="spClear()">清空</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">DOK 實作 <span class="ic-badge">CODE</span></div><div class="pseudo-code" style="font-size:.76rem;">
+<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">SparseMatrix</span>:   <span class="com"># pythonds3.basic.SparseMatrix（DOK）</span></span>
+<span class="line" data-l="2">    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, data=<span class="num">None</span>):</span>
+<span class="line" data-l="3">        <span class="kw">self</span>.data = data <span class="kw">or</span> {}   <span class="com"># dict：(i, j) → 值</span></span>
+<span class="line" data-l="4">    <span class="kw">def</span> <span class="fn">__getitem__</span>(<span class="kw">self</span>, key):</span>
+<span class="line" data-l="5">        <span class="kw">return</span> <span class="kw">self</span>.data.<span class="fn">get</span>(key, <span class="num">0</span>)  <span class="com"># 查不到回 0</span></span>
+<span class="line" data-l="6">    <span class="kw">def</span> <span class="fn">__setitem__</span>(<span class="kw">self</span>, key, value):</span>
+<span class="line" data-l="7">        <span class="kw">self</span>.data[key] = value      <span class="com"># m[i, j] = v</span></span>
+<span class="line" data-l="8">    <span class="kw">def</span> <span class="fn">__delitem__</span>(<span class="kw">self</span>, key):</span>
+<span class="line" data-l="9">        <span class="kw">del</span> <span class="kw">self</span>.data[key]</span>
+<span class="line" data-l="10">    <span class="kw">def</span> <span class="fn">__len__</span>(<span class="kw">self</span>):</span>
+<span class="line" data-l="11">        <span class="kw">return</span> <span class="fn">len</span>(<span class="kw">self</span>.data)   <span class="com"># len(m) 就是 nnz</span></span></div></div>
+      <div class="info-card">
+        <div class="ic-title">密度（sparsity）</div>
+        <div class="mono" id="spDensity" style="font-size:.9rem;"></div>
+      </div>
+    </div>
+  </div>
+  <h3 style="margin-top:1.4rem;">完整的 SparseMatrix 類別（pythonds3.basic.SparseMatrix）</h3>
+  <p>講義把 DOK 寫成一個可運算的類別：<code>__getitem__</code> 用 <code>data.get(key, 0)</code>
+  讓「查不到就是 0」、<code>len(m)</code> 就是非零項數、維度用 <code>_nrows</code>／<code>_ncols</code>
+  屬性從 key 現算，連加法和乘法都直接在稀疏表示上做，完全不用把矩陣展開。
+  一個容易誤會的細節：<code>m[i, j] = 0</code> 寫進去的 0 也會佔一個項目，
+  類別不會自動把它刪掉（上面的互動格子「點一下歸零」是示範用的簡化，真要刪得 <code>del m[i, j]</code>）：</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:.8rem;">
+    <div class="info-card"><div class="ic-title">稀疏加法（__add__） <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line"><span class="kw">def</span> <span class="fn">__add__</span>(<span class="kw">self</span>, other):</span>
+<span class="line">    result = <span class="fn">SparseMatrix</span>()</span>
+<span class="line">    keys = <span class="fn">set</span>(<span class="kw">self</span>.data) | <span class="fn">set</span>(other.data)</span>
+<span class="line">    <span class="com"># 兩邊非零項的聯集：其他座標加了也是 0</span></span>
+<span class="line">    <span class="kw">for</span> key <span class="kw">in</span> keys:</span>
+<span class="line">        result[key] = <span class="kw">self</span>[key] + other[key]</span>
+<span class="line">    <span class="kw">return</span> result  <span class="com"># 成本只跟 nnz 有關，跟 m×n 無關</span></span></div></div>
+    <div class="info-card"><div class="ic-title">稀疏乘法（__mul__） <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line"><span class="kw">def</span> <span class="fn">__mul__</span>(<span class="kw">self</span>, other):</span>
+<span class="line">    result = <span class="fn">SparseMatrix</span>()</span>
+<span class="line">    <span class="kw">for</span> (i, k) <span class="kw">in</span> <span class="kw">self</span>.data:</span>
+<span class="line">        <span class="kw">for</span> (j, l) <span class="kw">in</span> other.data:</span>
+<span class="line">            <span class="kw">if</span> k == j:   <span class="com"># 我的欄撞上你的列</span></span>
+<span class="line">                result[i, l] += <span class="kw">self</span>[i, k] * other[j, l]</span>
+<span class="line">    <span class="kw">return</span> result  <span class="com"># 只在非零×非零時才有工作</span></span></div></div>
+  </div>
+  <h3 style="margin-top:1.4rem;">A.4.3 第三種表示：每列一條串列</h3>
+  <p>講義最後給了一張圖：整個矩陣是一個「列陣列」，每列掛一條<strong>鏈結串列</strong>，
+  節點存（欄號、值、next 指標）。同一列的非零項照欄號串起來，逐列運算（例如稀疏矩陣相加）
+  變成兩條串列的合併。這是鏈結串列的預告：等你學完 ch3 後半的 linked list，回頭就能自己實作這個版本。</p>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 稀疏運算的成本</div>
+  <p>兩個 10⁵×10⁵、各有 10⁶ 個非零項的矩陣用 DOK 相加，工作量大約跟什麼成正比？</p>
+  
+  <div class="quiz-options" id="qSpAddOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="演算法只走訪兩邊的非零項。若用密集表示，光走過 10¹⁰ 個格子就死了。稀疏結構的意義：成本跟資料量走，不跟矩陣尺寸走。" onclick="quizCheck('qSpAdd', this)"><span class="opt-letter">(A)</span> 兩邊 nnz 的總和（約 2×10⁶ 項）</div><div class="quiz-opt" data-correct="false" data-fb="那是密集表示的成本。稀疏加法從頭到尾沒碰過零。" onclick="quizCheck('qSpAdd', this)"><span class="opt-letter">(B)</span> 矩陣尺寸 10⁵ × 10⁵</div><div class="quiz-opt" data-correct="false" data-fb="相乘的內外雙迴圈才會到乘積級；加法是兩趟線性走訪。" onclick="quizCheck('qSpAdd', this)"><span class="opt-letter">(C)</span> nnz 的乘積（10¹²）</div>
+  </div>
+  <div class="quiz-feedback" id="qSpAddFeedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 什麼時候划算？</div>
+  <p>5×6 的 double 矩陣（8B/值）。DOK 每個非零項約需 24B（key+值+map 開銷）。幾個非零以下 DOK 才省空間？</p>
+  
+  <div class="quiz-options" id="qSpOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="整片存 = 240B；DOK ≈ 24×nnz → nnz < 10 才划算。稀疏結構是「夠稀疏」才有利。" onclick="quizCheck('qSp', this)"><span class="opt-letter">(A)</span> 約 10 個以下</div><div class="quiz-opt" data-correct="false" data-fb="每項的 overhead 是 3 倍：密矩陣用 DOK 反而更肥又更慢。" onclick="quizCheck('qSp', this)"><span class="opt-letter">(B)</span> 永遠划算</div><div class="quiz-opt" data-correct="false" data-fb="30×24 = 720B，早就超過整片的 240B 了。" onclick="quizCheck('qSp', this)"><span class="opt-letter">(C)</span> 30 個以下</div>
+  </div>
+  <div class="quiz-feedback" id="qSpFeedback"></div>
+</div>
+</section>
+
+<section id="exercises">
+  <div class="section-number">EXERCISES · 練習</div>
+  <h2>動手驗證 <span class="sec-badge">課程補充 綜合</span></h2>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 1 · 位址計算</div>
+  <p>float64 陣列 a（100 格、8B/格）base = 2000。a[13] 的位址是？</p>
+  
+  <div class="quiz-options" id="ex1Options">
+    <div class="quiz-opt" data-correct="true" data-fb="2000 + 13×8 = 2104。一個乘法一個加法：這就是 O(1)。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> <code>2104</code></div><div class="quiz-opt" data-correct="false" data-fb="忘了乘 itemsize = 8。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> <code>2013</code></div><div class="quiz-opt" data-correct="false" data-fb="那是 a[14]；索引從 0 起算。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> <code>2112</code></div>
+  </div>
+  <div class="quiz-feedback" id="ex1Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 2 · row-major</div>
+  <p>int32 的 3×4 陣列 a，base = 1000（4B/格）。a[2][1] 的位址是？</p>
+  
+  <div class="quiz-options" id="ex2Options">
+    <div class="quiz-opt" data-correct="true" data-fb="(2×4 + 1) = 9 格 → 1000 + 9×4 = 1036。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(A)</span> <code>1036</code></div><div class="quiz-opt" data-correct="false" data-fb="那是 a[1][2]（offset 6）。公式：i×行數(4)+j。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(B)</span> <code>1024</code></div><div class="quiz-opt" data-correct="false" data-fb="那是 a[2][0]；別忘了 +j。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(C)</span> <code>1032</code></div>
+  </div>
+  <div class="quiz-feedback" id="ex2Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 4 · 講義練習：students 陣列</div>
+  <p>100×4 的陣列，students[0][0] 的位址是 0、每個元素佔 1 格、row-major。students[5][3] 的位址是？</p>
+  
+  <div class="quiz-options" id="ex4Options">
+    <div class="quiz-opt" data-correct="true" data-fb="y = x + Cols×i + j = 0 + 4×5 + 3 = 23。跟上一題同一條公式，只是把 itemsize 換成 1。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(A)</span> <code>23</code></div><div class="quiz-opt" data-correct="false" data-fb="把 100 當成 Cols 了。公式吃的是「每列幾欄」（4），不是列數。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(B)</span> <code>53</code></div><div class="quiz-opt" data-correct="false" data-fb="算到 row 開頭就停了，還要 +j = 3。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(C)</span> <code>20</code></div>
+  </div>
+  <div class="quiz-feedback" id="ex4Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 3 · 結構選擇</div>
+  <p>10⁵×10⁵ 矩陣、約 10⁶ 個非零、需要頻繁「讀寫任意 (r,c)」。選哪個？</p>
+  
+  <div class="quiz-options" id="ex3Options">
+    <div class="quiz-opt" data-correct="true" data-fb="隨機讀寫平均 O(1)；COO 要線性掃、密陣列 10¹⁰ 格根本放不下（40GB+）。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(A)</span> DOK（dict）</div><div class="quiz-opt" data-correct="false" data-fb="COO 隨機查 (r,c) 要掃整條列表：它是「建構/匯出」格式。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(B)</span> COO 三陣列</div><div class="quiz-opt" data-correct="false" data-fb="10¹⁰ 個參考，記憶體先陣亡。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(C)</span> 直接開巢狀 list</div>
+  </div>
+  <div class="quiz-feedback" id="ex3Feedback"></div>
+</div>
+</section>
+
+<section id="reference">
+  <div class="section-number">REFERENCE · 總覽</div>
+  <h2>陣列家族總覽 <span class="sec-badge">課程補充 總覽</span></h2>
+  <div style="overflow-x:auto;">
+  <table class="cmp-table" style="width:100%;font-size:.88rem;">
+    <thead><tr><th>結構</th><th>空間</th><th>讀 (r,c)/[i]</th><th>強項</th><th>弱項</th></tr></thead>
+    <tbody>
+      <tr><td>compact array（numpy）</td><td>O(n)</td><td>O(1)</td><td>cache 友善、零 overhead</td><td>等寬元素、中間插刪 O(n)</td></tr>
+      <tr><td>referential array（list）</td><td>O(n)+物件</td><td>O(1)+一跳</td><td>元素可異質/可共享</td><td>cache 不友善</td></tr>
+      <tr><td>2D row-major</td><td>O(mn)</td><td>O(1)</td><td>整片連續、公式定位</td><td>走訪順序敏感</td></tr>
+      <tr><td>稀疏 COO</td><td>O(nnz)</td><td>O(nnz)</td><td>建構、批次運算</td><td>隨機存取慢</td></tr>
+      <tr><td>稀疏 DOK（dict）</td><td>O(nnz)</td><td>O(1) 平均</td><td>隨機讀寫</td><td>每項 overhead 大</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="info-box" style="margin-top:1rem;">
+    <span class="info-label">關鍵概念複習</span>
+    ① O(1) 隨機存取 = 連續 + 等寬 + 一條位址公式。<br>
+    ② compact/referential 的差別在「值住哪」：cache 效應由此而生。<br>
+    ③ 多維只是攤平；<strong>走訪順序要順著佈局</strong>。<br>
+    ④ 稀疏結構只存非零：格式跟著存取模式選（建構用 COO、讀寫用 DOK）。
+  </div>
+</section></div>
+<footer>
+  互動式陣列教學 · 課程補充教材（對應講義 03_Arrays；延伸 pythonds §2.5 / §8.2）<br>
+  <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);">Designed for NSYSU · Interactive Python self-study</span>
+</footer>
+<script>
+/* ============ shared utilities ============ */
+const $ = id => document.getElementById(id);
+
+function quizCheck(quizId, optEl) {
+  const isCorrect = optEl.dataset.correct === 'true';
+  optEl.parentElement.querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('correct','wrong'));
+  optEl.classList.add(isCorrect ? 'correct' : 'wrong');
+  const fb = $(quizId + 'Feedback');
+  fb.classList.remove('correct','wrong');
+  fb.classList.add('show', isCorrect ? 'correct' : 'wrong');
+  fb.innerHTML = (isCorrect ? '<strong>正確 ✓</strong> ' : '<strong>不對 ✗</strong> ') + (optEl.dataset.fb || '');
+}
+
+function hlLine(rootId, n) {
+  const root = $(rootId);
+  if (!root) return;
+  root.querySelectorAll('.line').forEach(l => l.classList.remove('active'));
+  if (n != null) {
+    const line = root.querySelector(`.line[data-l="${n}"]`);
+    if (line) line.classList.add('active');
+  }
+}
+
+/* step player: frames = [{...}], apply(frame) renders */
+class Player {
+  constructor({frames, apply, delayInput, onDone}) {
+    this.frames = frames; this.apply = apply;
+    this.delayInput = delayInput; this.i = -1; this.timer = null;
+    this.onDone = onDone || (()=>{});
+  }
+  step() {
+    if (this.i + 1 >= this.frames.length) { this.stop(); this.onDone(); return; }
+    this.i += 1; this.apply(this.frames[this.i]);
+  }
+  play() {
+    this.stop();
+    const tick = () => {
+      if (this.i + 1 >= this.frames.length) { this.stop(); this.onDone(); return; }
+      this.step();
+      this.timer = setTimeout(tick, this.delayInput ? parseInt(this.delayInput.value,10) : 700);
+    };
+    tick();
+  }
+  stop() { if (this.timer) { clearTimeout(this.timer); this.timer = null; } }
+  reset() { this.stop(); this.i = -1; if (this.frames.length) this.apply(this.frames[0]); }
+}
+
+function setStatus(id, html) {
+  const el = $(id); if (el) el.querySelector('.status-text').innerHTML = html;
+}
+
+/* vertical box stack renderer (DOM) */
+function renderBoxStack(containerId, items, opts={}) {
+  const el = $(containerId); if (!el) return;
+  const hl = opts.highlight ?? -1;   // index from top (0 = top)
+  el.innerHTML = '';
+  const label = document.createElement('div');
+  label.className = 'bs-toplabel';
+  label.textContent = items.length ? 'top ↓' : '(empty)';
+  el.appendChild(label);
+  items.slice().reverse().forEach((v, idx) => {
+    const d = document.createElement('div');
+    d.className = 'bs-item' + (idx === hl ? ' bs-hl' : '');
+    d.textContent = v;
+    el.appendChild(d);
+  });
+}
+
+/* horizontal queue renderer: front at left */
+function renderBoxQueue(containerId, items, opts={}) {
+  const el = $(containerId); if (!el) return;
+  el.innerHTML = '';
+  const front = document.createElement('div');
+  front.className = 'bq-label'; front.textContent = items.length ? 'front →' : '(empty)';
+  el.appendChild(front);
+  items.forEach((v, idx) => {
+    const d = document.createElement('div');
+    d.className = 'bq-item' + (idx === (opts.highlight ?? -1) ? ' bs-hl' : '');
+    d.textContent = v;
+    el.appendChild(d);
+  });
+  const rear = document.createElement('div');
+  rear.className = 'bq-label'; rear.textContent = items.length ? '← rear' : '';
+  el.appendChild(rear);
+}
+
+/* floating nav scroll spy */
+(function setupNav() {
+  const nav = $('floatNav');
+  const links = nav.querySelectorAll('a[data-target]');
+  const sections = Array.from(links).map(a => document.getElementById(a.dataset.target)).filter(Boolean);
+  function update() {
+    const y = window.scrollY + window.innerHeight * 0.3;
+    let active = sections[0]?.id;
+    for (const s of sections) if (s.offsetTop <= y) active = s.id;
+    links.forEach(a => a.classList.toggle('active', a.dataset.target === active));
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+
+/* ---------- P01 address ---------- */
+function addrRender(sel) {
+  const size = parseInt($('addrSize').value, 10);
+  const el = $('addrVis'); el.innerHTML = '';
+  for (let i = 0; i < 6; i++) {
+    const d = document.createElement('div');
+    d.className = 'bq-item' + (i === sel ? ' bs-hl' : '');
+    d.style.cursor = 'pointer';
+    d.innerHTML = `<div style="font-size:.62rem;opacity:.8;">addr ${1000 + i*size}</div>a[${i}]`;
+    d.onclick = () => {
+      addrRender(i);
+      setStatus('addrStatus', `addr(a[${i}]) = 1000 + ${i} × ${size} = <strong>${1000 + i*size}</strong>：不管 i 多大都是一個乘加。`);
+    };
+    el.appendChild(d);
+  }
+}
+addrRender(-1);
+
+/* ---------- P02 compact vs ref ---------- */
+function cmpShow(mode) {
+  const el = $('cmpVis'); el.innerHTML = '';
+  if (mode === 'compact') {
+    ['17','26','31','54'].forEach((v,i) => {
+      const d = document.createElement('div'); d.className = 'bq-item';
+      d.innerHTML = `<div style="font-size:.62rem;opacity:.8;">${1000+i*4}</div>${v}`;
+      el.appendChild(d);
+    });
+    setStatus('cmpStatus', 'compact：值直接住在連續格子。走訪 = 順順地掃一條記憶體。');
+  } else {
+    ['0x7a10','0x3f88','0x91c4','0x55e0'].forEach((p,i) => {
+      const d = document.createElement('div'); d.className = 'bq-item';
+      d.style.background = '#8e44ad';
+      d.innerHTML = `<div style="font-size:.62rem;opacity:.8;">${1000+i*8}</div>${p} →`;
+      el.appendChild(d);
+    });
+    const note = document.createElement('div'); note.className = 'bq-label';
+    note.textContent = '…真正的物件散落在 heap 各處';
+    el.appendChild(note);
+    setStatus('cmpStatus', 'referential：格子裡是指標，每次取值都要「跳」到 heap：位置分散，cache 常 miss。');
+  }
+}
+cmpShow('compact');
+
+/* ---------- P03 multidim ---------- */
+const MD_R = 3, MD_C = 4;
+let mdTimer = null;
+function mdRender(hl) {
+  const g = $('mdGrid'); g.innerHTML = '';
+  for (let i = 0; i < MD_R; i++) for (let j = 0; j < MD_C; j++) {
+    const k = i * MD_C + j;
+    const d = document.createElement('div');
+    d.className = 'char-cell' + (k === hl ? ' char-cur' : '');
+    d.style.cssText += 'padding:.6rem .3rem;cursor:pointer;';
+    d.innerHTML = `a[${i}][${j}]`;
+    d.onclick = () => {
+      mdRender(k);
+      setStatus('mdStatus', `a[${i}][${j}] → 攤平 offset = ${i}×${MD_C} + ${j} = <strong>${k}</strong>，位址 = 1000 + ${k}×4 = ${1000 + k*4}。`);
+    };
+    g.appendChild(d);
+  }
+  const f = $('mdFlat'); f.innerHTML = '';
+  const lb = document.createElement('div'); lb.className = 'bq-label'; lb.textContent = '攤平 →';
+  f.appendChild(lb);
+  for (let k = 0; k < MD_R*MD_C; k++) {
+    const d = document.createElement('div');
+    d.className = 'bq-item' + (k === hl ? ' bs-hl' : '');
+    d.style.minWidth = '40px'; d.style.fontSize = '.72rem';
+    d.textContent = k;
+    f.appendChild(d);
+  }
+}
+function mdWalk(mode) {
+  if (mdTimer) clearInterval(mdTimer);
+  const order = [];
+  if (mode === 'row') { for (let i=0;i<MD_R;i++) for (let j=0;j<MD_C;j++) order.push(i*MD_C+j); }
+  else { for (let j=0;j<MD_C;j++) for (let i=0;i<MD_R;i++) order.push(i*MD_C+j); }
+  let t = 0;
+  mdTimer = setInterval(() => {
+    if (t >= order.length) { clearInterval(mdTimer);
+      setStatus('mdStatus', mode === 'row'
+        ? 'row-major 走訪：攤平索引 0,1,2,…連續前進：cache line 一路吃到飽。'
+        : 'column 走訪：攤平索引 0,4,8,1,5,9,…每步跳 4 格：大矩陣時 cache miss 連發。');
+      return; }
+    mdRender(order[t]); t++;
+  }, 260);
+}
+mdRender(-1);
+
+/* ---------- P04 sparse ---------- */
+const SP_R = 5, SP_C = 6;
+let spData = {};   // "r,c" -> value
+function spRender() {
+  const g = $('spGrid'); g.innerHTML = '';
+  for (let r = 0; r < SP_R; r++) for (let c = 0; c < SP_C; c++) {
+    const key = r + ',' + c;
+    const v = spData[key];
+    const d = document.createElement('div');
+    d.className = 'char-cell';
+    d.style.cssText += 'padding:.55rem .2rem;cursor:pointer;' + (v ? 'background:#2c3e7a;color:#fff;border-color:#2c3e7a;' : 'color:#bbb;');
+    d.textContent = v || '0';
+    d.onclick = () => {
+      if (spData[key]) delete spData[key];
+      else spData[key] = Math.floor(Math.random()*9) + 1;
+      spRender();
+    };
+    g.appendChild(d);
+  }
+  const entries = Object.entries(spData).map(([k,v]) => {
+    const [r,c] = k.split(','); return {r:+r, c:+c, v};
+  }).sort((a,b) => a.r-b.r || a.c-b.c);
+  const coo = entries.length
+    ? `row=[${entries.map(e=>e.r)}] col=[${entries.map(e=>e.c)}] val=[${entries.map(e=>e.v)}]`
+    : '（空）';
+  const dok = entries.length
+    ? '{ ' + entries.map(e => `(${e.r},${e.c}):${e.v}`).join(', ') + ' }'
+    : '{ }';
+  $('spStore').innerHTML = `<strong>COO</strong>：${coo}<br><strong>DOK</strong>：${dok}`;
+  const nnz = entries.length, total = SP_R * SP_C;
+  $('spDensity').innerHTML = `nnz = ${nnz} / ${total}<br>sparsity = ${(100*(1 - nnz/total)).toFixed(1)}%`;
+  setStatus('spStatus', nnz ? `整片存要 ${total} 格；稀疏格式只記 ${nnz} 筆。` : '點格子放非零值試試。');
+}
+function spRandom() {
+  spData = {};
+  let placed = 0;
+  while (placed < 4) {
+    const key = Math.floor(Math.random()*SP_R) + ',' + Math.floor(Math.random()*SP_C);
+    if (!spData[key]) { spData[key] = Math.floor(Math.random()*9)+1; placed++; }
+  }
+  spRender();
+}
+function spClear() { spData = {}; spRender(); }
+spRender();
+</script>
+</body>
+</html>

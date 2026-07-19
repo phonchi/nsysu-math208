@@ -1,0 +1,3012 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>圖與圖演算法 — Graphs &amp; Graphing Algorithms Interactive（Python）</title>
+<script>
+  MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1a2e;--paper:#f7f3eb;--accent:#c0392b;--accent2:#2c3e7a;--accent3:#1a6b4a;
+  --muted:#8a8578;--card:#fffdf7;--card-border:#e8e2d6;--highlight:#fff3cd;
+  --code-bg:#2d2d3f;--code-fg:#e8e6df;
+  --node-white:#ffffff;--node-gray:#bdc3c7;--node-black:#34495e;
+  --node-current:#f39c12;--node-found:#16a085;--node-start:#9b59b6;
+  --edge-default:#95a5a6;--edge-tree:#27ae60;--edge-explore:#f39c12;--edge-mst:#1a6b4a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.9;font-size:17px;}
+
+/* Hero */
+.hero{min-height:62vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem;position:relative;overflow:hidden;background:linear-gradient(170deg,#1a1a2e 0%,#2c3e7a 40%,#1a6b4a 100%);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.06) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.04) 0%,transparent 40%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);}
+.hero-content{position:relative;z-index:1;max-width:860px;}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;color:#fff;letter-spacing:.04em;line-height:1.3;margin-bottom:1rem;}
+.hero h1 .green{color:#2ecc71;}
+.hero h1 .blue{color:#5dade2;}
+.hero h1 .orange{color:#f39c12;}
+.hero h1 .purple{color:#bb8fce;}
+.hero .subtitle{font-size:clamp(.95rem,2.2vw,1.2rem);color:rgba(255,255,255,.65);font-weight:300;margin-bottom:2rem;}
+.hero .big-formula{color:#2ecc71;background:rgba(0,0,0,.3);padding:.8rem 2rem;border-radius:12px;display:inline-block;border:1px solid rgba(255,255,255,.1);margin-bottom:2rem;backdrop-filter:blur(4px);font-size:1.05rem;}
+.scroll-hint{color:rgba(255,255,255,.4);font-size:.9rem;animation:bounce 2s infinite;}
+.scroll-hint span{display:block;font-size:1.4rem;margin-top:.3rem;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+/* Hero mini-graph illustration */
+.hero-graph{position:absolute;right:5%;top:50%;transform:translateY(-50%);opacity:.18;pointer-events:none;}
+@media(max-width:900px){.hero-graph{display:none;}}
+
+/* Layout */
+.container{max-width:1180px;margin:0 auto;padding:3rem 1.5rem;}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.5rem;}
+h2{font-family:'Noto Serif TC',serif;font-size:1.65rem;font-weight:700;color:var(--ink);margin-bottom:1.2rem;line-height:1.4;}
+h3{font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:700;color:var(--accent2);margin:1.4rem 0 .8rem;}
+section{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--card-border);}
+section:last-of-type{border-bottom:none;}
+p{margin-bottom:1rem;}
+code{font-family:'JetBrains Mono',monospace;font-size:.92em;background:rgba(44,62,122,.08);padding:1px 6px;border-radius:4px;color:var(--accent2);}
+strong{color:var(--ink);}
+
+/* TOC */
+.toc{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:1.2rem 1.5rem;margin:1rem 0 2rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.toc-title{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.7rem;}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.5rem .8rem;}
+.toc-grid a{color:var(--accent2);text-decoration:none;font-size:.9rem;padding:.3rem 0;display:flex;align-items:center;gap:.4rem;transition:color .2s;}
+.toc-grid a:hover{color:var(--accent);}
+.toc-grid a .toc-num{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);min-width:34px;}
+
+/* Viz layout */
+.viz-layout{display:grid;grid-template-columns:1fr 320px;gap:1.3rem;margin:1.2rem 0;align-items:start;}
+@media(max-width:900px){.viz-layout{grid-template-columns:1fr;}}
+
+.viz-panel{background:linear-gradient(160deg,#fffdf7 0%,#f4efe3 100%);border:1px solid var(--card-border);border-radius:12px;padding:1rem;box-shadow:0 4px 18px rgba(0,0,0,.06);position:relative;}
+
+/* Graph SVG canvas */
+.graph-canvas{position:relative;width:100%;height:380px;background:#fafafa;border-radius:8px;overflow:hidden;border:1px solid #ececec;}
+.graph-canvas svg{width:100%;height:100%;display:block;}
+
+/* SVG elements styles */
+.graph-edge{stroke:var(--edge-default);stroke-width:2;fill:none;transition:stroke .25s, stroke-width .25s;}
+.graph-edge.tree{stroke:var(--edge-tree);stroke-width:3.5;}
+.graph-edge.exploring{stroke:var(--edge-explore);stroke-width:3.5;stroke-dasharray:5 4;animation:dash 1s linear infinite;}
+.graph-edge.mst{stroke:var(--edge-mst);stroke-width:4;}
+.graph-edge.path{stroke:var(--accent);stroke-width:4;}
+.graph-edge.dotted{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:3 4;}
+@keyframes dash{to{stroke-dashoffset:-18;}}
+
+.edge-label{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;fill:var(--ink);pointer-events:none;}
+.edge-label-bg{fill:#fafafa;stroke:#ececec;stroke-width:1;}
+
+.graph-node{cursor:pointer;}
+.graph-node circle{fill:var(--node-white);stroke:var(--ink);stroke-width:2;transition:fill .25s, stroke .25s, r .2s;}
+.graph-node.gray circle{fill:var(--node-gray);}
+.graph-node.black circle{fill:var(--node-black);stroke:var(--node-black);}
+.graph-node.current circle{fill:var(--node-current);stroke:#d68910;stroke-width:3;}
+.graph-node.start circle{fill:var(--node-start);stroke:#7d3c98;stroke-width:3;}
+.graph-node.found circle{fill:var(--node-found);stroke:#117a65;stroke-width:3;}
+.graph-node.in-mst circle{fill:#82e0aa;stroke:var(--accent3);stroke-width:3;}
+.graph-node text.node-key{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;fill:var(--ink);text-anchor:middle;dominant-baseline:central;pointer-events:none;}
+.graph-node.black text.node-key{fill:#fff;}
+.graph-node.current text.node-key{fill:#fff;}
+.graph-node.start text.node-key{fill:#fff;}
+.graph-node.found text.node-key{fill:#fff;}
+.graph-node text.node-meta{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;fill:var(--accent);text-anchor:middle;pointer-events:none;}
+
+/* Status banner */
+.status-banner{margin-top:.8rem;padding:.7rem 1rem;background:var(--code-bg);color:#fff;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.85rem;min-height:42px;display:flex;align-items:center;gap:.6rem;}
+.status-banner .status-icon{color:#2ecc71;font-weight:700;}
+.status-banner .status-text{flex:1;}
+
+/* Controls */
+.controls-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--card-border);}
+.btn{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:600;padding:.45rem 1rem;border-radius:6px;border:none;cursor:pointer;transition:all .2s;}
+.btn-play{background:var(--accent3);color:#fff;}
+.btn-play:hover{background:#22845c;}
+.btn-play.active{background:var(--accent);}
+.btn-step{background:var(--accent2);color:#fff;}
+.btn-step:hover{background:#1f2e5f;}
+.btn-step:disabled{background:#ccc;cursor:not-allowed;}
+.btn-reset{background:var(--card-border);color:var(--ink);}
+.btn-reset:hover{background:#ccc;}
+.btn-toggle{background:var(--accent2);color:#fff;}
+.btn-toggle:hover{background:#1f2e5f;}
+.btn-toggle.off{background:#bbb;color:#555;}
+.btn-shuffle{background:#8e44ad;color:#fff;}
+.btn-shuffle:hover{background:#6c3485;}
+
+/* Slider row */
+.slider-row{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;background:var(--paper);border-radius:8px;margin-bottom:.5rem;}
+.slider-row .slider-label{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent2);font-weight:600;min-width:60px;}
+.slider-row input[type="range"]{flex:1;accent-color:var(--accent3);height:5px;cursor:pointer;}
+.slider-row .slider-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--accent);font-weight:600;min-width:60px;text-align:right;}
+
+/* Side panel */
+.side-panel{display:flex;flex-direction:column;gap:.85rem;}
+.info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.info-card .ic-title{font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem;display:flex;align-items:center;justify-content:space-between;}
+.info-card .ic-title .ic-badge{font-size:.7rem;color:#fff;background:var(--accent3);padding:1px 7px;border-radius:3px;letter-spacing:.05em;font-weight:700;}
+.info-card .ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.83rem;padding:.2rem 0;}
+.info-card .ic-label{color:var(--muted);}
+.info-card .ic-value{color:var(--ink);font-weight:600;}
+.info-card .ic-value.highlight{color:var(--accent);}
+.info-card .ic-value.big{font-size:1.4rem;color:var(--accent2);}
+
+/* Stats grid */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.4rem;}
+.stat-tile{background:var(--paper);border-radius:8px;padding:.5rem .7rem;text-align:center;}
+.stat-tile .stat-label{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;}
+.stat-tile .stat-value{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;color:var(--accent2);}
+
+/* Queue / Stack / PQ visualization */
+.ds-display{font-family:'JetBrains Mono',monospace;font-size:.8rem;background:var(--paper);border-radius:6px;padding:.5rem .7rem;min-height:36px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;border:1px dashed var(--card-border);}
+.ds-display .ds-empty{color:var(--muted);font-style:italic;}
+.ds-item{background:var(--accent2);color:#fff;padding:2px 8px;border-radius:4px;font-weight:600;}
+.ds-item.front{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-item.top{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-item.pq{background:var(--accent3);}
+.ds-item.pq.min{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-arrow{color:var(--muted);}
+
+/* Pseudo code */
+.pseudo-code{background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:.85rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.6;overflow-x:auto;}
+.pseudo-code .line{padding:1px 4px;border-radius:3px;display:block;white-space:pre;}
+.pseudo-code .line.active{background:rgba(243,156,18,.3);color:#fff;border-left:3px solid var(--node-current);padding-left:6px;}
+.pseudo-code .kw{color:#ff79c6;}
+.pseudo-code .fn{color:#50fa7b;}
+.pseudo-code .num{color:#bd93f9;}
+.pseudo-code .com{color:#6272a4;font-style:italic;}
+.pseudo-code .str{color:#f1fa8c;}
+
+/* Adjacency table */
+.adj-display{margin:.5rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.adj-matrix{border-collapse:collapse;margin:.5rem auto;}
+.adj-matrix td,.adj-matrix th{border:1px solid var(--card-border);padding:6px 10px;text-align:center;min-width:34px;background:#fff;}
+.adj-matrix th{background:var(--accent2);color:#fff;font-weight:700;}
+.adj-matrix td.zero{color:#ccc;}
+.adj-matrix td.nonzero{background:#eafaf1;color:var(--accent3);font-weight:700;}
+.adj-matrix td.highlight{background:#fff3cd;}
+.adj-list{background:var(--card);border:1px solid var(--card-border);border-radius:8px;padding:.7rem 1rem;}
+.adj-list .adj-row{padding:3px 0;border-bottom:1px dashed var(--card-border);}
+.adj-list .adj-row:last-child{border-bottom:none;}
+.adj-list .adj-key{color:var(--accent);font-weight:700;display:inline-block;min-width:32px;}
+.adj-list .adj-arrow{color:var(--muted);margin:0 6px;}
+.adj-list .adj-neighbor{background:#eef2ff;color:var(--accent2);padding:1px 8px;border-radius:4px;margin:1px 3px;display:inline-block;font-weight:600;}
+
+/* Chess board for Knight's tour */
+.chess-board{display:grid;background:#fff;border:2px solid var(--ink);border-radius:6px;overflow:hidden;margin:.5rem auto;width:fit-content;}
+.chess-cell{display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:700;position:relative;transition:background .2s;}
+.chess-cell.light{background:#f0d9b5;color:#666;}
+.chess-cell.dark{background:#b58863;color:#fff;}
+.chess-cell.visited{background:#27ae60 !important;color:#fff;}
+.chess-cell.current{background:#f39c12 !important;color:#fff;box-shadow:inset 0 0 0 3px #d68910;}
+.chess-cell.start{background:#9b59b6 !important;color:#fff;}
+.chess-cell .knight{font-size:1.4em;line-height:1;}
+.chess-cell .step-num{font-size:.7em;}
+
+/* Info box */
+.info-box{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1.1rem 1.4rem;margin:1.3rem 0;position:relative;}
+.info-box .info-label{position:absolute;top:-11px;left:14px;background:var(--accent2);color:#fff;font-size:.74rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.05em;}
+.info-box.warm{background:#fef5e7;border-color:#d68910;}
+.info-box.warm .info-label{background:#d68910;}
+.info-box.green{background:#eafaf1;border-color:var(--accent3);}
+.info-box.green .info-label{background:var(--accent3);}
+.info-box.purple{background:#f4ecf7;border-color:#8e44ad;}
+.info-box.purple .info-label{background:#8e44ad;}
+
+/* Pill labels */
+.pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:4px;margin:0 .15rem;vertical-align:1px;}
+.pill-blue{background:rgba(41,128,185,.12);color:#2980b9;border:1px solid rgba(41,128,185,.3);}
+.pill-red{background:rgba(192,57,43,.12);color:var(--accent);border:1px solid rgba(192,57,43,.3);}
+.pill-green{background:rgba(39,174,96,.12);color:var(--accent3);border:1px solid rgba(39,174,96,.3);}
+.pill-orange{background:rgba(243,156,18,.12);color:#d68910;border:1px solid rgba(243,156,18,.3);}
+.pill-purple{background:rgba(142,68,173,.12);color:#8e44ad;border:1px solid rgba(142,68,173,.3);}
+.pill-gray{background:rgba(0,0,0,.06);color:var(--muted);border:1px solid rgba(0,0,0,.12);}
+
+/* Comparison table */
+.cmp-table{width:100%;border-collapse:collapse;font-size:.86rem;margin:.8rem 0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.cmp-table th{background:var(--accent2);color:#fff;padding:.6rem .8rem;text-align:center;font-weight:600;font-size:.82rem;}
+.cmp-table td{padding:.6rem .8rem;text-align:center;border-bottom:1px solid var(--card-border);font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.cmp-table td:first-child{font-family:'Noto Sans TC',sans-serif;color:var(--accent2);font-weight:600;text-align:left;}
+.cmp-table tr:last-child td{border-bottom:none;}
+.cmp-table tr:nth-child(even){background:rgba(0,0,0,.015);}
+.cmp-table .best{color:var(--accent3);font-weight:700;}
+.cmp-table .worst{color:var(--accent);font-weight:700;}
+
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:.6rem;margin:.6rem 0;font-family:'JetBrains Mono',monospace;font-size:.75rem;}
+.legend-item{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .5rem;background:var(--paper);border-radius:5px;}
+.legend-item .lg-swatch{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--ink);}
+.legend-item .lg-edge{width:18px;height:3px;border-radius:2px;}
+
+/* Quiz */
+.quiz-box{background:var(--card);border:2px solid var(--accent2);border-radius:12px;padding:1.3rem 1.5rem;margin:1.5rem 0;}
+.quiz-box .quiz-label{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);font-weight:700;letter-spacing:.1em;margin-bottom:.5rem;}
+.quiz-options{display:flex;flex-direction:column;gap:.5rem;margin:.8rem 0;}
+.quiz-opt{display:flex;align-items:center;gap:.6rem;padding:.55rem .9rem;background:var(--paper);border:2px solid var(--card-border);border-radius:8px;cursor:pointer;transition:all .2s;font-family:'JetBrains Mono',monospace;font-size:.86rem;}
+.quiz-opt:hover{border-color:var(--accent2);}
+.quiz-opt .opt-letter{font-weight:700;color:var(--accent2);min-width:22px;}
+.quiz-opt.correct{background:#eafaf1;border-color:var(--accent3);}
+.quiz-opt.correct .opt-letter{color:var(--accent3);}
+.quiz-opt.wrong{background:#fef5e7;border-color:var(--accent);}
+.quiz-opt.wrong .opt-letter{color:var(--accent);}
+.quiz-feedback{margin-top:.7rem;padding:.7rem 1rem;border-radius:8px;font-size:.88rem;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.correct{background:#eafaf1;color:var(--accent3);border-left:4px solid var(--accent3);}
+.quiz-feedback.wrong{background:#fef5e7;color:var(--accent);border-left:4px solid var(--accent);}
+
+/* Floating sidebar navigation */
+.float-nav{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:2px;background:rgba(255,253,250,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--card-border);border-radius:12px;padding:10px 7px;box-shadow:0 6px 24px rgba(0,0,0,.10);font-family:'JetBrains Mono',monospace;max-height:88vh;overflow-y:auto;transition:padding .25s ease;}
+.float-nav .fn-title{font-family:'Noto Serif TC',serif;font-weight:700;font-size:.68rem;color:var(--accent2);text-align:center;letter-spacing:1.5px;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--card-border);max-width:0;overflow:hidden;transition:max-width .25s ease;}
+.float-nav:hover .fn-title{max-width:220px;}
+.float-nav a{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:7px;color:var(--ink);text-decoration:none;white-space:nowrap;transition:all .2s ease;border-left:3px solid transparent;}
+.float-nav a .fn-num{font-weight:700;font-size:.66rem;color:var(--muted);letter-spacing:.4px;flex-shrink:0;width:30px;text-align:left;}
+.float-nav a .fn-name{font-family:'Noto Sans TC',sans-serif;font-size:.76rem;font-weight:500;max-width:0;overflow:hidden;transition:max-width .25s ease,padding .25s ease;padding:0;}
+.float-nav:hover a .fn-name{max-width:220px;padding-left:2px;}
+.float-nav a:hover{background:var(--card);}
+.float-nav a.active{background:var(--accent2);color:#fff;border-left-color:var(--accent);box-shadow:0 2px 6px rgba(192,57,43,.25);}
+.float-nav a.active .fn-num{color:rgba(255,255,255,.85);}
+.float-nav a.active .fn-name{color:#fff;}
+.float-nav .fn-top{margin-top:6px;padding-top:6px;border-top:1px solid var(--card-border);justify-content:center;}
+.float-nav .fn-top .fn-num{width:auto;color:var(--accent2);font-size:.78rem;}
+@media(max-width:768px){
+  .float-nav{right:8px;top:auto;bottom:14px;transform:none;padding:6px 5px;max-height:70vh;}
+  .float-nav .fn-title{display:none;}
+  .float-nav a{padding:4px 7px;}
+  .float-nav a .fn-num{width:26px;font-size:.62rem;}
+}
+
+footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border);}
+
+/* Distance / table inside graph viz */
+.vert-table{margin-top:.6rem;width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:.78rem;}
+.vert-table th,.vert-table td{padding:4px 6px;text-align:center;border:1px solid var(--card-border);}
+.vert-table th{background:var(--accent2);color:#fff;font-weight:600;font-size:.74rem;}
+.vert-table td.tcell-current{background:#fff3cd;font-weight:700;color:var(--accent);}
+.vert-table td.tcell-done{background:#eafaf1;color:var(--accent3);}
+.vert-table td.tcell-inf{color:#ccc;}
+.sec-badge{font-size:.6em;color:var(--muted);border:1px solid var(--card-border);background:var(--card);padding:2px 10px;border-radius:999px;vertical-align:middle;margin-left:.6rem;font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.02em;white-space:nowrap;}
+</style>
+</head>
+<body>
+
+<!-- Floating navigation sidebar -->
+<nav class="float-nav" id="floatNav" aria-label="章節導覽">
+  <div class="fn-title">章節導覽</div>
+  <a href="#prologue" data-target="prologue"><span class="fn-num">P00</span><span class="fn-name">引言與術語</span></a>
+  <a href="#representation" data-target="representation"><span class="fn-num">P01</span><span class="fn-name">圖的表示</span></a>
+  <a href="#bfs" data-target="bfs"><span class="fn-num">P02</span><span class="fn-name">廣度優先 BFS</span></a>
+  <a href="#word-ladder" data-target="word-ladder"><span class="fn-num">P03</span><span class="fn-name">Word Ladder</span></a>
+  <a href="#dfs" data-target="dfs"><span class="fn-num">P04</span><span class="fn-name">深度優先 DFS</span></a>
+  <a href="#knight" data-target="knight"><span class="fn-num">P05</span><span class="fn-name">騎士巡邏</span></a>
+  <a href="#dijkstra" data-target="dijkstra"><span class="fn-num">P06</span><span class="fn-name">Dijkstra 最短路徑</span></a>
+  <a href="#prim" data-target="prim"><span class="fn-num">P07</span><span class="fn-name">Prim 最小生成樹</span></a>
+  <a href="#topsort" data-target="topsort"><span class="fn-num">P08</span><span class="fn-name">拓撲排序（補充）</span></a>
+  <a href="#scc" data-target="scc"><span class="fn-num">P09</span><span class="fn-name">強連通元件（補充）</span></a>
+  <a href="#exercises" data-target="exercises"><span class="fn-num">EX</span><span class="fn-name">練習題</span></a>
+  <a href="#reference" data-target="reference"><span class="fn-num">REF</span><span class="fn-name">總覽比較</span></a>
+  <a href="#top" class="fn-top" title="回到頂端"><span class="fn-num">↑ TOP</span></a>
+</nav>
+
+<div class="hero" id="top">
+  <div class="hero-grid"></div>
+  <svg class="hero-graph" width="320" height="280" viewBox="0 0 320 280">
+    <g stroke="#fff" stroke-width="2" fill="none">
+      <line x1="60" y1="60" x2="160" y2="40"/>
+      <line x1="160" y1="40" x2="260" y2="80"/>
+      <line x1="60" y1="60" x2="100" y2="160"/>
+      <line x1="100" y1="160" x2="200" y2="200"/>
+      <line x1="200" y1="200" x2="260" y2="80"/>
+      <line x1="160" y1="40" x2="200" y2="200"/>
+      <line x1="100" y1="160" x2="260" y2="80"/>
+    </g>
+    <g fill="#fff">
+      <circle cx="60" cy="60" r="14"/>
+      <circle cx="160" cy="40" r="14"/>
+      <circle cx="260" cy="80" r="14"/>
+      <circle cx="100" cy="160" r="14"/>
+      <circle cx="200" cy="200" r="14"/>
+    </g>
+  </svg>
+  <div class="hero-content">
+    <h1><span class="blue">圖</span>與<span class="orange">圖演算法</span></h1>
+    <div class="subtitle">pythonds Chapter 7 — Graphs &amp; Graph Algorithms（對應講義 08）</div>
+    <div class="big-formula">頂點 · 邊 · 鄰接表示｜BFS｜DFS｜Dijkstra｜Prim</div>
+    <div class="scroll-hint">向下捲動開始互動<span>↓</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-title">CONTENTS · 內容目錄</div>
+  <div class="toc-grid">
+    <a href="#prologue"><span class="toc-num">P00</span>引言：圖的術語</a>
+    <a href="#representation"><span class="toc-num">P01</span>圖的表示方法</a>
+    <a href="#bfs"><span class="toc-num">P02</span>廣度優先搜尋 BFS</a>
+    <a href="#word-ladder"><span class="toc-num">P03</span>Word Ladder</a>
+    <a href="#dfs"><span class="toc-num">P04</span>深度優先搜尋 DFS</a>
+    <a href="#knight"><span class="toc-num">P05</span>騎士巡邏 Knight's Tour</a>
+    <a href="#dijkstra"><span class="toc-num">P06</span>Dijkstra 最短路徑</a>
+    <a href="#prim"><span class="toc-num">P07</span>Prim 最小生成樹</a>
+    <a href="#topsort"><span class="toc-num">P08</span>拓撲排序（補充）</a>
+    <a href="#scc"><span class="toc-num">P09</span>強連通元件（補充）</a>
+    <a href="#exercises"><span class="toc-num">EX</span>練習題</a>
+    <a href="#reference"><span class="toc-num">REF</span>總覽比較表</a>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PROLOGUE -->
+<!-- ============================================================ -->
+<section id="prologue">
+  <div class="section-number">PROLOGUE · 開場</div>
+  <h2>圖是什麼？先把術語都講清楚 <span class="sec-badge">pythonds §7.1–9.2</span></h2>
+  <p><strong>圖（graph）</strong>可以用來描述許多現實世界的關係：道路系統、航班、網際網路連線、課程先修關係等等。一旦我們把問題用圖表示出來，就可以套用<strong>標準的圖演算法</strong>解決原本看似困難的問題！</p>
+
+  <div class="info-box">
+    <span class="info-label">三個核心元素</span>
+    <strong>頂點（Vertex / Node）：</strong>圖的基本單位，有一個 <code>key</code>（名稱），可選擇性地附帶 <code>value</code> 或 <code>payload</code>。<br>
+    <strong>邊（Edge / Arc）：</strong>連接兩個頂點，表示兩者之間有關係。邊可以是<strong>單向</strong>（有向圖 digraph）或<strong>雙向</strong>。<br>
+    <strong>權重（Weight）：</strong>邊上可附加成本，例如兩城市間的距離、網路延遲等。
+  </div>
+
+  <p>形式上我們把圖寫成 $G = (V, E)$：$V$ 是頂點集合，$E$ 是邊的集合。每條邊是一個 tuple $(v, w)$，其中 $v, w \in V$；如果有權重就寫成 $(v, w, c)$。</p>
+
+  <h3>路徑、循環、樹、DAG</h3>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="graph-canvas" id="canvas-intro"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text">這是一個簡單的<strong>有向加權圖</strong>，有 6 個頂點與 9 條邊。下方按鈕可以高亮不同術語。</span></div>
+        <div class="controls-bar">
+          <button class="btn btn-step" onclick="introHighlight('path')">高亮 Path: v3→v4→v0→v1</button>
+          <button class="btn btn-step" onclick="introHighlight('cycle')">高亮 Cycle: v5→v2→v3→v5</button>
+          <button class="btn btn-reset" onclick="introHighlight('clear')">↺ 清除</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">術語對照</div>
+        <div class="ic-row"><span class="ic-label">|V|</span><span class="ic-value">6</span></div>
+        <div class="ic-row"><span class="ic-label">|E|</span><span class="ic-value">9</span></div>
+        <div class="ic-row"><span class="ic-label">類型</span><span class="ic-value">有向加權</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">關鍵概念</div>
+        <p style="font-size:.82rem;line-height:1.6;margin:0;">
+          <span class="pill pill-blue">Path</span> 由邊串聯的頂點序列 $w_1, w_2, \ldots, w_n$，每個相鄰對 $(w_i, w_{i+1}) \in E$。<br><br>
+          <span class="pill pill-orange">Cycle</span> 起點＝終點的 path 。<br><br>
+          <span class="pill pill-green">DAG</span> Directed Acyclic Graph：沒有 cycle 的有向圖；可解決許多排程／依賴問題。<br><br>
+          <span class="pill pill-purple">Tree</span> 連通且無 cycle 的圖；下一章專題討論。
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <h3>頂點的三色狀態（後續演算法都會用到）</h3>
+  <p>BFS 與 DFS 都會用「白／灰／黑」三色追蹤每個頂點被造訪的程度。請先記住這套語義，後續每一節都會直接套用：</p>
+  <div class="legend">
+    <span class="legend-item"><span class="lg-swatch" style="background:var(--node-white)"></span>White：尚未發現</span>
+    <span class="legend-item"><span class="lg-swatch" style="background:var(--node-gray)"></span>Gray：已發現、尚未完成</span>
+    <span class="legend-item"><span class="lg-swatch" style="background:var(--node-black)"></span>Black：已完全探索</span>
+    <span class="legend-item"><span class="lg-swatch" style="background:var(--node-current)"></span>Current：目前處理中</span>
+    <span class="legend-item"><span class="lg-swatch" style="background:var(--node-start)"></span>Start：起點</span>
+    <span class="legend-item"><span class="lg-edge" style="background:var(--edge-default)"></span>原始邊</span>
+    <span class="legend-item"><span class="lg-edge" style="background:var(--edge-tree)"></span>樹邊（搜尋樹）</span>
+    <span class="legend-item"><span class="lg-edge" style="background:var(--edge-explore)"></span>正在檢查</span>
+  </div>
+
+  <p>每一節版面都採用左「圖視覺化＋控制列」、右「即時統計＋虛擬碼＋複雜度」的形式。請按 <span class="pill pill-green">▶ 開始</span> 跑完整動畫，或按 <span class="pill pill-blue">→ 單步</span> 一步一步觀察。</p>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART 01: Graph Representation -->
+<!-- ============================================================ -->
+<section id="representation">
+  <div class="section-number">PART 01 · 圖的表示</div>
+  <h2>怎麼把圖塞進電腦？相鄰矩陣 vs 相鄰串列 <span class="sec-badge">pythonds §7.3–9.6</span></h2>
+  <p>圖的 ADT 主要支援以下操作：<code>setVertex(v)</code>、<code>addEdge(u, v, w)</code>、<code>getVertex(key)</code>、<code>getVertices()</code>、<code>g.count(v)</code>。實作方式有兩種主流選擇：<strong>相鄰矩陣（adjacency matrix）</strong>和<strong>相鄰串列（adjacency list）</strong>，兩者各有適用情境。</p>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div style="display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap;">
+          <div style="flex:1;min-width:280px;">
+            <h3 style="margin-top:0;text-align:center;color:var(--accent2);">相鄰矩陣<br><span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--muted);font-weight:400;">Adjacency Matrix</span></h3>
+            <div id="adjMatrixViz"></div>
+          </div>
+          <div style="flex:1;min-width:280px;">
+            <h3 style="margin-top:0;text-align:center;color:var(--accent2);">相鄰串列<br><span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--muted);font-weight:400;">Adjacency List</span></h3>
+            <div id="adjListViz"></div>
+          </div>
+        </div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text">點擊任意頂點，看對應的列／鄰居清單會被高亮</span></div>
+        <div class="controls-bar">
+          <span style="font-size:.82rem;color:var(--muted);margin-right:.4rem;">點選頂點：</span>
+          <button class="btn btn-step" onclick="adjHighlight('v0')">v0</button>
+          <button class="btn btn-step" onclick="adjHighlight('v1')">v1</button>
+          <button class="btn btn-step" onclick="adjHighlight('v2')">v2</button>
+          <button class="btn btn-step" onclick="adjHighlight('v3')">v3</button>
+          <button class="btn btn-step" onclick="adjHighlight('v4')">v4</button>
+          <button class="btn btn-step" onclick="adjHighlight('v5')">v5</button>
+          <button class="btn btn-reset" onclick="adjHighlight(null)">↺ 清除</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">何時用矩陣？</div>
+        <p style="font-size:.82rem;line-height:1.6;margin:0;">
+          適合<strong>稠密圖</strong>（dense，邊數接近 $|V|^2$）。<br>
+          ✅ 直接 $O(1)$ 查詢任兩點是否相連<br>
+          ❌ 空間 $O(|V|^2)$<br>
+          ❌ 對稀疏圖極度浪費
+        </p>
+        <div class="ic-row" style="margin-top:.6rem;"><span class="ic-label">空間</span><span class="ic-value highlight">$O(|V|^2)$</span></div>
+        <div class="ic-row"><span class="ic-label">查邊</span><span class="ic-value">$O(1)$</span></div>
+        <div class="ic-row"><span class="ic-label">列鄰居</span><span class="ic-value">$O(|V|)$</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">何時用串列？</div>
+        <p style="font-size:.82rem;line-height:1.6;margin:0;">
+          適合<strong>稀疏圖</strong>（sparse，邊數遠小於 $|V|^2$）。<br>
+          ✅ 空間 $O(|V|+|E|)$<br>
+          ✅ 列出鄰居只需 $O(\deg(v))$<br>
+          ❌ 查特定邊需走過鄰居清單
+        </p>
+        <div class="ic-row" style="margin-top:.6rem;"><span class="ic-label">空間</span><span class="ic-value highlight">$O(|V|+|E|)$</span></div>
+        <div class="ic-row"><span class="ic-label">查邊</span><span class="ic-value">$O(\deg(v))$</span></div>
+        <div class="ic-row"><span class="ic-label">列鄰居</span><span class="ic-value">$O(\deg(v))$</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">真實世界：稀疏為主</div>
+        <p style="font-size:.82rem;line-height:1.55;margin:0;color:var(--ink);">
+          以後面 Word Ladder 為例：5,110 個字 ⇒ 矩陣 $5{,}110^2 = 26{,}112{,}100$ 格，但實際只有 53,286 條邊（<strong>0.20%</strong> 滿）！這就是為什麼實務上幾乎都用相鄰串列。
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Python 實作：Vertex 與 Graph 類別 <span class="sec-badge">pythonds3.graphs</span></h3>
+  <p>每個 <code>Vertex</code> 用 <code>dict</code> 紀錄它的鄰居及邊權重；<code>Graph</code> 再用一個 <code>dict</code> 把 key 對應到 Vertex 物件：</p>
+  <div class="pseudo-code" style="font-size:.82rem;">
+<span class="line"><span class="kw">class</span> <span class="fn">Vertex</span>:</span>
+<span class="line">    <span class="kw">def</span> <span class="fn">__init__</span>(self, key):</span>
+<span class="line">        self.key = key</span>
+<span class="line">        self.neighbors = {}  <span class="com"># dict: 鄰居 vertex → 權重</span></span>
+<span class="line">    <span class="kw">def</span> <span class="fn">set_neighbor</span>(self, other, weight=<span class="num">0</span>):</span>
+<span class="line">        self.neighbors[other] = weight</span>
+<span class="line">    <span class="kw">def</span> <span class="fn">get_neighbors</span>(self):</span>
+<span class="line">        <span class="kw">return</span> self.neighbors.keys()</span>
+<span class="line"></span>
+<span class="line"><span class="kw">class</span> <span class="fn">Graph</span>:</span>
+<span class="line">    <span class="kw">def</span> <span class="fn">__init__</span>(self):</span>
+<span class="line">        self.vertices = {}</span>
+<span class="line">    <span class="kw">def</span> <span class="fn">set_vertex</span>(self, key):</span>
+<span class="line">        self.vertices[key] = Vertex(key)</span>
+<span class="line">    <span class="kw">def</span> <span class="fn">add_edge</span>(self, from_vert, to_vert, weight=<span class="num">0</span>):</span>
+<span class="line">        <span class="kw">if</span> from_vert <span class="kw">not in</span> self.vertices: self.set_vertex(from_vert)</span>
+<span class="line">        <span class="kw">if</span> to_vert <span class="kw">not in</span> self.vertices: self.set_vertex(to_vert)</span>
+<span class="line">        self.vertices[from_vert].set_neighbor(self.vertices[to_vert], weight)</span>
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">小提醒</span>
+    本章後續所有演算法（BFS/DFS/Dijkstra/Prim）都建立在<strong>相鄰串列</strong>實作之上。Vertex 類別在不同節中會擴充不同欄位（如 <code>color</code>, <code>distance</code>, <code>previous</code>, <code>discovery_time</code>, <code>closing_time</code>），但底層結構不變。
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART 02: BFS -->
+<!-- ============================================================ -->
+<section id="bfs">
+  <div class="section-number">PART 02 · 廣度優先搜尋</div>
+  <h2>BFS：一層一層往外擴散 <span class="sec-badge">pythonds §7.9–9.10</span></h2>
+  <p>給定起點 $s$，<strong>廣度優先搜尋（Breadth-First Search）</strong>會找出圖中所有從 $s$ 可達的頂點。它最迷人的性質是：<strong>會先找到所有距離 $s$ 為 $k$ 的頂點，才開始找距離 $k+1$ 的</strong>。換句話說，BFS 自動產生「最少邊數路徑」（在無權圖上就是最短路徑）。</p>
+
+  <div class="info-box">
+    <span class="info-label">核心資料結構</span>
+    BFS 用一個 <strong>Queue（先進先出）</strong>決定下一個要造訪的頂點。每個頂點維護三個欄位：<code>color</code>（white/gray/black）、<code>distance</code>（到起點的最短距離）、<code>previous</code>（前驅，用來重建路徑）。
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="graph-canvas" id="canvas-bfs"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="bfsStatus">選擇起點，按「開始」執行 BFS</span></div>
+        <div class="slider-row">
+          <span class="slider-label">起點</span>
+          <select id="bfsStart" style="font-family:'JetBrains Mono',monospace;padding:.3rem .5rem;border-radius:6px;border:1px solid var(--card-border);background:#fff;">
+            <option value="A" selected>A</option><option value="B">B</option><option value="C">C</option>
+            <option value="D">D</option><option value="E">E</option><option value="F">F</option>
+            <option value="G">G</option><option value="H">H</option>
+          </select>
+          <span style="font-size:.78rem;color:var(--muted);">速度</span>
+          <input type="range" id="bfsSpeed" min="200" max="1500" step="50" value="700" style="flex:1;accent-color:var(--accent3);">
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="bfsPlay">▶ 開始</button>
+          <button class="btn btn-step" id="bfsStep">→ 單步</button>
+          <button class="btn btn-reset" id="bfsReset">↺ 重置</button>
+        </div>
+        <div style="margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;">
+          <strong style="color:var(--accent2);">Queue：</strong>
+          <span class="ds-display" id="bfsQueue"><span class="ds-empty">empty</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="stats-grid">
+          <div class="stat-tile"><div class="stat-label">已探索</div><div class="stat-value" id="bfsVisited">0</div></div>
+          <div class="stat-tile"><div class="stat-label">當前距離</div><div class="stat-value" id="bfsDist">—</div></div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">頂點狀態表</div>
+        <div id="bfsTable" style="overflow-x:auto;"></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="bfsCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">bfs</span>(start):</span><span class="line" data-l="2">    start.color = <span class="str">"gray"</span></span><span class="line" data-l="3">    start.distance = <span class="num">0</span></span><span class="line" data-l="4">    start.previous = <span class="kw">None</span></span><span class="line" data-l="5">    queue = Queue()</span><span class="line" data-l="6">    queue.enqueue(start)</span><span class="line" data-l="7">    <span class="kw">while</span> queue.size() &gt; <span class="num">0</span>:</span><span class="line" data-l="8">        current = queue.dequeue()</span><span class="line" data-l="9">        <span class="kw">for</span> nb <span class="kw">in</span> current.get_neighbors():</span><span class="line" data-l="10">            <span class="kw">if</span> nb.color == <span class="str">"white"</span>:</span><span class="line" data-l="11">                nb.color = <span class="str">"gray"</span></span><span class="line" data-l="12">                nb.distance = current.distance + <span class="num">1</span></span><span class="line" data-l="13">                nb.previous = current</span><span class="line" data-l="14">                queue.enqueue(nb)</span><span class="line" data-l="15">        current.color = <span class="str">"black"</span></span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">時間</span><span class="ic-value">$O(\lvert V\rvert + \lvert E\rvert)$</span></div>
+        <div class="ic-row"><span class="ic-label">空間</span><span class="ic-value">$O(\lvert V\rvert)$</span></div>
+        <div class="ic-row"><span class="ic-label">最短路徑</span><span class="ic-value">無權圖 ✓</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box warm">
+    <span class="info-label">為什麼是 $O(|V|+|E|)$？</span>
+    外層 <code>while</code> 每個頂點最多進 queue 一次（白色才會被加），所以是 $O(|V|)$。內層 <code>for</code> 走每個被 dequeue 出來的點的所有鄰居，整體加總就是<strong>每條邊被檢查一次</strong>，也就是 $O(|E|)$。兩者相加：$O(|V|+|E|)$。
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">BFS 的兩個重要性質</span>
+    <strong>(1) 最短路徑樹：</strong>沿著 <code>previous</code> 指標往回走，可以重建從任何可達頂點回到起點的<strong>最少邊數路徑</strong>。<br>
+    <strong>(2) 一次解多個問題：</strong>一次 BFS 同時得到起點到「所有可達頂點」的最短距離，不需要重新跑 $|V|$ 次！
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART 03: Word Ladder -->
+<!-- ============================================================ -->
+<section id="word-ladder">
+  <div class="section-number">PART 03 · Word Ladder</div>
+  <h2>Word Ladder：把 BFS 應用到「換字謎題」 <span class="sec-badge">pythonds §7.7–9.8</span></h2>
+  <p><strong>Word Ladder</strong>：把一個單字一次改一個字母變成另一個單字，每一步都必須是有效單字。經典題目：<code>FOOL → SAGE</code>，最少要幾步？</p>
+
+  <div class="pseudo-code" style="font-size:.85rem;text-align:center;background:var(--card);color:var(--ink);border:1px solid var(--card-border);">
+<span class="line">FOOL → POOL → POLL → POLE → PALE → SALE → SAGE</span>
+  </div>
+
+  <p>把每個單字當頂點、把「只差一個字母」的單字對連邊，問題就變成<strong>「在這張圖上找最短路徑」</strong>，正是 BFS 的拿手好戲！</p>
+
+  <h3>建圖技巧：bucket 法（避免 $O(n^2)$ 比對）</h3>
+  <p>若有 $n=5{,}110$ 個四字母單字，兩兩比對需要約 $\binom{n}{2} \approx 1.3 \times 10^7$ 次，太慢。聰明的做法：<strong>用 bucket 標籤</strong>，將每個字母位置依次替換成底線 <code>_</code>，把所有共用同一個 bucket 的單字連起來。</p>
+
+  <div class="info-box">
+    <span class="info-label">Bucket 構造範例</span>
+    <code>POPE</code>、<code>POPS</code> 都會落入 bucket <code>POP_</code>；<br>
+    <code>FOOL</code>、<code>POOL</code>、<code>COOL</code>、<code>TOOL</code> 都落入 bucket <code>_OOL</code>。<br>
+    每個 bucket 內部的所有單字兩兩相連 → 所有「只差一個字母」的單字對都被連上了！
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="graph-canvas" id="canvas-wordladder" style="height:420px;"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="wlStatus">輸入起點與終點，按「找最短路徑」執行 BFS</span></div>
+        <div class="slider-row">
+          <span class="slider-label">起點</span>
+          <select id="wlStart" style="font-family:'JetBrains Mono',monospace;padding:.3rem .5rem;border-radius:6px;border:1px solid var(--card-border);background:#fff;"></select>
+          <span class="slider-label">終點</span>
+          <select id="wlEnd" style="font-family:'JetBrains Mono',monospace;padding:.3rem .5rem;border-radius:6px;border:1px solid var(--card-border);background:#fff;"></select>
+        </div>
+        <div class="slider-row">
+          <span style="font-size:.78rem;color:var(--muted);">速度</span>
+          <input type="range" id="wlSpeed" min="200" max="1500" step="50" value="500" style="flex:1;accent-color:var(--accent3);">
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="wlPlay">▶ 找最短路徑</button>
+          <button class="btn btn-step" id="wlStep">→ 單步</button>
+          <button class="btn btn-reset" id="wlReset">↺ 重置</button>
+        </div>
+        <div style="margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;">
+          <strong style="color:var(--accent2);">Queue：</strong>
+          <span class="ds-display" id="wlQueue"><span class="ds-empty">empty</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">最短路徑</div>
+        <div class="ic-value highlight" id="wlPath" style="font-family:'JetBrains Mono',monospace;font-size:.95rem;text-align:center;padding:.4rem 0;">—</div>
+        <div class="ic-row"><span class="ic-label">步數</span><span class="ic-value" id="wlSteps">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">建圖統計</div>
+        <div class="ic-row"><span class="ic-label">|V|</span><span class="ic-value" id="wlV">15</span></div>
+        <div class="ic-row"><span class="ic-label">|E|</span><span class="ic-value" id="wlE">—</span></div>
+        <div class="ic-row"><span class="ic-label">已探索</span><span class="ic-value" id="wlExplored">0</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">演算法複雜度</div>
+        <div class="ic-row"><span class="ic-label">建圖（bucket）</span><span class="ic-value">$O(n \cdot L)$</span></div>
+        <div class="ic-row"><span class="ic-label">BFS</span><span class="ic-value">$O(\lvert V\rvert + \lvert E\rvert)$</span></div>
+        <div class="ic-row" style="border-top:1px solid var(--card-border);margin-top:.3rem;padding-top:.4rem;"><span class="ic-label">$n$ = 字數, $L$ = 字長</span></div>
+      </div>
+    </div>
+  </div>
+
+  <p>單字集合：<code>fool, cool, pool, poll, pole, pall, fall, fail, foil, foul, pope, pale, sale, sage, page</code>。圖中只畫出 bucket 法產生的邊（同 bucket 內兩兩相連）；BFS 從起點往外擴散時會以橘色標記正在處理的頂點，綠色表示已被加入搜尋樹。</p>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART 04: DFS -->
+<!-- ============================================================ -->
+<section id="dfs">
+  <div class="section-number">PART 04 · 深度優先搜尋</div>
+  <h2>DFS：一條路走到黑，碰壁再回頭 <span class="sec-badge">pythonds §7.15–9.16</span></h2>
+  <p>BFS 一層一層擴散，<strong>深度優先搜尋（Depth-First Search）</strong>則是<strong>沿一條分支盡可能往深走</strong>，走不下去才回退（backtrack）到上一個還有未探索鄰居的頂點。BFS 用 queue，DFS 自然用<strong>遞迴（隱式 stack）</strong>。</p>
+
+  <div class="info-box">
+    <span class="info-label">DFS 的兩個新欄位</span>
+    除了 <code>color</code> 與 <code>previous</code>，DFS 還記錄：<br>
+    <strong>discovery_time（發現時間）：</strong>頂點從 white 變 gray 的時間步。<br>
+    <strong>closing_time（結束時間）：</strong>頂點從 gray 變 black 的時間步。<br>
+    這兩個時間滿足<strong>括號性質（parenthesis property）</strong>：每個子節點的 [discovery, closing] 區間都完全嵌套在父節點的區間內。
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="graph-canvas" id="canvas-dfs"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="dfsStatus">按「開始」跑完整 DFS（會走遍整個 forest）</span></div>
+        <div class="slider-row">
+          <span class="slider-label">起點</span>
+          <select id="dfsStart" style="font-family:'JetBrains Mono',monospace;padding:.3rem .5rem;border-radius:6px;border:1px solid var(--card-border);background:#fff;">
+            <option value="A" selected>A</option><option value="B">B</option><option value="C">C</option>
+            <option value="D">D</option><option value="E">E</option><option value="F">F</option>
+          </select>
+          <span style="font-size:.78rem;color:var(--muted);">速度</span>
+          <input type="range" id="dfsSpeed" min="200" max="1500" step="50" value="700" style="flex:1;accent-color:var(--accent3);">
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="dfsPlay">▶ 開始</button>
+          <button class="btn btn-step" id="dfsStep">→ 單步</button>
+          <button class="btn btn-reset" id="dfsReset">↺ 重置</button>
+        </div>
+        <div style="margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;">
+          <strong style="color:var(--accent2);">Recursion stack（隱式）：</strong>
+          <span class="ds-display" id="dfsStack"><span class="ds-empty">empty</span></span>
+        </div>
+        <div style="margin-top:.4rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;">
+          <strong style="color:var(--accent2);">時間計數：</strong>
+          <span style="color:var(--accent);font-weight:700;" id="dfsTime">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">頂點時間表</div>
+        <div id="dfsTable" style="overflow-x:auto;"></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="dfsCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">dfs</span>(graph):</span><span class="line" data-l="2">    <span class="kw">for</span> v <span class="kw">in</span> graph: v.color = <span class="str">"white"</span></span><span class="line" data-l="3">    time = <span class="num">0</span></span><span class="line" data-l="4">    <span class="kw">for</span> v <span class="kw">in</span> graph:</span><span class="line" data-l="5">        <span class="kw">if</span> v.color == <span class="str">"white"</span>:</span><span class="line" data-l="6">            dfs_visit(v)</span><span class="line" data-l="7"></span><span class="line" data-l="8"><span class="kw">def</span> <span class="fn">dfs_visit</span>(u):</span><span class="line" data-l="9">    u.color = <span class="str">"gray"</span></span><span class="line" data-l="10">    time += <span class="num">1</span>; u.discovery = time</span><span class="line" data-l="11">    <span class="kw">for</span> nb <span class="kw">in</span> u.get_neighbors():</span><span class="line" data-l="12">        <span class="kw">if</span> nb.color == <span class="str">"white"</span>:</span><span class="line" data-l="13">            nb.previous = u</span><span class="line" data-l="14">            dfs_visit(nb)  <span class="com"># 遞迴</span></span><span class="line" data-l="15">    u.color = <span class="str">"black"</span></span><span class="line" data-l="16">    time += <span class="num">1</span>; u.closing = time</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">時間</span><span class="ic-value">$O(\lvert V\rvert + \lvert E\rvert)$</span></div>
+        <div class="ic-row"><span class="ic-label">空間</span><span class="ic-value">$O(\lvert V\rvert)$ 遞迴</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box warm">
+    <span class="info-label">為什麼要走訪所有頂點？(line 4)</span>
+    從單一起點 DFS 可能無法走遍整張圖（特別是有向圖或不連通圖）。外層 <code>for v : graph</code> 確保每個白色頂點都會啟動一次 <code>dfsVisit</code>，最終得到一片<strong>深度優先森林（DF forest）</strong>。
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">BFS vs DFS 的程式碼對照</span>
+    DFS 與 BFS 的程式碼<strong>幾乎一模一樣</strong>，差別只在內層迴圈最後一行：<br>
+    BFS：<code>queue.enqueue(neighbor)</code>：先把鄰居塞 queue，等以後處理。<br>
+    DFS：<code>dfsVisit(neighbor)</code>：立刻遞迴下去處理鄰居。<br>
+    這個小差異就決定了「廣度優先 vs 深度優先」的搜尋順序！
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART 05: Knight's Tour -->
+<!-- ============================================================ -->
+<section id="knight">
+  <div class="section-number">PART 05 · 騎士巡邏</div>
+  <h2>Knight's Tour：DFS + Warnsdorff 啟發式 <span class="sec-badge">pythonds §7.11–9.14</span></h2>
+  <p><strong>騎士巡邏</strong>：在 $n \times n$ 棋盤上，騎士能否走 $n^2 - 1$ 步、恰好造訪每格一次？這是 DFS 的經典應用：把每格當頂點、把合法走法當邊，問題變成「找出長度為 $n^2 - 1$ 的簡單路徑」。</p>
+
+  <div class="info-box warm">
+    <span class="info-label">指數爆炸</span>
+    在 $8 \times 8$ 棋盤上，平均分支因子 $k = 5.25$，搜尋樹約有 $5.25^{64} \approx 1.2 \times 10^{46}$ 個節點！純 DFS 在 8x8 棋盤上會跑數分鐘到永遠跑不完。但只要加上一個簡單的<strong>啟發式排序</strong>，速度可以快上千萬倍。
+  </div>
+
+  <div class="info-box purple">
+    <span class="info-label">Warnsdorff 啟發式</span>
+    <strong>下一步永遠選「可走鄰居最少」的格子</strong>。直覺：先去角落、邊緣那些「難救援」的格子，避免它們被孤立；中間格子鄰居多，留到最後當跳板。<br>
+    這個簡單規則讓 8x8 從「跑不完」變成<strong>不到一秒就完成</strong>：經典的 heuristic 範例。
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div id="knightBoard" style="margin:.5rem 0;display:flex;justify-content:center;"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="knightStatus">選擇棋盤大小與是否使用 Warnsdorff，按「開始」</span></div>
+        <div class="slider-row">
+          <span class="slider-label">大小</span>
+          <select id="knightSize" style="font-family:'JetBrains Mono',monospace;padding:.3rem .5rem;border-radius:6px;border:1px solid var(--card-border);background:#fff;">
+            <option value="5">5×5</option>
+            <option value="6" selected>6×6</option>
+            <option value="7">7×7</option>
+            <option value="8">8×8</option>
+          </select>
+          <span class="slider-label">起點</span>
+          <select id="knightStart" style="font-family:'JetBrains Mono',monospace;padding:.3rem .5rem;border-radius:6px;border:1px solid var(--card-border);background:#fff;">
+            <option value="0" selected>(0,0)</option>
+          </select>
+          <span style="font-size:.78rem;color:var(--muted);">速度</span>
+          <input type="range" id="knightSpeed" min="20" max="500" step="20" value="120" style="flex:1;accent-color:var(--accent3);">
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-toggle" id="knightHeur">使用 Warnsdorff: 開</button>
+          <button class="btn btn-play" id="knightPlay">▶ 開始</button>
+          <button class="btn btn-reset" id="knightReset">↺ 重置</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="stats-grid">
+          <div class="stat-tile"><div class="stat-label">已走步數</div><div class="stat-value" id="knightSteps">0</div></div>
+          <div class="stat-tile"><div class="stat-label">回退次數</div><div class="stat-value" id="knightBack">0</div></div>
+        </div>
+        <div class="ic-row" style="margin-top:.6rem;"><span class="ic-label">總探索節點</span><span class="ic-value highlight" id="knightExplored">0</span></div>
+        <div class="ic-row"><span class="ic-label">結果</span><span class="ic-value" id="knightResult">—</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code"><span class="line"><span class="kw">def</span> <span class="fn">knight_tour</span>(n, path, u, limit):</span><span class="line">    u.color = <span class="str">"gray"</span></span><span class="line">    path.append(u)</span><span class="line">    <span class="kw">if</span> n &lt; limit:</span><span class="line">        nbs = order_by_avail(u)  <span class="com"># Warnsdorff!</span></span><span class="line">        done = <span class="kw">False</span></span><span class="line">        <span class="kw">for</span> nb <span class="kw">in</span> nbs:</span><span class="line">            <span class="kw">if</span> nb.color == <span class="str">"white"</span>:</span><span class="line">                done = knight_tour(n+<span class="num">1</span>, path, nb, limit)</span><span class="line">                <span class="kw">if</span> done: <span class="kw">break</span></span><span class="line">        <span class="kw">if not</span> done:  <span class="com"># backtrack</span></span><span class="line">            path.pop()</span><span class="line">            u.color = <span class="str">"white"</span></span><span class="line">        <span class="kw">return</span> done</span><span class="line">    <span class="kw">return</span> <span class="kw">True</span></span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">純 DFS</span><span class="ic-value">$O(k^N)$</span></div>
+        <div class="ic-row"><span class="ic-label">Warnsdorff</span><span class="ic-value highlight">幾乎線性</span></div>
+        <div class="ic-row" style="border-top:1px solid var(--card-border);margin-top:.3rem;padding-top:.4rem;font-size:.74rem;color:var(--muted);">$N=n^2$, $k$≈分支因子</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <span class="info-label">為什麼選「鄰居最少」而不是「最多」？</span>
+    若每次選鄰居最多的格子，騎士會傾向往中間擠（中間格鄰居多）。一旦中間都用完，<strong>四角的孤立格子就再也走不到</strong>。反過來「先解決鄰居最少的」，等於先掃完邊角這些「燙手山芋」，中間格子鄰居多、機動性高，留到後段當跳板使用：這就是 Warnsdorff 規則奏效的根本原因。
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART 06: Dijkstra -->
+<!-- ============================================================ -->
+<section id="dijkstra">
+  <div class="section-number">PART 06 · Dijkstra 最短路徑</div>
+  <h2>Dijkstra：加權圖上的「貪婪式 BFS」 <span class="sec-badge">pythonds §7.19–9.21</span></h2>
+  <p><strong>Dijkstra 演算法</strong>解決<strong>單源最短路徑</strong>問題：給定起點 $s$，求 $s$ 到所有其他頂點的<strong>最小權重總和路徑</strong>。它的精神類似 BFS，但用<strong>優先佇列（priority queue）</strong>取代普通 queue，每次從未處理頂點中挑出當前 distance 最小者。</p>
+
+  <div class="info-box warm">
+    <span class="info-label">前提：邊權必須非負</span>
+    Dijkstra <strong>不適用於有負邊權的圖</strong>。負邊會讓「拿出最小者就確定其最終距離」這個貪婪假設失效，詳見練習題 1。對於有負邊但無負環的情況請改用 <strong>Bellman-Ford</strong>。
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="graph-canvas" id="canvas-dijkstra"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="dijStatus">選擇起點，按「開始」執行 Dijkstra</span></div>
+        <div class="slider-row">
+          <span class="slider-label">起點</span>
+          <select id="dijStart" style="font-family:'JetBrains Mono',monospace;padding:.3rem .5rem;border-radius:6px;border:1px solid var(--card-border);background:#fff;">
+            <option value="u" selected>u</option><option value="v">v</option><option value="w">w</option>
+            <option value="x">x</option><option value="y">y</option><option value="z">z</option>
+          </select>
+          <span style="font-size:.78rem;color:var(--muted);">速度</span>
+          <input type="range" id="dijSpeed" min="200" max="2000" step="50" value="800" style="flex:1;accent-color:var(--accent3);">
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="dijPlay">▶ 開始</button>
+          <button class="btn btn-step" id="dijStep">→ 單步</button>
+          <button class="btn btn-reset" id="dijReset">↺ 重置</button>
+        </div>
+        <div style="margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;">
+          <strong style="color:var(--accent2);">Priority Queue：</strong>
+          <span class="ds-display" id="dijPQ"><span class="ds-empty">empty</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">距離表 <span class="ic-badge">LIVE</span></div>
+        <div id="dijTable" style="overflow-x:auto;"></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="dijCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">dijkstra</span>(graph, start):</span><span class="line" data-l="2">    pq = PriorityQueue()</span><span class="line" data-l="3">    start.distance = <span class="num">0</span></span><span class="line" data-l="4">    pq.insert((<span class="num">0</span>, start))</span><span class="line" data-l="5">    visited = set()</span><span class="line" data-l="6">    <span class="kw">while not</span> pq.is_empty():</span><span class="line" data-l="7">        d, u = pq.delete()  <span class="com"># 取最小</span></span><span class="line" data-l="8">        visited.add(u)</span><span class="line" data-l="9">        <span class="kw">for</span> v <span class="kw">in</span> u.get_neighbors():</span><span class="line" data-l="10">            <span class="kw">if</span> v <span class="kw">in</span> visited: <span class="kw">continue</span></span><span class="line" data-l="11">            new_d = d + u.weight(v)</span><span class="line" data-l="12">            <span class="kw">if</span> new_d &lt; v.distance:</span><span class="line" data-l="13">                v.distance = new_d</span><span class="line" data-l="14">                v.previous = u</span><span class="line" data-l="15">                pq.update(v, new_d)</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">時間（heap）</span><span class="ic-value">$O((|V|{+}|E|)\log|V|)$</span></div>
+        <div class="ic-row"><span class="ic-label">建 PQ</span><span class="ic-value">$O(|V|)$</span></div>
+        <div class="ic-row"><span class="ic-label">邊鬆弛</span><span class="ic-value">$O(|E|\log|V|)$</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box green">
+    <span class="info-label">關鍵概念：邊鬆弛 (relaxation)</span>
+    第 11–14 行稱為<strong>邊鬆弛</strong>：對 $u$ 的每個鄰居 $v$，檢查是否可以透過 $u$ 走到 $v$ 比目前已知更近：
+    $$\text{new\_d} = d(u) + w(u,v),\quad \text{若 new\_d} < d(v)\text{，更新 } d(v) \text{ 並把 }u\text{ 設為 previous}.$$
+    每條邊最多鬆弛一次（因為頂點只會從 PQ 取出一次），所以總共 $O(|E|)$ 次鬆弛，配合 PQ 的 $O(\log|V|)$ 操作，總時間 $O((|V|+|E|)\log|V|)$。
+  </div>
+
+  <div class="info-box">
+    <span class="info-label">範例圖</span>
+    這是 PDF 上的標準範例（雙向邊）：頂點 $\{u, v, w, x, y, z\}$，邊權如圖所示。從 $u$ 出發，正確的最短路徑樹如下：<br>
+    <code>u→v: 2</code>　<code>u→x: 1</code>　<code>u→y: 2 (經 x)</code>　<code>u→w: 3 (經 y)</code>　<code>u→z: 3 (經 y)</code>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART 07: Prim -->
+<!-- ============================================================ -->
+<section id="prim">
+  <div class="section-number">PART 07 · Prim 最小生成樹</div>
+  <h2>Prim：用最小邊權連通整張圖 <span class="sec-badge">pythonds §7.22</span></h2>
+  <p>想像線上遊戲要把同一筆訊息傳給所有玩家。最直覺的做法（Host 對每位玩家各送一份）會讓某些路由器重複收到同一個封包。一個更聰明的做法是：找出一棵<strong>最小生成樹（Minimum Spanning Tree, MST）</strong>：一個無循環的子圖，連通所有頂點，且總邊權最小。</p>
+
+  <div class="info-box">
+    <span class="info-label">MST 的定義</span>
+    對無向加權連通圖 $G = (V, E)$，最小生成樹 $T$ 是 $E$ 的一個無循環子集，滿足：<br>
+    (1) $T$ 連通所有 $V$ 中的頂點；(2) $T$ 中的邊權總和最小。
+  </div>
+
+  <div class="info-box purple">
+    <span class="info-label">Prim 是貪婪演算法</span>
+    Prim 每一步都選<strong>「安全邊（safe edge）」</strong>：一條跨越「已加入樹的頂點集合」與「尚未加入的頂點」的<strong>最小權重邊</strong>。每次加入一條，直到所有頂點都進樹為止。<br>
+    （在實作中我們用 PQ 維護「每個未加入頂點到已加入集合的最小距離」，跟 Dijkstra 結構非常類似！）
+  </div>
+
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="graph-canvas" id="canvas-prim"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="primStatus">選擇起點，按「開始」逐步建立 MST</span></div>
+        <div class="slider-row">
+          <span class="slider-label">起點</span>
+          <select id="primStart" style="font-family:'JetBrains Mono',monospace;padding:.3rem .5rem;border-radius:6px;border:1px solid var(--card-border);background:#fff;">
+            <option value="A" selected>A</option><option value="B">B</option><option value="C">C</option>
+            <option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option>
+          </select>
+          <span style="font-size:.78rem;color:var(--muted);">速度</span>
+          <input type="range" id="primSpeed" min="200" max="2000" step="50" value="800" style="flex:1;accent-color:var(--accent3);">
+        </div>
+        <div class="controls-bar">
+          <button class="btn btn-play" id="primPlay">▶ 開始</button>
+          <button class="btn btn-step" id="primStep">→ 單步</button>
+          <button class="btn btn-reset" id="primReset">↺ 重置</button>
+        </div>
+        <div style="margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;">
+          <strong style="color:var(--accent2);">Priority Queue：</strong>
+          <span class="ds-display" id="primPQ"><span class="ds-empty">empty</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">即時統計 <span class="ic-badge">LIVE</span></div>
+        <div class="ic-row"><span class="ic-label">已加入節點</span><span class="ic-value" id="primInTree">0/0</span></div>
+        <div class="ic-row"><span class="ic-label">MST 總權重</span><span class="ic-value highlight big" id="primTotal">0</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">MST 邊清單</div>
+        <div id="primEdges" style="font-family:'JetBrains Mono',monospace;font-size:.82rem;">—</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="primCode"><span class="line" data-l="1"><span class="kw">def</span> <span class="fn">prim</span>(graph, start):</span><span class="line" data-l="2">    <span class="kw">for</span> v <span class="kw">in</span> graph:</span><span class="line" data-l="3">        v.distance = <span class="num">∞</span></span><span class="line" data-l="4">        v.previous = <span class="kw">None</span></span><span class="line" data-l="5">    start.distance = <span class="num">0</span></span><span class="line" data-l="6">    pq = PriorityQueue(graph)</span><span class="line" data-l="7">    <span class="kw">while not</span> pq.is_empty():</span><span class="line" data-l="8">        d, u = pq.delete()</span><span class="line" data-l="9">        <span class="kw">for</span> v <span class="kw">in</span> u.get_neighbors():</span><span class="line" data-l="10">            new_d = u.weight(v)  <span class="com"># 注意：只看單邊權！</span></span><span class="line" data-l="11">            <span class="kw">if</span> v <span class="kw">in</span> pq <span class="kw">and</span> new_d &lt; v.distance:</span><span class="line" data-l="12">                v.previous = u</span><span class="line" data-l="13">                v.distance = new_d</span><span class="line" data-l="14">                pq.update(v, new_d)</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">複雜度</div>
+        <div class="ic-row"><span class="ic-label">時間（heap）</span><span class="ic-value">$O((|V|{+}|E|)\log|V|)$</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box warm">
+    <span class="info-label">Prim vs Dijkstra：一個關鍵差異</span>
+    結構幾乎一樣，但<strong>更新規則不同</strong>：<br>
+    <strong>Dijkstra：</strong> <code>newD = u-&gt;distance + w(u,v)</code>：累加從起點走到 v 的<strong>整條路徑</strong>權重。<br>
+    <strong>Prim：</strong> <code>newD = w(u,v)</code>：只看 u 到 v 的<strong>單一邊權</strong>。<br>
+    為什麼？因為 MST 不在乎「離起點多遠」，只在乎「下一個要連入樹的最便宜邊」。
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART 08: Topological Sort (supplemental) -->
+<!-- ============================================================ -->
+<section id="topsort">
+  <div class="section-number">PART 08 · 拓撲排序</div>
+  <h2>拓撲排序：把 DAG 攤平成一條合法的待辦順序 <span class="sec-badge">pythonds §7.17 · 講義補充</span></h2>
+  <p style="font-size:.88rem;color:var(--muted);">課堂投影片跳過本節（RISE skip，講義標 Optional）：屬自學補充。</p>
+  <p>講義用煎鬆餅開場：食譜很簡單（1 顆蛋、1 杯鬆餅粉、1 匙油、3/4 杯牛奶），
+  難的是<strong>先做哪一步</strong>。加熱煎鍋和打蛋都可以先做，但「倒麵糊」一定要等鍋熱了、糊攪好了。
+  把每個步驟當頂點、「必須先做」當有向邊，就得到一張 <strong>DAG</strong>（有向無環圖）。
+  <strong>拓撲排序</strong>（topological sort）吃進一張 DAG，吐出一個線性順序，
+  保證圖中每條邊 $(v, w)$ 的 $v$ 都排在 $w$ 前面。凡是「事件有先後依賴」的問題都用得上：
+  軟體專案排程、資料庫查詢最佳化、矩陣連乘的順序安排。</p>
+  <div class="info-box">
+    <span class="info-label">演算法：DFS 的一個小改裝</span>
+    ① 對圖跑 <code>dfs(g)</code>，目的是替每個頂點算出 <strong>closing time</strong>（結束時間）。<br>
+    ② 把頂點依 closing time <strong>遞減</strong>排成一列。<br>
+    ③ 這一列就是拓撲排序的結果。
+  </div>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="graph-canvas" id="canvas-ts" style="height:400px;"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="tsStatus">按「① 跑 DFS」開始：節點上會標出 start/close 時間。</span></div>
+        <div class="controls-bar">
+          <button class="btn btn-play" onclick="tsRunDFS()">▶ ① 跑 DFS 標 closing time</button>
+          <button class="btn btn-step" onclick="tsOrder()">② 依 closing 遞減排出順序</button>
+          <button class="btn btn-reset" onclick="tsReset()">↺ 重置</button>
+        </div>
+        <div class="mono" id="tsOrderOut" style="font-size:.85rem;line-height:1.9;min-height:34px;padding:.4rem .2rem;"></div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">節點代號</div>
+        <div style="font-size:.84rem;line-height:1.95;">
+        奶＝3/4 杯牛奶｜蛋＝1 顆蛋｜油＝1 匙油<br>
+        鍋＝加熱煎鍋｜糊＝攪 1 杯鬆餅糊<br>
+        漿＝加熱糖漿｜倒＝倒 1/4 杯麵糊<br>
+        翻＝冒泡就翻面｜吃＝開動</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">怎麼讀動畫</div>
+        <div style="font-size:.84rem;line-height:1.9;">
+        節點下方的 <span class="mono">s/f</span> 是 DFS 的 start／closing time。
+        灰＝已發現、黑＝已完成。第 ② 步只是把黑點照 f 由大到小唸出來，
+        合法的做事順序就出現了。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-label">QUIZ · 為什麼「closing time 遞減」就是答案？</div>
+    <p>對 DAG 跑完 DFS 後，依 closing time 遞減排序，為什麼保證每條邊 $(v,w)$ 的 $v$ 都排在 $w$ 前面？</p>
+    <div class="quiz-options" id="ts1Options">
+      <div class="quiz-opt" data-correct="true"  onclick="quizCheck('ts1', this)"><span class="opt-letter">(A)</span> 因為 DAG 上有邊 $(v,w)$ 時，$v$ 的 closing time 一定比 $w$ 大</div>
+      <div class="quiz-opt" data-correct="false" onclick="quizCheck('ts1', this)"><span class="opt-letter">(B)</span> 因為 closing time 大代表這個點的鄰居比較多</div>
+      <div class="quiz-opt" data-correct="false" onclick="quizCheck('ts1', this)"><span class="opt-letter">(C)</span> 因為 DFS 一定會先造訪 $v$ 再造訪 $w$</div>
+    </div>
+    <div class="quiz-feedback" id="ts1Feedback"></div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- PART 09: Strongly Connected Components (supplemental) -->
+<!-- ============================================================ -->
+<section id="scc">
+  <div class="section-number">PART 09 · 強連通元件</div>
+  <h2>強連通元件（SCC）：找出「彼此都到得了」的頂點群 <span class="sec-badge">pythonds §7.18 · 講義補充</span></h2>
+  <p style="font-size:.88rem;color:var(--muted);">課堂投影片跳過本節（RISE skip，講義標 Optional）：屬自學補充。</p>
+  <p>把全球資訊網當成一張超大的有向圖：網頁是頂點、超連結是邊。Google 這類搜尋引擎正是在這張圖上做演算法。
+  觀察這種圖會發現：內容相近的網站常常<strong>互相連來連去</strong>，形成高度互連的群集。
+  抓出這種群集的工具就是<strong>強連通元件</strong>演算法。
+  正式定義：SCC 是頂點的最大子集 $C \subseteq V$，使得其中任兩點 $v, w$ 都<strong>互相可達</strong>
+  （$v$ 到得了 $w$，$w$ 也到得了 $v$）。找到 SCC 之後，把每個 SCC 縮成一顆大點，
+  就得到一張簡化的「元件圖」，原圖的巨觀結構一眼可見。</p>
+  <div class="info-box">
+    <span class="info-label">先備定義：轉置圖 $G^T$</span>
+    把 $G$ 的每條邊反向就得到 $G^T$（A→B 變成 B→A）。
+    關鍵觀察：<strong>$G$ 和 $G^T$ 的 SCC 一模一樣</strong>（「互相可達」反向後仍互相可達），
+    但「跨 SCC」的單向連結會反向。演算法要鑽的正是這個縫。
+  </div>
+  <div class="info-box">
+    <span class="info-label">SCC 演算法四步（Kosaraju）</span>
+    ① 對 $G$ 跑 <code>dfs()</code>，算每個頂點的 closing time。<br>
+    ② 算出轉置圖 $G^T$。<br>
+    ③ 對 $G^T$ 跑 <code>dfs()</code>，但主迴圈<strong>依 closing time 遞減</strong>的順序挑起點。<br>
+    ④ 步驟 ③ 長出的森林中，<strong>每一棵樹就是一個 SCC</strong>。
+  </div>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="graph-canvas" id="canvas-scc" style="height:400px;"></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text" id="sccStatus">照按鈕順序 ①→②→③ 走一遍演算法。</span></div>
+        <div class="controls-bar">
+          <button class="btn btn-play" onclick="sccStep1()">▶ ① DFS on G</button>
+          <button class="btn btn-step" onclick="sccStep2()">② 轉置成 G&#7488;</button>
+          <button class="btn btn-step" onclick="sccStep3()">③ G&#7488; 上依 closing 遞減 DFS</button>
+          <button class="btn btn-reset" onclick="sccReset()">↺ 重置</button>
+        </div>
+        <div class="mono" id="sccOut" style="font-size:.85rem;line-height:1.9;min-height:34px;padding:.4rem .2rem;"></div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">這張例圖</div>
+        <div style="font-size:.84rem;line-height:1.9;">
+        8 個頂點、3 個 SCC：A B E 一圈、C F G 一圈、H I 一圈，
+        圈與圈之間只有單向通道。跑到第 ③ 步會用三種顏色框出三棵樹。</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">為什麼跑不出去？</div>
+        <div style="font-size:.84rem;line-height:1.9;">
+        第 ③ 步從「closing time 最大」的點出發。在 $G^T$ 裡，
+        通往其他 SCC 的邊全被反向了，DFS 只能在自己的 SCC 裡打轉：
+        一棵樹剛好框住一個元件。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-label">QUIZ · 第二次 DFS 的兩個講究</div>
+    <p>SCC 演算法的第二次 DFS 為什麼要（i）換到 $G^T$ 上跑、（ii）依 closing time 遞減挑起點？</p>
+    <div class="quiz-options" id="scc1Options">
+      <div class="quiz-opt" data-correct="true"  onclick="quizCheck('scc1', this)"><span class="opt-letter">(A)</span> 兩個條件合起來，讓每棵 DFS 樹恰好「困」在一個 SCC 裡</div>
+      <div class="quiz-opt" data-correct="false" onclick="quizCheck('scc1', this)"><span class="opt-letter">(B)</span> $G^T$ 的邊比較少，跑起來比較快</div>
+      <div class="quiz-opt" data-correct="false" onclick="quizCheck('scc1', this)"><span class="opt-letter">(C)</span> 只是慣例，從任何點開始、在原圖上跑也一樣對</div>
+    </div>
+    <div class="quiz-feedback" id="scc1Feedback"></div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- EXERCISES -->
+<!-- ============================================================ -->
+<section id="exercises">
+  <div class="section-number">EXERCISES · 練習題</div>
+  <h2>動手驗證：兩個經典考點</h2>
+
+  <div class="quiz-box">
+    <div class="quiz-label">EXERCISE 1 · Dijkstra 與負邊權</div>
+    <p>下列為一個含<strong>負邊權</strong>的有向加權圖。如果使用 Dijkstra 演算法（且<strong>會檢查 visited 節點</strong>，已造訪不再更新），從 A 出發走到 D，最後得到的路徑會是？</p>
+    <div class="graph-canvas" id="canvas-ex1" style="height:380px;"></div>
+    <div class="quiz-options" id="ex1Options">
+      <div class="quiz-opt" data-correct="true"  onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> A → B → D</div>
+      <div class="quiz-opt" data-correct="false" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> A → C → D</div>
+      <div class="quiz-opt" data-correct="false" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> A → E → G → D</div>
+      <div class="quiz-opt" data-correct="false" onclick="quizCheck('ex1', this)"><span class="opt-letter">(D)</span> A → C → E → G → D</div>
+    </div>
+    <div class="quiz-feedback" id="ex1Feedback"></div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-label">EXERCISE 2 · Prim 從 F 出發</div>
+    <p>下列無向加權圖中，<strong>從節點 F 開始</strong>執行 Prim 演算法，<strong>最後一條被加入 MST 的邊</strong>，其權重為何？</p>
+    <div class="graph-canvas" id="canvas-ex2" style="height:380px;"></div>
+    <div class="quiz-options" id="ex2Options">
+      <div class="quiz-opt" data-correct="false" onclick="quizCheck('ex2', this)"><span class="opt-letter">(A)</span> 3</div>
+      <div class="quiz-opt" data-correct="false" onclick="quizCheck('ex2', this)"><span class="opt-letter">(B)</span> 4</div>
+      <div class="quiz-opt" data-correct="true"  onclick="quizCheck('ex2', this)"><span class="opt-letter">(C)</span> 5</div>
+      <div class="quiz-opt" data-correct="false" onclick="quizCheck('ex2', this)"><span class="opt-letter">(D)</span> 6</div>
+    </div>
+    <div class="quiz-feedback" id="ex2Feedback"></div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- REFERENCE -->
+<!-- ============================================================ -->
+<section id="reference">
+  <div class="section-number">REFERENCE · 總覽比較</div>
+  <h2>所有圖演算法一覽</h2>
+
+  <h3>核心演算法比較表</h3>
+  <table class="cmp-table">
+    <thead>
+      <tr>
+        <th>演算法</th>
+        <th>解決問題</th>
+        <th>關鍵 DS</th>
+        <th>時間複雜度</th>
+        <th>適用條件</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>BFS</td>
+        <td>無權最短路徑、連通性</td>
+        <td>Queue</td>
+        <td class="best">$O(|V|+|E|)$</td>
+        <td>有向／無向皆可</td>
+      </tr>
+      <tr>
+        <td>DFS</td>
+        <td>連通分量、拓撲排序、強連通</td>
+        <td>Stack（遞迴）</td>
+        <td class="best">$O(|V|+|E|)$</td>
+        <td>有向／無向皆可</td>
+      </tr>
+      <tr>
+        <td>Knight's Tour（純 DFS）</td>
+        <td>Hamiltonian path（特例）</td>
+        <td>Stack（遞迴）+ backtrack</td>
+        <td class="worst">$O(k^N)$</td>
+        <td>$N=$ 棋盤格數</td>
+      </tr>
+      <tr>
+        <td>+ Warnsdorff 啟發式</td>
+        <td>同上</td>
+        <td>同上</td>
+        <td>幾乎線性（實務）</td>
+        <td>沒有理論保證</td>
+      </tr>
+      <tr>
+        <td>Dijkstra</td>
+        <td>單源加權最短路徑</td>
+        <td>Min-heap PQ</td>
+        <td>$O((|V|{+}|E|)\log|V|)$</td>
+        <td><strong>邊權必須非負</strong></td>
+      </tr>
+      <tr>
+        <td>Prim</td>
+        <td>最小生成樹</td>
+        <td>Min-heap PQ</td>
+        <td>$O((|V|{+}|E|)\log|V|)$</td>
+        <td>無向連通圖</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>BFS vs DFS 行為對照</h3>
+  <table class="cmp-table">
+    <thead>
+      <tr>
+        <th>面向</th>
+        <th>BFS</th>
+        <th>DFS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>探索順序</td><td>按距離由近到遠（一層一層）</td><td>沿一條分支走到底，再回退</td></tr>
+      <tr><td>資料結構</td><td>FIFO Queue</td><td>LIFO Stack（隱式遞迴）</td></tr>
+      <tr><td>找最短路徑</td><td class="best">無權圖直接得到</td><td>不保證</td></tr>
+      <tr><td>記憶體</td><td>$O(|V|)$（最寬層）</td><td>$O(|V|)$（最深路徑）</td></tr>
+      <tr><td>典型應用</td><td>最短跳數、層次結構</td><td>拓撲排序、SCC、循環偵測、回溯</td></tr>
+      <tr><td>產生的樹</td><td>BFS 樹</td><td>DFS forest（多棵樹）</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Dijkstra vs Prim：細節差異</h3>
+  <table class="cmp-table">
+    <thead>
+      <tr><th>面向</th><th>Dijkstra</th><th>Prim</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>解決問題</td><td>單源最短路徑</td><td>最小生成樹</td></tr>
+      <tr><td>更新規則</td><td><code>d(u) + w(u,v)</code> 累加</td><td><code>w(u,v)</code> 只看單邊</td></tr>
+      <tr><td>結果意義</td><td>每點到起點的最短距離</td><td>連通所有頂點的最小邊集合</td></tr>
+      <tr><td>邊權限制</td><td class="worst">不可有負邊</td><td>無限制</td></tr>
+      <tr><td>有向／無向</td><td>有向／無向皆可</td><td>無向（有向需特殊處理）</td></tr>
+    </tbody>
+  </table>
+
+  <div class="info-box green">
+    <span class="info-label">學習路線建議</span>
+    <strong>1.</strong> 先牢記三色語義（white/gray/black），這是 BFS 與 DFS 共通的骨架。<br>
+    <strong>2.</strong> 動手追幾遍 BFS 與 DFS 的虛擬碼：它們<strong>程式碼幾乎一樣</strong>，差別只在 queue/stack。<br>
+    <strong>3.</strong> Dijkstra 與 Prim 同樣是 PQ-based 演算法，只差在<strong>更新規則</strong>，一起記憶事半功倍。<br>
+    <strong>4.</strong> Knight's Tour 是欣賞「啟發式排序」威力的最佳範例：同樣的 DFS 骨架，加上 Warnsdorff 規則就能把 8x8 從「跑不完」變「秒解」。
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <p>圖與圖演算法 · Interactive Visualization · Chapter 7</p>
+  <p style="margin-top:.4rem;font-size:.78rem;">Based on <em>Problem Solving with Algorithms and Data Structures using Python (pythonds)</em> · 互動視覺化版本</p>
+</footer>
+
+<script>
+/* =============================================================
+   通用：SVG 圖渲染工具
+   ============================================================= */
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+function svgEl(tag, attrs={}) {
+  const el = document.createElementNS(SVG_NS, tag);
+  for (const k in attrs) el.setAttribute(k, attrs[k]);
+  return el;
+}
+
+/**
+ * GraphRenderer: 一個圖一個實例。
+ * 配置: { vertices: {key: {x,y,label?}}, edges: [[u,v,w?,directed?], ...] }
+ */
+class GraphRenderer {
+  constructor(containerId, config, opts={}) {
+    this.container = document.getElementById(containerId);
+    this.config = config;
+    this.opts = Object.assign({
+      directed: false,
+      showWeights: true,
+      nodeRadius: 22,
+      width: 600,
+      height: 380,
+      curveOpposite: true,  // 雙向邊互相彎開
+    }, opts);
+    this.svg = svgEl('svg', {
+      viewBox: `0 0 ${this.opts.width} ${this.opts.height}`,
+      preserveAspectRatio: 'xMidYMid meet',
+    });
+    this.container.innerHTML = '';
+    this.container.appendChild(this.svg);
+
+    // arrow marker
+    const defs = svgEl('defs');
+    const markerArrow = svgEl('marker', {
+      id: `arrow-${containerId}`, markerWidth: '10', markerHeight: '10',
+      refX: '9', refY: '3', orient: 'auto', markerUnits: 'strokeWidth'
+    });
+    markerArrow.appendChild(svgEl('path', { d: 'M0,0 L0,6 L9,3 z', fill: '#7f8c8d' }));
+    defs.appendChild(markerArrow);
+    this.svg.appendChild(defs);
+    this.markerId = `arrow-${containerId}`;
+
+    this.edgeGroup = svgEl('g', { class: 'edges' });
+    this.nodeGroup = svgEl('g', { class: 'nodes' });
+    this.svg.appendChild(this.edgeGroup);
+    this.svg.appendChild(this.nodeGroup);
+
+    this.nodeElems = {};   // key -> {group, circle, text, metaText}
+    this.edgeElems = {};   // "u→v" -> {path, label, labelBg}
+    this.render();
+  }
+
+  edgeKey(u, v) { return `${u}→${v}`; }
+
+  render() {
+    // edges
+    const drawn = new Set();
+    for (const e of this.config.edges) {
+      const [u, v, w, dirOverride] = e;
+      const directed = dirOverride !== undefined ? dirOverride : this.opts.directed;
+      const u2v = this.edgeKey(u, v);
+      const v2u = this.edgeKey(v, u);
+      // 判斷是否雙向：若無向，視為一條雙向邊
+      const reverseExists = this.config.edges.some(ee => ee[0] === v && ee[1] === u);
+      const a = this.config.vertices[u];
+      const b = this.config.vertices[v];
+      let pathD;
+      let labelX, labelY;
+      const dx = b.x - a.x, dy = b.y - a.y;
+      const dist = Math.hypot(dx, dy);
+      const ux = dx / dist, uy = dy / dist;
+      const r = this.opts.nodeRadius;
+      const sx = a.x + ux * r, sy = a.y + uy * r;
+      const ex = b.x - ux * r, ey = b.y - uy * r;
+      // 偏移：若雙向（兩條對向有向邊），讓兩條邊彎開
+      let curve = 0;
+      if (directed && reverseExists && this.opts.curveOpposite) {
+        curve = 18;
+      }
+      if (curve !== 0) {
+        // 偏移控制點
+        const mx = (sx + ex) / 2 + uy * curve * (-1 * Math.sign(u.localeCompare(v)));
+        const my = (sy + ey) / 2 - ux * curve * (-1 * Math.sign(u.localeCompare(v)));
+        pathD = `M ${sx} ${sy} Q ${mx} ${my} ${ex} ${ey}`;
+        labelX = mx + uy * 6 * (-1 * Math.sign(u.localeCompare(v)));
+        labelY = my - ux * 6 * (-1 * Math.sign(u.localeCompare(v)));
+      } else {
+        pathD = `M ${sx} ${sy} L ${ex} ${ey}`;
+        labelX = (sx + ex) / 2;
+        labelY = (sy + ey) / 2;
+      }
+      const path = svgEl('path', { d: pathD, class: 'graph-edge' });
+      if (directed) path.setAttribute('marker-end', `url(#${this.markerId})`);
+      this.edgeGroup.appendChild(path);
+
+      let labelEl = null, labelBg = null;
+      if (this.opts.showWeights && w !== undefined && w !== null) {
+        labelBg = svgEl('rect', {
+          x: labelX - 11, y: labelY - 9, width: 22, height: 18,
+          rx: 3, class: 'edge-label-bg'
+        });
+        labelEl = svgEl('text', {
+          x: labelX, y: labelY + 4, class: 'edge-label', 'text-anchor': 'middle'
+        });
+        labelEl.textContent = w;
+        this.edgeGroup.appendChild(labelBg);
+        this.edgeGroup.appendChild(labelEl);
+      }
+      this.edgeElems[u2v] = { path, label: labelEl, labelBg, weight: w };
+      drawn.add(u2v);
+    }
+
+    // nodes
+    for (const key in this.config.vertices) {
+      const v = this.config.vertices[key];
+      const g = svgEl('g', { class: 'graph-node', 'data-key': key });
+      g.setAttribute('transform', `translate(${v.x},${v.y})`);
+      const circle = svgEl('circle', { r: this.opts.nodeRadius });
+      const text = svgEl('text', { class: 'node-key', y: 1 });
+      text.textContent = v.label || key;
+      const metaText = svgEl('text', { class: 'node-meta', y: this.opts.nodeRadius + 14 });
+      metaText.textContent = '';
+      g.appendChild(circle);
+      g.appendChild(text);
+      g.appendChild(metaText);
+      this.nodeGroup.appendChild(g);
+      this.nodeElems[key] = { group: g, circle, text, metaText };
+    }
+  }
+
+  setNodeClass(key, cls) {
+    if (!this.nodeElems[key]) return;
+    this.nodeElems[key].group.setAttribute('class', `graph-node ${cls || ''}`.trim());
+  }
+
+  setNodeMeta(key, txt) {
+    if (!this.nodeElems[key]) return;
+    this.nodeElems[key].metaText.textContent = txt;
+  }
+
+  setEdgeClass(u, v, cls) {
+    const key = this.edgeKey(u, v);
+    if (!this.edgeElems[key]) return;
+    this.edgeElems[key].path.setAttribute('class', `graph-edge ${cls || ''}`.trim());
+  }
+
+  setEdgeClassUndirected(u, v, cls) {
+    this.setEdgeClass(u, v, cls);
+    this.setEdgeClass(v, u, cls);
+  }
+
+  resetAll() {
+    for (const k in this.nodeElems) this.setNodeClass(k, '');
+    for (const k in this.nodeElems) this.setNodeMeta(k, '');
+    for (const k in this.edgeElems) {
+      this.edgeElems[k].path.setAttribute('class', 'graph-edge');
+    }
+  }
+}
+
+/* 同步等待工具 */
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+/* 高亮一行虛擬碼 */
+function highlightCode(codeId, lineNum) {
+  const root = document.getElementById(codeId);
+  if (!root) return;
+  root.querySelectorAll('.line').forEach(l => l.classList.remove('active'));
+  if (lineNum != null) {
+    const line = root.querySelector(`.line[data-l="${lineNum}"]`);
+    if (line) line.classList.add('active');
+  }
+}
+
+/* =============================================================
+   Floating navigation: scroll spy
+   ============================================================= */
+(function setupNav() {
+  const nav = document.getElementById('floatNav');
+  const links = nav.querySelectorAll('a[data-target]');
+  const sections = Array.from(links).map(a => document.getElementById(a.dataset.target)).filter(Boolean);
+  function update() {
+    const y = window.scrollY + window.innerHeight * 0.3;
+    let active = sections[0]?.id;
+    for (const s of sections) {
+      if (s.offsetTop <= y) active = s.id;
+    }
+    links.forEach(a => a.classList.toggle('active', a.dataset.target === active));
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+
+/* =============================================================
+   PROLOGUE: 引言圖
+   ============================================================= */
+const introGraphConfig = {
+  vertices: {
+    v0: { x: 200, y: 320, label: 'v0' },
+    v1: { x: 460, y: 320, label: 'v1' },
+    v2: { x: 480, y: 170, label: 'v2' },
+    v3: { x: 330, y: 60,  label: 'v3' },
+    v4: { x: 110, y: 170, label: 'v4' },
+    v5: { x: 320, y: 200, label: 'v5' },
+  },
+  edges: [
+    ['v0','v1',5], ['v1','v2',4], ['v2','v3',9],
+    ['v3','v4',7], ['v4','v0',1], ['v0','v5',2],
+    ['v5','v4',8], ['v3','v5',3], ['v5','v2',1],
+  ],
+};
+const introR = new GraphRenderer('canvas-intro', introGraphConfig, {
+  directed: true, showWeights: true, width: 600, height: 380,
+});
+
+function introHighlight(mode) {
+  introR.resetAll();
+  if (mode === 'path') {
+    // v3 → v4 → v0 → v1
+    const path = ['v3','v4','v0','v1'];
+    for (let i = 0; i < path.length - 1; i++) introR.setEdgeClass(path[i], path[i+1], 'path');
+    path.forEach((k,i) => introR.setNodeClass(k, i === 0 ? 'start' : (i === path.length - 1 ? 'found' : 'gray')));
+    document.querySelector('#canvas-intro').nextElementSibling.querySelector('.status-text').innerHTML =
+      '<strong>Path</strong>：v3 → v4 → v0 → v1（4 個頂點，3 條邊）。在無權圖上路徑長度＝邊數＝3；加權版本＝7+1+5=13。';
+  } else if (mode === 'cycle') {
+    // v5 → v2 → v3 → v5
+    const cyc = ['v5','v2','v3','v5'];
+    for (let i = 0; i < cyc.length - 1; i++) introR.setEdgeClass(cyc[i], cyc[i+1], 'path');
+    introR.setNodeClass('v5', 'start');
+    introR.setNodeClass('v2', 'gray');
+    introR.setNodeClass('v3', 'gray');
+    document.querySelector('#canvas-intro').nextElementSibling.querySelector('.status-text').innerHTML =
+      '<strong>Cycle</strong>：v5 → v2 → v3 → v5（起終點相同）。有 cycle ⇒ 不是 DAG。';
+  } else {
+    document.querySelector('#canvas-intro').nextElementSibling.querySelector('.status-text').innerHTML =
+      '這是一個<strong>有向加權圖</strong>，有 6 個頂點與 9 條邊。下方按鈕可以高亮不同術語。';
+  }
+}
+
+
+/* =============================================================
+   PART 01: 相鄰矩陣 / 相鄰串列
+   ============================================================= */
+const adjVerts = ['v0','v1','v2','v3','v4','v5'];
+const adjEdges = introGraphConfig.edges;  // 重用同一張圖
+
+function buildAdjMatrix() {
+  const matrix = {};
+  for (const u of adjVerts) { matrix[u] = {}; for (const v of adjVerts) matrix[u][v] = 0; }
+  for (const [u,v,w] of adjEdges) matrix[u][v] = w;
+  let html = '<table class="adj-matrix"><thead><tr><th></th>';
+  for (const v of adjVerts) html += `<th>${v}</th>`;
+  html += '</tr></thead><tbody>';
+  for (const u of adjVerts) {
+    html += `<tr data-row="${u}"><th>${u}</th>`;
+    for (const v of adjVerts) {
+      const w = matrix[u][v];
+      html += `<td class="${w === 0 ? 'zero' : 'nonzero'}" data-cell="${u}-${v}">${w === 0 ? '·' : w}</td>`;
+    }
+    html += '</tr>';
+  }
+  html += '</tbody></table>';
+  document.getElementById('adjMatrixViz').innerHTML = html;
+}
+function buildAdjList() {
+  const list = {};
+  for (const u of adjVerts) list[u] = [];
+  for (const [u,v,w] of adjEdges) list[u].push([v,w]);
+  let html = '<div class="adj-list">';
+  for (const u of adjVerts) {
+    html += `<div class="adj-row" data-row="${u}"><span class="adj-key">${u}</span><span class="adj-arrow">→</span>`;
+    if (list[u].length === 0) html += '<span style="color:#bbb;">(none)</span>';
+    else for (const [v,w] of list[u]) html += `<span class="adj-neighbor">${v}<span style="opacity:.6;font-size:.78em;">/${w}</span></span>`;
+    html += '</div>';
+  }
+  html += '</div>';
+  document.getElementById('adjListViz').innerHTML = html;
+}
+buildAdjMatrix();
+buildAdjList();
+
+function adjHighlight(key) {
+  document.querySelectorAll('.adj-matrix tr').forEach(r => {
+    r.querySelectorAll('td').forEach(c => c.classList.remove('highlight'));
+  });
+  document.querySelectorAll('.adj-list .adj-row').forEach(r => r.style.background = '');
+  if (!key) return;
+  // 高亮矩陣中對應的「列」
+  document.querySelectorAll(`.adj-matrix tr[data-row="${key}"] td`).forEach(c => c.classList.add('highlight'));
+  // 高亮串列中對應行
+  const row = document.querySelector(`.adj-list .adj-row[data-row="${key}"]`);
+  if (row) row.style.background = '#fff3cd';
+}
+
+
+/* =============================================================
+   PART 02: BFS 動畫
+   ============================================================= */
+const bfsGraphConfig = {
+  vertices: {
+    A: { x: 100, y: 80  }, B: { x: 280, y: 60  }, C: { x: 460, y: 80 },
+    D: { x: 100, y: 200 }, E: { x: 280, y: 180 }, F: { x: 460, y: 200 },
+    G: { x: 200, y: 320 }, H: { x: 400, y: 320 },
+  },
+  edges: [
+    ['A','B'], ['A','D'], ['B','C'], ['B','E'], ['C','F'],
+    ['D','E'], ['D','G'], ['E','F'], ['E','G'], ['E','H'],
+    ['F','H'], ['G','H'],
+  ],
+};
+// 對 BFS 我們把無向圖轉為雙向有向，便於追蹤
+function makeUndirectedConfig(c) {
+  const newEdges = [];
+  for (const e of c.edges) {
+    newEdges.push([e[0], e[1], e[2]]);
+    newEdges.push([e[1], e[0], e[2]]);
+  }
+  return { vertices: c.vertices, edges: newEdges };
+}
+const bfsR = new GraphRenderer('canvas-bfs', bfsGraphConfig, {
+  directed: false, showWeights: false, width: 600, height: 380,
+});
+// 鄰接表（無向）
+function buildAdjacency(config, undirected=true) {
+  const adj = {};
+  for (const k in config.vertices) adj[k] = [];
+  for (const e of config.edges) {
+    adj[e[0]].push({ to: e[1], w: e[2] });
+    if (undirected) adj[e[1]].push({ to: e[0], w: e[2] });
+  }
+  // 排序使走訪順序穩定
+  for (const k in adj) adj[k].sort((a,b) => a.to.localeCompare(b.to));
+  return adj;
+}
+
+class BFSController {
+  constructor() {
+    this.steps = [];
+    this.idx = 0;
+    this.playing = false;
+    this.timer = null;
+  }
+  generate(start) {
+    const adj = buildAdjacency(bfsGraphConfig, true);
+    const verts = Object.keys(bfsGraphConfig.vertices);
+    const color = {}, dist = {}, prev = {};
+    for (const v of verts) { color[v] = 'white'; dist[v] = Infinity; prev[v] = null; }
+    color[start] = 'gray'; dist[start] = 0;
+    const queue = [start];
+    const steps = [];
+    steps.push({ kind:'init', codeLine:6, queue:[...queue], current:null, msg:`初始化：將起點 ${start} 設為 gray、distance=0、加入 queue`,
+      color: {...color}, dist: {...dist}, prev: {...prev} });
+    while (queue.length > 0) {
+      const u = queue.shift();
+      steps.push({ kind:'dequeue', codeLine:8, current:u, queue:[...queue], msg:`從 queue 取出 ${u}（distance = ${dist[u]}），開始檢查它的鄰居`,
+        color: {...color}, dist: {...dist}, prev: {...prev} });
+      for (const { to: w } of adj[u]) {
+        if (color[w] === 'white') {
+          color[w] = 'gray'; dist[w] = dist[u] + 1; prev[w] = u;
+          queue.push(w);
+          steps.push({ kind:'discover', codeLine:11, current:u, neighbor:w, queue:[...queue], msg:`發現新頂點 ${w}：標 gray、distance=${dist[w]}、previous=${u}、加入 queue`,
+            color: {...color}, dist: {...dist}, prev: {...prev}, treeEdge:[u,w] });
+        } else {
+          steps.push({ kind:'skip', codeLine:10, current:u, neighbor:w, queue:[...queue], msg:`鄰居 ${w} 已是 ${color[w]}（已被發現過），跳過`,
+            color: {...color}, dist: {...dist}, prev: {...prev} });
+        }
+      }
+      color[u] = 'black';
+      steps.push({ kind:'finish', codeLine:15, current:u, queue:[...queue], msg:`${u} 的所有鄰居都檢查完畢，標為 black`,
+        color: {...color}, dist: {...dist}, prev: {...prev} });
+    }
+    steps.push({ kind:'done', codeLine:null, current:null, queue:[], msg:`BFS 完成！從 ${start} 出發已探索所有可達頂點。`,
+      color: {...color}, dist: {...dist}, prev: {...prev} });
+    this.steps = steps;
+    this.idx = 0;
+    this.start = start;
+  }
+  applyStep(s) {
+    bfsR.resetAll();
+    for (const k in s.color) bfsR.setNodeClass(k, s.color[k] === 'white' ? '' : s.color[k]);
+    if (s.current) {
+      // 仍以「目前處理中」覆蓋顏色
+      if (s.kind !== 'finish') bfsR.setNodeClass(s.current, 'current');
+    }
+    if (s.kind === 'init') bfsR.setNodeClass(this.start, 'start');
+    // distance 標籤
+    for (const k in s.dist) bfsR.setNodeMeta(k, isFinite(s.dist[k]) ? `d=${s.dist[k]}` : '');
+    // 樹邊
+    for (const k in s.prev) {
+      if (s.prev[k]) bfsR.setEdgeClassUndirected(s.prev[k], k, 'tree');
+    }
+    if (s.kind === 'discover' && s.treeEdge) {
+      bfsR.setEdgeClassUndirected(s.treeEdge[0], s.treeEdge[1], 'exploring');
+    } else if (s.kind === 'skip' && s.current && s.neighbor) {
+      bfsR.setEdgeClassUndirected(s.current, s.neighbor, 'dotted');
+    }
+    // queue display
+    const qEl = document.getElementById('bfsQueue');
+    if (s.queue.length === 0) qEl.innerHTML = '<span class="ds-empty">empty</span>';
+    else {
+      qEl.innerHTML = s.queue.map((v,i) =>
+        `<span class="ds-item ${i===0?'front':''}">${v}</span>` + (i < s.queue.length-1 ? '<span class="ds-arrow">←</span>' : '')
+      ).join('');
+    }
+    document.getElementById('bfsStatus').innerHTML = s.msg;
+    highlightCode('bfsCode', s.codeLine);
+    // stats
+    let visited = 0;
+    for (const k in s.color) if (s.color[k] !== 'white') visited++;
+    document.getElementById('bfsVisited').textContent = visited;
+    document.getElementById('bfsDist').textContent = s.current ? (isFinite(s.dist[s.current]) ? s.dist[s.current] : '—') : '—';
+    // table
+    this.updateTable(s);
+  }
+  updateTable(s) {
+    const verts = Object.keys(bfsGraphConfig.vertices);
+    let html = '<table class="vert-table"><thead><tr><th>v</th><th>color</th><th>d</th><th>prev</th></tr></thead><tbody>';
+    for (const v of verts) {
+      const cls = (s.current === v) ? 'tcell-current' : (s.color[v] === 'black' ? 'tcell-done' : '');
+      const d = isFinite(s.dist[v]) ? s.dist[v] : '<span class="tcell-inf">∞</span>';
+      const c = s.color[v];
+      const p = s.prev[v] || '—';
+      html += `<tr><td class="${cls}">${v}</td><td class="${cls}">${c}</td><td class="${cls}">${d}</td><td class="${cls}">${p}</td></tr>`;
+    }
+    html += '</tbody></table>';
+    document.getElementById('bfsTable').innerHTML = html;
+  }
+  reset() {
+    this.stop();
+    bfsR.resetAll();
+    this.steps = []; this.idx = 0;
+    document.getElementById('bfsStatus').textContent = '選擇起點，按「開始」執行 BFS';
+    document.getElementById('bfsQueue').innerHTML = '<span class="ds-empty">empty</span>';
+    document.getElementById('bfsVisited').textContent = '0';
+    document.getElementById('bfsDist').textContent = '—';
+    document.getElementById('bfsTable').innerHTML = '';
+    highlightCode('bfsCode', null);
+  }
+  step() {
+    if (this.steps.length === 0) {
+      this.generate(document.getElementById('bfsStart').value);
+    }
+    if (this.idx >= this.steps.length) return false;
+    this.applyStep(this.steps[this.idx]);
+    this.idx++;
+    return this.idx < this.steps.length;
+  }
+  play() {
+    if (this.playing) return this.stop();
+    if (this.steps.length === 0) {
+      this.generate(document.getElementById('bfsStart').value);
+    }
+    this.playing = true;
+    document.getElementById('bfsPlay').classList.add('active');
+    document.getElementById('bfsPlay').textContent = '⏸ 暫停';
+    const tick = () => {
+      if (!this.playing) return;
+      const more = this.step();
+      if (!more) { this.stop(); return; }
+      const speed = parseInt(document.getElementById('bfsSpeed').value);
+      this.timer = setTimeout(tick, speed);
+    };
+    tick();
+  }
+  stop() {
+    this.playing = false;
+    if (this.timer) { clearTimeout(this.timer); this.timer = null; }
+    document.getElementById('bfsPlay').classList.remove('active');
+    document.getElementById('bfsPlay').textContent = '▶ 開始';
+  }
+}
+const bfsCtrl = new BFSController();
+document.getElementById('bfsPlay').addEventListener('click', () => bfsCtrl.play());
+document.getElementById('bfsStep').addEventListener('click', () => { bfsCtrl.stop(); bfsCtrl.step(); });
+document.getElementById('bfsReset').addEventListener('click', () => bfsCtrl.reset());
+document.getElementById('bfsStart').addEventListener('change', () => bfsCtrl.reset());
+
+
+/* =============================================================
+   PART 03: Word Ladder (BFS on word graph)
+   ============================================================= */
+const wlWords = ['fool','cool','pool','poll','pole','pall','fall','fail','foil','foul','pope','pale','sale','sage','page'];
+
+// 用 bucket 法建圖
+function buildWordLadderGraph(words) {
+  const buckets = {};
+  for (const w of words) {
+    for (let i = 0; i < w.length; i++) {
+      const b = w.slice(0,i) + '_' + w.slice(i+1);
+      if (!buckets[b]) buckets[b] = new Set();
+      buckets[b].add(w);
+    }
+  }
+  const adj = {};
+  for (const w of words) adj[w] = new Set();
+  for (const b in buckets) {
+    const ws = Array.from(buckets[b]);
+    for (let i = 0; i < ws.length; i++) {
+      for (let j = i+1; j < ws.length; j++) {
+        adj[ws[i]].add(ws[j]);
+        adj[ws[j]].add(ws[i]);
+      }
+    }
+  }
+  // 統計邊數
+  let eCount = 0;
+  for (const w in adj) eCount += adj[w].size;
+  eCount /= 2;
+  return { adj, edgeCount: eCount };
+}
+
+// 用力導向佈局簡化：手動位置
+const wlLayout = (() => {
+  const positions = {};
+  const cx = 320, cy = 200, R1 = 90, R2 = 170;
+  // 把 fool 放中間，其他環繞
+  // 但這樣會太擠，改成按字頭分群
+  // 簡化: 兩圈分佈
+  const inner = ['fool','pool','foil','foul','cool'];
+  const outer = ['poll','pall','fall','fail','pole','pope','pale','sale','sage','page'];
+  // 正中央
+  positions['fool'] = { x: cx, y: cy };
+  // inner ring (4 個其他)
+  const innerOthers = ['pool','foil','foul','cool'];
+  innerOthers.forEach((w,i) => {
+    const a = (i / innerOthers.length) * Math.PI * 2 - Math.PI/2;
+    positions[w] = { x: cx + R1 * Math.cos(a), y: cy + R1 * Math.sin(a) };
+  });
+  outer.forEach((w,i) => {
+    const a = (i / outer.length) * Math.PI * 2 - Math.PI/2 + 0.15;
+    positions[w] = { x: cx + R2 * Math.cos(a), y: cy + R2 * Math.sin(a) };
+  });
+  return positions;
+})();
+
+const wlGraphData = buildWordLadderGraph(wlWords);
+// 為 GraphRenderer 構造 vertices + edges
+const wlConfig = {
+  vertices: {},
+  edges: [],
+};
+for (const w of wlWords) {
+  wlConfig.vertices[w] = { x: wlLayout[w].x, y: wlLayout[w].y, label: w };
+}
+const wlAddedEdges = new Set();
+for (const w of wlWords) {
+  for (const nb of wlGraphData.adj[w]) {
+    const k = [w,nb].sort().join('|');
+    if (!wlAddedEdges.has(k)) { wlAddedEdges.add(k); wlConfig.edges.push([w,nb]); }
+  }
+}
+const wlR = new GraphRenderer('canvas-wordladder', wlConfig, {
+  directed: false, showWeights: false, width: 640, height: 420, nodeRadius: 24,
+});
+// 縮小字體（單字較長）
+wlR.svg.querySelectorAll('.node-key').forEach(t => t.setAttribute('style', 'font-size:11px;'));
+
+// 填入下拉
+(function fillWlSelects() {
+  const s = document.getElementById('wlStart');
+  const e = document.getElementById('wlEnd');
+  for (const w of wlWords) {
+    s.innerHTML += `<option value="${w}">${w}</option>`;
+    e.innerHTML += `<option value="${w}">${w}</option>`;
+  }
+  s.value = 'fool';
+  e.value = 'sage';
+})();
+document.getElementById('wlV').textContent = wlWords.length;
+document.getElementById('wlE').textContent = wlGraphData.edgeCount;
+
+class WordLadderController {
+  constructor() { this.steps = []; this.idx = 0; this.playing = false; this.timer = null; }
+  generate(start, end) {
+    const adj = {}; for (const w of wlWords) adj[w] = Array.from(wlGraphData.adj[w]).sort();
+    const color = {}, dist = {}, prev = {};
+    for (const w of wlWords) { color[w] = 'white'; dist[w] = Infinity; prev[w] = null; }
+    color[start] = 'gray'; dist[start] = 0;
+    const queue = [start];
+    const steps = [];
+    let found = false;
+    steps.push({ kind:'init', queue:[...queue], current:null, color:{...color}, dist:{...dist}, prev:{...prev}, msg:`從 ${start} 出發，目標 ${end}` });
+    while (queue.length > 0 && !found) {
+      const u = queue.shift();
+      steps.push({ kind:'dequeue', current:u, queue:[...queue], color:{...color}, dist:{...dist}, prev:{...prev}, msg:`處理 ${u} (d=${dist[u]})` });
+      if (u === end) { found = true; break; }
+      for (const w of adj[u]) {
+        if (color[w] === 'white') {
+          color[w] = 'gray'; dist[w] = dist[u] + 1; prev[w] = u; queue.push(w);
+          steps.push({ kind:'discover', current:u, neighbor:w, queue:[...queue], color:{...color}, dist:{...dist}, prev:{...prev}, treeEdge:[u,w], msg:`發現 ${w} (d=${dist[w]})` });
+          if (w === end) { found = true; break; }
+        }
+      }
+      if (!found) {
+        color[u] = 'black';
+        steps.push({ kind:'finish', current:u, queue:[...queue], color:{...color}, dist:{...dist}, prev:{...prev}, msg:`${u} 完成` });
+      }
+    }
+    // 重建路徑
+    const path = [];
+    if (found || dist[end] !== Infinity) {
+      let cur = end;
+      while (cur !== null) { path.unshift(cur); cur = prev[cur]; }
+    }
+    steps.push({ kind:'done', current:null, queue:[], color:{...color}, dist:{...dist}, prev:{...prev}, path, msg: path.length > 0 ? `找到最短路徑！長度 = ${path.length - 1} 步` : `無法從 ${start} 到 ${end}` });
+    this.steps = steps; this.idx = 0; this.start = start; this.end = end;
+  }
+  applyStep(s) {
+    wlR.resetAll();
+    for (const k in s.color) wlR.setNodeClass(k, s.color[k] === 'white' ? '' : s.color[k]);
+    if (s.current && s.kind !== 'finish' && s.kind !== 'done') wlR.setNodeClass(s.current, 'current');
+    if (s.kind === 'init') wlR.setNodeClass(this.start, 'start');
+    wlR.setNodeClass(this.end, wlR.nodeElems[this.end].group.getAttribute('class').includes('current') ? 'current' : (s.color[this.end] === 'white' ? '' : (s.color[this.end] === 'gray' ? 'gray' : (s.color[this.end] === 'black' ? 'black' : ''))));
+    // 終點以特別顏色標示
+    if (s.kind === 'done' && s.path && s.path.length > 0) {
+      // 顯示最短路徑
+      for (let i = 0; i < s.path.length - 1; i++) {
+        wlR.setEdgeClassUndirected(s.path[i], s.path[i+1], 'path');
+      }
+      s.path.forEach(p => wlR.setNodeClass(p, p === this.start ? 'start' : (p === this.end ? 'found' : 'in-mst')));
+    } else {
+      // 顯示樹邊
+      for (const k in s.prev) {
+        if (s.prev[k]) wlR.setEdgeClassUndirected(s.prev[k], k, 'tree');
+      }
+      if (s.kind === 'discover' && s.treeEdge) {
+        wlR.setEdgeClassUndirected(s.treeEdge[0], s.treeEdge[1], 'exploring');
+      }
+    }
+    // 距離 meta
+    for (const k in s.dist) {
+      if (isFinite(s.dist[k]) && s.dist[k] > 0) wlR.setNodeMeta(k, `${s.dist[k]}`);
+      else wlR.setNodeMeta(k, '');
+    }
+    // queue
+    const qEl = document.getElementById('wlQueue');
+    if (s.queue.length === 0) qEl.innerHTML = '<span class="ds-empty">empty</span>';
+    else qEl.innerHTML = s.queue.map((v,i) => `<span class="ds-item ${i===0?'front':''}">${v}</span>`).join(' ');
+    // status
+    document.getElementById('wlStatus').innerHTML = s.msg;
+    let visited = 0;
+    for (const k in s.color) if (s.color[k] !== 'white') visited++;
+    document.getElementById('wlExplored').textContent = visited;
+    if (s.kind === 'done' && s.path && s.path.length > 0) {
+      document.getElementById('wlPath').innerHTML = s.path.map(p => `<span class="ds-item" style="background:var(--accent3);margin:1px;">${p}</span>`).join('<span class="ds-arrow"> → </span>');
+      document.getElementById('wlSteps').textContent = s.path.length - 1;
+    }
+  }
+  reset() {
+    this.stop();
+    wlR.resetAll();
+    this.steps = []; this.idx = 0;
+    document.getElementById('wlStatus').textContent = '輸入起點與終點，按「找最短路徑」執行 BFS';
+    document.getElementById('wlQueue').innerHTML = '<span class="ds-empty">empty</span>';
+    document.getElementById('wlPath').textContent = '—';
+    document.getElementById('wlSteps').textContent = '—';
+    document.getElementById('wlExplored').textContent = '0';
+  }
+  step() {
+    if (this.steps.length === 0) {
+      this.generate(document.getElementById('wlStart').value, document.getElementById('wlEnd').value);
+    }
+    if (this.idx >= this.steps.length) return false;
+    this.applyStep(this.steps[this.idx]); this.idx++;
+    return this.idx < this.steps.length;
+  }
+  play() {
+    if (this.playing) return this.stop();
+    if (this.steps.length === 0) {
+      this.generate(document.getElementById('wlStart').value, document.getElementById('wlEnd').value);
+    }
+    this.playing = true;
+    document.getElementById('wlPlay').classList.add('active');
+    document.getElementById('wlPlay').textContent = '⏸ 暫停';
+    const tick = () => {
+      if (!this.playing) return;
+      const more = this.step();
+      if (!more) { this.stop(); return; }
+      this.timer = setTimeout(tick, parseInt(document.getElementById('wlSpeed').value));
+    };
+    tick();
+  }
+  stop() {
+    this.playing = false;
+    if (this.timer) { clearTimeout(this.timer); this.timer = null; }
+    document.getElementById('wlPlay').classList.remove('active');
+    document.getElementById('wlPlay').textContent = '▶ 找最短路徑';
+  }
+}
+const wlCtrl = new WordLadderController();
+document.getElementById('wlPlay').addEventListener('click', () => wlCtrl.play());
+document.getElementById('wlStep').addEventListener('click', () => { wlCtrl.stop(); wlCtrl.step(); });
+document.getElementById('wlReset').addEventListener('click', () => wlCtrl.reset());
+document.getElementById('wlStart').addEventListener('change', () => wlCtrl.reset());
+document.getElementById('wlEnd').addEventListener('change', () => wlCtrl.reset());
+
+
+/* =============================================================
+   PART 04: DFS 動畫
+   ============================================================= */
+// 使用 PDF 上的 A-F 有向圖
+const dfsGraphConfig = {
+  vertices: {
+    A: { x: 100, y: 90  },
+    B: { x: 280, y: 60  },
+    C: { x: 460, y: 90  },
+    D: { x: 100, y: 280 },
+    E: { x: 280, y: 230 },
+    F: { x: 460, y: 280 },
+  },
+  edges: [
+    ['A','B'], ['B','C'], ['A','D'], ['B','D'],
+    ['D','E'], ['E','B'], ['E','F'], ['F','C'],
+  ],
+};
+const dfsR = new GraphRenderer('canvas-dfs', dfsGraphConfig, {
+  directed: true, showWeights: false, width: 600, height: 380,
+});
+
+class DFSController {
+  constructor() { this.steps = []; this.idx = 0; this.playing = false; this.timer = null; }
+  generate(startKey) {
+    const verts = Object.keys(dfsGraphConfig.vertices);
+    // 把 startKey 移到最前
+    const order = [startKey, ...verts.filter(v => v !== startKey)];
+    const adj = buildAdjacency(dfsGraphConfig, false);
+    const color = {}, prev = {}, disc = {}, close = {};
+    for (const v of verts) { color[v] = 'white'; prev[v] = null; disc[v] = 0; close[v] = 0; }
+    let time = 0;
+    const stack = [];
+    const steps = [];
+    steps.push({ kind:'init', codeLine:2, current:null, stack:[], color:{...color}, prev:{...prev}, disc:{...disc}, close:{...close}, time, msg:'初始化所有頂點為 white' });
+
+    const visit = (u) => {
+      color[u] = 'gray'; time += 1; disc[u] = time;
+      stack.push(u);
+      steps.push({ kind:'visit', codeLine:9, current:u, stack:[...stack], color:{...color}, prev:{...prev}, disc:{...disc}, close:{...close}, time, msg:`發現 ${u}：標 gray，discovery = ${time}` });
+      const sortedNb = [...adj[u]].sort((a,b) => a.to.localeCompare(b.to));
+      for (const { to: w } of sortedNb) {
+        if (color[w] === 'white') {
+          prev[w] = u;
+          steps.push({ kind:'recurse', codeLine:13, current:u, neighbor:w, stack:[...stack], color:{...color}, prev:{...prev}, disc:{...disc}, close:{...close}, time, treeEdge:[u,w], msg:`從 ${u} 遞迴進入 ${w}` });
+          visit(w);
+        } else {
+          steps.push({ kind:'skip', codeLine:12, current:u, neighbor:w, stack:[...stack], color:{...color}, prev:{...prev}, disc:{...disc}, close:{...close}, time, msg:`鄰居 ${w} 已是 ${color[w]}（虛線邊），跳過` });
+        }
+      }
+      color[u] = 'black'; time += 1; close[u] = time;
+      stack.pop();
+      steps.push({ kind:'finish', codeLine:16, current:u, stack:[...stack], color:{...color}, prev:{...prev}, disc:{...disc}, close:{...close}, time, msg:`${u} 完成探索：標 black，closing = ${time}（從 stack 彈出）` });
+    };
+
+    for (const v of order) {
+      if (color[v] === 'white') {
+        steps.push({ kind:'newroot', codeLine:6, current:v, stack:[...stack], color:{...color}, prev:{...prev}, disc:{...disc}, close:{...close}, time, msg:`啟動新的 DFS tree（root = ${v}）` });
+        visit(v);
+      }
+    }
+    steps.push({ kind:'done', codeLine:null, current:null, stack:[], color:{...color}, prev:{...prev}, disc:{...disc}, close:{...close}, time, msg:`DFS forest 完成。Total time = ${time}` });
+    this.steps = steps; this.idx = 0; this.start = startKey;
+  }
+  applyStep(s) {
+    dfsR.resetAll();
+    for (const k in s.color) dfsR.setNodeClass(k, s.color[k] === 'white' ? '' : s.color[k]);
+    if (s.current && s.kind !== 'finish' && s.kind !== 'done') dfsR.setNodeClass(s.current, 'current');
+    if (s.kind === 'init') dfsR.setNodeClass(this.start, 'start');
+    // 樹邊
+    for (const k in s.prev) {
+      if (s.prev[k]) dfsR.setEdgeClass(s.prev[k], k, 'tree');
+    }
+    if (s.kind === 'recurse' && s.treeEdge) dfsR.setEdgeClass(s.treeEdge[0], s.treeEdge[1], 'exploring');
+    if (s.kind === 'skip' && s.current && s.neighbor) dfsR.setEdgeClass(s.current, s.neighbor, 'dotted');
+    // node meta：disc/close
+    for (const k in s.disc) {
+      const d = s.disc[k], c = s.close[k];
+      if (d > 0 && c > 0) dfsR.setNodeMeta(k, `${d}/${c}`);
+      else if (d > 0) dfsR.setNodeMeta(k, `${d}/—`);
+      else dfsR.setNodeMeta(k, '');
+    }
+    // stack
+    const stEl = document.getElementById('dfsStack');
+    if (s.stack.length === 0) stEl.innerHTML = '<span class="ds-empty">empty</span>';
+    else stEl.innerHTML = s.stack.map((v,i,arr) => `<span class="ds-item ${i===arr.length-1?'top':''}">${v}</span>`).join(' ');
+    document.getElementById('dfsTime').textContent = s.time;
+    document.getElementById('dfsStatus').innerHTML = s.msg;
+    highlightCode('dfsCode', s.codeLine);
+    this.updateTable(s);
+  }
+  updateTable(s) {
+    const verts = Object.keys(dfsGraphConfig.vertices);
+    let html = '<table class="vert-table"><thead><tr><th>v</th><th>color</th><th>disc</th><th>close</th><th>prev</th></tr></thead><tbody>';
+    for (const v of verts) {
+      const cls = (s.current === v) ? 'tcell-current' : (s.color[v] === 'black' ? 'tcell-done' : '');
+      html += `<tr><td class="${cls}">${v}</td><td class="${cls}">${s.color[v]}</td><td class="${cls}">${s.disc[v] || '—'}</td><td class="${cls}">${s.close[v] || '—'}</td><td class="${cls}">${s.prev[v] || '—'}</td></tr>`;
+    }
+    html += '</tbody></table>';
+    document.getElementById('dfsTable').innerHTML = html;
+  }
+  reset() {
+    this.stop();
+    dfsR.resetAll();
+    this.steps = []; this.idx = 0;
+    document.getElementById('dfsStatus').textContent = '按「開始」跑完整 DFS（會走遍整個 forest）';
+    document.getElementById('dfsStack').innerHTML = '<span class="ds-empty">empty</span>';
+    document.getElementById('dfsTime').textContent = '0';
+    document.getElementById('dfsTable').innerHTML = '';
+    highlightCode('dfsCode', null);
+  }
+  step() {
+    if (this.steps.length === 0) this.generate(document.getElementById('dfsStart').value);
+    if (this.idx >= this.steps.length) return false;
+    this.applyStep(this.steps[this.idx]); this.idx++;
+    return this.idx < this.steps.length;
+  }
+  play() {
+    if (this.playing) return this.stop();
+    if (this.steps.length === 0) this.generate(document.getElementById('dfsStart').value);
+    this.playing = true;
+    const btn = document.getElementById('dfsPlay');
+    btn.classList.add('active'); btn.textContent = '⏸ 暫停';
+    const tick = () => {
+      if (!this.playing) return;
+      const more = this.step();
+      if (!more) { this.stop(); return; }
+      this.timer = setTimeout(tick, parseInt(document.getElementById('dfsSpeed').value));
+    };
+    tick();
+  }
+  stop() {
+    this.playing = false;
+    if (this.timer) { clearTimeout(this.timer); this.timer = null; }
+    const btn = document.getElementById('dfsPlay');
+    btn.classList.remove('active'); btn.textContent = '▶ 開始';
+  }
+}
+const dfsCtrl = new DFSController();
+document.getElementById('dfsPlay').addEventListener('click', () => dfsCtrl.play());
+document.getElementById('dfsStep').addEventListener('click', () => { dfsCtrl.stop(); dfsCtrl.step(); });
+document.getElementById('dfsReset').addEventListener('click', () => dfsCtrl.reset());
+document.getElementById('dfsStart').addEventListener('change', () => dfsCtrl.reset());
+
+
+/* =============================================================
+   PART 05: Knight's Tour
+   ============================================================= */
+const knightMoves = [
+  [-1,-2],[-1,2],[-2,-1],[-2,1],
+  [1,-2],[1,2],[2,-1],[2,1],
+];
+
+function legalMoves(r, c, n, visited) {
+  const out = [];
+  for (const [dr, dc] of knightMoves) {
+    const nr = r + dr, nc = c + dc;
+    if (nr >= 0 && nr < n && nc >= 0 && nc < n && !visited[nr][nc]) out.push([nr, nc]);
+  }
+  return out;
+}
+
+class KnightController {
+  constructor() {
+    this.size = 6;
+    this.useHeur = true;
+    this.path = [];
+    this.visited = null;
+    this.exploredCount = 0;
+    this.backtrackCount = 0;
+    this.playing = false;
+    this.timer = null;
+    this.steps = [];
+    this.idx = 0;
+    this.renderBoard();
+    this.populateStartOptions();
+  }
+  renderBoard() {
+    const n = this.size;
+    const board = document.getElementById('knightBoard');
+    const cellSize = Math.min(50, Math.floor(360 / n));
+    let html = `<div class="chess-board" style="grid-template-columns:repeat(${n},${cellSize}px);grid-template-rows:repeat(${n},${cellSize}px);">`;
+    for (let r = 0; r < n; r++) {
+      for (let c = 0; c < n; c++) {
+        const isLight = (r + c) % 2 === 0;
+        html += `<div class="chess-cell ${isLight?'light':'dark'}" id="cell-${r}-${c}" data-r="${r}" data-c="${c}" style="width:${cellSize}px;height:${cellSize}px;"></div>`;
+      }
+    }
+    html += '</div>';
+    board.innerHTML = html;
+  }
+  populateStartOptions() {
+    const sel = document.getElementById('knightStart');
+    sel.innerHTML = '';
+    const n = this.size;
+    // 只列出幾個典型起點
+    const starts = [[0,0],[0, Math.floor(n/2)], [Math.floor(n/2), Math.floor(n/2)], [n-1, n-1]];
+    starts.forEach((s,i) => {
+      sel.innerHTML += `<option value="${s[0]*n+s[1]}" ${i===0?'selected':''}>(${s[0]},${s[1]})</option>`;
+    });
+  }
+  cellEl(r,c) { return document.getElementById(`cell-${r}-${c}`); }
+  setCell(r,c, cls, content) {
+    const el = this.cellEl(r,c);
+    if (!el) return;
+    const isLight = (r + c) % 2 === 0;
+    el.className = `chess-cell ${isLight?'light':'dark'}`;
+    if (cls) el.classList.add(cls);
+    el.innerHTML = content || '';
+  }
+  // 預先計算解（產生 steps）
+  solve(startR, startC) {
+    const n = this.size;
+    const visited = Array.from({length:n}, () => Array(n).fill(false));
+    const path = [[startR, startC]];
+    visited[startR][startC] = true;
+    const steps = [];
+    let exploredCount = 1, backtrackCount = 0;
+    const target = n * n;
+    const TIME_LIMIT = 800000;  // 安全上限（步驟數）
+    let aborted = false;
+
+    steps.push({ kind:'start', r: startR, c: startC, path: [[startR, startC]], explored: exploredCount, back: 0 });
+    const useHeur = this.useHeur;
+
+    const dfs = (r, c, depth) => {
+      if (aborted) return false;
+      if (steps.length > TIME_LIMIT) { aborted = true; return false; }
+      if (depth === target) return true;
+      let moves = legalMoves(r, c, n, visited);
+      if (useHeur) {
+        // Warnsdorff: 排序，先選鄰居最少的
+        moves = moves.map(([nr, nc]) => {
+          // 暫時把 (nr, nc) 設為 visited 來計算它在那裡的可走數
+          // 但要小心：應該計算的是「下一步從那格出發、可走的格數」，且要排除目前 (r,c)
+          // 先 mark current visited（已是 visited），現在計算 (nr, nc) 的鄰居
+          let cnt = 0;
+          for (const [dr, dc] of knightMoves) {
+            const nnr = nr + dr, nnc = nc + dc;
+            if (nnr >= 0 && nnr < n && nnc >= 0 && nnc < n && !visited[nnr][nnc] && !(nnr === r && nnc === c)) cnt++;
+          }
+          // 避免 cnt = 0 但 depth + 1 = target 時誤判
+          return { nr, nc, cnt };
+        }).sort((a,b) => a.cnt - b.cnt).map(x => [x.nr, x.nc]);
+      } else {
+        moves.sort((a,b) => (a[0]*100+a[1]) - (b[0]*100+b[1]));
+      }
+      for (const [nr, nc] of moves) {
+        visited[nr][nc] = true;
+        path.push([nr, nc]); exploredCount++;
+        steps.push({ kind:'move', r: nr, c: nc, prevR: r, prevC: c, path: path.map(p => [...p]), explored: exploredCount, back: backtrackCount });
+        if (dfs(nr, nc, depth + 1)) return true;
+        // backtrack
+        visited[nr][nc] = false;
+        path.pop(); backtrackCount++;
+        steps.push({ kind:'back', r: r, c: c, prevR: nr, prevC: nc, path: path.map(p => [...p]), explored: exploredCount, back: backtrackCount });
+      }
+      return false;
+    };
+    const ok = dfs(startR, startC, 1);
+    if (aborted) {
+      steps.push({ kind:'aborted', r: startR, c: startC, path: path.map(p => [...p]), explored: exploredCount, back: backtrackCount });
+    } else if (ok) {
+      steps.push({ kind:'success', path: path.map(p => [...p]), explored: exploredCount, back: backtrackCount });
+    } else {
+      steps.push({ kind:'fail', explored: exploredCount, back: backtrackCount });
+    }
+    this.steps = steps; this.idx = 0; this.startR = startR; this.startC = startC;
+  }
+  applyStep(s) {
+    const n = this.size;
+    // 重繪：把所有格子重設
+    for (let r = 0; r < n; r++) {
+      for (let c = 0; c < n; c++) {
+        const isLight = (r + c) % 2 === 0;
+        const el = this.cellEl(r, c);
+        if (!el) continue;
+        el.className = `chess-cell ${isLight?'light':'dark'}`;
+        el.innerHTML = '';
+      }
+    }
+    // 標 visited path
+    const path = s.path || [];
+    path.forEach((p, i) => {
+      const [r, c] = p;
+      const el = this.cellEl(r, c);
+      if (!el) return;
+      if (i === path.length - 1 && s.kind !== 'success' && s.kind !== 'fail') {
+        el.classList.add('current');
+        el.innerHTML = `<div class="knight">♞</div>`;
+      } else if (i === 0) {
+        el.classList.add('start');
+        el.innerHTML = `<div class="step-num">${i+1}</div>`;
+      } else {
+        el.classList.add('visited');
+        el.innerHTML = `<div class="step-num">${i+1}</div>`;
+      }
+    });
+    // 統計
+    document.getElementById('knightSteps').textContent = path.length;
+    document.getElementById('knightBack').textContent = s.back || 0;
+    document.getElementById('knightExplored').textContent = s.explored || 0;
+    let msg, result;
+    if (s.kind === 'start') { msg = `從 (${s.r},${s.c}) 出發`; result = '進行中…'; }
+    else if (s.kind === 'move') { msg = `走到 (${s.r},${s.c})`; result = '進行中…'; }
+    else if (s.kind === 'back') { msg = `回退到 (${s.r},${s.c})`; result = '進行中…'; }
+    else if (s.kind === 'success') {
+      msg = `完成！成功走完所有 ${n*n} 格`; result = '<span style="color:var(--accent3);">SUCCESS ✓</span>';
+      // 標所有格為 visited
+      path.forEach(([r,c],i) => { this.setCell(r,c,'visited',`<div class="step-num">${i+1}</div>`); });
+      this.setCell(this.startR, this.startC, 'start', `<div class="step-num">1</div>`);
+    } else if (s.kind === 'fail') {
+      msg = `沒有可行解`; result = '<span style="color:var(--accent);">FAIL</span>';
+    } else if (s.kind === 'aborted') {
+      msg = `步數超出上限（80 萬步），請改用 Warnsdorff 或縮小棋盤`; result = '<span style="color:var(--accent);">超時</span>';
+    }
+    document.getElementById('knightStatus').innerHTML = msg;
+    document.getElementById('knightResult').innerHTML = result;
+  }
+  reset() {
+    this.stop();
+    this.renderBoard();
+    this.steps = []; this.idx = 0;
+    document.getElementById('knightStatus').textContent = '選擇棋盤大小與是否使用 Warnsdorff，按「開始」';
+    document.getElementById('knightSteps').textContent = '0';
+    document.getElementById('knightBack').textContent = '0';
+    document.getElementById('knightExplored').textContent = '0';
+    document.getElementById('knightResult').textContent = '—';
+  }
+  step() {
+    if (this.steps.length === 0) {
+      const n = this.size;
+      const start = parseInt(document.getElementById('knightStart').value);
+      const sr = Math.floor(start / n), sc = start % n;
+      document.getElementById('knightStatus').textContent = '計算中…請稍候';
+      // 用 setTimeout 讓畫面先更新
+      setTimeout(() => {
+        this.solve(sr, sc);
+        this.applyStep(this.steps[0]); this.idx = 1;
+        if (this.playing) this.scheduleNext();
+      }, 50);
+      return true;
+    }
+    if (this.idx >= this.steps.length) return false;
+    this.applyStep(this.steps[this.idx]); this.idx++;
+    return this.idx < this.steps.length;
+  }
+  scheduleNext() {
+    if (!this.playing) return;
+    const speed = parseInt(document.getElementById('knightSpeed').value);
+    this.timer = setTimeout(() => {
+      const more = this.step();
+      if (!more) { this.stop(); return; }
+      this.scheduleNext();
+    }, speed);
+  }
+  play() {
+    if (this.playing) return this.stop();
+    this.playing = true;
+    const btn = document.getElementById('knightPlay');
+    btn.classList.add('active'); btn.textContent = '⏸ 暫停';
+    if (this.steps.length === 0) {
+      this.step();   // will solve and trigger scheduleNext when done
+    } else {
+      this.scheduleNext();
+    }
+  }
+  stop() {
+    this.playing = false;
+    if (this.timer) { clearTimeout(this.timer); this.timer = null; }
+    const btn = document.getElementById('knightPlay');
+    btn.classList.remove('active'); btn.textContent = '▶ 開始';
+  }
+}
+const knightCtrl = new KnightController();
+document.getElementById('knightPlay').addEventListener('click', () => knightCtrl.play());
+document.getElementById('knightReset').addEventListener('click', () => knightCtrl.reset());
+document.getElementById('knightSize').addEventListener('change', (e) => {
+  knightCtrl.size = parseInt(e.target.value);
+  knightCtrl.populateStartOptions();
+  knightCtrl.reset();
+});
+document.getElementById('knightStart').addEventListener('change', () => knightCtrl.reset());
+document.getElementById('knightHeur').addEventListener('click', (e) => {
+  knightCtrl.useHeur = !knightCtrl.useHeur;
+  e.target.textContent = `使用 Warnsdorff: ${knightCtrl.useHeur ? '開' : '關'}`;
+  e.target.classList.toggle('off', !knightCtrl.useHeur);
+  knightCtrl.reset();
+});
+
+
+/* =============================================================
+   PART 06: Dijkstra
+   ============================================================= */
+const dijGraphConfig = {
+  vertices: {
+    u: { x: 100, y: 90  },
+    v: { x: 300, y: 60  },
+    w: { x: 500, y: 90  },
+    x: { x: 200, y: 230 },
+    y: { x: 400, y: 230 },
+    z: { x: 550, y: 290 },
+  },
+  edges: [
+    ['u','v',2], ['v','w',3], ['w','z',5],
+    ['u','x',1], ['u','w',5], ['x','v',2],
+    ['x','w',3], ['x','y',1], ['y','w',1], ['y','z',1],
+  ],
+};
+const dijR = new GraphRenderer('canvas-dijkstra', dijGraphConfig, {
+  directed: false, showWeights: true, width: 600, height: 380,
+});
+
+class DijkstraController {
+  constructor() { this.steps = []; this.idx = 0; this.playing = false; this.timer = null; }
+  generate(start) {
+    const verts = Object.keys(dijGraphConfig.vertices);
+    const adj = buildAdjacency(dijGraphConfig, true);
+    const dist = {}, prev = {}, visited = {};
+    for (const v of verts) { dist[v] = Infinity; prev[v] = null; visited[v] = false; }
+    dist[start] = 0;
+    // PQ as array of [d, v]; sorted ascending by d
+    let pq = verts.map(v => [dist[v], v]);
+    const sortPq = () => pq.sort((a,b) => a[0] - b[0]);
+    const steps = [];
+    sortPq();
+    steps.push({ kind:'init', codeLine:4, current:null, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`初始化：start=${start}, distance=0；其他全部 ∞`, treeEdges: [] });
+
+    while (pq.length > 0) {
+      sortPq();
+      const [d, u] = pq.shift();
+      if (d === Infinity) break;
+      if (visited[u]) continue;
+      visited[u] = true;
+      const treeEdges = verts.filter(vv => prev[vv]).map(vv => [prev[vv], vv]);
+      steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges });
+      for (const { to: vv, w: weight } of adj[u]) {
+        if (visited[vv]) {
+          steps.push({ kind:'skip', codeLine:10, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鄰居 ${vv} 已 visited，跳過`, treeEdges });
+          continue;
+        }
+        const newD = d + weight;
+        steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：newD = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv])?dist[vv]:'∞'}`, treeEdges });
+        if (newD < dist[vv]) {
+          dist[vv] = newD; prev[vv] = u;
+          pq = pq.filter(p => p[1] !== vv);
+          pq.push([newD, vv]);
+          sortPq();
+          steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: [...treeEdges.filter(e => e[1] !== vv), [u, vv]] });
+        }
+      }
+    }
+    const treeEdges = verts.filter(vv => prev[vv]).map(vv => [prev[vv], vv]);
+    steps.push({ kind:'done', codeLine:null, current:null, pq:[], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`Dijkstra 完成。最短路徑樹已建立。`, treeEdges });
+    this.steps = steps; this.idx = 0; this.start = start;
+  }
+  applyStep(s) {
+    dijR.resetAll();
+    const verts = Object.keys(dijGraphConfig.vertices);
+    for (const v of verts) {
+      if (s.visited[v]) dijR.setNodeClass(v, 'black');
+      else if (isFinite(s.dist[v])) dijR.setNodeClass(v, 'gray');
+      else dijR.setNodeClass(v, '');
+    }
+    if (s.current && s.kind !== 'done') dijR.setNodeClass(s.current, 'current');
+    if (this.start) dijR.setNodeClass(this.start, s.kind === 'init' ? 'start' : (dijR.nodeElems[this.start].group.getAttribute('class').includes('current') ? 'current' : 'start'));
+    // 距離 meta
+    for (const v of verts) {
+      const d = s.dist[v];
+      dijR.setNodeMeta(v, isFinite(d) ? `d=${d}` : '∞');
+    }
+    // 樹邊
+    for (const [u, vv] of s.treeEdges || []) dijR.setEdgeClassUndirected(u, vv, 'tree');
+    // exploring 邊
+    if (s.kind === 'relax-check' && s.edge) dijR.setEdgeClassUndirected(s.edge[0], s.edge[1], 'exploring');
+    if (s.kind === 'skip' && s.current && s.neighbor) dijR.setEdgeClassUndirected(s.current, s.neighbor, 'dotted');
+    // PQ display
+    const pqEl = document.getElementById('dijPQ');
+    const visiblePq = (s.pq || []).filter(p => isFinite(p[0]));
+    if (visiblePq.length === 0) pqEl.innerHTML = '<span class="ds-empty">empty</span>';
+    else pqEl.innerHTML = visiblePq.map((p,i) => `<span class="ds-item pq ${i===0?'min':''}">${p[1]}:${p[0]}</span>`).join(' ');
+    document.getElementById('dijStatus').innerHTML = s.msg;
+    highlightCode('dijCode', s.codeLine);
+    this.updateTable(s);
+  }
+  updateTable(s) {
+    const verts = Object.keys(dijGraphConfig.vertices);
+    let html = '<table class="vert-table"><thead><tr><th>v</th><th>distance</th><th>prev</th><th>visited</th></tr></thead><tbody>';
+    for (const v of verts) {
+      const cls = (s.current === v) ? 'tcell-current' : (s.visited[v] ? 'tcell-done' : '');
+      const d = isFinite(s.dist[v]) ? s.dist[v] : '<span class="tcell-inf">∞</span>';
+      html += `<tr><td class="${cls}">${v}</td><td class="${cls}">${d}</td><td class="${cls}">${s.prev[v] || '—'}</td><td class="${cls}">${s.visited[v] ? '✓' : ''}</td></tr>`;
+    }
+    html += '</tbody></table>';
+    document.getElementById('dijTable').innerHTML = html;
+  }
+  reset() {
+    this.stop();
+    dijR.resetAll();
+    this.steps = []; this.idx = 0;
+    document.getElementById('dijStatus').textContent = '選擇起點，按「開始」執行 Dijkstra';
+    document.getElementById('dijPQ').innerHTML = '<span class="ds-empty">empty</span>';
+    document.getElementById('dijTable').innerHTML = '';
+    highlightCode('dijCode', null);
+  }
+  step() {
+    if (this.steps.length === 0) this.generate(document.getElementById('dijStart').value);
+    if (this.idx >= this.steps.length) return false;
+    this.applyStep(this.steps[this.idx]); this.idx++;
+    return this.idx < this.steps.length;
+  }
+  play() {
+    if (this.playing) return this.stop();
+    if (this.steps.length === 0) this.generate(document.getElementById('dijStart').value);
+    this.playing = true;
+    const btn = document.getElementById('dijPlay');
+    btn.classList.add('active'); btn.textContent = '⏸ 暫停';
+    const tick = () => {
+      if (!this.playing) return;
+      const more = this.step();
+      if (!more) { this.stop(); return; }
+      this.timer = setTimeout(tick, parseInt(document.getElementById('dijSpeed').value));
+    };
+    tick();
+  }
+  stop() {
+    this.playing = false;
+    if (this.timer) { clearTimeout(this.timer); this.timer = null; }
+    const btn = document.getElementById('dijPlay');
+    btn.classList.remove('active'); btn.textContent = '▶ 開始';
+  }
+}
+const dijCtrl = new DijkstraController();
+document.getElementById('dijPlay').addEventListener('click', () => dijCtrl.play());
+document.getElementById('dijStep').addEventListener('click', () => { dijCtrl.stop(); dijCtrl.step(); });
+document.getElementById('dijReset').addEventListener('click', () => dijCtrl.reset());
+document.getElementById('dijStart').addEventListener('change', () => dijCtrl.reset());
+
+
+/* =============================================================
+   PART 07: Prim
+   ============================================================= */
+const primGraphConfig = {
+  vertices: {
+    A: { x: 100, y: 80  },
+    B: { x: 270, y: 60  },
+    C: { x: 440, y: 80  },
+    D: { x: 100, y: 280 },
+    E: { x: 270, y: 260 },
+    F: { x: 440, y: 280 },
+    G: { x: 560, y: 180 },
+  },
+  edges: [
+    ['A','B',2], ['A','C',3], ['B','C',1], ['B','D',1],
+    ['B','E',4], ['D','E',1], ['C','F',5], ['E','F',1], ['F','G',1],
+  ],
+};
+const primR = new GraphRenderer('canvas-prim', primGraphConfig, {
+  directed: false, showWeights: true, width: 600, height: 380,
+});
+
+class PrimController {
+  constructor() { this.steps = []; this.idx = 0; this.playing = false; this.timer = null; }
+  generate(start) {
+    const verts = Object.keys(primGraphConfig.vertices);
+    const adj = buildAdjacency(primGraphConfig, true);
+    const dist = {}, prev = {}, inTree = {};
+    for (const v of verts) { dist[v] = Infinity; prev[v] = null; inTree[v] = false; }
+    dist[start] = 0;
+    let pq = verts.map(v => [dist[v], v]);
+    const sortPq = () => pq.sort((a,b) => a[0] - b[0]);
+    const steps = [];
+    const mstEdges = [];
+    let total = 0;
+    sortPq();
+    steps.push({ kind:'init', codeLine:5, current:null, pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`初始化：起點 ${start} distance=0；其他全部 ∞` });
+
+    while (pq.length > 0) {
+      sortPq();
+      const [d, u] = pq.shift();
+      if (d === Infinity) break;
+      if (inTree[u]) continue;
+      inTree[u] = true;
+      // 加入 MST 的邊（除了起點本身）
+      if (prev[u]) {
+        mstEdges.push([prev[u], u, d]);
+        total += d;
+      }
+      steps.push({ kind:'add', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`從 PQ 取出 ${u} (key=${d})，加入 MST。${prev[u] ? `加入邊 ${prev[u]}—${u} (weight=${d})` : '（起點，無邊加入）'}` });
+
+      for (const { to: vv, w: weight } of adj[u]) {
+        if (inTree[vv]) {
+          steps.push({ kind:'skip', codeLine:11, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`鄰居 ${vv} 已在 MST 中，跳過` });
+          continue;
+        }
+        const newD = weight;  // 注意：Prim 只看單邊權！
+        steps.push({ kind:'relax-check', codeLine:10, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`檢查 ${u}—${vv}：邊權 = ${weight}，目前 key(${vv}) = ${isFinite(dist[vv])?dist[vv]:'∞'}` });
+        if (newD < dist[vv]) {
+          dist[vv] = newD; prev[vv] = u;
+          pq = pq.filter(p => p[1] !== vv);
+          pq.push([newD, vv]);
+          sortPq();
+          steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`更新！key(${vv}) = ${newD}，previous(${vv}) = ${u}` });
+        }
+      }
+    }
+    steps.push({ kind:'done', codeLine:null, current:null, pq:[], dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`Prim 完成。MST 共 ${mstEdges.length} 條邊，總權重 = ${total}` });
+    this.steps = steps; this.idx = 0; this.start = start;
+  }
+  applyStep(s) {
+    primR.resetAll();
+    const verts = Object.keys(primGraphConfig.vertices);
+    for (const v of verts) {
+      if (s.inTree[v]) primR.setNodeClass(v, 'in-mst');
+      else if (isFinite(s.dist[v])) primR.setNodeClass(v, 'gray');
+      else primR.setNodeClass(v, '');
+    }
+    if (s.current && s.kind !== 'done') primR.setNodeClass(s.current, 'current');
+    if (s.kind === 'init') primR.setNodeClass(this.start, 'start');
+    // distance meta
+    for (const v of verts) {
+      primR.setNodeMeta(v, isFinite(s.dist[v]) ? `${s.dist[v]}` : '∞');
+    }
+    // MST edges
+    for (const [u, vv] of s.mstEdges || []) primR.setEdgeClassUndirected(u, vv, 'mst');
+    // exploring
+    if (s.kind === 'relax-check' && s.edge) primR.setEdgeClassUndirected(s.edge[0], s.edge[1], 'exploring');
+    if (s.kind === 'skip' && s.current && s.neighbor) primR.setEdgeClassUndirected(s.current, s.neighbor, 'dotted');
+    // PQ
+    const pqEl = document.getElementById('primPQ');
+    const visiblePq = (s.pq || []).filter(p => isFinite(p[0]));
+    if (visiblePq.length === 0) pqEl.innerHTML = '<span class="ds-empty">empty</span>';
+    else pqEl.innerHTML = visiblePq.map((p,i) => `<span class="ds-item pq ${i===0?'min':''}">${p[1]}:${p[0]}</span>`).join(' ');
+    // edges list & total
+    const edgesEl = document.getElementById('primEdges');
+    if (s.mstEdges.length === 0) edgesEl.innerHTML = '<span style="color:var(--muted);">—</span>';
+    else edgesEl.innerHTML = s.mstEdges.map(([u,vv,w]) => `<span class="ds-item" style="background:var(--accent3);margin:1px;">${u}—${vv}<span style="opacity:.7">/${w}</span></span>`).join(' ');
+    document.getElementById('primInTree').textContent = `${Object.values(s.inTree).filter(x=>x).length}/${verts.length}`;
+    document.getElementById('primTotal').textContent = s.total;
+    document.getElementById('primStatus').innerHTML = s.msg;
+    highlightCode('primCode', s.codeLine);
+  }
+  reset() {
+    this.stop();
+    primR.resetAll();
+    this.steps = []; this.idx = 0;
+    document.getElementById('primStatus').textContent = '選擇起點，按「開始」逐步建立 MST';
+    document.getElementById('primPQ').innerHTML = '<span class="ds-empty">empty</span>';
+    document.getElementById('primEdges').innerHTML = '—';
+    document.getElementById('primInTree').textContent = '0/0';
+    document.getElementById('primTotal').textContent = '0';
+    highlightCode('primCode', null);
+  }
+  step() {
+    if (this.steps.length === 0) this.generate(document.getElementById('primStart').value);
+    if (this.idx >= this.steps.length) return false;
+    this.applyStep(this.steps[this.idx]); this.idx++;
+    return this.idx < this.steps.length;
+  }
+  play() {
+    if (this.playing) return this.stop();
+    if (this.steps.length === 0) this.generate(document.getElementById('primStart').value);
+    this.playing = true;
+    const btn = document.getElementById('primPlay');
+    btn.classList.add('active'); btn.textContent = '⏸ 暫停';
+    const tick = () => {
+      if (!this.playing) return;
+      const more = this.step();
+      if (!more) { this.stop(); return; }
+      this.timer = setTimeout(tick, parseInt(document.getElementById('primSpeed').value));
+    };
+    tick();
+  }
+  stop() {
+    this.playing = false;
+    if (this.timer) { clearTimeout(this.timer); this.timer = null; }
+    const btn = document.getElementById('primPlay');
+    btn.classList.remove('active'); btn.textContent = '▶ 開始';
+  }
+}
+const primCtrl = new PrimController();
+document.getElementById('primPlay').addEventListener('click', () => primCtrl.play());
+document.getElementById('primStep').addEventListener('click', () => { primCtrl.stop(); primCtrl.step(); });
+document.getElementById('primReset').addEventListener('click', () => primCtrl.reset());
+document.getElementById('primStart').addEventListener('change', () => primCtrl.reset());
+
+
+/* =============================================================
+   EXERCISES：練習題的圖（與 PDF 原圖完全一致）
+   ============================================================= */
+// Exercise 1 (PDF p.110): Dijkstra with negative edges, 7 vertices
+//   A→B(2), A→C(7), A→E(12), C→B(3), B→D(2),
+//   C→D(-5), C→E(2), D→F(2), F→G(4), E→G(-7)
+// Dijkstra (with visited check) returns dist[D]=4 via A→B→D.
+// True shortest A→C→D = 7+(-5) = 2, but Dijkstra misses it
+// because D becomes visited (via B at d=4) before C is popped (d=7).
+const ex1Config = {
+  vertices: {
+    A: { x: 90,  y: 60  },
+    B: { x: 340, y: 60  },
+    C: { x: 240, y: 170 },
+    D: { x: 490, y: 170 },
+    E: { x: 200, y: 280 },
+    F: { x: 490, y: 285 },
+    G: { x: 360, y: 360 },
+  },
+  edges: [
+    ['A','B',2],
+    ['A','C',7],
+    ['A','E',12],
+    ['C','B',3],
+    ['B','D',2],
+    ['C','D',-5],
+    ['C','E',2],
+    ['D','F',2],
+    ['F','G',4],
+    ['E','G',-7],
+  ],
+};
+const ex1R = new GraphRenderer('canvas-ex1', ex1Config, {
+  directed: true, showWeights: true, width: 600, height: 400,
+});
+// 把兩條負邊高亮為紅色（提示）
+ex1R.setEdgeClass('C','D','path');
+ex1R.setEdgeClass('E','G','path');
+
+// Exercise 2 (PDF p.124): Prim from F, 7 vertices, undirected
+//   A-B(1), A-F(8), A-G(2), B-C(7), F-E(9), G-C(5),
+//   G-E(3), E-D(4), D-C(6)
+// Prim from F adds edges in order: F-A(8), A-B(1), A-G(2),
+// G-E(3), E-D(4), G-C(5).  Last edge weight = 5.
+const ex2Config = {
+  vertices: {
+    A: { x: 240, y: 80  },
+    B: { x: 450, y: 80  },
+    F: { x: 60,  y: 200 },
+    G: { x: 300, y: 200 },
+    C: { x: 540, y: 200 },
+    E: { x: 210, y: 320 },
+    D: { x: 390, y: 320 },
+  },
+  edges: [
+    ['A','B',1],
+    ['A','F',8],
+    ['A','G',2],
+    ['B','C',7],
+    ['F','E',9],
+    ['G','C',5],
+    ['G','E',3],
+    ['E','D',4],
+    ['D','C',6],
+  ],
+};
+const ex2R = new GraphRenderer('canvas-ex2', ex2Config, {
+  directed: false, showWeights: true, width: 600, height: 400,
+});
+
+/* =============================================================
+   PART 08: TOPOLOGICAL SORT (supplemental, pythonds 7.17)
+   ============================================================= */
+function dfsCloseEvents(vertKeys, adj) {
+  // 回傳 DFS 事件串（start/close 各一次），root 依 vertKeys 順序
+  const state = {}, events = [];
+  let t = 0;
+  const visit = v => {
+    state[v] = 1; t++; events.push({ v, act: 'start', t });
+    (adj[v] || []).forEach(w => { if (!state[w]) visit(w); });
+    state[v] = 2; t++; events.push({ v, act: 'close', t });
+  };
+  vertKeys.forEach(v => { if (!state[v]) visit(v); });
+  return events;
+}
+
+const TS_FULL = { '奶':'加 3/4 杯牛奶', '蛋':'打 1 顆蛋', '油':'加 1 匙油',
+  '鍋':'加熱煎鍋', '糊':'攪鬆餅糊', '漿':'加熱糖漿', '倒':'倒 1/4 杯',
+  '翻':'冒泡翻面', '吃':'開動' };
+const tsConfig = {
+  vertices: {
+    '奶': { x: 70,  y: 60  },
+    '蛋': { x: 215, y: 60  },
+    '油': { x: 360, y: 60  },
+    '鍋': { x: 520, y: 60  },
+    '糊': { x: 215, y: 170 },
+    '漿': { x: 80,  y: 260 },
+    '倒': { x: 445, y: 210 },
+    '翻': { x: 445, y: 320 },
+    '吃': { x: 255, y: 350 },
+  },
+  edges: [
+    ['奶','糊'], ['蛋','糊'], ['油','糊'],
+    ['糊','倒'], ['糊','漿'], ['鍋','倒'],
+    ['倒','翻'], ['翻','吃'], ['漿','吃'],
+  ],
+};
+const tsAdj = {};
+tsConfig.edges.forEach(([u, v]) => { (tsAdj[u] = tsAdj[u] || []).push(v); });
+const tsR = new GraphRenderer('canvas-ts', tsConfig, {
+  directed: true, showWeights: false, width: 600, height: 400,
+});
+let tsTimer = null, tsClose = null;
+
+function tsStatus(html) {
+  document.querySelector('#tsStatus').innerHTML = html;
+}
+function tsRunDFS() {
+  tsReset(true);
+  const events = dfsCloseEvents(Object.keys(tsConfig.vertices), tsAdj);
+  const startT = {};
+  tsClose = {};
+  let i = 0;
+  tsTimer = setInterval(() => {
+    if (i >= events.length) {
+      clearInterval(tsTimer); tsTimer = null;
+      tsStatus('DFS 完成：每個節點都有 start/close time。接著按 ②。');
+      return;
+    }
+    const e = events[i++];
+    if (e.act === 'start') {
+      startT[e.v] = e.t;
+      tsR.setNodeClass(e.v, 'gray');
+      tsR.setNodeMeta(e.v, e.t + '/…');
+      tsStatus(`t=${e.t}：發現「${TS_FULL[e.v]}」（灰）`);
+    } else {
+      tsClose[e.v] = e.t;
+      tsR.setNodeClass(e.v, 'black');
+      tsR.setNodeMeta(e.v, startT[e.v] + '/' + e.t);
+      tsStatus(`t=${e.t}：「${TS_FULL[e.v]}」完成（黑），closing time = ${e.t}`);
+    }
+  }, 420);
+}
+function tsOrder() {
+  if (!tsClose || !Object.keys(tsClose).length) {
+    tsStatus('要先按 ① 跑 DFS，才有 closing time 可排。'); return;
+  }
+  if (tsTimer) { clearInterval(tsTimer); tsTimer = null; }
+  const order = Object.keys(tsClose).sort((a, b) => tsClose[b] - tsClose[a]);
+  const out = document.getElementById('tsOrderOut');
+  out.innerHTML = '';
+  let i = 0;
+  tsTimer = setInterval(() => {
+    if (i >= order.length) {
+      clearInterval(tsTimer); tsTimer = null;
+      tsStatus('完成！這一列保證每條邊的起點都排在終點前面：照著做就不會把生麵糊吃下肚。');
+      return;
+    }
+    const v = order[i++];
+    tsR.setNodeClass(v, 'found');
+    out.innerHTML = order.slice(0, i)
+      .map(k => `${TS_FULL[k]}<span style="opacity:.55;">(f=${tsClose[k]})</span>`)
+      .join(' → ');
+    tsStatus(`第 ${i} 位：「${TS_FULL[v]}」（closing time ${tsClose[v]}）`);
+  }, 520);
+}
+function tsReset(keepStatus) {
+  if (tsTimer) { clearInterval(tsTimer); tsTimer = null; }
+  tsR.resetAll();
+  tsClose = null;
+  document.getElementById('tsOrderOut').innerHTML = '';
+  if (!keepStatus) tsStatus('按「① 跑 DFS」開始：節點上會標出 start/close 時間。');
+}
+
+/* =============================================================
+   PART 09: STRONGLY CONNECTED COMPONENTS (supplemental, pythonds 7.18)
+   ============================================================= */
+const sccPos = {
+  A: { x: 95,  y: 80  }, B: { x: 260, y: 60  }, E: { x: 175, y: 195 },
+  C: { x: 420, y: 90  }, F: { x: 545, y: 175 }, G: { x: 420, y: 235 },
+  H: { x: 255, y: 330 }, I: { x: 470, y: 350 },
+};
+const sccEdges = [
+  ['A','B'], ['B','E'], ['E','A'],          // SCC 1：A B E
+  ['B','C'],                                 // 跨元件單向通道
+  ['C','F'], ['F','G'], ['G','C'],          // SCC 2：C F G
+  ['G','H'],                                 // 跨元件單向通道
+  ['H','I'], ['I','H'],                      // SCC 3：H I
+];
+const sccOpts = { directed: true, showWeights: false, width: 600, height: 400 };
+let sccR = new GraphRenderer('canvas-scc', { vertices: sccPos, edges: sccEdges }, sccOpts);
+let sccTimer = null, sccCloseT = null, sccOnGT = false;
+
+function sccStatus(html) { document.querySelector('#sccStatus').innerHTML = html; }
+function sccAdjOf(edges) {
+  const adj = {};
+  edges.forEach(([u, v]) => { (adj[u] = adj[u] || []).push(v); });
+  return adj;
+}
+function sccStep1() {
+  sccReset(true);
+  const events = dfsCloseEvents(Object.keys(sccPos), sccAdjOf(sccEdges));
+  const startT = {};
+  sccCloseT = {};
+  let i = 0;
+  sccTimer = setInterval(() => {
+    if (i >= events.length) {
+      clearInterval(sccTimer); sccTimer = null;
+      sccStatus('第 ① 步完成：每個頂點都有 closing time。接著按 ② 轉置。');
+      return;
+    }
+    const e = events[i++];
+    if (e.act === 'start') {
+      startT[e.v] = e.t;
+      sccR.setNodeClass(e.v, 'gray');
+      sccR.setNodeMeta(e.v, e.t + '/…');
+    } else {
+      sccCloseT[e.v] = e.t;
+      sccR.setNodeClass(e.v, 'black');
+      sccR.setNodeMeta(e.v, startT[e.v] + '/' + e.t);
+    }
+    sccStatus(`t=${e.t}：${e.act === 'start' ? '發現' : '完成'} ${e.v}`);
+  }, 380);
+}
+function sccStep2() {
+  if (!sccCloseT || !Object.keys(sccCloseT).length) {
+    sccStatus('要先按 ① 在 G 上跑 DFS。'); return;
+  }
+  if (sccTimer) { clearInterval(sccTimer); sccTimer = null; }
+  const rev = sccEdges.map(([u, v]) => [v, u]);
+  sccR = new GraphRenderer('canvas-scc', { vertices: sccPos, edges: rev }, sccOpts);
+  Object.keys(sccCloseT).forEach(v => sccR.setNodeMeta(v, 'f=' + sccCloseT[v]));
+  sccOnGT = true;
+  sccStatus('這是轉置圖 G&#7488;：所有邊都反向了，closing time 保留在節點下方。接著按 ③。');
+}
+function sccStep3() {
+  if (!sccOnGT) { sccStatus('要先按 ② 轉置成 G&#7488;。'); return; }
+  if (sccTimer) { clearInterval(sccTimer); sccTimer = null; }
+  const revAdj = sccAdjOf(sccEdges.map(([u, v]) => [v, u]));
+  const roots = Object.keys(sccCloseT).sort((a, b) => sccCloseT[b] - sccCloseT[a]);
+  // 依 closing 遞減長森林；每棵樹＝一個 SCC
+  const seen = {}, trees = [];
+  const collect = (v, tree) => {
+    seen[v] = true; tree.push(v);
+    (revAdj[v] || []).forEach(w => { if (!seen[w]) collect(w, tree); });
+  };
+  roots.forEach(r => {
+    if (!seen[r]) { const tree = []; collect(r, tree); trees.push(tree); }
+  });
+  const treeCls = ['start', 'found', 'current'];
+  const steps = [];
+  trees.forEach((tree, ti) => tree.forEach(v => steps.push({ v, ti })));
+  const out = document.getElementById('sccOut');
+  out.innerHTML = '';
+  let i = 0;
+  sccTimer = setInterval(() => {
+    if (i >= steps.length) {
+      clearInterval(sccTimer); sccTimer = null;
+      out.innerHTML = trees.map((t, k) => `SCC${k + 1} = { ${t.join(', ')} }`).join('　｜　');
+      sccStatus(`完成：${trees.length} 棵樹＝${trees.length} 個強連通元件。跨元件的邊在 G&#7488; 裡走不出去，樹被「困」在元件內。`);
+      return;
+    }
+    const s = steps[i++];
+    sccR.setNodeClass(s.v, treeCls[s.ti % treeCls.length]);
+    sccStatus(`第 ${s.ti + 1} 棵樹收下 ${s.v}（起點是剩餘 closing time 最大者）`);
+  }, 380);
+}
+function sccReset(keepStatus) {
+  if (sccTimer) { clearInterval(sccTimer); sccTimer = null; }
+  sccR = new GraphRenderer('canvas-scc', { vertices: sccPos, edges: sccEdges }, sccOpts);
+  sccCloseT = null; sccOnGT = false;
+  document.getElementById('sccOut').innerHTML = '';
+  if (!keepStatus) sccStatus('照按鈕順序 ①→②→③ 走一遍演算法。');
+}
+
+/* =============================================================
+   QUIZ HANDLER
+   ============================================================= */
+function quizCheck(quizId, optEl) {
+  const isCorrect = optEl.dataset.correct === 'true';
+  const optsParent = optEl.parentElement;
+  // 先清除任何已標記
+  optsParent.querySelectorAll('.quiz-opt').forEach(o => {
+    o.classList.remove('correct', 'wrong');
+  });
+  optEl.classList.add(isCorrect ? 'correct' : 'wrong');
+  const fb = document.getElementById(`${quizId}Feedback`);
+  fb.classList.remove('correct', 'wrong');
+  fb.classList.add('show', isCorrect ? 'correct' : 'wrong');
+
+  if (quizId === 'ex1') {
+    if (isCorrect) {
+      fb.innerHTML = `<strong>正確 ✓</strong> Dijkstra（含 visited 檢查）從 A 出發的執行追蹤如下：<br>
+        <span style="font-family:monospace;font-size:.82rem;">
+        Pop A(0) → 鬆弛 B=2, C=7, E=12<br>
+        Pop B(2) → 鬆弛 D=4 (prev=B)<br>
+        Pop D(4) → 標 visited，鬆弛 F=6<br>
+        Pop F(6) → 鬆弛 G=10<br>
+        Pop C(7) → 試算 C→D = 7+(−5)=2，但 D 已 visited，<strong style="color:var(--accent);">跳過！</strong> 鬆弛 E=9<br>
+        Pop E(9) → 鬆弛 G=2 (用負邊 −7)<br>
+        Pop G(2) → 完成
+        </span><br>
+        最終 dist[D] = 4，prev[D] = B，路徑為 <strong>A → B → D</strong>。<br>
+        ⚠️ 真實最短路徑其實是 <strong>A → C → D = 7 + (−5) = 2</strong>，但 Dijkstra 因為 visited 檢查而錯過。這正是 Dijkstra 不能處理負邊權的根本原因。<br>
+        圖中已用紅色標記兩條負邊：<code>C→D(−5)</code> 與 <code>E→G(−7)</code>。`;
+      // 同時把 Dijkstra 實際走的路徑高亮（不是真正最短的）
+      ex1R.resetAll();
+      ex1R.setEdgeClass('A','B','tree');
+      ex1R.setEdgeClass('B','D','tree');
+      // 仍然標出負邊作為對比
+      ex1R.setEdgeClass('C','D','path');
+      ex1R.setEdgeClass('E','G','path');
+      ex1R.setNodeClass('A','start');
+      ex1R.setNodeClass('B','in-mst');
+      ex1R.setNodeClass('D','found');
+    } else {
+      fb.innerHTML = `<strong>不對 ✗</strong> 重點是：Dijkstra 從 A 開始後，PQ 依序取出最小者 A(0) → B(2) → D(4) → F(6) → C(7) → E(9) → G。<br>
+        當 D 在第 3 步以距離 4 被 pop 時，<strong>就被標記為 visited</strong>。後來 C 被 pop 時，雖然 C→D 給出更短的距離 2（= 7+(−5)），但<strong>已 visited 的 D 不會再被更新</strong>。所以 Dijkstra 的最終結果路徑是 prev 指標往回追：D ← B ← A。`;
+    }
+  } else if (quizId === 'ex2') {
+    if (isCorrect) {
+      fb.innerHTML = `<strong>正確 ✓</strong> 從 F 開始的 Prim 追蹤（每次取 PQ 中 key 最小的非 MST 頂點）：<br>
+        <span style="font-family:monospace;font-size:.82rem;">
+        ① F 進樹（key=0，起點）<br>
+        ② Pop A (key=8)，加入邊 <strong>F-A (8)</strong>；更新 B=1, G=2<br>
+        ③ Pop B (key=1)，加入邊 <strong>A-B (1)</strong>；更新 C=7<br>
+        ④ Pop G (key=2)，加入邊 <strong>A-G (2)</strong>；更新 C=5（由 B 經 G 變更便宜！）, E=3<br>
+        ⑤ Pop E (key=3)，加入邊 <strong>G-E (3)</strong>；更新 D=4<br>
+        ⑥ Pop D (key=4)，加入邊 <strong>E-D (4)</strong>；C=min(5, w(D,C)=6) 不更新<br>
+        ⑦ Pop C (key=5)，加入邊 <strong>G-C (5)</strong>　← <strong style="color:var(--accent);">最後一條，權重 5</strong>
+        </span><br>
+        MST 總權重 = 8 + 1 + 2 + 3 + 4 + 5 = <strong>23</strong>。<br>
+        關鍵理解：<strong>Prim 的更新規則是 <code>newD = w(u,v)</code></strong>（只看單邊權，不累加）。所以當 G 進樹時，會把 C 的 key 從原本經 B(=7) 改用更便宜的 G-C(5)。`;
+      ex2R.resetAll();
+      ex2R.setEdgeClassUndirected('F','A','mst');
+      ex2R.setEdgeClassUndirected('A','B','mst');
+      ex2R.setEdgeClassUndirected('A','G','mst');
+      ex2R.setEdgeClassUndirected('G','E','mst');
+      ex2R.setEdgeClassUndirected('E','D','mst');
+      ex2R.setEdgeClassUndirected('G','C','path');
+      ['A','B','D','E','G'].forEach(k => ex2R.setNodeClass(k,'in-mst'));
+      ex2R.setNodeClass('F','start');
+      ex2R.setNodeClass('C','found');
+    } else {
+      fb.innerHTML = `<strong>不對 ✗</strong> 提示：Prim 從 F 開始，每次取 PQ key 最小的點加入樹。注意 Prim 的更新規則是 <code>newD = w(u,v)</code>（只看當邊權，不累加路徑）。<br>
+        逐步追蹤 PQ 內容會發現：F→A(8)、A→B(1)、A→G(2)、G→E(3)、E→D(4) 都先被處理；<strong>C 是最後才進樹的</strong>，要看哪條邊被選為 C 的「進樹邊」。`;
+    }
+  } else if (quizId === 'ts1') {
+    if (isCorrect) {
+      fb.innerHTML = `<strong>正確 ✓</strong> 對 DAG 上任一條邊 (v, w)，DFS 只有兩種可能：<br>
+        ① w 在 v 的子樹裡（從 v 探進去）：w 先關閉、v 後關閉。<br>
+        ② w 早已在別的子樹／別棵樹完成：w 的 closing time 當然更小。<br>
+        「w 是 v 的祖先」不可能發生：那需要一條 w → … → v 的路徑，再加上邊 v → w 就成了循環，DAG 沒有循環。
+        所以 <code>f(v) &gt; f(w)</code> 恆成立，依 f 遞減排序自然把 v 排在 w 前面。<br>
+        順帶一提：拓撲排序通常<strong>不唯一</strong>。DFS 的起點與鄰居順序不同，會得到不同但同樣合法的順序。`;
+    } else {
+      fb.innerHTML = `<strong>不對 ✗</strong> closing time 跟鄰居數量、也跟「誰先被造訪」沒有必然關係（w 可能在另一棵 DFS 樹裡比 v 更早被造訪）。<br>
+        關鍵是邊 (v, w) 在 DFS 中只有兩種結局：w 是 v 子樹的一員（先關），或 w 早已完成（更早關）。兩種情況 w 都比 v 先關閉。`;
+    }
+  } else if (quizId === 'scc1') {
+    if (isCorrect) {
+      fb.innerHTML = `<strong>正確 ✓</strong> 第一次 DFS 的 closing time 有個關鍵性質：位在「上游」的 SCC（能通往別人、別人回不來的那群）一定包含全圖最大的 f。<br>
+        換到 G<sup>T</sup> 之後，跨 SCC 的邊全部反向：從剩餘 f 最大的頂點出發，DFS <strong>只能在自己的 SCC 裡打轉</strong>，走不進下游元件。
+        走完一棵樹、剛好收掉一個 SCC，再從剩下 f 最大的點開新樹，直到收完為止。`;
+    } else {
+      fb.innerHTML = `<strong>不對 ✗</strong> (B) 轉置只是把邊反向，邊數一模一樣。(C) 順序與圖都不能亂換：
+        在原圖 G 上從 A 跑 DFS，一棵樹就會吃掉全部 8 個頂點（A 到得了每個點），三個 SCC 全糊在一起。
+        「G<sup>T</sup> ＋ closing time 遞減」兩個條件缺一不可。`;
+    }
+  }
+}
+</script>
+</body>
+</html>

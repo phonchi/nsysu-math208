@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>演算法分析 — Algorithm Analysis Interactive（Python）</title>
+<script>
+  MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1a2e;--paper:#f7f3eb;--accent:#c0392b;--accent2:#2c3e7a;--accent3:#1a6b4a;
+  --muted:#8a8578;--card:#fffdf7;--card-border:#e8e2d6;--highlight:#fff3cd;
+  --code-bg:#2d2d3f;--code-fg:#e8e6df;
+  --node-white:#ffffff;--node-gray:#bdc3c7;--node-black:#34495e;
+  --node-current:#f39c12;--node-found:#16a085;--node-start:#9b59b6;
+  --edge-default:#95a5a6;--edge-tree:#27ae60;--edge-explore:#f39c12;--edge-mst:#1a6b4a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.9;font-size:17px;}
+
+/* Hero */
+.hero{min-height:62vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem;position:relative;overflow:hidden;background:linear-gradient(170deg,#1a1a2e 0%,#2c3e7a 40%,#1a6b4a 100%);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.06) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.04) 0%,transparent 40%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);}
+.hero-content{position:relative;z-index:1;max-width:860px;}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;color:#fff;letter-spacing:.04em;line-height:1.3;margin-bottom:1rem;}
+.hero h1 .green{color:#2ecc71;}
+.hero h1 .blue{color:#5dade2;}
+.hero h1 .orange{color:#f39c12;}
+.hero h1 .purple{color:#bb8fce;}
+.hero .subtitle{font-size:clamp(.95rem,2.2vw,1.2rem);color:rgba(255,255,255,.65);font-weight:300;margin-bottom:2rem;}
+.hero .big-formula{color:#2ecc71;background:rgba(0,0,0,.3);padding:.8rem 2rem;border-radius:12px;display:inline-block;border:1px solid rgba(255,255,255,.1);margin-bottom:2rem;backdrop-filter:blur(4px);font-size:1.05rem;}
+.scroll-hint{color:rgba(255,255,255,.4);font-size:.9rem;animation:bounce 2s infinite;}
+.scroll-hint span{display:block;font-size:1.4rem;margin-top:.3rem;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+/* Hero mini-graph illustration */
+.hero-graph{position:absolute;right:5%;top:50%;transform:translateY(-50%);opacity:.18;pointer-events:none;}
+@media(max-width:900px){.hero-graph{display:none;}}
+
+/* Layout */
+.container{max-width:1180px;margin:0 auto;padding:3rem 1.5rem;}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.5rem;}
+h2{font-family:'Noto Serif TC',serif;font-size:1.65rem;font-weight:700;color:var(--ink);margin-bottom:1.2rem;line-height:1.4;}
+h3{font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:700;color:var(--accent2);margin:1.4rem 0 .8rem;}
+section{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--card-border);}
+section:last-of-type{border-bottom:none;}
+p{margin-bottom:1rem;}
+code{font-family:'JetBrains Mono',monospace;font-size:.92em;background:rgba(44,62,122,.08);padding:1px 6px;border-radius:4px;color:var(--accent2);}
+strong{color:var(--ink);}
+
+/* TOC */
+.toc{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:1.2rem 1.5rem;margin:1rem 0 2rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.toc-title{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.7rem;}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.5rem .8rem;}
+.toc-grid a{color:var(--accent2);text-decoration:none;font-size:.9rem;padding:.3rem 0;display:flex;align-items:center;gap:.4rem;transition:color .2s;}
+.toc-grid a:hover{color:var(--accent);}
+.toc-grid a .toc-num{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);min-width:34px;}
+
+/* Viz layout */
+.viz-layout{display:grid;grid-template-columns:1fr 320px;gap:1.3rem;margin:1.2rem 0;align-items:start;}
+@media(max-width:900px){.viz-layout{grid-template-columns:1fr;}}
+
+.viz-panel{background:linear-gradient(160deg,#fffdf7 0%,#f4efe3 100%);border:1px solid var(--card-border);border-radius:12px;padding:1rem;box-shadow:0 4px 18px rgba(0,0,0,.06);position:relative;}
+
+/* Graph SVG canvas */
+.graph-canvas{position:relative;width:100%;height:380px;background:#fafafa;border-radius:8px;overflow:hidden;border:1px solid #ececec;}
+.graph-canvas svg{width:100%;height:100%;display:block;}
+
+/* SVG elements styles */
+.graph-edge{stroke:var(--edge-default);stroke-width:2;fill:none;transition:stroke .25s, stroke-width .25s;}
+.graph-edge.tree{stroke:var(--edge-tree);stroke-width:3.5;}
+.graph-edge.exploring{stroke:var(--edge-explore);stroke-width:3.5;stroke-dasharray:5 4;animation:dash 1s linear infinite;}
+.graph-edge.mst{stroke:var(--edge-mst);stroke-width:4;}
+.graph-edge.path{stroke:var(--accent);stroke-width:4;}
+.graph-edge.dotted{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:3 4;}
+@keyframes dash{to{stroke-dashoffset:-18;}}
+
+.edge-label{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;fill:var(--ink);pointer-events:none;}
+.edge-label-bg{fill:#fafafa;stroke:#ececec;stroke-width:1;}
+
+.graph-node{cursor:pointer;}
+.graph-node circle{fill:var(--node-white);stroke:var(--ink);stroke-width:2;transition:fill .25s, stroke .25s, r .2s;}
+.graph-node.gray circle{fill:var(--node-gray);}
+.graph-node.black circle{fill:var(--node-black);stroke:var(--node-black);}
+.graph-node.current circle{fill:var(--node-current);stroke:#d68910;stroke-width:3;}
+.graph-node.start circle{fill:var(--node-start);stroke:#7d3c98;stroke-width:3;}
+.graph-node.found circle{fill:var(--node-found);stroke:#117a65;stroke-width:3;}
+.graph-node.in-mst circle{fill:#82e0aa;stroke:var(--accent3);stroke-width:3;}
+.graph-node text.node-key{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;fill:var(--ink);text-anchor:middle;dominant-baseline:central;pointer-events:none;}
+.graph-node.black text.node-key{fill:#fff;}
+.graph-node.current text.node-key{fill:#fff;}
+.graph-node.start text.node-key{fill:#fff;}
+.graph-node.found text.node-key{fill:#fff;}
+.graph-node text.node-meta{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;fill:var(--accent);text-anchor:middle;pointer-events:none;}
+
+/* Status banner */
+.status-banner{margin-top:.8rem;padding:.7rem 1rem;background:var(--code-bg);color:#fff;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.85rem;min-height:42px;display:flex;align-items:center;gap:.6rem;}
+.status-banner .status-icon{color:#2ecc71;font-weight:700;}
+.status-banner .status-text{flex:1;}
+
+/* Controls */
+.controls-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--card-border);}
+.btn{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:600;padding:.45rem 1rem;border-radius:6px;border:none;cursor:pointer;transition:all .2s;}
+.btn-play{background:var(--accent3);color:#fff;}
+.btn-play:hover{background:#22845c;}
+.btn-play.active{background:var(--accent);}
+.btn-step{background:var(--accent2);color:#fff;}
+.btn-step:hover{background:#1f2e5f;}
+.btn-step:disabled{background:#ccc;cursor:not-allowed;}
+.btn-reset{background:var(--card-border);color:var(--ink);}
+.btn-reset:hover{background:#ccc;}
+.btn-toggle{background:var(--accent2);color:#fff;}
+.btn-toggle:hover{background:#1f2e5f;}
+.btn-toggle.off{background:#bbb;color:#555;}
+.btn-shuffle{background:#8e44ad;color:#fff;}
+.btn-shuffle:hover{background:#6c3485;}
+
+/* Slider row */
+.slider-row{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;background:var(--paper);border-radius:8px;margin-bottom:.5rem;}
+.slider-row .slider-label{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent2);font-weight:600;min-width:60px;}
+.slider-row input[type="range"]{flex:1;accent-color:var(--accent3);height:5px;cursor:pointer;}
+.slider-row .slider-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--accent);font-weight:600;min-width:60px;text-align:right;}
+
+/* Side panel */
+.side-panel{display:flex;flex-direction:column;gap:.85rem;}
+.info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.info-card .ic-title{font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem;display:flex;align-items:center;justify-content:space-between;}
+.info-card .ic-title .ic-badge{font-size:.7rem;color:#fff;background:var(--accent3);padding:1px 7px;border-radius:3px;letter-spacing:.05em;font-weight:700;}
+.info-card .ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.83rem;padding:.2rem 0;}
+.info-card .ic-label{color:var(--muted);}
+.info-card .ic-value{color:var(--ink);font-weight:600;}
+.info-card .ic-value.highlight{color:var(--accent);}
+.info-card .ic-value.big{font-size:1.4rem;color:var(--accent2);}
+
+/* Stats grid */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.4rem;}
+.stat-tile{background:var(--paper);border-radius:8px;padding:.5rem .7rem;text-align:center;}
+.stat-tile .stat-label{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;}
+.stat-tile .stat-value{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;color:var(--accent2);}
+
+/* Queue / Stack / PQ visualization */
+.ds-display{font-family:'JetBrains Mono',monospace;font-size:.8rem;background:var(--paper);border-radius:6px;padding:.5rem .7rem;min-height:36px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;border:1px dashed var(--card-border);}
+.ds-display .ds-empty{color:var(--muted);font-style:italic;}
+.ds-item{background:var(--accent2);color:#fff;padding:2px 8px;border-radius:4px;font-weight:600;}
+.ds-item.front{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-item.top{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-item.pq{background:var(--accent3);}
+.ds-item.pq.min{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-arrow{color:var(--muted);}
+
+/* Pseudo code */
+.pseudo-code{background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:.85rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.6;overflow-x:auto;}
+.pseudo-code .line{padding:1px 4px;border-radius:3px;display:block;white-space:pre;}
+.pseudo-code .line.active{background:rgba(243,156,18,.3);color:#fff;border-left:3px solid var(--node-current);padding-left:6px;}
+.pseudo-code .kw{color:#ff79c6;}
+.pseudo-code .fn{color:#50fa7b;}
+.pseudo-code .num{color:#bd93f9;}
+.pseudo-code .com{color:#6272a4;font-style:italic;}
+.pseudo-code .str{color:#f1fa8c;}
+
+/* Adjacency table */
+.adj-display{margin:.5rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.adj-matrix{border-collapse:collapse;margin:.5rem auto;}
+.adj-matrix td,.adj-matrix th{border:1px solid var(--card-border);padding:6px 10px;text-align:center;min-width:34px;background:#fff;}
+.adj-matrix th{background:var(--accent2);color:#fff;font-weight:700;}
+.adj-matrix td.zero{color:#ccc;}
+.adj-matrix td.nonzero{background:#eafaf1;color:var(--accent3);font-weight:700;}
+.adj-matrix td.highlight{background:#fff3cd;}
+.adj-list{background:var(--card);border:1px solid var(--card-border);border-radius:8px;padding:.7rem 1rem;}
+.adj-list .adj-row{padding:3px 0;border-bottom:1px dashed var(--card-border);}
+.adj-list .adj-row:last-child{border-bottom:none;}
+.adj-list .adj-key{color:var(--accent);font-weight:700;display:inline-block;min-width:32px;}
+.adj-list .adj-arrow{color:var(--muted);margin:0 6px;}
+.adj-list .adj-neighbor{background:#eef2ff;color:var(--accent2);padding:1px 8px;border-radius:4px;margin:1px 3px;display:inline-block;font-weight:600;}
+
+/* Chess board for Knight's tour */
+.chess-board{display:grid;background:#fff;border:2px solid var(--ink);border-radius:6px;overflow:hidden;margin:.5rem auto;width:fit-content;}
+.chess-cell{display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:700;position:relative;transition:background .2s;}
+.chess-cell.light{background:#f0d9b5;color:#666;}
+.chess-cell.dark{background:#b58863;color:#fff;}
+.chess-cell.visited{background:#27ae60 !important;color:#fff;}
+.chess-cell.current{background:#f39c12 !important;color:#fff;box-shadow:inset 0 0 0 3px #d68910;}
+.chess-cell.start{background:#9b59b6 !important;color:#fff;}
+.chess-cell .knight{font-size:1.4em;line-height:1;}
+.chess-cell .step-num{font-size:.7em;}
+
+/* Info box */
+.info-box{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1.1rem 1.4rem;margin:1.3rem 0;position:relative;}
+.info-box .info-label{position:absolute;top:-11px;left:14px;background:var(--accent2);color:#fff;font-size:.74rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.05em;}
+.info-box.warm{background:#fef5e7;border-color:#d68910;}
+.info-box.warm .info-label{background:#d68910;}
+.info-box.green{background:#eafaf1;border-color:var(--accent3);}
+.info-box.green .info-label{background:var(--accent3);}
+.info-box.purple{background:#f4ecf7;border-color:#8e44ad;}
+.info-box.purple .info-label{background:#8e44ad;}
+
+/* Pill labels */
+.pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:4px;margin:0 .15rem;vertical-align:1px;}
+.pill-blue{background:rgba(41,128,185,.12);color:#2980b9;border:1px solid rgba(41,128,185,.3);}
+.pill-red{background:rgba(192,57,43,.12);color:var(--accent);border:1px solid rgba(192,57,43,.3);}
+.pill-green{background:rgba(39,174,96,.12);color:var(--accent3);border:1px solid rgba(39,174,96,.3);}
+.pill-orange{background:rgba(243,156,18,.12);color:#d68910;border:1px solid rgba(243,156,18,.3);}
+.pill-purple{background:rgba(142,68,173,.12);color:#8e44ad;border:1px solid rgba(142,68,173,.3);}
+.pill-gray{background:rgba(0,0,0,.06);color:var(--muted);border:1px solid rgba(0,0,0,.12);}
+
+/* Comparison table */
+.cmp-table{width:100%;border-collapse:collapse;font-size:.86rem;margin:.8rem 0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.cmp-table th{background:var(--accent2);color:#fff;padding:.6rem .8rem;text-align:center;font-weight:600;font-size:.82rem;}
+.cmp-table td{padding:.6rem .8rem;text-align:center;border-bottom:1px solid var(--card-border);font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.cmp-table td:first-child{font-family:'Noto Sans TC',sans-serif;color:var(--accent2);font-weight:600;text-align:left;}
+.cmp-table tr:last-child td{border-bottom:none;}
+.cmp-table tr:nth-child(even){background:rgba(0,0,0,.015);}
+.cmp-table .best{color:var(--accent3);font-weight:700;}
+.cmp-table .worst{color:var(--accent);font-weight:700;}
+
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:.6rem;margin:.6rem 0;font-family:'JetBrains Mono',monospace;font-size:.75rem;}
+.legend-item{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .5rem;background:var(--paper);border-radius:5px;}
+.legend-item .lg-swatch{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--ink);}
+.legend-item .lg-edge{width:18px;height:3px;border-radius:2px;}
+
+/* Quiz */
+.quiz-box{background:var(--card);border:2px solid var(--accent2);border-radius:12px;padding:1.3rem 1.5rem;margin:1.5rem 0;}
+.quiz-box .quiz-label{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);font-weight:700;letter-spacing:.1em;margin-bottom:.5rem;}
+.quiz-options{display:flex;flex-direction:column;gap:.5rem;margin:.8rem 0;}
+.quiz-opt{display:flex;align-items:center;gap:.6rem;padding:.55rem .9rem;background:var(--paper);border:2px solid var(--card-border);border-radius:8px;cursor:pointer;transition:all .2s;font-family:'JetBrains Mono',monospace;font-size:.86rem;}
+.quiz-opt:hover{border-color:var(--accent2);}
+.quiz-opt .opt-letter{font-weight:700;color:var(--accent2);min-width:22px;}
+.quiz-opt.correct{background:#eafaf1;border-color:var(--accent3);}
+.quiz-opt.correct .opt-letter{color:var(--accent3);}
+.quiz-opt.wrong{background:#fef5e7;border-color:var(--accent);}
+.quiz-opt.wrong .opt-letter{color:var(--accent);}
+.quiz-feedback{margin-top:.7rem;padding:.7rem 1rem;border-radius:8px;font-size:.88rem;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.correct{background:#eafaf1;color:var(--accent3);border-left:4px solid var(--accent3);}
+.quiz-feedback.wrong{background:#fef5e7;color:var(--accent);border-left:4px solid var(--accent);}
+
+/* Floating sidebar navigation */
+.float-nav{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:2px;background:rgba(255,253,250,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--card-border);border-radius:12px;padding:10px 7px;box-shadow:0 6px 24px rgba(0,0,0,.10);font-family:'JetBrains Mono',monospace;max-height:88vh;overflow-y:auto;transition:padding .25s ease;}
+.float-nav .fn-title{font-family:'Noto Serif TC',serif;font-weight:700;font-size:.68rem;color:var(--accent2);text-align:center;letter-spacing:1.5px;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--card-border);max-width:0;overflow:hidden;transition:max-width .25s ease;}
+.float-nav:hover .fn-title{max-width:220px;}
+.float-nav a{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:7px;color:var(--ink);text-decoration:none;white-space:nowrap;transition:all .2s ease;border-left:3px solid transparent;}
+.float-nav a .fn-num{font-weight:700;font-size:.66rem;color:var(--muted);letter-spacing:.4px;flex-shrink:0;width:30px;text-align:left;}
+.float-nav a .fn-name{font-family:'Noto Sans TC',sans-serif;font-size:.76rem;font-weight:500;max-width:0;overflow:hidden;transition:max-width .25s ease,padding .25s ease;padding:0;}
+.float-nav:hover a .fn-name{max-width:220px;padding-left:2px;}
+.float-nav a:hover{background:var(--card);}
+.float-nav a.active{background:var(--accent2);color:#fff;border-left-color:var(--accent);box-shadow:0 2px 6px rgba(192,57,43,.25);}
+.float-nav a.active .fn-num{color:rgba(255,255,255,.85);}
+.float-nav a.active .fn-name{color:#fff;}
+.float-nav .fn-top{margin-top:6px;padding-top:6px;border-top:1px solid var(--card-border);justify-content:center;}
+.float-nav .fn-top .fn-num{width:auto;color:var(--accent2);font-size:.78rem;}
+@media(max-width:768px){
+  .float-nav{right:8px;top:auto;bottom:14px;transform:none;padding:6px 5px;max-height:70vh;}
+  .float-nav .fn-title{display:none;}
+  .float-nav a{padding:4px 7px;}
+  .float-nav a .fn-num{width:26px;font-size:.62rem;}
+}
+
+footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border);}
+
+/* Distance / table inside graph viz */
+.vert-table{margin-top:.6rem;width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:.78rem;}
+.vert-table th,.vert-table td{padding:4px 6px;text-align:center;border:1px solid var(--card-border);}
+.vert-table th{background:var(--accent2);color:#fff;font-weight:600;font-size:.74rem;}
+.vert-table td.tcell-current{background:#fff3cd;font-weight:700;color:var(--accent);}
+.vert-table td.tcell-done{background:#eafaf1;color:var(--accent3);}
+.vert-table td.tcell-inf{color:#ccc;}
+.sec-badge{font-size:.6em;color:var(--muted);border:1px solid var(--card-border);background:var(--card);padding:2px 10px;border-radius:999px;vertical-align:middle;margin-left:.6rem;font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.02em;white-space:nowrap;}
+
+/* Phase 8 shared widgets */
+.bs-stack{display:flex;flex-direction:column-reverse;align-items:center;gap:4px;min-height:180px;justify-content:flex-start;padding:.6rem;}
+.bs-item{width:110px;text-align:center;padding:.4rem .6rem;background:#5b7eb8;color:#fff;border-radius:6px;font-family:'JetBrains Mono',monospace;font-weight:600;box-shadow:0 2px 5px rgba(0,0,0,.15);}
+.bs-hl{background:#f39c12;}
+.bs-toplabel,.bq-label{font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.bq-row{display:flex;align-items:center;gap:6px;min-height:64px;flex-wrap:wrap;padding:.4rem;}
+.bq-item{min-width:52px;text-align:center;padding:.45rem .5rem;background:#5b7eb8;color:#fff;border-radius:6px;font-family:'JetBrains Mono',monospace;font-weight:600;}
+.char-strip{display:flex;gap:3px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;padding:.4rem 0;}
+.char-cell{min-width:30px;text-align:center;padding:.35rem .25rem;border:1px solid var(--card-border);border-radius:5px;background:var(--card);}
+.char-cur{background:#f39c12;color:#fff;border-color:#f39c12;}
+.char-done{background:#e8f5ec;color:#1a6b4a;border-color:#bfe3cd;}
+.char-bad{background:#c0392b;color:#fff;border-color:#c0392b;}
+.token-out{display:flex;gap:4px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;min-height:40px;padding:.3rem 0;}
+.tok{padding:.3rem .55rem;border-radius:5px;background:#2c3e7a;color:#fff;font-weight:600;}
+.tok-op{background:#8e44ad;}
+.tok-new{outline:3px solid #f39c12;}
+.mono{font-family:'JetBrains Mono',monospace;}
+</style>
+</head>
+<body>
+<nav class="float-nav" id="floatNav" aria-label="章節導覽">
+  <div class="fn-title">章節導覽</div>
+  <a href="#prologue" data-target="prologue"><span class="fn-num">P00</span><span class="fn-name">為什麼要分析？</span></a>
+  <a href="#bigo" data-target="bigo"><span class="fn-num">P01</span><span class="fn-name">Big-O 記號</span></a>
+  <a href="#growth" data-target="growth"><span class="fn-num">P02</span><span class="fn-name">成長曲線實驗室</span></a>
+  <a href="#anagram" data-target="anagram"><span class="fn-num">P03</span><span class="fn-name">Anagram 四解法</span></a>
+  <a href="#lists" data-target="lists"><span class="fn-num">P04</span><span class="fn-name">list 操作成本</span></a>
+  <a href="#hash" data-target="hash"><span class="fn-num">P05</span><span class="fn-name">dict 的成本</span></a>
+  <a href="#exercises" data-target="exercises"><span class="fn-num">EX</span><span class="fn-name">練習題</span></a>
+  <a href="#reference" data-target="reference"><span class="fn-num">REF</span><span class="fn-name">總覽比較</span></a>
+  <a href="#top" class="fn-top" title="回到頂端"><span class="fn-num">↑ TOP</span></a>
+</nav>
+
+<div class="hero" id="top">
+  <div class="hero-grid"></div>
+  <svg class="hero-graph" width="320" height="250" viewBox="0 0 320 250">
+  <g stroke="#fff" stroke-width="2.5" fill="none" opacity=".9">
+    <path d="M30 220 h260"/><path d="M30 220 v-190"/>
+    <path d="M30 218 C 120 216, 220 214, 290 210"/>
+    <path d="M30 218 C 130 200, 230 170, 290 140"/>
+    <path d="M30 218 C 120 170, 200 90, 250 30"/>
+    <path d="M30 218 C 80 190, 110 80, 120 30"/>
+  </g>
+</svg>
+  <div class="hero-content">
+    <h1><span class="blue">演算法分析</span>與 <span class="orange">Big-O</span></h1>
+    <div class="subtitle">pythonds Chapter 2 — Analysis（對應講義 02）</div>
+    <div class="big-formula">T(n)｜主導項｜anagram 四解法｜list 攤銷｜dict</div>
+    <div class="scroll-hint">向下捲動開始互動<span>↓</span></div>
+  </div>
+</div>
+
+<div class="container">
+<div class="toc">
+  <div class="toc-title">CONTENTS · 內容目錄</div>
+  <div class="toc-grid">
+    <a href="#prologue"><span class="toc-num">P00</span>為什麼要分析？</a>
+    <a href="#bigo"><span class="toc-num">P01</span>Big-O 記號</a>
+    <a href="#growth"><span class="toc-num">P02</span>成長曲線實驗室</a>
+    <a href="#anagram"><span class="toc-num">P03</span>Anagram 四解法</a>
+    <a href="#lists"><span class="toc-num">P04</span>list 操作成本</a>
+    <a href="#hash"><span class="toc-num">P05</span>dict 的成本</a>
+    <a href="#exercises"><span class="toc-num">EX</span>練習題</a>
+    <a href="#reference"><span class="toc-num">REF</span>總覽比較</a>
+  </div>
+</div>
+
+<section id="prologue">
+  <div class="section-number">PROLOGUE · 開場</div>
+  <h2>演算法分析：比「誰的程式快」更聰明的問法 <span class="sec-badge">pythonds §2.1–2.2</span></h2>
+  <p>同一個問題有很多寫法。「哪個好？」不能只用碼表量：機器快慢、資料大小都會干擾。
+  演算法分析問的是：<strong>當輸入規模 n 變大，工作量怎麼成長？</strong>
+  我們數「基本操作次數」T(n)，只留下<strong>成長最快的主導項</strong>。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="mono" id="sumcmpOut" style="font-size:.9rem;line-height:2;min-height:120px;"></div>
+        <div class="status-banner" id="sumcmpStatus"><span class="status-icon">›</span><span class="status-text">1 加到 n：迴圈法 T(n)=n 次加法 vs 高斯公式 3 個運算。按按鈕比較「操作次數」。</span></div>
+        <div class="controls-bar">
+          <select id="sumcmpN" class="mono" style="padding:.35rem;border-radius:6px;border:1px solid var(--card-border);">
+            <option value="1000">n = 1,000</option><option value="100000" selected>n = 100,000</option><option value="10000000">n = 10,000,000</option>
+          </select>
+          <button class="btn" onclick="sumcmpRun()">計數比較</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">兩種解法 <span class="ic-badge">CODE</span></div>
+        <div class="pseudo-code" style="font-size:.76rem;">
+<span class="line"><span class="com"># 迴圈版：加 n 次</span></span>
+<span class="line"><span class="kw">def</span> <span class="fn">sum_of_n</span>(n):</span>
+<span class="line">    the_sum = <span class="num">0</span></span>
+<span class="line">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, n + <span class="num">1</span>):</span>
+<span class="line">        the_sum = the_sum + i</span>
+<span class="line">    <span class="kw">return</span> the_sum</span>
+<span class="line"><span class="com"># 高斯公式版：三個運算，n 再大也一樣</span></span>
+<span class="line">the_sum = (n * (n + <span class="num">1</span>)) // <span class="num">2</span></span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">怎麼在 Python 計時？</div>
+        <div class="pseudo-code" style="font-size:.74rem;">
+<span class="line"><span class="kw">import</span> time</span>
+<span class="line">start = time.<span class="fn">time</span>()   <span class="com"># 夾住要量的程式碼</span></span>
+<span class="line"><span class="com"># ... 要計時的程式 ...</span></span>
+<span class="line">elapsed = time.<span class="fn">time</span>() - start</span>
+<span class="line"><span class="com"># 更講究：timeit.Timer 重複跑 1000 次</span></span></div>
+        <div style="font-size:.82rem;line-height:1.8;color:var(--muted);margin-top:.4rem;">講義的實測：迴圈版
+        n 從 10⁵ 加到 10⁶，時間差不多也乘十；公式版對 10⁵ 到 10⁸ 四種 n 的耗時幾乎是同一個數字。
+        講義還做了 list 對 dict 的 in 比賽：list 隨 n 線性變慢、dict 平坦如常。
+        短小的操作要重複跑很多次再取平均，雜訊才壓得下來。</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">benchmark 的干擾因素</div>
+        <div style="font-size:.86rem;line-height:1.9;">CPU、直譯器的快取與垃圾回收、
+        當下的系統負載，都會影響碼表讀數。操作次數的成長級別才是演算法本身的性質，
+        這就是接下來 Big-O 要抓的東西。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="bigo">
+  <div class="section-number">PART 01 · 記號</div>
+  <h2>Big-O：只留主導項 <span class="sec-badge">pythonds §2.3</span></h2>
+  <p>T(n) = 5n² + 27n + 1005 → 當 n 夠大，n² 說了算：<strong>O(n²)</strong>。
+  常數與低次項在成長率面前都是雜訊。</p>
+  <div class="viz-panel">
+    <div style="overflow-x:auto;">
+    <table class="cmp-table" style="width:100%;font-size:.88rem;">
+      <thead><tr><th>f(n)</th><th>名稱</th><th>n=10</th><th>n=1,000</th><th>n=10⁶</th><th>典型例子</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">1</td><td>常數</td><td>1</td><td>1</td><td>1</td><td>索引 a_list[i]、dict 查詢（平均）</td></tr>
+        <tr><td class="mono">log n</td><td>對數</td><td>3</td><td>10</td><td>20</td><td>binary search</td></tr>
+        <tr><td class="mono">n</td><td>線性</td><td>10</td><td>1,000</td><td>10⁶</td><td>走訪、sequential search</td></tr>
+        <tr><td class="mono">n log n</td><td>線性對數</td><td>33</td><td>10⁴</td><td>2×10⁷</td><td>merge sort</td></tr>
+        <tr><td class="mono">n²</td><td>平方</td><td>100</td><td>10⁶</td><td>10¹²</td><td>雙層迴圈、bubble sort</td></tr>
+        <tr><td class="mono">2ⁿ</td><td>指數</td><td>1,024</td><td>10³⁰¹</td><td>—</td><td>天真費波那契、河內塔</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+  <h3 style="margin-top:1.3rem;">逐行數一次 T(n)</h3>
+  <p>拿一段真的程式來數。三個賦值（3）、外圈跑 n 次的內圈各貢獻 n 次（3n²… 這裡照講義的例子）：
+  <span class="mono">T(n) = 3 + 3n² + 2n + 1 = 3n² + 2n + 4</span>。
+  n 一大，3n² 說了算，其他項連同係數 3 全部丟掉：O(n²)。
+  數的時候不用精確到每一行，抓住「哪一段被執行最多次」就夠了。</p>
+  <h3 style="margin-top:1.3rem;">最好、最差、平均</h3>
+  <p>有些演算法的表現不只看 n，還看<strong>資料內容</strong>。在陣列裡找一個值：
+  運氣好第一格就中（best case，O(1)）、運氣差找到最後一格或根本不在（worst case，O(n)）、
+  平均攤下來要看一半（average case）。講 Big-O 時預設講 worst case，因為它是保證；
+  第 5 章的雜湊表會是「平均 O(1)、最差 O(n)」這種分開報的典型例子。</p>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 讀程式數操作</div>
+  <p>雙層迴圈 <code>for i in range(n): for j in range(n): k += 1</code> 之後接單層 <code>for i in range(n): k += 1</code>，整段的 Big-O 是？</p>
+  
+  <div class="quiz-options" id="qBigoOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="T(n) = n² + n，主導項是 n²。低次項 n 直接丟掉。" onclick="quizCheck('qBigo', this)"><span class="opt-letter">(A)</span> O(n²)</div><div class="quiz-opt" data-correct="false" data-fb="Big-O 只留主導項：n² + n 就寫 O(n²)。" onclick="quizCheck('qBigo', this)"><span class="opt-letter">(B)</span> O(n² + n)</div><div class="quiz-opt" data-correct="false" data-fb="兩段是「接續」不是「巢狀」：相加不相乘。" onclick="quizCheck('qBigo', this)"><span class="opt-letter">(C)</span> O(n³)</div>
+  </div>
+  <div class="quiz-feedback" id="qBigoFeedback"></div>
+</div>
+</section>
+
+<section id="growth">
+  <div class="section-number">PART 02 · 實驗室</div>
+  <h2>成長曲線實驗室：親眼看差距拉開 <span class="sec-badge">pythonds §2.3</span></h2>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <canvas id="growthCanvas" width="640" height="380" style="width:100%;background:#fff;border-radius:8px;"></canvas>
+        <div class="status-banner" id="growthStatus"><span class="status-icon">›</span><span class="status-text">拖動滑桿改變 n 的範圍；勾選要顯示的函數。</span></div>
+        <div class="controls-bar" style="flex-wrap:wrap;">
+          <label class="mono" style="font-size:.8rem;"><input type="checkbox" class="gcb" value="logn" checked> log n</label>
+          <label class="mono" style="font-size:.8rem;"><input type="checkbox" class="gcb" value="n" checked> n</label>
+          <label class="mono" style="font-size:.8rem;"><input type="checkbox" class="gcb" value="nlogn" checked> n log n</label>
+          <label class="mono" style="font-size:.8rem;"><input type="checkbox" class="gcb" value="n2" checked> n²</label>
+          <label class="mono" style="font-size:.8rem;"><input type="checkbox" class="gcb" value="exp2"> 2ⁿ</label>
+          <label class="mono" style="font-size:.8rem;">n 上限 <input id="growthMax" type="range" min="16" max="256" value="64" style="vertical-align:middle;"></label>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">怎麼讀這張圖</div>
+        <div style="font-size:.86rem;line-height:1.9;">n 小時大家擠在一起：常數項還有戲；
+        n 一大，曲線<strong>層級分明</strong>：這就是為什麼我們只在乎 order of magnitude。
+        勾選 2ⁿ 感受一下什麼叫「瞬間出框」。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="anagram">
+  <div class="section-number">PART 03 · 案例研究</div>
+  <h2>Anagram 偵測：同一題的四種成長率 <span class="sec-badge">pythonds §2.4</span></h2>
+  <p>「earth 和 heart 是不是變位詞？」四種解法都對，但成長率天差地遠。
+  這是「<strong>正確 ≠ 好</strong>」的最佳教材。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="char-strip" id="anaStrip1"></div>
+        <div class="char-strip" id="anaStrip2"></div>
+        <div class="mono" id="anaCount" style="font-size:.82rem;min-height:26px;"></div>
+        <div class="status-banner" id="anaStatus"><span class="status-icon">›</span><span class="status-text">用解法 4（Count and Compare）檢查 earth vs heart。</span></div>
+        <div class="controls-bar">
+          <input id="anaS1" class="mono" style="width:110px;padding:.35rem .5rem;border:1px solid var(--card-border);border-radius:6px;" value="earth">
+          <input id="anaS2" class="mono" style="width:110px;padding:.35rem .5rem;border:1px solid var(--card-border);border-radius:6px;" value="heart">
+          <button class="btn" onclick="anaStart()">▶ 開始（解法 4）</button>
+          <button class="btn" onclick="anaPlayer &amp;&amp; anaPlayer.step()">→ 單步</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">四解法總覽 <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="anaCode">
+<span class="line" data-l="1"><span class="com"># 解法 1 Checking Off：對 s1 每個字元，去 s2 找到就劃掉 → O(n²)</span></span>
+<span class="line" data-l="2"><span class="com"># 解法 2 Sort and Compare：兩字串排序後逐字比 → O(n log n)</span></span>
+<span class="line" data-l="3"><span class="com"># 解法 3 Brute Force：列出 s1 全部排列 → O(n!)，免談</span></span>
+<span class="line" data-l="4"><span class="com"># 解法 4 Count and Compare：數 26 個字母出現次數 → O(n)</span></span>
+<span class="line" data-l="5"><span class="kw">def</span> <span class="fn">anagram_solution_4</span>(s1, s2):</span>
+<span class="line" data-l="6">    c1 = [<span class="num">0</span>] * <span class="num">26</span>;  c2 = [<span class="num">0</span>] * <span class="num">26</span></span>
+<span class="line" data-l="7">    <span class="kw">for</span> ch <span class="kw">in</span> s1: c1[<span class="fn">ord</span>(ch) - <span class="fn">ord</span>(<span class="str">&quot;a&quot;</span>)] += <span class="num">1</span></span>
+<span class="line" data-l="8">    <span class="kw">for</span> ch <span class="kw">in</span> s2: c2[<span class="fn">ord</span>(ch) - <span class="fn">ord</span>(<span class="str">&quot;a&quot;</span>)] += <span class="num">1</span></span>
+<span class="line" data-l="9">    <span class="kw">return</span> c1 == c2</span></div></div>
+      <div class="info-card">
+        <div class="ic-title">空間換時間</div>
+        <div style="font-size:.86rem;line-height:1.9;">解法 4 用兩個 26 格計數陣列換到 O(n)。
+        時間與空間的交易是演算法設計最常用的槓桿之一。</div>
+      </div>
+    </div>
+  </div>
+  <h3 style="margin-top:1.4rem;">四個解法攤開看</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:.8rem;">
+    <div class="info-card"><div class="ic-title">解法 1：Checking Off，O(n²) <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.71rem;">
+<span class="line"><span class="kw">def</span> <span class="fn">anagram_solution_1</span>(s1, s2):</span>
+<span class="line">    still_ok = (<span class="fn">len</span>(s1) == <span class="fn">len</span>(s2))</span>
+<span class="line">    a_list = <span class="fn">list</span>(s2)</span>
+<span class="line">    <span class="kw">for</span> 每個 s1 的字元（still_ok 時）:</span>
+<span class="line">        在 a_list 裡線性找它            <span class="com"># 內圈：O(n)</span></span>
+<span class="line">        <span class="kw">if</span> found: <span class="kw">del</span> a_list[pos_2]   <span class="com"># 劃掉</span></span>
+<span class="line">        <span class="kw">else</span>: still_ok = <span class="num">False</span></span>
+<span class="line">    <span class="kw">return</span> still_ok   <span class="com"># n 個字元 × 每個找 O(n) = O(n²)</span></span></div>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">完整版在講義 deck02。比較次數是 1+2+…+n = n(n+1)/2，主導項 n²/2。</div></div>
+    <div class="info-card"><div class="ic-title">解法 2：Sort and Compare，O(n log n) <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.71rem;">
+<span class="line"><span class="kw">def</span> <span class="fn">anagram_solution_2</span>(s1, s2):</span>
+<span class="line">    a_list_1 = <span class="fn">list</span>(s1);  a_list_1.<span class="fn">sort</span>()</span>
+<span class="line">    a_list_2 = <span class="fn">list</span>(s2);  a_list_2.<span class="fn">sort</span>()</span>
+<span class="line">    <span class="com"># 排序後逐字比對，一個不同就 False</span></span>
+<span class="line">    <span class="kw">return</span> a_list_1 逐字等於 a_list_2</span>
+<span class="line"><span class="com"># 迴圈 O(n)，但 sort 是 O(n log n)：貴的那步說了算</span></span></div></div>
+    <div class="info-card"><div class="ic-title">解法 3：Brute Force，O(n!)</div>
+      <div style="font-size:.85rem;line-height:1.9;">列出 s1 全部排列、看 s2 在不在裡面。
+      20 個字元的排列數是 20! ≈ 2.4×10¹⁸：就算一微秒生一個，也要七萬多年。
+      正確、可寫、完全不可用，這種選項的存在是為了提醒你先估量級再動手。</div></div>
+    <div class="info-card"><div class="ic-title">解法 4：Count and Compare，O(n) <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.71rem;">
+<span class="line"><span class="kw">def</span> <span class="fn">anagram_solution_4</span>(s1, s2):</span>
+<span class="line">    c1 = [<span class="num">0</span>] * <span class="num">26</span>   <span class="com"># 26 個字母的計數器</span></span>
+<span class="line">    c2 = [<span class="num">0</span>] * <span class="num">26</span></span>
+<span class="line">    <span class="kw">for</span> ch <span class="kw">in</span> s1:</span>
+<span class="line">        c1[<span class="fn">ord</span>(ch) - <span class="fn">ord</span>(<span class="str">&quot;a&quot;</span>)] += <span class="num">1</span></span>
+<span class="line">    <span class="kw">for</span> ch <span class="kw">in</span> s2:</span>
+<span class="line">        c2[<span class="fn">ord</span>(ch) - <span class="fn">ord</span>(<span class="str">&quot;a&quot;</span>)] += <span class="num">1</span></span>
+<span class="line">    <span class="kw">return</span> c1 == c2   <span class="com"># T(n) = 2n + 26 → O(n)</span></span></div></div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 解法 2 的陷阱</div>
+  <p>解法 2「排序後比較」看起來只有一個迴圈，為什麼不是 O(n)？</p>
+  
+  <div class="quiz-options" id="qAnaOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="迴圈是 O(n)，但前面的 sort 是 O(n log n)：整體由最貴的步驟主導。" onclick="quizCheck('qAna', this)"><span class="opt-letter">(A)</span> 排序本身要 O(n log n)</div><div class="quiz-opt" data-correct="false" data-fb="逐字比較是 O(n)；貴的是排序。" onclick="quizCheck('qAna', this)"><span class="opt-letter">(B)</span> 字串比較是 O(n²)</div><div class="quiz-opt" data-correct="false" data-fb="隱藏成本！呼叫 sort() 不代表成本消失。" onclick="quizCheck('qAna', this)"><span class="opt-letter">(C)</span> 它其實是 O(n)</div>
+  </div>
+  <div class="quiz-feedback" id="qAnaFeedback"></div>
+</div>
+</section>
+
+<section id="lists">
+  <div class="section-number">PART 04 · Python 容器</div>
+  <h2>list 的操作成本：為什麼 append 是攤銷 O(1) <span class="sec-badge">pythonds §2.5–2.6</span></h2>
+  <p><code>list</code> 底層是連續陣列。<strong>索引 O(1)</strong>；
+  <code>append</code> 平常 O(1)，偶爾裝滿要<strong>搬到更大的家</strong>：把搬家成本平均到每次操作，仍是 O(1)（攤銷）。
+  但 <code>insert(0, x)</code> 每次都要整體右移 → O(n)。
+  （下面的動畫用「容量翻倍」示意；CPython 實際的過度配置比例更保守，攤銷 O(1) 的道理相同。）</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="bq-row" id="vecVis" style="min-height:70px;"></div>
+        <div class="mono" id="vecMeta" style="font-size:.82rem;color:var(--muted);"></div>
+        <div class="status-banner" id="vecStatus"><span class="status-icon">›</span><span class="status-text">連按 append 觀察容量成長與搬家。</span></div>
+        <div class="controls-bar">
+          <button class="btn" onclick="vecPush()">append</button>
+          <button class="btn" onclick="vecFront()">insert(0, x)</button>
+          <button class="btn" onclick="vecReset()">重置</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">list 成本表（背這張）</div>
+        <div class="ic-row"><span class="ic-label">a_list[i] 讀寫</span><span class="ic-value">O(1)</span></div>
+        <div class="ic-row"><span class="ic-label">append / pop()</span><span class="ic-value">O(1) 攤銷</span></div>
+        <div class="ic-row"><span class="ic-label">insert(0) / pop(0) / del（前端或中間）</span><span class="ic-value highlight">O(n)</span></div>
+        <div class="ic-row"><span class="ic-label">走訪 / in（無序）</span><span class="ic-value">O(n)</span></div>
+        <div class="ic-row"><span class="ic-label">切片 a_list[a:b]（k 個元素）</span><span class="ic-value">O(k)</span></div>
+        <div class="ic-row"><span class="ic-label">sort</span><span class="ic-value">O(n log n)</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">四種把 0..999 收進 list 的寫法 <span class="ic-badge">CODE</span></div>
+        <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line"><span class="fn">test1</span>: l = l + [i]           <span class="com"># 串接：每次造新 list，最慢</span></span>
+<span class="line"><span class="fn">test2</span>: l.<span class="fn">append</span>(i)          <span class="com"># 攤銷 O(1)</span></span>
+<span class="line"><span class="fn">test3</span>: [i <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1000</span>)] <span class="com"># 生成式，更快</span></span>
+<span class="line"><span class="fn">test4</span>: <span class="fn">list</span>(<span class="fn">range</span>(<span class="num">1000</span>))      <span class="com"># 內建一次到位，最快</span></span></div>
+        <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">講義用 timeit.Timer 對四種寫法各跑 1000 次：串接版慢一個數量級以上（總量是 O(n²)），後三種同級遞快。</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">量出 Big-O 的土方法</div>
+        <div style="font-size:.86rem;line-height:1.9;">把 n 加倍再量一次，看時間變幾倍：
+        接近 1 倍是 O(1)、2 倍是 O(n)、4 倍是 O(n²)。講義用這招驗證了
+        <code>pop()</code> 平坦不動、<code>pop(0)</code> 隨 n 線性爬升，
+        還用 big-o 套件對量測數據自動判定最接近的成長級別。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="hash">
+  <div class="section-number">PART 05 · 雜湊容器</div>
+  <h2>dict 與 set：平均 O(1) 的代價與條件 <span class="sec-badge">pythonds §2.7</span></h2>
+  <p><code>dict</code>（雜湊表）讓「查 key」平均 O(1)：不用排序、不用走訪。
+  細節（hash 函數、碰撞、載入因子）第 5 章展開；本章先記住成本表與<strong>「平均」兩個字的份量</strong>。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div style="overflow-x:auto;">
+        <table class="cmp-table" style="width:100%;font-size:.88rem;">
+          <thead><tr><th>操作</th><th>list（無序）</th><th>list（已排序）</th><th>dict / set</th></tr></thead>
+          <tbody>
+            <tr><td>查找 contains(x)</td><td>O(n)</td><td>O(log n)</td><td><strong>O(1) 平均</strong>／O(n) 最差</td></tr>
+            <tr><td>插入</td><td>O(1) 尾端</td><td>O(n)（挪位）</td><td><strong>O(1) 平均</strong></td></tr>
+            <tr><td>刪除</td><td>O(n)</td><td>O(n)</td><td><strong>O(1) 平均</strong></td></tr>
+            <tr><td>依大小序輸出</td><td>需先排序</td><td>O(n)</td><td>—（保插入序，非大小序）</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="status-banner" id="hashStatus"><span class="status-icon">›</span><span class="status-text">按按鈕模擬「在 10 萬元素中查 1000 次」的操作次數比較。</span></div>
+        <div class="controls-bar"><button class="btn" onclick="hashRace()">▶ 查找次數比賽</button></div>
+        <div class="mono" id="hashOut" style="font-size:.86rem;line-height:2;"></div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">怎麼選容器？</div>
+        <div style="font-size:.87rem;line-height:1.9;">
+        要<strong>次序</strong>（排名、範圍查詢）→ 已排序 list 搭二分搜尋。<br>
+        只要<strong>快速存在性/對應</strong> → <code>set</code>／<code>dict</code>。<br>
+        小資料（&lt; 100）→ 什麼都很快，選最簡單的。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="exercises">
+  <div class="section-number">EXERCISES · 練習</div>
+  <h2>動手驗證 <span class="sec-badge">pythonds §2 綜合</span></h2>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 1 · 主導項</div>
+  <p>T(n) = 3 + 100·log n + 0.001·n² 的 Big-O 是？</p>
+  
+  <div class="quiz-options" id="ex1Options">
+    <div class="quiz-opt" data-correct="true" data-fb="係數 0.001 再小，n² 終究輾壓 100·log n：n=10⁶ 時 n² 項已是 log 項的十億倍級。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> O(n²)</div><div class="quiz-opt" data-correct="false" data-fb="被 100 的大係數騙了：Big-O 看的是成長率，不是係數。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> O(log n)</div><div class="quiz-opt" data-correct="false" data-fb="相加取最大，不是相乘。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> O(n² log n)</div>
+  </div>
+  <div class="quiz-feedback" id="ex1Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 2 · 巢狀但不滿</div>
+  <p><code>for i in range(n): for j in range(i, n): k += 1</code> 執行 k += 1 幾次？Big-O？</p>
+  
+  <div class="quiz-options" id="ex2Options">
+    <div class="quiz-opt" data-correct="true" data-fb="內圈長度 n, n−1, …, 1，總和是三角形數：仍是平方級。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(A)</span> n(n+1)/2 次；O(n²)</div><div class="quiz-opt" data-correct="false" data-fb="除以 2 不會降級：n²/2 還是 O(n²)。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(B)</span> n²/2 次；O(n)</div><div class="quiz-opt" data-correct="false" data-fb="內圈是線性遞減，不是每次砍半：砍半才有 log。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(C)</span> n log n 次；O(n log n)</div>
+  </div>
+  <div class="quiz-feedback" id="ex2Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 4 · 講義練習：翻倍迴圈</div>
+  <p><code>i = 1</code>，<code>while i &lt;= n: for j in range(i): x += 1; i *= 2</code> 的複雜度是？</p>
+  
+  <div class="quiz-options" id="ex4Options">
+    <div class="quiz-opt" data-correct="true" data-fb="外圈 i 走 1, 2, 4, …, n（log n 輪），內圈次數是 1+2+4+…+n = 2n−1。等比級數的和被最後一項主導，總計 O(n)。有 log 不一定就是 O(n log n)，要看內圈怎麼長。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(A)</span> O(n)</div><div class="quiz-opt" data-correct="false" data-fb="那是「每輪都做 n 次、共 log n 輪」的情況。這裡每輪只做 i 次，加總是等比級數。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(B)</span> O(n log n)</div><div class="quiz-opt" data-correct="false" data-fb="log n 是輪數，但每輪的工作量在翻倍，最後一輪就做了 n 次。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(C)</span> O(log n)</div>
+  </div>
+  <div class="quiz-feedback" id="ex4Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 5 · 講義補充練習（課堂跳過）：第 k 小</div>
+  <p>亂序數列找第 k 小的數，要求 O(n log n)。最直接的做法是？</p>
+  
+  <div class="quiz-options" id="ex5Options">
+    <div class="quiz-opt" data-correct="true" data-fb="sort O(n log n) + 索引 O(1)。順帶一提：更快的 O(n) 平均解（quickselect）會在第 5 章快速排序的分割技巧裡現身。" onclick="quizCheck('ex5', this)"><span class="opt-letter">(A)</span> 整串 sort 一次，回傳第 k−1 格</div><div class="quiz-opt" data-correct="false" data-fb="每輪 O(n)、共 k 輪 → O(kn)；k 接近 n 時就是 O(n²)，不合要求。" onclick="quizCheck('ex5', this)"><span class="opt-letter">(B)</span> 跑 k 輪「找最小、刪掉」</div><div class="quiz-opt" data-correct="false" data-fb="雜湊表沒有次序概念，找「第 k 小」反而無從下手。" onclick="quizCheck('ex5', this)"><span class="opt-letter">(C)</span> 全部塞進 dict</div>
+  </div>
+  <div class="quiz-feedback" id="ex5Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 3 · 容器選擇</div>
+  <p>需求：不斷插入單字、隨時問「這個單字出現過嗎」。10⁶ 次操作，選哪個？</p>
+  
+  <div class="quiz-options" id="ex3Options">
+    <div class="quiz-opt" data-correct="true" data-fb="插入與查找都是平均 O(1)，總計 O(10⁶)；list 方案是 O(10¹²) 級。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(A)</span> set</div><div class="quiz-opt" data-correct="false" data-fb="每次 in 是 O(n)，總計平方級：n 大直接卡死。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(B)</span> list + 每次 in</div><div class="quiz-opt" data-correct="false" data-fb="排序每次 O(n log n)，比查找本身還貴。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(C)</span> 每次插入後重新排序 + binary search</div>
+  </div>
+  <div class="quiz-feedback" id="ex3Feedback"></div>
+</div>
+</section>
+
+<section id="reference">
+  <div class="section-number">REFERENCE · 總覽</div>
+  <h2>本章總結 <span class="sec-badge">pythonds §2 總覽</span></h2>
+  <div class="info-box">
+    <span class="info-label">關鍵概念複習</span>
+    ① 演算法分析比 benchmark 穩：數操作、看成長率。<br>
+    ② Big-O 三步驟：數 T(n) → 找主導項 → 丟係數。<br>
+    ③ Anagram 案例：同一題可以有 O(n!)、O(n²)、O(n log n)、O(n) 四種命運。<br>
+    ④ Python 容器成本表要背：list 索引 O(1)／前端插入 O(n)；dict 平均 O(1)。<br>
+    ⑤ 「平均」有前提（好的 hash、健康的載入因子）：第 5 章雜湊專章見。
+  </div>
+  <div style="overflow-x:auto;margin-top:1rem;">
+  <table class="cmp-table" style="width:100%;font-size:.88rem;">
+    <thead><tr><th>本章對應</th><th>pythonds</th><th>自學頁</th></tr></thead>
+    <tbody>
+      <tr><td>什麼是演算法分析</td><td>§2.1–2.2</td><td>P00</td></tr>
+      <tr><td>Big-O</td><td>§2.3</td><td>P01–P02</td></tr>
+      <tr><td>Anagram</td><td>§2.4</td><td>P03</td></tr>
+      <tr><td>Python 集合效能（list）</td><td>§2.5–2.6</td><td>P04</td></tr>
+      <tr><td>Dictionaries</td><td>§2.7</td><td>P05</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section></div>
+<footer>
+  互動式演算法分析教學 · 基於 Problem Solving with Algorithms and Data Structures using Python (pythonds) Ch.2<br>
+  <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);">Designed for NSYSU · Interactive Python self-study</span>
+</footer>
+<script>
+/* ============ shared utilities ============ */
+const $ = id => document.getElementById(id);
+
+function quizCheck(quizId, optEl) {
+  const isCorrect = optEl.dataset.correct === 'true';
+  optEl.parentElement.querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('correct','wrong'));
+  optEl.classList.add(isCorrect ? 'correct' : 'wrong');
+  const fb = $(quizId + 'Feedback');
+  fb.classList.remove('correct','wrong');
+  fb.classList.add('show', isCorrect ? 'correct' : 'wrong');
+  fb.innerHTML = (isCorrect ? '<strong>正確 ✓</strong> ' : '<strong>不對 ✗</strong> ') + (optEl.dataset.fb || '');
+}
+
+function hlLine(rootId, n) {
+  const root = $(rootId);
+  if (!root) return;
+  root.querySelectorAll('.line').forEach(l => l.classList.remove('active'));
+  if (n != null) {
+    const line = root.querySelector(`.line[data-l="${n}"]`);
+    if (line) line.classList.add('active');
+  }
+}
+
+/* step player: frames = [{...}], apply(frame) renders */
+class Player {
+  constructor({frames, apply, delayInput, onDone}) {
+    this.frames = frames; this.apply = apply;
+    this.delayInput = delayInput; this.i = -1; this.timer = null;
+    this.onDone = onDone || (()=>{});
+  }
+  step() {
+    if (this.i + 1 >= this.frames.length) { this.stop(); this.onDone(); return; }
+    this.i += 1; this.apply(this.frames[this.i]);
+  }
+  play() {
+    this.stop();
+    const tick = () => {
+      if (this.i + 1 >= this.frames.length) { this.stop(); this.onDone(); return; }
+      this.step();
+      this.timer = setTimeout(tick, this.delayInput ? parseInt(this.delayInput.value,10) : 700);
+    };
+    tick();
+  }
+  stop() { if (this.timer) { clearTimeout(this.timer); this.timer = null; } }
+  reset() { this.stop(); this.i = -1; if (this.frames.length) this.apply(this.frames[0]); }
+}
+
+function setStatus(id, html) {
+  const el = $(id); if (el) el.querySelector('.status-text').innerHTML = html;
+}
+
+/* vertical box stack renderer (DOM) */
+function renderBoxStack(containerId, items, opts={}) {
+  const el = $(containerId); if (!el) return;
+  const hl = opts.highlight ?? -1;   // index from top (0 = top)
+  el.innerHTML = '';
+  const label = document.createElement('div');
+  label.className = 'bs-toplabel';
+  label.textContent = items.length ? 'top ↓' : '(empty)';
+  el.appendChild(label);
+  items.slice().reverse().forEach((v, idx) => {
+    const d = document.createElement('div');
+    d.className = 'bs-item' + (idx === hl ? ' bs-hl' : '');
+    d.textContent = v;
+    el.appendChild(d);
+  });
+}
+
+/* horizontal queue renderer: front at left */
+function renderBoxQueue(containerId, items, opts={}) {
+  const el = $(containerId); if (!el) return;
+  el.innerHTML = '';
+  const front = document.createElement('div');
+  front.className = 'bq-label'; front.textContent = items.length ? 'front →' : '(empty)';
+  el.appendChild(front);
+  items.forEach((v, idx) => {
+    const d = document.createElement('div');
+    d.className = 'bq-item' + (idx === (opts.highlight ?? -1) ? ' bs-hl' : '');
+    d.textContent = v;
+    el.appendChild(d);
+  });
+  const rear = document.createElement('div');
+  rear.className = 'bq-label'; rear.textContent = items.length ? '← rear' : '';
+  el.appendChild(rear);
+}
+
+/* floating nav scroll spy */
+(function setupNav() {
+  const nav = $('floatNav');
+  const links = nav.querySelectorAll('a[data-target]');
+  const sections = Array.from(links).map(a => document.getElementById(a.dataset.target)).filter(Boolean);
+  function update() {
+    const y = window.scrollY + window.innerHeight * 0.3;
+    let active = sections[0]?.id;
+    for (const s of sections) if (s.offsetTop <= y) active = s.id;
+    links.forEach(a => a.classList.toggle('active', a.dataset.target === active));
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+
+/* ---------- P00 sum compare ---------- */
+function sumcmpRun() {
+  const n = parseInt($('sumcmpN').value, 10);
+  const gauss = 3;
+  $('sumcmpOut').innerHTML =
+    `迴圈法：<strong>${n.toLocaleString()}</strong> 次加法<br>` +
+    `高斯公式：<strong>3</strong> 個運算（乘、加、除）<br>` +
+    `比值：<strong>${(n/gauss).toLocaleString(undefined,{maximumFractionDigits:0})}×</strong>`;
+  setStatus('sumcmpStatus', 'n 增加 100 倍，迴圈法工作量也增加 100 倍；公式法不動如山：這就是 O(n) 與 O(1) 的差別。');
+}
+sumcmpRun();
+
+/* ---------- P02 growth lab ---------- */
+const GFUNCS = {
+  logn:  {f: n => Math.log2(Math.max(n,1)), color: '#1a6b4a', label: 'log n'},
+  n:     {f: n => n,                        color: '#2c3e7a', label: 'n'},
+  nlogn: {f: n => n * Math.log2(Math.max(n,1)), color: '#e67e22', label: 'n log n'},
+  n2:    {f: n => n * n,                    color: '#c0392b', label: 'n²'},
+  exp2:  {f: n => Math.pow(2, n),           color: '#8e44ad', label: '2ⁿ'},
+};
+function growthDraw() {
+  const cv = $('growthCanvas'), ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height, pad = 42;
+  ctx.clearRect(0,0,W,H);
+  const maxN = parseInt($('growthMax').value, 10);
+  const active = Array.from(document.querySelectorAll('.gcb:checked')).map(c => c.value);
+  let maxY = 10;
+  active.forEach(k => { const v = GFUNCS[k].f(maxN); if (v < 1e6 && v > maxY) maxY = v; });
+  maxY = Math.min(maxY, 1e6);
+  // axes
+  ctx.strokeStyle = '#999'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(pad, 10); ctx.lineTo(pad, H-pad); ctx.lineTo(W-10, H-pad); ctx.stroke();
+  ctx.fillStyle = '#666'; ctx.font = '12px JetBrains Mono';
+  ctx.fillText('n →', W-40, H-pad+16);
+  ctx.fillText('T(n)', 6, 20);
+  ctx.fillText(String(maxN), W-30, H-pad+30);
+  active.forEach(k => {
+    const {f, color, label} = GFUNCS[k];
+    ctx.strokeStyle = color; ctx.lineWidth = 2.4; ctx.beginPath();
+    let started = false;
+    for (let px = 0; px <= W - pad - 12; px++) {
+      const n = 1 + (px / (W - pad - 12)) * (maxN - 1);
+      const y = f(n);
+      if (y > maxY) break;
+      const X = pad + px, Y = (H - pad) - (y / maxY) * (H - pad - 16);
+      if (!started) { ctx.moveTo(X, Y); started = true; } else ctx.lineTo(X, Y);
+    }
+    ctx.stroke();
+    // label at end of curve
+    let nEnd = maxN, yEnd = f(maxN);
+    while (yEnd > maxY && nEnd > 1) { nEnd -= maxN/100; yEnd = f(nEnd); }
+    const X = pad + ((nEnd - 1)/(maxN - 1)) * (W - pad - 12), Y = (H - pad) - (yEnd / maxY) * (H - pad - 16);
+    ctx.fillStyle = color; ctx.fillText(label, Math.min(X, W-70), Math.max(14, Y - 6));
+  });
+}
+document.querySelectorAll('.gcb').forEach(c => c.addEventListener('change', growthDraw));
+$('growthMax').addEventListener('input', growthDraw);
+growthDraw();
+
+/* ---------- P03 anagram sol.4 ---------- */
+let anaPlayer = null;
+function anaFrames(s1, s2) {
+  const frames = [];
+  const c1 = {}, c2 = {};
+  for (let i = 0; i < s1.length; i++) {
+    c1[s1[i]] = (c1[s1[i]] || 0) + 1;
+    frames.push({i1:i, i2:-1, c1:{...c1}, c2:{...c2}, msg:`c1['${s1[i]}'] → ${c1[s1[i]]}`, line:7});
+  }
+  for (let i = 0; i < s2.length; i++) {
+    c2[s2[i]] = (c2[s2[i]] || 0) + 1;
+    frames.push({i1:-1, i2:i, c1:{...c1}, c2:{...c2}, msg:`c2['${s2[i]}'] → ${c2[s2[i]]}`, line:8});
+  }
+  const keys = new Set([...Object.keys(c1), ...Object.keys(c2)]);
+  let ok = true;
+  for (const k of keys) if ((c1[k]||0) !== (c2[k]||0)) ok = false;
+  frames.push({i1:-1, i2:-1, c1, c2, line:9,
+    msg: ok ? '<strong>26 格計數全等 → 是變位詞 ✓（總工作量 2n + 26 → O(n)）</strong>'
+            : '<strong>計數不等 → 不是變位詞 ✗</strong>'});
+  return frames;
+}
+function anaApply(f) {
+  const s1 = $('anaS1').value, s2 = $('anaS2').value;
+  const paint = (id, s, cur) => {
+    const el = $(id); el.innerHTML = '';
+    for (let i = 0; i < s.length; i++) {
+      const d = document.createElement('div');
+      d.className = 'char-cell' + (i === cur ? ' char-cur' : '');
+      d.textContent = s[i]; el.appendChild(d);
+    }
+  };
+  paint('anaStrip1', s1, f.i1); paint('anaStrip2', s2, f.i2);
+  const fmt = o => Object.entries(o).sort().map(([k,v]) => `${k}:${v}`).join(' ');
+  $('anaCount').innerHTML = `c1 = { ${fmt(f.c1)} }<br>c2 = { ${fmt(f.c2)} }`;
+  setStatus('anaStatus', f.msg); hlLine('anaCode', f.line);
+}
+function anaStart() {
+  anaPlayer = new Player({frames: anaFrames($('anaS1').value.toLowerCase(), $('anaS2').value.toLowerCase()), apply: anaApply});
+  anaPlayer.reset(); anaPlayer.play();
+}
+
+/* ---------- P04 list growth ---------- */
+let vec = {size: 0, cap: 1, moves: 0};
+function vecRender(msg, hlAll=false) {
+  const el = $('vecVis'); el.innerHTML = '';
+  for (let i = 0; i < vec.cap; i++) {
+    const d = document.createElement('div');
+    d.className = 'bq-item' + (hlAll && i < vec.size ? ' bs-hl' : '');
+    d.style.background = i < vec.size ? (hlAll ? '' : '#5b7eb8') : '#e8e2d6';
+    d.style.color = i < vec.size ? '#fff' : 'var(--muted)';
+    d.textContent = i < vec.size ? `a${i}` : '·';
+    el.appendChild(d);
+  }
+  $('vecMeta').textContent = `size = ${vec.size}, capacity = ${vec.cap}, 累計搬移元素 = ${vec.moves}`;
+  if (msg) setStatus('vecStatus', msg);
+}
+function vecPush() {
+  if (vec.size === vec.cap) {
+    vec.moves += vec.size;
+    vec.cap *= 2;
+    vec.size++;
+    vecRender(`裝滿了！配置 ${vec.cap} 格新家、搬移 ${vec.size-1} 個元素，再放入新元素：這次很貴，但很少發生。`, true);
+  } else {
+    vec.size++;
+    vecRender('還有空位：直接放進尾端，O(1)：這就是 append 的日常。');
+  }
+}
+function vecFront() {
+  if (vec.size === vec.cap) { vec.cap *= 2; }
+  vec.moves += vec.size;
+  vec.size++;
+  vecRender(`insert(0, x)：${vec.size-1} 個元素全部右移一格：每次都是 O(n)！`, true);
+}
+function vecReset() { vec = {size:0, cap:1, moves:0}; vecRender('已重置：size 0 / capacity 1。'); }
+vecReset();
+
+/* ---------- P05 hash race ---------- */
+function hashRace() {
+  const n = 100000, q = 1000;
+  const linear = n/2 * q;
+  const binary = Math.ceil(Math.log2(n)) * q;
+  const hash = 1.2 * q;
+  $('hashOut').innerHTML =
+    `list 線性查找（in）：約 <strong>${linear.toLocaleString()}</strong> 次比較<br>` +
+    `排序 + binary search：約 <strong>${binary.toLocaleString()}</strong> 次比較<br>` +
+    `set／dict：約 <strong>${Math.round(hash).toLocaleString()}</strong> 次（平均每查 1.2 次探查）`;
+  setStatus('hashStatus', '同樣 1000 次查詢，三種容器差了 4 個數量級：資料一大，容器選擇就是生死題。');
+}
+</script>
+</body>
+</html>

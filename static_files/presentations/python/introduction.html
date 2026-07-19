@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python 導論 — Introduction Interactive</title>
+<script>
+  MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1a2e;--paper:#f7f3eb;--accent:#c0392b;--accent2:#2c3e7a;--accent3:#1a6b4a;
+  --muted:#8a8578;--card:#fffdf7;--card-border:#e8e2d6;--highlight:#fff3cd;
+  --code-bg:#2d2d3f;--code-fg:#e8e6df;
+  --node-white:#ffffff;--node-gray:#bdc3c7;--node-black:#34495e;
+  --node-current:#f39c12;--node-found:#16a085;--node-start:#9b59b6;
+  --edge-default:#95a5a6;--edge-tree:#27ae60;--edge-explore:#f39c12;--edge-mst:#1a6b4a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.9;font-size:17px;}
+
+/* Hero */
+.hero{min-height:62vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem;position:relative;overflow:hidden;background:linear-gradient(170deg,#1a1a2e 0%,#2c3e7a 40%,#1a6b4a 100%);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.06) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.04) 0%,transparent 40%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);}
+.hero-content{position:relative;z-index:1;max-width:860px;}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;color:#fff;letter-spacing:.04em;line-height:1.3;margin-bottom:1rem;}
+.hero h1 .green{color:#2ecc71;}
+.hero h1 .blue{color:#5dade2;}
+.hero h1 .orange{color:#f39c12;}
+.hero h1 .purple{color:#bb8fce;}
+.hero .subtitle{font-size:clamp(.95rem,2.2vw,1.2rem);color:rgba(255,255,255,.65);font-weight:300;margin-bottom:2rem;}
+.hero .big-formula{color:#2ecc71;background:rgba(0,0,0,.3);padding:.8rem 2rem;border-radius:12px;display:inline-block;border:1px solid rgba(255,255,255,.1);margin-bottom:2rem;backdrop-filter:blur(4px);font-size:1.05rem;}
+.scroll-hint{color:rgba(255,255,255,.4);font-size:.9rem;animation:bounce 2s infinite;}
+.scroll-hint span{display:block;font-size:1.4rem;margin-top:.3rem;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+/* Hero mini-graph illustration */
+.hero-graph{position:absolute;right:5%;top:50%;transform:translateY(-50%);opacity:.18;pointer-events:none;}
+@media(max-width:900px){.hero-graph{display:none;}}
+
+/* Layout */
+.container{max-width:1180px;margin:0 auto;padding:3rem 1.5rem;}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.5rem;}
+h2{font-family:'Noto Serif TC',serif;font-size:1.65rem;font-weight:700;color:var(--ink);margin-bottom:1.2rem;line-height:1.4;}
+h3{font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:700;color:var(--accent2);margin:1.4rem 0 .8rem;}
+section{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--card-border);}
+section:last-of-type{border-bottom:none;}
+p{margin-bottom:1rem;}
+code{font-family:'JetBrains Mono',monospace;font-size:.92em;background:rgba(44,62,122,.08);padding:1px 6px;border-radius:4px;color:var(--accent2);}
+strong{color:var(--ink);}
+
+/* TOC */
+.toc{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:1.2rem 1.5rem;margin:1rem 0 2rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.toc-title{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.7rem;}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.5rem .8rem;}
+.toc-grid a{color:var(--accent2);text-decoration:none;font-size:.9rem;padding:.3rem 0;display:flex;align-items:center;gap:.4rem;transition:color .2s;}
+.toc-grid a:hover{color:var(--accent);}
+.toc-grid a .toc-num{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);min-width:34px;}
+
+/* Viz layout */
+.viz-layout{display:grid;grid-template-columns:1fr 320px;gap:1.3rem;margin:1.2rem 0;align-items:start;}
+@media(max-width:900px){.viz-layout{grid-template-columns:1fr;}}
+
+.viz-panel{background:linear-gradient(160deg,#fffdf7 0%,#f4efe3 100%);border:1px solid var(--card-border);border-radius:12px;padding:1rem;box-shadow:0 4px 18px rgba(0,0,0,.06);position:relative;}
+
+/* Graph SVG canvas */
+.graph-canvas{position:relative;width:100%;height:380px;background:#fafafa;border-radius:8px;overflow:hidden;border:1px solid #ececec;}
+.graph-canvas svg{width:100%;height:100%;display:block;}
+
+/* SVG elements styles */
+.graph-edge{stroke:var(--edge-default);stroke-width:2;fill:none;transition:stroke .25s, stroke-width .25s;}
+.graph-edge.tree{stroke:var(--edge-tree);stroke-width:3.5;}
+.graph-edge.exploring{stroke:var(--edge-explore);stroke-width:3.5;stroke-dasharray:5 4;animation:dash 1s linear infinite;}
+.graph-edge.mst{stroke:var(--edge-mst);stroke-width:4;}
+.graph-edge.path{stroke:var(--accent);stroke-width:4;}
+.graph-edge.dotted{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:3 4;}
+@keyframes dash{to{stroke-dashoffset:-18;}}
+
+.edge-label{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;fill:var(--ink);pointer-events:none;}
+.edge-label-bg{fill:#fafafa;stroke:#ececec;stroke-width:1;}
+
+.graph-node{cursor:pointer;}
+.graph-node circle{fill:var(--node-white);stroke:var(--ink);stroke-width:2;transition:fill .25s, stroke .25s, r .2s;}
+.graph-node.gray circle{fill:var(--node-gray);}
+.graph-node.black circle{fill:var(--node-black);stroke:var(--node-black);}
+.graph-node.current circle{fill:var(--node-current);stroke:#d68910;stroke-width:3;}
+.graph-node.start circle{fill:var(--node-start);stroke:#7d3c98;stroke-width:3;}
+.graph-node.found circle{fill:var(--node-found);stroke:#117a65;stroke-width:3;}
+.graph-node.in-mst circle{fill:#82e0aa;stroke:var(--accent3);stroke-width:3;}
+.graph-node text.node-key{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;fill:var(--ink);text-anchor:middle;dominant-baseline:central;pointer-events:none;}
+.graph-node.black text.node-key{fill:#fff;}
+.graph-node.current text.node-key{fill:#fff;}
+.graph-node.start text.node-key{fill:#fff;}
+.graph-node.found text.node-key{fill:#fff;}
+.graph-node text.node-meta{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;fill:var(--accent);text-anchor:middle;pointer-events:none;}
+
+/* Status banner */
+.status-banner{margin-top:.8rem;padding:.7rem 1rem;background:var(--code-bg);color:#fff;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.85rem;min-height:42px;display:flex;align-items:center;gap:.6rem;}
+.status-banner .status-icon{color:#2ecc71;font-weight:700;}
+.status-banner .status-text{flex:1;}
+
+/* Controls */
+.controls-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--card-border);}
+.btn{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:600;padding:.45rem 1rem;border-radius:6px;border:none;cursor:pointer;transition:all .2s;}
+.btn-play{background:var(--accent3);color:#fff;}
+.btn-play:hover{background:#22845c;}
+.btn-play.active{background:var(--accent);}
+.btn-step{background:var(--accent2);color:#fff;}
+.btn-step:hover{background:#1f2e5f;}
+.btn-step:disabled{background:#ccc;cursor:not-allowed;}
+.btn-reset{background:var(--card-border);color:var(--ink);}
+.btn-reset:hover{background:#ccc;}
+.btn-toggle{background:var(--accent2);color:#fff;}
+.btn-toggle:hover{background:#1f2e5f;}
+.btn-toggle.off{background:#bbb;color:#555;}
+.btn-shuffle{background:#8e44ad;color:#fff;}
+.btn-shuffle:hover{background:#6c3485;}
+
+/* Slider row */
+.slider-row{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;background:var(--paper);border-radius:8px;margin-bottom:.5rem;}
+.slider-row .slider-label{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent2);font-weight:600;min-width:60px;}
+.slider-row input[type="range"]{flex:1;accent-color:var(--accent3);height:5px;cursor:pointer;}
+.slider-row .slider-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--accent);font-weight:600;min-width:60px;text-align:right;}
+
+/* Side panel */
+.side-panel{display:flex;flex-direction:column;gap:.85rem;}
+.info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.info-card .ic-title{font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem;display:flex;align-items:center;justify-content:space-between;}
+.info-card .ic-title .ic-badge{font-size:.7rem;color:#fff;background:var(--accent3);padding:1px 7px;border-radius:3px;letter-spacing:.05em;font-weight:700;}
+.info-card .ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.83rem;padding:.2rem 0;}
+.info-card .ic-label{color:var(--muted);}
+.info-card .ic-value{color:var(--ink);font-weight:600;}
+.info-card .ic-value.highlight{color:var(--accent);}
+.info-card .ic-value.big{font-size:1.4rem;color:var(--accent2);}
+
+/* Stats grid */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.4rem;}
+.stat-tile{background:var(--paper);border-radius:8px;padding:.5rem .7rem;text-align:center;}
+.stat-tile .stat-label{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;}
+.stat-tile .stat-value{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;color:var(--accent2);}
+
+/* Queue / Stack / PQ visualization */
+.ds-display{font-family:'JetBrains Mono',monospace;font-size:.8rem;background:var(--paper);border-radius:6px;padding:.5rem .7rem;min-height:36px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;border:1px dashed var(--card-border);}
+.ds-display .ds-empty{color:var(--muted);font-style:italic;}
+.ds-item{background:var(--accent2);color:#fff;padding:2px 8px;border-radius:4px;font-weight:600;}
+.ds-item.front{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-item.top{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-item.pq{background:var(--accent3);}
+.ds-item.pq.min{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-arrow{color:var(--muted);}
+
+/* Pseudo code */
+.pseudo-code{background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:.85rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.6;overflow-x:auto;}
+.pseudo-code .line{padding:1px 4px;border-radius:3px;display:block;white-space:pre;}
+.pseudo-code .line.active{background:rgba(243,156,18,.3);color:#fff;border-left:3px solid var(--node-current);padding-left:6px;}
+.pseudo-code .kw{color:#ff79c6;}
+.pseudo-code .fn{color:#50fa7b;}
+.pseudo-code .num{color:#bd93f9;}
+.pseudo-code .com{color:#6272a4;font-style:italic;}
+.pseudo-code .str{color:#f1fa8c;}
+
+/* Adjacency table */
+.adj-display{margin:.5rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.adj-matrix{border-collapse:collapse;margin:.5rem auto;}
+.adj-matrix td,.adj-matrix th{border:1px solid var(--card-border);padding:6px 10px;text-align:center;min-width:34px;background:#fff;}
+.adj-matrix th{background:var(--accent2);color:#fff;font-weight:700;}
+.adj-matrix td.zero{color:#ccc;}
+.adj-matrix td.nonzero{background:#eafaf1;color:var(--accent3);font-weight:700;}
+.adj-matrix td.highlight{background:#fff3cd;}
+.adj-list{background:var(--card);border:1px solid var(--card-border);border-radius:8px;padding:.7rem 1rem;}
+.adj-list .adj-row{padding:3px 0;border-bottom:1px dashed var(--card-border);}
+.adj-list .adj-row:last-child{border-bottom:none;}
+.adj-list .adj-key{color:var(--accent);font-weight:700;display:inline-block;min-width:32px;}
+.adj-list .adj-arrow{color:var(--muted);margin:0 6px;}
+.adj-list .adj-neighbor{background:#eef2ff;color:var(--accent2);padding:1px 8px;border-radius:4px;margin:1px 3px;display:inline-block;font-weight:600;}
+
+/* Chess board for Knight's tour */
+.chess-board{display:grid;background:#fff;border:2px solid var(--ink);border-radius:6px;overflow:hidden;margin:.5rem auto;width:fit-content;}
+.chess-cell{display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:700;position:relative;transition:background .2s;}
+.chess-cell.light{background:#f0d9b5;color:#666;}
+.chess-cell.dark{background:#b58863;color:#fff;}
+.chess-cell.visited{background:#27ae60 !important;color:#fff;}
+.chess-cell.current{background:#f39c12 !important;color:#fff;box-shadow:inset 0 0 0 3px #d68910;}
+.chess-cell.start{background:#9b59b6 !important;color:#fff;}
+.chess-cell .knight{font-size:1.4em;line-height:1;}
+.chess-cell .step-num{font-size:.7em;}
+
+/* Info box */
+.info-box{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1.1rem 1.4rem;margin:1.3rem 0;position:relative;}
+.info-box .info-label{position:absolute;top:-11px;left:14px;background:var(--accent2);color:#fff;font-size:.74rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.05em;}
+.info-box.warm{background:#fef5e7;border-color:#d68910;}
+.info-box.warm .info-label{background:#d68910;}
+.info-box.green{background:#eafaf1;border-color:var(--accent3);}
+.info-box.green .info-label{background:var(--accent3);}
+.info-box.purple{background:#f4ecf7;border-color:#8e44ad;}
+.info-box.purple .info-label{background:#8e44ad;}
+
+/* Pill labels */
+.pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:4px;margin:0 .15rem;vertical-align:1px;}
+.pill-blue{background:rgba(41,128,185,.12);color:#2980b9;border:1px solid rgba(41,128,185,.3);}
+.pill-red{background:rgba(192,57,43,.12);color:var(--accent);border:1px solid rgba(192,57,43,.3);}
+.pill-green{background:rgba(39,174,96,.12);color:var(--accent3);border:1px solid rgba(39,174,96,.3);}
+.pill-orange{background:rgba(243,156,18,.12);color:#d68910;border:1px solid rgba(243,156,18,.3);}
+.pill-purple{background:rgba(142,68,173,.12);color:#8e44ad;border:1px solid rgba(142,68,173,.3);}
+.pill-gray{background:rgba(0,0,0,.06);color:var(--muted);border:1px solid rgba(0,0,0,.12);}
+
+/* Comparison table */
+.cmp-table{width:100%;border-collapse:collapse;font-size:.86rem;margin:.8rem 0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.cmp-table th{background:var(--accent2);color:#fff;padding:.6rem .8rem;text-align:center;font-weight:600;font-size:.82rem;}
+.cmp-table td{padding:.6rem .8rem;text-align:center;border-bottom:1px solid var(--card-border);font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.cmp-table td:first-child{font-family:'Noto Sans TC',sans-serif;color:var(--accent2);font-weight:600;text-align:left;}
+.cmp-table tr:last-child td{border-bottom:none;}
+.cmp-table tr:nth-child(even){background:rgba(0,0,0,.015);}
+.cmp-table .best{color:var(--accent3);font-weight:700;}
+.cmp-table .worst{color:var(--accent);font-weight:700;}
+
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:.6rem;margin:.6rem 0;font-family:'JetBrains Mono',monospace;font-size:.75rem;}
+.legend-item{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .5rem;background:var(--paper);border-radius:5px;}
+.legend-item .lg-swatch{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--ink);}
+.legend-item .lg-edge{width:18px;height:3px;border-radius:2px;}
+
+/* Quiz */
+.quiz-box{background:var(--card);border:2px solid var(--accent2);border-radius:12px;padding:1.3rem 1.5rem;margin:1.5rem 0;}
+.quiz-box .quiz-label{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);font-weight:700;letter-spacing:.1em;margin-bottom:.5rem;}
+.quiz-options{display:flex;flex-direction:column;gap:.5rem;margin:.8rem 0;}
+.quiz-opt{display:flex;align-items:center;gap:.6rem;padding:.55rem .9rem;background:var(--paper);border:2px solid var(--card-border);border-radius:8px;cursor:pointer;transition:all .2s;font-family:'JetBrains Mono',monospace;font-size:.86rem;}
+.quiz-opt:hover{border-color:var(--accent2);}
+.quiz-opt .opt-letter{font-weight:700;color:var(--accent2);min-width:22px;}
+.quiz-opt.correct{background:#eafaf1;border-color:var(--accent3);}
+.quiz-opt.correct .opt-letter{color:var(--accent3);}
+.quiz-opt.wrong{background:#fef5e7;border-color:var(--accent);}
+.quiz-opt.wrong .opt-letter{color:var(--accent);}
+.quiz-feedback{margin-top:.7rem;padding:.7rem 1rem;border-radius:8px;font-size:.88rem;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.correct{background:#eafaf1;color:var(--accent3);border-left:4px solid var(--accent3);}
+.quiz-feedback.wrong{background:#fef5e7;color:var(--accent);border-left:4px solid var(--accent);}
+
+/* Floating sidebar navigation */
+.float-nav{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:2px;background:rgba(255,253,250,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--card-border);border-radius:12px;padding:10px 7px;box-shadow:0 6px 24px rgba(0,0,0,.10);font-family:'JetBrains Mono',monospace;max-height:88vh;overflow-y:auto;transition:padding .25s ease;}
+.float-nav .fn-title{font-family:'Noto Serif TC',serif;font-weight:700;font-size:.68rem;color:var(--accent2);text-align:center;letter-spacing:1.5px;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--card-border);max-width:0;overflow:hidden;transition:max-width .25s ease;}
+.float-nav:hover .fn-title{max-width:220px;}
+.float-nav a{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:7px;color:var(--ink);text-decoration:none;white-space:nowrap;transition:all .2s ease;border-left:3px solid transparent;}
+.float-nav a .fn-num{font-weight:700;font-size:.66rem;color:var(--muted);letter-spacing:.4px;flex-shrink:0;width:30px;text-align:left;}
+.float-nav a .fn-name{font-family:'Noto Sans TC',sans-serif;font-size:.76rem;font-weight:500;max-width:0;overflow:hidden;transition:max-width .25s ease,padding .25s ease;padding:0;}
+.float-nav:hover a .fn-name{max-width:220px;padding-left:2px;}
+.float-nav a:hover{background:var(--card);}
+.float-nav a.active{background:var(--accent2);color:#fff;border-left-color:var(--accent);box-shadow:0 2px 6px rgba(192,57,43,.25);}
+.float-nav a.active .fn-num{color:rgba(255,255,255,.85);}
+.float-nav a.active .fn-name{color:#fff;}
+.float-nav .fn-top{margin-top:6px;padding-top:6px;border-top:1px solid var(--card-border);justify-content:center;}
+.float-nav .fn-top .fn-num{width:auto;color:var(--accent2);font-size:.78rem;}
+@media(max-width:768px){
+  .float-nav{right:8px;top:auto;bottom:14px;transform:none;padding:6px 5px;max-height:70vh;}
+  .float-nav .fn-title{display:none;}
+  .float-nav a{padding:4px 7px;}
+  .float-nav a .fn-num{width:26px;font-size:.62rem;}
+}
+
+footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border);}
+
+/* Distance / table inside graph viz */
+.vert-table{margin-top:.6rem;width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:.78rem;}
+.vert-table th,.vert-table td{padding:4px 6px;text-align:center;border:1px solid var(--card-border);}
+.vert-table th{background:var(--accent2);color:#fff;font-weight:600;font-size:.74rem;}
+.vert-table td.tcell-current{background:#fff3cd;font-weight:700;color:var(--accent);}
+.vert-table td.tcell-done{background:#eafaf1;color:var(--accent3);}
+.vert-table td.tcell-inf{color:#ccc;}
+.sec-badge{font-size:.6em;color:var(--muted);border:1px solid var(--card-border);background:var(--card);padding:2px 10px;border-radius:999px;vertical-align:middle;margin-left:.6rem;font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.02em;white-space:nowrap;}
+
+/* Phase 8 shared widgets */
+.bs-stack{display:flex;flex-direction:column-reverse;align-items:center;gap:4px;min-height:180px;justify-content:flex-start;padding:.6rem;}
+.bs-item{width:110px;text-align:center;padding:.4rem .6rem;background:#5b7eb8;color:#fff;border-radius:6px;font-family:'JetBrains Mono',monospace;font-weight:600;box-shadow:0 2px 5px rgba(0,0,0,.15);}
+.bs-hl{background:#f39c12;}
+.bs-toplabel,.bq-label{font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.bq-row{display:flex;align-items:center;gap:6px;min-height:64px;flex-wrap:wrap;padding:.4rem;}
+.bq-item{min-width:52px;text-align:center;padding:.45rem .5rem;background:#5b7eb8;color:#fff;border-radius:6px;font-family:'JetBrains Mono',monospace;font-weight:600;}
+.char-strip{display:flex;gap:3px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;padding:.4rem 0;}
+.char-cell{min-width:30px;text-align:center;padding:.35rem .25rem;border:1px solid var(--card-border);border-radius:5px;background:var(--card);}
+.char-cur{background:#f39c12;color:#fff;border-color:#f39c12;}
+.char-done{background:#e8f5ec;color:#1a6b4a;border-color:#bfe3cd;}
+.char-bad{background:#c0392b;color:#fff;border-color:#c0392b;}
+.token-out{display:flex;gap:4px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;min-height:40px;padding:.3rem 0;}
+.tok{padding:.3rem .55rem;border-radius:5px;background:#2c3e7a;color:#fff;font-weight:600;}
+.tok-op{background:#8e44ad;}
+.tok-new{outline:3px solid #f39c12;}
+.mono{font-family:'JetBrains Mono',monospace;}
+</style>
+</head>
+<body>
+<nav class="float-nav" id="floatNav" aria-label="章節導覽">
+  <div class="fn-title">章節導覽</div>
+  <a href="#prologue" data-target="prologue"><span class="fn-num">P00</span><span class="fn-name">為什麼學資料結構？</span></a>
+  <a href="#types" data-target="types"><span class="fn-num">P01</span><span class="fn-name">原子型別與名字</span></a>
+  <a href="#collections" data-target="collections"><span class="fn-num">P02</span><span class="fn-name">集合型別</span></a>
+  <a href="#io" data-target="io"><span class="fn-num">P03</span><span class="fn-name">輸入與輸出</span></a>
+  <a href="#control" data-target="control"><span class="fn-num">P04</span><span class="fn-name">控制結構</span></a>
+  <a href="#exceptions" data-target="exceptions"><span class="fn-num">P05</span><span class="fn-name">例外處理</span></a>
+  <a href="#functions" data-target="functions"><span class="fn-num">P06</span><span class="fn-name">函式與傳參</span></a>
+  <a href="#classes" data-target="classes"><span class="fn-num">P07</span><span class="fn-name">類別：Fraction</span></a>
+  <a href="#inherit" data-target="inherit"><span class="fn-num">P08</span><span class="fn-name">繼承：邏輯閘</span></a>
+  <a href="#exercises" data-target="exercises"><span class="fn-num">EX</span><span class="fn-name">練習題</span></a>
+  <a href="#reference" data-target="reference"><span class="fn-num">REF</span><span class="fn-name">總覽與詞彙</span></a>
+  <a href="#top" class="fn-top" title="回到頂端"><span class="fn-num">↑ TOP</span></a>
+</nav>
+
+<div class="hero" id="top">
+  <div class="hero-grid"></div>
+  <svg class="hero-graph" width="320" height="250" viewBox="0 0 320 250">
+  <g stroke="#fff" stroke-width="2.5" fill="none" opacity=".9">
+    <rect x="45" y="40" width="230" height="60" rx="9"/>
+    <rect x="45" y="140" width="100" height="60" rx="9"/>
+    <rect x="175" y="140" width="100" height="60" rx="9"/>
+    <path d="M160 100 v18 m0 0 l-60 22 m60-22 l60 22"/>
+  </g>
+  <g fill="#fff" opacity=".9"><circle cx="160" cy="70" r="7"/><circle cx="95" cy="170" r="7"/><circle cx="225" cy="170" r="7"/></g>
+</svg>
+  <div class="hero-content">
+    <h1><span class="blue">Python</span> 導論：物件、<span class="orange">名字</span>與類別</h1>
+    <div class="subtitle">pythonds Chapter 1 — Introduction（對應講義 01）</div>
+    <div class="big-formula">ADT｜原子型別｜名字綁定｜五種集合｜f-string｜控制結構｜例外｜Fraction｜邏輯閘</div>
+    <div class="scroll-hint">向下捲動開始互動<span>↓</span></div>
+  </div>
+</div>
+
+<div class="container">
+<div class="toc">
+  <div class="toc-title">CONTENTS · 內容目錄</div>
+  <div class="toc-grid">
+    <a href="#prologue"><span class="toc-num">P00</span>為什麼學資料結構？</a>
+    <a href="#types"><span class="toc-num">P01</span>原子型別與名字</a>
+    <a href="#collections"><span class="toc-num">P02</span>集合型別</a>
+    <a href="#io"><span class="toc-num">P03</span>輸入與輸出</a>
+    <a href="#control"><span class="toc-num">P04</span>控制結構</a>
+    <a href="#exceptions"><span class="toc-num">P05</span>例外處理</a>
+    <a href="#functions"><span class="toc-num">P06</span>函式與傳參</a>
+    <a href="#classes"><span class="toc-num">P07</span>類別：Fraction</a>
+    <a href="#inherit"><span class="toc-num">P08</span>繼承：邏輯閘</a>
+    <a href="#exercises"><span class="toc-num">EX</span>練習題</a>
+    <a href="#reference"><span class="toc-num">REF</span>總覽與詞彙</a>
+  </div>
+</div>
+
+<section id="prologue">
+  <div class="section-number">PROLOGUE · 開場</div>
+  <h2>演算法、抽象化，還有這門課要帶你去哪 <span class="sec-badge">pythonds §1.1–1.6</span></h2>
+  <p>面對一個問題，資訊科學家的目標是寫出<strong>演算法</strong>：一份一步一步的指令清單，
+  能解決這個問題的任何一個實例。講義給了正式定義，四個條件缺一不可：</p>
+  <div class="viz-panel">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.9rem;">
+      <div class="info-card"><div class="ic-title">① 定義良好</div>
+        <div style="font-size:.88rem;line-height:1.85;">指令是有序的集合，每一步都明確。</div></div>
+      <div class="info-card"><div class="ic-title">② 步驟不含糊</div>
+        <div style="font-size:.88rem;line-height:1.85;">說「把兩個整數相加」，就得先講清楚什麼是整數、什麼是加。</div></div>
+      <div class="info-card"><div class="ic-title">③ 產生結果</div>
+        <div style="font-size:.88rem;line-height:1.85;">回傳資料，或造成某種效果（例如印出東西）。</div></div>
+      <div class="info-card"><div class="ic-title">④ 有限時間內停止</div>
+        <div style="font-size:.88rem;line-height:1.85;">跑不完的程序不算演算法。存在演算法可解的問題，我們說它是「可計算的」（computable）。</div></div>
+    </div>
+  </div>
+  <p style="margin-top:1rem;">資訊科學同時也是研究<strong>抽象化</strong>的學問。開車不需要懂引擎，
+  你只用方向盤、油門、煞車這組「介面」。寫程式也一樣：<code>import math</code> 之後喊一聲
+  <code>math.sqrt(16)</code> 就拿到 4.0，不必知道底層是牛頓法還是查表。這叫<strong>程序抽象化</strong>。</p>
+  <p>把同一招用在資料上，就是<strong>抽象資料型別（ADT）</strong>：只描述資料有哪些操作、行為是什麼，
+  完全不管怎麼實作。使用者摸到的是外殼，實作藏在殼裡面一層，這層包裝叫<strong>封裝</strong>。
+  而 ADT 的具體實作，就是我們整學期要磨的東西：<strong>資料結構</strong>。</p>
+  <div class="info-box">
+    <span class="info-label">為什麼值得花一學期？</span>
+    同一個 ADT 通常有好幾種實作，介面一樣、效能天差地遠。第 2 章開始你會看到：
+    同一個問題，一種寫法跑一秒，另一種要跑到天荒地老。學會「評估解法」跟學會「寫出解法」一樣重要。
+  </div>
+  <div class="info-box warm">
+    <span class="info-label">為什麼用 Python？</span>
+    Python 直譯執行、語法貼近虛擬碼，內建的 list 和 dict 又直接對應課程的核心資料結構：
+    你可以把力氣花在演算法本身，而不是語言儀式上。課程用 pythonds 這本書，程式碼跟著書的風格走。
+  </div>
+</section>
+
+<section id="types">
+  <div class="section-number">PART 01 · 原子型別</div>
+  <h2>原子型別與變數：名字綁到物件上 <span class="sec-badge">pythonds §1.7–1.8.1</span></h2>
+  <p>Python 內建的原子型別主要是 <code>int</code>、<code>float</code> 與 <code>bool</code>；
+  算術運算子 <code>+ - * / % ** //</code> 全員到齊。先看一段講義的示範，
+  兩個除法運算子的分工要先站穩：</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="pseudo-code" style="font-size:.8rem;">
+<span class="line"><span class="fn">print</span>(2 + 3 * 4)     <span class="com"># 14，先乘除後加減</span></span>
+<span class="line"><span class="fn">print</span>((2 + 3) * 4)   <span class="com"># 20，括號改變順序</span></span>
+<span class="line"><span class="fn">print</span>(2 ** 10)       <span class="com"># 1024，次方是內建運算子</span></span>
+<span class="line"><span class="fn">print</span>(7 / 3)         <span class="com"># 2.3333…，/ 永遠是真除法</span></span>
+<span class="line"><span class="fn">print</span>(7 // 3)        <span class="com"># 2，// 才是整數除法（向下取整）</span></span>
+<span class="line"><span class="fn">print</span>(7 % 3)         <span class="com"># 1，取餘數</span></span>
+<span class="line"><span class="fn">print</span>(2 ** 100)      <span class="com"># 1267650600228229401496703205376：精確！</span></span></div>
+        <div class="status-banner" id="typeStatus"><span class="status-icon">›</span><span class="status-text">點下面的型別卡，看各型別的個性與地雷。</span></div>
+        <div class="controls-bar" id="typeBtns"></div>
+        <div class="mono" id="typeVis" style="font-size:.88rem;line-height:1.9;min-height:56px;padding:.4rem .2rem;"></div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">int 要多大有多大</div>
+        <div style="font-size:.86rem;line-height:1.9;">Python 的整數是<strong>任意精度</strong>：
+        <code>2 ** 100</code> 直接算出精確的 31 位數，不會溢位、不會變成近似值。
+        大整數運算的成本會隨位數成長，但正確性永遠不打折。</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">兩種除法</div>
+        <div style="font-size:.86rem;line-height:1.9;"><code>7 / 3</code> 是 2.333…（結果一律是 float）；
+        <code>7 // 3</code> 是 2（向下取整）。想要商和餘數就用 <code>//</code> 搭 <code>%</code>。</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:1.6rem;">布林、比較與邏輯運算子</h3>
+  <p><code>bool</code> 只有 <code>True</code> 和 <code>False</code> 兩個值，搭配
+  <code>and</code>、<code>or</code>、<code>not</code>。比較運算的結果也是 bool。整理成一張表：</p>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>運算</th><th>寫法</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td>大小比較</td><td class="mono">&lt; &gt; &lt;= &gt;=</td><td>結果是 bool</td></tr>
+      <tr><td>相等／不等</td><td class="mono">== 　!=</td><td>注意 <code>=</code> 是賦值，<code>==</code> 才是比較</td></tr>
+      <tr><td>邏輯且／或／非</td><td class="mono">and 　or 　not</td><td>短路求值：左邊定案就不看右邊</td></tr>
+      <tr><td>連鎖比較</td><td class="mono">1 &lt; 5 &lt; 10</td><td>合法且符合數學直覺：等於 <code>1 &lt; 5 and 5 &lt; 10</code></td></tr>
+    </tbody>
+  </table></div>
+  <div class="info-box" style="margin-top:.8rem;">
+    <span class="info-label">連鎖比較是正字標記</span>
+    <code>1 &lt; 5 &lt; 10</code> 印出 <code>True</code>：Python 把它展開成
+    <code>1 &lt; 5 and 5 &lt; 10</code>，跟數學課寫的區間一模一樣。
+    同理 <code>10 &lt; 5 &lt; 3</code> 是 <code>False</code>，因為第一段就倒了。
+  </div>
+
+  <h3 style="margin-top:1.6rem;">變數是「名字」，不是盒子</h3>
+  <p>執行 <code>the_sum = 0</code> 時，Python 先造出整數物件 0，再把名字
+  <code>the_sum</code> <strong>綁</strong>到它身上。之後的賦值都是<strong>改綁</strong>：
+  名字轉頭指向新物件，型別跟著新物件走。按按鈕看三步的變化：</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="bq-row" id="nbVis" style="min-height:100px;"></div>
+        <div class="status-banner" id="nbStatus"><span class="status-icon">›</span><span class="status-text">照順序按三顆按鈕，看名字與物件怎麼變。</span></div>
+        <div class="controls-bar">
+          <button class="btn" onclick="nbStep(1)">① the_sum = 0</button>
+          <button class="btn" onclick="nbStep(2)">② the_sum = the_sum + 1</button>
+          <button class="btn" onclick="nbStep(3)">③ the_sum = True</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">程式對照 <span class="ic-badge">CODE</span></div>
+        <div class="pseudo-code" id="nbCode" style="font-size:.78rem;">
+<span class="line" data-l="1">the_sum = <span class="num">0</span>          <span class="com"># 名字綁到整數物件 0</span></span>
+<span class="line" data-l="2">the_sum = the_sum + <span class="num">1</span>  <span class="com"># 算出新物件 1，改綁</span></span>
+<span class="line" data-l="3">the_sum = <span class="num">True</span>       <span class="com"># 改綁到 bool 物件：型別跟人走</span></span></div></div>
+      <div class="info-card">
+        <div class="ic-title">動態型別的規矩</div>
+        <div style="font-size:.86rem;line-height:1.9;">
+        名字本身沒有型別，<strong>物件才有</strong>。識別字以字母或底線開頭、大小寫視為不同；
+        保留字（<code>class</code>、<code>while</code>、<code>def</code>）不能拿來當名字。
+        同一個名字待會兒指向誰，要看最後一次賦值。</div>
+      </div>
+    </div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 兩種除法</div>
+  <p><code>print(7 / 2)</code> 和 <code>print(7 // 2)</code> 分別印出？</p>
+  
+  <div class="quiz-options" id="qTypeOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="/ 是真除法，結果一律是 float；// 才做整數除法（向下取整）。想避免小數就明確用 //。" onclick="quizCheck('qType', this)"><span class="opt-letter">(A)</span> <code>3.5</code> 和 <code>3</code></div><div class="quiz-opt" data-correct="false" data-fb="Python 3 的 / 不截斷：7 / 2 老老實實給你 3.5。" onclick="quizCheck('qType', this)"><span class="opt-letter">(B)</span> <code>3</code> 和 <code>3</code></div><div class="quiz-opt" data-correct="false" data-fb="// 是整數除法：7 // 2 向下取整得 3。" onclick="quizCheck('qType', this)"><span class="opt-letter">(C)</span> <code>3.5</code> 和 <code>3.5</code></div>
+  </div>
+  <div class="quiz-feedback" id="qTypeFeedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 連鎖比較</div>
+  <p><code>print(10 &lt; 5 &lt; 3)</code> 印出什麼？</p>
+  
+  <div class="quiz-options" id="qBoolOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="連鎖比較展開成 (10 &lt; 5) and (5 &lt; 3)。第一段已經是 False，短路後整串為 False，符合數學直覺。" onclick="quizCheck('qBool', this)"><span class="opt-letter">(A)</span> <code>False</code></div><div class="quiz-opt" data-correct="false" data-fb="Python 不會把 10 &lt; 5 先變成 0 再跟 3 比：它把連鎖當成 and 串接。" onclick="quizCheck('qBool', this)"><span class="opt-letter">(B)</span> <code>True</code></div><div class="quiz-opt" data-correct="false" data-fb="這是完全合法的語法，還是 Python 引以為傲的特色。" onclick="quizCheck('qBool', this)"><span class="opt-letter">(C)</span> 丟出例外</div>
+  </div>
+  <div class="quiz-feedback" id="qBoolFeedback"></div>
+</div>
+</section>
+
+<section id="collections">
+  <div class="section-number">PART 02 · 集合型別</div>
+  <h2>集合型別：list、string、tuple、set、dict <span class="sec-badge">pythonds §1.8.2</span></h2>
+  <p>有序集合（sequence）有 <code>list</code>、<code>string</code>、<code>tuple</code>；
+  無序集合有 <code>set</code> 和 <code>dict</code>。這一節的幾張表整學期都會回頭查，
+  值得現在花時間讀熟。</p>
+
+  <h3>list：什麼都能裝的動態序列</h3>
+  <p><code>my_list = [1, 3, True, 6.5]</code>：元素可以<strong>異質</strong>、可以動態增刪，
+  切片語法 <code>my_list[1:3]</code> 直接取一段（含 1 不含 3）。</p>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>方法</th><th>用法</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">[ ] / [a:b]</td><td class="mono">my_list[i]、my_list[1:3]</td><td>索引從 0 起算；切片含頭不含尾</td></tr>
+      <tr><td class="mono">append</td><td class="mono">my_list.append(x)</td><td>加到尾端</td></tr>
+      <tr><td class="mono">insert</td><td class="mono">my_list.insert(2, 4.5)</td><td>插到索引 2（後面的元素往後搬）</td></tr>
+      <tr><td class="mono">pop</td><td class="mono">my_list.pop()、my_list.pop(1)</td><td>移除尾端／索引 1 的元素，<strong>回傳被移除的值</strong></td></tr>
+      <tr><td class="mono">sort / reverse</td><td class="mono">my_list.sort()</td><td>就地排序／反轉（回傳 None，不是新串列）</td></tr>
+      <tr><td class="mono">count / index / remove / del</td><td class="mono">my_list.remove(6.5)</td><td>計數、找位置、刪第一個等值元素、del 按索引刪</td></tr>
+    </tbody>
+  </table></div>
+  <div class="viz-panel" style="margin-top:.8rem;">
+    <div class="status-banner" id="colStatus"><span class="status-icon">›</span><span class="status-text">跑一段 list 示範。</span></div>
+    <div class="controls-bar"><button class="btn" onclick="colDemo()">▶ append ×3 → my_list[1] → pop()</button></div>
+    <div class="bq-row" id="colVis" style="min-height:64px;"></div>
+  </div>
+  <p style="font-size:.9rem;color:var(--muted);margin-top:.6rem;">冷知識：<code>54 + 21</code> 底層其實是
+  <code>(54).__add__(21)</code>。運算子都是方法呼叫的糖衣，這件事到 Fraction 那一節會派上大用場。</p>
+
+  <h3 style="margin-top:1.6rem;">range：等差數列產生器</h3>
+  <div class="pseudo-code" style="font-size:.8rem;">
+<span class="line"><span class="fn">list</span>(<span class="fn">range</span>(<span class="num">10</span>))         <span class="com"># [0, 1, …, 9]</span></span>
+<span class="line"><span class="fn">list</span>(<span class="fn">range</span>(<span class="num">5</span>, <span class="num">10</span>))      <span class="com"># [5, 6, 7, 8, 9]</span></span>
+<span class="line"><span class="fn">list</span>(<span class="fn">range</span>(<span class="num">5</span>, <span class="num">10</span>, <span class="num">2</span>))   <span class="com"># [5, 7, 9]</span></span>
+<span class="line"><span class="fn">list</span>(<span class="fn">range</span>(<span class="num">10</span>, <span class="num">1</span>, <span class="num">-1</span>))  <span class="com"># [10, 9, …, 2]，倒著走</span></span></div>
+  <p style="font-size:.9rem;color:var(--muted);">range 是惰性的：<code>print(range(10))</code>
+  只印 <code>range(0, 10)</code>，要看內容得先包一層 <code>list()</code>。</p>
+
+  <h3 style="margin-top:1.6rem;">string：不可變的字元序列</h3>
+  <p>單引號雙引號都行。串接用 <code>+</code>、重複用 <code>*</code>、長度是 <code>len()</code>。重點：
+  <strong>字串是不可變的</strong>，<code>my_name[0] = "X"</code> 直接丟 TypeError；
+  想要「改過的字串」，得造一個新的。</p>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>方法</th><th>用法</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">upper / lower</td><td class="mono">my_name.upper()</td><td>回傳全大寫／全小寫的新字串</td></tr>
+      <tr><td class="mono">center / ljust / rjust</td><td class="mono">my_name.center(10)</td><td>排版成寬度 10 的欄位</td></tr>
+      <tr><td class="mono">find</td><td class="mono">my_name.find("v")</td><td>第一次出現的索引（找不到回 −1）</td></tr>
+      <tr><td class="mono">split</td><td class="mono">my_name.split("v")</td><td>依分隔字元切開，回傳 list：解析輸入的主力</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 style="margin-top:1.6rem;">tuple：不可變的 list</h3>
+  <p><code>my_tuple = (2, True, 4.96)</code>：索引、切片、len、重複都跟 list 一樣，
+  唯獨<strong>不能改</strong>：<code>my_tuple[1] = False</code> 丟 TypeError。
+  需要「保證不被動到」的一組值時用它，之後很多資料會以 tuple 的身分現身（例如 dict 的 items）。</p>
+
+  <h3 style="margin-top:1.6rem;">set：不重複、支援數學集合運算</h3>
+  <p><code>my_set = {3, 6, "cat", 4.5, False}</code>：無序、異質、不重複。
+  成員檢查 <code>in</code> 超快，數學運算直接是運算子：</p>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>運算</th><th>方法寫法</th><th>運算子寫法</th></tr></thead>
+    <tbody>
+      <tr><td>聯集</td><td class="mono">my_set.union(your_set)</td><td class="mono">my_set | your_set</td></tr>
+      <tr><td>交集</td><td class="mono">my_set.intersection(your_set)</td><td class="mono">my_set &amp; your_set</td></tr>
+      <tr><td>差集</td><td class="mono">my_set.difference(your_set)</td><td class="mono">my_set - your_set</td></tr>
+      <tr><td>子集判斷</td><td class="mono">s.issubset(your_set)</td><td class="mono">s &lt;= your_set</td></tr>
+      <tr><td>增刪</td><td class="mono">add / remove / pop / clear</td><td class="mono">—</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 style="margin-top:1.6rem;">dict：key 對應 value</h3>
+  <p>key 對應 value 的查找表：<code>capitals = {"Iowa": "Des Moines", "Wisconsin": "Madison"}</code>。
+  新增就直接賦值 <code>capitals["Utah"] = "Salt Lake City"</code>；
+  走訪 <code>for k in capitals</code> 拿到的是 key。</p>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>操作</th><th>用法</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">[ ]</td><td class="mono">capitals["Iowa"]</td><td>取值；<strong>key 不存在時丟 KeyError</strong></td></tr>
+      <tr><td class="mono">get</td><td class="mono">d.get("kent")</td><td>查不到回 None，不報錯；<code>d.get("kent", "NO ENTRY")</code> 可自訂預設值</td></tr>
+      <tr><td class="mono">in</td><td class="mono">"kent" in d</td><td>安全的成員檢查</td></tr>
+      <tr><td class="mono">keys / values / items</td><td class="mono">d.items()</td><td>三種視圖；items 給 (key, value) 的 tuple</td></tr>
+      <tr><td class="mono">del / len</td><td class="mono">del d[k]</td><td>刪除、數量</td></tr>
+    </tbody>
+  </table></div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · dict 的查詢分工</div>
+  <p><code>phone_ext = {"david": 1410}</code>。<code>print(phone_ext.get("kent"))</code> 和 <code>print(phone_ext["kent"])</code> 各是什麼下場？</p>
+  
+  <div class="quiz-options" id="qMapOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="get() 查不到就回 None（還能給第二個引數當預設值）；[] 查不到直接 KeyError。要「查了不炸」用 get 或 in。" onclick="quizCheck('qMap', this)"><span class="opt-letter">(A)</span> 前者印 <code>None</code>，後者丟 KeyError</div><div class="quiz-opt" data-correct="false" data-fb="[] 沒有這麼溫柔：key 不存在就是 KeyError。" onclick="quizCheck('qMap', this)"><span class="opt-letter">(B)</span> 兩個都印 None</div><div class="quiz-opt" data-correct="false" data-fb="get() 的存在意義就是查不到也不炸。" onclick="quizCheck('qMap', this)"><span class="opt-letter">(C)</span> 兩個都丟 KeyError</div>
+  </div>
+  <div class="quiz-feedback" id="qMapFeedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 字串可變性</div>
+  <p><code>my_name = "David"; my_name[0] = "X"</code> 的結果是？</p>
+  
+  <div class="quiz-options" id="qStrOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="字串是 immutable：任何「修改」都得造新字串，例如 &quot;X&quot; + my_name[1:]。list 才是可變的那一個。" onclick="quizCheck('qStr', this)"><span class="opt-letter">(A)</span> 丟出 TypeError：字串不可變</div><div class="quiz-opt" data-correct="false" data-fb="單一字元賦值對字串行不通；想要 &quot;Xavid&quot; 要用切片拼一個新的。" onclick="quizCheck('qStr', this)"><span class="opt-letter">(B)</span> my_name 變成 "Xavid"</div><div class="quiz-opt" data-correct="false" data-fb="Python 不會吞掉這種錯：TypeError 當場丟出來。" onclick="quizCheck('qStr', this)"><span class="opt-letter">(C)</span> 靜靜地什麼都沒發生</div>
+  </div>
+  <div class="quiz-feedback" id="qStrFeedback"></div>
+</div>
+</section>
+
+<section id="io">
+  <div class="section-number">PART 03 · 輸入輸出</div>
+  <h2>輸入與輸出：input、print 與 f-string <span class="sec-badge">pythonds §1.9</span></h2>
+  <p><code>input(提示字串)</code> 讀進來的<strong>永遠是字串</strong>：
+  要當數字用得自己轉，<code>radius = float(input("半徑？"))</code>。
+  <code>print()</code> 預設用空格分隔、行尾換行，兩者都能改：
+  <code>print("Hello", "World", sep="***", end="")</code>。</p>
+  <p>格式化字串一路演化：<code>%</code> 舊式 → <code>.format()</code> → <strong>f-string</strong>（現代首選）。
+  f-string 的格式規格寫在冒號後面：<code>f"{item:&gt;10}"</code> 靠右塞進寬度 10 的欄位、
+  <code>f"{price:10.2f}"</code> 寬度 10、小數 2 位。</p>
+  <div class="viz-layout" style="margin-top:.8rem;">
+    <div>
+      <div class="viz-panel">
+        <div class="mono" style="font-size:.85rem;color:var(--muted);">f"The {item:<span id="ioExpr">&gt;10</span>} costs {price:…f} cents"</div>
+        <pre id="ioOut" style="background:#2d2d3f;color:#e8e6df;font-family:'JetBrains Mono',monospace;font-size:.85rem;padding:.8rem 1rem;border-radius:10px;line-height:1.7;overflow-x:auto;"></pre>
+        <div class="status-banner" id="ioStatus"><span class="status-icon">›</span><span class="status-text">調整格式規格，馬上看排版結果（item = "banana"、price = 24）。</span></div>
+        <div class="controls-bar" style="flex-wrap:wrap;">
+          <label class="mono" style="font-size:.8rem;">寬度 <select id="ioW"><option>6</option><option selected>10</option><option>14</option></select></label>
+          <label class="mono" style="font-size:.8rem;">對齊 <select id="ioAlign"><option value="right" selected>&gt;（靠右）</option><option value="left">&lt;（靠左）</option><option value="center">^（置中）</option></select></label>
+          <label class="mono" style="font-size:.8rem;">填充 <select id="ioFill"><option value=" " selected>空白</option><option value="0">'0'</option><option value=".">'.'</option></select></label>
+          <label class="mono" style="font-size:.8rem;">小數位 <select id="ioPrec"><option>0</option><option selected>2</option><option>4</option></select></label>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">三代同堂</div>
+        <div class="mono" style="font-size:.78rem;line-height:2;">"%s is %d" % (name, age)<br>"{} is {}".format(name, age)<br>f"{name} is {age}"</div>
+        <div style="font-size:.82rem;line-height:1.8;color:var(--muted);margin-top:.4rem;">% 是 C 家族傳下來的格式字串；f-string 把運算式直接放進字面值裡，可讀性最好，本課程一律用它。</div>
+      </div>
+    </div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 讀 f-string 規格</div>
+  <p><code>print(f"{price:&gt;010.2f}")</code>，price = 24，印出什麼？</p>
+  
+  <div class="quiz-options" id="qIoOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="寬度 10、小數 2 位、靠右、缺的位置用 0 填：24.00 前面補 5 個 0。冒號後的規格順序是「填充、對齊、寬度、.小數位、型別」。" onclick="quizCheck('qIo', this)"><span class="opt-letter">(A)</span> <code>0000024.00</code></div><div class="quiz-opt" data-correct="false" data-fb="別漏看寬度 10 和填充字元 0：不足的部分要補滿。" onclick="quizCheck('qIo', this)"><span class="opt-letter">(B)</span> <code>24.00</code></div><div class="quiz-opt" data-correct="false" data-fb="填 0 不填 #，而且 &gt; 是靠右：補在前面。" onclick="quizCheck('qIo', this)"><span class="opt-letter">(C)</span> <code>##24.00###</code></div>
+  </div>
+  <div class="quiz-feedback" id="qIoFeedback"></div>
+</div>
+</section>
+
+<section id="control">
+  <div class="section-number">PART 04 · 控制結構</div>
+  <h2>控制結構：迴圈、選擇與串列生成式 <span class="sec-badge">pythonds §1.10</span></h2>
+  <p>演算法需要兩種控制結構：迭代與選擇。Python 的程式區塊由<strong>縮排</strong>決定：
+  冒號之後往右縮的那一段就是本體。縮排不是排版建議，是語法本身，混用 tab 和空格是初學第一大坑。</p>
+
+  <h3>兩種迴圈</h3>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>寫法</th><th>用途</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">while counter &lt;= 5:</td><td>條件為真就重複</td></tr>
+      <tr><td class="mono">for item in [1, 3, 6, 2, 5]:</td><td>走訪任何可迭代物件的成員</td></tr>
+      <tr><td class="mono">for i in range(5):</td><td>計數迴圈：搭配 range 控制起點、終點、步幅</td></tr>
+    </tbody>
+  </table></div>
+  <div class="pseudo-code" style="font-size:.8rem;margin-top:.6rem;">
+<span class="line">word_list = [<span class="str">&quot;cat&quot;</span>, <span class="str">&quot;dog&quot;</span>, <span class="str">&quot;rabbit&quot;</span>]</span>
+<span class="line">letter_list = []</span>
+<span class="line"><span class="kw">for</span> a_word <span class="kw">in</span> word_list:</span>
+<span class="line">    <span class="kw">for</span> a_letter <span class="kw">in</span> a_word:      <span class="com"># 巢狀迴圈：字串也可迭代</span></span>
+<span class="line">        letter_list.<span class="fn">append</span>(a_letter)</span></div>
+
+  <h3 style="margin-top:1.4rem;">選擇：if、elif、else</h3>
+  <p>巢狀 if 疊四層看得眼花，慣用寫法是 <code>elif</code> 一路接平：
+  最後的 <code>else</code> 是保底，漏了它，所有條件都不成立時就什麼都不做：</p>
+  <div class="pseudo-code" style="font-size:.8rem;">
+<span class="line"><span class="kw">if</span> score &gt;= <span class="num">90</span>:   <span class="fn">print</span>(<span class="str">&quot;A&quot;</span>)</span>
+<span class="line"><span class="kw">elif</span> score &gt;= <span class="num">80</span>: <span class="fn">print</span>(<span class="str">&quot;B&quot;</span>)</span>
+<span class="line"><span class="kw">elif</span> score &gt;= <span class="num">70</span>: <span class="fn">print</span>(<span class="str">&quot;C&quot;</span>)</span>
+<span class="line"><span class="kw">elif</span> score &gt;= <span class="num">60</span>: <span class="fn">print</span>(<span class="str">&quot;D&quot;</span>)</span>
+<span class="line"><span class="kw">else</span>:             <span class="fn">print</span>(<span class="str">&quot;F&quot;</span>)</span></div>
+
+  <h3 style="margin-top:1.4rem;">串列生成式（list comprehension）</h3>
+  <p>「取 1 到 10 的奇數、各自平方、收進 list」這類篩選＋轉換需求，Python 一行解決：</p>
+  <div class="pseudo-code" style="font-size:.8rem;">
+<span class="line">sq_list = [x * x <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">11</span>) <span class="kw">if</span> x % <span class="num">2</span> != <span class="num">0</span>]</span>
+<span class="line"><span class="com"># [1, 9, 25, 49, 81]：for 走訪、if 篩選、最前面的運算式轉換</span></span></div>
+  <p style="font-size:.9rem;color:var(--muted);">讀法從中間開始：for 產生候選、if 留下想要的、
+  開頭的運算式決定進 list 的長相。跟等價的四行迴圈相比，意圖一眼可見。</p>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 講義練習：average 函式</div>
+  <p>寫 <code>average(a_list)</code>：平均 ≥ 60 印 pass、否則 fail，平均取到小數一位。對 [99,100,74,63,100,100] 應印出？</p>
+  
+  <div class="quiz-options" id="qCtlOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="總和 536／6 = 89.333…，f&quot;{avg:.1f}&quot; 取到一位。Python 的 / 是真除法，sum(a_list) / len(a_list) 直接就是浮點平均。" onclick="quizCheck('qCtl', this)"><span class="opt-letter">(A)</span> <code>pass (Average: 89.3)</code></div><div class="quiz-opt" data-correct="false" data-fb="那是 536 // 6 的結果。整數除法用 //，這裡要的是 /。" onclick="quizCheck('qCtl', this)"><span class="opt-letter">(B)</span> <code>pass (Average: 89.0)</code></div><div class="quiz-opt" data-correct="false" data-fb="89.3 ≥ 60，是 pass。" onclick="quizCheck('qCtl', this)"><span class="opt-letter">(C)</span> <code>fail (Average: 89.3)</code></div>
+  </div>
+  <div class="quiz-feedback" id="qCtlFeedback"></div>
+</div>
+</section>
+
+<section id="exceptions">
+  <div class="section-number">PART 05 · 例外處理</div>
+  <h2>例外處理：錯誤發生時給程式一條活路 <span class="sec-badge">pythonds §1.11</span></h2>
+  <p>錯誤分兩種。<strong>語法錯誤</strong>是句子寫壞了，直譯器在開始執行前就拒收
+  （例如 <code>for i in range(10)</code> 忘了冒號）。<strong>邏輯錯誤</strong>是程式會跑但答案不對；
+  其中最糟的一類會讓程式當場中止，像除以零、用越界的索引，這種執行期錯誤叫<strong>例外</strong>（exception）。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="pseudo-code" style="font-size:.8rem;">
+<span class="line"><span class="kw">try</span>:</span>
+<span class="line">    a_number = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">&quot;Please enter an integer &quot;</span>))</span>
+<span class="line">    <span class="fn">print</span>(math.<span class="fn">sqrt</span>(a_number))</span>
+<span class="line"><span class="kw">except</span>:</span>
+<span class="line">    <span class="fn">print</span>(<span class="str">&quot;Bad value for the square root function&quot;</span>)</span>
+<span class="line">    <span class="fn">print</span>(<span class="str">&quot;Using the absolute value instead&quot;</span>)</span>
+<span class="line">    <span class="fn">print</span>(math.<span class="fn">sqrt</span>(<span class="fn">abs</span>(a_number)))  <span class="com"># 補救：改用絕對值</span></span></div>
+        <div class="status-banner"><span class="status-icon">›</span><span class="status-text">try 圈住可能爆炸的程式碼，except 接住爆炸後決定怎麼辦。沒接住的例外會讓程式當場終止並印出 traceback。</span></div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">自己丟例外</div>
+        <div class="pseudo-code" style="font-size:.78rem;">
+<span class="line"><span class="kw">if</span> a_number &lt; <span class="num">0</span>:</span>
+<span class="line">    <span class="kw">raise</span> <span class="fn">RuntimeError</span>(</span>
+<span class="line">      <span class="str">&quot;You can't use a negative number&quot;</span>)</span>
+<span class="line"><span class="kw">else</span>:</span>
+<span class="line">    <span class="fn">print</span>(math.<span class="fn">sqrt</span>(a_number))</span></div>
+        <div style="font-size:.82rem;line-height:1.8;color:var(--muted);margin-top:.4rem;">與其把負數餵給 sqrt 拿到 ValueError，不如自己檢查、自己 raise，錯誤訊息由你定義。</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">常見例外快查</div>
+        <div style="font-size:.86rem;line-height:1.9;"><code>ZeroDivisionError</code> 除以零、
+        <code>IndexError</code> 索引越界、<code>KeyError</code> dict 查無此 key、
+        <code>TypeError</code> 型別不對、<code>ValueError</code> 值不合法（如 int("abc")）。</div>
+      </div>
+    </div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 例外基本功</div>
+  <p>下列哪個「不會」被 try/except 接住？</p>
+  
+  <div class="quiz-options" id="qExcOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="語法錯誤發生在程式開始執行之前：整份程式根本沒跑起來，try 區塊自然沒機會登場。except 接的是執行期丟出的例外。" onclick="quizCheck('qExc', this)"><span class="opt-letter">(A)</span> 少了冒號的語法錯誤</div><div class="quiz-opt" data-correct="false" data-fb="索引越界是執行期例外，接得住。" onclick="quizCheck('qExc', this)"><span class="opt-letter">(B)</span> <code>my_list[10]</code> 的 IndexError</div><div class="quiz-opt" data-correct="false" data-fb="自己丟的當然接得住，這正是 raise 的用途。" onclick="quizCheck('qExc', this)"><span class="opt-letter">(C)</span> 自己 <code>raise RuntimeError(...)</code></div>
+  </div>
+  <div class="quiz-feedback" id="qExcFeedback"></div>
+</div>
+</section>
+
+<section id="functions">
+  <div class="section-number">PART 06 · 函式</div>
+  <h2>定義函式與參數傳遞 <span class="sec-badge">pythonds §1.12</span></h2>
+  <p>函式用 <code>def</code> 定義：<strong>名字、參數列、本體</strong>，用 <code>return</code> 交回結果
+  （沒寫 return 就回 <code>None</code>）。<code>def square(n): return n ** 2</code>
+  就是完整的一課：不用宣告型別，呼叫時傳什麼就是什麼。</p>
+  <p>參數傳遞的規矩一句話：<strong>傳的是物件的參考，名字是區域的</strong>。
+  函式裡把參數<strong>改綁</strong>到新物件，呼叫端不受影響；
+  但透過參數<strong>就地修改</strong>可變物件（例如 list.append），呼叫端看得一清二楚。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="bq-row" id="fnVis" style="min-height:96px;"></div>
+        <div class="status-banner" id="fnStatus"><span class="status-icon">›</span><span class="status-text">比較「改綁」與「就地修改」對呼叫端的影響。</span></div>
+        <div class="controls-bar">
+          <button class="btn" onclick="fnDemo('rebind')">rebind(a)</button>
+          <button class="btn" onclick="fnDemo('mutate')">mutate(lst)</button>
+          <button class="btn" onclick="fnDemo('rebindList')">lst = lst + [99]</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">程式對照 <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="fnCode">
+<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">square</span>(n):</span>
+<span class="line" data-l="2">    <span class="kw">return</span> n ** <span class="num">2</span></span>
+<span class="line" data-l="3"> </span>
+<span class="line" data-l="4"><span class="fn">print</span>(<span class="fn">square</span>(<span class="num">3</span>))          <span class="com"># 9</span></span>
+<span class="line" data-l="5"><span class="fn">print</span>(<span class="fn">square</span>(<span class="fn">square</span>(<span class="num">3</span>)))  <span class="com"># 81：呼叫可以組合</span></span>
+<span class="line" data-l="6"> </span>
+<span class="line" data-l="7"><span class="kw">def</span> <span class="fn">rebind</span>(x):    x = <span class="num">99</span>          <span class="com"># 改綁區域名字</span></span>
+<span class="line" data-l="8"><span class="kw">def</span> <span class="fn">mutate</span>(lst):  lst.<span class="fn">append</span>(<span class="num">99</span>)  <span class="com"># 就地修改物件</span></span></div></div>
+      <div class="info-card">
+        <div class="ic-title">兩個實務慣例</div>
+        <div style="font-size:.86rem;line-height:1.9;">
+        ① 函式開頭用三引號寫 <strong>docstring</strong>，help() 讀得到。<br>
+        ② 要改呼叫端的資料，讓意圖明顯：不是回傳新值讓對方接，就是在文件裡講清楚會就地修改。</div>
+      </div>
+    </div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 傳參語意</div>
+  <p><code>def f(lst): lst = lst + [9]</code>。呼叫 <code>a = [1]; f(a)</code> 之後 a 是？</p>
+  
+  <div class="quiz-options" id="qFnOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="lst + [9] 造出全新的串列，lst 改綁過去，區域名字跟 a 從此分道揚鑣。想讓 a 變長，要用 lst.append(9) 或 lst += [9]（就地版本）。" onclick="quizCheck('qFn', this)"><span class="opt-letter">(A)</span> <code>[1]</code>：lst 被改綁到新串列，a 不動</div><div class="quiz-opt" data-correct="false" data-fb="那是 lst.append(9) 的效果。+ 造新物件、append 改舊物件，一字之差兩個世界。" onclick="quizCheck('qFn', this)"><span class="opt-letter">(B)</span> <code>[1, 9]</code></div><div class="quiz-opt" data-correct="false" data-fb="語法完全合法，這是語意問題不是語法問題。" onclick="quizCheck('qFn', this)"><span class="opt-letter">(C)</span> 丟出例外</div>
+  </div>
+  <div class="quiz-feedback" id="qFnFeedback"></div>
+</div>
+</section>
+
+<section id="classes">
+  <div class="section-number">PART 07 · 類別</div>
+  <h2>自訂型別：把 Fraction 一步一步蓋起來 <span class="sec-badge">pythonds §1.13.1</span></h2>
+  <p>浮點數存 1/3 只能存個近似值。想要「精確的分數」，就得自己造型別。
+  講義用五步把 <code>Fraction</code> 從空殼蓋成能加、能比、能印的完整類別，每一步都有理由。</p>
+
+  <h3>第 1 步：__init__ 建構子與底線慣例</h3>
+  <div class="pseudo-code" style="font-size:.8rem;">
+<span class="line"><span class="kw">class</span> <span class="fn">Fraction</span>:</span>
+<span class="line">    <span class="str">&quot;&quot;&quot;Class Fraction&quot;&quot;&quot;</span></span>
+<span class="line">    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, top, bottom):</span>
+<span class="line">        <span class="kw">self</span>._num = top      <span class="com"># 單底線：內部狀態的君子協定</span></span>
+<span class="line">        <span class="kw">self</span>._den = bottom</span></div>
+  <p>建構子固定叫 <code>__init__</code>，第一個參數 <code>self</code> 是物件自己，
+  成員都掛在 self 身上。底線開頭（<code>_num</code>）是「請勿直接碰」的慣例；
+  雙底線（<code>__num</code>）會觸發名稱改編（name mangling），外部存取直接失敗。
+  Python 的封裝靠慣例與文件，不靠強制。</p>
+
+  <h3 style="margin-top:1.4rem;">第 2 步：預設參數（多載的 Python 解法）</h3>
+  <div class="pseudo-code" style="font-size:.8rem;">
+<span class="line"><span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, top=<span class="num">0</span>, bottom=<span class="num">1</span>):</span>
+<span class="line">    ...</span>
+<span class="line"><span class="com"># Fraction(3, 5) → 3/5；Fraction(5) → 5/1；Fraction() → 0/1</span></span></div>
+  <p>一個建構子配上預設參數，三種呼叫方式一次滿足；
+  另一招是 <code>@classmethod</code> 工廠方法（如 <code>Fraction.from_top(5)</code>），
+  講義兩種都示範了。使用者根本分不出你選了哪種寫法，這正是封裝的意思。</p>
+
+  <h3 style="margin-top:1.4rem;">第 3 步：__str__，讓 print 認得你</h3>
+  <p><code>print(my_fraction)</code> 一開始印出 <code>&lt;__main__.Fraction object at 0x...&gt;</code>：
+  預設表示法只給型別和位址，等於什麼都沒說。定義 <code>__str__</code> 之後 print、str()、f-string 全部改口：</p>
+  <div class="pseudo-code" style="font-size:.8rem;">
+<span class="line"><span class="kw">def</span> <span class="fn">__str__</span>(<span class="kw">self</span>):</span>
+<span class="line">    <span class="kw">return</span> f<span class="str">&quot;{self._num}/{self._den}&quot;</span></span>
+<span class="line"><span class="com"># print(my_fraction) → 3/5；f&quot;I ate {my_fraction} of pizza&quot; 也通</span></span></div>
+
+  <h3 style="margin-top:1.4rem;">第 4 步：__add__，加法要順便約分</h3>
+  <p>通分相加：a/b + c/d = (ad + cb)/bd。直接這樣存會愈加愈肥（1/4 + 1/2 = 6/8），
+  所以加完用<strong>最大公因數</strong>約分，6/8 出門前變 3/4。這維護了一條不變量：
+  Fraction 永遠是最簡分數，其他方法都可以放心依賴這件事。</p>
+  <div class="pseudo-code" style="font-size:.8rem;">
+<span class="line"><span class="kw">def</span> <span class="fn">gcd</span>(m, n):</span>
+<span class="line">    <span class="kw">while</span> m % n != <span class="num">0</span>:</span>
+<span class="line">        m, n = n, m % n     <span class="com"># 歐幾里得演算法</span></span>
+<span class="line">    <span class="kw">return</span> n</span>
+<span class="line"> </span>
+<span class="line"><span class="kw">def</span> <span class="fn">__add__</span>(<span class="kw">self</span>, other_fraction):</span>
+<span class="line">    new_num = <span class="kw">self</span>._num * other_fraction._den + \</span>
+<span class="line">              <span class="kw">self</span>._den * other_fraction._num</span>
+<span class="line">    new_den = <span class="kw">self</span>._den * other_fraction._den</span>
+<span class="line">    common = <span class="fn">gcd</span>(new_num, new_den)</span>
+<span class="line">    <span class="kw">return</span> <span class="fn">Fraction</span>(new_num // common, new_den // common)</span></div>
+  <p style="font-size:.9rem;color:var(--muted);">定義了 <code>__add__</code>，<code>f1 + f2</code> 就會自動翻譯成
+  <code>f1.__add__(f2)</code>：這就是運算子多載的 Python 版本。</p>
+
+  <h3 style="margin-top:1.4rem;">第 5 步：__eq__，定義「相等」是什麼意思</h3>
+  <p>沒定義 <code>__eq__</code> 之前，<code>f1 == f2</code> 比的是「是不是同一個物件」（身分）。
+  用交叉相乘 <code>self._num * other._den == other._num * self._den</code>，1/2 和 2/4 就會相等，
+  這叫<strong>深相等</strong>：比的是值，不是物件身分。
+  另外記住 Python 的<strong>參考語意</strong>：<code>f3 = f1</code> 只是多一個名字指向同一個物件，
+  不會複製任何東西。</p>
+
+  <div class="viz-panel" style="margin-top:1rem;">
+    <div style="display:flex;gap:.6rem;align-items:center;justify-content:center;flex-wrap:wrap;" class="mono">
+      <input id="frA" style="width:64px;padding:.35rem;border:1px solid var(--card-border);border-radius:6px;" value="1/4">
+      <span id="frOp" style="font-size:1.2rem;">+</span>
+      <input id="frB" style="width:64px;padding:.35rem;border:1px solid var(--card-border);border-radius:6px;" value="1/2">
+      <span>=</span><span id="frOut" style="font-size:1.25rem;font-weight:700;color:var(--accent2);">?</span>
+    </div>
+    <div class="status-banner" id="frStatus"><span class="status-icon">›</span><span class="status-text">輸入兩個分數（a/b 格式），選一種運算試試。</span></div>
+    <div class="controls-bar" style="justify-content:center;">
+      <button class="btn" onclick="frCalc('+')">__add__</button>
+      <button class="btn" onclick="frCalc('*')">__mul__</button>
+      <button class="btn" onclick="frCalc('==')">__eq__</button>
+    </div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 參考語意</div>
+  <p><code>f1 = Fraction(1,2); f3 = f1</code>，之後把 f3 的 _num 就地改成 9，f1 會變嗎？</p>
+  
+  <div class="quiz-options" id="qClsOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="賦值不複製，只是綁名字。想要獨立的副本，得自己造一個新 Fraction（或用 copy 模組）。這跟 list 的 b = a 之後 b.append 會動到 a 是同一件事。" onclick="quizCheck('qCls', this)"><span class="opt-letter">(A)</span> 會：f3 和 f1 是同一個物件的兩個名字</div><div class="quiz-opt" data-correct="false" data-fb="Python 的賦值從不複製物件；兩個名字指著同一份資料。" onclick="quizCheck('qCls', this)"><span class="opt-letter">(B)</span> 不會：f3 是複製品</div><div class="quiz-opt" data-correct="false" data-fb="存取 _num 只是不禮貌（違反底線慣例），不會報錯。" onclick="quizCheck('qCls', this)"><span class="opt-letter">(C)</span> 丟出例外</div>
+  </div>
+  <div class="quiz-feedback" id="qClsFeedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 講義練習：負分母</div>
+  <p>講義要求 Fraction(9, -10) 也要能跟其他分數正確比大小。__init__ 該做什麼？</p>
+  
+  <div class="quiz-options" id="qCls2Options">
+    <div class="quiz-opt" data-correct="true" data-fb="把負號統一搬到分子（9/−10 存成 −9/10），所有比較方法就不用各自處理負分母的特例。在入口維護不變量，比在每個 __gt__、__lt__ 裡打補丁高明。" onclick="quizCheck('qCls2', this)"><span class="opt-letter">(A)</span> 分母為負時，分子分母同乘 −1</div><div class="quiz-opt" data-correct="false" data-fb="講義說這是不必要的限制。數學上 9/−10 是合法的分數，只是表示法要正規化。" onclick="quizCheck('qCls2', this)"><span class="opt-letter">(B)</span> raise 例外拒絕負分母</div><div class="quiz-opt" data-correct="false" data-fb="能動，但每個比較方法都要重複這段邏輯，漏一個就出 bug。" onclick="quizCheck('qCls2', this)"><span class="opt-letter">(C)</span> 在 __gt__ 裡特判分母正負</div>
+  </div>
+  <div class="quiz-feedback" id="qCls2Feedback"></div>
+</div>
+</section>
+
+<section id="inherit">
+  <div class="section-number">PART 08 · 繼承</div>
+  <h2>繼承與多型：用邏輯閘蓋一座電路 <span class="sec-badge">pythonds §1.13.2</span></h2>
+  <p>list 是一種循序集合，我們說 list「是一個」（IS-A）sequence：這就是繼承要表達的關係。
+  子類拿到父類的全部家當，再加上自己的特色。講義用數位電路模擬把這套想法跑一遍，
+  類別階層長這樣：<code>LogicGate</code> →（<code>BinaryGate</code>、<code>UnaryGate</code>）→
+  （<code>AndGate</code>、<code>OrGate</code>、<code>NotGate</code>）。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div style="display:flex;gap:1.2rem;justify-content:center;align-items:center;flex-wrap:wrap;" class="mono" id="circuitVis">
+          <div style="text-align:center;">A <select id="gInA" class="mono"><option>0</option><option selected>1</option></select>
+          B <select id="gInB" class="mono"><option>0</option><option selected>1</option></select>
+          <div class="bq-item" style="margin-top:.4rem;">AND g1</div><div id="gAndOut">?</div></div>
+          <div style="text-align:center;">C <select id="gInC" class="mono"><option selected>0</option><option>1</option></select>
+          D <select id="gInD" class="mono"><option selected>0</option><option>1</option></select>
+          <div class="bq-item" style="margin-top:.4rem;">AND g2</div><div id="gAnd2Out">?</div></div>
+          <div style="text-align:center;">→ <div class="bq-item" style="background:#8e44ad;">OR g3</div><div id="gOrOut">?</div></div>
+          <div style="text-align:center;">→ <div class="bq-item" style="background:#1a6b4a;">NOT g4</div><div id="gNotOut" style="font-size:1.3rem;font-weight:700;">?</div></div>
+        </div>
+        <div class="status-banner" id="gateStatus"><span class="status-icon">›</span><span class="status-text">講義的示範電路：NOT((A AND B) OR (C AND D))。改輸入按「執行」。</span></div>
+        <div class="controls-bar"><button class="btn" onclick="gateRun()">▶ 執行電路</button></div>
+        <div class="mono" style="font-size:.78rem;color:var(--muted);">對應程式：g1 = AndGate("g1")、g3 = OrGate("g3")、g4 = NotGate("g4")<br>c1 = Connector(g1, g3)、c3 = Connector(g3, g4)，然後 g4.get_output()。</div>
+      </div>
+      <div class="info-box" style="margin-top:.9rem;">
+        <span class="info-label">這段設計裡的四個關鍵機制</span>
+        <strong>動態繫結</strong>：get_output() 寫在父類，呼叫 self.perform_gate_logic() 時，
+        執行期照物件的實際類別找方法：AndGate 的物件就跑 AndGate 的版本。<br>
+        <strong>缺席即抽象</strong>：LogicGate 沒定義 perform_gate_logic，直接拿它造物件再呼叫就 AttributeError：
+        它天生只適合當基底。<br>
+        <strong>super().__init__(lbl)</strong>：呼叫父類建構子，把共同的初始化交回去。<br>
+        <strong>HAS-A</strong>：Connector 不繼承 LogicGate，它「擁有」兩個閘（from_gate、to_gate）。
+        IS-A 用繼承、HAS-A 用成員，分清楚這兩種關係是物件導向設計的第一堂課。
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">基底與 BinaryGate <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="gateCode" style="font-size:.74rem;">
+<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">LogicGate</span>:</span>
+<span class="line" data-l="2">    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, lbl):</span>
+<span class="line" data-l="3">        <span class="kw">self</span>._label = lbl</span>
+<span class="line" data-l="4">        <span class="kw">self</span>._output = <span class="num">None</span></span>
+<span class="line" data-l="5">    <span class="kw">def</span> <span class="fn">get_output</span>(<span class="kw">self</span>):</span>
+<span class="line" data-l="6">        <span class="kw">self</span>._output = <span class="kw">self</span>.<span class="fn">perform_gate_logic</span>()</span>
+<span class="line" data-l="7">        <span class="kw">return</span> <span class="kw">self</span>._output   <span class="com"># 邏輯由子類提供</span></span>
+<span class="line" data-l="8"> </span>
+<span class="line" data-l="9"><span class="kw">class</span> <span class="fn">BinaryGate</span>(LogicGate):   <span class="com"># 括號＝繼承</span></span>
+<span class="line" data-l="10">    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, lbl):</span>
+<span class="line" data-l="11">        <span class="kw">super</span>().<span class="fn">__init__</span>(lbl)   <span class="com"># 呼叫父類建構子</span></span>
+<span class="line" data-l="12">        <span class="kw">self</span>._pin_a = <span class="num">None</span></span>
+<span class="line" data-l="13">        <span class="kw">self</span>._pin_b = <span class="num">None</span></span>
+<span class="line" data-l="14">    <span class="kw">def</span> <span class="fn">set_from_pin</span>(<span class="kw">self</span>, source):</span>
+<span class="line" data-l="15">        <span class="kw">if</span> <span class="kw">self</span>._pin_a <span class="kw">is</span> <span class="num">None</span>:   <span class="kw">self</span>._pin_a = source</span>
+<span class="line" data-l="16">        <span class="kw">elif</span> <span class="kw">self</span>._pin_b <span class="kw">is</span> <span class="num">None</span>: <span class="kw">self</span>._pin_b = source</span>
+<span class="line" data-l="17">        <span class="kw">else</span>: <span class="kw">raise</span> <span class="fn">RuntimeError</span>(<span class="str">&quot;NO EMPTY PINS&quot;</span>)</span></div></div>
+      <div class="info-card"><div class="ic-title">具體的閘 <span class="ic-badge">CODE</span></div><div class="pseudo-code" style="font-size:.76rem;">
+<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">AndGate</span>(BinaryGate):</span>
+<span class="line" data-l="2">    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, lbl):</span>
+<span class="line" data-l="3">        <span class="kw">super</span>().<span class="fn">__init__</span>(lbl)</span>
+<span class="line" data-l="4">    <span class="kw">def</span> <span class="fn">perform_gate_logic</span>(<span class="kw">self</span>):</span>
+<span class="line" data-l="5">        a = <span class="kw">self</span>.<span class="fn">get_pin_a</span>()</span>
+<span class="line" data-l="6">        b = <span class="kw">self</span>.<span class="fn">get_pin_b</span>()</span>
+<span class="line" data-l="7">        <span class="kw">return</span> <span class="num">1</span> <span class="kw">if</span> a == <span class="num">1</span> <span class="kw">and</span> b == <span class="num">1</span> <span class="kw">else</span> <span class="num">0</span></span>
+<span class="line" data-l="8"><span class="com"># OrGate、NotGate 同款，只換這一個方法</span></span></div></div>
+      <div class="info-card"><div class="ic-title">Connector <span class="ic-badge">CODE</span></div><div class="pseudo-code" style="font-size:.76rem;">
+<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">Connector</span>:      <span class="com"># 不在閘的階層裡：HAS-A</span></span>
+<span class="line" data-l="2">    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, fgate, tgate):</span>
+<span class="line" data-l="3">        <span class="kw">self</span>.from_gate = fgate</span>
+<span class="line" data-l="4">        <span class="kw">self</span>.to_gate = tgate</span>
+<span class="line" data-l="5">        tgate.<span class="fn">set_from_pin</span>(<span class="kw">self</span>)  <span class="com"># 把自己插上目的閘的腳位</span></span>
+<span class="line" data-l="6">    <span class="kw">def</span> <span class="fn">get_from</span>(<span class="kw">self</span>):</span>
+<span class="line" data-l="7">        <span class="kw">return</span> <span class="kw">self</span>.from_gate</span></div></div>
+    </div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 多型的機關</div>
+  <p><code>get_output()</code> 定義在 LogicGate，卻能執行到 AndGate 的邏輯。靠的是？</p>
+  
+  <div class="quiz-options" id="qInhOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="這就是多型。父類寫流程（拿輸出前先算邏輯），子類各自填入「怎麼算」。Python 的方法查找本來就在執行期進行，不需要任何特別標記。" onclick="quizCheck('qInh', this)"><span class="opt-letter">(A)</span> 動態繫結：執行期依物件的實際類別找 perform_gate_logic</div><div class="quiz-opt" data-correct="false" data-fb="不是猜名字：查找順序是「物件的類別 → 父類」，一路往上找到為止。" onclick="quizCheck('qInh', this)"><span class="opt-letter">(B)</span> 直譯器看變數名稱猜的</div><div class="quiz-opt" data-correct="false" data-fb="AndGate 只寫了 perform_gate_logic。get_output 完整繼承自父類，一行都沒改。" onclick="quizCheck('qInh', this)"><span class="opt-letter">(C)</span> AndGate 重新定義了 get_output</div>
+  </div>
+  <div class="quiz-feedback" id="qInhFeedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 缺席的方法</div>
+  <p><code>g = LogicGate("G0"); g.get_output()</code> 會怎樣？</p>
+  
+  <div class="quiz-options" id="qInh2Options">
+    <div class="quiz-opt" data-correct="true" data-fb="造物件那一行是成功的（Python 沒有「抽象類別不能實例化」的內建限制），爆點在 get_output 呼叫不存在的方法。想提早擋，可以用 abc 模組把它宣告成抽象方法。" onclick="quizCheck('qInh2', this)"><span class="opt-letter">(A)</span> AttributeError：LogicGate 沒有 perform_gate_logic</div><div class="quiz-opt" data-correct="false" data-fb="_output 的初始值確實是 None，但流程根本走不到回傳那行。" onclick="quizCheck('qInh2', this)"><span class="opt-letter">(B)</span> 回傳 None</div><div class="quiz-opt" data-correct="false" data-fb="Python 不做這種檢查：錯誤延到真正呼叫的那一刻才爆。" onclick="quizCheck('qInh2', this)"><span class="opt-letter">(C)</span> 程式開始執行前就報錯</div>
+  </div>
+  <div class="quiz-feedback" id="qInh2Feedback"></div>
+</div>
+</section>
+
+<section id="exercises">
+  <div class="section-number">EXERCISES · 練習</div>
+  <h2>綜合練習 <span class="sec-badge">pythonds §1 綜合</span></h2>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 1 · 大整數</div>
+  <p><code>print(2 ** 100)</code> 的輸出是？</p>
+  
+  <div class="quiz-options" id="ex1Options">
+    <div class="quiz-opt" data-correct="true" data-fb="Python 的 int 是任意精度：要多大有多大，永遠精確。代價是大數運算比固定寬度整數慢，但正確性不用你操心。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> 精確的 31 位整數 1267650600228229401496703205376</div><div class="quiz-opt" data-correct="false" data-fb="那是 float 的表示法。int 的次方仍是 int，不會偷偷變近似值。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> <code>1.2676506e+30</code></div><div class="quiz-opt" data-correct="false" data-fb="int 沒有上限，不存在溢位這回事。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> OverflowError</div>
+  </div>
+  <div class="quiz-feedback" id="ex1Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 2 · pop 的兩用</div>
+  <p><code>my_list = [1024, 3, True, 6.5]; print(my_list.pop(1))</code> 印出什麼？list 變成什麼？</p>
+  
+  <div class="quiz-options" id="ex2Options">
+    <div class="quiz-opt" data-correct="true" data-fb="pop(i) 移除索引 i 的元素並回傳它；不帶引數的 pop() 則拿走最後一個。「取值」和「移除」一次完成。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(A)</span> 印 <code>3</code>；list 變 [1024, True, 6.5]</div><div class="quiz-opt" data-correct="false" data-fb="pop(1) 的 1 是索引：拿走的是第二個元素 3。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(B)</span> 印 <code>1024</code>；list 少了第一個</div><div class="quiz-opt" data-correct="false" data-fb="回傳 None 的是 sort()、reverse() 這類就地方法；pop 有回傳值。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(C)</span> 印 <code>None</code></div>
+  </div>
+  <div class="quiz-feedback" id="ex2Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 3 · 深相等</div>
+  <p>x = Fraction(1,2)、z = Fraction(2,4)，定義了交叉相乘的 __eq__ 之後，<code>x == z</code> 是？</p>
+  
+  <div class="quiz-options" id="ex3Options">
+    <div class="quiz-opt" data-correct="true" data-fb="1×4 == 2×2。兩個物件的成員數值不同（1,2 vs 2,4），但代表同一個分數。深相等就是我們的 ADT 想要的語意。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(A)</span> True：比的是值，不是物件身分</div><div class="quiz-opt" data-correct="false" data-fb="沒定義 __eq__ 時才會退回比身分；定義之後由你說了算。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(B)</span> False：不同物件就不等</div><div class="quiz-opt" data-correct="false" data-fb="__eq__ 已經定義了，比較合法。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(C)</span> 丟出例外</div>
+  </div>
+  <div class="quiz-feedback" id="ex3Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 4 · 型別選擇</div>
+  <p>要記錄「每位學生的成績清單」，讓你能用學號查到該生所有成績，最直接的容器組合是？</p>
+  
+  <div class="quiz-options" id="ex4Options">
+    <div class="quiz-opt" data-correct="true" data-fb="<code>grades = {&quot;B123&quot;: [90, 85]}</code>：容器可以巢狀，用 [] 新增、用 get()/in 查詢，一步到位。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(A)</span> dict：key 是學號、value 是成績 list</div><div class="quiz-opt" data-correct="false" data-fb="這是「一排字典」，用學號查人得掃整排，方向反了。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(B)</span> list 裡放一堆 dict</div><div class="quiz-opt" data-correct="false" data-fb="set 沒有 key 對 value 的概念，而且 list 不可雜湊，根本放不進 set。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(C)</span> set 裡放成績 list</div>
+  </div>
+  <div class="quiz-feedback" id="ex4Feedback"></div>
+</div>
+</section>
+
+<section id="reference">
+  <div class="section-number">REFERENCE · 總覽</div>
+  <h2>本章地圖與詞彙 <span class="sec-badge">pythonds §1 總覽</span></h2>
+  <div style="overflow-x:auto;">
+  <table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>主題</th><th>pythonds</th><th>本頁</th><th>之後在哪裡用到</th></tr></thead>
+    <tbody>
+      <tr><td>演算法、抽象化、ADT</td><td>§1.1–1.6</td><td>P00</td><td>每一章的開場白</td></tr>
+      <tr><td>原子型別、名字與綁定</td><td>§1.7–1.8.1</td><td>P01</td><td>第 2 章的效能分析</td></tr>
+      <tr><td>集合型別五張表</td><td>§1.8.2</td><td>P02</td><td>list/dict 全書主力</td></tr>
+      <tr><td>I/O 與 f-string</td><td>§1.9</td><td>P03</td><td>之後所有輸出排版</td></tr>
+      <tr><td>控制結構與生成式</td><td>§1.10</td><td>P04</td><td>所有演算法的骨架</td></tr>
+      <tr><td>例外處理</td><td>§1.11</td><td>P05</td><td>自訂錯誤、防禦式寫法</td></tr>
+      <tr><td>函式與傳參</td><td>§1.12</td><td>P06</td><td>所有演算法的簽名</td></tr>
+      <tr><td>類別、dunder、參考語意</td><td>§1.13.1</td><td>P07</td><td>自訂 Stack、Queue、BST</td></tr>
+      <tr><td>繼承、動態繫結、HAS-A</td><td>§1.13.2</td><td>P08</td><td>物件導向設計</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <h3 style="margin-top:1.4rem;">關鍵詞彙（講義 Key terms 精選）</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:.7rem;">
+    <div class="info-card"><div class="ic-title">抽象與封裝</div><div style="font-size:.84rem;line-height:1.9;">
+      <strong>ADT</strong>：只講操作與行為的資料模型。<br><strong>資料結構</strong>：ADT 的具體實作。<br>
+      <strong>封裝</strong>：把狀態藏起來，只留公開介面。<br><strong>介面</strong>：元件之間交換資訊的邊界。</div></div>
+    <div class="info-card"><div class="ic-title">語言機制</div><div style="font-size:.84rem;line-height:1.9;">
+      <strong>直譯器</strong>：逐行執行原始碼，錯誤多半到執行期才現形。<br>
+      <strong>動態型別</strong>：型別跟著物件走，名字只是綁定。<br>
+      <strong>可變／不可變</strong>：list、dict 可變；string、tuple 不可變。<br>
+      <strong>縮排區塊</strong>：縮排就是語法。</div></div>
+    <div class="info-card"><div class="ic-title">錯誤三兄弟</div><div style="font-size:.84rem;line-height:1.9;">
+      <strong>語法錯誤</strong>：執行前被擋。<br><strong>邏輯錯誤</strong>：會跑但答案錯。<br>
+      <strong>例外</strong>：執行期被打斷，可 try/except 接住、可 raise 自己丟。</div></div>
+    <div class="info-card"><div class="ic-title">物件導向</div><div style="font-size:.84rem;line-height:1.9;">
+      <strong>__init__</strong>：建構子，self 是物件自己。<br><strong>魔術方法</strong>：__str__、__add__、__eq__ 讓內建語法認得你。<br>
+      <strong>覆寫</strong>：子類換掉父類的實作。<br><strong>多型</strong>：同一介面、各自表述（動態繫結）。<br>
+      <strong>深／淺相等</strong>：比值 vs 比身分。</div></div>
+  </div>
+</section></div>
+<footer>
+  互動式 Python 導論自學教材 · 依 pythonds Ch.1 與課程講義 01 編寫<br>
+  <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);">Designed for NSYSU · Interactive Python self-study</span>
+</footer>
+<script>
+/* ============ shared utilities ============ */
+const $ = id => document.getElementById(id);
+
+function quizCheck(quizId, optEl) {
+  const isCorrect = optEl.dataset.correct === 'true';
+  optEl.parentElement.querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('correct','wrong'));
+  optEl.classList.add(isCorrect ? 'correct' : 'wrong');
+  const fb = $(quizId + 'Feedback');
+  fb.classList.remove('correct','wrong');
+  fb.classList.add('show', isCorrect ? 'correct' : 'wrong');
+  fb.innerHTML = (isCorrect ? '<strong>正確 ✓</strong> ' : '<strong>不對 ✗</strong> ') + (optEl.dataset.fb || '');
+}
+
+function hlLine(rootId, n) {
+  const root = $(rootId);
+  if (!root) return;
+  root.querySelectorAll('.line').forEach(l => l.classList.remove('active'));
+  if (n != null) {
+    const line = root.querySelector(`.line[data-l="${n}"]`);
+    if (line) line.classList.add('active');
+  }
+}
+
+/* step player: frames = [{...}], apply(frame) renders */
+class Player {
+  constructor({frames, apply, delayInput, onDone}) {
+    this.frames = frames; this.apply = apply;
+    this.delayInput = delayInput; this.i = -1; this.timer = null;
+    this.onDone = onDone || (()=>{});
+  }
+  step() {
+    if (this.i + 1 >= this.frames.length) { this.stop(); this.onDone(); return; }
+    this.i += 1; this.apply(this.frames[this.i]);
+  }
+  play() {
+    this.stop();
+    const tick = () => {
+      if (this.i + 1 >= this.frames.length) { this.stop(); this.onDone(); return; }
+      this.step();
+      this.timer = setTimeout(tick, this.delayInput ? parseInt(this.delayInput.value,10) : 700);
+    };
+    tick();
+  }
+  stop() { if (this.timer) { clearTimeout(this.timer); this.timer = null; } }
+  reset() { this.stop(); this.i = -1; if (this.frames.length) this.apply(this.frames[0]); }
+}
+
+function setStatus(id, html) {
+  const el = $(id); if (el) el.querySelector('.status-text').innerHTML = html;
+}
+
+/* vertical box stack renderer (DOM) */
+function renderBoxStack(containerId, items, opts={}) {
+  const el = $(containerId); if (!el) return;
+  const hl = opts.highlight ?? -1;   // index from top (0 = top)
+  el.innerHTML = '';
+  const label = document.createElement('div');
+  label.className = 'bs-toplabel';
+  label.textContent = items.length ? 'top ↓' : '(empty)';
+  el.appendChild(label);
+  items.slice().reverse().forEach((v, idx) => {
+    const d = document.createElement('div');
+    d.className = 'bs-item' + (idx === hl ? ' bs-hl' : '');
+    d.textContent = v;
+    el.appendChild(d);
+  });
+}
+
+/* horizontal queue renderer: front at left */
+function renderBoxQueue(containerId, items, opts={}) {
+  const el = $(containerId); if (!el) return;
+  el.innerHTML = '';
+  const front = document.createElement('div');
+  front.className = 'bq-label'; front.textContent = items.length ? 'front →' : '(empty)';
+  el.appendChild(front);
+  items.forEach((v, idx) => {
+    const d = document.createElement('div');
+    d.className = 'bq-item' + (idx === (opts.highlight ?? -1) ? ' bs-hl' : '');
+    d.textContent = v;
+    el.appendChild(d);
+  });
+  const rear = document.createElement('div');
+  rear.className = 'bq-label'; rear.textContent = items.length ? '← rear' : '';
+  el.appendChild(rear);
+}
+
+/* floating nav scroll spy */
+(function setupNav() {
+  const nav = $('floatNav');
+  const links = nav.querySelectorAll('a[data-target]');
+  const sections = Array.from(links).map(a => document.getElementById(a.dataset.target)).filter(Boolean);
+  function update() {
+    const y = window.scrollY + window.innerHeight * 0.3;
+    let active = sections[0]?.id;
+    for (const s of sections) if (s.offsetTop <= y) active = s.id;
+    links.forEach(a => a.classList.toggle('active', a.dataset.target === active));
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+
+/* ---------- P01 types ---------- */
+const TYPES = {
+  'int':   {demo: '2 ** 100 → 1267650600228229401496703205376',
+            note: '任意精度：不溢位、不近似，要多大有多大。'},
+  'float': {demo: '0.1 + 0.2 → 0.30000000000000004',
+            note: '64 位元雙精度：浮點誤差是常態，比較時用誤差容忍值。'},
+  'bool':  {demo: 'True + True → 2',
+            note: 'True 就是 1、False 就是 0（bool 是 int 的子型別）。'},
+  'NoneType': {demo: 'print(print("hi")) → hi 然後 None',
+            note: 'None 表示「沒有值」；函式沒寫 return 就回它。判斷用 is None。'},
+};
+function typeShow(name) {
+  const t = TYPES[name];
+  $('typeVis').innerHTML = `<span style="color:var(--accent2);font-weight:700;">${name}</span>　${t.demo}`;
+  setStatus('typeStatus', `<strong>${name}</strong>：${t.note}`);
+}
+(function initTypes(){
+  const bar = $('typeBtns');
+  Object.keys(TYPES).forEach(name => {
+    const b = document.createElement('button');
+    b.className = 'btn'; b.textContent = name;
+    b.onclick = () => typeShow(name);
+    bar.appendChild(b);
+  });
+  typeShow('int');
+})();
+
+/* ---------- P01 name binding ---------- */
+function nbRender(objLabel, objColor, msg, line) {
+  const el = $('nbVis'); el.innerHTML = '';
+  const name = document.createElement('div'); name.className = 'bq-item';
+  name.style.background = '#5b7eb8';
+  name.innerHTML = '<div style="font-size:.62rem;opacity:.8;">名字</div>the_sum';
+  el.appendChild(name);
+  const arrow = document.createElement('div'); arrow.className = 'bq-label';
+  arrow.textContent = '⟶ 綁到';
+  el.appendChild(arrow);
+  const obj = document.createElement('div'); obj.className = 'bq-item';
+  obj.style.background = objColor;
+  obj.innerHTML = `<div style="font-size:.62rem;opacity:.8;">物件</div>${objLabel}`;
+  el.appendChild(obj);
+  setStatus('nbStatus', msg); hlLine('nbCode', line);
+}
+function nbStep(s) {
+  if (s === 1) nbRender('0（int）', '#8e44ad',
+    'the_sum 綁到整數物件 0。名字沒有型別，物件才有。', 1);
+  if (s === 2) nbRender('1（int）', '#8e44ad',
+    '右邊先算出新物件 1，the_sum 改綁過去。整數物件本身從未被修改：int 是不可變的。', 2);
+  if (s === 3) nbRender('True（bool）', '#1a6b4a',
+    'the_sum 改綁到 bool 物件。同一個名字先後指向不同型別，完全合法：這就是動態型別。', 3);
+}
+nbStep(1);
+
+/* ---------- P02 list demo ---------- */
+function colDemo() {
+  const steps = [
+    {v: ['17'], msg: 'my_list.append(17)，長度變 1'},
+    {v: ['17','26'], msg: 'my_list.append(26)'},
+    {v: ['17','26','31'], msg: 'my_list.append(31)'},
+    {v: ['17','26','31'], hl: 1, msg: 'my_list[1] 直達 26，O(1)'},
+    {v: ['17','26'], msg: 'my_list.pop() 移除並「回傳」31：取值與移除一次完成'},
+  ];
+  let i = 0;
+  const t = setInterval(() => {
+    if (i >= steps.length) { clearInterval(t); return; }
+    const s = steps[i];
+    renderBoxQueue('colVis', s.v, {highlight: s.hl ?? -1});
+    setStatus('colStatus', s.msg);
+    i++;
+  }, 750);
+}
+
+/* ---------- P03 io formatter ---------- */
+function ioRender() {
+  const w = parseInt($('ioW').value, 10);
+  const align = $('ioAlign').value;
+  const fill = $('ioFill').value;
+  const prec = parseInt($('ioPrec').value, 10);
+  const item = 'banana';
+  const price = 24;
+  const pad = (s, n, ch, mode) => {
+    s = String(s);
+    while (s.length < n) {
+      if (mode === 'left') s = s + ch;
+      else if (mode === 'center') { s = (s.length % 2 ? ch + s : s + ch); }
+      else s = ch + s;
+    }
+    return s;
+  };
+  const itemF = pad(item, w, fill, align);
+  const priceF = pad(price.toFixed(prec), w, fill, align);
+  $('ioOut').textContent = `The ${itemF} costs ${priceF} cents`;
+  const alignCh = align === 'left' ? '<' : align === 'center' ? '^' : '>';
+  const fillCh = fill === ' ' ? '' : fill;
+  $('ioExpr').textContent = `${fillCh}${alignCh}${w}`;
+  setStatus('ioStatus', `規格 {item:${fillCh}${alignCh}${w}}、{price:${fillCh}${alignCh}${w}.${prec}f}：` +
+    `寬度 ${w}、${align === 'left' ? '靠左' : align === 'center' ? '置中' : '靠右'}、填充「${fill === ' ' ? '空白' : fill}」、小數 ${prec} 位。`);
+}
+['ioW','ioAlign','ioFill','ioPrec'].forEach(id => $(id).addEventListener('change', ioRender));
+ioRender();
+
+/* ---------- P06 functions ---------- */
+function fnDemo(mode) {
+  const el = $('fnVis'); el.innerHTML = '';
+  const mk = (label, val, color) => {
+    const d = document.createElement('div'); d.className = 'bq-item';
+    d.style.background = color;
+    d.innerHTML = `<div style="font-size:.62rem;opacity:.8;">${label}</div>${val}`;
+    return d;
+  };
+  if (mode === 'rebind') {
+    el.appendChild(mk('呼叫端 a', '1', '#5b7eb8'));
+    el.appendChild(mk('函式內 x（改綁後）', '99', '#e67e22'));
+    setStatus('fnStatus', 'rebind：x = 99 只是把區域名字改綁到新物件，呼叫端的 a 原封不動，仍是 1。');
+    hlLine('fnCode', 7);
+  } else if (mode === 'mutate') {
+    el.appendChild(mk('a 與 lst（同一個 list）', '[1] → [1, 99]', '#1a6b4a'));
+    setStatus('fnStatus', 'mutate：lst.append(99) 就地修改物件本身。a 和 lst 指著同一個 list，呼叫端看得到變化。');
+    hlLine('fnCode', 8);
+  } else {
+    el.appendChild(mk('呼叫端 a', '[1]', '#5b7eb8'));
+    el.appendChild(mk('函式內 lst（改綁後）', '[1, 99]（新物件）', '#8e44ad'));
+    setStatus('fnStatus', 'lst = lst + [9]：+ 造出全新 list，lst 改綁過去。呼叫端的 a 還指著舊物件，不受影響。');
+    hlLine('fnCode', 8);
+  }
+}
+fnDemo('rebind');
+
+/* ---------- P07 fraction ---------- */
+function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b]; } return a || 1; }
+function parseFrac(s) {
+  const m = s.trim().match(/^(-?\d+)\s*\/\s*(-?\d+)$/);
+  if (!m) return null;
+  let n = parseInt(m[1],10), d = parseInt(m[2],10);
+  if (d < 0) { n = -n; d = -d; }   // 負分母正規化，跟講義練習一致
+  return [n, d];
+}
+function frCalc(op) {
+  const A = parseFrac($('frA').value), B = parseFrac($('frB').value);
+  $('frOp').textContent = op;
+  if (!A || !B || !A[1] || !B[1]) { $('frOut').textContent = '?'; setStatus('frStatus', '請用 a/b 格式，分母不能是 0。'); return; }
+  const [an, ad] = A, [bn, bd] = B;
+  if (op === '==') {
+    const eq = an * bd === bn * ad;
+    $('frOut').textContent = eq ? 'True' : 'False';
+    setStatus('frStatus', `__eq__：交叉相乘 ${an}×${bd} 與 ${bn}×${ad} ${eq ? '相等' : '不等'}，所以是 ${eq ? 'True' : 'False'}。不必先通分。`);
+    return;
+  }
+  let n, d;
+  if (op === '+') { n = an*bd + bn*ad; d = ad*bd; }
+  else { n = an*bn; d = ad*bd; }
+  const g = gcd(n, d);
+  $('frOut').textContent = `${n/g}/${d/g}`;
+  setStatus('frStatus', `__${op === '+' ? 'add' : 'mul'}__：先得到 ${n}/${d}，再用 gcd = ${g} 約分成 ${n/g}/${d/g}。不變量：出手的永遠是最簡分數。`);
+}
+frCalc('+');
+
+/* ---------- P08 gates ---------- */
+function gateRun() {
+  const A = +$('gInA').value, B = +$('gInB').value, C = +$('gInC').value, D = +$('gInD').value;
+  const and1 = A && B ? 1 : 0, and2 = C && D ? 1 : 0;
+  const or1 = (and1 || and2) ? 1 : 0, out = or1 ? 0 : 1;
+  $('gAndOut').textContent = and1; $('gAnd2Out').textContent = and2;
+  $('gOrOut').textContent = or1; $('gNotOut').textContent = out;
+  setStatus('gateStatus', `AND(${A},${B})=${and1}、AND(${C},${D})=${and2}，OR 得 ${or1}，NOT 得 <strong>${out}</strong>。` +
+    '訊號沿 Connector 一路往前送，每個閘只管自己的 perform_gate_logic()。');
+}
+gateRun();
+</script>
+</body>
+</html>

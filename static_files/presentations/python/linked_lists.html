@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>鏈結串列 — Linked Lists Interactive（Python）</title>
+<script>
+  MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1a2e;--paper:#f7f3eb;--accent:#c0392b;--accent2:#2c3e7a;--accent3:#1a6b4a;
+  --muted:#8a8578;--card:#fffdf7;--card-border:#e8e2d6;--highlight:#fff3cd;
+  --code-bg:#2d2d3f;--code-fg:#e8e6df;
+  --node-white:#ffffff;--node-gray:#bdc3c7;--node-black:#34495e;
+  --node-current:#f39c12;--node-found:#16a085;--node-start:#9b59b6;
+  --edge-default:#95a5a6;--edge-tree:#27ae60;--edge-explore:#f39c12;--edge-mst:#1a6b4a;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--paper);color:var(--ink);line-height:1.9;font-size:17px;}
+
+/* Hero */
+.hero{min-height:62vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem;position:relative;overflow:hidden;background:linear-gradient(170deg,#1a1a2e 0%,#2c3e7a 40%,#1a6b4a 100%);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.06) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.04) 0%,transparent 40%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);}
+.hero-content{position:relative;z-index:1;max-width:860px;}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;color:#fff;letter-spacing:.04em;line-height:1.3;margin-bottom:1rem;}
+.hero h1 .green{color:#2ecc71;}
+.hero h1 .blue{color:#5dade2;}
+.hero h1 .orange{color:#f39c12;}
+.hero h1 .purple{color:#bb8fce;}
+.hero .subtitle{font-size:clamp(.95rem,2.2vw,1.2rem);color:rgba(255,255,255,.65);font-weight:300;margin-bottom:2rem;}
+.hero .big-formula{color:#2ecc71;background:rgba(0,0,0,.3);padding:.8rem 2rem;border-radius:12px;display:inline-block;border:1px solid rgba(255,255,255,.1);margin-bottom:2rem;backdrop-filter:blur(4px);font-size:1.05rem;}
+.scroll-hint{color:rgba(255,255,255,.4);font-size:.9rem;animation:bounce 2s infinite;}
+.scroll-hint span{display:block;font-size:1.4rem;margin-top:.3rem;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+/* Hero mini-graph illustration */
+.hero-graph{position:absolute;right:5%;top:50%;transform:translateY(-50%);opacity:.18;pointer-events:none;}
+@media(max-width:900px){.hero-graph{display:none;}}
+
+/* Layout */
+.container{max-width:1180px;margin:0 auto;padding:3rem 1.5rem;}
+.section-number{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.5rem;}
+h2{font-family:'Noto Serif TC',serif;font-size:1.65rem;font-weight:700;color:var(--ink);margin-bottom:1.2rem;line-height:1.4;}
+h3{font-family:'Noto Serif TC',serif;font-size:1.15rem;font-weight:700;color:var(--accent2);margin:1.4rem 0 .8rem;}
+section{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--card-border);}
+section:last-of-type{border-bottom:none;}
+p{margin-bottom:1rem;}
+code{font-family:'JetBrains Mono',monospace;font-size:.92em;background:rgba(44,62,122,.08);padding:1px 6px;border-radius:4px;color:var(--accent2);}
+strong{color:var(--ink);}
+
+/* TOC */
+.toc{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:1.2rem 1.5rem;margin:1rem 0 2rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.toc-title{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);font-weight:600;letter-spacing:.15em;margin-bottom:.7rem;}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.5rem .8rem;}
+.toc-grid a{color:var(--accent2);text-decoration:none;font-size:.9rem;padding:.3rem 0;display:flex;align-items:center;gap:.4rem;transition:color .2s;}
+.toc-grid a:hover{color:var(--accent);}
+.toc-grid a .toc-num{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);min-width:34px;}
+
+/* Viz layout */
+.viz-layout{display:grid;grid-template-columns:1fr 320px;gap:1.3rem;margin:1.2rem 0;align-items:start;}
+@media(max-width:900px){.viz-layout{grid-template-columns:1fr;}}
+
+.viz-panel{background:linear-gradient(160deg,#fffdf7 0%,#f4efe3 100%);border:1px solid var(--card-border);border-radius:12px;padding:1rem;box-shadow:0 4px 18px rgba(0,0,0,.06);position:relative;}
+
+/* Graph SVG canvas */
+.graph-canvas{position:relative;width:100%;height:380px;background:#fafafa;border-radius:8px;overflow:hidden;border:1px solid #ececec;}
+.graph-canvas svg{width:100%;height:100%;display:block;}
+
+/* SVG elements styles */
+.graph-edge{stroke:var(--edge-default);stroke-width:2;fill:none;transition:stroke .25s, stroke-width .25s;}
+.graph-edge.tree{stroke:var(--edge-tree);stroke-width:3.5;}
+.graph-edge.exploring{stroke:var(--edge-explore);stroke-width:3.5;stroke-dasharray:5 4;animation:dash 1s linear infinite;}
+.graph-edge.mst{stroke:var(--edge-mst);stroke-width:4;}
+.graph-edge.path{stroke:var(--accent);stroke-width:4;}
+.graph-edge.dotted{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:3 4;}
+@keyframes dash{to{stroke-dashoffset:-18;}}
+
+.edge-label{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;fill:var(--ink);pointer-events:none;}
+.edge-label-bg{fill:#fafafa;stroke:#ececec;stroke-width:1;}
+
+.graph-node{cursor:pointer;}
+.graph-node circle{fill:var(--node-white);stroke:var(--ink);stroke-width:2;transition:fill .25s, stroke .25s, r .2s;}
+.graph-node.gray circle{fill:var(--node-gray);}
+.graph-node.black circle{fill:var(--node-black);stroke:var(--node-black);}
+.graph-node.current circle{fill:var(--node-current);stroke:#d68910;stroke-width:3;}
+.graph-node.start circle{fill:var(--node-start);stroke:#7d3c98;stroke-width:3;}
+.graph-node.found circle{fill:var(--node-found);stroke:#117a65;stroke-width:3;}
+.graph-node.in-mst circle{fill:#82e0aa;stroke:var(--accent3);stroke-width:3;}
+.graph-node text.node-key{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;fill:var(--ink);text-anchor:middle;dominant-baseline:central;pointer-events:none;}
+.graph-node.black text.node-key{fill:#fff;}
+.graph-node.current text.node-key{fill:#fff;}
+.graph-node.start text.node-key{fill:#fff;}
+.graph-node.found text.node-key{fill:#fff;}
+.graph-node text.node-meta{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;fill:var(--accent);text-anchor:middle;pointer-events:none;}
+
+/* Status banner */
+.status-banner{margin-top:.8rem;padding:.7rem 1rem;background:var(--code-bg);color:#fff;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.85rem;min-height:42px;display:flex;align-items:center;gap:.6rem;}
+.status-banner .status-icon{color:#2ecc71;font-weight:700;}
+.status-banner .status-text{flex:1;}
+
+/* Controls */
+.controls-bar{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--card-border);}
+.btn{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:600;padding:.45rem 1rem;border-radius:6px;border:none;cursor:pointer;transition:all .2s;}
+.btn-play{background:var(--accent3);color:#fff;}
+.btn-play:hover{background:#22845c;}
+.btn-play.active{background:var(--accent);}
+.btn-step{background:var(--accent2);color:#fff;}
+.btn-step:hover{background:#1f2e5f;}
+.btn-step:disabled{background:#ccc;cursor:not-allowed;}
+.btn-reset{background:var(--card-border);color:var(--ink);}
+.btn-reset:hover{background:#ccc;}
+.btn-toggle{background:var(--accent2);color:#fff;}
+.btn-toggle:hover{background:#1f2e5f;}
+.btn-toggle.off{background:#bbb;color:#555;}
+.btn-shuffle{background:#8e44ad;color:#fff;}
+.btn-shuffle:hover{background:#6c3485;}
+
+/* Slider row */
+.slider-row{display:flex;align-items:center;gap:.6rem;padding:.5rem .8rem;background:var(--paper);border-radius:8px;margin-bottom:.5rem;}
+.slider-row .slider-label{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent2);font-weight:600;min-width:60px;}
+.slider-row input[type="range"]{flex:1;accent-color:var(--accent3);height:5px;cursor:pointer;}
+.slider-row .slider-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--accent);font-weight:600;min-width:60px;text-align:right;}
+
+/* Side panel */
+.side-panel{display:flex;flex-direction:column;gap:.85rem;}
+.info-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.info-card .ic-title{font-size:.72rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem;border-bottom:1px solid var(--card-border);padding-bottom:.3rem;display:flex;align-items:center;justify-content:space-between;}
+.info-card .ic-title .ic-badge{font-size:.7rem;color:#fff;background:var(--accent3);padding:1px 7px;border-radius:3px;letter-spacing:.05em;font-weight:700;}
+.info-card .ic-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.83rem;padding:.2rem 0;}
+.info-card .ic-label{color:var(--muted);}
+.info-card .ic-value{color:var(--ink);font-weight:600;}
+.info-card .ic-value.highlight{color:var(--accent);}
+.info-card .ic-value.big{font-size:1.4rem;color:var(--accent2);}
+
+/* Stats grid */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.4rem;}
+.stat-tile{background:var(--paper);border-radius:8px;padding:.5rem .7rem;text-align:center;}
+.stat-tile .stat-label{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;}
+.stat-tile .stat-value{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;color:var(--accent2);}
+
+/* Queue / Stack / PQ visualization */
+.ds-display{font-family:'JetBrains Mono',monospace;font-size:.8rem;background:var(--paper);border-radius:6px;padding:.5rem .7rem;min-height:36px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;border:1px dashed var(--card-border);}
+.ds-display .ds-empty{color:var(--muted);font-style:italic;}
+.ds-item{background:var(--accent2);color:#fff;padding:2px 8px;border-radius:4px;font-weight:600;}
+.ds-item.front{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-item.top{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-item.pq{background:var(--accent3);}
+.ds-item.pq.min{background:var(--accent);box-shadow:0 0 0 2px rgba(192,57,43,.3);}
+.ds-arrow{color:var(--muted);}
+
+/* Pseudo code */
+.pseudo-code{background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:.85rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.6;overflow-x:auto;}
+.pseudo-code .line{padding:1px 4px;border-radius:3px;display:block;white-space:pre;}
+.pseudo-code .line.active{background:rgba(243,156,18,.3);color:#fff;border-left:3px solid var(--node-current);padding-left:6px;}
+.pseudo-code .kw{color:#ff79c6;}
+.pseudo-code .fn{color:#50fa7b;}
+.pseudo-code .num{color:#bd93f9;}
+.pseudo-code .com{color:#6272a4;font-style:italic;}
+.pseudo-code .str{color:#f1fa8c;}
+
+/* Adjacency table */
+.adj-display{margin:.5rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.adj-matrix{border-collapse:collapse;margin:.5rem auto;}
+.adj-matrix td,.adj-matrix th{border:1px solid var(--card-border);padding:6px 10px;text-align:center;min-width:34px;background:#fff;}
+.adj-matrix th{background:var(--accent2);color:#fff;font-weight:700;}
+.adj-matrix td.zero{color:#ccc;}
+.adj-matrix td.nonzero{background:#eafaf1;color:var(--accent3);font-weight:700;}
+.adj-matrix td.highlight{background:#fff3cd;}
+.adj-list{background:var(--card);border:1px solid var(--card-border);border-radius:8px;padding:.7rem 1rem;}
+.adj-list .adj-row{padding:3px 0;border-bottom:1px dashed var(--card-border);}
+.adj-list .adj-row:last-child{border-bottom:none;}
+.adj-list .adj-key{color:var(--accent);font-weight:700;display:inline-block;min-width:32px;}
+.adj-list .adj-arrow{color:var(--muted);margin:0 6px;}
+.adj-list .adj-neighbor{background:#eef2ff;color:var(--accent2);padding:1px 8px;border-radius:4px;margin:1px 3px;display:inline-block;font-weight:600;}
+
+/* Chess board for Knight's tour */
+.chess-board{display:grid;background:#fff;border:2px solid var(--ink);border-radius:6px;overflow:hidden;margin:.5rem auto;width:fit-content;}
+.chess-cell{display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:700;position:relative;transition:background .2s;}
+.chess-cell.light{background:#f0d9b5;color:#666;}
+.chess-cell.dark{background:#b58863;color:#fff;}
+.chess-cell.visited{background:#27ae60 !important;color:#fff;}
+.chess-cell.current{background:#f39c12 !important;color:#fff;box-shadow:inset 0 0 0 3px #d68910;}
+.chess-cell.start{background:#9b59b6 !important;color:#fff;}
+.chess-cell .knight{font-size:1.4em;line-height:1;}
+.chess-cell .step-num{font-size:.7em;}
+
+/* Info box */
+.info-box{background:#eef2ff;border:2px solid var(--accent2);border-radius:10px;padding:1.1rem 1.4rem;margin:1.3rem 0;position:relative;}
+.info-box .info-label{position:absolute;top:-11px;left:14px;background:var(--accent2);color:#fff;font-size:.74rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.05em;}
+.info-box.warm{background:#fef5e7;border-color:#d68910;}
+.info-box.warm .info-label{background:#d68910;}
+.info-box.green{background:#eafaf1;border-color:var(--accent3);}
+.info-box.green .info-label{background:var(--accent3);}
+.info-box.purple{background:#f4ecf7;border-color:#8e44ad;}
+.info-box.purple .info-label{background:#8e44ad;}
+
+/* Pill labels */
+.pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;padding:2px 9px;border-radius:4px;margin:0 .15rem;vertical-align:1px;}
+.pill-blue{background:rgba(41,128,185,.12);color:#2980b9;border:1px solid rgba(41,128,185,.3);}
+.pill-red{background:rgba(192,57,43,.12);color:var(--accent);border:1px solid rgba(192,57,43,.3);}
+.pill-green{background:rgba(39,174,96,.12);color:var(--accent3);border:1px solid rgba(39,174,96,.3);}
+.pill-orange{background:rgba(243,156,18,.12);color:#d68910;border:1px solid rgba(243,156,18,.3);}
+.pill-purple{background:rgba(142,68,173,.12);color:#8e44ad;border:1px solid rgba(142,68,173,.3);}
+.pill-gray{background:rgba(0,0,0,.06);color:var(--muted);border:1px solid rgba(0,0,0,.12);}
+
+/* Comparison table */
+.cmp-table{width:100%;border-collapse:collapse;font-size:.86rem;margin:.8rem 0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.cmp-table th{background:var(--accent2);color:#fff;padding:.6rem .8rem;text-align:center;font-weight:600;font-size:.82rem;}
+.cmp-table td{padding:.6rem .8rem;text-align:center;border-bottom:1px solid var(--card-border);font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+.cmp-table td:first-child{font-family:'Noto Sans TC',sans-serif;color:var(--accent2);font-weight:600;text-align:left;}
+.cmp-table tr:last-child td{border-bottom:none;}
+.cmp-table tr:nth-child(even){background:rgba(0,0,0,.015);}
+.cmp-table .best{color:var(--accent3);font-weight:700;}
+.cmp-table .worst{color:var(--accent);font-weight:700;}
+
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:.6rem;margin:.6rem 0;font-family:'JetBrains Mono',monospace;font-size:.75rem;}
+.legend-item{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .5rem;background:var(--paper);border-radius:5px;}
+.legend-item .lg-swatch{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--ink);}
+.legend-item .lg-edge{width:18px;height:3px;border-radius:2px;}
+
+/* Quiz */
+.quiz-box{background:var(--card);border:2px solid var(--accent2);border-radius:12px;padding:1.3rem 1.5rem;margin:1.5rem 0;}
+.quiz-box .quiz-label{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);font-weight:700;letter-spacing:.1em;margin-bottom:.5rem;}
+.quiz-options{display:flex;flex-direction:column;gap:.5rem;margin:.8rem 0;}
+.quiz-opt{display:flex;align-items:center;gap:.6rem;padding:.55rem .9rem;background:var(--paper);border:2px solid var(--card-border);border-radius:8px;cursor:pointer;transition:all .2s;font-family:'JetBrains Mono',monospace;font-size:.86rem;}
+.quiz-opt:hover{border-color:var(--accent2);}
+.quiz-opt .opt-letter{font-weight:700;color:var(--accent2);min-width:22px;}
+.quiz-opt.correct{background:#eafaf1;border-color:var(--accent3);}
+.quiz-opt.correct .opt-letter{color:var(--accent3);}
+.quiz-opt.wrong{background:#fef5e7;border-color:var(--accent);}
+.quiz-opt.wrong .opt-letter{color:var(--accent);}
+.quiz-feedback{margin-top:.7rem;padding:.7rem 1rem;border-radius:8px;font-size:.88rem;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.correct{background:#eafaf1;color:var(--accent3);border-left:4px solid var(--accent3);}
+.quiz-feedback.wrong{background:#fef5e7;color:var(--accent);border-left:4px solid var(--accent);}
+
+/* Floating sidebar navigation */
+.float-nav{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:2px;background:rgba(255,253,250,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--card-border);border-radius:12px;padding:10px 7px;box-shadow:0 6px 24px rgba(0,0,0,.10);font-family:'JetBrains Mono',monospace;max-height:88vh;overflow-y:auto;transition:padding .25s ease;}
+.float-nav .fn-title{font-family:'Noto Serif TC',serif;font-weight:700;font-size:.68rem;color:var(--accent2);text-align:center;letter-spacing:1.5px;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--card-border);max-width:0;overflow:hidden;transition:max-width .25s ease;}
+.float-nav:hover .fn-title{max-width:220px;}
+.float-nav a{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:7px;color:var(--ink);text-decoration:none;white-space:nowrap;transition:all .2s ease;border-left:3px solid transparent;}
+.float-nav a .fn-num{font-weight:700;font-size:.66rem;color:var(--muted);letter-spacing:.4px;flex-shrink:0;width:30px;text-align:left;}
+.float-nav a .fn-name{font-family:'Noto Sans TC',sans-serif;font-size:.76rem;font-weight:500;max-width:0;overflow:hidden;transition:max-width .25s ease,padding .25s ease;padding:0;}
+.float-nav:hover a .fn-name{max-width:220px;padding-left:2px;}
+.float-nav a:hover{background:var(--card);}
+.float-nav a.active{background:var(--accent2);color:#fff;border-left-color:var(--accent);box-shadow:0 2px 6px rgba(192,57,43,.25);}
+.float-nav a.active .fn-num{color:rgba(255,255,255,.85);}
+.float-nav a.active .fn-name{color:#fff;}
+.float-nav .fn-top{margin-top:6px;padding-top:6px;border-top:1px solid var(--card-border);justify-content:center;}
+.float-nav .fn-top .fn-num{width:auto;color:var(--accent2);font-size:.78rem;}
+@media(max-width:768px){
+  .float-nav{right:8px;top:auto;bottom:14px;transform:none;padding:6px 5px;max-height:70vh;}
+  .float-nav .fn-title{display:none;}
+  .float-nav a{padding:4px 7px;}
+  .float-nav a .fn-num{width:26px;font-size:.62rem;}
+}
+
+footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--card-border);}
+
+/* Distance / table inside graph viz */
+.vert-table{margin-top:.6rem;width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:.78rem;}
+.vert-table th,.vert-table td{padding:4px 6px;text-align:center;border:1px solid var(--card-border);}
+.vert-table th{background:var(--accent2);color:#fff;font-weight:600;font-size:.74rem;}
+.vert-table td.tcell-current{background:#fff3cd;font-weight:700;color:var(--accent);}
+.vert-table td.tcell-done{background:#eafaf1;color:var(--accent3);}
+.vert-table td.tcell-inf{color:#ccc;}
+.sec-badge{font-size:.6em;color:var(--muted);border:1px solid var(--card-border);background:var(--card);padding:2px 10px;border-radius:999px;vertical-align:middle;margin-left:.6rem;font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.02em;white-space:nowrap;}
+
+/* Phase 8 shared widgets */
+.bs-stack{display:flex;flex-direction:column-reverse;align-items:center;gap:4px;min-height:180px;justify-content:flex-start;padding:.6rem;}
+.bs-item{width:110px;text-align:center;padding:.4rem .6rem;background:#5b7eb8;color:#fff;border-radius:6px;font-family:'JetBrains Mono',monospace;font-weight:600;box-shadow:0 2px 5px rgba(0,0,0,.15);}
+.bs-hl{background:#f39c12;}
+.bs-toplabel,.bq-label{font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.bq-row{display:flex;align-items:center;gap:6px;min-height:64px;flex-wrap:wrap;padding:.4rem;}
+.bq-item{min-width:52px;text-align:center;padding:.45rem .5rem;background:#5b7eb8;color:#fff;border-radius:6px;font-family:'JetBrains Mono',monospace;font-weight:600;}
+.char-strip{display:flex;gap:3px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;padding:.4rem 0;}
+.char-cell{min-width:30px;text-align:center;padding:.35rem .25rem;border:1px solid var(--card-border);border-radius:5px;background:var(--card);}
+.char-cur{background:#f39c12;color:#fff;border-color:#f39c12;}
+.char-done{background:#e8f5ec;color:#1a6b4a;border-color:#bfe3cd;}
+.char-bad{background:#c0392b;color:#fff;border-color:#c0392b;}
+.token-out{display:flex;gap:4px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;min-height:40px;padding:.3rem 0;}
+.tok{padding:.3rem .55rem;border-radius:5px;background:#2c3e7a;color:#fff;font-weight:600;}
+.tok-op{background:#8e44ad;}
+.tok-new{outline:3px solid #f39c12;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.bq-prev{outline:3px solid #8e44ad;}
+</style>
+</head>
+<body>
+<nav class="float-nav" id="floatNav" aria-label="章節導覽">
+  <div class="fn-title">章節導覽</div>
+  <a href="#prologue" data-target="prologue"><span class="fn-num">P00</span><span class="fn-name">為什麼要鏈結？</span></a>
+  <a href="#node" data-target="node"><span class="fn-num">P01</span><span class="fn-name">Node 與指標</span></a>
+  <a href="#unordered" data-target="unordered"><span class="fn-num">P02</span><span class="fn-name">未排序串列操作</span></a>
+  <a href="#ordered" data-target="ordered"><span class="fn-num">P03</span><span class="fn-name">排序串列</span></a>
+  <a href="#variants" data-target="variants"><span class="fn-num">P04</span><span class="fn-name">雙向與環狀</span></a>
+  <a href="#stl" data-target="stl"><span class="fn-num">P05</span><span class="fn-name">deque 對照</span></a>
+  <a href="#exercises" data-target="exercises"><span class="fn-num">EX</span><span class="fn-name">練習題</span></a>
+  <a href="#reference" data-target="reference"><span class="fn-num">REF</span><span class="fn-name">總覽比較</span></a>
+  <a href="#top" class="fn-top" title="回到頂端"><span class="fn-num">↑ TOP</span></a>
+</nav>
+
+<div class="hero" id="top">
+  <div class="hero-grid"></div>
+  <svg class="hero-graph" width="340" height="240" viewBox="0 0 340 240">
+  <g fill="#fff" opacity=".92">
+    <rect x="20"  y="100" width="52" height="34" rx="6"/>
+    <rect x="110" y="100" width="52" height="34" rx="6"/>
+    <rect x="200" y="100" width="52" height="34" rx="6"/>
+  </g>
+  <g stroke="#fff" stroke-width="3" fill="none" opacity=".85">
+    <path d="M72 117 h30"/><path d="M96 110 l8 7 l-8 7"/>
+    <path d="M162 117 h30"/><path d="M186 110 l8 7 l-8 7"/>
+    <path d="M252 117 h30"/><path d="M276 110 l8 7 l-8 7"/>
+    <line x1="292" y1="104" x2="306" y2="130"/>
+    <line x1="306" y1="104" x2="292" y2="130"/>
+  </g>
+</svg>
+  <div class="hero-content">
+    <h1><span class="blue">節點</span>與<span class="orange">指標</span>：鏈結串列</h1>
+    <div class="subtitle">pythonds §3.19–3.23 — Linked Lists（對應講義 04）</div>
+    <div class="big-formula">Node｜head｜previous/current 雙參考｜有序插入｜doubly / circular｜collections.deque</div>
+    <div class="scroll-hint">向下捲動開始互動<span>↓</span></div>
+  </div>
+</div>
+
+<div class="container">
+<div class="toc">
+  <div class="toc-title">CONTENTS · 內容目錄</div>
+  <div class="toc-grid">
+    <a href="#prologue"><span class="toc-num">P00</span>為什麼要鏈結？</a>
+    <a href="#node"><span class="toc-num">P01</span>Node 與指標</a>
+    <a href="#unordered"><span class="toc-num">P02</span>未排序串列操作</a>
+    <a href="#ordered"><span class="toc-num">P03</span>排序串列</a>
+    <a href="#variants"><span class="toc-num">P04</span>雙向與環狀</a>
+    <a href="#stl"><span class="toc-num">P05</span>deque 對照</a>
+    <a href="#exercises"><span class="toc-num">EX</span>練習題</a>
+    <a href="#reference"><span class="toc-num">REF</span>總覽比較</a>
+  </div>
+</div>
+
+<section id="prologue">
+  <div class="section-number">PROLOGUE · 開場</div>
+  <h2>擺脫連續記憶體：用指標串起集合 <span class="sec-badge">pythonds §3.19–3.20</span></h2>
+  <p>list 這類陣列容器要求元素<strong>緊挨著</strong>放在記憶體裡；鏈結結構（linked structure）改用
+  <strong>節點（node）＋參考（reference）</strong>：每個節點自己記得「下一個在哪」。
+  只要能從第一個節點（<strong>head</strong>）出發，相對順序就能靠參考一路走出來。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="bq-row" id="memVis" style="min-height:80px;"></div>
+        <div class="status-banner" id="memStatus"><span class="status-icon">›</span><span class="status-text">同一份資料 93→77→31，兩種擺法。按按鈕切換視角。</span></div>
+        <div class="controls-bar">
+          <button class="btn" onclick="memShow('array')">陣列視角（連續）</button>
+          <button class="btn" onclick="memShow('linked')">鏈結視角（分散＋指標）</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card">
+        <div class="ic-title">取捨一覽</div>
+        <div class="ic-row"><span class="ic-label">隨機存取 a[i]</span><span class="ic-value">陣列 O(1)｜串列 O(n)</span></div>
+        <div class="ic-row"><span class="ic-label">頭端插入/刪除</span><span class="ic-value">陣列 O(n)｜串列 O(1)</span></div>
+        <div class="ic-row"><span class="ic-label">記憶體</span><span class="ic-value">串列多存指標</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-title">作業系統的例子</div>
+        <div style="font-size:.86rem;line-height:1.9;">分時系統把工作排成<strong>環狀串列</strong>輪流執行：
+        鏈結結構天生適合「不斷插入、移除、輪轉」的場景。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="node">
+  <div class="section-number">PART 01 · 節點</div>
+  <h2>Node 類別：資料 + 一個指向下一個的參考 <span class="sec-badge">pythonds §3.21.1</span></h2>
+  <p>節點是鏈結串列的積木：<code>data</code> 放資料、<code>next</code> 指向下一個節點。
+  <code>next is None</code> 表示「後面沒有了」：這就是串列的結尾記號（grounded）。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="bq-row" id="nodeVis" style="min-height:90px;"></div>
+        <div class="status-banner" id="nodeStatus"><span class="status-icon">›</span><span class="status-text">按「new Node(93)」建立節點，觀察 data 與 next 欄位。</span></div>
+        <div class="controls-bar">
+          <button class="btn" onclick="nodeDemo(1)">temp = Node(93)</button>
+          <button class="btn" onclick="nodeDemo(2)">temp.data？</button>
+          <button class="btn" onclick="nodeDemo(3)">temp.next？</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">Python 實作 <span class="ic-badge">CODE</span></div><div class="pseudo-code" style="font-size:.76rem;">
+<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">Node</span>:   <span class="com"># pythonds3.basic 的節點</span></span>
+<span class="line" data-l="2">    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, node_data):</span>
+<span class="line" data-l="3">        <span class="kw">self</span>._data = node_data</span>
+<span class="line" data-l="4">        <span class="kw">self</span>._next = <span class="num">None</span>   <span class="com"># 還沒接上任何節點</span></span>
+<span class="line" data-l="5">    <span class="kw">def</span> <span class="fn">get_data</span>(<span class="kw">self</span>):  <span class="kw">return</span> <span class="kw">self</span>._data</span>
+<span class="line" data-l="6">    <span class="kw">def</span> <span class="fn">set_data</span>(<span class="kw">self</span>, d): <span class="kw">self</span>._data = d</span>
+<span class="line" data-l="7">    <span class="kw">def</span> <span class="fn">get_next</span>(<span class="kw">self</span>):  <span class="kw">return</span> <span class="kw">self</span>._next</span>
+<span class="line" data-l="8">    <span class="kw">def</span> <span class="fn">set_next</span>(<span class="kw">self</span>, n): <span class="kw">self</span>._next = n</span>
+<span class="line" data-l="9">    data = <span class="fn">property</span>(get_data, set_data)</span>
+<span class="line" data-l="10">    next = <span class="fn">property</span>(get_next, set_next)</span>
+<span class="line" data-l="11">    <span class="com"># property：temp.data 的糖衣底下仍走 getter/setter</span></span></div></div>
+      <div class="info-card">
+        <div class="ic-title">節點語法速記</div>
+        <div style="font-size:.86rem;line-height:2;" class="mono">
+        temp = Node(93)<br>
+        temp.data&nbsp;&nbsp;# 93<br>
+        temp.next&nbsp;&nbsp;# None<br>
+        # 不用手動釋放：GC 代勞</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="unordered">
+  <div class="section-number">PART 02 · 未排序串列</div>
+  <h2>UnorderedList：add、search、remove 的指標舞步 <span class="sec-badge">pythonds §3.21.2</span></h2>
+  <p>未排序串列把新元素<strong>加在 head</strong>（最省事的位置，O(1)）。
+  重點戲是 <code>remove</code>：需要 <strong>previous / current 雙參考</strong>同行，找到後讓 previous「跳過」current。
+  <strong>順序錯了串列就斷</strong>：先接住後面，再改前面。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="bq-row" id="ullVis" style="min-height:90px;"></div>
+        <div class="status-banner" id="ullStatus"><span class="status-icon">›</span><span class="status-text">初始串列 31→77→17→93（head 在左）。試試 add / search / remove。</span></div>
+        <div class="controls-bar">
+          <input id="ullInput" type="number" class="mono" style="width:80px;padding:.35rem .5rem;border:1px solid var(--card-border);border-radius:6px;" value="54">
+          <button class="btn" onclick="ullAdd()">add</button>
+          <button class="btn" onclick="ullSearch()">search</button>
+          <button class="btn" onclick="ullRemove()">remove</button>
+          <button class="btn" onclick="ullReset()">重置</button>
+          <button class="btn" onclick="ullPlayer &amp;&amp; ullPlayer.step()">→ 單步</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">三大操作（動畫對照）<span class="ic-badge">CODE</span></div><div class="pseudo-code" id="ullCode">
+<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">add</span>(<span class="kw">self</span>, item):   <span class="com"># 加在 head，O(1)</span></span>
+<span class="line" data-l="2">    temp = <span class="fn">Node</span>(item)</span>
+<span class="line" data-l="3">    temp.<span class="fn">set_next</span>(<span class="kw">self</span>.head)  <span class="com"># ① 先接住整條串列</span></span>
+<span class="line" data-l="4">    <span class="kw">self</span>.head = temp        <span class="com"># ② 再移動 head</span></span>
+<span class="line" data-l="5"> </span>
+<span class="line" data-l="6"><span class="kw">def</span> <span class="fn">search</span>(<span class="kw">self</span>, item):</span>
+<span class="line" data-l="7">    current = <span class="kw">self</span>.head</span>
+<span class="line" data-l="8">    <span class="kw">while</span> current <span class="kw">is not</span> <span class="num">None</span>:</span>
+<span class="line" data-l="9">        <span class="kw">if</span> current.data == item: <span class="kw">return</span> <span class="num">True</span></span>
+<span class="line" data-l="10">        current = current.next   <span class="com"># 走訪 traversal</span></span>
+<span class="line" data-l="11">    <span class="kw">return</span> <span class="num">False</span></span>
+<span class="line" data-l="12"> </span>
+<span class="line" data-l="13"><span class="kw">def</span> <span class="fn">remove</span>(<span class="kw">self</span>, item):  <span class="com"># 雙參考：previous 跟著 current</span></span>
+<span class="line" data-l="14">    current = <span class="kw">self</span>.head; previous = <span class="num">None</span></span>
+<span class="line" data-l="15">    <span class="kw">while</span> current.data != item:</span>
+<span class="line" data-l="16">        previous = current; current = current.next</span>
+<span class="line" data-l="17">    <span class="kw">if</span> previous <span class="kw">is</span> <span class="num">None</span>: <span class="kw">self</span>.head = current.next</span>
+<span class="line" data-l="18">    <span class="kw">else</span>: previous.next = current.next</span></div></div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:1.5rem;">完整類別長什麼樣（pythonds3.basic.UnorderedList）</h3>
+  <p>動畫面板用的是簡化寫法；實際的類別透過 Node 的
+  <code>get_next()／set_next()</code>（或 property 糖衣 <code>current.next</code>）操作。
+  <code>size()</code>、<code>search()</code>、<code>remove()</code>
+  都建立在同一個技巧上：<strong>走訪</strong>（traversal），也就是從 head 出發、
+  一個節點一個節點地拜訪到 None 為止。</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:.8rem;">
+    <div class="info-card"><div class="ic-title">is_empty / size <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.74rem;">
+<span class="line"><span class="kw">def</span> <span class="fn">is_empty</span>(<span class="kw">self</span>):</span>
+<span class="line">    <span class="kw">return</span> <span class="kw">self</span>.head == <span class="num">None</span>   <span class="com"># O(1)：只看 head</span></span>
+<span class="line"> </span>
+<span class="line"><span class="kw">def</span> <span class="fn">size</span>(<span class="kw">self</span>):</span>
+<span class="line">    current = <span class="kw">self</span>.head</span>
+<span class="line">    count = <span class="num">0</span></span>
+<span class="line">    <span class="kw">while</span> current <span class="kw">is not</span> <span class="num">None</span>:</span>
+<span class="line">        count = count + <span class="num">1</span></span>
+<span class="line">        current = current.<span class="fn">get_next</span>()</span>
+<span class="line">    <span class="kw">return</span> count   <span class="com"># O(n)：串列不會免費告訴你長度</span></span></div></div>
+    <div class="info-card"><div class="ic-title">remove：雙參考＋ValueError <span class="ic-badge">CODE</span></div>
+      <div class="pseudo-code" style="font-size:.72rem;">
+<span class="line"><span class="kw">def</span> <span class="fn">remove</span>(<span class="kw">self</span>, item):</span>
+<span class="line">    current = <span class="kw">self</span>.head</span>
+<span class="line">    previous = <span class="num">None</span></span>
+<span class="line">    <span class="kw">while</span> current <span class="kw">is not</span> <span class="num">None</span>:</span>
+<span class="line">        <span class="kw">if</span> current.data == item: <span class="kw">break</span></span>
+<span class="line">        previous = current</span>
+<span class="line">        current = current.<span class="fn">get_next</span>()</span>
+<span class="line">    <span class="kw">if</span> current <span class="kw">is</span> <span class="num">None</span>:   <span class="com"># 找不到就明講</span></span>
+<span class="line">        <span class="kw">raise</span> <span class="fn">ValueError</span>(f<span class="str">&quot;{item} is not in the list&quot;</span>)</span>
+<span class="line">    <span class="kw">if</span> previous <span class="kw">is</span> <span class="num">None</span>: <span class="kw">self</span>.head = current.next</span>
+<span class="line">    <span class="kw">else</span>: previous.next = current.next</span>
+<span class="line">    <span class="com"># 脫鉤的節點沒人參考：GC 自動回收</span></span></div></div>
+  </div>
+  <div class="info-box warm" style="margin-top:.9rem;">
+    <span class="info-label">為什麼需要 previous？</span>
+    單向串列<strong>不能往回走</strong>。current 停在要刪的節點上時，需要改的其實是「前一個節點的 next」，
+    但這時已經回不去了。解法是讓 previous 永遠跟在 current 後面一格。
+    刪 head 是特殊情況：previous 還是 None，這時改的是 head 本身。
+    講義留了一題思考：<strong>刪最後一個節點時，這兩個分支夠用嗎？</strong>（提示：夠。想想 current.get_next() 那時是什麼。）
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · add 的兩行順序</div>
+  <p><code>add</code> 裡若把兩行寫反（先 <code>self.head = temp</code>、再 <code>temp.set_next(self.head)</code>），會發生什麼事？</p>
+  
+  <div class="quiz-options" id="qUllOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="head 先被改成 temp，之後 set_next(self.head) 就是指向自己；原本的串列再也沒有任何名字能到達，整條被 GC 收走。" onclick="quizCheck('qUll', this)"><span class="opt-letter">(A)</span> temp 的 next 指向自己，其餘節點全部漏接</div><div class="quiz-opt" data-correct="false" data-fb="順序是關鍵！先讓新節點接住原串列，才能安全移動 head。" onclick="quizCheck('qUll', this)"><span class="opt-letter">(B)</span> 沒差，結果一樣</div><div class="quiz-opt" data-correct="false" data-fb="語法完全合法，這是「邏輯炸彈」，直譯器不會救你。" onclick="quizCheck('qUll', this)"><span class="opt-letter">(C)</span> 丟出例外</div>
+  </div>
+  <div class="quiz-feedback" id="qUllFeedback"></div>
+</div>
+</section>
+
+<section id="ordered">
+  <div class="section-number">PART 03 · 排序串列</div>
+  <h2>OrderedList：維持大小順序的插入 <span class="sec-badge">pythonds §3.22–3.23</span></h2>
+  <p>排序串列的 <code>add</code> 不能亂插：previous/current 往前走，直到 <code>current.data ≥ item</code> 就是插入點。
+  <code>search</code> 因此能<strong>提前失敗</strong>：一旦看到比目標大的值就確定不存在。</p>
+  <div class="viz-layout">
+    <div>
+      <div class="viz-panel">
+        <div class="bq-row" id="ollVis" style="min-height:90px;"></div>
+        <div class="status-banner" id="ollStatus"><span class="status-icon">›</span><span class="status-text">初始 17→26→31→54→77→93。add(40) 會逐步找到 31 與 54 之間。</span></div>
+        <div class="controls-bar">
+          <input id="ollInput" type="number" class="mono" style="width:80px;padding:.35rem .5rem;border:1px solid var(--card-border);border-radius:6px;" value="40">
+          <button class="btn" onclick="ollAdd()">▶ add（動畫）</button>
+          <button class="btn" onclick="ollPlayer &amp;&amp; ollPlayer.step()">→ 單步</button>
+          <button class="btn" onclick="ollReset()">重置</button>
+        </div>
+      </div>
+    </div>
+    <div class="side-panel">
+      <div class="info-card"><div class="ic-title">排序版操作 <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="ollCode">
+<span class="line" data-l="1"><span class="kw">def</span> <span class="fn">add</span>(<span class="kw">self</span>, item):   <span class="com"># 排序版：先找位置</span></span>
+<span class="line" data-l="2">    current = <span class="kw">self</span>.head; previous = <span class="num">None</span></span>
+<span class="line" data-l="3">    temp = <span class="fn">Node</span>(item)</span>
+<span class="line" data-l="4">    <span class="kw">while</span> current <span class="kw">is not</span> <span class="num">None</span> <span class="kw">and</span> current.data &lt; item:</span>
+<span class="line" data-l="5">        previous = current; current = current.next</span>
+<span class="line" data-l="6">    <span class="kw">if</span> previous <span class="kw">is</span> <span class="num">None</span>:   <span class="com"># 插在最前</span></span>
+<span class="line" data-l="7">        temp.next = <span class="kw">self</span>.head; <span class="kw">self</span>.head = temp</span>
+<span class="line" data-l="8">    <span class="kw">else</span>:</span>
+<span class="line" data-l="9">        temp.next = current; previous.next = temp</span>
+<span class="line" data-l="10"> </span>
+<span class="line" data-l="11"><span class="kw">def</span> <span class="fn">search</span>(<span class="kw">self</span>, item):  <span class="com"># 可提前停</span></span>
+<span class="line" data-l="12">    <span class="kw">while</span> current <span class="kw">is not</span> <span class="num">None</span>:</span>
+<span class="line" data-l="13">        <span class="kw">if</span> current.data == item: <span class="kw">return</span> <span class="num">True</span></span>
+<span class="line" data-l="14">        <span class="kw">if</span> current.data &gt; item: <span class="kw">return</span> <span class="num">False</span>  <span class="com"># 超過了</span></span>
+<span class="line" data-l="15">        current = current.next</span>
+<span class="line" data-l="16">    <span class="kw">return</span> <span class="num">False</span></span></div></div>
+      <div class="info-card">
+        <div class="ic-title">複雜度（n 節點）</div>
+        <div class="ic-row"><span class="ic-label">未排序 add</span><span class="ic-value">O(1)</span></div>
+        <div class="ic-row"><span class="ic-label">排序 add</span><span class="ic-value">O(n)</span></div>
+        <div class="ic-row"><span class="ic-label">search / remove</span><span class="ic-value">O(n)</span></div>
+        <div style="font-size:.76rem;color:var(--muted);margin-top:.3rem;">鏈結串列<strong>不能</strong>二分搜尋：沒有 O(1) 隨機存取。</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:1.5rem;">分析：哪些操作 O(1)、哪些逃不掉走訪（pythonds §3.23.1）</h3>
+  <p>判斷準則一句話：<strong>只碰 head 的操作是 O(1)，其他都要走訪</strong>。
+  search 平均找到目標時走了 n/2 步：聽起來省一半，但 Big-O 只看成長率，
+  係數 1/2 會被丟掉，而且最壞情況（不在串列裡、或排在最後）還是得走完全程，所以仍是 O(n)。
+  下表是講義列的完整 List ADT，一次看清楚每個方法的代價：</p>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>方法</th><th>做什麼</th><th>未排序</th><th>排序</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">is_empty()</td><td>串列是空的嗎（看 head）</td><td>O(1)</td><td>O(1)</td></tr>
+      <tr><td class="mono">add(item)</td><td>加入元素</td><td><strong>O(1)</strong>（插 head）</td><td>O(n)（找位置）</td></tr>
+      <tr><td class="mono">size()</td><td>邊走邊數</td><td>O(n)</td><td>O(n)</td></tr>
+      <tr><td class="mono">search(item)</td><td>找得到嗎</td><td>O(n)</td><td>O(n)，可提前停</td></tr>
+      <tr><td class="mono">remove(item)</td><td>prev/cur 找到後摘除</td><td>O(n)</td><td>O(n)</td></tr>
+      <tr><td class="mono">append(item)</td><td>接在尾端（補充練習）</td><td>O(n)；有 tail 指標可 O(1)</td><td>不適用（位置由大小決定）</td></tr>
+      <tr><td class="mono">index(item)</td><td>回報元素排第幾</td><td>O(n)</td><td>O(n)</td></tr>
+      <tr><td class="mono">insert(pos, item)</td><td>插到指定位置</td><td>O(n)（走到 pos）</td><td>不適用</td></tr>
+      <tr><td class="mono">pop() / pop(pos)</td><td>移除尾端／指定位置並回傳</td><td>O(n)</td><td>O(n)</td></tr>
+    </tbody>
+  </table></div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 平均走一半，為什麼還是 O(n)？</div>
+  <p>search 平均只要走 n/2 個節點就找到目標。為什麼複雜度不寫成 O(n/2)？</p>
+  
+  <div class="quiz-options" id="qAnaOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="n/2 與 n 的成長率相同：n 加倍、時間都加倍。Big-O 抓的是成長率，1/2 這種常數係數一律丟掉；何況目標不在串列裡時一步都少不了。" onclick="quizCheck('qAna', this)"><span class="opt-letter">(A)</span> 係數在 Big-O 裡沒有意義，且最壞情況要走完全程</div><div class="quiz-opt" data-correct="false" data-fb="Big-O 不是四捨五入：是「成長率相同的函數視為同類」。" onclick="quizCheck('qAna', this)"><span class="opt-letter">(B)</span> 因為 n/2 四捨五入之後就是 n</div><div class="quiz-opt" data-correct="false" data-fb="平均情況可以分析（第 2 章的 average case）；只是它跟最壞情況同為線性，結論不變。" onclick="quizCheck('qAna', this)"><span class="opt-letter">(C)</span> 平均情況根本不能分析</div>
+  </div>
+  <div class="quiz-feedback" id="qAnaFeedback"></div>
+</div>
+</section>
+
+<section id="variants">
+  <div class="section-number">PART 04 · 變化型</div>
+  <h2>雙向與環狀：多一根指標，換一批超能力 <span class="sec-badge">講義 A.1 · 課程補充</span></h2>
+  <p>單向串列刪尾端很痛：要先走到倒數第二個節點。<strong>雙向串列</strong>（doubly linked）
+  給每個節點多存一根 <code>prev</code>，兩個方向都能走；<strong>環狀串列</strong>（circular）
+  讓 tail 的 next 指回 head，作業系統的分時排程（輪流給每個程式一點 CPU）就是這樣繞圈的。</p>
+  <p>雙向串列的插入要同時接好四根指標：新節點的 prev、next，加上左右鄰居各一根。
+  順序亂了照樣斷鏈，所以實務上常加<strong>哨兵節點</strong>（sentinel）：在頭尾各放一個不存資料的假節點，
+  讓「插在最前」「刪到只剩一個」這些邊界情況消失，每次操作都變成「在兩個真實存在的節點之間動手」。
+  多花兩個節點的記憶體，換到少一半的 if，很划算。</p>
+  <div class="viz-panel">
+    <div class="bq-row" id="varVis" style="min-height:90px;"></div>
+    <div class="status-banner" id="varStatus"><span class="status-icon">›</span><span class="status-text">切換三種串列型態，注意指標的方向與端點。</span></div>
+    <div class="controls-bar">
+      <button class="btn" onclick="varShow('singly')">單向</button>
+      <button class="btn" onclick="varShow('doubly')">雙向</button>
+      <button class="btn" onclick="varShow('circular')">環狀</button>
+    </div>
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · 尾端刪除</div>
+  <p>要讓「刪除尾端節點」變成 O(1)，需要哪種配置？</p>
+  
+  <div class="quiz-options" id="qVarOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="tail 直接定位尾端，tail->prev 直接定位倒數第二個：兩步搞定。" onclick="quizCheck('qVar', this)"><span class="opt-letter">(A)</span> 雙向串列 + tail 指標</div><div class="quiz-opt" data-correct="false" data-fb="tail 找得到尾端，但刪除還需要把「倒數第二個」的 next 設回 None：單向串列拿不到它，仍要 O(n) 走訪。" onclick="quizCheck('qVar', this)"><span class="opt-letter">(B)</span> 單向串列 + tail 指標</div><div class="quiz-opt" data-correct="false" data-fb="環狀解決「輪轉」問題；刪尾端一樣需要前一個節點，仍是 O(n)。" onclick="quizCheck('qVar', this)"><span class="opt-letter">(C)</span> 環狀單向串列</div>
+  </div>
+  <div class="quiz-feedback" id="qVarFeedback"></div>
+</div>
+</section>
+
+<section id="stl">
+  <div class="section-number">PART 05 · 工業級</div>
+  <h2>工業級的現成品：collections.deque <span class="sec-badge">課程補充</span></h2>
+  <p>理解原理之後，該知道一件事：Python 標準庫<strong>沒有</strong>內建的單向鏈結串列，
+  因為 <code>list</code>＋<code>collections.deque</code> 已經覆蓋大多數需求。
+  <code>deque</code> 用「塊狀雙向鏈結」實作：<strong>兩端插入/移除都是 O(1)</strong>，
+  但<strong>中間索引 <code>d[k]</code> 是 O(n)</strong>：它是兩端的專家，不是隨機存取的容器。</p>
+  <div style="overflow-x:auto;">
+  <table class="cmp-table" style="width:100%;font-size:.88rem;">
+    <thead><tr><th></th><th>list（陣列）</th><th>deque（塊狀雙向鏈結）</th><th>自刻 UnorderedList</th></tr></thead>
+    <tbody>
+      <tr><td>隨機存取 [i]</td><td>O(1)</td><td>O(n)</td><td>O(n) 走訪</td></tr>
+      <tr><td>頭端插入</td><td>O(n)</td><td><strong>O(1)</strong> appendleft</td><td>O(1) add</td></tr>
+      <tr><td>尾端插入</td><td>O(1) 攤銷</td><td><strong>O(1)</strong> append</td><td>O(n)（無 tail）</td></tr>
+      <tr><td>兩端移除</td><td>pop() O(1)／pop(0) O(n)</td><td>pop / popleft 皆 O(1)</td><td>O(n)</td></tr>
+      <tr><td>每節點額外空間</td><td>1 參考</td><td>塊狀分攤</td><td>1 參考＋1 節點物件</td></tr>
+      <tr><td>cache 友善度</td><td>高（連續）</td><td>中（塊內連續）</td><td>低（節點分散）</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <h3 style="margin-top:1.2rem;">deque 的操作長相</h3>
+  <p>兩端的操作各配一對，命名一看就懂；中間操作故意稀少，因為那不是它的主場：</p>
+  <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
+    <thead><tr><th>操作</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">append(x) / pop()</td><td>右端加入、移除，O(1)</td></tr>
+      <tr><td class="mono">appendleft(x) / popleft()</td><td>左端加入、移除，O(1)</td></tr>
+      <tr><td class="mono">rotate(k)</td><td>整條旋轉 k 步：輪轉場景一行搞定</td></tr>
+      <tr><td class="mono">maxlen=n</td><td>建構時給上限，滿了自動擠掉另一端（滑動視窗）</td></tr>
+      <tr><td class="mono">d[k]</td><td>可以用，但 O(n)：需要隨機存取請回頭用 list</td></tr>
+    </tbody>
+  </table></div>
+  <div class="info-box warm" style="margin-top:.9rem;">
+    <span class="info-label">工程直覺</span>
+    現代 CPU 上 list 常常「理論輸、實測贏」，因為連續記憶體對快取太友善。
+    選 deque 的時機是：兩端都要頻繁進出（佇列、滑動視窗）。
+    自刻鏈結串列的價值在<strong>理解原理</strong>，以及之後樹與圖的「節點＋參考」蓋法。
+  </div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">QUIZ · deque 的性格</div>
+  <p>collections.deque 兩端操作都是 O(1)，為什麼 d[k] 卻是 O(n)？</p>
+  
+  <div class="quiz-options" id="qStlOptions">
+    <div class="quiz-opt" data-correct="true" data-fb="deque 是一串固定大小的區塊用雙向參考串起來：兩端的塊直接拿得到，中間的塊得從某一端數。資料結構的形狀決定它擅長什麼。" onclick="quizCheck('qStl', this)"><span class="opt-letter">(A)</span> 塊狀鏈結：找第 k 個要沿著塊一路數過去</div><div class="quiz-opt" data-correct="false" data-fb="不是政策問題，是結構問題：塊狀鏈結天生沒有「一條公式直達第 k 格」。" onclick="quizCheck('qStl', this)"><span class="opt-letter">(B)</span> 直譯器故意限速</div><div class="quiz-opt" data-correct="false" data-fb="官方文件明講中間存取退化到 O(n)：隨機存取請用 list。" onclick="quizCheck('qStl', this)"><span class="opt-letter">(C)</span> d[k] 其實也是 O(1)</div>
+  </div>
+  <div class="quiz-feedback" id="qStlFeedback"></div>
+</div>
+</section>
+
+<section id="exercises">
+  <div class="section-number">EXERCISES · 練習</div>
+  <h2>動手驗證 <span class="sec-badge">pythonds §3.19–3.23 綜合</span></h2>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 1 · 走訪計數</div>
+  <p>一條長度 n 的單向串列，<code>size()</code>（用走訪實作）與「取第 k 個元素」的成本分別是？</p>
+  
+  <div class="quiz-options" id="ex1Options">
+    <div class="quiz-opt" data-correct="true" data-fb="兩者都得從 head 一步步走；這是串列與陣列式 list 最根本的差別。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> O(n) 與 O(k)</div><div class="quiz-opt" data-correct="false" data-fb="除非額外維護 size 計數器，否則串列沒有免費的 size；取第 k 個永遠要走 k 步。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> O(1) 與 O(1)</div><div class="quiz-opt" data-correct="false" data-fb="沒有隨機存取就沒有二分：log 是陣列的專利。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> O(n) 與 O(log k)</div>
+  </div>
+  <div class="quiz-feedback" id="ex1Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 2 · remove 邊界</div>
+  <p><code>remove(item)</code> 用 previous/current 雙參考。刪除的是 <strong>head 節點</strong>時，正確動作是？</p>
+  
+  <div class="quiz-options" id="ex2Options">
+    <div class="quiz-opt" data-correct="true" data-fb="previous is None 代表 current 就是 head：特殊情況要直接搬 head。這正是虛擬碼第 17 行。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(A)</span> <code>self.head = current.next</code>（previous 是 None）</div><div class="quiz-opt" data-correct="false" data-fb="previous 是 None，取它的屬性直接 AttributeError！" onclick="quizCheck('ex2', this)"><span class="opt-letter">(B)</span> <code>previous.next = current.next</code></div><div class="quiz-opt" data-correct="false" data-fb="大可不必，一個 if 就解決的邊界情況。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(C)</span> 先把串列反轉再刪</div>
+  </div>
+  <div class="quiz-feedback" id="ex2Feedback"></div>
+</div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">EXERCISE 3 · 記憶體</div>
+  <p><code>remove</code> 把節點從串列摘掉之後，那個 Node 物件的記憶體誰負責？</p>
+  
+  <div class="quiz-options" id="ex3Options">
+    <div class="quiz-opt" data-correct="true" data-fb="Python 用參考計數＋GC：節點脫鉤、區域名字離開作用域後，物件就會被回收，不需要手動釋放。你要顧的是「別讓不該活的參考繼續抓著它」。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(A)</span> 沒有任何參考指向它 → 垃圾回收自動處理</div><div class="quiz-opt" data-correct="false" data-fb="del 只是刪名字，不是釋放記憶體；就算不 del，沒有參考的物件一樣會被回收。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(B)</span> 要自己呼叫 <code>del node</code> 釋放</div><div class="quiz-opt" data-correct="false" data-fb="只要沒有殘存參考（例如自己另外存了一份 current），就不會洩漏。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(C)</span> 永遠洩漏，串列不能 remove</div>
+  </div>
+  <div class="quiz-feedback" id="ex3Feedback"></div>
+</div>
+
+  <h3 style="margin-top:1.5rem;">補充練習：實作 append() <span class="sec-badge">講義補充（課堂跳過）</span></h3>
+  <p>講義留了一題課後練習：替 UnorderedList 加上 <code>append(item)</code>，把新元素接在<strong>尾端</strong>。
+  走訪版的解答長這樣：</p>
+  <div class="info-card" style="max-width:560px;"><div class="ic-title">append：一路走到尾 <span class="ic-badge">CODE</span></div>
+    <div class="pseudo-code" style="font-size:.74rem;">
+<span class="line"><span class="kw">def</span> <span class="fn">append</span>(<span class="kw">self</span>, item):</span>
+<span class="line">    temp = <span class="fn">Node</span>(item)</span>
+<span class="line">    <span class="kw">if</span> <span class="kw">self</span>.head <span class="kw">is</span> <span class="num">None</span>:   <span class="com"># 空串列：直接當 head</span></span>
+<span class="line">        <span class="kw">self</span>.head = temp</span>
+<span class="line">        <span class="kw">return</span></span>
+<span class="line">    current = <span class="kw">self</span>.head</span>
+<span class="line">    <span class="kw">while</span> current.<span class="fn">get_next</span>() <span class="kw">is not</span> <span class="num">None</span>:</span>
+<span class="line">        current = current.<span class="fn">get_next</span>()   <span class="com"># 一路走到最後一個節點</span></span>
+<span class="line">    current.<span class="fn">set_next</span>(temp)</span></div></div>
+  
+<div class="quiz-box">
+  <div class="quiz-label">補充練習 · append 的成本</div>
+  <p>上面這個 <code>append()</code> 是 O(n)。要讓它變成 O(1)，正確的做法是？</p>
+  
+  <div class="quiz-options" id="ex4Options">
+    <div class="quiz-opt" data-correct="true" data-fb="tail 一步定位尾端：接上新節點、tail 往後搬即可。代價是 add/remove 都要順手維護 tail（尤其刪到尾端節點時），這是「空間與維護成本換時間」的老交易。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(A)</span> 類別多存一根 tail 指標，append 直接接在 tail 後面</div><div class="quiz-opt" data-correct="false" data-fb="這只是把問題鏡射：append 變快了，原本 O(1) 的頭端 add 就變 O(n)。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(B)</span> 把串列改成從尾端往頭端指</div><div class="quiz-opt" data-correct="false" data-fb="兩次反轉各 O(n)，比原本更慢。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(C)</span> 先把串列反轉、插入、再反轉回來</div>
+  </div>
+  <div class="quiz-feedback" id="ex4Feedback"></div>
+</div>
+</section>
+
+<section id="reference">
+  <div class="section-number">REFERENCE · 總覽</div>
+  <h2>鏈結串列 vs 陣列：一張表決勝負 <span class="sec-badge">pythonds §3.19–3.23 總覽</span></h2>
+  <div style="overflow-x:auto;">
+  <table class="cmp-table" style="width:100%;font-size:.88rem;">
+    <thead><tr><th>操作</th><th>list（陣列式）</th><th>UnorderedList</th><th>OrderedList</th></tr></thead>
+    <tbody>
+      <tr><td>存取第 k 個</td><td>O(1)</td><td>O(k)</td><td>O(k)</td></tr>
+      <tr><td>插入（頭）</td><td>O(n)</td><td><strong>O(1)</strong></td><td>O(n)（找位置）</td></tr>
+      <tr><td>search</td><td>O(n)／排序後 O(log n)</td><td>O(n)</td><td>O(n)，可提前停</td></tr>
+      <tr><td>remove（已找到）</td><td>O(n)（搬移）</td><td>O(1)（改指標）</td><td>O(1)（改指標）</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="info-box" style="margin-top:1rem;">
+    <span class="info-label">關鍵概念複習</span>
+    ① 鏈結 = 用指標買「頭端 O(1) 插刪」，代價是失去隨機存取。<br>
+    ② 指標操作口訣：<strong>先接住後面，再改前面</strong>。<br>
+    ③ prev/cur 雙指標是 remove／有序插入的標準步法；head 是唯一入口，弄丟就全丟。<br>
+    ④ 下一章（pythonds ch4 遞迴）會看到：串列的遞迴定義「node + 剩下的串列」。
+  </div>
+</section></div>
+<footer>
+  互動式鏈結串列教學 · 基於 Problem Solving with Algorithms and Data Structures using Python (pythonds) §3.19–3.23<br>
+  <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent3);">Designed for NSYSU · Interactive Python self-study</span>
+</footer>
+<script>
+/* ============ shared utilities ============ */
+const $ = id => document.getElementById(id);
+
+function quizCheck(quizId, optEl) {
+  const isCorrect = optEl.dataset.correct === 'true';
+  optEl.parentElement.querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('correct','wrong'));
+  optEl.classList.add(isCorrect ? 'correct' : 'wrong');
+  const fb = $(quizId + 'Feedback');
+  fb.classList.remove('correct','wrong');
+  fb.classList.add('show', isCorrect ? 'correct' : 'wrong');
+  fb.innerHTML = (isCorrect ? '<strong>正確 ✓</strong> ' : '<strong>不對 ✗</strong> ') + (optEl.dataset.fb || '');
+}
+
+function hlLine(rootId, n) {
+  const root = $(rootId);
+  if (!root) return;
+  root.querySelectorAll('.line').forEach(l => l.classList.remove('active'));
+  if (n != null) {
+    const line = root.querySelector(`.line[data-l="${n}"]`);
+    if (line) line.classList.add('active');
+  }
+}
+
+/* step player: frames = [{...}], apply(frame) renders */
+class Player {
+  constructor({frames, apply, delayInput, onDone}) {
+    this.frames = frames; this.apply = apply;
+    this.delayInput = delayInput; this.i = -1; this.timer = null;
+    this.onDone = onDone || (()=>{});
+  }
+  step() {
+    if (this.i + 1 >= this.frames.length) { this.stop(); this.onDone(); return; }
+    this.i += 1; this.apply(this.frames[this.i]);
+  }
+  play() {
+    this.stop();
+    const tick = () => {
+      if (this.i + 1 >= this.frames.length) { this.stop(); this.onDone(); return; }
+      this.step();
+      this.timer = setTimeout(tick, this.delayInput ? parseInt(this.delayInput.value,10) : 700);
+    };
+    tick();
+  }
+  stop() { if (this.timer) { clearTimeout(this.timer); this.timer = null; } }
+  reset() { this.stop(); this.i = -1; if (this.frames.length) this.apply(this.frames[0]); }
+}
+
+function setStatus(id, html) {
+  const el = $(id); if (el) el.querySelector('.status-text').innerHTML = html;
+}
+
+/* vertical box stack renderer (DOM) */
+function renderBoxStack(containerId, items, opts={}) {
+  const el = $(containerId); if (!el) return;
+  const hl = opts.highlight ?? -1;   // index from top (0 = top)
+  el.innerHTML = '';
+  const label = document.createElement('div');
+  label.className = 'bs-toplabel';
+  label.textContent = items.length ? 'top ↓' : '(empty)';
+  el.appendChild(label);
+  items.slice().reverse().forEach((v, idx) => {
+    const d = document.createElement('div');
+    d.className = 'bs-item' + (idx === hl ? ' bs-hl' : '');
+    d.textContent = v;
+    el.appendChild(d);
+  });
+}
+
+/* horizontal queue renderer: front at left */
+function renderBoxQueue(containerId, items, opts={}) {
+  const el = $(containerId); if (!el) return;
+  el.innerHTML = '';
+  const front = document.createElement('div');
+  front.className = 'bq-label'; front.textContent = items.length ? 'front →' : '(empty)';
+  el.appendChild(front);
+  items.forEach((v, idx) => {
+    const d = document.createElement('div');
+    d.className = 'bq-item' + (idx === (opts.highlight ?? -1) ? ' bs-hl' : '');
+    d.textContent = v;
+    el.appendChild(d);
+  });
+  const rear = document.createElement('div');
+  rear.className = 'bq-label'; rear.textContent = items.length ? '← rear' : '';
+  el.appendChild(rear);
+}
+
+/* floating nav scroll spy */
+(function setupNav() {
+  const nav = $('floatNav');
+  const links = nav.querySelectorAll('a[data-target]');
+  const sections = Array.from(links).map(a => document.getElementById(a.dataset.target)).filter(Boolean);
+  function update() {
+    const y = window.scrollY + window.innerHeight * 0.3;
+    let active = sections[0]?.id;
+    for (const s of sections) if (s.offsetTop <= y) active = s.id;
+    links.forEach(a => a.classList.toggle('active', a.dataset.target === active));
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+
+/* ---------- helpers: linked list DOM ---------- */
+function renderLinked(containerId, items, opts={}) {
+  const el = $(containerId); if (!el) return;
+  el.innerHTML = '';
+  const mk = (html, cls='') => { const d = document.createElement('div'); d.className = cls; d.innerHTML = html; return d; };
+  const mode = opts.mode || 'singly';
+  el.appendChild(mk('head →', 'bq-label'));
+  items.forEach((v, i) => {
+    const hl = opts.hl === i, prevHl = opts.prevHl === i;
+    const box = mk(`<div style="display:flex;">
+        <div style="padding:.4rem .55rem;">${v}</div>
+        <div style="border-left:1px dashed rgba(255,255,255,.6);padding:.4rem .35rem;font-size:.7rem;">${i === items.length-1 && mode!=='circular' ? '∅' : '•'}</div>
+      </div>`,
+      'bq-item' + (hl ? ' bs-hl' : '') + (prevHl ? ' bq-prev' : ''));
+    box.style.padding = '0';
+    el.appendChild(box);
+    if (i < items.length - 1) el.appendChild(mk(mode==='doubly' ? '⇄' : '→', 'bq-label'));
+  });
+  if (mode === 'circular' && items.length) el.appendChild(mk('↩ 回到 head', 'bq-label'));
+}
+
+/* ---------- P00 memory view ---------- */
+function memShow(mode) {
+  const el = $('memVis'); el.innerHTML = '';
+  if (mode === 'array') {
+    ['93','77','31'].forEach((v,i) => {
+      const d = document.createElement('div'); d.className = 'bq-item';
+      d.innerHTML = `<div style="font-size:.65rem;opacity:.75;">addr ${1000+4*i}</div>${v}`;
+      el.appendChild(d);
+    });
+    setStatus('memStatus', '陣列式 list：位址連續（1000、1004、1008），a[i] 一個乘法就定位 → O(1) 隨機存取。');
+  } else {
+    const addrs = [7080, 2046, 5340];
+    const nexts = [2046, 5340, '∅'];
+    ['93','77','31'].forEach((v,i) => {
+      const d = document.createElement('div'); d.className = 'bq-item';
+      d.style.background = '#2c3e7a';
+      d.innerHTML = `<div style="font-size:.65rem;opacity:.75;">addr ${addrs[i]}</div>${v} <span style="opacity:.8;font-size:.75rem;">| next=${nexts[i]}</span>`;
+      el.appendChild(d);
+      if (i < 2) { const a = document.createElement('div'); a.className='bq-label'; a.textContent='→'; el.appendChild(a); }
+    });
+    setStatus('memStatus', '鏈結：節點散落各處，靠 next 參考找到下一個 → 想到第 k 個只能走 k 步。');
+  }
+}
+memShow('array');
+
+/* ---------- P01 node demo ---------- */
+function nodeDemo(step) {
+  const el = $('nodeVis');
+  if (step === 1) {
+    el.innerHTML = '<div class="bq-item" style="background:#2c3e7a;padding:.6rem 1rem;">data: 93 | next: <strong>None</strong></div>';
+    setStatus('nodeStatus', 'Node(93) 造出一個節點物件；__init__ 把 data 設成 93、next 設成 None。');
+  } else if (step === 2) {
+    setStatus('nodeStatus', '<code>temp.data</code> 回傳 93：property 讓屬性語法底下走 get_data()。');
+  } else {
+    setStatus('nodeStatus', '<code>temp.next</code> 是 None：這個節點還沒接上任何串列。');
+  }
+}
+
+/* ---------- P02 unordered ---------- */
+let ull = [31, 77, 17, 93];
+let ullPlayer = null;
+function ullRender(opts={}, msg) {
+  renderLinked('ullVis', ull, opts);
+  if (msg) setStatus('ullStatus', msg);
+}
+function ullAdd() {
+  const v = parseInt($('ullInput').value || '54', 10);
+  const frames = [
+    {hl:-1, line:2, msg:`Node(${v})`},
+    {hl:-1, line:3, msg:`temp.set_next(head)（新節點接住 ${ull[0] ?? 'None'} 開頭的整條串列）`},
+    {act:'do', hl:0, line:4, msg:`head = temp → ${v} 成為新的第一個節點。O(1) 完工！`},
+  ];
+  ullPlayer = new Player({frames, apply: f => {
+    if (f.act === 'do' && !f.done) { ull.unshift(v); f.done = true; }
+    ullRender({hl:f.hl}, f.msg); hlLine('ullCode', f.line);
+  }});
+  ullPlayer.reset(); ullPlayer.play();
+}
+function ullSearch() {
+  const v = parseInt($('ullInput').value || '17', 10);
+  const frames = [];
+  for (let i = 0; i < ull.length; i++) {
+    frames.push({hl:i, line:9, msg:`current.data = ${ull[i]}，${ull[i] === v ? `等於 ${v} → <strong>找到 ✓</strong>` : `不是 ${v}，current = current.next`}`});
+    if (ull[i] === v) break;
+  }
+  if (ull.indexOf(v) < 0) frames.push({hl:-1, line:11, msg:`current 走到 None → <strong>${v} 不在串列中 ✗</strong>`});
+  ullPlayer = new Player({frames, apply: f => { ullRender({hl:f.hl}, f.msg); hlLine('ullCode', f.line); }});
+  ullPlayer.reset(); ullPlayer.play();
+}
+function ullRemove() {
+  const v = parseInt($('ullInput').value || '17', 10);
+  const idx = ull.indexOf(v);
+  if (idx < 0) { ullRender({}, `${v} 不在串列裡，先 add 或換個值。`); return; }
+  const frames = [];
+  for (let i = 0; i <= idx; i++)
+    frames.push({hl:i, prevHl:i-1, line:15, msg:`current = ${ull[i]}${i===idx?'（就是它！）':'，previous 跟上'}`});
+  frames.push({act:'do', hl:-1, line: idx===0?17:18,
+    msg: idx===0 ? `previous 是 None → head = current.next。脫鉤的節點交給 GC。`
+                 : `previous.next = current.next，${ull[idx-1]} 直接跳過 ${v}。脫鉤的節點交給 GC。`});
+  ullPlayer = new Player({frames, apply: f => {
+    if (f.act === 'do' && !f.done) { ull.splice(idx,1); f.done = true; }
+    ullRender({hl:f.hl, prevHl:f.prevHl}, f.msg); hlLine('ullCode', f.line);
+  }});
+  ullPlayer.reset(); ullPlayer.play();
+}
+function ullReset() { ull = [31,77,17,93]; ullRender({}, '已重置為 31→77→17→93。'); }
+ullRender();
+
+/* ---------- P03 ordered ---------- */
+let oll = [17, 26, 31, 54, 77, 93];
+let ollPlayer = null;
+function ollRender(opts={}, msg) { renderLinked('ollVis', oll, opts); if (msg) setStatus('ollStatus', msg); }
+function ollAdd() {
+  const v = parseInt($('ollInput').value || '40', 10);
+  const frames = [];
+  let i = 0;
+  while (i < oll.length && oll[i] < v) {
+    frames.push({hl:i, line:4, msg:`current.data = ${oll[i]} < ${v}，繼續前進`});
+    i++;
+  }
+  const at = i;
+  frames.push({hl: i < oll.length ? i : -1, line:5,
+    msg: i < oll.length ? `current.data = ${oll[i]} ≥ ${v} → 插在 previous 與 current 之間` : `走到尾端 → 插在最後`});
+  frames.push({act:'do', hl:at, line: at===0?7:9,
+    msg: at===0 ? `插在最前：temp.next = head; head = temp` : `temp.next = current; previous.next = temp ✓`});
+  ollPlayer = new Player({frames, apply: f => {
+    if (f.act === 'do' && !f.done) { oll.splice(at,0,v); f.done = true; }
+    ollRender({hl:f.hl}, f.msg); hlLine('ollCode', f.line);
+  }});
+  ollPlayer.reset(); ollPlayer.play();
+}
+function ollReset() { oll = [17,26,31,54,77,93]; ollRender({}, '已重置。'); }
+ollRender();
+
+/* ---------- P04 variants ---------- */
+function varShow(mode) {
+  renderLinked('varVis', ['a','b','c','d'], {mode});
+  const msgs = {
+    singly: '單向：一根 next。刪尾端要先走到倒數第二個 → O(n)。',
+    doubly: '雙向：next + prev（⇄）。任一節點可雙向移動；配合 tail 指標，尾端插刪 O(1)。',
+    circular: '環狀：tail 的 next 指回 head，「下一個」永遠存在：輪流排程的天然結構。',
+  };
+  setStatus('varStatus', msgs[mode]);
+}
+varShow('singly');
+</script>
+</body>
+</html>
