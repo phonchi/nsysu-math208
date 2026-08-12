@@ -4,7 +4,7 @@
 
 - **線上站台：** <https://phonchi.github.io/nsysu-math208/>
 - **授課教師：** 鍾思齊（理 SC 2002-4）
-- **助教：** 黃冠欽（理 SC1011-1）
+- **助教：** 黃冠欽
 - **教科書：** [Problem Solving with Algorithms and Data Structures using C++](https://runestone.academy/ns/books/published/cppds/index.html)（Miller / Ranum）
 - **歷年封存：** [Spring 2026](https://github.com/phonchi/nsysu-math208-2025)（Python 授課）、[Spring 2024](https://github.com/phonchi/nsysu-math208-2024)
 
