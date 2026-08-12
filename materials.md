@@ -6,14 +6,29 @@ permalink: /materials/
 
 <!---{% include image.html url="/_images/cover2.jpg" width=175 align="right" %}--->
 
+## 互動自學網站
+依本課投影片編寫的 C++ 互動教材，含程式碼、圖解與隨堂測驗：
+
+* [C++ 導論](/nsysu-math208/static_files/presentations/introduction.html)
+* [演算法分析](/nsysu-math208/static_files/presentations/analysis.html)
+* [陣列與稀疏矩陣](/nsysu-math208/static_files/presentations/arrays.html)
+* [鏈結串列](/nsysu-math208/static_files/presentations/linked_lists.html)
+* [線性結構](/nsysu-math208/static_files/presentations/linear_structures.html)
+* [遞迴](/nsysu-math208/static_files/presentations/recursion.html)
+* [搜尋與排序演算法](/nsysu-math208/static_files/presentations/searching_sorting.html)
+* [圖與圖的演算法](/nsysu-math208/static_files/presentations/graphs.html)
+* [樹與樹的演算法](/nsysu-math208/static_files/presentations/trees.html)
+* [高效率搜尋樹與多路搜尋樹](/nsysu-math208/static_files/presentations/search_trees.html)
+
+
 ## Book
-* [Problem Solving with Algorithms and Data Structures using Python, 3rd Edition](https://runestone.academy/ns/books/published/pythonds3/index.html)
 * [Problem Solving with Algorithms and Data Structures using C++](https://runestone.academy/ns/books/published/cppds/index.html)
+* [Problem Solving with Algorithms and Data Structures using Python, 3rd Edition](https://runestone.academy/ns/books/published/pythonds3/index.html)
 
 
 ## Reference Book
-* [Data Structures & Algorithms in Python](https://www.wiley.com/en-us/Data+Structures+and+Algorithms+in+Python%2C+1st+Edition-p-9781118290279)
 * [Data Structures & Algorithms in C++, 2nd Edition](https://www.wiley.com/en-us/Data+Structures+and+Algorithms+in+C%2B%2B%2C+2nd+Edition-p-9781118136638)
+* [Data Structures & Algorithms in Python](https://www.wiley.com/en-us/Data+Structures+and+Algorithms+in+Python%2C+1st+Edition-p-9781118290279)
 
 
 ## MOOC
@@ -28,8 +43,8 @@ permalink: /materials/
 
 ## Resources
 ### Source code
-* [Problem Solving with Algorithms and Data Structures Using Python](https://github.com/phonchi/pythonds3)
 * [Problem Solving with Algorithms and Data Structures using C++](https://github.com/phonchi/pythonds3/tree/master/cppds)
+* [Problem Solving with Algorithms and Data Structures Using Python](https://github.com/phonchi/pythonds3)
 
 ### Collections
 * [資工所相關資源](https://eecsmt.com/cs-resource/)
@@ -39,35 +54,36 @@ permalink: /materials/
 * [Teach Yourself Computer Science](https://teachyourselfcs.com/#algorithms)
 
 ### Simulators/Visualization
+* [C++ Tutor](https://pythontutor.com/cpp.html)
 * [pythontutor](https://pythontutor.com/)
 * [visualgo](https://visualgo.net/en)
 * [OpenDSA](https://opendsa-server.cs.vt.edu/OpenDSA/Books/Everything/html/index.html)
 * [Data Structure Visualizations](https://cmps-people.ok.ubc.ca/ylucet/DS/Algorithms.html) [[中文版本](https://fchart.github.io/DS/)]
+
+### Programming Environment (C++)
+* [VSCode](https://blog.darkthread.net/blog/vscode-cpp-cli-setup/)
+* [Dev C++](https://ithelp.ithome.com.tw/articles/10261850)
 
 ### Programming Environment (Python)
 * [VSCode](https://code.visualstudio.com/docs/datascience/jupyter-notebooks)
 * [Anaconda](https://www.anaconda.com/products/individual)
 * [Google colab](https://colab.research.google.com/notebooks/intro.ipynb#recent=true)
 
-### Programming Environment (C++)
-* [VSCode](https://blog.darkthread.net/blog/vscode-cpp-cli-setup/)
-* [Dev C++](https://ithelp.ithome.com.tw/articles/10261850)
-
-### Learning Python/C++
+### Learning C++/Python
+* [C++ Cheatsheet](https://github.com/gibsjose/cpp-cheat-sheet/blob/master/Data%20Structures%20and%20Algorithms.md)
+* [NTU C++ Programming](https://ocw.aca.ntu.edu.tw/ntu-ocw/ocw/cou/111S107)
+* [C++ Object oriented programming videos](https://www.youtube.com/watch?v=dDFZ9v9MOJA&list=PLHDTW9-5SsB_PDhTEn6fRp83UY1q06p-M&index=1)
+* [C++ Object oriented programming - Gossip](https://openhome.cc/Gossip/CppGossip/)
 * [PythonBook](https://pythonbook.cc/chapters/basic/introduction)
 * [Python Cheatsheet](https://github.com/AbdulMalikDev/PythonCheatSheet?tab=readme-ov-file)
 * [Python for everybody](https://runestone.academy/ns/books/published/py4e-int/index.html?mode=browsing)
 * [NSYSU MATH Python book](https://phonchi.github.io/Computer_Programming/)
 * [Python Object oriented programming - Gossip](https://openhome.cc/zh-tw/python/)
-* [C++ Cheatsheet](https://github.com/gibsjose/cpp-cheat-sheet/blob/master/Data%20Structures%20and%20Algorithms.md)
-* [NTU C++ Programming](https://ocw.aca.ntu.edu.tw/ntu-ocw/ocw/cou/111S107)
-* [C++ Object oriented programming videos](https://www.youtube.com/watch?v=dDFZ9v9MOJA&list=PLHDTW9-5SsB_PDhTEn6fRp83UY1q06p-M&index=1)
-* [C++ Object oriented programming - Gossip](https://openhome.cc/Gossip/CppGossip/)
 
 ### Language transistion
-* [Python for C++ Programmers](https://python.pages.doc.ic.ac.uk/cpp/lessons/cpp/01-intro/index.html)
 * [C++ for Python Programmers I](https://runestone.academy/ns/books/published/cpp4python/index.html)
 * [C++ for Python Programmers II](https://cs.kenyon.edu/wp-content/uploads/2020/11/CForPythonProgrammers.pdf)
+* [Python for C++ Programmers](https://python.pages.doc.ic.ac.uk/cpp/lessons/cpp/01-intro/index.html)
 
 ### Practicing
 * [hackerrank](https://www.hackerrank.com/domains/data-structures)

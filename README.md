@@ -1,13 +1,14 @@
 # nsysu-math208
 
-中山大學 **MATH 208 資料結構（Data Structure）** Spring 2026 課程網站，採 Jekyll + GitHub Pages 部署。
+中山大學 **MATH 208 資料結構（Data Structure）** Fall 2026 課程網站，採 Jekyll + GitHub Pages 部署。
 
 - **線上站台：** <https://phonchi.github.io/nsysu-math208/>
 - **授課教師：** 鍾思齊（理 SC 2002-4）
-- **助教：** 黃冠欽（理 SC1011-1）、陳姵涵（理 SC1015-2）
-- **教科書：** [Problem Solving with Algorithms and Data Structures using Python, 3rd Edition](https://runestone.academy/ns/books/published/pythonds3/index.html)（Miller / Ranum）
+- **助教：** 黃冠欽（理 SC1011-1）
+- **教科書：** [Problem Solving with Algorithms and Data Structures using C++](https://runestone.academy/ns/books/published/cppds/index.html)（Miller / Ranum）
+- **歷年封存：** [Spring 2026](https://github.com/phonchi/nsysu-math208-2025)（Python 授課）、[Spring 2024](https://github.com/phonchi/nsysu-math208-2024)
 
-> 本 repo 兼任**雙重角色**：(1) Jekyll 課程站台原始碼；(2) 教學投影片所需互動資產（動畫 / 互動 quiz / 字卡）的 CDN 後端 — 課程 notebook 透過 `https://cdn.jsdelivr.net/gh/phonchi/nsysu-math208@<sha>/extra/...` 載入 `extra/` 下的檔案。
+> 本 repo 兼任**雙重角色**：(1) Jekyll 課程站台原始碼；(2) 教學投影片所需互動資產（動畫 / 互動 quiz / 字卡）的 CDN 後端 — 課程 notebook 透過 `https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/...` 載入 `extra/` 下的檔案。
 
 ---
 
@@ -15,7 +16,7 @@
 
 ```
 .
-├── _config.yml              # Jekyll 設定，含課程名稱 / baseurl=/nsysu-math208 / Spring 2026
+├── _config.yml              # Jekyll 設定，含課程名稱 / baseurl=/nsysu-math208 / Fall 2026
 ├── Gemfile, Gemfile.lock    # Ruby 依賴：minima 2.5 + github-pages gem + jekyll-feed
 ├── LICENSE                  # 沿用模板的 LICENSE
 │
@@ -27,32 +28,21 @@
 ├── project.md               # 期末專題（目前為佔位）
 │
 ├── _lectures/               # 每週講義 markdown（一檔 = 一筆 lecture frontmatter）
-│   ├── 01_Introduction.md            # 2026-02-23
-│   ├── 02_Introduction.md            # 2026-03-02 OOP / Magic methods
-│   ├── 03_Algo.md                    # 2026-03-08 Algorithm Analysis (Ch2)
-│   ├── 04_array.md                   # 2026-03-16 Arrays & Linked list (Ch3+Ch4)
-│   ├── 05_Linear.md                  # 2026-03-23 Linked list & Stack (Ch5)
-│   ├── 06_week6.md                   # 2026-03-30 Stack & Queue
-│   ├── 07_week7.md                   # 2026-04-06 Spring Break
-│   ├── 08_week8.md                   # 2026-04-20 Recursion (Ch6)
-│   └── 09_week9.md                   # 2026-04-27 Searching & Sorting (Ch7)
+│   └── a.md                 # 佔位檔；換學期時清空本目錄，只留這一個
 │
 ├── _assignments/            # 作業 / Quiz
-│   ├── 01_HW1.md            # 2026-03-03，截止 03-20
-│   ├── 02_HW2.md
-│   ├── 03_HW3.md
-│   └── 03_Quiz1.md          # 2026-03-23 釋出，04-02 23:59 紙本繳交
+│   └── aa.txt               # 佔位檔；同上
 │
 ├── _events/                 # 額外事件（exam / due / raw）
-│   ├── evaluate.md
-│   ├── sample_due.md
-│   ├── sample_exam_due.md   # 期中考 2026-04-13
-│   ├── sample_final_due
-│   └── sample_raw_event.md
+│   ├── evaluate.md          # 空檔
+│   ├── sample_due.md        # front matter 已用 <!--- ---> 註解掉，不會渲染
+│   ├── sample_exam_due.md   # 期中考範本，目前註解掉
+│   ├── sample_final_due     # 期末考範本，目前註解掉
+│   └── sample_raw_event.md  # 同樣註解掉
 │
 ├── _data/
 │   ├── nav.yml              # 上方 nav: Home / Schedule / Lectures / Assignments / Materials
-│   ├── people.yml           # 講師 + 兩位助教資料
+│   ├── people.yml           # 講師 + 助教資料
 │   ├── late_policy.yml      # 遲交 / 抄襲 / 補交流程說明
 │   └── previous_offering.yml
 │
@@ -71,11 +61,16 @@
 │   └── screenshots/         # 模板 README 用的截圖
 │
 ├── static_files/
-│   ├── presentations/       # 9 章 RISE 投影片三件套（.ipynb / .html / .pdf）+ 章節 CSS
-│   │                        # Ch1.ipynb ~ Ch9.ipynb（學生練習題）+ Ch?_sol.ipynb（解答）
-│   │                        # Overview.pdf / course_outline.pdf / Midterm_sol.pdf
-│   │                        # rise.css / draw.html / searching_sorting.html
-│   └── assignments/         # HW1.{pdf,zip} ~ HW3.{pdf,zip} / Quiz1.pdf / Quiz1{,_new}_sol.pdf
+│   ├── presentations/       # 9 章 C++ RISE 投影片三件套（.ipynb / .html / .pdf）+ 章節 CSS
+│   │   │                    # Ch1.ipynb ~ Ch9.ipynb（學生練習題）+ Ch?_sol.ipynb（解答）
+│   │   │                    # Overview.pdf / course_outline.pdf / rise.css
+│   │   │                    # 小寫 .html＝C++ 互動自學頁（introduction / analysis /
+│   │   │                    #   arrays / linked_lists / linear_structures / recursion /
+│   │   │                    #   searching_sorting / graphs / trees / search_trees）
+│   │   ├── dscpp/           # 投影片用的 C++ 標頭檔（stack/queue/bst/graph/sorting…）
+│   │   ├── imgs/            # 投影片圖片（含 cpp/ 子目錄）
+│   │   └── python/          # 舊 Python 版自學頁，目前站上無任何連結指向
+│   └── assignments/         # 換學期時清空，只留 a.md 佔位
 │
 └── extra/                   # ★★ ds_slides notebook 的 CDN 後端，不參與 Jekyll site
     ├── animations/          # chapter 7 互動動畫資產（11 檔）
@@ -85,6 +80,11 @@
     │   ├── bubble.html, selection.html, insertion.html
     │   ├── shell.html, merge.html, quick.html
     │   └── （以上 9 檔對應 9 個動畫面板的 markup）
+    ├── animations08/        # chapter 8 圖演算法動畫：ds08.{css,js} + bfs / dfs /
+    │                        #   dijkstra / prim / topsort 面板
+    ├── animations09/        # chapter 9 樹動畫：ds09.{css,js} + preorder / inorder /
+    │                        #   postorder / bst_{insert,search,delete} /
+    │                        #   heap_{insert,extract,build} 面板
     ├── flashcards/          # jupytercards 用：ch1.json ~ ch9.json
     └── questions/           # jupyterquiz 用：ch1/ ~ ch9/ 各章節題目資料夾
 ```
@@ -102,7 +102,7 @@
 | `baseurl` | `/nsysu-math208` |
 | `url` | `https://phonchi.github.io/` |
 | `course_name` | Data Structure |
-| `course_semester` | Spring 2026 |
+| `course_semester` | Fall 2026 |
 | `schoolname` | National Sun Yat-Sen University |
 | `markdown` | kramdown |
 | `permalink` | `blog/:year/:month/:title` |
@@ -123,11 +123,11 @@ bundle exec jekyll serve
 
 ## `extra/` 與課程投影片的關係
 
-`extra/` 不是 Jekyll site 的一部分（GitHub Pages 不會把它列入 navigation 或 schedule），它的存在純粹是給 `ds_slides/` 的 notebook 透過 jsDelivr CDN 抓資產用。
+`extra/` 沒有列進 navigation 或 schedule，但 GitHub Pages 一樣會發佈它；它的存在是給投影片 notebook 透過 raw.githubusercontent.com 抓資產用。
 
-- **動畫**（`extra/animations/`）：`ds_slides/07_Searching and Sorting.ipynb` cell 6 inline loader 從 `https://cdn.jsdelivr.net/gh/phonchi/nsysu-math208@<commit-sha>/extra/animations/` 抓 `ds07.css` / `ds07.js` 與 9 個 `.html` 面板。**SHA 在 notebook 中是 pin 死的** — 每次推新 commit 到 `extra/animations/` 後，必須同步 bump notebook 裡的 SHA，否則 jsdelivr edge cache 仍 serve stale。
+- **動畫**（`extra/animations/`、`animations08/`、`animations09/`）：對應章節 notebook 的 inline loader 從 `https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/animations…/` 抓 `ds0N.css` / `ds0N.js` 與各動畫面板 `.html`。走 `refs/heads/main` 即時解析，**沒有 pin SHA**，推上去就生效（raw 有數分鐘快取）。
 - **字卡**（`extra/flashcards/ch<N>.json`）：`jupytercards` 載入。
-- **題目**（`extra/questions/ch<N>/*.json`）：`jupyterquiz` 載入。
+- **題目**（`extra/questions/ch<N>/*.json`）：`jupyterquiz` 載入。投影片只讀 `ch<N>/` 子目錄。
 
 > Source-of-truth 仍在 `ds_slides/animations/`、`ds_slides/flashcards/`、`ds_slides/questions/`；本 repo 的 `extra/` 是鏡像 — 修改後要從 `ds_slides/` 同步過來再 push。
 
