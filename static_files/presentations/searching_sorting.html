@@ -696,7 +696,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <span class="line">    <span class="fn">put</span>(key, val): <span class="com">// 用 hash + rehash 找空位插入；若 key 已存在則覆寫</span></span>
 <span class="line">    <span class="fn">get</span>(key):      <span class="com">// 同樣的 probe 路徑找回，position == startSlot 時繞回即停</span></span>
 <span class="line">    <span class="com">// C++ 版讀寫都走 h.put(key, val) 與 h.get(key)</span></span>
-<span class="line">    <span class="com">//（完整實作見 dscpp/hashtable.hpp，-1 標記空槽）</span></span></div>
+<span class="line">    <span class="com">//（完整實作見 pythonds3/cppds/hashtable.hpp，-1 標記空槽）</span></span></div>
     <strong>關鍵：</strong>用兩個平行 list (<code>slots</code>、<code>data</code>) 分別存 key 和 value，索引位置必須對齊。<code>get</code> 時要走和 <code>put</code> 一樣的 rehash 路徑，且要偵測「<strong>繞回起點</strong>」(<code>position == startSlot</code>) 以結束搜尋（代表整個探查鏈都沒有該 key）。
   </div>
 

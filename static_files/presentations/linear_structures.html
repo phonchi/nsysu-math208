@@ -442,7 +442,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       <div class="info-card">
         <div class="ic-title">C++ 實作 <span class="ic-badge">CODE</span></div>
         <div class="pseudo-code" style="font-size:.78rem;">
-<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">Stack</span> {           <span class="com">// dscpp/stack.hpp（vector 尾端 = top）</span></span>
+<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">Stack</span> {           <span class="com">// pythonds3/cppds/stack.hpp（vector 尾端 = top）</span></span>
 <span class="line" data-l="2">    vector&lt;T&gt; items;</span>
 <span class="line" data-l="3">    <span class="kw">bool</span> <span class="fn">isEmpty</span>() { <span class="kw">return</span> items.<span class="fn">empty</span>(); }</span>
 <span class="line" data-l="4">    <span class="kw">void</span> <span class="fn">push</span>(T item) { items.<span class="fn">push_back</span>(item); }</span>
@@ -766,7 +766,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     看到運算子就 pop 兩次：<strong>第一次 pop 出來的是右運算元、第二次才是左運算元</strong>。
     加法乘法無所謂，除法減法就是生死線：7 8 + 3 2 + / 是 15 / 5 = 3，
     順序寫反會變成 5 / 15。輔助函式 <code>doMath(op, op1, op2)</code> 把四則收在一處，
-    完整程式在 dscpp/expression.hpp。
+    完整程式在 pythonds3/cppds/expression.hpp。
   </div>
   
 <div class="quiz-box">
@@ -824,7 +824,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     </div>
     <div class="side-panel">
       <div class="info-card"><div class="ic-title">C++ 實作 <span class="ic-badge">CODE</span></div><div class="pseudo-code" style="font-size:.78rem;">
-<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">Queue</span> {           <span class="com">// dscpp/queue.hpp（vector 前端 = rear）</span></span>
+<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">Queue</span> {           <span class="com">// pythonds3/cppds/queue.hpp（vector 前端 = rear）</span></span>
 <span class="line" data-l="2">    vector&lt;T&gt; items;</span>
 <span class="line" data-l="3">    <span class="kw">bool</span> <span class="fn">isEmpty</span>() { <span class="kw">return</span> items.<span class="fn">empty</span>(); }</span>
 <span class="line" data-l="4">    <span class="kw">void</span> <span class="fn">enqueue</span>(T item) { items.<span class="fn">insert</span>(items.<span class="fn">begin</span>(), item); }</span>
@@ -1030,7 +1030,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     </div>
     <div class="side-panel">
       <div class="info-card"><div class="ic-title">C++ 實作 <span class="ic-badge">CODE</span></div><div class="pseudo-code" style="font-size:.76rem;">
-<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">Deque</span> {           <span class="com">// dscpp/deque.hpp（vector 尾端 = front）</span></span>
+<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">Deque</span> {           <span class="com">// pythonds3/cppds/deque.hpp（vector 尾端 = front）</span></span>
 <span class="line" data-l="2">    vector&lt;T&gt; items;</span>
 <span class="line" data-l="3">    <span class="kw">void</span> <span class="fn">addFront</span>(T item) { items.<span class="fn">push_back</span>(item); }</span>
 <span class="line" data-l="4">    <span class="kw">void</span> <span class="fn">addRear</span>(T item)  { items.<span class="fn">insert</span>(items.<span class="fn">begin</span>(), item); }</span>

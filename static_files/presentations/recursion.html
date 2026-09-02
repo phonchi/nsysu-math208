@@ -680,7 +680,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <div class="pseudo-code" style="font-size:.73rem;">
 <span class="line"><span class="kw">const char</span> OBSTACLE=<span class="str">&#39;+&#39;</span>, TRIED=<span class="str">&#39;.&#39;</span>,</span>
 <span class="line">           DEAD_END=<span class="str">&#39;-&#39;</span>, PART_OF_PATH=<span class="str">&#39;O&#39;</span>;</span>
-<span class="line"><span class="kw">class</span> <span class="fn">Maze</span> {         <span class="com">// dscpp/maze.hpp</span></span>
+<span class="line"><span class="kw">class</span> <span class="fn">Maze</span> {         <span class="com">// pythonds3/cppds/maze.hpp</span></span>
 <span class="line">    <span class="fn">Maze</span>(string filename) {</span>
 <span class="line">        ifstream f(filename);  string line;</span>
 <span class="line">        <span class="kw">while</span> (<span class="fn">getline</span>(f, line)) mazeList.<span class="fn">push_back</span>(line);</span>
@@ -704,7 +704,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <span class="line"><span class="kw">return</span> found;</span></div>
         <div style="font-size:.82rem;line-height:1.8;color:var(--muted);margin-top:.4rem;">四個呼叫用 || 串起來：
         北邊一旦回報 true，剩下三個方向連試都不試（短路求值）。找到路的格子標 O、全敗的標 −，
-        印出來就是完整的探索地圖。課堂版把這個 Maze 跑在 maze2.txt 上（dscpp/maze.hpp）。</div>
+        印出來就是完整的探索地圖。課堂版把這個 Maze 跑在 maze2.txt 上（pythonds3/cppds/maze.hpp）。</div>
       </div>
     </div>
   </div>

@@ -393,7 +393,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   以及取值都要多跳一次記憶體。</p>
 
   <h3>手刻一個 compact 動態陣列：ArrayList</h3>
-  <p>講義用原生 <code>new[]</code> 自己刻了一個簡化版 vector（<code>dscpp/arraylist.hpp</code>），
+  <p>講義用原生 <code>new[]</code> 自己刻了一個簡化版 vector（<code>pythonds3/cppds/arraylist.hpp</code>），
   把「動態陣列到底在做什麼」攤開來看。
   幾個值得停下來看的細節：解構子要 <code>delete[]</code>（自己配置的自己收）、
   <code>operator[]</code> 回傳<strong>參考</strong>（讀寫共用一個運算子）、insert 與 remove 都要搬移元素，
@@ -535,7 +535,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     </div>
     <div class="side-panel">
       <div class="info-card"><div class="ic-title">DOK 實作 <span class="ic-badge">CODE</span></div><div class="pseudo-code" style="font-size:.76rem;">
-<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">SparseMatrix</span> {     <span class="com">// dscpp/sparsematrix.hpp（DOK）</span></span>
+<span class="line" data-l="1"><span class="kw">class</span> <span class="fn">SparseMatrix</span> {     <span class="com">// pythonds3/cppds/sparsematrix.hpp（DOK）</span></span>
 <span class="line" data-l="2">    map&lt;pair&lt;size_t,size_t&gt;, <span class="kw">double</span>&gt; data;  <span class="com">// (r,c) → 值</span></span>
 <span class="line" data-l="3">  <span class="kw">public</span>:  <span class="com">// 讀：const 版，查不到回 0</span></span>
 <span class="line" data-l="4">    <span class="kw">double</span> <span class="kw">operator</span>()(size_t i, size_t j) <span class="kw">const</span> {</span>
@@ -555,7 +555,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
     </div>
   </div>
-  <h3 style="margin-top:1.4rem;">完整的 SparseMatrix 類別（dscpp/sparsematrix.hpp）</h3>
+  <h3 style="margin-top:1.4rem;">完整的 SparseMatrix 類別（pythonds3/cppds/sparsematrix.hpp）</h3>
   <p>講義把 DOK 寫成一個可運算的類別：讀寫共用 <code>operator()</code>（const 版查不到回 0、
   非 const 版會插入）、<code>nnz()</code> 數非零項、<code>sparsity()</code> 算密度，
   連加法和乘法都直接在稀疏表示上做，完全不用把矩陣展開。
