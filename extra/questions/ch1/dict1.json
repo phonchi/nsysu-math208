@@ -12,7 +12,7 @@
             {
                 "answer": "99",
                 "correct": false,
-                "feedback": "Incorrect. In C++, d2 = d1 copies the whole container (value semantics). Changing d2 leaves d1 untouched — the opposite of Python's reference semantics."
+                "feedback": "Incorrect. In C++, d2 = d1 copies the whole container (value semantics). Changing d2 leaves d1 untouched - the opposite of Python's reference semantics."
             },
             {
                 "answer": "Nothing is printed. A compile error occurs.",

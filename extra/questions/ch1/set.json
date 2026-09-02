@@ -22,7 +22,7 @@
             {
                 "answer": "A runtime error is raised because 3 is inserted twice.",
                 "correct": false,
-                "feedback": "Incorrect. Inserting an element that already exists in a set is valid — it simply has no effect."
+                "feedback": "Incorrect. Inserting an element that already exists in a set is valid - it simply has no effect."
             }
         ]
     }

@@ -11,7 +11,7 @@
             {
                 "answer": "The original nodes in the list will be lost and can no longer be accessed (a memory leak in C++).",
                 "correct": true,
-                "feedback": "Correct! Since the head is the only external pointer to the list, updating it to the new node before linking the new node to the rest of the list causes all existing nodes to become unreachable — and since C++ has no garbage collector, that memory is leaked."
+                "feedback": "Correct! Since the head is the only external pointer to the list, updating it to the new node before linking the new node to the rest of the list causes all existing nodes to become unreachable - and since C++ has no garbage collector, that memory is leaked."
             },
             {
                 "answer": "The list will automatically become a circularly linked list.",

@@ -17,7 +17,7 @@
             {
                 "answer": "a pop on an empty stack occurs (undefined behavior / likely crash)",
                 "correct": true,
-                "feedback": "Correct! After the first two pops remove \"z\" and \"y\", the loop condition is checked again with one item left (\"x\"). The next iteration pops \"x\" and then pops an empty stack — in C++ this is undefined behavior and typically crashes the program (unlike Python, no exception is raised for you)."
+                "feedback": "Correct! After the first two pops remove \"z\" and \"y\", the loop condition is checked again with one item left (\"x\"). The next iteration pops \"x\" and then pops an empty stack - in C++ this is undefined behavior and typically crashes the program (unlike Python, no exception is raised for you)."
             },
             {
                 "answer": "\"z\"",

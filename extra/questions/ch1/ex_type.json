@@ -17,7 +17,7 @@
             {
                 "answer": "54",
                 "correct": false,
-                "feedback": "When converting to an integer, the cast does not round — it truncates."
+                "feedback": "When converting to an integer, the cast does not round - it truncates."
             },
             {
                 "answer": "53.785",

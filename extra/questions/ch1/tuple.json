@@ -21,7 +21,7 @@
             {
                 "answer": "An array automatically checks that an index is within bounds.",
                 "correct": false,
-                "feedback": "Incorrect. Arrays perform no bounds checking — accessing an out-of-range index is undefined behavior. Even vector's [] does not check; only vector's at() does."
+                "feedback": "Incorrect. Arrays perform no bounds checking - accessing an out-of-range index is undefined behavior. Even vector's [] does not check; only vector's at() does."
             },
             {
                 "answer": "A vector keeps track of its own size, which can be queried with size().",

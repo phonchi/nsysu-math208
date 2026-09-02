@@ -11,12 +11,12 @@
             {
                 "answer": "0 < x < 5",
                 "correct": false,
-                "feedback": "Careful — this compiles in C++ but does NOT do what you want! It evaluates (0 < x) first, giving 0 or 1, and then compares that with 5, so it is always true. This is a classic C++ pitfall (Python's chained comparison does not carry over)."
+                "feedback": "Careful - this compiles in C++ but does NOT do what you want! It evaluates (0 < x) first, giving 0 or 1, and then compares that with 5, so it is always true. This is a classic C++ pitfall (Python's chained comparison does not carry over)."
             },
             {
                 "answer": "x > 0 || x < 5",
                 "correct": false,
-                "feedback": "It evaluates to true for all numbers that are either greater than 0 or less than 5 — which is every number, so this expression is always true!"
+                "feedback": "It evaluates to true for all numbers that are either greater than 0 or less than 5 - which is every number, so this expression is always true!"
             },
             {
                 "answer": "x > 0 && x < 5",

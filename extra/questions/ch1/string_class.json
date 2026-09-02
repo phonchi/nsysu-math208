@@ -7,7 +7,7 @@
             {
                 "answer": "Bob (25 years old)",
                 "correct": true,
-                "feedback": "Correct! Overloading operator<< tells the stream how to print a Person, so cout << p uses our friend function — the C++ counterpart of Python's __str__."
+                "feedback": "Correct! Overloading operator<< tells the stream how to print a Person, so cout << p uses our friend function - the C++ counterpart of Python's __str__."
             },
             {
                 "answer": "Person('Bob', 25)",

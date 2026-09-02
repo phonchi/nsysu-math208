@@ -17,7 +17,7 @@
             {
                 "answer": "5 4.5",
                 "correct": false,
-                "feedback": "Integer division truncates — it never rounds up."
+                "feedback": "Integer division truncates - it never rounds up."
             },
             {
                 "answer": "4 4.5",

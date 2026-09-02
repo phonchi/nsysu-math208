@@ -16,7 +16,7 @@
             {
                 "answer": "Because each cell stores a memory address that points to an object living elsewhere in memory.",
                 "correct": true,
-                "feedback": "Correct! This architecture allows the array to refer to objects of different sizes and dynamic lifetimes by storing fixed-size pointers — this is also how Python lists work internally."
+                "feedback": "Correct! This architecture allows the array to refer to objects of different sizes and dynamic lifetimes by storing fixed-size pointers - this is also how Python lists work internally."
             },
             {
                 "answer": "Because pointer arrays are automatically allocated on the heap.",
