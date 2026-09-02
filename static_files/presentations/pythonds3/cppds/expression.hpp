@@ -1,4 +1,4 @@
-// dscpp/expression.hpp -- infix/postfix expression tools (Chapter 5)
+// pythonds3/cppds/expression.hpp -- infix/postfix expression tools (Chapter 5)
 #ifndef DSCPP_EXPRESSION_HPP
 #define DSCPP_EXPRESSION_HPP
 #include <iostream>

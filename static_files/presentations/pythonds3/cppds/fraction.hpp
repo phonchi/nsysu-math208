@@ -1,4 +1,4 @@
-// dscpp/fraction.hpp -- the Fraction class from Chapter 1 (NSYSU MATH208)
+// pythonds3/cppds/fraction.hpp -- the Fraction class from Chapter 1 (NSYSU MATH208)
 #ifndef DSCPP_FRACTION_HPP
 #define DSCPP_FRACTION_HPP
 #include <iostream>

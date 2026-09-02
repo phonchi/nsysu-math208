@@ -1,4 +1,4 @@
-// dscpp/gates.hpp -- the logic-gate hierarchy from Chapter 1 (NSYSU MATH208)
+// pythonds3/cppds/gates.hpp -- the logic-gate hierarchy from Chapter 1 (NSYSU MATH208)
 #ifndef DSCPP_GATES_HPP
 #define DSCPP_GATES_HPP
 #include <iostream>

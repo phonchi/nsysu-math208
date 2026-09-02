@@ -1,4 +1,4 @@
-// dscpp/searching.hpp -- the searching algorithms of Chapter 7
+// pythonds3/cppds/searching.hpp -- the searching algorithms of Chapter 7
 #ifndef DSCPP_SEARCHING_HPP
 #define DSCPP_SEARCHING_HPP
 #include <iostream>

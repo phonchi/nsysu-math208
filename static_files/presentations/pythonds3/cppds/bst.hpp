@@ -1,4 +1,4 @@
-// dscpp/bst.hpp -- BinarySearchTree with three-case delete (Chapter 9)
+// pythonds3/cppds/bst.hpp -- BinarySearchTree with three-case delete (Chapter 9)
 #ifndef DSCPP_BST_HPP
 #define DSCPP_BST_HPP
 #include <iostream>

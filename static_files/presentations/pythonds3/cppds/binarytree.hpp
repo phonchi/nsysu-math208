@@ -1,4 +1,4 @@
-// dscpp/binarytree.hpp -- BinaryTree, parse tree, traversals (Chapter 9)
+// pythonds3/cppds/binarytree.hpp -- BinaryTree, parse tree, traversals (Chapter 9)
 #ifndef DSCPP_BINARYTREE_HPP
 #define DSCPP_BINARYTREE_HPP
 #include <iostream>

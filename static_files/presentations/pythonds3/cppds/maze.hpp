@@ -1,4 +1,4 @@
-// dscpp/maze.hpp -- text-based maze and recursive solver (Chapter 6)
+// pythonds3/cppds/maze.hpp -- text-based maze and recursive solver (Chapter 6)
 #ifndef DSCPP_MAZE_HPP
 #define DSCPP_MAZE_HPP
 #include <iostream>

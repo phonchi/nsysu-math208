@@ -1,4 +1,4 @@
-// dscpp/hashtable.hpp -- open-addressing hash table (Chapter 7)
+// pythonds3/cppds/hashtable.hpp -- open-addressing hash table (Chapter 7)
 #ifndef DSCPP_HASHTABLE_HPP
 #define DSCPP_HASHTABLE_HPP
 #include <iostream>

@@ -1,4 +1,4 @@
-// dscpp/sparsematrix.hpp -- Dictionary-Of-Keys sparse matrix (Chapter 3)
+// pythonds3/cppds/sparsematrix.hpp -- Dictionary-Of-Keys sparse matrix (Chapter 3)
 #ifndef DSCPP_SPARSEMATRIX_HPP
 #define DSCPP_SPARSEMATRIX_HPP
 #include <iostream>

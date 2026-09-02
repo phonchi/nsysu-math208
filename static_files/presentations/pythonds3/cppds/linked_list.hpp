@@ -1,4 +1,4 @@
-// dscpp/linked_list.hpp -- Node / UnorderedList / OrderedList (Chapter 4)
+// pythonds3/cppds/linked_list.hpp -- Node / UnorderedList / OrderedList (Chapter 4)
 #ifndef DSCPP_LINKED_LIST_HPP
 #define DSCPP_LINKED_LIST_HPP
 #include <iostream>

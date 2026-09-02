@@ -67,7 +67,7 @@
 │   │   │                    # 小寫 .html＝C++ 互動自學頁（introduction / analysis /
 │   │   │                    #   arrays / linked_lists / linear_structures / recursion /
 │   │   │                    #   searching_sorting / graphs / trees / search_trees）
-│   │   ├── dscpp/           # 投影片用的 C++ 標頭檔（stack/queue/bst/graph/sorting…）
+│   │   ├── pythonds3/cppds/  # 課程 C++ 標頭檔（與 github.com/phonchi/pythonds3 同步）
 │   │   ├── imgs/            # 投影片圖片（含 cpp/ 子目錄）
 │   │   └── python/          # 舊 Python 版自學頁，目前站上無任何連結指向
 │   └── assignments/         # 換學期時清空，只留 a.md 佔位

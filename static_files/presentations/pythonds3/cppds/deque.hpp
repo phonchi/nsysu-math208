@@ -1,4 +1,4 @@
-// dscpp/deque.hpp -- vector-backed Deque template (Chapter 5)
+// pythonds3/cppds/deque.hpp -- vector-backed Deque template (Chapter 5)
 #ifndef DSCPP_DEQUE_HPP
 #define DSCPP_DEQUE_HPP
 #include <vector>

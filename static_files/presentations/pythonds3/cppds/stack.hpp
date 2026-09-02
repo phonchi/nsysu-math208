@@ -1,4 +1,4 @@
-// dscpp/stack.hpp -- vector-backed Stack templates (Chapter 5)
+// pythonds3/cppds/stack.hpp -- vector-backed Stack templates (Chapter 5)
 #ifndef DSCPP_STACK_HPP
 #define DSCPP_STACK_HPP
 #include <iostream>

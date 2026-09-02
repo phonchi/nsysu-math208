@@ -1,4 +1,4 @@
-// dscpp/graph.hpp -- adjacency-map Graph (Chapter 8)
+// pythonds3/cppds/graph.hpp -- adjacency-map Graph (Chapter 8)
 #ifndef DSCPP_GRAPH_HPP
 #define DSCPP_GRAPH_HPP
 #include <iostream>

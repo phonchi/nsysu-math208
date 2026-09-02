@@ -1,4 +1,4 @@
-// dscpp/binaryheap.hpp -- vector-backed min-heap (Chapter 9)
+// pythonds3/cppds/binaryheap.hpp -- vector-backed min-heap (Chapter 9)
 #ifndef DSCPP_BINARYHEAP_HPP
 #define DSCPP_BINARYHEAP_HPP
 #include <iostream>

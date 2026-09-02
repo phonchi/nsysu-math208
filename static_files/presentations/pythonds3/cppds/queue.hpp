@@ -1,4 +1,4 @@
-// dscpp/queue.hpp -- vector-backed Queue template (Chapter 5)
+// pythonds3/cppds/queue.hpp -- vector-backed Queue template (Chapter 5)
 #ifndef DSCPP_QUEUE_HPP
 #define DSCPP_QUEUE_HPP
 #include <vector>

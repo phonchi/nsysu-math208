@@ -1,4 +1,4 @@
-// dscpp/dstimer.hpp -- tiny benchmarking helper (Chapter 2, NSYSU MATH208)
+// pythonds3/cppds/dstimer.hpp -- tiny benchmarking helper (Chapter 2, NSYSU MATH208)
 #ifndef DSCPP_DSTIMER_HPP
 #define DSCPP_DSTIMER_HPP
 #include <chrono>

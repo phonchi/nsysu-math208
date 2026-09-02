@@ -1,4 +1,4 @@
-// dscpp/arraylist.hpp -- dynamic array built on a raw C++ array (Chapter 3)
+// pythonds3/cppds/arraylist.hpp -- dynamic array built on a raw C++ array (Chapter 3)
 #ifndef DSCPP_ARRAYLIST_HPP
 #define DSCPP_ARRAYLIST_HPP
 #include <iostream>

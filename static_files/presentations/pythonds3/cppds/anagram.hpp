@@ -1,4 +1,4 @@
-// dscpp/anagram.hpp -- the anagram-detection solutions of Chapter 2
+// pythonds3/cppds/anagram.hpp -- the anagram-detection solutions of Chapter 2
 #ifndef DSCPP_ANAGRAM_HPP
 #define DSCPP_ANAGRAM_HPP
 #include <string>

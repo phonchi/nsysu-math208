@@ -1,7 +1,7 @@
-// dscpp/graph_algos.hpp -- the graph algorithms of Chapter 8
+// pythonds3/cppds/graph_algos.hpp -- the graph algorithms of Chapter 8
 #ifndef DSCPP_GRAPH_ALGOS_HPP
 #define DSCPP_GRAPH_ALGOS_HPP
-#include "dscpp/graph.hpp"
+#include "pythonds3/cppds/graph.hpp"
 #include <queue>
 #include <set>
 #include <vector>

@@ -1,4 +1,4 @@
-// dscpp/sorting.hpp -- the six sorting algorithms of Chapter 7
+// pythonds3/cppds/sorting.hpp -- the six sorting algorithms of Chapter 7
 #ifndef DSCPP_SORTING_HPP
 #define DSCPP_SORTING_HPP
 #include <iostream>
