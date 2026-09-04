@@ -7,18 +7,10 @@ permalink: /materials/
 <!---{% include image.html url="/_images/cover2.jpg" width=175 align="right" %}--->
 
 ## 互動自學網站
-依本課投影片編寫的 C++ 互動教材，含程式碼、圖解與隨堂測驗：
+依本課投影片編寫的 C++ 互動教材，含程式碼、圖解與隨堂測驗（課前準備、九章正課與九頁先備知識都在站內首頁）：
 
-* [C++ 導論](/nsysu-math208/static_files/presentations/introduction.html)
-* [演算法分析](/nsysu-math208/static_files/presentations/analysis.html)
-* [陣列與稀疏矩陣](/nsysu-math208/static_files/presentations/arrays.html)
-* [鏈結串列](/nsysu-math208/static_files/presentations/linked_lists.html)
-* [線性結構](/nsysu-math208/static_files/presentations/linear_structures.html)
-* [遞迴](/nsysu-math208/static_files/presentations/recursion.html)
-* [搜尋與排序演算法](/nsysu-math208/static_files/presentations/searching_sorting.html)
-* [圖與圖的演算法](/nsysu-math208/static_files/presentations/graphs.html)
-* [樹與樹的演算法](/nsysu-math208/static_files/presentations/trees.html)
-* [高效率搜尋樹與多路搜尋樹](/nsysu-math208/static_files/presentations/search_trees.html)
+* [C++ 資料結構自學網站](https://phonchi.github.io/ds-cpp-selfstudy/)
+* [高效率搜尋樹與多路搜尋樹（補充章節）](/nsysu-math208/static_files/presentations/search_trees.html)
 
 
 ## Book
