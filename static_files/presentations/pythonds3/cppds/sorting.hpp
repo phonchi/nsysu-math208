@@ -38,14 +38,18 @@ void bubbleSortShort(vector<int>& aList) {
 }
 
 void selectionSort(vector<int>& aList) {
-    int n = aList.size();
-    for (int i = 0; i < n - 1; i++) {
+    int n = static_cast<int>(aList.size());
+    for (int fillSlot = n - 1; fillSlot > 0; fillSlot--) {
         printl(aList);
-        int minIdx = i;
-        for (int j = i + 1; j < n; j++) {
-            if (aList[j] < aList[minIdx]) minIdx = j;
+        int positionOfMax = 0;
+        for (int location = 1; location <= fillSlot; location++) {
+            if (aList[location] > aList[positionOfMax]) {
+                positionOfMax = location;
+            }
         }
-        if (minIdx != i) swap(aList[i], aList[minIdx]);
+        if (positionOfMax != fillSlot) {
+            swap(aList[positionOfMax], aList[fillSlot]);
+        }
     }
 }
 

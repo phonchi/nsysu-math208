@@ -93,7 +93,7 @@
     },
     {
         "front": "Dijkstra's Algorithm",
-        "back": "An algorithm for finding the shortest paths between nodes in a graph with non-negative edge weights."
+    "back": "A single-source shortest-path algorithm for non-negative edge weights. This course's lazy priority-queue version pushes improved pairs and skips stale entries."
     },
     {
         "front": "Priority Queue",
@@ -109,7 +109,7 @@
     },
     {
         "front": "Prim's Algorithm",
-        "back": "An algorithm that finds a minimum spanning tree by growing a tree one edge at a time from a starting vertex."
+    "back": "An MST algorithm that repeatedly adds a minimum-weight edge crossing the current cut. The course prim() requires a connected graph and throws invalid_argument otherwise."
     },
     {
         "front": "Greedy Algorithms",

@@ -689,7 +689,8 @@
         const dist = {}, prev = {}, visited = {};
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; visited[v] = false; }
         dist[start] = 0;
-        let pq = verts.map(v => [dist[v], v]);
+        // Lazy priority queue: push improvements; stale entries are skipped on pop.
+        let pq = [[0, start]];
         const sortPq = () => pq.sort((a,b) => a[0] - b[0]);
         const steps = [];
         sortPq();
@@ -698,21 +699,19 @@
         while (pq.length > 0) {
           sortPq();
           const [d, u] = pq.shift();
-          if (d === Infinity) break;
-          if (visited[u]) continue;
+          if (d > dist[u]) {
+            const treeEdges = verts.filter(vv => prev[vv]).map(vv => [prev[vv], vv]);
+            steps.push({ kind:'stale', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`跳過 stale entry：${u}:${d}，目前最佳距離已是 ${dist[u]}`, treeEdges });
+            continue;
+          }
           visited[u] = true;
           const treeEdges = verts.filter(vv => prev[vv]).map(vv => [prev[vv], vv]);
           steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges });
           for (const { to: vv, w: weight } of adj[u]) {
-            if (visited[vv]) {
-              steps.push({ kind:'skip', codeLine:10, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鄰居 ${vv} 已 visited，跳過`, treeEdges });
-              continue;
-            }
-            const newD = d + weight;
+            const newD = dist[u] + weight;
             steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：new_d = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}`, treeEdges });
             if (newD < dist[vv]) {
               dist[vv] = newD; prev[vv] = u;
-              pq = pq.filter(p => p[1] !== vv);
               pq.push([newD, vv]);
               sortPq();
               steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: [...treeEdges.filter(e => e[1] !== vv), [u, vv]] });
@@ -844,20 +843,19 @@
         const dist = {}, prev = {}, inTree = {};
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; inTree[v] = false; }
         dist[start] = 0;
-        let pq = verts.map(v => [dist[v], v]);
+        let pq = [[0, start]];
         const sortPq = () => pq.sort((a,b) => {
           if (a[0] === b[0]) return verts.indexOf(a[1]) - verts.indexOf(b[1]);
           if (a[0] === Infinity) return 1;
           if (b[0] === Infinity) return -1;
           return a[0] - b[0];
         });
-        const pqIndex = (v) => pq.findIndex(p => p[1] === v);
         const snapPq = () => pq.map(([key, v]) => [key, v]);
         const steps = [];
         const mstEdges = [];
         let total = 0;
         sortPq();
-        steps.push({ kind:'init', codeLine:6, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`heapify：所有頂點都在 PQ；${start}.distance = 0，其餘為 sys.maxsize` });
+        steps.push({ kind:'init', codeLine:6, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`初始化 lazy PQ：只加入起點 ${start}:0；其餘 key 為 ∞` });
 
         while (pq.length > 0) {
           sortPq();
@@ -873,14 +871,12 @@
 
           for (const { to: vv, w: weight } of adj[u]) {
             const newD = weight;
-            const idx = pqIndex(vv);
-            const inPq = idx !== -1;
-            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`檢查 ${u}—${vv}：new_distance = ${weight}；條件 next_v in pq 為 ${inPq ? 'True' : 'False'}，目前 distance(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}` });
-            if (inPq && newD < dist[vv]) {
+            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`檢查 cut edge ${u}—${vv}：weight=${weight}，目前 key(${vv})=${isFinite(dist[vv]) ? dist[vv] : '∞'}` });
+            if (!inTree[vv] && newD < dist[vv]) {
               dist[vv] = newD; prev[vv] = u;
-              pq[idx][0] = newD;
+              pq.push([newD, vv]);
               sortPq();
-              steps.push({ kind:'relax-update', codeLine:15, current:u, neighbor:vv, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`change_priority(${vv}, ${newD})：previous(${vv}) = ${u}，distance(${vv}) = ${newD}` });
+              steps.push({ kind:'relax-update', codeLine:15, current:u, neighbor:vv, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`push(${vv}, ${newD})：這是目前跨 cut 到 ${vv} 的最便宜 safe-edge candidate` });
             }
           }
         }

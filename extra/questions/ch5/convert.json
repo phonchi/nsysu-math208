@@ -11,7 +11,7 @@
             {
                 "answer": "031",
                 "correct": true,
-                "feedback": "Correct! 031 is the standard C++ representation for the octal value 31."
+                "feedback": "Correct! In C++ source, the leading zero in the integer literal 031 denotes base 8; the literal therefore has decimal value 25."
             }
         ]
     }

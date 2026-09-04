@@ -45,7 +45,7 @@
     },
     {
         "front": "Height",
-        "back": "The total number of levels in a tree, or the length of the longest path from the root to a leaf node."
+    "back": "The maximum number of edges on a path from the root to a leaf; a one-node tree has height 0."
     },
     {
         "front": "Binary Tree",
@@ -53,7 +53,7 @@
     },
     {
         "front": "List of Lists",
-        "back": "A method for implementing a tree using a nested list structure where each list represents a node and its children."
+    "back": "The Python textbook's nested-list tree representation; the C++ course uses nodes and child pointers as its main implementation."
     },
     {
         "front": "Nodes and References",
@@ -85,7 +85,7 @@
     },
     {
         "front": "Binary Heap",
-        "back": "A binary tree-based structure that satisfies the heap property, where nodes are ordered relative to their children."
+    "back": "A complete binary tree stored in a zero-based vector; a min-heap keeps each parent no greater than its children."
     },
     {
         "front": "Complete Binary Tree",
@@ -120,8 +120,8 @@
         "back": "The node that immediately follows a given node in an inorder traversal of a binary search tree."
     },
     {
-        "front": "Generator Function",
-        "back": "A function that returns an iterator and yields values one at a time, pausing between each execution."
+    "front": "Recursive Inorder Traversal",
+    "back": "Visit the left subtree, then the node, then the right subtree; on a BST this emits keys in sorted order."
     },
     {
         "front": "Balanced Binary Search Tree",
@@ -132,7 +132,11 @@
         "back": "In AVL trees, the difference between the heights of a node's left and right subtrees."
     },
     {
-        "front": "AVL Tree",
-        "back": "A self-balancing BST where the height of subtrees differs by at most one, ensuring logarithmic time complexity."
+    "front": "AVL Tree",
+    "back": "A self-balancing BST whose subtree heights differ by at most one, giving height O(log n); rotations are an optional implementation topic."
+  },
+  {
+    "front": "Bottom-up buildHeap",
+    "back": "Build a heap in O(n) by calling percDown from the last non-leaf toward the root; repeated insertions take O(n log n)."
     }
 ]

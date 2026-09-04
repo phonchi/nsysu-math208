@@ -39,6 +39,10 @@
           <div class="stat-tile swap"><div class="stat-label">交換</div><div class="stat-value" id="quickSwp">0</div></div>
         </div>
       </div>
+      <div class="info-card">
+        <div class="ic-title">C++17 核心 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+        <div class="pseudo-code" id="quickCode"><span class="line"><span class="kw">void</span> <span class="fn">quickSortHelper</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> first, <span class="kw">int</span> last) {</span><span class="line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (first &lt; last) {</span><span class="line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">int</span> split = <span class="fn">partition</span>(a, first, last);</span><span class="line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">quickSortHelper</span>(a, first, split - <span class="num">1</span>);</span><span class="line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">quickSortHelper</span>(a, split + <span class="num">1</span>, last);</span><span class="line">&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="line">}</span></div>
+      </div>
     </div>
   </div>
 </div>

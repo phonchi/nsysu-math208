@@ -35,17 +35,26 @@
 <div class="info-card">
 <div class="ic-title" id="bstCodeTitleInsert">虛擬碼 — _put <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
 <div class="pseudo-code" id="bstCodeInsert" style="font-size:.73em;">
-<span class="line" data-l="1"><span class="fn">put</span>(self, key, value, currentNode):</span>
-<span class="line" data-l="2">    <span class="kw">if</span> key &lt; currentNode->key:</span>
-<span class="line" data-l="3">        <span class="kw">if</span> currentNode->leftChild:</span>
-<span class="line" data-l="4">            <span class="fn">put</span>(key, value, currentNode->leftChild)</span>
-<span class="line" data-l="5">        <span class="kw">else</span>:</span>
-<span class="line" data-l="6">            currentNode->leftChild = <span class="fn">TreeNode</span>(key, value, parent=currentNode)</span>
-<span class="line" data-l="7">    <span class="kw">else</span>:</span>
-<span class="line" data-l="8">        <span class="kw">if</span> currentNode->rightChild:</span>
-<span class="line" data-l="9">            <span class="fn">put</span>(key, value, currentNode->rightChild)</span>
-<span class="line" data-l="10">        <span class="kw">else</span>:</span>
-<span class="line" data-l="11">            currentNode->rightChild = <span class="fn">TreeNode</span>(key, value, parent=currentNode)</span>
+<span class="line"><span class="kw">#include</span> &lt;string&gt;</span>
+<span class="line"><span class="kw">struct</span> TreeNode {</span>
+<span class="line">    std::string key, value;</span>
+<span class="line">    TreeNode *leftChild = <span class="kw">nullptr</span>, *rightChild = <span class="kw">nullptr</span>, *parent = <span class="kw">nullptr</span>;</span>
+<span class="line">    TreeNode(std::string k, std::string v, TreeNode* p = <span class="kw">nullptr</span>)</span>
+<span class="line">        : key(k), value(v), parent(p) {}</span>
+<span class="line">};</span>
+<span class="line" data-l="1"><span class="kw">void</span> <span class="fn">put</span>(<span class="kw">const</span> std::string&amp; key, <span class="kw">const</span> std::string&amp; value, TreeNode* currentNode) {</span>
+<span class="line" data-l="2">    <span class="kw">if</span> (key == currentNode->key) { currentNode->value = value; <span class="kw">return</span>; }</span>
+<span class="line" data-l="3">    <span class="kw">if</span> (key &lt; currentNode->key) {</span>
+<span class="line" data-l="4">        <span class="kw">if</span> (currentNode->leftChild != <span class="kw">nullptr</span>)</span>
+<span class="line" data-l="5">            <span class="fn">put</span>(key, value, currentNode->leftChild);</span>
+<span class="line" data-l="6">        <span class="kw">else</span> currentNode->leftChild = <span class="kw">new</span> <span class="fn">TreeNode</span>(key, value, currentNode);</span>
+<span class="line" data-l="7">    } <span class="kw">else</span> {</span>
+<span class="line" data-l="8">        <span class="kw">if</span> (currentNode->rightChild != <span class="kw">nullptr</span>)</span>
+<span class="line" data-l="9">            <span class="fn">put</span>(key, value, currentNode->rightChild);</span>
+<span class="line" data-l="10">        <span class="kw">else</span></span>
+<span class="line" data-l="11">            currentNode->rightChild = <span class="kw">new</span> <span class="fn">TreeNode</span>(key, value, currentNode);</span>
+<span class="line">    }</span>
+<span class="line">}</span>
 </div>
 </div>
 </div>

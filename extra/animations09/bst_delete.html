@@ -37,17 +37,28 @@
 <div class="ic-row"><span class="ic-label">階段</span><span class="ic-value" id="delPhaseDel">—</span></div>
 </div>
 <div class="info-card">
-<div class="ic-title">find_successor <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
+<div class="ic-title">findSuccessor <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
 <div class="pseudo-code" style="font-size:.74em;">
-<span class="line"><span class="fn">find_successor</span>(self):</span>
-<span class="line">    <span class="kw">if</span> rightChild:</span>
-<span class="line">        <span class="kw">return</span> rightChild.<span class="fn">find_min</span>()</span>
-<span class="line">    ...</span>
-<span class="line"><span class="fn">find_min</span>(self):</span>
-<span class="line">    cur = self</span>
-<span class="line">    <span class="kw">while</span> cur.leftChild:</span>
-<span class="line">        cur = cur.leftChild</span>
-<span class="line">    <span class="kw">return</span> cur</span>
+<span class="line"><span class="kw">struct</span> TreeNode {</span>
+<span class="line">    <span class="kw">int</span> key;</span>
+<span class="line">    TreeNode *leftChild = <span class="kw">nullptr</span>, *rightChild = <span class="kw">nullptr</span>;</span>
+<span class="line">    TreeNode* parent = <span class="kw">nullptr</span>;</span>
+<span class="line">    TreeNode* <span class="fn">findSuccessor</span>() {</span>
+<span class="line">        <span class="kw">if</span> (rightChild != <span class="kw">nullptr</span>)</span>
+<span class="line">        <span class="kw">return</span> rightChild-&gt;<span class="fn">findMin</span>();</span>
+<span class="line">        TreeNode *cur = <span class="kw">this</span>, *up = parent;</span>
+<span class="line">        <span class="kw">while</span> (up != <span class="kw">nullptr</span> &amp;&amp; cur == up-&gt;rightChild) {</span>
+<span class="line">            cur = up; up = up-&gt;parent;</span>
+<span class="line">        }</span>
+<span class="line">        <span class="kw">return</span> up;</span>
+<span class="line">    }</span>
+<span class="line">    TreeNode* <span class="fn">findMin</span>() {</span>
+<span class="line">        TreeNode* cur = <span class="kw">this</span>;</span>
+<span class="line">        <span class="kw">while</span> (cur-&gt;leftChild != <span class="kw">nullptr</span>)</span>
+<span class="line">            cur = cur-&gt;leftChild;</span>
+<span class="line">        <span class="kw">return</span> cur;</span>
+<span class="line">    }</span>
+<span class="line">};</span>
 </div>
 </div>
 

@@ -1,28 +1,54 @@
 [
-	{
-        "question": "In Prim's algorithm for finding a Minimum Spanning Tree (MST), what defines a safe edge?",
-        "type": "multiple_choice",
-        "answers": [
-            {
-                "answer": "Any edge that does not create a cycle when added to the current tree.",
-                "correct": false,
-                "feedback": "Incorrect. While true of any tree edge, Prim's specifically looks for the minimum weight edge connecting the tree to a new vertex."
-            },
-            {
-                "answer": "The edge with the minimum weight that connects a vertex in the tree to a vertex outside the tree.",
-                "correct": true,
-                "feedback": "Correct! This greedy choice ensures that we grow the tree while keeping the total weight as low as possible without creating cycles."
-            },
-            {
-                "answer": "An edge that has a weight lower than the average of all edges in the graph.",
-                "correct": false,
-                "feedback": "Incorrect. The algorithm focuses on the absolute minimum weight connection for the current boundary."
-            },
-            {
-                "answer": "The first edge encountered during a depth-first search of the graph.",
-                "correct": false,
-                "feedback": "Incorrect. Prim's algorithm is distinct from DFS and uses weights to determine the next edge."
-            }
-        ]
-    }
+  {
+    "question": "In Prim's algorithm for finding a Minimum Spanning Tree (MST), what defines a safe edge?",
+    "type": "multiple_choice",
+    "answers": [
+      {
+        "answer": "Any edge that does not create a cycle when added to the current tree.",
+        "correct": false,
+        "feedback": "Incorrect. Prim's safe edge is the minimum-weight edge crossing the cut between the current tree and the vertices outside it."
+      },
+      {
+        "answer": "A minimum-weight edge crossing from the current tree to a vertex outside it.",
+        "correct": true,
+        "feedback": "Correct! This is the cut-property safe edge used by Prim's greedy step."
+      },
+      {
+        "answer": "An edge that has a weight lower than the average of all edges in the graph.",
+        "correct": false,
+        "feedback": "Incorrect. The algorithm focuses on the absolute minimum weight connection for the current boundary."
+      },
+      {
+        "answer": "The first edge encountered during a depth-first search of the graph.",
+        "correct": false,
+        "feedback": "Incorrect. Prim's algorithm is distinct from DFS and uses weights to determine the next edge."
+      }
+    ]
+  },
+  {
+    "question": "What does the course prim(g, start) function do when the graph is disconnected?",
+    "type": "multiple_choice",
+    "answers": [
+      {
+        "answer": "It silently returns a minimum spanning forest.",
+        "correct": false,
+        "feedback": "That would be a different contract. This function requires one spanning tree containing every vertex."
+      },
+      {
+        "answer": "It adds arbitrary edges between disconnected components.",
+        "correct": false,
+        "feedback": "Prim may only choose edges that exist; it cannot connect separate components."
+      },
+      {
+        "answer": "It throws invalid_argument after detecting that not every vertex entered the tree.",
+        "correct": true,
+        "feedback": "Correct! A disconnected graph has no spanning tree, so the void API reports the failed precondition with an exception."
+      },
+      {
+        "answer": "It loops forever waiting for another priority-queue entry.",
+        "correct": false,
+        "feedback": "The lazy queue becomes empty; the implementation then performs an explicit connectivity check."
+      }
+    ]
+  }
 ]

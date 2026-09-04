@@ -1,7 +1,7 @@
 [
     {
         "question": "Given the following sequence of stack operations, what is the top item on the stack when the sequence is complete?",
-        "code": "Stack&lt;string&gt; m;\nm.push(\"x\");\nm.push(\"y\");\nm.pop();\nm.push(\"z\");\nm.peek();",
+        "code": "std::stack&lt;std::string&gt; m;\nm.push(\"x\");\nm.push(\"y\");\nm.pop();\nm.push(\"z\");\nm.top();",
         "type": "multiple_choice",
         "answers": [
             {
@@ -17,7 +17,7 @@
             {
                 "answer": "\"z\"",
                 "correct": true,
-                "feedback": "Correct! Here is the trace: 1. push(\"x\") -> [\"x\"]; 2. push(\"y\") -> [\"x\", \"y\"]; 3. pop() removes \"y\" -> [\"x\"]; 4. push(\"z\") -> [\"x\", \"z\"]. The `peek()` operation returns \"z\", which is at the top."
+                "feedback": "Correct! Here is the trace: 1. push(\"x\") -> [\"x\"]; 2. push(\"y\") -> [\"x\", \"y\"]; 3. pop() removes \"y\" -> [\"x\"]; 4. push(\"z\") -> [\"x\", \"z\"]. The `top()` operation returns \"z\"."
             },
             {
                 "answer": "The stack is empty",

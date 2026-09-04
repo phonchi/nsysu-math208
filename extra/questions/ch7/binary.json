@@ -1,12 +1,12 @@
 [
     {
-        "question": "Suppose you have the following sorted vector [3, 5, 6, 8, 11, 12, 14, 15, 17, 18] and are using the recursive binary search algorithm (with midpoint = (list_size - 1) / 2, using integer division). Which group of numbers correctly shows the sequence of comparisons used to search for the key 16?",
+        "question": "Suppose recursive binary search uses index bounds and midpoint = first + (last - first) / 2. For the sorted vector {3, 5, 6, 8, 11, 12, 14, 15, 17, 18}, which values are compared while searching for 16?",
         "type": "multiple_choice",
         "answers": [
             {
                 "answer": "12, 17, 15",
                 "correct": false,
-                "feedback": "Incorrect. This sequence uses midpoint = len(a_list) // 2, but the lecture's recursive binary search uses midpoint = (len(a_list) - 1) // 2, so the first midpoint of a 10-element list is index 4 (value 11), not index 5 (value 12)."
+                "feedback": "The initial bounds are 0 through 9, so integer division chooses index 4 (value 11), not index 5."
             },
             {
                 "answer": "18, 17, 15",
@@ -21,7 +21,7 @@
             {
                 "answer": "11, 15, 17",
                 "correct": true,
-                "feedback": "Correct! Trace using midpoint = (len(a_list) - 1) // 2: 1. The list has 10 elements. The midpoint is (10-1)//2 = 4, which is 11. Since 16 > 11, we recurse on [12, 14, 15, 17, 18]. 2. This sublist has 5 elements. The midpoint is (5-1)//2 = 2, which is 15. Since 16 > 15, we recurse on [17, 18]. 3. This sublist has 2 elements. The midpoint is (2-1)//2 = 0, which is 17. Since 16 < 17, we recurse on the empty list and return False. The sequence is 11, 15, 17."
+                "feedback": "Correct. Bounds 0..9 probe 11; bounds 5..9 probe 15; bounds 8..9 probe 17; the next range is empty. No sub-vector is copied."
             }
         ]
     }

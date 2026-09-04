@@ -39,12 +39,25 @@
 <div class="info-card">
 <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
 <div class="pseudo-code" id="heapCodeIns" style="font-size:.74em;">
-<span class="line" data-l="1"><span class="fn">percUp</span>(self, i):</span>
-<span class="line" data-l="2">    <span class="kw">while</span> (i - <span class="num">1</span>) / <span class="num">2</span> &gt;= <span class="num">0</span>:</span>
-<span class="line" data-l="3">        p = (i - <span class="num">1</span>) / <span class="num">2</span></span>
-<span class="line" data-l="4">        <span class="kw">if</span> heap[i] &lt; heap[p]:</span>
-<span class="line" data-l="5">            <span class="fn">swap</span>(heap[i], heap[p])</span>
-<span class="line" data-l="6">        i = p</span>
+<span class="line"><span class="kw">#include</span> &lt;algorithm&gt;</span>
+<span class="line"><span class="kw">#include</span> &lt;vector&gt;</span>
+<span class="line"><span class="kw">class</span> MinHeap {</span>
+<span class="line">    std::vector&lt;<span class="kw">int</span>&gt; heap;</span>
+<span class="line" data-l="1"><span class="kw">void</span> <span class="fn">percUp</span>(<span class="kw">int</span> i) {</span>
+<span class="line" data-l="2">    <span class="kw">while</span> (i &gt; <span class="num">0</span>) {</span>
+<span class="line" data-l="3">        <span class="kw">int</span> p = (i - <span class="num">1</span>) / <span class="num">2</span>;</span>
+<span class="line" data-l="4">        <span class="kw">if</span> (heap[i] &lt; heap[p]) {</span>
+<span class="line" data-l="5">            std::<span class="fn">swap</span>(heap[i], heap[p]);</span>
+<span class="line">        }</span>
+<span class="line" data-l="6">        i = p;</span>
+<span class="line">    }</span>
+<span class="line">}</span>
+<span class="line"><span class="kw">public</span>:</span>
+<span class="line">    <span class="kw">void</span> <span class="fn">insert</span>(<span class="kw">int</span> key) {</span>
+<span class="line">        heap.<span class="fn">push_back</span>(key);</span>
+<span class="line">        <span class="fn">percUp</span>(<span class="kw">static_cast</span>&lt;<span class="kw">int</span>&gt;(heap.<span class="fn">size</span>()) - <span class="num">1</span>);</span>
+<span class="line">    }</span>
+<span class="line">};</span>
 </div>
 </div>
 

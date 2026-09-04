@@ -21,11 +21,11 @@
     },
     {
         "front": "Big-O",
-        "back": "A notation used to express the upper bound of the time complexity or space complexity of an algorithm, helping to describe how the algorithm scales as the input size grows."
+        "back": "An asymptotic upper-bound notation for a cost function. It does not by itself mean worst case; first state which case or operation sequence the cost function describes."
     },
     {
         "front": "Average-Case Performance",
-        "back": "The expected time or space complexity of an algorithm when all possible inputs are considered, providing a measure of the algorithm's efficiency under typical conditions."
+        "back": "The expected cost over inputs of size n under a stated probability distribution. Without that distribution, an average-case claim is incomplete."
     },
     {
         "front": "Worst-Case Performance",
@@ -41,10 +41,18 @@
     },
     {
         "front": "Indexing",
-        "back": "The process of creating an index to improve data retrieval speed by efficiently locating and accessing the data in a data structure."
+        "back": "Accessing an element by its numeric position. For contiguous std::vector and std::string storage, operator[] takes O(1) time."
     },
     {
         "front": "Contains Operator",
-        "back": "An operator used in programming to check if a particular element is present within a data structure."
+        "back": "A membership test. Linear search in an unsorted vector is O(n), whereas unordered_map lookup is O(1) on average and O(n) in the worst case."
+    },
+    {
+        "front": "Amortized Analysis",
+        "back": "A bound on average cost per operation over a sequence, without assuming random inputs. std::vector::push_back is amortized O(1) although one reallocation can cost O(n)."
+    },
+    {
+        "front": "std::string Complexity",
+        "back": "Since C++11, characters are contiguous: indexing and size are O(1), push_back is amortized O(1), and insertion or erasure near the front is O(n)."
     }
 ]

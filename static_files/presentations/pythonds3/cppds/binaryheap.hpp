@@ -4,12 +4,14 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <stdexcept>
 using namespace std;
 
 class BinaryHeap {
     public:
         vector<int> heap;
-        bool isEmpty() { return heap.empty(); }
+        bool isEmpty() const { return heap.empty(); }
+        int size() const { return static_cast<int>(heap.size()); }
         void percUp(int i) {
             while ((i - 1) / 2 >= 0 && i > 0) {
                 int parentIdx = (i - 1) / 2;
@@ -42,11 +44,17 @@ class BinaryHeap {
             }
         }
         int delet() {   // C++ reserves the word delete!
+            if (heap.empty()) throw underflow_error("Cannot delete from an empty heap");
             swap(heap[0], heap[heap.size() - 1]);
             int result = heap.back();
             heap.pop_back();
-            percDown(0);
+            if (!heap.empty()) percDown(0);
             return result;
+        }
+        int delMin() { return delet(); }
+        int findMin() const {
+            if (heap.empty()) throw underflow_error("Cannot inspect an empty heap");
+            return heap[0];
         }
         void heapify(vector<int> notAHeap) {
             heap = notAHeap;
@@ -56,6 +64,7 @@ class BinaryHeap {
                 i = i - 1;
             }
         }
+        void buildHeap(vector<int> notAHeap) { heapify(notAHeap); }
         void print() {
             for (int x : heap) cout << x << " ";
             cout << endl;

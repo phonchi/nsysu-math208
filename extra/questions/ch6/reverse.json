@@ -1,0 +1,28 @@
+[
+    {
+        "question": "Which base case makes a recursive C++ reverse(string s) function correct for both an empty string and a one-character string?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "code": "if (s.size() <= 1) return s;",
+                "correct": true,
+                "feedback": "Correct. Both inputs are already their own reverse, and the empty-string case is safe."
+            },
+            {
+                "code": "if (s.size() == 1) return s;",
+                "correct": false,
+                "feedback": "This handles one character but misses the empty string; indexing or recursing from an empty input can then fail."
+            },
+            {
+                "code": "if (s.empty()) return s[0];",
+                "correct": false,
+                "feedback": "An empty string has no element at index 0."
+            },
+            {
+                "code": "if (s.size() >= 1) return s;",
+                "correct": false,
+                "feedback": "This stops immediately for every nonempty input, so strings longer than one character are never reversed."
+            }
+        ]
+    }
+]

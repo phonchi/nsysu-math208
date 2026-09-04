@@ -54,5 +54,13 @@
     {
         "front": "Deque",
         "back": "Short for double-ended queue, it is a data structure that allows the insertion and removal of elements from both the front and the rear, providing more flexibility than standard queues or stacks."
+    },
+    {
+        "front": "STL Container Adapter",
+        "back": "std::stack and std::queue restrict an underlying container to LIFO or FIFO operations. Their pop() removes an item and returns void, so read top() or front() first when the value is needed."
+    },
+    {
+        "front": "Three Stack APIs",
+        "back": "STL std::stack uses top()/empty() and void pop(). The pythonds3 Stack<T> uses peek()/isEmpty() and value-returning pop(). HW3 Stack<T>(capacity) uses stackTop() or peek(index), value-returning pop(), and isFull()."
     }
 ]

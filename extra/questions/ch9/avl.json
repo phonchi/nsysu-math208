@@ -1,28 +1,54 @@
 [
-	{
-        "question": "How does an AVL tree improve upon a standard Binary Search Tree?",
-        "type": "multiple_choice",
-        "answers": [
-            {
-                "answer": "It uses a special hash function to distribute nodes more evenly.",
-                "correct": false,
-                "feedback": "Incorrect. AVL trees use rotations based on height, not hashing."
-            },
-            {
-                "answer": "It automatically performs rotations to ensure the height of the tree remains O(log n).",
-                "correct": true,
-                "feedback": "Correct! By maintaining a balance factor for each node, it prevents the tree from becoming skewed and ensures logarithmic search time."
-            },
-            {
-                "answer": "It allows multiple keys to be stored in a single node to save memory.",
-                "correct": false,
-                "feedback": "Incorrect. This describes other structures like B-Trees; AVL nodes still hold individual keys."
-            },
-            {
-                "answer": "It completely eliminates the need for a delete operation.",
-                "correct": false,
-                "feedback": "Incorrect. AVL trees still support and require a delete operation, which also includes rebalancing."
-            }
-        ]
-    }
+  {
+    "question": "How does an AVL tree improve upon a standard Binary Search Tree?",
+    "type": "multiple_choice",
+    "answers": [
+      {
+        "answer": "It uses a special hash function to distribute nodes more evenly.",
+        "correct": false,
+        "feedback": "Incorrect. AVL trees use rotations based on height, not hashing."
+      },
+      {
+        "answer": "It automatically performs rotations to ensure the height of the tree remains O(log n).",
+        "correct": true,
+        "feedback": "Correct! By maintaining a balance factor for each node, it prevents the tree from becoming skewed and ensures logarithmic search time."
+      },
+      {
+        "answer": "It allows multiple keys to be stored in a single node to save memory.",
+        "correct": false,
+        "feedback": "Incorrect. This describes other structures like B-Trees; AVL nodes still hold individual keys."
+      },
+      {
+        "answer": "It completely eliminates the need for a delete operation.",
+        "correct": false,
+        "feedback": "Incorrect. AVL trees still support and require a delete operation, which also includes rebalancing."
+      }
+    ]
+  },
+  {
+    "question": "With height measured in edges, which statement correctly describes the sparsest AVL tree?",
+    "type": "multiple_choice",
+    "answers": [
+      {
+        "answer": "Its exact height is 1.44 log2(n) for every n.",
+        "correct": false,
+        "feedback": "The Fibonacci argument gives an upper bound up to additive constants, not an exact equality for every AVL tree."
+      },
+      {
+        "answer": "N_h = F_(h+3) - 1, which implies height O(log n).",
+        "correct": true,
+        "feedback": "Correct! N_0=1 and N_1=2 lead to the Fibonacci index h+3."
+      },
+      {
+        "answer": "N_h = h squared, so height is O(sqrt(n)).",
+        "correct": false,
+        "feedback": "The minimum-node recurrence is Fibonacci-like, not quadratic."
+      },
+      {
+        "answer": "AVL balance guarantees constant height.",
+        "correct": false,
+        "feedback": "AVL height grows logarithmically with the number of nodes."
+      }
+    ]
+  }
 ]

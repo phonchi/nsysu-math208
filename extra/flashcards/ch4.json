@@ -30,5 +30,17 @@
     {
         "front": "Doubly Linked List",
         "back": "A linked list where each node keeps two explicit references: one to the node after it (next) and one to the node before it (prev). This allows for efficient bidirectional traversal and updates."
+    },
+    {
+        "front": "std::forward_list",
+        "back": "The STL singly linked container. It supports forward iteration and constant-time insert_after or erase_after once the predecessor iterator is known, but no random access."
+    },
+    {
+        "front": "std::list",
+        "back": "The STL doubly linked container. Insertion and erasure at a known iterator are O(1), but locating a position is O(n) and operator[] is not provided."
+    },
+    {
+        "front": "Deep Copy",
+        "back": "Copying every node into independently owned storage. Copying only the head pointer aliases one chain and can cause shared mutation and double deletion."
     }
 ]

@@ -21,7 +21,7 @@
     },
     {
         "front": "Hashing",
-        "back": "A method used for uniquely identifying a specific number from a set of numbers by converting the input into a fixed-size string or number through a hash function."
+        "back": "A technique that applies a hash function to a key to select a table index; different keys can collide and therefore require a collision-resolution strategy."
     },
     {
         "front": "Hash Table",
@@ -61,7 +61,7 @@
     },
     {
         "front": "Rehashing",
-        "back": "The process of increasing the size of a hash table and rehashing all existing keys (numbers), typically performed when the load factor exceeds a certain threshold."
+        "back": "In this chapter's open-addressing implementation, the probe step that computes the next candidate slot after a collision, such as (oldHash + 1) % size. Resizing a production table is a separate operation that also requires reinserting keys."
     },
     {
         "front": "Quadratic Probing",
@@ -76,8 +76,8 @@
         "back": "A data structure that stores pairs of keys and values, allowing for efficient retrieval of a value based on its associated key (number)."
     },
     {
-        "front": "Loading Factor",
-        "back": "A measure of how full a hash table is, calculated as the ratio of the number of entries to the total number of slots available in the table."
+        "front": "Load Factor",
+        "back": "A measure of how full a hash table is: the number of stored entries divided by the number of slots."
     },
     {
         "front": "Bubble Sort",
@@ -85,7 +85,7 @@
     },
     {
         "front": "Selection Sort",
-        "back": "An in-place comparison sorting algorithm that segmentation the list into sorted and unsorted parts, repeatedly moving the minimum number to the sorted segment."
+        "back": "An in-place comparison sort that repeatedly finds the largest value in the unsorted prefix and swaps it into the final open slot at the end."
     },
     {
         "front": "Insertion Sort",

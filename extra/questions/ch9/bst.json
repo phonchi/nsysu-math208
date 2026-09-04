@@ -1,28 +1,54 @@
 [
-	{
-        "question": "In a Binary Search Tree (BST), what property must hold for every node to ensure efficient searching?",
-        "type": "multiple_choice",
-        "answers": [
-            {
-                "answer": "The key of a node must be greater than the keys in its left subtree and smaller than the keys in its right subtree.",
-                "correct": true,
-                "feedback": "Correct! This property allows the search algorithm to eliminate half of the remaining tree at each step."
-            },
-            {
-                "answer": "Every node must have exactly two children to maintain a balance.",
-                "correct": false,
-                "feedback": "Incorrect. Nodes can have zero, one, or two children; having two children is not required for a BST."
-            },
-            {
-                "answer": "The keys must be inserted in sorted order to create the most efficient tree.",
-                "correct": false,
-                "feedback": "Incorrect. Inserting keys in sorted order actually results in a 'skewed' tree (like a list), which is very inefficient."
-            },
-            {
-                "answer": "All leaf nodes must be at the same depth level.",
-                "correct": false,
-                "feedback": "Incorrect. This describes a perfectly balanced tree, which a basic BST does not guarantee."
-            }
-        ]
-    }
+  {
+    "question": "In a Binary Search Tree (BST), what property must hold for every node to ensure efficient searching?",
+    "type": "multiple_choice",
+    "answers": [
+      {
+        "answer": "The key of a node must be greater than the keys in its left subtree and smaller than the keys in its right subtree.",
+        "correct": true,
+        "feedback": "Correct! Each comparison rules out one impossible subtree. The cost is O(h), where h is tree height; a basic BST does not guarantee that half the nodes disappear at each step."
+      },
+      {
+        "answer": "Every node must have exactly two children to maintain a balance.",
+        "correct": false,
+        "feedback": "Incorrect. Nodes can have zero, one, or two children; having two children is not required for a BST."
+      },
+      {
+        "answer": "The keys must be inserted in sorted order to create the most efficient tree.",
+        "correct": false,
+        "feedback": "Incorrect. Inserting keys in sorted order actually results in a 'skewed' tree (like a list), which is very inefficient."
+      },
+      {
+        "answer": "All leaf nodes must be at the same depth level.",
+        "correct": false,
+        "feedback": "Incorrect. This describes a perfectly balanced tree, which a basic BST does not guarantee."
+      }
+    ]
+  },
+  {
+    "question": "What should put(key, value) do when key already exists in the course BST map?",
+    "type": "multiple_choice",
+    "answers": [
+      {
+        "answer": "Insert a duplicate node in the right subtree and increase size.",
+        "correct": false,
+        "feedback": "That duplicate may become unreachable by ordinary search and violates Map semantics."
+      },
+      {
+        "answer": "Replace the existing value and leave size unchanged.",
+        "correct": true,
+        "feedback": "Correct! put uses insert-or-assign semantics for an existing key."
+      },
+      {
+        "answer": "Delete the entire subtree rooted at that key.",
+        "correct": false,
+        "feedback": "Updating a mapped value does not change the tree structure."
+      },
+      {
+        "answer": "Throw underflow_error.",
+        "correct": false,
+        "feedback": "underflow_error is used for invalid empty-heap access, not BST assignment."
+      }
+    ]
+  }
 ]

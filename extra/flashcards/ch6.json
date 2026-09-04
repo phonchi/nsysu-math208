@@ -5,7 +5,7 @@
     },
     {
         "front": "Base Case",
-        "back": "The condition in recursion that stops the function from calling itself. It typically represents the simplest instance of the problem that can be solved directly without further recursive calls."
+        "back": "The condition that stops further recursive calls. It should cover every smallest valid input; for example, a string reverse function can use size <= 1 so both empty and one-character strings terminate safely."
     },
     {
         "front": "Stack Frame",
@@ -25,6 +25,6 @@
     },
     {
         "front": "Memoization",
-        "back": "A specific form of caching used in dynamic programming to speed up programs by storing the results of expensive function calls and returning the cached result when the same inputs occur again."
+        "back": "Top-down caching: store the result of each solved subproblem and reuse it when the same input appears again. Bottom-up dynamic programming instead fills a table in dependency order."
     }
 ]

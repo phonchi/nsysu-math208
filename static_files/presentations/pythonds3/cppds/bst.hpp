@@ -20,6 +20,7 @@ class TreeNode {
             rightChild = NULL;
             parent = p;
         }
+        virtual ~TreeNode() = default;
         bool isLeftChild() { return parent != NULL && parent->leftChild == this; }
         bool isRightChild() { return parent != NULL && parent->rightChild == this; }
         bool isLeaf() { return leftChild == NULL && rightChild == NULL; }
@@ -45,28 +46,86 @@ class TreeNode {
 };
 
 class BinarySearchTree {
+    private:
+        static TreeNode* clone(TreeNode* node, TreeNode* parent = NULL) {
+            if (node == NULL) return NULL;
+            TreeNode* copy = new TreeNode(node->key, node->value, parent);
+            try {
+                copy->leftChild = clone(node->leftChild, copy);
+                copy->rightChild = clone(node->rightChild, copy);
+            } catch (...) {
+                destroy(copy);
+                throw;
+            }
+            return copy;
+        }
+        static void destroy(TreeNode* node) {
+            if (node == NULL) return;
+            destroy(node->leftChild);
+            destroy(node->rightChild);
+            delete node;
+        }
+    protected:
+        // Extension seam used by balanced search trees. The reference lets an
+        // override allocate a derived node when the destination slot is empty.
+        virtual bool insertOrAssign(string key, string value,
+                                    TreeNode*& slot, TreeNode* parent) {
+            if (slot == NULL) {
+                slot = new TreeNode(key, value, parent);
+                return true;
+            }
+            TreeNode* currentNode = slot;
+            if (key == currentNode->key) {
+                currentNode->value = value;
+                return false;
+            }
+            if (key < currentNode->key) {
+                return insertOrAssign(key, value,
+                                      currentNode->leftChild, currentNode);
+            } else {
+                return insertOrAssign(key, value,
+                                      currentNode->rightChild, currentNode);
+            }
+        }
     public:
         TreeNode* root;
         int size;
         BinarySearchTree() { root = NULL; size = 0; }
-        int length() { return size; }
+        ~BinarySearchTree() { destroy(root); }
+        BinarySearchTree(const BinarySearchTree& other)
+            : root(clone(other.root)), size(other.size) {}
+        BinarySearchTree& operator=(const BinarySearchTree& other) {
+            if (this != &other) {
+                TreeNode* replacement = clone(other.root);
+                destroy(root);
+                root = replacement;
+                size = other.size;
+            }
+            return *this;
+        }
+        BinarySearchTree(BinarySearchTree&& other) noexcept
+            : root(other.root), size(other.size) {
+            other.root = NULL;
+            other.size = 0;
+        }
+        BinarySearchTree& operator=(BinarySearchTree&& other) noexcept {
+            if (this != &other) {
+                destroy(root);
+                root = other.root;
+                size = other.size;
+                other.root = NULL;
+                other.size = 0;
+            }
+            return *this;
+        }
+        int length() const { return size; }
         void put(string key, string value) {
-            if (root != NULL) _put(key, value, root);
-            else root = new TreeNode(key, value);
-            size = size + 1;
+            if (insertOrAssign(key, value, root, NULL)) size = size + 1;
         }
         void _put(string key, string value, TreeNode* currentNode) {
-            if (key < currentNode->key) {
-                if (currentNode->leftChild != NULL)
-                    _put(key, value, currentNode->leftChild);
-                else
-                    currentNode->leftChild = new TreeNode(key, value, currentNode);
-            } else {
-                if (currentNode->rightChild != NULL)
-                    _put(key, value, currentNode->rightChild);
-                else
-                    currentNode->rightChild = new TreeNode(key, value, currentNode);
-            }
+            if (currentNode == NULL) return;
+            TreeNode* slot = currentNode;
+            insertOrAssign(key, value, slot, currentNode->parent);
         }
         string get(string key) {
             if (root != NULL) {
@@ -75,6 +134,7 @@ class BinarySearchTree {
             }
             return "";
         }
+        bool contains(string key) { return _get(key, root) != NULL; }
         TreeNode* _get(string key, TreeNode* currentNode) {
             if (currentNode == NULL) return NULL;
             if (currentNode->key == key) return currentNode;
@@ -90,11 +150,13 @@ class BinarySearchTree {
         void _delete(TreeNode* current) {
             if (current->isLeaf() && current->parent != NULL) {
                 current->spliceOut();
+                delete current;
             } else if (current->hasBothChildren()) {
                 TreeNode* successor = current->findSuccessor();
                 successor->spliceOut();
                 current->key = successor->key;
                 current->value = successor->value;
+                delete successor;
             } else {
                 TreeNode* child = (current->leftChild != NULL)
                                   ? current->leftChild : current->rightChild;
@@ -104,6 +166,7 @@ class BinarySearchTree {
                 } else {
                     current->spliceOut();
                 }
+                delete current;
             }
         }
         void inorder(TreeNode* node) {

@@ -4,32 +4,38 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <stdexcept>
 using namespace std;
 
 class HashTable {
     public:
         HashTable(int sz) {
+            if (sz <= 0) throw invalid_argument("hash table size must be positive");
             size = sz;
             slots = vector<int>(size, -1);       // -1 marks an empty slot
             data = vector<string>(size, "");
         }
-        int hashFunction(int key) { return key % size; }
+        int hashFunction(int key) { return (key % size + size) % size; }
         int rehash(int oldHash) { return (oldHash + 1) % size; }
         void put(int key, string value) {
-            int hashValue = hashFunction(key);
-            if (slots[hashValue] == -1) {
-                slots[hashValue] = key;
-                data[hashValue] = value;
-            } else if (slots[hashValue] == key) {
-                data[hashValue] = value;
-            } else {
-                int nextSlot = rehash(hashValue);
-                while (slots[nextSlot] != -1 && slots[nextSlot] != key) {
-                    nextSlot = rehash(nextSlot);
-                }
-                slots[nextSlot] = key;
-                data[nextSlot] = value;
+            if (key == -1) {
+                throw invalid_argument("key -1 is reserved as the empty-slot marker");
             }
+            int hashValue = hashFunction(key);
+            int position = hashValue;
+            do {
+                if (slots[position] == -1) {
+                    slots[position] = key;
+                    data[position] = value;
+                    return;
+                }
+                if (slots[position] == key) {
+                    data[position] = value;
+                    return;
+                }
+                position = rehash(position);
+            } while (position != hashValue);
+            throw overflow_error("hash table is full");
         }
         string get(int key) {
             int startSlot = hashFunction(key);

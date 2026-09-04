@@ -2,6 +2,7 @@
 #ifndef DSCPP_LINKED_LIST_HPP
 #define DSCPP_LINKED_LIST_HPP
 #include <iostream>
+#include <utility>
 using namespace std;
 
 template <typename T>
@@ -21,8 +22,45 @@ template <typename T>
 class UnorderedList {
     private:
         Node<T> *head;
+        static Node<T> *cloneChain(const Node<T> *source) {
+            if (source == NULL) return NULL;
+            Node<T> *copyHead = new Node<T>(source->getData());
+            Node<T> *copyTail = copyHead;
+            source = source->getNext();
+            try {
+                while (source != NULL) {
+                    copyTail->setNext(new Node<T>(source->getData()));
+                    copyTail = copyTail->getNext();
+                    source = source->getNext();
+                }
+            } catch (...) {
+                while (copyHead != NULL) {
+                    Node<T> *next = copyHead->getNext();
+                    delete copyHead;
+                    copyHead = next;
+                }
+                throw;
+            }
+            return copyHead;
+        }
+        void clear() {
+            while (head != NULL) {
+                Node<T> *next = head->getNext();
+                delete head;
+                head = next;
+            }
+        }
     public:
         UnorderedList() { head = NULL; }
+        ~UnorderedList() { clear(); }
+        UnorderedList(const UnorderedList& other) : head(cloneChain(other.head)) {}
+        UnorderedList(UnorderedList&& other) noexcept : head(other.head) {
+            other.head = NULL;
+        }
+        UnorderedList& operator=(UnorderedList other) {
+            swap(head, other.head);
+            return *this;
+        }
         Node<T>* getHead() const { return head; }
         bool isEmpty() const { return head == NULL; }
         void add(T item) {
@@ -76,8 +114,45 @@ template <typename T>
 class OrderedList {
     private:
         Node<T> *head;
+        static Node<T> *cloneChain(const Node<T> *source) {
+            if (source == NULL) return NULL;
+            Node<T> *copyHead = new Node<T>(source->getData());
+            Node<T> *copyTail = copyHead;
+            source = source->getNext();
+            try {
+                while (source != NULL) {
+                    copyTail->setNext(new Node<T>(source->getData()));
+                    copyTail = copyTail->getNext();
+                    source = source->getNext();
+                }
+            } catch (...) {
+                while (copyHead != NULL) {
+                    Node<T> *next = copyHead->getNext();
+                    delete copyHead;
+                    copyHead = next;
+                }
+                throw;
+            }
+            return copyHead;
+        }
+        void clear() {
+            while (head != NULL) {
+                Node<T> *next = head->getNext();
+                delete head;
+                head = next;
+            }
+        }
     public:
         OrderedList() { head = NULL; }
+        ~OrderedList() { clear(); }
+        OrderedList(const OrderedList& other) : head(cloneChain(other.head)) {}
+        OrderedList(OrderedList&& other) noexcept : head(other.head) {
+            other.head = NULL;
+        }
+        OrderedList& operator=(OrderedList other) {
+            swap(head, other.head);
+            return *this;
+        }
         Node<T>* getHead() const { return head; }
         bool isEmpty() const { return head == NULL; }
         int size() const {
@@ -108,6 +183,18 @@ class OrderedList {
                 newNode->setNext(current->getNext());
                 current->setNext(newNode);
             }
+        }
+        void remove(T item) {
+            Node<T> *current = head;
+            Node<T> *previous = NULL;
+            while (current != NULL && current->getData() < item) {
+                previous = current;
+                current = current->getNext();
+            }
+            if (current == NULL || current->getData() != item) return;
+            if (previous == NULL) head = current->getNext();
+            else previous->setNext(current->getNext());
+            delete current;
         }
         friend ostream& operator<<(ostream& os, const OrderedList<T>& ol) {
             Node<T> *current = ol.head;

@@ -1,5 +1,5 @@
 <div class="ds07-anim" id="selection">
-  <h3 style="margin-top:0;color:var(--accent2);">選擇排序互動 — 找最小放到前面</h3>
+  <h3 style="margin-top:0;color:var(--accent2);">選擇排序互動 — 找最大放到後面</h3>
   <div class="viz-layout">
     <div>
       <div class="viz-panel">
@@ -29,11 +29,11 @@
           <div class="stat-tile compare"><div class="stat-label">比較</div><div class="stat-value" id="selCmp">0</div></div>
           <div class="stat-tile swap"><div class="stat-label">交換</div><div class="stat-value" id="selSwp">0</div></div>
         </div>
-        <div class="ic-row" style="margin-top:.5rem;"><span class="ic-label">本輪 minIdx</span><span class="ic-value highlight" id="selMinIdx">—</span></div>
+        <div class="ic-row" style="margin-top:.5rem;"><span class="ic-label">本輪 maxPos</span><span class="ic-value highlight" id="selMinIdx">—</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="selCode"><span class="line" data-l="1"><span class="fn">selectionSort</span>(aList):</span><span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> i, item <span class="kw">in</span> <span class="fn">enumerate</span>(aList):</span><span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;minIdx = <span class="fn">aList.size</span>() - <span class="num">1</span></span><span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(i, <span class="fn">aList.size</span>()):</span><span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> aList[j] &lt; aList[minIdx]:</span><span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;minIdx = j</span><span class="line" data-l="7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> minIdx != i:</span><span class="line" data-l="8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aList[minIdx], aList[i] = aList[i], aList[minIdx]</span></div>
+        <div class="pseudo-code" id="selCode"><span class="line" data-l="1"><span class="kw">void</span> <span class="fn">selectionSort</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a) {</span><span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> fill = a.<span class="fn">size</span>() - <span class="num">1</span>; fill &gt; <span class="num">0</span>; --fill) {</span><span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">int</span> maxPos = <span class="num">0</span>;</span><span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">1</span>; j &lt;= fill; ++j) {</span><span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (a[j] &gt; a[maxPos])</span><span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maxPos = j;</span><span class="line" data-l="7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="line" data-l="8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">swap</span>(a[maxPos], a[fill]);</span><span class="line" data-l="9">&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="line" data-l="10">}</span></div>
       </div>
     </div>
   </div>

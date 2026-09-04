@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <climits>
 #include <cstdio>
+#include <stdexcept>
 
 // ---- word ladder ----
 Graph buildGraph(vector<string> words) {
@@ -30,7 +31,16 @@ Graph buildGraph(vector<string> words) {
 }
 
 void bfs(Graph& g, string startKey) {
+    if (g.vertices.count(startKey) == 0) {
+        throw invalid_argument("BFS start vertex is not in the graph");
+    }
+    for (auto& p : g.vertices) {
+        p.second.color = "white";
+        p.second.distance = INT_MAX;
+        p.second.previous = "";
+    }
     g.vertices[startKey].distance = 0;
+    g.vertices[startKey].color = "gray";
     queue<string> vertQueue;
     vertQueue.push(startKey);
     while (!vertQueue.empty()) {
@@ -166,6 +176,9 @@ class DFSGraph : public Graph {
         map<string, int> discovery;
         map<string, int> closing;
         void dfs() {
+            time = 0;
+            discovery.clear();
+            closing.clear();
             for (auto& p : vertices) {
                 p.second.color = "white";
                 p.second.previous = "";
@@ -192,8 +205,19 @@ class DFSGraph : public Graph {
 
 // ---- Dijkstra / Prim ----
 void dijkstra(Graph& g, string startKey) {
+    if (g.vertices.count(startKey) == 0) {
+        throw invalid_argument("Dijkstra start vertex is not in the graph");
+    }
     priority_queue<pair<int, string>, vector<pair<int, string>>, greater<pair<int, string>>> pq;
-    for (auto& p : g.vertices) p.second.distance = INT_MAX;
+    for (auto& p : g.vertices) {
+        p.second.distance = INT_MAX;
+        p.second.previous = "";
+        for (auto& edge : p.second.neighbors) {
+            if (edge.second < 0) {
+                throw invalid_argument("Dijkstra requires non-negative edge weights");
+            }
+        }
+    }
     g.vertices[startKey].distance = 0;
     pq.push({0, startKey});
     while (!pq.empty()) {
@@ -227,6 +251,9 @@ vector<string> findPath(Graph& g, string startKey, string endKey) {
 }
 
 void prim(Graph& g, string startKey) {
+    if (g.vertices.count(startKey) == 0) {
+        throw invalid_argument("Prim start vertex is not in the graph");
+    }
     priority_queue<pair<int, string>, vector<pair<int, string>>, greater<pair<int, string>>> pq;
     set<string> inTree;
     for (auto& p : g.vertices) {
@@ -249,6 +276,9 @@ void prim(Graph& g, string startKey) {
                 pq.push({newDistance, n.first});
             }
         }
+    }
+    if (inTree.size() != g.vertices.size()) {
+        throw invalid_argument("Prim requires a connected graph");
     }
 }
 #endif

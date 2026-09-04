@@ -39,11 +39,28 @@
 <div class="info-card">
 <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
 <div class="pseudo-code" id="heapCodeExt" style="font-size:.74em;">
-<span class="line" data-l="1"><span class="fn">delete_min</span>(self):</span>
-<span class="line" data-l="2">    m = heap[<span class="num">0</span>]</span>
-<span class="line" data-l="3">    heap[<span class="num">0</span>] = heap.<span class="fn">pop</span>()</span>
-<span class="line" data-l="4">    <span class="fn">percDown</span>(<span class="num">0</span>)</span>
-<span class="line" data-l="5">    <span class="kw">return</span> m</span>
+<span class="line"><span class="kw">#include</span> &lt;algorithm&gt;</span>
+<span class="line"><span class="kw">#include</span> &lt;stdexcept&gt;</span>
+<span class="line"><span class="kw">#include</span> &lt;vector&gt;</span>
+<span class="line"><span class="kw">class</span> MinHeap {</span>
+<span class="line">    std::vector&lt;<span class="kw">int</span>&gt; heap;</span>
+<span class="line">    <span class="kw">void</span> <span class="fn">percDown</span>(<span class="kw">int</span> i) {</span>
+<span class="line">        <span class="kw">while</span> (<span class="num">2</span> * i + <span class="num">1</span> &lt; <span class="kw">static_cast</span>&lt;<span class="kw">int</span>&gt;(heap.<span class="fn">size</span>())) {</span>
+<span class="line">            <span class="kw">int</span> child = <span class="num">2</span> * i + <span class="num">1</span>;</span>
+<span class="line">            <span class="kw">if</span> (child + <span class="num">1</span> &lt; <span class="kw">static_cast</span>&lt;<span class="kw">int</span>&gt;(heap.<span class="fn">size</span>()) &amp;&amp;</span>
+<span class="line">                heap[child + <span class="num">1</span>] &lt; heap[child]) ++child;</span>
+<span class="line">            <span class="kw">if</span> (heap[i] &lt;= heap[child]) <span class="kw">break</span>;</span>
+<span class="line">            std::<span class="fn">swap</span>(heap[i], heap[child]); i = child;</span>
+<span class="line">        }</span>
+<span class="line">    }</span>
+<span class="line"><span class="kw">public</span>:</span>
+<span class="line" data-l="1"><span class="kw">int</span> <span class="fn">delMin</span>() {</span>
+<span class="line" data-l="2">    <span class="kw">if</span> (heap.<span class="fn">empty</span>()) <span class="kw">throw</span> std::underflow_error(<span class="str">&quot;empty heap&quot;</span>);</span>
+<span class="line" data-l="3">    std::<span class="fn">swap</span>(heap[<span class="num">0</span>], heap.<span class="fn">back</span>()); <span class="kw">int</span> m = heap.<span class="fn">back</span>(); heap.<span class="fn">pop_back</span>();</span>
+<span class="line" data-l="4">    <span class="kw">if</span> (!heap.<span class="fn">empty</span>()) <span class="fn">percDown</span>(<span class="num">0</span>);</span>
+<span class="line" data-l="5">    <span class="kw">return</span> m;</span>
+<span class="line">}</span>
+<span class="line">};</span>
 </div>
 </div>
 

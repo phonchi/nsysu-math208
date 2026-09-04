@@ -335,7 +335,7 @@ function genBubbleSort(initial) {
   return frames;
 }
 
-// --- Selection Sort (lecture version: find min, place at front) ---
+// --- Selection Sort (cppds/HW4 version: find max, place at end) ---
 function genSelectionSort(initial) {
   const frames = [];
   const a = [...initial];
@@ -343,28 +343,27 @@ function genSelectionSort(initial) {
   const oi = a.map((_,i)=>i);
   let cmp = 0, swp = 0;
   frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:'初始陣列', stats:{cmp,swp,minIdx:'—'}, pcLine:1});
-  for (let i = 0; i < N - 1; i++) {
-    // Lecture's exact init: minIdx = len(aList) - 1
-    let minIdx = N - 1;
-    const sortedSet = range(0, i);
-    frames.push({arr:[...a], origIdx:[...oi], highlights:{[minIdx]:'active'}, sorted:sortedSet, message:`pass ${i+1}: 從 a[${i}..${N-1}] 找最小值，依講義初始 minIdx = ${N-1}（最末端），a[${minIdx}]=${a[minIdx]}`, stats:{cmp,swp,minIdx}, pcLine:3});
-    for (let j = i; j < N; j++) {
+  for (let fill = N - 1; fill > 0; fill--) {
+    let maxPos = 0;
+    const sortedSet = range(fill + 1, N);
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{[maxPos]:'active'}, sorted:sortedSet, message:`pass ${N-fill}: 從 a[0..${fill}] 找最大值，初始 maxPos = 0（值 ${a[maxPos]}）`, stats:{cmp,swp,minIdx:maxPos}, pcLine:3});
+    for (let j = 1; j <= fill; j++) {
       cmp++;
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[minIdx]:'active',[j]:'compare'}, sorted:sortedSet, message:`比較 a[${j}]=${a[j]} 與目前最小 a[${minIdx}]=${a[minIdx]}`, stats:{cmp,swp,minIdx}, pcLine:5});
-      if (a[j] < a[minIdx]) {
-        minIdx = j;
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[minIdx]:'active'}, sorted:sortedSet, message:`更小！更新 minIdx = ${minIdx}（值 ${a[minIdx]}）`, stats:{cmp,swp,minIdx}, pcLine:6});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[maxPos]:'active',[j]:'compare'}, sorted:sortedSet, message:`比較 a[${j}]=${a[j]} 與目前最大 a[${maxPos}]=${a[maxPos]}`, stats:{cmp,swp,minIdx:maxPos}, pcLine:5});
+      if (a[j] > a[maxPos]) {
+        maxPos = j;
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[maxPos]:'active'}, sorted:sortedSet, message:`更大！更新 maxPos = ${maxPos}（值 ${a[maxPos]}）`, stats:{cmp,swp,minIdx:maxPos}, pcLine:6});
       }
     }
-    if (minIdx !== i) {
-      [a[i], a[minIdx]] = [a[minIdx], a[i]];
-      [oi[i], oi[minIdx]] = [oi[minIdx], oi[i]];
+    if (maxPos !== fill) {
+      [a[fill], a[maxPos]] = [a[maxPos], a[fill]];
+      [oi[fill], oi[maxPos]] = [oi[maxPos], oi[fill]];
       swp++;
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'swap',[minIdx]:'swap'}, sorted:sortedSet, message:`交換 a[${minIdx}] ↔ a[${i}]：最小值歸位到 a[${i}]`, stats:{cmp,swp,minIdx}, pcLine:8});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[fill]:'swap',[maxPos]:'swap'}, sorted:sortedSet, message:`交換 a[${maxPos}] ↔ a[${fill}]：最大值歸位到 a[${fill}]`, stats:{cmp,swp,minIdx:maxPos}, pcLine:8});
     } else {
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'sorted'}, sorted:sortedSet, message:`minIdx == i，已在正確位置，無需交換`, stats:{cmp,swp,minIdx}, pcLine:7});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[fill]:'sorted'}, sorted:sortedSet, message:`maxPos == fill，已在正確位置，無需交換`, stats:{cmp,swp,minIdx:maxPos}, pcLine:7});
     }
-    frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(0, i+1), message:`pass ${i+1} 結束：a[${i}]=${a[i]} 已就位`, stats:{cmp,swp,minIdx:'—'}, pcLine:1});
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(fill, N), message:`pass ${N-fill} 結束：a[${fill}]=${a[fill]} 已就位`, stats:{cmp,swp,minIdx:'—'}, pcLine:1});
   }
   frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(0, N), message:`★ 排序完成！${cmp} 次比較、${swp} 次交換（最多 n−1 次）`, stats:{cmp,swp,minIdx:'—'}, pcLine:1});
   return frames;
@@ -434,9 +433,9 @@ function genShellSort(initial, gapSeq) {
 
   // === 講義版 gapInsertionSort：對 aList 從 start 開始、stride = gap 的子列做 insertion sort ===
   function gapInsertionSort(start, gap) {
-    // pcLine 9: for i in range(start + gap, len(aList), gap)
+    // pcLine 9: C++ for-loop over the gapped subsequence
     for (let i = start + gap; i < N; i += gap) {
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, message:`for i in range(${start}+${gap}, ${N}, ${gap})：i = ${i}`, stats:{cmp,swp,gap}, pcLine:9});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, message:`for (i = ${start}+${gap}; i < ${N}; i += ${gap})：i = ${i}`, stats:{cmp,swp,gap}, pcLine:9});
 
       const curVal = a[i];
       const oiKey = oi[i];
@@ -484,7 +483,7 @@ function genShellSort(initial, gapSeq) {
 
   // === 講義版 shellSort：外層折半 + 對每個 posStart 呼叫 gapInsertionSort ===
   // pcLine 2: sublistCount 初始化
-  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublistCount = len(aList) // 2 = ${gaps[0]}`, stats:{cmp,swp,gap:'—'}, pcLine:2});
+  frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublistCount = aList.size() / 2 = ${gaps[0]}`, stats:{cmp,swp,gap:'—'}, pcLine:2});
 
   for (let gIdx = 0; gIdx < gaps.length; gIdx++) {
     const sublistCount = gaps[gIdx];
@@ -492,10 +491,10 @@ function genShellSort(initial, gapSeq) {
     frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`while sublistCount > 0：sublistCount = ${sublistCount}`, stats:{cmp,swp,gap:sublistCount}, pcLine:3});
 
     for (let posStart = 0; posStart < sublistCount; posStart++) {
-      // pcLine 4: for posStart in range(sublistCount)
+      // pcLine 4: C++ loop over each starting offset
       const indices = [];
       for (let k = posStart; k < N; k += sublistCount) indices.push(k);
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`for posStart in range(${sublistCount})：posStart = ${posStart}, 子列索引 = [${indices.join(', ')}]`, stats:{cmp,swp,gap:sublistCount}, pcLine:4});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`for (posStart = 0; posStart < ${sublistCount}; ++posStart)：posStart = ${posStart}，子列索引 = [${indices.join(', ')}]`, stats:{cmp,swp,gap:sublistCount}, pcLine:4});
       // pcLine 5: 呼叫 gapInsertionSort
       frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`gapInsertionSort(aList, ${posStart}, ${sublistCount})`, stats:{cmp,swp,gap:sublistCount}, pcLine:5});
 
@@ -503,12 +502,12 @@ function genShellSort(initial, gapSeq) {
       gapInsertionSort(posStart, sublistCount);
     }
 
-    // pcLine 6: sublistCount = sublistCount // 2 (outer while 收尾)
+    // pcLine 6: integer division by two (outer while update)
     if (gIdx < gaps.length - 1) {
       const newGap = gaps[gIdx + 1];
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublistCount = sublistCount // 2 = ${newGap}`, stats:{cmp,swp,gap:newGap}, pcLine:6});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublistCount /= 2 → ${newGap}`, stats:{cmp,swp,gap:newGap}, pcLine:6});
     } else {
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublistCount = sublistCount // 2 = 0 → while 結束`, stats:{cmp,swp,gap:'—'}, pcLine:6});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublistCount /= 2 → 0，while 結束`, stats:{cmp,swp,gap:'—'}, pcLine:6});
     }
   }
 
