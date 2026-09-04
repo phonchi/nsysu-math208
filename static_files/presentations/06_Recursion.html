@@ -7815,10 +7815,10 @@ a.anchor-link {
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <table align="left">
 <td>
-<a href="https://colab.research.google.com/github/phonchi/nsysu-math208/blob/main/static_files/presentations/06_Recursion.ipynb" target="_parent"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg"/></a>
+<a href="https://colab.research.google.com/github/phonchi/nsysu-math208/blob/master/static_files/presentations/06_Recursion.ipynb" target="_parent"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg"/></a>
 </td>
 <td>
-<a href="https://kaggle.com/kernels/welcome?src=https://github.com/phonchi/nsysu-math208/blob/main/static_files/presentations/06_Recursion.ipynb" target="_blank"><img alt="No description has been provided for this image" src="https://kaggle.com/static/images/open-in-kaggle.svg"/></a>
+<a href="https://kaggle.com/kernels/welcome?src=https://github.com/phonchi/nsysu-math208/blob/master/static_files/presentations/06_Recursion.ipynb" target="_blank"><img alt="No description has been provided for this image" src="https://kaggle.com/static/images/open-in-kaggle.svg"/></a>
 </td>
 </table>
 </div>
@@ -7845,7 +7845,7 @@ a.anchor-link {
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="n">from</span><span class="w"> </span><span class="n">jupyterquiz</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="n">display_quiz</span>
 
-<span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch6/"</span>
+<span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"questions/ch6/"</span>
 </pre></div>
 </div>
 </div>
@@ -7938,16 +7938,17 @@ a.anchor-link {
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span>
 
-<span class="kt">int</span><span class="w"> </span><span class="nf">listSum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">numList</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">listSum</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">numList</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">theSum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">numList</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">theSum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">theSum</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">numList</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">theSum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">theSum</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">listSum</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">})</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">listSum</span><span class="p">({})</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span><span class="w">   </span><span class="c1">// the empty vector sums to 0</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
@@ -7963,6 +7964,7 @@ a.anchor-link {
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
 <p>25</p>
+<p>0</p>
 </div>
 </div>
 </div>
@@ -7974,7 +7976,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The function uses an accumulator variable (<code>the_sum</code>) to compute a running total of all the numbers in the list by starting with 0.</p>
+<p>The function uses an accumulator variable (<code>theSum</code>) to compute a running total. Passing the vector by <code>const</code> reference avoids copying it and promises not to modify it.</p>
 </div>
 </div>
 </div>
@@ -8040,7 +8042,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>First, let's restate the sum problem in terms of <code>C++</code> <code>vectors</code>. We might say the sum of the vector <code>numList</code> is the sum of the first element of the vector (<code>numList[0]</code>) and the sum of the rest of the vector. The rest of the vector can be built with the iterator-range constructor.</p>
+<p>First, restate the sum problem for a C++ <code>vector</code>. The sum starting at index <code>i</code> is <code>numList[i]</code> plus the sum starting at <code>i + 1</code>. When <code>i == numList.size()</code>, the remaining range is empty and its sum is 0. Passing one vector plus an index avoids allocating a new sub-vector at every call.</p>
 </div>
 </div>
 </div>
@@ -8063,21 +8065,25 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-C++"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<div class="highlight hl-C++"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstddef&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span>
 
-<span class="kt">int</span><span class="w"> </span><span class="nf">listSum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">numList</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">numList</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">numList</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">rest</span><span class="p">(</span><span class="n">numList</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">numList</span><span class="p">.</span><span class="n">end</span><span class="p">());</span><span class="w">   </span><span class="c1">// numList[1:]</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">numList</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">listSum</span><span class="p">(</span><span class="n">rest</span><span class="p">);</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">listSumFrom</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">numList</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">index</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">numList</span><span class="p">.</span><span class="n">size</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">                              </span><span class="c1">// empty remaining range</span>
 <span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">numList</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">listSumFrom</span><span class="p">(</span><span class="n">numList</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">listSum</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">numList</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">listSumFrom</span><span class="p">(</span><span class="n">numList</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">listSum</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">})</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">listSum</span><span class="p">({})</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span><span class="w">               </span><span class="c1">// safe: prints 0</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
@@ -8093,6 +8099,7 @@ a.anchor-link {
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
 <p>25</p>
+<p>0</p>
 </div>
 </div>
 </div>
@@ -8105,9 +8112,9 @@ a.anchor-link {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ol>
-<li><p>On line 2 we are checking to see if the list is one element long. This check is crucial and is our escape clause from the function. The sum of a list of length 1 is trivial; it is just the number in the list.</p>
+<li><p><code>listSumFrom</code> stops when <code>index == numList.size()</code>. This base case represents an empty remaining range, whose sum is 0, so it also makes <code>listSum({})</code> safe.</p>
 </li>
-<li><p>On line 5 our function calls itself! This is the reason that we call the <code>list_sum()</code> algorithm recursive. A recursive function is a function that calls itself.</p>
+<li><p>The recursive call advances <code>index</code> by one. The same vector is passed by <code>const</code> reference, so recursion does not copy or modify it.</p>
 </li>
 </ol>
 </div>
@@ -8215,7 +8222,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>First, a base case is the condition that allows the algorithm to stop recursing. A base case is typically a problem that is small enough to solve directly. In the <code>list_sum()</code> algorithm the base case is a list of length 1.</p>
+<p>A base case is a problem small enough to solve directly. In <code>listSumFrom()</code>, the base case is an empty remaining range (<code>index == numList.size()</code>), whose sum is 0.</p>
 </div>
 </div>
 </div>
@@ -8226,7 +8233,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>A change of state means that some data that the algorithm is using is modified. Usually the data that represents our problem gets smaller in some way. In the <code>list_sum()</code> algorithm our primary data structure is a list. Since the base case is a list of length 1, a natural progression toward the base case is to shorten the list.</p>
+<p>A change of state means moving toward the base case. <code>listSumFrom()</code> keeps the vector fixed and advances <code>index</code>, so the unprocessed range becomes shorter on every recursive call.</p>
 </div>
 </div>
 </div>
@@ -8284,8 +8291,8 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="aYpblqZXuzzb" style="border-radius: 10px; text-align: left"><style>
-#aYpblqZXuzzb {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="SPGmlnNkNbQW" style="border-radius: 10px; text-align: left"><style>
+#SPGmlnNkNbQW {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -8513,10 +8520,10 @@ a.anchor-link {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="4a74ddd5-eb0a-4341-afdc-9beab4908c34" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="426fba3d-7259-4884-8860-896203fdd8fb" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('4a74ddd5-eb0a-4341-afdc-9beab4908c34');
-var questionsaYpblqZXuzzb=[
+var element = document.getElementById('426fba3d-7259-4884-8860-896203fdd8fb');
+var questionsSPGmlnNkNbQW=[
     {
         "question": "How many recursive calls are made when computing the sum of the vector {2, 4, 6, 8, 10}?",
         "type": "multiple_choice",
@@ -9605,8 +9612,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("aYpblqZXuzzb")) {
-    show_questions(questionsaYpblqZXuzzb, aYpblqZXuzzb);
+  if (document.getElementById("SPGmlnNkNbQW")) {
+    show_questions(questionsSPGmlnNkNbQW, SPGmlnNkNbQW);
   } else {
     setTimeout(try_show, 200);
   }
@@ -9643,8 +9650,8 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="LJimYkBSreNS" style="border-radius: 10px; text-align: left"><style>
-#LJimYkBSreNS {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="HOlCuXCIuPXb" style="border-radius: 10px; text-align: left"><style>
+#HOlCuXCIuPXb {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -9872,10 +9879,10 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="97e4ffb0-68a0-4396-8fc6-30d0d50515f2" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="3177526a-9b80-422b-a849-e4205ed53117" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('97e4ffb0-68a0-4396-8fc6-30d0d50515f2');
-var questionsLJimYkBSreNS=[
+var element = document.getElementById('3177526a-9b80-422b-a849-e4205ed53117');
+var questionsHOlCuXCIuPXb=[
     {
         "question": "Suppose you are going to write a recursive function to calculate the factorial of a number. fact(n) returns n * (n-1) * (n-2) * ... where the factorial of zero is defined to be 1. What would be the most efficient and appropriate base case?",
         "type": "multiple_choice",
@@ -10964,8 +10971,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("LJimYkBSreNS")) {
-    show_questions(questionsLJimYkBSreNS, LJimYkBSreNS);
+  if (document.getElementById("HOlCuXCIuPXb")) {
+    show_questions(questionsHOlCuXCIuPXb, HOlCuXCIuPXb);
   } else {
     setTimeout(try_show, 200);
   }
@@ -11197,7 +11204,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Notice that in line 3 we check for the base case where <code>n</code> is less than the base we are converting to. When we detect the base case, we stop recursing and simply return the string from the <code>convert_string</code> sequence.</p>
+<p>Notice that in line 3 we check for the base case where <code>n</code> is less than the base we are converting to. When we detect the base case, we stop recursing and simply return the string from the <code>convertString</code> sequence.</p>
 </div>
 </div>
 </div>
@@ -11252,7 +11259,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>If we reversed returning the <code>convert_string</code> lookup and returning the <code>to_str()</code> call, the resulting string would be backward! But by delaying the concatenation operation until after the recursive call has returned, we get the result in the proper order! This should remind you of our discussion of stacks back in the previous chapter.</p>
+<p>If we reversed returning the <code>convertString</code> lookup and returning the <code>toStr()</code> call, the resulting string would be backward! But by delaying the concatenation operation until after the recursive call has returned, we get the result in the proper order! This should remind you of our discussion of stacks back in the previous chapter.</p>
 </div>
 </div>
 </div>
@@ -11263,7 +11270,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Exercsie:-Write-a-function-using-recursion-that-takes-a-string-as-a-parameter-and-returns-a-new-string-that-is-the-reverse-of-the-old-string.">Exercsie: Write a function using recursion that takes a string as a parameter and returns a new string that is the reverse of the old string.<a class="anchor-link" href="#Exercsie:-Write-a-function-using-recursion-that-takes-a-string-as-a-parameter-and-returns-a-new-string-that-is-the-reverse-of-the-old-string.">¶</a></h4>
+<h4 id="Exercise:-Write-a-function-using-recursion-that-takes-a-string-as-a-parameter-and-returns-a-new-string-that-is-the-reverse-of-the-old-string.">Exercise: Write a function using recursion that takes a string as a parameter and returns a new string that is the reverse of the old string.<a class="anchor-link" href="#Exercise:-Write-a-function-using-recursion-that-takes-a-string-as-a-parameter-and-returns-a-new-string-that-is-the-reverse-of-the-old-string.">¶</a></h4>
 </div>
 </div>
 </div>
@@ -11275,21 +11282,18 @@ function try_show() {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-C++"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cassert&gt;</span>
+<div class="highlight hl-C++"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cassert&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span>
-
 <span class="n">string</span><span class="w"> </span><span class="nf">reverse</span><span class="p">(</span><span class="n">string</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">length</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">____</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">____</span><span class="p">;</span><span class="w">            </span><span class="c1">// handles "" and one character</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">____</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
 <span class="p">}</span>
-
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">""</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">""</span><span class="p">);</span>
 <span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">"hello"</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"olleh"</span><span class="p">);</span>
-<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Pass"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -11303,9 +11307,9 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/tmp/tmpgw0970nz.cpp: In function ‘std::string reverse(std::string)’:
-/tmp/tmpgw0970nz.cpp:9:16: error: ‘____’ was not declared in this scope
-    9 |         return ____;
+<pre>/tmp/tmpm11a9xnl.cpp: In function ‘std::string reverse(std::string)’:
+/tmp/tmpm11a9xnl.cpp:8:16: error: ‘____’ was not declared in this scope
+    8 |         return ____;
       |                ^~~~
 </pre>
 </div>
@@ -11313,8 +11317,8 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/tmp/tmpgw0970nz.cpp:11:12: error: ‘____’ was not declared in this scope
-   11 |     return ____ + s[0];
+<pre>/tmp/tmpm11a9xnl.cpp:10:12: error: ‘____’ was not declared in this scope
+   10 |     return ____ + s[0];
       |            ^~~~
 </pre>
 </div>
@@ -11324,6 +11328,1366 @@ function try_show() {
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
 <pre>
 [C++ kernel] Error: Unable to compile the source code. Return error: 0x1.</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-C++"><pre><span></span><span class="n">display_quiz</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s">"reverse.json"</span><span class="p">,</span><span class="w"> </span><span class="n">max_width</span><span class="o">=</span><span class="mi">800</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="nUbmTIYhatYZ" style="border-radius: 10px; text-align: left"><style>
+#nUbmTIYhatYZ {
+   --jq-multiple-choice-bg: #392061;
+   --jq-mc-button-bg: #fafafa;
+   --jq-mc-button-border: #e0e0e0e0;
+   --jq-mc-button-inset-shadow: #555555;
+   --jq-many-choice-bg: #f75c03ff;
+   --jq-numeric-bg: #392061ff;
+   --jq-numeric-input-bg: #c0c0c0;
+   --jq-numeric-input-label: #101010;
+   --jq-numeric-input-shadow: #999999;
+   --jq-string-bg: #4c1a57;
+   --jq-incorrect-color: #c80202;
+   --jq-correct-color: #009113;
+   --jq-text-color: #fafafa;
+   --jq-link-color: #9abafa;
+}
+
+.Quiz {
+    max-width: 600px;
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+/*    margin-bottom: 15px;*/
+/*    padding-bottom: 4px;*/
+    padding-top: 4px;
+    line-height: 1.1;
+    font-size: 16pt;
+    border-radius: inherit;
+}
+
+.QuizCode {
+    font-size: 14pt;
+    margin-top: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.QuizCode>pre {
+    padding: 4px;
+}
+
+.Quiz code {
+    background-color: lightgray;
+    color: black;
+}
+
+.Quiz .QuizCode code {
+    background-color: inherit;
+    color: inherit;
+}
+
+
+.Quiz .MCButton code {
+    background-color: inherit;
+    color: inherit;
+}
+
+.MCButton .QuizCode {
+    text-align: left;
+}
+
+
+.Quiz .JQLink {
+    color: var(--jq-link-color) !important;
+    text-decoration: underline;
+}
+
+
+
+.Answer {
+    border-radius: inherit;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    margin: 10px 0;
+}
+
+@media only screen and (max-width:480px) {
+    .Answer {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+.Feedback {
+    font-size: 16pt;
+    text-align: center;
+/*    min-height: 2em;*/
+}
+
+.Input {
+    align: left;
+    font-size: 20pt;
+}
+
+.Input-text {
+    display: block;
+    margin: 10px;
+    color: inherit;
+    width: unset;
+    min-width: 140px;
+    max-width: 93%;
+    field-sizing: content;
+    background-color: var(--jq-numeric-input-bg);
+    color: var(--jq-text-color);
+    padding: 5px;
+    padding-left: 10px;
+    font-family: inherit;
+    font-size: 20px;
+    font-weight: inherit;
+    line-height: 20pt;
+    border: none;
+    border-radius: 0.2rem;
+    transition: box-shadow 0.1s);
+}
+
+.Input-text:focus {
+    /*outline: none;*/
+    background-color: var(--jq-numeric-input-bg);
+    box-shadow: 0.6rem 0.8rem 1.4rem -0.5rem var(--jq-numeric-input-shadow);
+}
+
+.MCButton {
+    background: var(--jq-mc-button-bg);
+    border: 1px solid var(--jq-mc-button-border);
+    border-radius: inherit;
+    color: #333333;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.MCButton p {
+    color: inherit;
+}
+
+.MultipleChoiceQn {
+    padding: 10px;
+    background: var(--jq-multiple-choice-bg);
+    color: var(--jq-text-color);
+    border-radius: inherit;
+}
+
+.ManyChoiceQn {
+    padding: 10px;
+    background: var(--jq-many-choice-bg);
+    color: var(--jq-text-color);
+    border-radius: inherit;
+}
+
+.NumericQn {
+    background: var(--jq-numeric-bg);
+    border-radius: inherit;
+    color: var(--jq-text-color);
+    padding: 10px;
+}
+
+.NumericQn p {
+    color: inherit;
+}
+
+.StringQn {
+    background: var(--jq-string-bg);
+    border-radius: inherit;
+    color: var(--jq-text-color);
+    padding: 10px;
+}
+
+.StringQn p {
+    color: inherit;
+}
+
+
+.InpLabel {
+    color: var(--jq-numeric-input-label);
+    float: left;
+    font-size: 15pt;
+    line-height: 34px;
+    margin-right: 10px;
+}
+
+.incorrect {
+    color: var(--jq-incorrect-color);
+}
+
+.correct {
+    color: var(--jq-correct-color);
+}
+
+.correctButton {
+    /*
+    background: var(--jq-correct-color);
+   */
+    animation: correct-anim 0.6s ease;
+    animation-fill-mode: forwards;
+    box-shadow: inset 0 0 5px var(--jq-mc-button-inset-shadow);
+    color: var(--jq-text-color);
+    /*outline: none;*/
+}
+
+.incorrectButton {
+    animation: incorrect-anim 0.8s ease;
+    animation-fill-mode: forwards;
+    box-shadow: inset 0 0 5px var(--jq-mc-button-inset-shadow);
+    color: var(--jq-text-color);
+    /*outline: none;*/
+}
+
+@keyframes incorrect-anim {
+    100% {
+        background-color: var(--jq-incorrect-color);
+    }
+}
+
+@keyframes correct-anim {
+    100% {
+        background-color: var(--jq-correct-color);
+    }
+}
+</style>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="f3f03369-7b08-4513-a86b-7e27adaa2b60" tabindex="0">
+<script type="text/javascript">
+var element = document.getElementById('f3f03369-7b08-4513-a86b-7e27adaa2b60');
+var questionsnUbmTIYhatYZ=[
+    {
+        "question": "Which base case makes a recursive C++ reverse(string s) function correct for both an empty string and a one-character string?",
+        "type": "multiple_choice",
+        "answers": [
+            {
+                "code": "if (s.size() <= 1) return s;",
+                "correct": true,
+                "feedback": "Correct. Both inputs are already their own reverse, and the empty-string case is safe."
+            },
+            {
+                "code": "if (s.size() == 1) return s;",
+                "correct": false,
+                "feedback": "This handles one character but misses the empty string; indexing or recursing from an empty input can then fail."
+            },
+            {
+                "code": "if (s.empty()) return s[0];",
+                "correct": false,
+                "feedback": "An empty string has no element at index 0."
+            },
+            {
+                "code": "if (s.size() >= 1) return s;",
+                "correct": false,
+                "feedback": "This stops immediately for every nonempty input, so strings longer than one character are never reversed."
+            }
+        ]
+    }
+]
+;
+
+if (typeof Question === 'undefined') {
+// Make a random ID
+function makeid(length) {
+    var result = [];
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+        result.push(characters.charAt(Math.floor(Math.random() * charactersLength)));
+    }
+    return result.join('');
+}
+// Convert LaTeX delimiters and markdown links to HTML
+function jaxify(string) {
+    let mystring = string;
+    let count = 0, count2 = 0;
+    let loc = mystring.search(/([^\\]|^)(\$)/);
+    let loc2 = mystring.search(/([^\\]|^)(\$\$)/);
+    while (loc >= 0 || loc2 >= 0) {
+        if (loc2 >= 0) {
+            mystring = mystring.replace(/([^\\]|^)(\$\$)/, count2 % 2 ? '$1\\]' : '$1\\[');
+            count2++;
+        } else {
+            mystring = mystring.replace(/([^\\]|^)(\$)/, count % 2 ? '$1\\)' : '$1\\(');
+            count++;
+        }
+        loc = mystring.search(/([^\\]|^)(\$)/);
+        loc2 = mystring.search(/([^\\]|^)(\$\$)/);
+    }
+    // Replace markdown links
+    mystring = mystring.replace(/<http(.*?)>/g, '<a href="http$1" target="_blank" class="Quiz JQLink">http$1</a>');
+    mystring = mystring.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" class="Quiz JQLink">$1</a>');
+    return mystring;
+}
+
+// Base class for question types
+class Question {
+    static registry = {};
+    static register(type, cls) {
+        Question.registry[type] = cls;
+    }
+    static create(qa, id, index, options, rootDiv) {
+        const Cls = Question.registry[qa.type];
+        if (!Cls) {
+            console.error(`No question class registered for type "${qa.type}"`);
+            return;
+        }
+        const q = new Cls(qa, id, index, options, rootDiv);
+        q.render();
+    }
+
+    constructor(qa, id, index, options, rootDiv) {
+        this.qa = qa;
+        this.id = id;
+        this.index = index;
+        this.options = options;
+        this.rootDiv = rootDiv;
+        // wrapper
+        this.wrapper = document.createElement('div');
+        this.wrapper.id = `quizWrap${id}`;
+        this.wrapper.className = 'Quiz';
+        this.wrapper.dataset.qnum = index;
+        this.wrapper.style.maxWidth = `${options.maxWidth}px`;
+        rootDiv.appendChild(this.wrapper);
+        // question container
+        this.outerqDiv = document.createElement('div');
+        this.outerqDiv.id = `OuterquizQn${id}${index}`;
+        this.wrapper.appendChild(this.outerqDiv);
+        // question text
+        this.qDiv = document.createElement('div');
+        this.qDiv.id = `quizQn${id}${index}`;
+        if (qa.question) {
+            this.qDiv.innerHTML = jaxify(qa.question);
+            this.outerqDiv.appendChild(this.qDiv);
+        }
+        // code block
+        if (qa.code) {
+            const codeDiv = document.createElement('div');
+            codeDiv.id = `code${id}${index}`;
+            codeDiv.className = 'QuizCode';
+            const pre = document.createElement('pre');
+            const codeEl = document.createElement('code');
+            codeEl.innerHTML = qa.code;
+            pre.appendChild(codeEl);
+            codeDiv.appendChild(pre);
+            this.outerqDiv.appendChild(codeDiv);
+        }
+        // answer container
+        this.aDiv = document.createElement('div');
+        this.aDiv.id = `quizAns${id}${index}`;
+        this.aDiv.className = 'Answer';
+        this.wrapper.appendChild(this.aDiv);
+        // feedback container (append after answers)
+        this.fbDiv = document.createElement('div');
+        this.fbDiv.id = `fb${id}`;
+        this.fbDiv.className = 'Feedback';
+        this.fbDiv.dataset.answeredcorrect = 0;
+    }
+
+    render() {
+        throw new Error('render() not implemented');
+    }
+
+    preserveResponse(val) {
+        if (!this.options.preserveResponses) return;
+        const resp = document.getElementById(`responses${this.rootDiv.id}`);
+        if (!resp) return;
+        const arr = JSON.parse(resp.dataset.responses);
+        arr[this.index] = val;
+        resp.dataset.responses = JSON.stringify(arr);
+        printResponses(resp);
+    }
+
+    typeset(container) {
+        if (typeof MathJax !== 'undefined') {
+            const v = MathJax.version;
+            if (v[0] === '2') {
+                MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
+            } else {
+                MathJax.typeset([container]);
+            }
+        }
+    }
+}
+
+// Choose a random subset of an array. Can also be used to shuffle the array
+function getRandomSubarray(arr, size) {
+    var shuffled = arr.slice(0), i = arr.length, temp, index;
+    while (i--) {
+        index = Math.floor((i + 1) * Math.random());
+        temp = shuffled[index];
+        shuffled[index] = shuffled[i];
+        shuffled[i] = temp;
+    }
+    return shuffled.slice(0, size);
+}
+
+function printResponses(responsesContainer) {
+    var responses=JSON.parse(responsesContainer.dataset.responses);
+    var stringResponses='<B>IMPORTANT!</B>To preserve this answer sequence for submission, when you have finalized your answers: <ol> <li> Copy the text in this cell below "Answer String"</li> <li> Double click on the cell directly below the Answer String, labeled "Replace Me"</li> <li> Select the whole "Replace Me" text</li> <li> Paste in your answer string and press shift-Enter.</li><li>Save the notebook using the save icon or File->Save Notebook menu item</li></ul><br><br><br><b>Answer String:</b><br> ';
+    console.log(responses);
+    responses.forEach((response, index) => {
+        if (response) {
+            console.log(index + ': ' + response);
+            stringResponses+= index + ': ' + response +"<BR>";
+        }
+    });
+    responsesContainer.innerHTML=stringResponses;
+}
+/* Callback function to determine whether a selected multiple-choice
+   button corresponded to a correct answer and to provide feedback
+   based on the answer */
+function check_mc() {
+    var id = this.id.split('-')[0];
+    //var response = this.id.split('-')[1];
+    //console.log(response);
+    //console.log("In check_mc(), id="+id);
+    //console.log(event.srcElement.id)           
+    //console.log(event.srcElement.dataset.correct)   
+    //console.log(event.srcElement.dataset.feedback)
+
+    var label = event.srcElement;
+    //console.log(label, label.nodeName);
+    var depth = 0;
+    while ((label.nodeName != "LABEL") && (depth < 20)) {
+        label = label.parentElement;
+        console.log(depth, label);
+        depth++;
+    }
+
+
+
+    var answers = label.parentElement.children;
+    //console.log(answers);
+
+    // Split behavior based on multiple choice vs many choice:
+    var fb = document.getElementById("fb" + id);
+
+
+
+    /* Multiple choice (1 answer). Allow for 0 correct
+       answers as an edge case */
+    if (fb.dataset.numcorrect <= 1) {
+        // What follows is for the saved responses stuff
+        var outerContainer = fb.parentElement.parentElement;
+        var responsesContainer = document.getElementById("responses" + outerContainer.id);
+        if (responsesContainer) {
+            //console.log(responsesContainer);
+            var response = label.firstChild.innerText;
+            if (label.querySelector(".QuizCode")){
+                response+= label.querySelector(".QuizCode").firstChild.innerText;
+            }
+            console.log(response);
+            //console.log(document.getElementById("quizWrap"+id));
+            var qnum = document.getElementById("quizWrap"+id).dataset.qnum;
+            console.log("Question " + qnum);
+            //console.log(id, ", got numcorrect=",fb.dataset.numcorrect);
+            var responses=JSON.parse(responsesContainer.dataset.responses);
+            console.log(responses);
+            responses[qnum]= response;
+            responsesContainer.setAttribute('data-responses', JSON.stringify(responses));
+            printResponses(responsesContainer);
+        }
+        // End code to preserve responses
+
+        for (var i = 0; i < answers.length; i++) {
+            var child = answers[i];
+            //console.log(child);
+            child.className = "MCButton";
+        }
+
+
+
+        if (label.dataset.correct == "true") {
+            // console.log("Correct action");
+            if ("feedback" in label.dataset) {
+                fb.innerHTML = jaxify(label.dataset.feedback);
+            } else {
+                fb.innerHTML = "Correct!";
+            }
+            label.classList.add("correctButton");
+
+            fb.className = "Feedback";
+            fb.classList.add("correct");
+
+        } else {
+            if ("feedback" in label.dataset) {
+                fb.innerHTML = jaxify(label.dataset.feedback);
+            } else {
+                fb.innerHTML = "Incorrect -- try again.";
+            }
+            //console.log("Error action");
+            label.classList.add("incorrectButton");
+            fb.className = "Feedback";
+            fb.classList.add("incorrect");
+        }
+    }
+    else { /* Many choice (more than 1 correct answer) */
+        var reset = false;
+        var feedback;
+         if (label.dataset.correct == "true") {
+            if ("feedback" in label.dataset) {
+                feedback = jaxify(label.dataset.feedback);
+            } else {
+                feedback = "Correct!";
+            }
+            if (label.dataset.answered <= 0) {
+                if (fb.dataset.answeredcorrect < 0) {
+                    fb.dataset.answeredcorrect = 1;
+                    reset = true;
+                } else {
+                    fb.dataset.answeredcorrect++;
+                }
+                if (reset) {
+                    for (var i = 0; i < answers.length; i++) {
+                        var child = answers[i];
+                        child.className = "MCButton";
+                        child.dataset.answered = 0;
+                    }
+                }
+                label.classList.add("correctButton");
+                label.dataset.answered = 1;
+                fb.className = "Feedback";
+                fb.classList.add("correct");
+
+            }
+        } else {
+            if ("feedback" in label.dataset) {
+                feedback = jaxify(label.dataset.feedback);
+            } else {
+                feedback = "Incorrect -- try again.";
+            }
+            if (fb.dataset.answeredcorrect > 0) {
+                fb.dataset.answeredcorrect = -1;
+                reset = true;
+            } else {
+                fb.dataset.answeredcorrect--;
+            }
+
+            if (reset) {
+                for (var i = 0; i < answers.length; i++) {
+                    var child = answers[i];
+                    child.className = "MCButton";
+                    child.dataset.answered = 0;
+                }
+            }
+            label.classList.add("incorrectButton");
+            fb.className = "Feedback";
+            fb.classList.add("incorrect");
+        }
+        // What follows is for the saved responses stuff
+        var outerContainer = fb.parentElement.parentElement;
+        var responsesContainer = document.getElementById("responses" + outerContainer.id);
+        if (responsesContainer) {
+            //console.log(responsesContainer);
+            var response = label.firstChild.innerText;
+            if (label.querySelector(".QuizCode")){
+                response+= label.querySelector(".QuizCode").firstChild.innerText;
+            }
+            console.log(response);
+            //console.log(document.getElementById("quizWrap"+id));
+            var qnum = document.getElementById("quizWrap"+id).dataset.qnum;
+            console.log("Question " + qnum);
+            //console.log(id, ", got numcorrect=",fb.dataset.numcorrect);
+            var responses=JSON.parse(responsesContainer.dataset.responses);
+            if (label.dataset.correct == "true") {
+                if (typeof(responses[qnum]) == "object"){
+                    if (!responses[qnum].includes(response))
+                        responses[qnum].push(response);
+                } else{
+                    responses[qnum]= [ response ];
+                }
+            } else {
+                responses[qnum]= response;
+            }
+            console.log(responses);
+            responsesContainer.setAttribute('data-responses', JSON.stringify(responses));
+            printResponses(responsesContainer);
+        }
+        // End save responses stuff
+
+
+
+        var numcorrect = fb.dataset.numcorrect;
+        var answeredcorrect = fb.dataset.answeredcorrect;
+        if (answeredcorrect >= 0) {
+            fb.innerHTML = feedback + " [" + answeredcorrect + "/" + numcorrect + "]";
+        } else {
+            fb.innerHTML = feedback + " [" + 0 + "/" + numcorrect + "]";
+        }
+
+
+    }
+
+    if (typeof MathJax != 'undefined') {
+        var version = MathJax.version;
+        console.log('MathJax version', version);
+        if (version[0] == "2") {
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        } else if (version[0] == "3") {
+            MathJax.typeset([fb]);
+        }
+    } else {
+        console.log('MathJax not detected');
+    }
+
+}
+
+
+/* Function to produce the HTML buttons for a multiple choice/
+   many choice question  and to update the CSS tags based on
+   the question type */
+function make_mc(qa, shuffle_answers, outerqDiv, qDiv, aDiv, id) {
+
+    var shuffled;
+    if (shuffle_answers == true) {
+        //console.log(shuffle_answers+" read as true");
+        shuffled = getRandomSubarray(qa.answers, qa.answers.length);
+    } else {
+        //console.log(shuffle_answers+" read as false");
+        shuffled = qa.answers;
+    }
+
+
+    var num_correct = 0;
+
+    shuffled.forEach((item, index, ans_array) => {
+        //console.log(answer);
+
+        // Make label for input element
+        var lab = document.createElement("label");
+        lab.className = "MCButton";
+        lab.id = id + '-' + index;
+        lab.onclick = check_mc;
+
+        // Make input element
+        var inp = document.createElement("input");
+        inp.type = "radio";
+        inp.id = "quizo" + id + index;
+        inp.name = "mcgroup-" + id; // for grouping radios
+        inp.className = "sr-only"; // or "visually-hidden" or whatever you call it
+
+
+        lab.append(inp); // input is now inside the label
+
+        var aSpan = document.createElement('span');
+        if ("answer" in item) {
+            aSpan.innerHTML = jaxify(item.answer);
+        }
+        lab.append(aSpan);
+
+        // Create div for code inside question
+        if ("code" in item) {
+            var codeSpan = document.createElement('span');
+            codeSpan.id = "code" + id + index;
+            codeSpan.className = "QuizCode";
+            var codePre = document.createElement('pre');
+            codeSpan.append(codePre);
+            var codeCode = document.createElement('code');
+            codePre.append(codeCode);
+            codeCode.innerHTML = item.code;
+            lab.append(codeSpan);
+        }
+
+        // Set the data attributes for the answer
+        lab.setAttribute('data-correct', item.correct);
+        if (item.correct) {
+            num_correct++;
+        }
+        if ("feedback" in item) {
+            lab.setAttribute('data-feedback', item.feedback);
+        }
+        lab.setAttribute('data-answered', 0);
+
+        // Only append the label (input is inside)
+        aDiv.append(lab);
+
+
+    });
+
+    if (num_correct > 1) {
+        outerqDiv.className = "ManyChoiceQn";
+    } else {
+        outerqDiv.className = "MultipleChoiceQn";
+    }
+
+    return num_correct;
+
+}
+// Object-oriented wrapper for MC/MANY choice
+class MCQuestion extends Question {
+    constructor(qa, id, idx, opts, rootDiv) { super(qa, id, idx, opts, rootDiv); }
+    render() {
+        //console.log("options.shuffleAnswers " + this.options.shuffleAnswers);
+        const numCorrect = make_mc(
+            this.qa,
+            this.options.shuffleAnswers,
+            this.outerqDiv,
+            this.qDiv,
+            this.aDiv,
+            this.id
+        );
+        if ('answer_cols' in this.qa) {
+            this.aDiv.style.gridTemplateColumns =
+                'repeat(' + this.qa.answer_cols + ', 1fr)';
+        }
+        this.fbDiv.dataset.numcorrect = numCorrect;
+        this.wrapper.appendChild(this.fbDiv);
+    }
+}
+Question.register('multiple_choice', MCQuestion);
+Question.register('many_choice', MCQuestion);
+function check_numeric(ths, event) {
+
+    if (event.keyCode === 13) {
+        ths.blur();
+
+        var id = ths.id.split('-')[0];
+
+        var submission = ths.value;
+        if (submission.indexOf('/') != -1) {
+            var sub_parts = submission.split('/');
+            //console.log(sub_parts);
+            submission = sub_parts[0] / sub_parts[1];
+        }
+        //console.log("Reader entered", submission);
+
+        if (("precision" in ths.dataset) && (ths.dataset.precision > 0)) {
+            var precision = ths.dataset.precision;
+            submission = Number(Number(submission).toPrecision(precision));
+        }
+
+
+        //console.log("In check_numeric(), id="+id);
+        //console.log(event.srcElement.id)           
+        //console.log(event.srcElement.dataset.feedback)
+
+        var fb = document.getElementById("fb" + id);
+        fb.style.display = "none";
+        fb.innerHTML = "Incorrect -- try again.";
+
+        var answers = JSON.parse(ths.dataset.answers);
+        //console.log(answers);
+
+        var defaultFB = "Incorrect. Try again.";
+        var correct;
+        var done = false;
+        answers.every(answer => {
+            //console.log(answer.type);
+
+            correct = false;
+            // if (answer.type=="value"){
+            if ('value' in answer) {
+                var value;
+                if ("precision" in ths.dataset) {
+                    value = answer.value.toPrecision(ths.dataset.precision);
+                } else {
+                    value = answer.value;
+                }
+                if (submission == value) {
+                    if ("feedback" in answer) {
+                        fb.innerHTML = jaxify(answer.feedback);
+                    } else {
+                        fb.innerHTML = jaxify("Correct");
+                    }
+                    correct = answer.correct;
+                    //console.log(answer.correct);
+                    done = true;
+                }
+
+                // } else if (answer.type=="range") {
+            } else if ('range' in answer) {
+                console.log(answer.range);
+                console.log(submission, submission >=answer.range[0], submission < answer.range[1])
+                if ((submission >= answer.range[0]) && (submission < answer.range[1])) {
+                    fb.innerHTML = jaxify(answer.feedback);
+                    correct = answer.correct;
+                    console.log(answer.correct);
+                    done = true;
+                }
+            } else if (answer.type == "default") {
+                if ("feedback" in answer) {
+                    defaultFB = answer.feedback;
+                } 
+            }
+            if (done) {
+                return false; // Break out of loop if this has been marked correct
+            } else {
+                return true; // Keep looking for case that includes this as a correct answer
+            }
+        });
+        console.log("done:", done);
+
+        if ((!done) && (defaultFB != "")) {
+            fb.innerHTML = jaxify(defaultFB);
+            //console.log("Default feedback", defaultFB);
+        }
+
+        fb.style.display = "block";
+        if (correct) {
+            ths.className = "Input-text";
+            ths.classList.add("correctButton");
+            fb.className = "Feedback";
+            fb.classList.add("correct");
+        } else {
+            ths.className = "Input-text";
+            ths.classList.add("incorrectButton");
+            fb.className = "Feedback";
+            fb.classList.add("incorrect");
+        }
+
+        // What follows is for the saved responses stuff
+        var outerContainer = fb.parentElement.parentElement;
+        var responsesContainer = document.getElementById("responses" + outerContainer.id);
+        if (responsesContainer) {
+            console.log(submission);
+            var qnum = document.getElementById("quizWrap"+id).dataset.qnum;
+            //console.log("Question " + qnum);
+            //console.log(id, ", got numcorrect=",fb.dataset.numcorrect);
+            var responses=JSON.parse(responsesContainer.dataset.responses);
+            console.log(responses);
+            if (submission == ths.value){
+                responses[qnum]= submission;
+            } else {
+                responses[qnum]= ths.value + "(" + submission +")";
+            }
+            responsesContainer.setAttribute('data-responses', JSON.stringify(responses));
+            printResponses(responsesContainer);
+        }
+        // End code to preserve responses
+
+        if (typeof MathJax != 'undefined') {
+            var version = MathJax.version;
+            console.log('MathJax version', version);
+            if (version[0] == "2") {
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            } else if (version[0] == "3") {
+                MathJax.typeset([fb]);
+            }
+        } else {
+            console.log('MathJax not detected');
+        }
+        // After correct answer, if next JupyterQuiz question exists and has a text input, scroll by current question height
+        if (correct) {
+            // find the current question wrapper
+            var wrapper = ths.closest('.Quiz');
+            if (wrapper) {
+                var nextWrapper = wrapper.nextElementSibling;
+                if (nextWrapper && nextWrapper.classList.contains('Quiz')) {
+                    var nextInput = nextWrapper.querySelector('input.Input-text');
+                    if (nextInput) {
+                        var height = wrapper.getBoundingClientRect().height;
+                        console.log(height);
+                        nextInput.focus();
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+}
+// Object-oriented wrapper for numeric questions
+class NumericQuestion extends Question {
+    constructor(qa, id, idx, opts, rootDiv) {
+        super(qa, id, idx, opts, rootDiv);
+    }
+    render() {
+        make_numeric(this.qa, this.outerqDiv, this.qDiv, this.aDiv, this.id);
+        this.wrapper.appendChild(this.fbDiv);
+    }
+}
+Question.register('numeric', NumericQuestion);
+
+function isValid(el, charC) {
+    //console.log("Input char: ", charC);
+    if (charC == 46) {
+        if (el.value.indexOf('.') === -1) {
+            return true;
+        } else if (el.value.indexOf('/') != -1) {
+            var parts = el.value.split('/');
+            if (parts[1].indexOf('.') === -1) {
+                return true;
+            }
+        }
+        else {
+            return false;
+        }
+    } else if (charC == 47) {
+        if (el.value.indexOf('/') === -1) {
+            if ((el.value != "") && (el.value != ".")) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    } else if (charC == 45) {
+        var edex = el.value.indexOf('e');
+        if (edex == -1) {
+            edex = el.value.indexOf('E');
+        }
+
+        if (el.value == "") {
+            return true;
+        } else if (edex == (el.value.length - 1)) { // If just after e or E
+            return true;
+        } else {
+            return false;
+        }
+    } else if (charC == 101) { // "e"
+        if ((el.value.indexOf('e') === -1) && (el.value.indexOf('E') === -1) && (el.value.indexOf('/') == -1)) {
+            // Prev symbol must be digit or decimal point:
+            if (el.value.slice(-1).search(/\d/) >= 0) {
+                return true;
+            } else if (el.value.slice(-1).search(/\./) >= 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    } else {
+        if (charC > 31 && (charC < 48 || charC > 57))
+            return false;
+    }
+    return true;
+}
+
+function numeric_keypress(evnt) {
+    var charC = (evnt.which) ? evnt.which : evnt.keyCode;
+
+    if (charC == 13) {
+        check_numeric(this, evnt);
+    } else {
+        return isValid(this, charC);
+    }
+}
+
+
+
+
+
+function make_numeric(qa, outerqDiv, qDiv, aDiv, id) {
+
+
+
+    //console.log(answer);
+
+
+    outerqDiv.className = "NumericQn";
+    aDiv.style.display = 'block';
+
+    var lab = document.createElement("label");
+    lab.className = "InpLabel";
+    lab.innerHTML = "Type numeric answer here:";
+    aDiv.append(lab);
+
+    var inp = document.createElement("input");
+    inp.type = "text";
+    //inp.id="input-"+id;
+    inp.id = id + "-0";
+    inp.className = "Input-text";
+    inp.setAttribute('data-answers', JSON.stringify(qa.answers));
+    if ("precision" in qa) {
+        inp.setAttribute('data-precision', qa.precision);
+    }
+    aDiv.append(inp);
+    //console.log(inp);
+
+    //inp.addEventListener("keypress", check_numeric);
+    //inp.addEventListener("keypress", numeric_keypress);
+    /*
+    inp.addEventListener("keypress", function(event) {
+        return numeric_keypress(this, event);
+    }
+                        );
+                        */
+    //inp.onkeypress="return numeric_keypress(this, event)";
+    inp.onkeypress = numeric_keypress;
+    inp.onpaste = event => false;
+
+    inp.addEventListener("focus", function (event) {
+        this.value = "";
+        return false;
+    }
+    );
+
+
+}
+// Override show_questions to use object-oriented Question API
+function show_questions(json, container) {
+    // Accept container element or element ID
+    if (typeof container === 'string') {
+        container = document.getElementById(container);
+    }
+    if (!container) {
+        console.error('show_questions: invalid container', container);
+        return;
+    }
+
+    const shuffleQuestions = container.dataset.shufflequestions === 'True';
+    const shuffleAnswers = container.dataset.shuffleanswers === 'True';
+    const preserveResponses = container.dataset.preserveresponses === 'true';
+    const maxWidth = parseInt(container.dataset.maxwidth, 10) || 0;
+    let numQuestions = parseInt(container.dataset.numquestions, 10) || json.length;
+    if (numQuestions > json.length) numQuestions = json.length;
+
+    let questions = json;
+    if (shuffleQuestions || numQuestions < json.length) {
+        questions = getRandomSubarray(json, numQuestions);
+    }
+
+    questions.forEach((qa, index) => {
+        const id = makeid(8);
+        const options = {
+            shuffleAnswers: shuffleAnswers,
+            preserveResponses: preserveResponses,
+            maxWidth: maxWidth
+        };
+        Question.create(qa, id, index, options, container);
+    });
+
+    if (preserveResponses) {
+        const respDiv = document.createElement('div');
+        respDiv.id = 'responses' + container.id;
+        respDiv.className = 'JCResponses';
+        respDiv.dataset.responses = JSON.stringify([]);
+        respDiv.innerHTML = '<b>Select your answers and then follow the directions that will appear here.</b>';
+        container.appendChild(respDiv);
+    }
+
+    // Trigger MathJax typesetting if available
+    if (typeof MathJax != 'undefined') {
+        console.log("MathJax version", MathJax.version);
+        var version = MathJax.version;
+        setTimeout(function(){
+            var version = MathJax.version;
+            console.log('After sleep, MathJax version', version);
+            if (version[0] == "2") {
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            } else if (version[0] == "3") {
+                if (MathJax.hasOwnProperty('typeset') ) {
+                    MathJax.typeset([container]);
+                } else {
+                    console.log('WARNING: Trying to force load MathJax 3');
+                    window.MathJax = {
+                        tex: {
+                            inlineMath: [['$', '$'], ['\\(', '\\)']]
+                        },
+                        svg: {
+                            fontCache: 'global'
+                        }
+                    };
+
+                    (function () {
+                        var script = document.createElement('script');
+                        script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';
+                        script.async = true;
+                        document.head.appendChild(script);
+                    })();
+                }
+            }
+        }, 500);
+if (typeof version == 'undefined') {
+        } else
+        {
+            if (version[0] == "2") {
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            } else if (version[0] == "3") {
+                if (MathJax.hasOwnProperty('typeset') ) {
+                    MathJax.typeset([container]);
+                } else {
+                    console.log('WARNING: Trying to force load MathJax 3');
+                    window.MathJax = {
+                        tex: {
+                            inlineMath: [['$', '$'], ['\\(', '\\)']]
+                        },
+                        svg: {
+                            fontCache: 'global'
+                        }
+                    };
+
+                    (function () {
+                        var script = document.createElement('script');
+                        script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';
+                        script.async = true;
+                        document.head.appendChild(script);
+                    })();
+                }
+            } else {
+                console.log("MathJax not found");
+            }
+        }
+    }
+    // if (typeof MathJax !== 'undefined') {
+    //     const v = MathJax.version;
+    //     if (v[0] === '2') {
+    //         MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
+    //     } else if (v[0] === '3') {
+    //         MathJax.typeset([container]);
+    //     }
+    // }
+
+    // Prevent link clicks from bubbling up
+    Array.from(container.getElementsByClassName('Link')).forEach(link => {
+        link.addEventListener('click', e => e.stopPropagation());
+    });
+}
+function levenshteinDistance(a, b) {
+    if (a.length === 0) return b.length;
+    if (b.length === 0) return a.length;
+
+    const matrix = Array(b.length + 1).fill(null).map(() => Array(a.length + 1).fill(null));
+
+    for (let i = 0; i <= a.length; i++) {
+        matrix[0][i] = i;
+    }
+
+    for (let j = 0; j <= b.length; j++) {
+        matrix[j][0] = j;
+    }
+
+    for (let j = 1; j <= b.length; j++) {
+        for (let i = 1; i <= a.length; i++) {
+            const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+            matrix[j][i] = Math.min(
+                matrix[j - 1][i] + 1, // Deletion
+                matrix[j][i - 1] + 1, // Insertion
+                matrix[j - 1][i - 1] + cost // Substitution
+            );
+        }
+    }
+    return matrix[b.length][a.length];
+}
+// Object-oriented wrapper for string input questions
+class StringQuestion extends Question {
+    constructor(qa, id, idx, opts, rootDiv) {
+        super(qa, id, idx, opts, rootDiv);
+    }
+    render() {
+        make_string(this.qa, this.outerqDiv, this.qDiv, this.aDiv, this.id);
+        this.wrapper.appendChild(this.fbDiv);
+    }
+}
+Question.register('string', StringQuestion);
+
+function check_string(ths, event) {
+    if (event.keyCode === 13) {
+        ths.blur();
+
+        var id = ths.id.split('-')[0];
+        var submission = ths.value.trim();
+        var fb = document.getElementById("fb" + id);
+        fb.style.display = "none";
+        fb.innerHTML = "Incorrect -- try again.";
+
+        var answers = JSON.parse(ths.dataset.answers);
+        var defaultFB = "Incorrect. Try again.";
+        var correct;
+        var done = false;
+
+        // Handle default answer pattern: filter out and capture default feedback
+        var filteredAnswers = [];
+        answers.forEach(answer => {
+            if (answer.type === "default") {
+                defaultFB = answer.feedback;
+            } else {
+                filteredAnswers.push(answer);
+            }
+        });
+        answers = filteredAnswers;
+
+        answers.every(answer => {
+            correct = false;
+
+            let match = false;
+            if (answer.match_case) {
+                match = submission === answer.answer;
+            } else {
+                match = submission.toLowerCase() === answer.answer.toLowerCase();
+            }
+            console.log(submission);
+            console.log(answer.answer);
+            console.log(match);
+
+            if (match) {
+                if ("feedback" in answer) {
+                    fb.innerHTML = jaxify(answer.feedback);
+                } else {
+                    fb.innerHTML = jaxify("Correct");
+                }
+                correct = answer.correct;
+                done = true;
+            } else if (answer.fuzzy_threshold) {
+                var max_length = Math.max(submission.length, answer.answer.length);
+                var ratio;
+                if (answer.match_case) {
+                    ratio = 1- (levenshteinDistance(submission, answer.answer) / max_length);
+                } else {
+                    ratio = 1- (levenshteinDistance(submission.toLowerCase(),
+                                                    answer.answer.toLowerCase()) / max_length);
+                }
+                if (ratio >= answer.fuzzy_threshold) {
+                    if ("feedback" in answer) {
+                        fb.innerHTML = jaxify("(Fuzzy) " + answer.feedback);
+                    } else {
+                        fb.innerHTML = jaxify("Correct");
+                    }
+                    correct = answer.correct;
+                    done = true;
+                }
+
+            }
+
+            if (done) {
+                return false;
+            } else {
+                return true;
+            }
+        });
+
+        if ((!done) && (defaultFB != "")) {
+            fb.innerHTML = jaxify(defaultFB);
+        }
+
+        fb.style.display = "block";
+        if (correct) {
+            ths.className = "Input-text";
+            ths.classList.add("correctButton");
+            fb.className = "Feedback";
+            fb.classList.add("correct");
+        } else {
+            ths.className = "Input-text";
+            ths.classList.add("incorrectButton");
+            fb.className = "Feedback";
+            fb.classList.add("incorrect");
+        }
+
+        var outerContainer = fb.parentElement.parentElement;
+        var responsesContainer = document.getElementById("responses" + outerContainer.id);
+        if (responsesContainer) {
+            var qnum = document.getElementById("quizWrap" + id).dataset.qnum;
+            var responses = JSON.parse(responsesContainer.dataset.responses);
+            responses[qnum] = submission;
+            responsesContainer.setAttribute('data-responses', JSON.stringify(responses));
+            printResponses(responsesContainer);
+        }
+
+        if (typeof MathJax != 'undefined') {
+            var version = MathJax.version;
+            if (version[0] == "2") {
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            } else if (version[0] == "3") {
+                MathJax.typeset([fb]);
+            }
+        } else {
+            console.log('MathJax not detected');
+        }
+        // After correct answer, if next JupyterQuiz question exists and has a text input, scroll by current question height
+        if (correct) {
+            var wrapper = ths.closest('.Quiz');
+            if (wrapper) {
+                var nextWrapper = wrapper.nextElementSibling;
+                if (nextWrapper && nextWrapper.classList.contains('Quiz')) {
+                    var nextInput = nextWrapper.querySelector('input.Input-text');
+                    if (nextInput) {
+                        var height = wrapper.getBoundingClientRect().height;
+                        nextInput.focus();
+                    }
+                }
+            }
+        }
+        return false;
+    }
+}
+
+function string_keypress(evnt) {
+    var charC = (evnt.which) ? evnt.which : evnt.keyCode;
+
+    if (charC == 13) {
+        check_string(this, evnt);
+    } 
+}
+
+
+function make_string(qa, outerqDiv, qDiv, aDiv, id) {
+    outerqDiv.className = "StringQn";
+    aDiv.style.display = 'block';
+
+    var lab = document.createElement("label");
+    lab.className = "InpLabel";
+    lab.innerHTML = "Type your answer here:";
+    aDiv.append(lab);
+
+    var inp = document.createElement("input");
+    inp.type = "text";
+    inp.id = id + "-0";
+    inp.className = "Input-text";
+    inp.setAttribute('data-answers', JSON.stringify(qa.answers));
+    // Apply optional input width (approx. number of characters, in em units)
+    if (qa.input_width != null) {
+        inp.style['min-width'] = qa.input_width + 'em';
+    }
+    aDiv.append(inp);
+
+    inp.onkeypress = string_keypress;
+    inp.onpaste = event => false;
+
+    inp.addEventListener("focus", function (event) {
+        this.value = "";
+        return false;
+    });
+}
+/*
+ * Handle asynchrony issues when re-running quizzes in Jupyter notebooks.
+ * Ensures show_questions is called after the container div is in the DOM.
+ */
+function try_show() {
+  if (document.getElementById("nUbmTIYhatYZ")) {
+    show_questions(questionsnUbmTIYhatYZ, nUbmTIYhatYZ);
+  } else {
+    setTimeout(try_show, 200);
+  }
+};
+// Invoke immediately
+{
+  try_show();
+}
+}
+
+</script>
 </div>
 </div>
 </div>
@@ -11346,7 +12710,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Suppose that instead of concatenating the result of the recursive call to <code>to_str()</code> with the string from <code>convert_string</code>, we modified our algorithm to push the strings onto a stack instead of making the recursive call:</p>
+<p>Suppose that instead of concatenating the result of the recursive call to <code>toStr()</code> with the string from <code>convertString</code>, we modified our algorithm to push the strings onto a stack instead of making the recursive call:</p>
 </div>
 </div>
 </div>
@@ -11414,7 +12778,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Each time we make a call to <code>to_str()</code>, we push a character on the stack. Returning to the previous example we can see that after the fourth call to <code>to_str()</code> the stack would look like Figure below:</p>
+<p>Each time we make a call to <code>toStr()</code>, we push a character on the stack. Returning to the previous example we can see that after the fourth call to <code>toStr()</code> the stack would look like Figure below:</p>
 </div>
 </div>
 </div>
@@ -11447,7 +12811,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The previous example gives us some insight into how <code>C++</code> implements a recursive function call. When a function is called in <code>Python</code>, a <u>stack frame</u> is allocated to handle the local variables of the function.</p>
+<p>The previous example gives insight into how C++ implements recursive calls. For each active function call, the runtime maintains a stack frame containing the call's parameters, local variables, and return information.</p>
 </div>
 </div>
 </div>
@@ -11491,7 +12855,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Notice that the call to <code>to_str(2 // 2, 2)</code> leaves a return value of <code>"1"</code> on the stack. This return value is then used in place of the function call (<code>to_str(1, 2)</code>) in the expression <code>"1" + convert_string[2 % 2]</code>, which will leave the string <code>"10"</code> on the top of the stack.</p>
+<p>The call <code>toStr(2 / 2, 2)</code> returns <code>"1"</code>. That value is substituted into <code>toStr(1, 2) + convertString[2 % 2]</code>, producing <code>"10"</code> before the earlier calls continue returning.</p>
 </div>
 </div>
 </div>
@@ -11607,7 +12971,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The tool we will use for our illustrations is <code>Python</code>’s <code>turtle</code> graphics module called <code>turtle</code>.  When the turtle is created it also creates a window for itself to draw in.</p>
+<p>The cppds C++ examples use the header-only <code>CTurtle.hpp</code> library. A <code>cturtle::TurtleScreen</code> owns the drawing window and a <code>cturtle::Turtle</code> moves within it. These listings are non-executing examples because the notebook kernel is configured for console programs; the existing figures below preserve the visual result.</p>
 </div>
 </div>
 </div>
@@ -11629,21 +12993,24 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><em>(Live demo — external Python script, run <code>python turtle_example.py</code> from a terminal; turtle graphics is not available in the C++ kernel.)</em></p>
-<div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">turtle</span>
+<p><em>(C++ CTurtle reference listing — not executed in the notebook.)</em></p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;CTurtle.hpp&gt;</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">ct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nn">cturtle</span><span class="p">;</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">draw_spiral</span><span class="p">(</span><span class="n">my_turtle</span><span class="p">,</span> <span class="n">line_len</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">line_len</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">my_turtle</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">line_len</span><span class="p">)</span>
-        <span class="c1"># we instruct the turtle to go forward by len units and </span>
-        <span class="c1"># then turn right 90 degrees.</span>
-        <span class="n">my_turtle</span><span class="o">.</span><span class="n">right</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>
-        <span class="n">draw_spiral</span><span class="p">(</span><span class="n">my_turtle</span><span class="p">,</span> <span class="n">line_len</span> <span class="o">-</span> <span class="mi">5</span><span class="p">)</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">spiral</span><span class="p">(</span><span class="n">ct</span><span class="o">::</span><span class="n">Turtle</span><span class="o">&amp;</span><span class="w"> </span><span class="n">turtle</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">length</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">turtle</span><span class="p">.</span><span class="n">forward</span><span class="p">(</span><span class="n">length</span><span class="p">);</span>
+<span class="w">        </span><span class="n">turtle</span><span class="p">.</span><span class="n">right</span><span class="p">(</span><span class="mi">90</span><span class="p">);</span>
+<span class="w">        </span><span class="n">spiral</span><span class="p">(</span><span class="n">turtle</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 
-<span class="n">my_turtle</span> <span class="o">=</span> <span class="n">turtle</span><span class="o">.</span><span class="n">Turtle</span><span class="p">()</span>
-<span class="n">my_win</span> <span class="o">=</span> <span class="n">turtle</span><span class="o">.</span><span class="n">Screen</span><span class="p">()</span>
-<span class="n">draw_spiral</span><span class="p">(</span><span class="n">my_turtle</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-<span class="n">my_win</span><span class="o">.</span><span class="n">exitonclick</span><span class="p">()</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ct</span><span class="o">::</span><span class="n">TurtleScreen</span><span class="w"> </span><span class="n">screen</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ct</span><span class="o">::</span><span class="n">Turtle</span><span class="w"> </span><span class="n">turtle</span><span class="p">(</span><span class="n">screen</span><span class="p">);</span>
+<span class="w">    </span><span class="n">spiral</span><span class="p">(</span><span class="n">turtle</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">);</span>
+<span class="w">    </span><span class="n">screen</span><span class="p">.</span><span class="n">bye</span><span class="p">();</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -11655,7 +13022,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Run from a terminal: <code>python turtle_example.py</code></p>
+<p>To run this example locally, place <code>CTurtle.hpp</code> beside the source file and compile it as a desktop C++ program. The notebook keeps it non-executing so opening the slides never launches a GUI window.</p>
 </div>
 </div>
 </div>
@@ -11666,7 +13033,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The recursive step is when we call <code>draw_spiral()</code> again with a reduced length. The function <code>my_win.exitonclick()</code> will put the turtle into a wait mode until you click inside the window, after which the program cleans up and exits.</p>
+<p>The recursive step calls <code>spiral()</code> with a smaller length. When the length reaches zero or less, the function returns; <code>screen.bye()</code> closes the CTurtle window after the drawing completes.</p>
 </div>
 </div>
 </div>
@@ -11721,29 +13088,21 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><em>(Live demo — external Python script.)</em></p>
-<div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">turtle</span>
+<p><em>(C++ CTurtle reference listing — not executed in the notebook.)</em></p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;CTurtle.hpp&gt;</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">ct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nn">cturtle</span><span class="p">;</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">tree</span><span class="p">(</span><span class="n">branch_len</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">branch_len</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
-        <span class="n">t</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">branch_len</span><span class="p">)</span>
-        <span class="n">t</span><span class="o">.</span><span class="n">right</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-        <span class="n">tree</span><span class="p">(</span><span class="n">branch_len</span> <span class="o">-</span> <span class="mi">15</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
-        <span class="n">t</span><span class="o">.</span><span class="n">left</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
-        <span class="n">tree</span><span class="p">(</span><span class="n">branch_len</span> <span class="o">-</span> <span class="mi">15</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
-        <span class="n">t</span><span class="o">.</span><span class="n">right</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-        <span class="n">t</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">branch_len</span><span class="p">)</span>
-
-
-<span class="n">t</span> <span class="o">=</span> <span class="n">turtle</span><span class="o">.</span><span class="n">Turtle</span><span class="p">()</span>
-<span class="n">my_win</span> <span class="o">=</span> <span class="n">turtle</span><span class="o">.</span><span class="n">Screen</span><span class="p">()</span>
-<span class="n">t</span><span class="o">.</span><span class="n">left</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>
-<span class="c1">#t.up()</span>
-<span class="c1">#t.backward(100)</span>
-<span class="c1">#t.down()</span>
-<span class="n">t</span><span class="o">.</span><span class="n">color</span><span class="p">(</span><span class="s2">"green"</span><span class="p">)</span>
-<span class="n">tree</span><span class="p">(</span><span class="mi">75</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
-<span class="n">my_win</span><span class="o">.</span><span class="n">exitonclick</span><span class="p">()</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">tree</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">branchLen</span><span class="p">,</span><span class="w"> </span><span class="n">ct</span><span class="o">::</span><span class="n">Turtle</span><span class="o">&amp;</span><span class="w"> </span><span class="n">turtle</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">branchLen</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">turtle</span><span class="p">.</span><span class="n">forward</span><span class="p">(</span><span class="n">branchLen</span><span class="p">);</span>
+<span class="w">        </span><span class="n">turtle</span><span class="p">.</span><span class="n">right</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+<span class="w">        </span><span class="n">tree</span><span class="p">(</span><span class="n">branchLen</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="n">turtle</span><span class="p">);</span>
+<span class="w">        </span><span class="n">turtle</span><span class="p">.</span><span class="n">left</span><span class="p">(</span><span class="mi">40</span><span class="p">);</span>
+<span class="w">        </span><span class="n">tree</span><span class="p">(</span><span class="n">branchLen</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="n">turtle</span><span class="p">);</span>
+<span class="w">        </span><span class="n">turtle</span><span class="p">.</span><span class="n">right</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+<span class="w">        </span><span class="n">turtle</span><span class="p">.</span><span class="n">backward</span><span class="p">(</span><span class="n">branchLen</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -11755,7 +13114,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Run from a terminal: <code>python turtle_example2.py</code></p>
+<p>The complete desktop program creates a <code>cturtle::TurtleScreen</code>, turns the turtle upward, calls <code>tree(75, turtle)</code>, and then closes the screen. The saved figures on the next slides show the result.</p>
 </div>
 </div>
 </div>
@@ -11766,9 +13125,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>You will see that on lines 7 and 9 we are making a recursive call. On line 7 we make the recursive call right after the turtle turns to the right by 20 degrees; this is the right tree mentioned above.</p>
-<p>Then in line 9 the turtle makes another recursive call, but this time after turning left by 40 degrees. The reason the turtle must turn left by 40 degrees is that it needs to <strong>undo the original 20-degree</strong> turn to the right and then do an additional 20-degree turn to the left in order to draw the left tree.</p>
-<p>Also notice that each time we make a recursive call to tree we subtract some amount from the <code>branch_len</code> parameter; this is to make sure that the recursive trees get smaller and smaller. You should also recognize the initial <code>if</code> statement on line 4 as a check for the base case of <code>branch_len</code> getting too small.</p>
+<p>The two recursive calls occur after turns of 20 degrees right and 40 degrees left. The left turn first undoes the original right turn, then turns another 20 degrees left. Each call subtracts 15 from <code>branchLen</code>, and the <code>branchLen &gt; 5</code> condition is the base case guard.</p>
 </div>
 </div>
 </div>
@@ -11918,19 +13275,18 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><em>(Live demo — external Python script <code>Sierpinski.py</code>, part 1.)</em></p>
-<div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">turtle</span>
+<p><em>(C++ CTurtle reference listing — part 1, not executed in the notebook.)</em></p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;CTurtle.hpp&gt;</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">ct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nn">cturtle</span><span class="p">;</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">draw_triangle</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">my_turtle</span><span class="p">):</span>
-    <span class="n">my_turtle</span><span class="o">.</span><span class="n">fillcolor</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
-    <span class="n">my_turtle</span><span class="o">.</span><span class="n">up</span><span class="p">()</span>
-    <span class="n">my_turtle</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">my_turtle</span><span class="o">.</span><span class="n">down</span><span class="p">()</span>
-    <span class="n">my_turtle</span><span class="o">.</span><span class="n">begin_fill</span><span class="p">()</span>
-    <span class="n">my_turtle</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">my_turtle</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">my_turtle</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">my_turtle</span><span class="o">.</span><span class="n">end_fill</span><span class="p">()</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">drawTriangle</span><span class="p">(</span><span class="n">ct</span><span class="o">::</span><span class="n">Point</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">ct</span><span class="o">::</span><span class="n">Point</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">ct</span><span class="o">::</span><span class="n">Point</span><span class="w"> </span><span class="n">c</span><span class="p">,</span>
+<span class="w">                  </span><span class="n">ct</span><span class="o">::</span><span class="n">Color</span><span class="w"> </span><span class="n">color</span><span class="p">,</span><span class="w"> </span><span class="n">ct</span><span class="o">::</span><span class="n">Turtle</span><span class="o">&amp;</span><span class="w"> </span><span class="n">turtle</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">turtle</span><span class="p">.</span><span class="n">fillcolor</span><span class="p">(</span><span class="n">color</span><span class="p">);</span>
+<span class="w">    </span><span class="n">turtle</span><span class="p">.</span><span class="n">penup</span><span class="p">();</span><span class="w"> </span><span class="n">turtle</span><span class="p">.</span><span class="n">goTo</span><span class="p">(</span><span class="n">a</span><span class="p">);</span><span class="w"> </span><span class="n">turtle</span><span class="p">.</span><span class="n">pendown</span><span class="p">();</span>
+<span class="w">    </span><span class="n">turtle</span><span class="p">.</span><span class="n">begin_fill</span><span class="p">();</span>
+<span class="w">    </span><span class="n">turtle</span><span class="p">.</span><span class="n">goTo</span><span class="p">(</span><span class="n">c</span><span class="p">);</span><span class="w"> </span><span class="n">turtle</span><span class="p">.</span><span class="n">goTo</span><span class="p">(</span><span class="n">b</span><span class="p">);</span><span class="w"> </span><span class="n">turtle</span><span class="p">.</span><span class="n">goTo</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+<span class="w">    </span><span class="n">turtle</span><span class="p">.</span><span class="n">end_fill</span><span class="p">();</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -11943,29 +13299,18 @@ function try_show() {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><em>(part 2)</em></p>
-<div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_mid</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">((</span><span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">sierpinski</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">my_turtle</span><span class="p">):</span>
-    <span class="n">colormap</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"blue"</span><span class="p">,</span> <span class="s2">"red"</span><span class="p">,</span> <span class="s2">"green"</span><span class="p">,</span> <span class="s2">"white"</span><span class="p">,</span> <span class="s2">"yellow"</span><span class="p">,</span> <span class="s2">"violet"</span><span class="p">,</span> <span class="s2">"orange"</span><span class="p">]</span>
-    <span class="n">draw_triangle</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">colormap</span><span class="p">[</span><span class="n">degree</span><span class="p">],</span> <span class="n">my_turtle</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">degree</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">sierpinski</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">get_mid</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">get_mid</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">])],</span>
-            <span class="n">degree</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="n">my_turtle</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">sierpinski</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">get_mid</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">get_mid</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">])],</span>
-            <span class="n">degree</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="n">my_turtle</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">sierpinski</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">get_mid</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">get_mid</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">])],</span>
-            <span class="n">degree</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="n">my_turtle</span><span class="p">,</span>
-        <span class="p">)</span>
+<div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">sierpinski</span><span class="p">(</span><span class="n">ct</span><span class="o">::</span><span class="n">Point</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">ct</span><span class="o">::</span><span class="n">Point</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">ct</span><span class="o">::</span><span class="n">Point</span><span class="w"> </span><span class="n">c</span><span class="p">,</span>
+<span class="w">                </span><span class="kt">int</span><span class="w"> </span><span class="n">degree</span><span class="p">,</span><span class="w"> </span><span class="n">ct</span><span class="o">::</span><span class="n">Turtle</span><span class="o">&amp;</span><span class="w"> </span><span class="n">turtle</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="n">colors</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s">"blue"</span><span class="p">,</span><span class="w"> </span><span class="s">"red"</span><span class="p">,</span><span class="w"> </span><span class="s">"green"</span><span class="p">,</span><span class="w"> </span><span class="s">"white"</span><span class="p">,</span><span class="w"> </span><span class="s">"yellow"</span><span class="p">,</span><span class="w"> </span><span class="s">"violet"</span><span class="p">,</span><span class="w"> </span><span class="s">"orange"</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="n">drawTriangle</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="n">colors</span><span class="p">[</span><span class="n">degree</span><span class="p">]},</span><span class="w"> </span><span class="n">turtle</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">degree</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">sierpinski</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">ct</span><span class="o">::</span><span class="n">middle</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">),</span><span class="w"> </span><span class="n">ct</span><span class="o">::</span><span class="n">middle</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">),</span><span class="w"> </span><span class="n">degree</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">turtle</span><span class="p">);</span>
+<span class="w">        </span><span class="n">sierpinski</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">ct</span><span class="o">::</span><span class="n">middle</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">),</span><span class="w"> </span><span class="n">ct</span><span class="o">::</span><span class="n">middle</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">),</span><span class="w"> </span><span class="n">degree</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">turtle</span><span class="p">);</span>
+<span class="w">        </span><span class="n">sierpinski</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">ct</span><span class="o">::</span><span class="n">middle</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">),</span><span class="w"> </span><span class="n">ct</span><span class="o">::</span><span class="n">middle</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">),</span><span class="w"> </span><span class="n">degree</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">turtle</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -11989,11 +13334,14 @@ function try_show() {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p><em>(part 3)</em></p>
-<div class="highlight"><pre><span></span><span class="n">my_turtle</span> <span class="o">=</span> <span class="n">turtle</span><span class="o">.</span><span class="n">Turtle</span><span class="p">()</span>
-<span class="n">my_win</span> <span class="o">=</span> <span class="n">turtle</span><span class="o">.</span><span class="n">Screen</span><span class="p">()</span>
-<span class="n">my_points</span> <span class="o">=</span> <span class="p">[[</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="o">-</span><span class="mi">150</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">150</span><span class="p">],</span> <span class="p">[</span><span class="mi">180</span><span class="p">,</span> <span class="o">-</span><span class="mi">150</span><span class="p">]]</span>
-<span class="n">sierpinski</span><span class="p">(</span><span class="n">my_points</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">my_turtle</span><span class="p">)</span>
-<span class="n">my_win</span><span class="o">.</span><span class="n">exitonclick</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ct</span><span class="o">::</span><span class="n">TurtleScreen</span><span class="w"> </span><span class="n">screen</span><span class="p">;</span>
+<span class="w">    </span><span class="n">screen</span><span class="p">.</span><span class="n">tracer</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+<span class="w">    </span><span class="n">ct</span><span class="o">::</span><span class="n">Turtle</span><span class="w"> </span><span class="n">turtle</span><span class="p">(</span><span class="n">screen</span><span class="p">);</span>
+<span class="w">    </span><span class="n">ct</span><span class="o">::</span><span class="n">Point</span><span class="w"> </span><span class="n">points</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span><span class="mi">-100</span><span class="p">,</span><span class="w"> </span><span class="mi">-50</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">-50</span><span class="p">}};</span>
+<span class="w">    </span><span class="n">sierpinski</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">turtle</span><span class="p">);</span>
+<span class="w">    </span><span class="n">screen</span><span class="p">.</span><span class="n">bye</span><span class="p">();</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -12005,7 +13353,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Run from a terminal: <code>python Sierpinski.py</code></p>
+<p>This is a desktop CTurtle example. It remains a non-executing listing in the notebook; the surrounding figures provide the visual trace.</p>
 </div>
 </div>
 </div>
@@ -12314,7 +13662,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Here is a hint: if you were going to explicitly keep track of the disks, you would probably use three <code>Stack</code> objects, one for each pole. The answer is that <code>Python</code> provides the stacks that we need implicitly through the call stack!</p>
+<p>If you explicitly tracked the disks, you could use three <code>Stack</code> objects, one per pole. The recursive C++ program instead relies on the runtime call stack to remember the suspended calls.</p>
 </div>
 </div>
 </div>
@@ -12557,9 +13905,9 @@ function try_show() {
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>The <code>Maze</code> object will provide the following methods for us to use in writing our search algorithm:</p>
 <ol>
-<li><p><code>__init__</code> Reads in a data file representing a maze, initializes the internal representation of the maze, and finds the starting position for the turtle.</p>
+<li><p><code>Maze(filename)</code> constructor Reads in a data file representing a maze, initializes the internal representation of the maze, and finds the starting grid position.</p>
 </li>
-<li><p><code>draw_maze()</code> Draws the maze in a window on the screen.</p>
+<li><p><code>print()</code> Prints the current character-grid representation.</p>
 </li>
 </ol>
 </div>
@@ -12573,9 +13921,9 @@ function try_show() {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ol start="3">
-<li><p><code>update_position()</code> Updates the internal representation of the maze and changes the position of the turtle in the window.</p>
+<li><p><code>updatePosition()</code> Updates the internal representation of the maze and changes the current grid position in the window.</p>
 </li>
-<li><p><code>is_exit()</code> Checks to see if the current position is an exit from the maze.</p>
+<li><p><code>isExit()</code> Checks to see if the current position is an exit from the maze.</p>
 </li>
 </ol>
 </div>
@@ -12616,7 +13964,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The <code>__init__</code> method takes the name of a file as its only parameter. This file is a text file that represents a maze by using "+" characters for walls, spaces for open squares, and the letter "S" to indicate the starting position.</p>
+<p>The <code>Maze(filename)</code> constructor method takes the name of a file as its only parameter. This file is a text file that represents a maze by using "+" characters for walls, spaces for open squares, and the letter "S" to indicate the starting position.</p>
 </div>
 </div>
 </div>
@@ -12678,7 +14026,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The internal representation of the maze is a list of lists. Each row of the <code>maze_list</code> instance variable is also a list.</p>
+<p>The C++ <code>Maze</code> stores its character grid in a <code>vector&lt;string&gt;</code> named <code>mazeList</code>. Each string is one row, so <code>mazeList[row][col]</code> addresses one square.</p>
 </div>
 </div>
 </div>
@@ -12689,7 +14037,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The Python version draws the maze with turtle graphics; here we simply print the character grid — each update is visible in the printed maze at the end:</p>
+<p>The C++ version keeps the same recursive maze-search state transitions and prints the character grid. Each update is visible in the final grid without requiring a GUI turtle window:</p>
 </div>
 </div>
 </div>
@@ -12720,7 +14068,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The <code>is_exit()</code> method uses the current position of the turtle to test for an exit condition. An exit condition occurs whenever the turtle has navigated to the edge of the maze, either row zero or column zero, or the far-right column or the bottom row.</p>
+<p>The <code>isExit()</code> method uses the current current grid position to test for an exit condition. An exit condition occurs whenever the turtle has navigated to the edge of the maze, either row zero or column zero, or the far-right column or the bottom row.</p>
 </div>
 </div>
 </div>
@@ -12750,7 +14098,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Let’s examine the code for the search function which we call <code>search_from()</code>. Notice that this function takes three parameters: a <code>Maze</code> object, the starting <code>row</code>, and the starting <code>column</code>. This is important because as a recursive function the search logically starts again with each recursive call.</p>
+<p>Let’s examine the code for the search function which we call <code>searchFrom()</code>. Notice that this function takes three parameters: a <code>Maze</code> object, the starting <code>row</code>, and the starting <code>column</code>. This is important because as a recursive function the search logically starts again with each recursive call.</p>
 </div>
 </div>
 </div>
@@ -12825,7 +14173,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>If the first call to <code>search_from()</code> returns <code>True</code> then none of the last three calls would be needed. You can interpret this as meaning that a step to <code>(row - 1, column)</code> (or north if you want to think geographically) is on the path leading out of the maze.</p>
+<p>If the first call to <code>searchFrom()</code> returns <code>true</code>, short-circuit evaluation skips the other three calls. Geometrically, the north step is then on a path leading out of the maze.</p>
 </div>
 </div>
 </div>
@@ -12836,7 +14184,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>If there is not a good path leading out of the maze to the north then the next recursive call is tried, this one to the south. If south fails then try west, and finally east. If all four recursive calls return <code>False</code> then we have found a dead end.</p>
+<p>If north fails, the next recursive call tries south, then west, then east. If all four calls return <code>false</code>, the current square is a dead end.</p>
 </div>
 </div>
 </div>
@@ -12915,7 +14263,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In the printed result, <code>O</code> marks the successful path, <code>.</code> are tried squares, and <code>-</code> are dead ends. For the animated turtle version, run the original Python demo: <code>python maze.py</code>.</p>
+<p>In the printed C++ result, <code>O</code> marks the successful path, <code>.</code> marks tried squares, and <code>-</code> marks dead ends. This console representation preserves the backtracking algorithm without requiring a GUI turtle window.</p>
 </div>
 </div>
 </div>
@@ -13055,7 +14403,7 @@ min
 <span class="p">}</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="c1">// 26 cents already needs 67,716,925 recursive calls!</span>
+<span class="w">    </span><span class="c1">// 26 cents makes 377 total calls; 63 cents makes 67,716,925.</span>
 <span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">makeChange1</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">25</span><span class="p">},</span><span class="w"> </span><span class="mi">26</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
@@ -13116,7 +14464,7 @@ min
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Each node in the graph corresponds to a call to <code>make_change_1()</code>. The label on the node indicates the amount of change for which we are computing the number of coins. The label on the arrow indicates the coin that we just used.</p>
+<p>Each node in the graph corresponds to a call to <code>makeChange1()</code>. The label on the node indicates the amount of change for which we are computing the number of coins. The label on the arrow indicates the coin that we just used.</p>
 </div>
 </div>
 </div>
@@ -13153,23 +14501,25 @@ min
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;algorithm&gt;</span>
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span>
 
-<span class="kt">int</span><span class="w"> </span><span class="nf">makeChange2</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">coinValueList</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">change</span><span class="p">,</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">knownResults</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">makeChange2</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">coins</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">change</span><span class="p">,</span>
+<span class="w">                </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">knownResults</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">minCoins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">change</span><span class="p">;</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">find</span><span class="p">(</span><span class="n">coinValueList</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">coinValueList</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class="w"> </span><span class="n">change</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">coinValueList</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">knownResults</span><span class="p">[</span><span class="n">change</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">knownResults</span><span class="p">[</span><span class="n">change</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">knownResults</span><span class="p">[</span><span class="n">change</span><span class="p">];</span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">coinValueList</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">change</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="kt">int</span><span class="w"> </span><span class="n">numCoins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">makeChange2</span><span class="p">(</span><span class="n">coinValueList</span><span class="p">,</span><span class="w"> </span><span class="n">change</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">knownResults</span><span class="p">);</span>
-<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">numCoins</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">minCoins</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="n">minCoins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">numCoins</span><span class="p">;</span>
-<span class="w">                </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">coin</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">coins</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">coin</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">change</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">knownResults</span><span class="p">[</span><span class="n">change</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">knownResults</span><span class="p">[</span><span class="n">change</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">knownResults</span><span class="p">[</span><span class="n">change</span><span class="p">];</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">coin</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">coins</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">coin</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">change</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">candidate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">makeChange2</span><span class="p">(</span>
+<span class="w">                </span><span class="n">coins</span><span class="p">,</span><span class="w"> </span><span class="n">change</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">coin</span><span class="p">,</span><span class="w"> </span><span class="n">knownResults</span><span class="p">);</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">candidate</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">minCoins</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">minCoins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">candidate</span><span class="p">;</span>
 <span class="w">                </span><span class="n">knownResults</span><span class="p">[</span><span class="n">change</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">minCoins</span><span class="p">;</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">        </span><span class="p">}</span>
@@ -13178,10 +14528,8 @@ min
 <span class="p">}</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">coins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">25</span><span class="p">};</span>
 <span class="w">    </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">knownResults</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">makeChange2</span><span class="p">(</span><span class="n">coins</span><span class="p">,</span><span class="w"> </span><span class="mi">63</span><span class="p">,</span><span class="w"> </span><span class="n">knownResults</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">makeChange2</span><span class="p">({</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">25</span><span class="p">},</span><span class="w"> </span><span class="mi">63</span><span class="p">,</span><span class="w"> </span><span class="n">knownResults</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -13207,7 +14555,7 @@ min
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Notice that in line 6 we have added a test to see if our table contains the minimum number of coins for a certain amount of change. If it does not, we compute the minimum recursively and store the computed minimum in the table. Using this modified algorithm reduces the number of recursive calls we need to make for the four coin, 63 cent problem to 221 calls!</p>
+<p>For the exact cppds listing above, table lookup reduces the four-coin, 63-cent computation to 221 total calls. The count depends on where the cache checks and assignments occur, so a differently organized but equivalent memoized function can have a different call count.</p>
 </div>
 </div>
 </div>
@@ -13218,7 +14566,7 @@ min
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>It looks and feels like a bit of a hack. Also, if we look at the <code>known_results</code> lists we can see that there are some holes in the table. In fact the term for what we have done is not dynamic programming but rather we have improved the performance of our program by using a technique known as <u>memoization</u>, or more commonly called <u>caching</u>.</p>
+<p>It looks and feels like a bit of a hack. Also, if we look at the <code>knownResults</code> vector we can see that there are some holes in the table. In fact the term for what we have done is not dynamic programming but rather we have improved the performance of our program by using a technique known as <u>memoization</u>, or more commonly called <u>caching</u>.</p>
 </div>
 </div>
 </div>
@@ -13315,7 +14663,7 @@ min
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Code below is a dynamic programming algorithm to solve our change-making problem. <code>make_change_3()</code> takes three parameters: a list of valid coin values, the amount of change we want to make, and a list of the minimum number of coins needed to make each value. When the function is done, <code>min_coins</code> will contain the solution for all values from 0 to the value of change.</p>
+<p><code>makeChange3()</code> is the bottom-up dynamic-programming version. It takes a vector of valid coin values, the target amount, and a vector that stores the minimum coin count for every amount from 0 through the target.</p>
 </div>
 </div>
 </div>
@@ -13374,7 +14722,7 @@ min
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Note that make_change_3 is not a recursive function. The bulk of the work in this function is done by the loop that starts on line 4. In this loop we consider using all possible coins to make change for the amount specified by cents. We remember the minimum value and store it in our <code>min_coins</code> list.</p>
+<p><code>makeChange3()</code> is not recursive. For each amount from 0 through <code>change</code>, its inner loop checks every denomination and stores the best result already computed for a smaller amount. With <code>A</code> as the target and <code>C</code> coin types, the work is $O(AC)$ and the table uses $O(A)$ space.</p>
 </div>
 </div>
 </div>
@@ -13385,7 +14733,7 @@ min
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>We can easily extend <code>make_change_3</code> to keep track of the coins used by simply remembering the last coin we add for each entry in the <code>min_coins</code> table. If we know the last coin added, we can simply subtract the value of the coin to find a previous entry in the table that tells us the last coin we added to make that amount. We can keep tracing back through the table until we get to the beginning!</p>
+<p>We can easily extend <code>makeChange3</code> to keep track of the coins used by simply remembering the last coin we add for each entry in the <code>minCoins</code> table. If we know the last coin added, we can simply subtract the value of the coin to find a previous entry in the table that tells us the last coin we added to make that amount. We can keep tracing back through the table until we get to the beginning!</p>
 </div>
 </div>
 </div>
@@ -13493,7 +14841,13 @@ min
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
 <p>Making change for 63 requires the following 3 coins: 21 21 21</p>
 <p>The used list is as follows:</p>
-<p>1 1 1 1 1 5 1 1 1 1 10 1 1 1 1 5 1 1 1 1 10 21 1 1 1 25 1 1 1 1 5 10 1 1 1 10 1 1 1 1 5 10 21 1 1 10 21 1 1 1 25 1 10 1 1 5 10 1 1 1 10 1 10 21</p>
+<p>1 1 1 1 1 5 1 1 1 1 10 1 1 1 1 5 1 1 1 1 10 21 1 1 1 25 1 1 1 1 5 10</p>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
+<p>1 1 1 10 1 1 1 1 5 10 21 1 1 10 21 1 1 1 25 1 10 1 1 5 10 1 1 1 10 1 10 21</p>
 </div>
 </div>
 </div>
@@ -13505,7 +14859,7 @@ min
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><code>coins_used</code> is a list of the coins used to make change, and <code>coin_count</code> is the minimum number of coins used to make change for the amount corresponding to the position in the list.</p>
+<p><code>coinsUsed</code> records the last coin chosen for each amount, while <code>coinCount</code> records the minimum number of coins for each amount. Both are C++ vectors indexed by the amount.</p>
 </div>
 </div>
 </div>
@@ -13516,7 +14870,7 @@ min
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Notice that the coins we print out come directly from the <code>coins_used</code> array. For the first call we start at array position 63 and print 21. Then we take and look at the 42nd element of the list. Once again we find a 21 stored there. Finally, element 21 of the array also contains 21, giving us the three 21 cent pieces.</p>
+<p>Notice that the coins we print out come directly from the <code>coinsUsed</code> array. For the first call we start at array position 63 and print 21. Then we take and look at the 42nd element of the list. Once again we find a 21 stored there. Finally, element 21 of the array also contains 21, giving us the three 21 cent pieces.</p>
 </div>
 </div>
 </div>
@@ -13529,8 +14883,7 @@ min
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="n">from</span><span class="w"> </span><span class="n">jupytercards</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="n">display_flashcards</span>
-<span class="n">fpath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/flashcards/"</span>
-<span class="n">display_flashcards</span><span class="p">(</span><span class="n">fpath</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="err">'</span><span class="n">ch6</span><span class="p">.</span><span class="n">json</span><span class="err">'</span><span class="p">)</span>
+<span class="n">display_flashcards</span><span class="p">(</span><span class="s">"flashcards/ch6.json"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -13903,14 +15256,14 @@ min
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="TmSgJbOBaFkd" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="TmSgJbOBaFkd-next" onclick="window.checkFlip('TmSgJbOBaFkd')"> </div> <div style="height:40px"></div>
+<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="bQouYziezdeN" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="bQouYziezdeN-next" onclick="window.checkFlip('bQouYziezdeN')"> </div> <div style="height:40px"></div>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="c3982268-0f3b-44e8-9696-23aac69090a7" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="71412363-8bcf-45a2-a576-005da74d5d7b" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('c3982268-0f3b-44e8-9696-23aac69090a7');
+var element = document.getElementById('71412363-8bcf-45a2-a576-005da74d5d7b');
 /*!
  * swiped-events.js - v1.1.4
  * Pure JavaScript swipe events
@@ -14707,10 +16060,10 @@ window.setTopics = function(idOrElem, topics) {
 
 (function() {
     var observer = new MutationObserver(function(mutations, obs) {
-        var el = document.getElementById("TmSgJbOBaFkd");
+        var el = document.getElementById("bQouYziezdeN");
         if (el) {
             el.dataset.url = "";
-            el.dataset.cards = JSON.stringify([{"front": "Recursion", "back": "A programming technique where a function calls itself directly or indirectly to solve a problem. It breaks down a problem into smaller, more manageable parts until reaching a base case that can be solved directly.", "seqNum": 0}, {"front": "Base Case", "back": "The condition in recursion that stops the function from calling itself. It typically represents the simplest instance of the problem that can be solved directly without further recursive calls.", "seqNum": 1}, {"front": "Stack Frame", "back": "A portion of stack memory that contains all information necessary to execute a function call, including parameters, return addresses, and local variables. Each recursive call creates a new stack frame on the call stack.", "seqNum": 2}, {"front": "Fractals", "back": "Geometric figures that are self-similar across different scales. These complex patterns are created by repeating a simple process in an ongoing feedback loop and are often used to generate natural-looking scenarios in computer graphics.", "seqNum": 3}, {"front": "Dynamic Programming", "back": "A method for solving complex problems by breaking them down into simpler, overlapping subproblems. Each subproblem is solved once and its solution is stored to avoid redundant calculations.", "seqNum": 4}, {"front": "Greedy Method", "back": "A problem-solving strategy that makes the locally optimal choice at each step with the hope of finding a global optimum. While simple to implement, it does not guarantee an optimal solution for all problems.", "seqNum": 5}, {"front": "Memoization", "back": "A specific form of caching used in dynamic programming to speed up programs by storing the results of expensive function calls and returning the cached result when the same inputs occur again.", "seqNum": 6}]);
+            el.dataset.cards = JSON.stringify([{"front": "Recursion", "back": "A programming technique where a function calls itself directly or indirectly to solve a problem. It breaks down a problem into smaller, more manageable parts until reaching a base case that can be solved directly.", "seqNum": 0}, {"front": "Base Case", "back": "The condition that stops further recursive calls. It should cover every smallest valid input; for example, a string reverse function can use size <= 1 so both empty and one-character strings terminate safely.", "seqNum": 1}, {"front": "Stack Frame", "back": "A portion of stack memory that contains all information necessary to execute a function call, including parameters, return addresses, and local variables. Each recursive call creates a new stack frame on the call stack.", "seqNum": 2}, {"front": "Fractals", "back": "Geometric figures that are self-similar across different scales. These complex patterns are created by repeating a simple process in an ongoing feedback loop and are often used to generate natural-looking scenarios in computer graphics.", "seqNum": 3}, {"front": "Dynamic Programming", "back": "A method for solving complex problems by breaking them down into simpler, overlapping subproblems. Each subproblem is solved once and its solution is stored to avoid redundant calculations.", "seqNum": 4}, {"front": "Greedy Method", "back": "A problem-solving strategy that makes the locally optimal choice at each step with the hope of finding a global optimum. While simple to implement, it does not guarantee an optimal solution for all problems.", "seqNum": 5}, {"front": "Memoization", "back": "Top-down caching: store the result of each solved subproblem and reuse it when the same input appears again. Bottom-up dynamic programming instead fills a table in dependency order.", "seqNum": 6}]);
             el.dataset.frontColors = JSON.stringify(["var(--asparagus)", "var(--terra-cotta)", "var(--cyan-process)"]);
             el.dataset.backColors = JSON.stringify(["var(--dark-blue-gray)"]);
             el.dataset.textColors = JSON.stringify(["var(--snow)"]);
@@ -14719,7 +16072,7 @@ window.setTopics = function(idOrElem, topics) {
             el.dataset.shuffleCards = false;
             el.dataset.title = "";
             el.dataset.subject = "";
-            createCards("TmSgJbOBaFkd");
+            createCards("bQouYziezdeN");
             obs.disconnect();
         }
     });
@@ -14776,7 +16129,7 @@ window.setTopics = function(idOrElem, topics) {
 <ul>
 <li><p><strong>Recursion</strong>: A programming technique where a function calls itself directly or indirectly to solve a problem. It breaks down a problem into smaller, more manageable parts until reaching a base case that can be solved directly.</p>
 </li>
-<li><p><strong>Base Case</strong>: The condition in recursion that stops the function from calling itself. It typically represents the simplest instance of the problem that can be solved directly without further recursive calls.</p>
+<li><p><strong>Base Case</strong>: The condition that stops recursion and covers every smallest valid input; for example, <code>size() &lt;= 1</code> safely handles both empty and one-character strings.</p>
 </li>
 <li><p><strong>Stack Frame</strong>: A portion of stack memory that contains all information necessary to execute a function call, including parameters, return addresses, and local variables. Each recursive call creates a new stack frame on the call stack.</p>
 </li>
@@ -14786,13 +16139,13 @@ window.setTopics = function(idOrElem, topics) {
 </li>
 <li><p><strong>Greedy Method</strong>: A problem-solving strategy that makes the locally optimal choice at each step with the hope of finding a global optimum. While simple to implement, it does not guarantee an optimal solution for all problems.</p>
 </li>
-<li><p><strong>Memoization</strong>: A specific form of caching used in dynamic programming to speed up programs by storing the results of expensive function calls and returning the cached result when the same inputs occur again.</p>
+<li><p><strong>Memoization</strong>: Top-down caching that stores solved subproblems for reuse. Bottom-up dynamic programming instead fills a table in dependency order.</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 </div>
-</div></div></main>
+</div></div></div></main>
 </body>
 </html>

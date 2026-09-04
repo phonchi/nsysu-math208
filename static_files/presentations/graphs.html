@@ -272,6 +272,168 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 .vert-table td.tcell-inf{color:#ccc;}
 .sec-badge{font-size:.6em;color:var(--muted);border:1px solid var(--card-border);background:var(--card);padding:2px 10px;border-radius:999px;vertical-align:middle;margin-left:.6rem;font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.02em;white-space:nowrap;}
 </style>
+
+<style>
+
+/* ===== 題庫自測區 ===== */
+.sq-item{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1.1rem;}
+.sq-item .sq-q{font-weight:700;margin-bottom:.7rem;}
+.sq-item .sq-q .sq-num{font-family:'JetBrains Mono',monospace;color:var(--accent);margin-right:.4rem;}
+.sq-opts{display:flex;flex-direction:column;gap:.45rem;}
+.sq-opt{text-align:left;font-family:'Noto Sans TC',sans-serif;font-size:.9rem;line-height:1.6;padding:.55rem .9rem;border-radius:8px;border:1px solid var(--card-border);background:var(--paper);color:var(--ink);cursor:pointer;transition:all .15s;}
+.sq-opt:hover{border-color:var(--accent2);}
+.sq-opt.correct{border-color:var(--accent3);background:rgba(26,107,74,.10);}
+.sq-opt.wrong{border-color:var(--accent);background:rgba(192,57,43,.08);}
+.sq-fb{display:none;margin-top:.7rem;font-size:.86rem;line-height:1.7;border-left:4px solid var(--accent2);padding:.5rem .9rem;background:var(--paper);border-radius:0 8px 8px 0;}
+.sq-fb.show{display:block;}
+.sq-fb.good{border-left-color:var(--accent3);}
+.sq-fb.bad{border-left-color:var(--accent);}
+
+/* ===== 網站化附加樣式（study-guide / flashcards / chapter-nav）===== */
+.study-guide{background:var(--card);border:1px solid var(--card-border);border-left:5px solid var(--accent3);border-radius:12px;padding:1.2rem 1.4rem;margin:0 0 2.2rem;}
+.study-guide .sg-title{font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:700;letter-spacing:1.5px;color:var(--accent3);margin-bottom:.5rem;}
+.study-guide p{font-size:.92rem;margin-bottom:.5rem;}
+.study-guide .sg-links{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.7rem;}
+.study-guide .sg-links a{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;color:var(--accent2);border:1px solid var(--card-border);border-radius:999px;padding:.3rem .85rem;text-decoration:none;transition:all .2s;}
+.study-guide .sg-links a:hover{background:var(--accent2);color:#fff;}
+.fc-controls{display:flex;gap:.5rem;flex-wrap:wrap;margin:.8rem 0 1.2rem;}
+.fc-controls button{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:600;padding:.45rem 1rem;border-radius:6px;border:1px solid var(--card-border);cursor:pointer;background:var(--card);color:var(--ink);transition:all .2s;}
+.fc-controls button:hover{background:var(--accent2);color:#fff;border-color:var(--accent2);}
+.fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:.9rem;}
+.fc-card{perspective:900px;height:170px;cursor:pointer;}
+.fc-card .fc-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+.fc-card.flipped .fc-inner{transform:rotateY(180deg);}
+.fc-card .fc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:.9rem;text-align:center;box-shadow:0 3px 12px rgba(0,0,0,.08);}
+.fc-card .fc-front{background:linear-gradient(150deg,var(--accent2),var(--ink));color:#fff;font-family:'Noto Serif TC',serif;font-size:1rem;font-weight:700;letter-spacing:.02em;flex-direction:column;gap:.4rem;}
+.fc-card .fc-front .fc-hint{font-size:.62rem;color:rgba(255,255,255,.5);font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.1em;}
+.fc-card .fc-back{background:var(--card);border:2px solid var(--accent3);color:var(--ink);font-size:.78rem;line-height:1.55;transform:rotateY(180deg);overflow-y:auto;}
+.chapter-nav{display:grid;grid-template-columns:1fr auto 1fr;gap:.8rem;align-items:stretch;margin:2.5rem 0 1rem;}
+.chapter-nav a{display:block;border:1px solid var(--card-border);border-radius:12px;padding:.8rem 1.1rem;text-decoration:none;color:var(--ink);background:var(--card);transition:all .2s;}
+.chapter-nav a:hover{border-color:var(--accent2);box-shadow:0 4px 14px rgba(0,0,0,.08);}
+.chapter-nav .nav-dir{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;letter-spacing:1px;color:var(--muted);margin-bottom:.2rem;}
+.chapter-nav .nav-title{font-family:'Noto Serif TC',serif;font-weight:700;font-size:.95rem;color:var(--accent2);}
+.chapter-nav a.next{text-align:right;}
+.chapter-nav a.home{display:flex;flex-direction:column;justify-content:center;text-align:center;}
+@media(max-width:700px){.chapter-nav{grid-template-columns:1fr;}}
+</style>
+<style>
+/* ===== 講義範例卡 ===== */
+.deck-extra{margin:1.2rem 0;}
+.deck-extra .dx-label{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;letter-spacing:1px;color:var(--accent3);margin-bottom:.4rem;}
+.deck-extra .dx-note{font-size:.9rem;margin-top:.6rem;}
+.expected-out{background:var(--card);border:1px solid var(--card-border);border-left:4px solid var(--accent3);border-radius:0 8px 8px 0;padding:.5rem .9rem;margin-top:.5rem;}
+.expected-out .eo-tag{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;letter-spacing:1px;color:var(--accent3);display:block;margin-bottom:.2rem;}
+.expected-out pre{font-family:'JetBrains Mono',monospace;font-size:.8rem;line-height:1.55;white-space:pre-wrap;margin:0;}
+.warn-box{background:rgba(192,57,43,.06);border:1px solid rgba(192,57,43,.25);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:.6rem 1rem;margin:.8rem 0;font-size:.9rem;}
+.warn-box b{color:var(--accent);}
+</style>
+<!-- contrast-fix v1 -->
+<style>
+/* ══ contrast-fix v1 ═══════════════════════════════════════════════
+   base.css 有兩條全域規則：code{color:var(--accent2)}（#2c3e7a）與
+   strong{color:var(--ink)}（#1a1a2e）。它們一旦落進深色底容器就會消失——
+   最糟的是 .cmp-table th 與 .info-box .info-label，底色也是 #2c3e7a，
+   對比 1.00，字跟背景完全同色。
+
+   下面把「深色底容器裡的行內元素」統一改掉。chip 用 rgba(26,26,46,.7)
+   配 #ffe9a8：對本設計系統的每一個深色底，最差的對比是 7.84（在 #f39c12 上），
+   全部過 WCAG AA。單一組值、不分層，才驗得動。
+
+   只列 code/kbd/a/strong/b/em/i 七個標籤，**從不用 * 、從不碰 span**——
+   .pseudo-code 的 .kw/.str/.fn/.com/.num 與 .status-banner 的 .status-icon
+   本來就是為深底調好的，不能被蓋掉。
+
+   容器清單是三站的聯集（多列的在該站只是無效的死規則，漏列才會出事）。
+   真正的把關者是 tools/check_contrast.py，它會逐站掃出所有深色底選擇器再比對這份清單。
+   ═══════════════════════════════════════════════════════════════════════ */
+.adj-matrix th code,.adj-matrix th kbd,.adj-matrix th a,.ai-box .ai-label code,.ai-box .ai-label kbd,
+.ai-box .ai-label a,.bar code,.bar kbd,.bar a,.bar-fill code,.bar-fill kbd,.bar-fill a,.bq-item code,
+.bq-item kbd,.bq-item a,.bs-hl code,.bs-hl kbd,.bs-hl a,.bs-item code,.bs-item kbd,.bs-item a,.btn code,
+.btn kbd,.btn a,.btn-play code,.btn-play kbd,.btn-play a,.btn-shuffle code,.btn-shuffle kbd,.btn-shuffle a,
+.btn-step code,.btn-step kbd,.btn-step a,.btn-toggle code,.btn-toggle kbd,.btn-toggle a,.chain-node code,
+.chain-node kbd,.chain-node a,.char-bad code,.char-bad kbd,.char-bad a,.char-cur code,.char-cur kbd,
+.char-cur a,.chess-cell.current code,.chess-cell.current kbd,.chess-cell.current a,.chess-cell.dark code,
+.chess-cell.dark kbd,.chess-cell.dark a,.chess-cell.start code,.chess-cell.start kbd,.chess-cell.start a,
+.chess-cell.visited code,.chess-cell.visited kbd,.chess-cell.visited a,.cmp-table th code,.cmp-table th kbd,
+.cmp-table th a,.fib-card.memo .bar-fill code,.fib-card.memo .bar-fill kbd,.fib-card.memo .bar-fill a,
+.heap-cell.active code,.heap-cell.active kbd,.heap-cell.active a,.token.active code,.token.active kbd,
+.token.active a,.console code,.console kbd,.console a,.ds-item code,.ds-item kbd,.ds-item a,.eq-card code,
+.eq-card kbd,.eq-card a,.eslx code,.eslx kbd,.eslx a,.fc-card .fc-front code,.fc-card .fc-front kbd,
+.fc-card .fc-front a,.fc-controls button:hover code,.fc-controls button:hover kbd,
+.fc-controls button:hover a,.float-nav a.active code,.float-nav a.active kbd,.float-nav a.active a,
+.game-console code,.game-console kbd,.game-console a,.heap-cell.parent code,.heap-cell.parent kbd,
+.heap-cell.parent a,.heap-cell.swap code,.heap-cell.swap kbd,.heap-cell.swap a,.hero code,.hero kbd,.hero a,
+.info-box .info-label code,.info-box .info-label kbd,.info-box .info-label a,
+.info-card .ic-title .ic-badge code,.info-card .ic-title .ic-badge kbd,.info-card .ic-title .ic-badge a,
+.kv-pair .kv-key code,.kv-pair .kv-key kbd,.kv-pair .kv-key a,.num-cell.sel code,.num-cell.sel kbd,
+.num-cell.sel a,.obj-box .obj-type code,.obj-box .obj-type kbd,.obj-box .obj-type a,.obj-box .tag code,
+.obj-box .tag kbd,.obj-box .tag a,.preset-btn.active code,.preset-btn.active kbd,.preset-btn.active a,
+.pseudo-code code,.pseudo-code kbd,.pseudo-code a,.quiz-box .quiz-code code,.quiz-box .quiz-code kbd,
+.quiz-box .quiz-code a,.quiz-box .quiz-label .multi-badge code,.quiz-box .quiz-label .multi-badge kbd,
+.quiz-box .quiz-label .multi-badge a,.sandbox .sandbox-label code,.sandbox .sandbox-label kbd,
+.sandbox .sandbox-label a,.sandbox-result code,.sandbox-result kbd,.sandbox-result a,
+.seq-cell .order-badge code,.seq-cell .order-badge kbd,.seq-cell .order-badge a,.sol-links a:hover code,
+.sol-links a:hover kbd,.sol-links a:hover a,.sq-code code,.sq-code kbd,.sq-code a,.stack-frame code,
+.stack-frame kbd,.stack-frame a,.status-banner code,.status-banner kbd,.status-banner a,
+.strip .cell.held code,.strip .cell.held kbd,.strip .cell.held a,.strip .cell.picked code,
+.strip .cell.picked kbd,.strip .cell.picked a,.strip .cell.train code,.strip .cell.train kbd,
+.strip .cell.train a,.study-guide .sg-links a:hover code,.study-guide .sg-links a:hover kbd,
+.study-guide .sg-links a:hover a,.t-node code,.t-node kbd,.t-node a,.tok code,.tok kbd,.tok a,.tok-op code,
+.tok-op kbd,.tok-op a,.traceback code,.traceback kbd,.traceback a,.trav-mini .mini-output code,
+.trav-mini .mini-output kbd,.trav-mini .mini-output a,.traversal-output code,.traversal-output kbd,
+.traversal-output a,.tree-node.done code,.tree-node.done kbd,.tree-node.done a,.vert-table th code,
+.vert-table th kbd,.vert-table th a{background:rgba(26,26,46,.7);color:#ffe9a8;}
+.adj-matrix th strong,.adj-matrix th b,.ai-box .ai-label strong,.ai-box .ai-label b,.bar strong,.bar b,
+.bar-fill strong,.bar-fill b,.bq-item strong,.bq-item b,.bs-hl strong,.bs-hl b,.bs-item strong,.bs-item b,
+.btn strong,.btn b,.btn-play strong,.btn-play b,.btn-shuffle strong,.btn-shuffle b,.btn-step strong,
+.btn-step b,.btn-toggle strong,.btn-toggle b,.chain-node strong,.chain-node b,.char-bad strong,.char-bad b,
+.char-cur strong,.char-cur b,.chess-cell.current strong,.chess-cell.current b,.chess-cell.dark strong,
+.chess-cell.dark b,.chess-cell.start strong,.chess-cell.start b,.chess-cell.visited strong,
+.chess-cell.visited b,.cmp-table th strong,.cmp-table th b,.fib-card.memo .bar-fill strong,
+.fib-card.memo .bar-fill b,.heap-cell.active strong,.heap-cell.active b,.token.active strong,.token.active b,
+.console strong,.console b,.ds-item strong,.ds-item b,.eq-card strong,.eq-card b,.eslx strong,.eslx b,
+.fc-card .fc-front strong,.fc-card .fc-front b,.fc-controls button:hover strong,.fc-controls button:hover b,
+.float-nav a.active strong,.float-nav a.active b,.game-console strong,.game-console b,
+.heap-cell.parent strong,.heap-cell.parent b,.heap-cell.swap strong,.heap-cell.swap b,.hero strong,.hero b,
+.info-box .info-label strong,.info-box .info-label b,.info-card .ic-title .ic-badge strong,
+.info-card .ic-title .ic-badge b,.kv-pair .kv-key strong,.kv-pair .kv-key b,.num-cell.sel strong,
+.num-cell.sel b,.obj-box .obj-type strong,.obj-box .obj-type b,.obj-box .tag strong,.obj-box .tag b,
+.preset-btn.active strong,.preset-btn.active b,.pseudo-code strong,.pseudo-code b,
+.quiz-box .quiz-code strong,.quiz-box .quiz-code b,.quiz-box .quiz-label .multi-badge strong,
+.quiz-box .quiz-label .multi-badge b,.sandbox .sandbox-label strong,.sandbox .sandbox-label b,
+.sandbox-result strong,.sandbox-result b,.seq-cell .order-badge strong,.seq-cell .order-badge b,
+.sol-links a:hover strong,.sol-links a:hover b,.sq-code strong,.sq-code b,.stack-frame strong,.stack-frame b,
+.status-banner strong,.status-banner b,.strip .cell.held strong,.strip .cell.held b,
+.strip .cell.picked strong,.strip .cell.picked b,.strip .cell.train strong,.strip .cell.train b,
+.study-guide .sg-links a:hover strong,.study-guide .sg-links a:hover b,.t-node strong,.t-node b,.tok strong,
+.tok b,.tok-op strong,.tok-op b,.traceback strong,.traceback b,.trav-mini .mini-output strong,
+.trav-mini .mini-output b,.traversal-output strong,.traversal-output b,.tree-node.done strong,
+.tree-node.done b,.vert-table th strong,.vert-table th b{color:#fff;}
+.adj-matrix th em,.adj-matrix th i,.ai-box .ai-label em,.ai-box .ai-label i,.bar em,.bar i,.bar-fill em,
+.bar-fill i,.bq-item em,.bq-item i,.bs-hl em,.bs-hl i,.bs-item em,.bs-item i,.btn em,.btn i,.btn-play em,
+.btn-play i,.btn-shuffle em,.btn-shuffle i,.btn-step em,.btn-step i,.btn-toggle em,.btn-toggle i,
+.chain-node em,.chain-node i,.char-bad em,.char-bad i,.char-cur em,.char-cur i,.chess-cell.current em,
+.chess-cell.current i,.chess-cell.dark em,.chess-cell.dark i,.chess-cell.start em,.chess-cell.start i,
+.chess-cell.visited em,.chess-cell.visited i,.cmp-table th em,.cmp-table th i,.fib-card.memo .bar-fill em,
+.fib-card.memo .bar-fill i,.heap-cell.active em,.heap-cell.active i,.token.active em,.token.active i,
+.console em,.console i,.ds-item em,.ds-item i,.eq-card em,.eq-card i,.eslx em,.eslx i,.fc-card .fc-front em,
+.fc-card .fc-front i,.fc-controls button:hover em,.fc-controls button:hover i,.float-nav a.active em,
+.float-nav a.active i,.game-console em,.game-console i,.heap-cell.parent em,.heap-cell.parent i,
+.heap-cell.swap em,.heap-cell.swap i,.hero em,.hero i,.info-box .info-label em,.info-box .info-label i,
+.info-card .ic-title .ic-badge em,.info-card .ic-title .ic-badge i,.kv-pair .kv-key em,.kv-pair .kv-key i,
+.num-cell.sel em,.num-cell.sel i,.obj-box .obj-type em,.obj-box .obj-type i,.obj-box .tag em,.obj-box .tag i,
+.preset-btn.active em,.preset-btn.active i,.pseudo-code em,.pseudo-code i,.quiz-box .quiz-code em,
+.quiz-box .quiz-code i,.quiz-box .quiz-label .multi-badge em,.quiz-box .quiz-label .multi-badge i,
+.sandbox .sandbox-label em,.sandbox .sandbox-label i,.sandbox-result em,.sandbox-result i,
+.seq-cell .order-badge em,.seq-cell .order-badge i,.sol-links a:hover em,.sol-links a:hover i,.sq-code em,
+.sq-code i,.stack-frame em,.stack-frame i,.status-banner em,.status-banner i,.strip .cell.held em,
+.strip .cell.held i,.strip .cell.picked em,.strip .cell.picked i,.strip .cell.train em,.strip .cell.train i,
+.study-guide .sg-links a:hover em,.study-guide .sg-links a:hover i,.t-node em,.t-node i,.tok em,.tok i,
+.tok-op em,.tok-op i,.traceback em,.traceback i,.trav-mini .mini-output em,.trav-mini .mini-output i,
+.traversal-output em,.traversal-output i,.tree-node.done em,.tree-node.done i,.vert-table th em,
+.vert-table th i{color:inherit;}
+</style>
+<!-- /contrast-fix -->
 </head>
 <body>
 
@@ -414,7 +576,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="representation">
   <div class="section-number">PART 01 · 圖的表示</div>
   <h2>怎麼把圖塞進電腦？相鄰矩陣 vs 相鄰串列 <span class="sec-badge">cppds §9.3–9.6</span></h2>
-  <p>圖的 ADT 主要支援以下操作：<code>setVertex(v)</code>、<code>addEdge(u, v, w)</code>、<code>getVertex(key)</code>、<code>getVertices()</code>、<code>g.count(v)</code>。實作方式有兩種主流選擇：<strong>相鄰矩陣（adjacency matrix）</strong>和<strong>相鄰串列（adjacency list）</strong>，兩者各有適用情境。</p>
+  <p>本課程的 <code>Graph</code> 以 <code>setVertex(key)</code>、<code>addEdge(u, v, w)</code> 建圖，並透過公開的 <code>vertices</code> map 查詢與迭代。<code>setVertex</code> 對既有 key 是 no-op，不會清掉原有 edges 或 traversal state；<code>vertices.count(key)</code> 檢查頂點是否存在。</p>
 
   <div class="viz-layout">
     <div>
@@ -465,13 +627,13 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
           ❌ 查特定邊需走過鄰居清單
         </p>
         <div class="ic-row" style="margin-top:.6rem;"><span class="ic-label">空間</span><span class="ic-value highlight">$O(|V|+|E|)$</span></div>
-        <div class="ic-row"><span class="ic-label">查邊</span><span class="ic-value">$O(\deg(v))$</span></div>
+        <div class="ic-row"><span class="ic-label">查邊（std::map）</span><span class="ic-value">$O(\log\deg(v))$</span></div>
         <div class="ic-row"><span class="ic-label">列鄰居</span><span class="ic-value">$O(\deg(v))$</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">真實世界：稀疏為主</div>
         <p style="font-size:.82rem;line-height:1.55;margin:0;color:var(--ink);">
-          以後面 Word Ladder 為例：5,110 個字 ⇒ 矩陣 $5{,}110^2 = 26{,}112{,}100$ 格，但實際只有 53,286 條邊（<strong>0.20%</strong> 滿）！這就是為什麼實務上幾乎都用相鄰串列。
+          以 Word Ladder 為例：5,110 個字的矩陣有 26,112,100 格；實作儲存 53,286 條有向 adjacency entries（26,643 組無向單字對），約占 <strong>0.20%</strong>。
         </p>
       </div>
     </div>
@@ -491,7 +653,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <span class="line"><span class="kw">class</span> <span class="fn">Graph</span> {</span>
 <span class="line">  <span class="kw">public</span>:</span>
 <span class="line">    map&lt;string, Vertex&gt; vertices;</span>
-<span class="line">    <span class="kw">void</span> <span class="fn">setVertex</span>(string key) { vertices[key] = <span class="fn">Vertex</span>(key); }</span>
+<span class="line">    <span class="kw">void</span> <span class="fn">setVertex</span>(string key) { <span class="kw">if</span> (vertices.<span class="fn">count</span>(key) == <span class="num">0</span>) vertices.<span class="fn">emplace</span>(key, <span class="fn">Vertex</span>(key)); }</span>
 <span class="line">    <span class="kw">void</span> <span class="fn">addEdge</span>(string fromVert, string toVert, <span class="kw">int</span> weight = <span class="num">0</span>) {</span>
 <span class="line">        <span class="kw">if</span> (vertices.<span class="fn">count</span>(fromVert) == <span class="num">0</span>) <span class="fn">setVertex</span>(fromVert);</span>
 <span class="line">        <span class="kw">if</span> (vertices.<span class="fn">count</span>(toVert) == <span class="num">0</span>) <span class="fn">setVertex</span>(toVert);</span>
@@ -503,6 +665,30 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <span class="info-label">小提醒</span>
     本章後續所有演算法（BFS/DFS/Dijkstra/Prim）都建立在<strong>相鄰串列</strong>實作之上。Vertex 類別在不同節中會擴充不同欄位（如 <code>color</code>, <code>distance</code>, <code>previous</code>, <code>discovery_time</code>, <code>closing_time</code>），但底層結構不變。
   </div>
+
+<h3 id="dx-rep">講義完整範例：Graph 類別的使用畫面</h3>
+<div class="deck-extra">
+  <div class="dx-label">講義 08 · 建頂點、加邊、走訪相鄰串列</div>
+  <div class="pseudo-code" style="font-size:.8rem;"><span class="line"><span class="kw">#</span><span class="kw">include</span> <span class="kw">&lt;iostream&gt;</span><span class="kw"></span>
+<span class="line"></span><span class="kw">#</span><span class="kw">include</span> <span class="kw">"graph.hpp"</span><span class="com">   // Vertex + Graph（上面的完整列表）</span><span class="kw"></span>
+<span class="line"></span><span class="kw">using</span> <span class="kw">namespace</span> std;</span>
+<span class="line"> </span>
+<span class="line"><span class="kw">int</span> <span class="fn">main</span>() {</span>
+<span class="line">    Graph g;</span>
+<span class="line">    g.addEdge(<span class="str">"</span><span class="str">0</span><span class="str">"</span>,<span class="str">"</span><span class="str">1</span><span class="str">"</span>,<span class="num">5</span>); g.addEdge(<span class="str">"</span><span class="str">0</span><span class="str">"</span>,<span class="str">"</span><span class="str">5</span><span class="str">"</span>,<span class="num">2</span>); g.addEdge(<span class="str">"</span><span class="str">1</span><span class="str">"</span>,<span class="str">"</span><span class="str">2</span><span class="str">"</span>,<span class="num">4</span>);</span>
+<span class="line">    g.addEdge(<span class="str">"</span><span class="str">2</span><span class="str">"</span>,<span class="str">"</span><span class="str">3</span><span class="str">"</span>,<span class="num">9</span>); g.addEdge(<span class="str">"</span><span class="str">3</span><span class="str">"</span>,<span class="str">"</span><span class="str">4</span><span class="str">"</span>,<span class="num">7</span>); g.addEdge(<span class="str">"</span><span class="str">3</span><span class="str">"</span>,<span class="str">"</span><span class="str">5</span><span class="str">"</span>,<span class="num">3</span>);</span>
+<span class="line">    g.addEdge(<span class="str">"</span><span class="str">4</span><span class="str">"</span>,<span class="str">"</span><span class="str">0</span><span class="str">"</span>,<span class="num">1</span>); g.addEdge(<span class="str">"</span><span class="str">5</span><span class="str">"</span>,<span class="str">"</span><span class="str">4</span><span class="str">"</span>,<span class="num">8</span>); g.addEdge(<span class="str">"</span><span class="str">5</span><span class="str">"</span>,<span class="str">"</span><span class="str">2</span><span class="str">"</span>,<span class="num">1</span>);</span>
+<span class="line"> </span>
+<span class="line">    <span class="kw">for</span> (<span class="kw">auto</span>&amp; p : g.vertices)</span>
+<span class="line">        <span class="kw">for</span> (<span class="kw">auto</span>&amp; n : p.second.neighbors)</span>
+<span class="line">            cout &lt;&lt; <span class="str">"</span><span class="str">(</span><span class="str">"</span> &lt;&lt; p.first &lt;&lt; <span class="str">"</span><span class="str">,</span><span class="str">"</span> &lt;&lt; n.first &lt;&lt; <span class="str">"</span><span class="str">,</span><span class="str">"</span> &lt;&lt; n.second &lt;&lt; <span class="str">"</span><span class="str">) </span><span class="str">"</span>;</span>
+<span class="line">    cout &lt;&lt; endl;</span>
+<span class="line">    <span class="kw">return</span> <span class="num">0</span>;</span>
+<span class="line">}</span>
+<span class="line"> </span></div>
+  <div class="expected-out"><span class="eo-tag">預期輸出</span><pre>(0,1,5) (0,5,2) (1,2,4) (2,3,9) (3,4,7) (3,5,3) (4,0,1) (5,2,1) (5,4,8) </pre></div>
+  <p class="dx-note">每組 (from, to, weight) 對應一條有向邊。addEdge 會補上不存在的頂點；setVertex 對既有 key 是 no-op，不會清掉 edges/state。ordered map 查頂點為 O(log |V|)、查特定鄰邊為 O(log deg(v))。</p>
+</div>
 </section>
 
 
@@ -516,7 +702,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <div class="info-box">
     <span class="info-label">核心資料結構</span>
-    BFS 用一個 <strong>Queue（先進先出）</strong>決定下一個要造訪的頂點。每個頂點維護三個欄位：<code>color</code>（white/gray/black）、<code>distance</code>（到起點的最短距離）、<code>previous</code>（前驅，用來重建路徑）。
+    BFS 用 <strong>Queue（先進先出）</strong>決定下一個頂點。每次執行前先把所有頂點重設為 white、<code>distance = INT_MAX</code>（尚不可達）、空 previous；起點在 enqueue 前設為 gray 與 distance 0，避免被鄰居重複加入。
   </div>
 
   <div class="viz-layout">
@@ -560,21 +746,25 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="bfsCode"><span class="line" data-l="1"><span class="fn">bfs</span>(start):</span>
-<span class="line" data-l="2">    start-&gt;color = <span class="str">&quot;gray&quot;</span></span>
-<span class="line" data-l="3">    start-&gt;distance = <span class="num">0</span></span>
-<span class="line" data-l="4">    start-&gt;previous = <span class="num">NULL</span></span>
-<span class="line" data-l="5">    Queue queue</span>
-<span class="line" data-l="6">    queue.<span class="fn">enqueue</span>(start)</span>
-<span class="line" data-l="7">    <span class="kw">while</span> queue.<span class="fn">size</span>() &gt; <span class="num">0</span>:</span>
-<span class="line" data-l="8">        current = queue.<span class="fn">dequeue</span>()</span>
-<span class="line" data-l="9">        <span class="kw">for</span> nb : current-&gt;<span class="fn">getNeighbors</span>():</span>
-<span class="line" data-l="10">            <span class="kw">if</span> nb-&gt;color == <span class="str">&quot;white&quot;</span>:</span>
-<span class="line" data-l="11">                nb-&gt;color = <span class="str">&quot;gray&quot;</span></span>
-<span class="line" data-l="12">                nb-&gt;distance = current-&gt;distance + <span class="num">1</span></span>
-<span class="line" data-l="13">                nb-&gt;previous = current</span>
-<span class="line" data-l="14">                queue.<span class="fn">enqueue</span>(nb)</span>
-<span class="line" data-l="15">        current-&gt;color = <span class="str">&quot;black&quot;</span></span></div>
+        <div class="pseudo-code" id="bfsCode"><span class="line">#include &quot;pythonds3/cppds/graph.hpp&quot;</span>
+<span class="line">#include &lt;climits&gt;</span>
+<span class="line">#include &lt;queue&gt;</span>
+<span class="line">#include &lt;stdexcept&gt;</span>
+<span class="line" data-l="1"><span class="kw">void</span> <span class="fn">bfsPanel</span>(Graph&amp; g, <span class="kw">const</span> string&amp; startKey) {</span>
+<span class="line" data-l="2">    <span class="kw">if</span> (!g.vertices.<span class="fn">count</span>(startKey)) { <span class="kw">throw</span> invalid_argument(<span class="str">&quot;missing start&quot;</span>); } <span class="kw">for</span> (<span class="kw">auto</span>&amp; [key, v] : g.vertices) { v.color=<span class="str">&quot;white&quot;</span>; v.distance=INT_MAX; v.previous=<span class="str">&quot;&quot;</span>; }</span>
+<span class="line" data-l="3">    Vertex&amp; start = g.vertices.<span class="fn">at</span>(startKey); start.distance = <span class="num">0</span>;</span>
+<span class="line" data-l="4">    start.color = <span class="str">&quot;gray&quot;</span>;</span>
+<span class="line" data-l="5">    queue&lt;string&gt; pending;</span>
+<span class="line" data-l="6">    pending.<span class="fn">push</span>(startKey);</span>
+<span class="line" data-l="7">    <span class="kw">while</span> (!pending.<span class="fn">empty</span>()) {</span>
+<span class="line" data-l="8">        string currentKey = pending.<span class="fn">front</span>(); pending.<span class="fn">pop</span>();</span>
+<span class="line" data-l="9">        Vertex&amp; current = g.vertices.<span class="fn">at</span>(currentKey); <span class="kw">for</span> (<span class="kw">auto</span>&amp; [neighborKey, weight] : current.neighbors) {</span>
+<span class="line" data-l="10">            Vertex&amp; neighbor = g.vertices.<span class="fn">at</span>(neighborKey); <span class="kw">if</span> (neighbor.color == <span class="str">&quot;white&quot;</span>) {</span>
+<span class="line" data-l="11">                neighbor.color = <span class="str">&quot;gray&quot;</span>;</span>
+<span class="line" data-l="12">                neighbor.distance = current.distance + <span class="num">1</span>;</span>
+<span class="line" data-l="13">                neighbor.previous = currentKey;</span>
+<span class="line" data-l="14">                pending.<span class="fn">push</span>(neighborKey);</span>
+<span class="line" data-l="15">            } } current.color = <span class="str">&quot;black&quot;</span>; } }</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -595,6 +785,30 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <strong>(1) 最短路徑樹：</strong>沿著 <code>previous</code> 指標往回走，可以重建從任何可達頂點回到起點的<strong>最少邊數路徑</strong>。<br>
     <strong>(2) 一次解多個問題：</strong>一次 BFS 同時得到起點到「所有可達頂點」的最短距離，不需要重新跑 $|V|$ 次！
   </div>
+
+<h3 id="dx-bfs">講義完整範例：Word Ladder 的實際執行</h3>
+<div class="deck-extra">
+  <div class="dx-label">講義 08 · bfs + traverse：從 fool 爬到 sage</div>
+  <div class="pseudo-code" style="font-size:.8rem;"><span class="line"><span class="kw">#</span><span class="kw">include</span> <span class="kw">&lt;iostream&gt;</span><span class="kw"></span>
+<span class="line"></span><span class="kw">#</span><span class="kw">include</span> <span class="kw">"graph_algos.hpp"</span><span class="com">   // buildGraph + bfs + traverse</span><span class="kw"></span>
+<span class="line"></span><span class="kw">using</span> <span class="kw">namespace</span> std;</span>
+<span class="line"> </span>
+<span class="line"><span class="kw">int</span> <span class="fn">main</span>() {</span>
+<span class="line">    Graph g = buildGraph({<span class="str">"</span><span class="str">fool</span><span class="str">"</span>, <span class="str">"</span><span class="str">cool</span><span class="str">"</span>, <span class="str">"</span><span class="str">pool</span><span class="str">"</span>, <span class="str">"</span><span class="str">poll</span><span class="str">"</span>, <span class="str">"</span><span class="str">pole</span><span class="str">"</span>,</span>
+<span class="line">                         <span class="str">"</span><span class="str">pall</span><span class="str">"</span>, <span class="str">"</span><span class="str">fall</span><span class="str">"</span>, <span class="str">"</span><span class="str">fail</span><span class="str">"</span>, <span class="str">"</span><span class="str">foil</span><span class="str">"</span>, <span class="str">"</span><span class="str">foul</span><span class="str">"</span>,</span>
+<span class="line">                         <span class="str">"</span><span class="str">pope</span><span class="str">"</span>, <span class="str">"</span><span class="str">pale</span><span class="str">"</span>, <span class="str">"</span><span class="str">sale</span><span class="str">"</span>, <span class="str">"</span><span class="str">sage</span><span class="str">"</span>, <span class="str">"</span><span class="str">page</span><span class="str">"</span>});</span>
+<span class="line">    bfs(g, <span class="str">"</span><span class="str">fool</span><span class="str">"</span>);</span>
+<span class="line">    traverse(g, <span class="str">"</span><span class="str">sage</span><span class="str">"</span>);                 <span class="com">// 沿 previous 指標回溯</span>
+<span class="line"></span>    <span class="kw">for</span> (<span class="kw">auto</span>&amp; p : g.vertices)           <span class="com">// 單字（與 fool 的距離）</span>
+<span class="line"></span>        cout &lt;&lt; p.first &lt;&lt; <span class="str">"</span><span class="str">(</span><span class="str">"</span> &lt;&lt; p.second.distance &lt;&lt; <span class="str">"</span><span class="str">) </span><span class="str">"</span>;</span>
+<span class="line">    cout &lt;&lt; endl;</span>
+<span class="line">    <span class="kw">return</span> <span class="num">0</span>;</span>
+<span class="line">}</span>
+<span class="line"> </span></div>
+  <div class="expected-out"><span class="eo-tag">示範執行（回溯路徑可能因探索順序略異，長度必為 6 步）</span><pre>sage-&gt;sale-&gt;pale-&gt;pall-&gt;poll-&gt;pool-&gt;fool
+cool(1) fail(2) fall(3) foil(1) fool(0) foul(1) page(5) pale(4) pall(3) pole(3) poll(2) pool(1) pope(4) sage(6) sale(5)</pre></div>
+  <p class="dx-note">每次 bfs 前會先重設全部 color、previous，並把 distance 設為 INT_MAX；起點在 enqueue 前標 gray。traverse 印 previous 鏈，任何可達單字回溯到 fool 都是最短路。</p>
+</div>
 </section>
 
 
@@ -727,22 +941,24 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="dfsCode"><span class="line" data-l="1"><span class="fn">dfs</span>(graph):</span>
-<span class="line" data-l="2">    <span class="kw">for</span> v : graph: v-&gt;color = <span class="str">&quot;white&quot;</span></span>
-<span class="line" data-l="3">    time = <span class="num">0</span></span>
-<span class="line" data-l="4">    <span class="kw">for</span> v : graph:</span>
-<span class="line" data-l="5">        <span class="kw">if</span> v-&gt;color == <span class="str">&quot;white&quot;</span>:</span>
-<span class="line" data-l="6">            <span class="fn">dfsVisit</span>(v)</span>
-<span class="line" data-l="7"> </span>
-<span class="line" data-l="8"><span class="fn">dfsVisit</span>(u):</span>
-<span class="line" data-l="9">    u-&gt;color = <span class="str">&quot;gray&quot;</span></span>
-<span class="line" data-l="10">    time += <span class="num">1</span>; u-&gt;discovery = time</span>
-<span class="line" data-l="11">    <span class="kw">for</span> nb : u-&gt;<span class="fn">getNeighbors</span>():</span>
-<span class="line" data-l="12">        <span class="kw">if</span> nb-&gt;color == <span class="str">&quot;white&quot;</span>:</span>
-<span class="line" data-l="13">            nb-&gt;previous = u</span>
-<span class="line" data-l="14">            <span class="fn">dfsVisit</span>(nb)  <span class="com">// 遞迴</span></span>
-<span class="line" data-l="15">    u-&gt;color = <span class="str">&quot;black&quot;</span></span>
-<span class="line" data-l="16">    time += <span class="num">1</span>; u-&gt;closing = time</span></div>
+        <div class="pseudo-code" id="dfsCode"><span class="line">#include &quot;pythonds3/cppds/graph_algos.hpp&quot;</span>
+<span class="line"><span class="kw">void</span> dfsVisitPanel(DFSGraph&amp;, <span class="kw">const</span> string&amp;);</span>
+<span class="line" data-l="1"><span class="kw">void</span> <span class="fn">dfsPanel</span>(DFSGraph&amp; graph) {</span>
+<span class="line" data-l="2">    <span class="kw">for</span> (<span class="kw">auto</span>&amp; [key, v] : graph.vertices) { v.color=<span class="str">&quot;white&quot;</span>; v.previous=<span class="str">&quot;&quot;</span>; }</span>
+<span class="line" data-l="3">    graph.time = <span class="num">0</span>; graph.discovery.<span class="fn">clear</span>(); graph.closing.<span class="fn">clear</span>();</span>
+<span class="line" data-l="4">    <span class="kw">for</span> (<span class="kw">auto</span>&amp; [key, v] : graph.vertices) {</span>
+<span class="line" data-l="5">        <span class="kw">if</span> (v.color == <span class="str">&quot;white&quot;</span>) {</span>
+<span class="line" data-l="6">            <span class="fn">dfsVisitPanel</span>(graph, key);</span>
+<span class="line" data-l="7">        } } }</span>
+<span class="line" data-l="8"><span class="kw">void</span> <span class="fn">dfsVisitPanel</span>(DFSGraph&amp; graph, <span class="kw">const</span> string&amp; uKey) {</span>
+<span class="line" data-l="9">    graph.vertices.<span class="fn">at</span>(uKey).color = <span class="str">&quot;gray&quot;</span>;</span>
+<span class="line" data-l="10">    graph.discovery[uKey] = ++graph.time;</span>
+<span class="line" data-l="11">    <span class="kw">for</span> (<span class="kw">auto</span>&amp; [neighborKey, weight] : graph.vertices.<span class="fn">at</span>(uKey).neighbors) {</span>
+<span class="line" data-l="12">        <span class="kw">if</span> (graph.vertices.<span class="fn">at</span>(neighborKey).color == <span class="str">&quot;white&quot;</span>) {</span>
+<span class="line" data-l="13">            graph.vertices.<span class="fn">at</span>(neighborKey).previous = uKey;</span>
+<span class="line" data-l="14">            <span class="fn">dfsVisitPanel</span>(graph, neighborKey);</span>
+<span class="line" data-l="15">        } } graph.vertices.<span class="fn">at</span>(uKey).color = <span class="str">&quot;black&quot;</span>;</span>
+<span class="line" data-l="16">    graph.closing[uKey] = ++graph.time; }</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -764,6 +980,36 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     DFS：<code>dfsVisit(neighbor)</code>：立刻遞迴下去處理鄰居。<br>
     這個小差異就決定了「廣度優先 vs 深度優先」的搜尋順序！
   </div>
+
+<div class="deck-extra">
+  <div class="dx-label">講義 08 · DFSGraph：discovery / closing time 全表</div>
+  <div class="pseudo-code" style="font-size:.8rem;"><span class="line"><span class="kw">#</span><span class="kw">include</span> <span class="kw">&lt;iostream&gt;</span><span class="kw"></span>
+<span class="line"></span><span class="kw">#</span><span class="kw">include</span> <span class="kw">"graph_algos.hpp"</span><span class="com">   // DFSGraph（上面的完整列表）</span><span class="kw"></span>
+<span class="line"></span><span class="kw">using</span> <span class="kw">namespace</span> std;</span>
+<span class="line"> </span>
+<span class="line"><span class="kw">int</span> <span class="fn">main</span>() {</span>
+<span class="line">    DFSGraph g;</span>
+<span class="line">    g.addEdge(<span class="str">"</span><span class="str">A</span><span class="str">"</span>, <span class="str">"</span><span class="str">B</span><span class="str">"</span>);  g.addEdge(<span class="str">"</span><span class="str">B</span><span class="str">"</span>, <span class="str">"</span><span class="str">C</span><span class="str">"</span>);</span>
+<span class="line">    g.addEdge(<span class="str">"</span><span class="str">A</span><span class="str">"</span>, <span class="str">"</span><span class="str">D</span><span class="str">"</span>);  g.addEdge(<span class="str">"</span><span class="str">B</span><span class="str">"</span>, <span class="str">"</span><span class="str">D</span><span class="str">"</span>);</span>
+<span class="line">    g.addEdge(<span class="str">"</span><span class="str">D</span><span class="str">"</span>, <span class="str">"</span><span class="str">E</span><span class="str">"</span>);  g.addEdge(<span class="str">"</span><span class="str">E</span><span class="str">"</span>, <span class="str">"</span><span class="str">B</span><span class="str">"</span>);</span>
+<span class="line">    g.addEdge(<span class="str">"</span><span class="str">E</span><span class="str">"</span>, <span class="str">"</span><span class="str">F</span><span class="str">"</span>);  g.addEdge(<span class="str">"</span><span class="str">F</span><span class="str">"</span>, <span class="str">"</span><span class="str">C</span><span class="str">"</span>);</span>
+<span class="line">    g.dfs();</span>
+<span class="line">    printf(<span class="str">"</span><span class="str">%4s|%9s|%8s|%9s</span><span class="str">\n</span><span class="str">"</span>, <span class="str">"</span><span class="str">Key</span><span class="str">"</span>, <span class="str">"</span><span class="str">Discover</span><span class="str">"</span>, <span class="str">"</span><span class="str">Closing</span><span class="str">"</span>, <span class="str">"</span><span class="str">Previous</span><span class="str">"</span>);</span>
+<span class="line">    <span class="kw">for</span> (<span class="kw">auto</span>&amp; p : g.vertices)</span>
+<span class="line">        printf(<span class="str">"</span><span class="str">%4s|%9d|%8d|%9s</span><span class="str">\n</span><span class="str">"</span>, p.first.c_str(),</span>
+<span class="line">               g.discovery[p.first], g.closing[p.first], p.second.previous.c_str());</span>
+<span class="line">    <span class="kw">return</span> <span class="num">0</span>;</span>
+<span class="line">}</span>
+<span class="line"> </span></div>
+  <div class="expected-out"><span class="eo-tag">預期輸出</span><pre> Key| Discover| Closing| Previous
+   A|        1|      12|
+   B|        2|      11|        A
+   C|        3|       4|        B
+   D|        5|      10|        B
+   E|        6|       9|        D
+   F|        7|       8|        E</pre></div>
+  <p class="dx-note"><span id="dx-dfs"></span>對照括號性質：C 的 [3,4] 完全包在 B 的 [2,11] 裡（C 是 B 的子孫）；每個頂點的區間要嘛互相包住、要嘛完全分開，絕不交錯。E→B 那條邊指向還是灰色的祖先，是一條 back edge：它宣告圖裡有循環。</p>
+</div>
 </section>
 
 
@@ -774,6 +1020,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div class="section-number">PART 05 · 騎士巡邏</div>
   <h2>Knight's Tour：DFS + Warnsdorff 啟發式 <span class="sec-badge">cppds §9.11–9.14</span></h2>
   <p><strong>騎士巡邏</strong>：在 $n \times n$ 棋盤上，騎士能否走 $n^2 - 1$ 步、恰好造訪每格一次？這是 DFS 的經典應用：把每格當頂點、把合法走法當邊，問題變成「找出長度為 $n^2 - 1$ 的簡單路徑」。</p>
+
+  <p>在 $8\times8$ 棋盤上，adjacency map 儲存 336 條<strong>有向 adjacency arcs</strong>；每個合法移動的無向關係會以兩個方向儲存，所以等價於 168 條無向邊。</p>
 
   <div class="info-box warm">
     <span class="info-label">指數爆炸</span>
@@ -826,27 +1074,23 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code">
-<span class="line"><span class="fn">knightTour</span>(n, path, u, limit):</span>
-<span class="line">    u-&gt;color = <span class="str">&quot;gray&quot;</span></span>
-<span class="line">    path.<span class="fn">push_back</span>(u)</span>
-<span class="line">    <span class="kw">if</span> n &lt; limit:</span>
-<span class="line">        nbs = <span class="fn">orderByAvail</span>(u)  <span class="com">// Warnsdorff!</span></span>
-<span class="line">        done = <span class="num">false</span></span>
-<span class="line">        <span class="kw">for</span> nb : nbs:</span>
-<span class="line">            <span class="kw">if</span> nb-&gt;color == <span class="str">&quot;white&quot;</span>:</span>
-<span class="line">                done = <span class="fn">knightTour</span>(n+<span class="num">1</span>, path, nb, limit)</span>
-<span class="line">                <span class="kw">if</span> done: <span class="kw">break</span></span>
-<span class="line">        <span class="kw">if</span> !done:  <span class="com">// backtrack</span></span>
-<span class="line">            path.<span class="fn">pop_back</span>()</span>
-<span class="line">            u-&gt;color = <span class="str">&quot;white&quot;</span></span>
-<span class="line">        <span class="kw">return</span> done</span>
-<span class="line">    <span class="kw">return</span> <span class="num">true</span></span></div>
+        <div class="pseudo-code" id="knightCode"><span class="line">#include &quot;pythonds3/cppds/graph_algos.hpp&quot;</span>
+<span class="line"><span class="kw">bool</span> <span class="fn">knightTourPanel</span>(<span class="kw">int</span> n, vector&lt;string&gt;&amp; path, <span class="kw">const</span> string&amp; uKey, <span class="kw">int</span> limit, Graph&amp; g) {</span>
+<span class="line">    g.vertices.<span class="fn">at</span>(uKey).color = <span class="str">&quot;gray&quot;</span>;</span>
+<span class="line">    path.<span class="fn">push_back</span>(uKey);</span>
+<span class="line">    <span class="kw">if</span> (n &gt;= limit) <span class="kw">return</span> <span class="num">true</span>;</span>
+<span class="line">    <span class="kw">for</span> (<span class="kw">const</span> string&amp; neighborKey : <span class="fn">orderByAvail</span>(g, uKey)) {</span>
+<span class="line">        <span class="kw">if</span> (g.vertices.<span class="fn">at</span>(neighborKey).color == <span class="str">&quot;white&quot;</span> &amp;&amp;</span>
+<span class="line">            <span class="fn">knightTourPanel</span>(n + <span class="num">1</span>, path, neighborKey, limit, g)) <span class="kw">return</span> <span class="num">true</span>;</span>
+<span class="line">    }</span>
+<span class="line">    path.<span class="fn">pop_back</span>(); g.vertices.<span class="fn">at</span>(uKey).color = <span class="str">&quot;white&quot;</span>;</span>
+<span class="line">    <span class="kw">return</span> <span class="num">false</span>;</span>
+<span class="line">}</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
         <div class="ic-row"><span class="ic-label">純 DFS</span><span class="ic-value">$O(k^N)$</span></div>
-        <div class="ic-row"><span class="ic-label">Warnsdorff</span><span class="ic-value highlight">幾乎線性</span></div>
+        <div class="ic-row"><span class="ic-label">Warnsdorff</span><span class="ic-value highlight">啟發式；最壞仍指數</span></div>
         <div class="ic-row" style="border-top:1px solid var(--card-border);margin-top:.3rem;padding-top:.4rem;font-size:.74rem;color:var(--muted);">$N=n^2$, $k$≈分支因子</div>
       </div>
     </div>
@@ -905,27 +1149,27 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="dijCode"><span class="line" data-l="1"><span class="fn">dijkstra</span>(graph, start):</span>
-<span class="line" data-l="2">    PriorityQueue pq</span>
-<span class="line" data-l="3">    start-&gt;distance = <span class="num">0</span></span>
-<span class="line" data-l="4">    pq.<span class="fn">insert</span>({<span class="num">0</span>, start})</span>
-<span class="line" data-l="5">    set&lt;Vertex*&gt; visited</span>
-<span class="line" data-l="6">    <span class="kw">while</span> !pq.<span class="fn">isEmpty</span>():</span>
-<span class="line" data-l="7">        [d, u] = pq.<span class="fn">delete</span>()  <span class="com">// 取最小</span></span>
-<span class="line" data-l="8">        visited.<span class="fn">insert</span>(u)</span>
-<span class="line" data-l="9">        <span class="kw">for</span> v : u-&gt;<span class="fn">getNeighbors</span>():</span>
-<span class="line" data-l="10">            <span class="kw">if</span> visited.<span class="fn">count</span>(v): <span class="kw">continue</span></span>
-<span class="line" data-l="11">            newD = d + u-&gt;<span class="fn">weight</span>(v)</span>
-<span class="line" data-l="12">            <span class="kw">if</span> newD &lt; v-&gt;distance:</span>
-<span class="line" data-l="13">                v-&gt;distance = newD</span>
-<span class="line" data-l="14">                v-&gt;previous = u</span>
-<span class="line" data-l="15">                pq.<span class="fn">update</span>(v, newD)</span></div>
+        <div class="pseudo-code" id="dijCode"><span class="line">#include &quot;pythonds3/cppds/graph.hpp&quot;</span>
+<span class="line">#include &lt;climits&gt;</span><span class="line">#include &lt;functional&gt;</span><span class="line">#include &lt;queue&gt;</span><span class="line">#include &lt;stdexcept&gt;</span><span class="line">#include &lt;vector&gt;</span>
+<span class="line" data-l="1"><span class="kw">void</span> <span class="fn">dijkstraPanel</span>(Graph&amp; g, <span class="kw">const</span> string&amp; startKey) {</span>
+<span class="line" data-l="2">    <span class="kw">if</span> (!g.vertices.<span class="fn">count</span>(startKey)) { <span class="kw">throw</span> invalid_argument(<span class="str">&quot;missing start&quot;</span>); } priority_queue&lt;pair&lt;<span class="kw">int</span>,string&gt;, vector&lt;pair&lt;<span class="kw">int</span>,string&gt;&gt;, greater&lt;pair&lt;<span class="kw">int</span>,string&gt;&gt;&gt; pq;</span>
+<span class="line" data-l="3">    <span class="kw">for</span> (<span class="kw">auto</span>&amp; [key,v] : g.vertices) { v.distance=INT_MAX; v.previous=<span class="str">&quot;&quot;</span>; <span class="kw">for</span> (<span class="kw">auto</span>&amp; edge : v.neighbors) <span class="kw">if</span> (edge.second &lt; <span class="num">0</span>) <span class="kw">throw</span> invalid_argument(<span class="str">&quot;negative edge&quot;</span>); }</span>
+<span class="line" data-l="4">    g.vertices.<span class="fn">at</span>(startKey).distance = <span class="num">0</span>; pq.<span class="fn">push</span>({<span class="num">0</span>, startKey});</span>
+<span class="line" data-l="5">    <span class="kw">while</span> (!pq.<span class="fn">empty</span>()) {</span>
+<span class="line" data-l="6">        <span class="kw">auto</span> [distance, uKey] = pq.<span class="fn">top</span>(); pq.<span class="fn">pop</span>();</span>
+<span class="line" data-l="7">        <span class="kw">if</span> (distance &gt; g.vertices.<span class="fn">at</span>(uKey).distance) <span class="kw">continue</span>;</span>
+<span class="line" data-l="8">        <span class="kw">for</span> (<span class="kw">auto</span>&amp; [vKey, weight] : g.vertices.<span class="fn">at</span>(uKey).neighbors) {</span>
+<span class="line" data-l="9">            <span class="kw">int</span> newDistance = distance + weight;</span>
+<span class="line" data-l="10">            <span class="kw">if</span> (newDistance &lt; g.vertices.<span class="fn">at</span>(vKey).distance) {</span>
+<span class="line" data-l="11">                g.vertices.<span class="fn">at</span>(vKey).distance = newDistance;</span>
+<span class="line" data-l="12">                g.vertices.<span class="fn">at</span>(vKey).previous = uKey;</span>
+<span class="line" data-l="13">                pq.<span class="fn">push</span>({newDistance, vKey}); } } } }</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
         <div class="ic-row"><span class="ic-label">時間（heap）</span><span class="ic-value">$O((|V|{+}|E|)\log|V|)$</span></div>
-        <div class="ic-row"><span class="ic-label">建 PQ</span><span class="ic-value">$O(|V|)$</span></div>
-        <div class="ic-row"><span class="ic-label">邊鬆弛</span><span class="ic-value">$O(|E|\log|V|)$</span></div>
+        <div class="ic-row"><span class="ic-label">初始化 PQ</span><span class="ic-value">$O(1)$</span></div>
+        <div class="ic-row"><span class="ic-label">最多 entries</span><span class="ic-value">$O(|E|)$</span></div>
       </div>
     </div>
   </div>
@@ -934,7 +1178,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <span class="info-label">關鍵概念：邊鬆弛 (relaxation)</span>
     第 11–14 行稱為<strong>邊鬆弛</strong>：對 $u$ 的每個鄰居 $v$，檢查是否可以透過 $u$ 走到 $v$ 比目前已知更近：
     $$\text{new\_d} = d(u) + w(u,v),\quad \text{若 new\_d} < d(v)\text{，更新 } d(v) \text{ 並把 }u\text{ 設為 previous}.$$
-    每條邊最多鬆弛一次（因為頂點只會從 PQ 取出一次），所以總共 $O(|E|)$ 次鬆弛，配合 PQ 的 $O(\log|V|)$ 操作，總時間 $O((|V|+|E|)\log|V|)$。
+    本課程採 lazy priority queue：改善距離時直接 push 新 pair；舊 pair 出列時若距離較大就略過。最多 $O(|E|)$ 次 push/pop；簡單圖上 $\log|E|=O(\log|V|)$，總時間 $O((|V|+|E|)\log|V|)$。
   </div>
 
   <div class="info-box">
@@ -942,6 +1186,39 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     這是 PDF 上的標準範例（雙向邊）：頂點 $\{u, v, w, x, y, z\}$，邊權如圖所示。從 $u$ 出發，正確的最短路徑樹如下：<br>
     <code>u→v: 2</code>　<code>u→x: 1</code>　<code>u→y: 2 (經 x)</code>　<code>u→w: 3 (經 y)</code>　<code>u→z: 3 (經 y)</code>
   </div>
+
+<div class="deck-extra">
+  <div class="dx-label">講義 08 · dijkstra + findPath 的使用畫面</div>
+  <div class="pseudo-code" style="font-size:.8rem;"><span class="line"><span class="kw">#</span><span class="kw">include</span> <span class="kw">&lt;iostream&gt;</span><span class="kw"></span>
+<span class="line"></span><span class="kw">#</span><span class="kw">include</span> <span class="kw">"graph_algos.hpp"</span><span class="com">   // dijkstra + findPath</span><span class="kw"></span>
+<span class="line"></span><span class="kw">using</span> <span class="kw">namespace</span> std;</span>
+<span class="line"> </span>
+<span class="line"><span class="kw">int</span> <span class="fn">main</span>() {</span>
+<span class="line">    Graph g;   <span class="com">// 講義的 6 頂點範例圖（雙向邊）</span>
+<span class="line"></span>    g.addEdge(<span class="str">"</span><span class="str">u</span><span class="str">"</span>,<span class="str">"</span><span class="str">v</span><span class="str">"</span>,<span class="num">2</span>); g.addEdge(<span class="str">"</span><span class="str">v</span><span class="str">"</span>,<span class="str">"</span><span class="str">u</span><span class="str">"</span>,<span class="num">2</span>); g.addEdge(<span class="str">"</span><span class="str">v</span><span class="str">"</span>,<span class="str">"</span><span class="str">w</span><span class="str">"</span>,<span class="num">3</span>); g.addEdge(<span class="str">"</span><span class="str">w</span><span class="str">"</span>,<span class="str">"</span><span class="str">v</span><span class="str">"</span>,<span class="num">3</span>);</span>
+<span class="line">    g.addEdge(<span class="str">"</span><span class="str">w</span><span class="str">"</span>,<span class="str">"</span><span class="str">z</span><span class="str">"</span>,<span class="num">5</span>); g.addEdge(<span class="str">"</span><span class="str">z</span><span class="str">"</span>,<span class="str">"</span><span class="str">w</span><span class="str">"</span>,<span class="num">5</span>); g.addEdge(<span class="str">"</span><span class="str">u</span><span class="str">"</span>,<span class="str">"</span><span class="str">x</span><span class="str">"</span>,<span class="num">1</span>); g.addEdge(<span class="str">"</span><span class="str">x</span><span class="str">"</span>,<span class="str">"</span><span class="str">u</span><span class="str">"</span>,<span class="num">1</span>);</span>
+<span class="line">    g.addEdge(<span class="str">"</span><span class="str">u</span><span class="str">"</span>,<span class="str">"</span><span class="str">w</span><span class="str">"</span>,<span class="num">5</span>); g.addEdge(<span class="str">"</span><span class="str">w</span><span class="str">"</span>,<span class="str">"</span><span class="str">u</span><span class="str">"</span>,<span class="num">5</span>); g.addEdge(<span class="str">"</span><span class="str">x</span><span class="str">"</span>,<span class="str">"</span><span class="str">v</span><span class="str">"</span>,<span class="num">2</span>); g.addEdge(<span class="str">"</span><span class="str">v</span><span class="str">"</span>,<span class="str">"</span><span class="str">x</span><span class="str">"</span>,<span class="num">2</span>);</span>
+<span class="line">    g.addEdge(<span class="str">"</span><span class="str">x</span><span class="str">"</span>,<span class="str">"</span><span class="str">w</span><span class="str">"</span>,<span class="num">3</span>); g.addEdge(<span class="str">"</span><span class="str">w</span><span class="str">"</span>,<span class="str">"</span><span class="str">x</span><span class="str">"</span>,<span class="num">3</span>); g.addEdge(<span class="str">"</span><span class="str">x</span><span class="str">"</span>,<span class="str">"</span><span class="str">y</span><span class="str">"</span>,<span class="num">1</span>); g.addEdge(<span class="str">"</span><span class="str">y</span><span class="str">"</span>,<span class="str">"</span><span class="str">x</span><span class="str">"</span>,<span class="num">1</span>);</span>
+<span class="line">    g.addEdge(<span class="str">"</span><span class="str">y</span><span class="str">"</span>,<span class="str">"</span><span class="str">w</span><span class="str">"</span>,<span class="num">1</span>); g.addEdge(<span class="str">"</span><span class="str">w</span><span class="str">"</span>,<span class="str">"</span><span class="str">y</span><span class="str">"</span>,<span class="num">1</span>); g.addEdge(<span class="str">"</span><span class="str">y</span><span class="str">"</span>,<span class="str">"</span><span class="str">z</span><span class="str">"</span>,<span class="num">1</span>); g.addEdge(<span class="str">"</span><span class="str">z</span><span class="str">"</span>,<span class="str">"</span><span class="str">y</span><span class="str">"</span>,<span class="num">1</span>);</span>
+<span class="line"> </span>
+<span class="line">    dijkstra(g, <span class="str">"</span><span class="str">u</span><span class="str">"</span>);</span>
+<span class="line">    <span class="kw">for</span> (<span class="kw">auto</span>&amp; p : g.vertices)   <span class="com">// 頂點: 距離 (previous)</span>
+<span class="line"></span>        cout &lt;&lt; p.first &lt;&lt; <span class="str">"</span><span class="str">: </span><span class="str">"</span> &lt;&lt; p.second.distance</span>
+<span class="line">             &lt;&lt; <span class="str">"</span><span class="str"> (</span><span class="str">"</span> &lt;&lt; p.second.previous &lt;&lt; <span class="str">"</span><span class="str">)</span><span class="str">"</span> &lt;&lt; endl;</span>
+<span class="line">    <span class="kw">for</span> (string v : findPath(g, <span class="str">"</span><span class="str">u</span><span class="str">"</span>, <span class="str">"</span><span class="str">z</span><span class="str">"</span>)) cout &lt;&lt; v &lt;&lt; <span class="str">"</span><span class="str"> </span><span class="str">"</span>;</span>
+<span class="line">    cout &lt;&lt; endl;</span>
+<span class="line">    <span class="kw">return</span> <span class="num">0</span>;</span>
+<span class="line">}</span>
+<span class="line"> </span></div>
+  <div class="expected-out"><span class="eo-tag">預期輸出</span><pre>u: 0 ()
+v: 2 (u)
+w: 3 (y)
+x: 1 (u)
+y: 2 (x)
+z: 3 (y)
+u x y z </pre></div>
+  <p class="dx-note"><span id="dx-dij"></span>w 的直達候選是 5，最後下修為 3（u→x→y→w）。lazy PQ 會 push 新的 (3,w)，舊的 (5,w) 出列時因 stale 被略過；不需要在 heap 中搜尋並 decrease-key。u 到 z 的最短路是 u x y z，總長 3。</p>
+</div>
 </section>
 
 
@@ -963,6 +1240,11 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <span class="info-label">Prim 是貪婪演算法</span>
     Prim 每一步都選<strong>「安全邊（safe edge）」</strong>：一條跨越「已加入樹的頂點集合」與「尚未加入的頂點」的<strong>最小權重邊</strong>。每次加入一條，直到所有頂點都進樹為止。<br>
     （在實作中我們用 PQ 維護「每個未加入頂點到已加入集合的最小距離」，跟 Dijkstra 結構非常類似！）
+  </div>
+
+  <div class="info-box warm">
+    <span class="info-label">連通性前提</span>
+    不連通圖不存在涵蓋所有頂點的 spanning tree。課程的 <code>void prim()</code> 在 PQ 清空後檢查已入樹頂點數；若不足便丟出 <code>invalid_argument</code>，不會靜默回傳 forest。
   </div>
 
   <div class="viz-layout">
@@ -1003,20 +1285,21 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="primCode"><span class="line" data-l="1"><span class="fn">prim</span>(graph, start):</span>
-<span class="line" data-l="2">    <span class="kw">for</span> v : graph:</span>
-<span class="line" data-l="3">        v-&gt;distance = ∞</span>
-<span class="line" data-l="4">        v-&gt;previous = <span class="num">NULL</span></span>
-<span class="line" data-l="5">    start-&gt;distance = <span class="num">0</span></span>
-<span class="line" data-l="6">    PriorityQueue pq(graph)</span>
-<span class="line" data-l="7">    <span class="kw">while</span> !pq.<span class="fn">isEmpty</span>():</span>
-<span class="line" data-l="8">        [d, u] = pq.<span class="fn">delete</span>()</span>
-<span class="line" data-l="9">        <span class="kw">for</span> v : u-&gt;<span class="fn">getNeighbors</span>():</span>
-<span class="line" data-l="10">            newD = u-&gt;<span class="fn">weight</span>(v)  <span class="com">// 注意：只看單邊權！</span></span>
-<span class="line" data-l="11">            <span class="kw">if</span> pq.<span class="fn">contains</span>(v) &amp;&amp; newD &lt; v-&gt;distance:</span>
-<span class="line" data-l="12">                v-&gt;previous = u</span>
-<span class="line" data-l="13">                v-&gt;distance = newD</span>
-<span class="line" data-l="14">                pq.<span class="fn">update</span>(v, newD)</span></div>
+        <div class="pseudo-code" id="primCode"><span class="line">#include &quot;pythonds3/cppds/graph.hpp&quot;</span><span class="line">#include &lt;climits&gt;</span><span class="line">#include &lt;functional&gt;</span><span class="line">#include &lt;queue&gt;</span><span class="line">#include &lt;set&gt;</span><span class="line">#include &lt;stdexcept&gt;</span><span class="line">#include &lt;vector&gt;</span>
+<span class="line" data-l="1"><span class="kw">void</span> <span class="fn">primPanel</span>(Graph&amp; g, <span class="kw">const</span> string&amp; startKey) {</span>
+<span class="line" data-l="2">    <span class="kw">if</span> (!g.vertices.<span class="fn">count</span>(startKey)) { <span class="kw">throw</span> invalid_argument(<span class="str">&quot;missing start&quot;</span>); } priority_queue&lt;pair&lt;<span class="kw">int</span>,string&gt;, vector&lt;pair&lt;<span class="kw">int</span>,string&gt;&gt;, greater&lt;pair&lt;<span class="kw">int</span>,string&gt;&gt;&gt; pq; set&lt;string&gt; inTree;</span>
+<span class="line" data-l="3">    <span class="kw">for</span> (<span class="kw">auto</span>&amp; [key,v] : g.vertices) v.distance = INT_MAX;</span>
+<span class="line" data-l="4">    <span class="kw">for</span> (<span class="kw">auto</span>&amp; [key,v] : g.vertices) v.previous = <span class="str">&quot;&quot;</span>;</span>
+<span class="line" data-l="5">    g.vertices.<span class="fn">at</span>(startKey).distance = <span class="num">0</span>;</span>
+<span class="line" data-l="6">    pq.<span class="fn">push</span>({<span class="num">0</span>, startKey});</span>
+<span class="line" data-l="7">    <span class="kw">while</span> (!pq.<span class="fn">empty</span>()) {</span>
+<span class="line" data-l="8">        <span class="kw">auto</span> [key,uKey]=pq.<span class="fn">top</span>(); pq.<span class="fn">pop</span>(); <span class="kw">if</span> (inTree.<span class="fn">count</span>(uKey)) <span class="kw">continue</span>; inTree.<span class="fn">insert</span>(uKey);</span>
+<span class="line" data-l="9">        <span class="kw">for</span> (<span class="kw">auto</span>&amp; [vKey,weight] : g.vertices.<span class="fn">at</span>(uKey).neighbors) {</span>
+<span class="line" data-l="10">            <span class="kw">int</span> newDistance = weight;</span>
+<span class="line" data-l="11">            <span class="kw">if</span> (!inTree.<span class="fn">count</span>(vKey) &amp;&amp; newDistance &lt; g.vertices.<span class="fn">at</span>(vKey).distance) {</span>
+<span class="line" data-l="12">                g.vertices.<span class="fn">at</span>(vKey).previous = uKey;</span>
+<span class="line" data-l="13">                g.vertices.<span class="fn">at</span>(vKey).distance = newDistance;</span>
+<span class="line" data-l="14">                pq.<span class="fn">push</span>({newDistance,vKey}); } } } <span class="kw">if</span> (inTree.<span class="fn">size</span>() != g.vertices.<span class="fn">size</span>()) <span class="kw">throw</span> invalid_argument(<span class="str">&quot;disconnected graph&quot;</span>); }</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -1032,6 +1315,33 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     <strong>Prim：</strong> <code>newD = w(u,v)</code>：只看 u 到 v 的<strong>單一邊權</strong>。<br>
     為什麼？因為 MST 不在乎「離起點多遠」，只在乎「下一個要連入樹的最便宜邊」。
   </div>
+
+<div class="deck-extra">
+  <div class="dx-label">講義 08 · prim 的使用畫面：長出 MST</div>
+  <div class="pseudo-code" style="font-size:.8rem;"><span class="line"><span class="kw">#</span><span class="kw">include</span> <span class="kw">&lt;iostream&gt;</span><span class="kw"></span>
+<span class="line"></span><span class="kw">#</span><span class="kw">include</span> <span class="kw">"graph_algos.hpp"</span><span class="com">   // prim</span><span class="kw"></span>
+<span class="line"></span><span class="kw">using</span> <span class="kw">namespace</span> std;</span>
+<span class="line"> </span>
+<span class="line"><span class="kw">int</span> <span class="fn">main</span>() {</span>
+<span class="line">    Graph g;   <span class="com">// 講義的廣播範例圖（雙向邊）</span>
+<span class="line"></span>    g.addEdge(<span class="str">"</span><span class="str">A</span><span class="str">"</span>,<span class="str">"</span><span class="str">B</span><span class="str">"</span>,<span class="num">2</span>); g.addEdge(<span class="str">"</span><span class="str">B</span><span class="str">"</span>,<span class="str">"</span><span class="str">A</span><span class="str">"</span>,<span class="num">2</span>); g.addEdge(<span class="str">"</span><span class="str">A</span><span class="str">"</span>,<span class="str">"</span><span class="str">C</span><span class="str">"</span>,<span class="num">3</span>); g.addEdge(<span class="str">"</span><span class="str">C</span><span class="str">"</span>,<span class="str">"</span><span class="str">A</span><span class="str">"</span>,<span class="num">3</span>);</span>
+<span class="line">    g.addEdge(<span class="str">"</span><span class="str">B</span><span class="str">"</span>,<span class="str">"</span><span class="str">D</span><span class="str">"</span>,<span class="num">1</span>); g.addEdge(<span class="str">"</span><span class="str">D</span><span class="str">"</span>,<span class="str">"</span><span class="str">B</span><span class="str">"</span>,<span class="num">1</span>); g.addEdge(<span class="str">"</span><span class="str">B</span><span class="str">"</span>,<span class="str">"</span><span class="str">C</span><span class="str">"</span>,<span class="num">1</span>); g.addEdge(<span class="str">"</span><span class="str">C</span><span class="str">"</span>,<span class="str">"</span><span class="str">B</span><span class="str">"</span>,<span class="num">1</span>);</span>
+<span class="line">    g.addEdge(<span class="str">"</span><span class="str">B</span><span class="str">"</span>,<span class="str">"</span><span class="str">E</span><span class="str">"</span>,<span class="num">4</span>); g.addEdge(<span class="str">"</span><span class="str">E</span><span class="str">"</span>,<span class="str">"</span><span class="str">B</span><span class="str">"</span>,<span class="num">4</span>); g.addEdge(<span class="str">"</span><span class="str">D</span><span class="str">"</span>,<span class="str">"</span><span class="str">E</span><span class="str">"</span>,<span class="num">1</span>); g.addEdge(<span class="str">"</span><span class="str">E</span><span class="str">"</span>,<span class="str">"</span><span class="str">D</span><span class="str">"</span>,<span class="num">1</span>);</span>
+<span class="line">    g.addEdge(<span class="str">"</span><span class="str">C</span><span class="str">"</span>,<span class="str">"</span><span class="str">F</span><span class="str">"</span>,<span class="num">5</span>); g.addEdge(<span class="str">"</span><span class="str">F</span><span class="str">"</span>,<span class="str">"</span><span class="str">C</span><span class="str">"</span>,<span class="num">5</span>); g.addEdge(<span class="str">"</span><span class="str">E</span><span class="str">"</span>,<span class="str">"</span><span class="str">F</span><span class="str">"</span>,<span class="num">1</span>); g.addEdge(<span class="str">"</span><span class="str">F</span><span class="str">"</span>,<span class="str">"</span><span class="str">E</span><span class="str">"</span>,<span class="num">1</span>);</span>
+<span class="line">    g.addEdge(<span class="str">"</span><span class="str">F</span><span class="str">"</span>,<span class="str">"</span><span class="str">G</span><span class="str">"</span>,<span class="num">1</span>); g.addEdge(<span class="str">"</span><span class="str">G</span><span class="str">"</span>,<span class="str">"</span><span class="str">F</span><span class="str">"</span>,<span class="num">1</span>);</span>
+<span class="line"> </span>
+<span class="line">    prim(g, <span class="str">"</span><span class="str">A</span><span class="str">"</span>);</span>
+<span class="line">    cout &lt;&lt; <span class="str">"</span><span class="str">MST edges: </span><span class="str">"</span>;</span>
+<span class="line">    <span class="kw">for</span> (<span class="kw">auto</span>&amp; p : g.vertices)</span>
+<span class="line">        <span class="kw">if</span> (p.second.previous != <span class="str">"</span><span class="str">"</span>)</span>
+<span class="line">            cout &lt;&lt; <span class="str">"</span><span class="str">(</span><span class="str">"</span> &lt;&lt; p.second.previous &lt;&lt; <span class="str">"</span><span class="str">,</span><span class="str">"</span> &lt;&lt; p.first &lt;&lt; <span class="str">"</span><span class="str">) </span><span class="str">"</span>;</span>
+<span class="line">    cout &lt;&lt; endl;</span>
+<span class="line">    <span class="kw">return</span> <span class="num">0</span>;</span>
+<span class="line">}</span>
+<span class="line"> </span></div>
+  <div class="expected-out"><span class="eo-tag">預期輸出</span><pre>MST edges: (A,B) (B,C) (B,D) (D,E) (E,F) (F,G) </pre></div>
+  <p class="dx-note"><span id="dx-prm"></span>六條邊總權重 7。每次選的是跨越「目前樹／樹外頂點」之 cut 的最小權重 safe edge。若圖不連通，課程 void prim() 會丟出 invalid_argument，不會靜默回傳 forest。</p>
+</div>
 </section>
 
 
@@ -1040,8 +1350,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="topsort">
   <div class="section-number">PART 08 · 拓撲排序</div>
-  <h2>拓撲排序：把 DAG 攤平成一條合法的待辦順序 <span class="sec-badge">cppds §9.17 · 講義補充</span></h2>
-  <p style="font-size:.88rem;color:var(--muted);">課堂投影片跳過本節（RISE skip，講義標 Optional）：屬自學補充。</p>
+  <h2>拓撲排序：把 DAG 攤平成一條合法的待辦順序 <span class="sec-badge">cppds §9.17 · 官方選讀</span></h2>
+  <p style="font-size:.88rem;color:var(--muted);">這是 cppds 正文章節；課程標為 Optional，但保留完整可見摘要供自學。</p>
   <p>講義用煎鬆餅開場：食譜很簡單（1 顆蛋、1 杯鬆餅粉、1 匙油、3/4 杯牛奶），
   難的是<strong>先做哪一步</strong>。加熱煎鍋和打蛋都可以先做，但「倒麵糊」一定要等鍋熱了、糊攪好了。
   把每個步驟當頂點、「必須先做」當有向邊，就得到一張 <strong>DAG</strong>（有向無環圖）。
@@ -1062,6 +1372,9 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <div class="controls-bar">
           <button class="btn btn-play" onclick="tsRunDFS()">▶ ① 跑 DFS 標 closing time</button>
           <button class="btn btn-step" onclick="tsOrder()">② 依 closing 遞減排出順序</button>
+          <button class="btn" onclick="tsPlayer &amp;&amp; tsPlayer.step()">→ 單步</button>
+          <button class="btn" onclick="tsPlayer &amp;&amp; tsPlayer.toggle(this)">⏸ 暫停</button>
+          <span class="mono" style="font-size:.8rem;color:var(--muted);">速度 <input id="tsSpeed" type="range" min="150" max="1200" value="550" style="vertical-align:middle;"></span>
           <button class="btn btn-reset" onclick="tsReset()">↺ 重置</button>
         </div>
         <div class="mono" id="tsOrderOut" style="font-size:.85rem;line-height:1.9;min-height:34px;padding:.4rem .2rem;"></div>
@@ -1104,8 +1417,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="scc">
   <div class="section-number">PART 09 · 強連通元件</div>
-  <h2>強連通元件（SCC）：找出「彼此都到得了」的頂點群 <span class="sec-badge">cppds §9.18 · 講義補充</span></h2>
-  <p style="font-size:.88rem;color:var(--muted);">課堂投影片跳過本節（RISE skip，講義標 Optional）：屬自學補充。</p>
+  <h2>強連通元件（SCC）：找出「彼此都到得了」的頂點群 <span class="sec-badge">cppds §9.18 · 官方選讀</span></h2>
+  <p style="font-size:.88rem;color:var(--muted);">這是 cppds 正文章節；課程標為 Optional，但保留完整可見摘要供自學。</p>
   <p>把全球資訊網當成一張超大的有向圖：網頁是頂點、超連結是邊。Google 這類搜尋引擎正是在這張圖上做演算法。
   觀察這種圖會發現：內容相近的網站常常<strong>互相連來連去</strong>，形成高度互連的群集。
   抓出這種群集的工具就是<strong>強連通元件</strong>演算法。
@@ -1134,6 +1447,9 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
           <button class="btn btn-play" onclick="sccStep1()">▶ ① DFS on G</button>
           <button class="btn btn-step" onclick="sccStep2()">② 轉置成 G&#7488;</button>
           <button class="btn btn-step" onclick="sccStep3()">③ G&#7488; 上依 closing 遞減 DFS</button>
+          <button class="btn" onclick="sccPlayer &amp;&amp; sccPlayer.step()">→ 單步</button>
+          <button class="btn" onclick="sccPlayer &amp;&amp; sccPlayer.toggle(this)">⏸ 暫停</button>
+          <span class="mono" style="font-size:.8rem;color:var(--muted);">速度 <input id="sccSpeed" type="range" min="150" max="1200" value="550" style="vertical-align:middle;"></span>
           <button class="btn btn-reset" onclick="sccReset()">↺ 重置</button>
         </div>
         <div class="mono" id="sccOut" style="font-size:.85rem;line-height:1.9;min-height:34px;padding:.4rem .2rem;"></div>
@@ -1178,13 +1494,13 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <div class="quiz-box">
     <div class="quiz-label">EXERCISE 1 · Dijkstra 與負邊權</div>
-    <p>下列為一個含<strong>負邊權</strong>的有向加權圖。如果使用 Dijkstra 演算法（且<strong>會檢查 visited 節點</strong>，已造訪不再更新），從 A 出發走到 D，最後得到的路徑會是？</p>
+    <p>下列圖含負邊權。傳給課程的 <code>dijkstra(g, "A")</code> 時會發生什麼事？</p>
     <div class="graph-canvas" id="canvas-ex1" style="height:380px;"></div>
     <div class="quiz-options" id="ex1Options">
-      <div class="quiz-opt" data-correct="true"  onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> A → B → D</div>
-      <div class="quiz-opt" data-correct="false" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> A → C → D</div>
-      <div class="quiz-opt" data-correct="false" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> A → E → G → D</div>
-      <div class="quiz-opt" data-correct="false" onclick="quizCheck('ex1', this)"><span class="opt-letter">(D)</span> A → C → E → G → D</div>
+      <div class="quiz-opt" data-correct="false" onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> 回傳 A → B → D</div>
+      <div class="quiz-opt" data-correct="false" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> 回傳 A → C → D</div>
+      <div class="quiz-opt" data-correct="false" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> 自動刪除負邊後繼續</div>
+      <div class="quiz-opt" data-correct="true"  onclick="quizCheck('ex1', this)"><span class="opt-letter">(D)</span> 在 PQ traversal 前丟出 invalid_argument</div>
     </div>
     <div class="quiz-feedback" id="ex1Feedback"></div>
   </div>
@@ -1248,7 +1564,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <td>+ Warnsdorff 啟發式</td>
         <td>同上</td>
         <td>同上</td>
-        <td>幾乎線性（實務）</td>
+        <td>啟發式；最壞仍 $O(k^N)$</td>
         <td>沒有理論保證</td>
       </tr>
       <tr>
@@ -1310,6 +1626,83 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   </div>
 </section>
 
+<section id="bankquiz">
+  <div class="section-number">QUIZ · 自我檢測</div>
+  <h2>自我檢測：圖演算法 <span class="sec-badge">課程題庫 ch8 · 6 題</span></h2>
+  <p>題目取自課程題庫（已譯為繁體中文），每個選項都有解說：選錯也點開看看為什麼錯。全對之後再往下翻詞彙卡。</p>
+  <div class="sq-item">
+    <div class="sq-q"><span class="sq-num">Q1.</span>為什麼廣度優先搜尋（BFS）在無權重圖上保證找到最短路徑？</div>
+    <div class="sq-opts">
+      <button class="sq-opt" data-c="1" data-fb="正確！BFS 像同心圓一層一層往外擴散，第一次碰到目標時，走的必然是最短的那條路徑。">它會先探索完距離起點 k 的所有頂點，才前進到距離 k+1 的頂點。</button>
+      <button class="sq-opt" data-c="0" data-fb="不對。BFS 通常用在無權重圖，所有邊視為等價。">它總是先選數值權重最小的邊。</button>
+      <button class="sq-opt" data-c="0" data-fb="不對。BFS 不做長度剪枝，它只是一層一層把所有可能都走過。">它用貪婪策略剪掉太長的路徑。</button>
+      <button class="sq-opt" data-c="0" data-fb="不對。頂點標黑只代表它的鄰居都探索完了。">它只在最短路徑確認後才把頂點標成黑色。</button>
+    </div>
+    <div class="sq-fb"></div>
+  </div>
+  <div class="sq-item">
+    <div class="sq-q"><span class="sq-num">Q2.</span>廣度優先搜尋（BFS）與深度優先搜尋（DFS）在「追蹤下一個要探索的頂點」上，主要的結構差異是什麼？</div>
+    <div class="sq-opts">
+      <button class="sq-opt" data-c="0" data-fb="不對。剛好相反。">BFS 用堆疊，DFS 用佇列。</button>
+      <button class="sq-opt" data-c="1" data-fb="正確！BFS 用先進先出的佇列維持逐層搜尋的順序；DFS 用後進先出的堆疊（遞迴呼叫堆疊就是現成的）。">BFS 用佇列逐層探索，DFS 用堆疊（常透過遞迴）盡量往深處走。</button>
+      <button class="sq-opt" data-c="0" data-fb="不對。優先佇列是 Dijkstra、Prim 這類要處理權重的演算法在用的。">兩者都必須用優先佇列才能保證正確的搜尋順序。</button>
+      <button class="sq-opt" data-c="0" data-fb="不對。兩者都可能用 map 或 set 記錄已造訪節點；核心差異在排程探索用的是佇列還是堆疊。">BFS 用 map 追蹤頂點，DFS 只用簡單的 vector。</button>
+    </div>
+    <div class="sq-fb"></div>
+  </div>
+  <div class="sq-item">
+    <div class="sq-q"><span class="sq-num">Q3.</span>下列哪一項是 Dijkstra 演算法的已知限制或特性？</div>
+    <div class="sq-opts">
+      <button class="sq-opt" data-c="0" data-fb="不對。Dijkstra 要求所有邊權重非負；零權重邊可以，但負邊會破壞貪婪證明。">它能正確處理含負權重邊的圖。</button>
+      <button class="sq-opt" data-c="1" data-fb="正確！lazy C++ 版本反覆 pop 最小候選距離，並略過被後續改善取代的 stale entries。">它是疊代式演算法，能給出單一起點到所有可達頂點的最短路徑。</button>
+      <button class="sq-opt" data-c="0" data-fb="不對。複雜度是 O((V + E) log V)，跟頂點數與邊數都有關。">它的時間複雜度與圖的邊數無關。</button>
+      <button class="sq-opt" data-c="0" data-fb="不對。要讓 Dijkstra 在路由上運作，每台路由器都得有完整的網路地圖。">用在路由環境時，它不需要完整的網路地圖。</button>
+    </div>
+    <div class="sq-fb"></div>
+  </div>
+  <div class="sq-item">
+    <div class="sq-q"><span class="sq-num">Q4.</span>關於圖的實作方式，下列哪個敘述符合教材內容？</div>
+    <div class="sq-opts">
+      <button class="sq-opt" data-c="0" data-fb="不對。講義指出稀疏圖用相鄰矩陣很浪費：大多數格子是空的，卻仍占 V² 的空間。">相鄰矩陣是表示稀疏圖最省空間的方式。</button>
+      <button class="sq-opt" data-c="1" data-fb="正確！相鄰串列只儲存實際存在的連接，能緊湊地表示稀疏圖。">對連接稀疏的圖來說，相鄰串列更省空間。</button>
+      <button class="sq-opt" data-c="0" data-fb="不對。矩陣實作裡每個「可能的邊」都占一格，就算權重是 0 或無限大也一樣。">相鄰矩陣中，兩頂點沒有相連就不會配置那一格的記憶體。</button>
+      <button class="sq-opt" data-c="0" data-fb="不對。矩陣得掃完整條長度 V 的列；串列只要走實際存在的鄰居。">找出某頂點的所有鄰居，相鄰矩陣比相鄰串列快。</button>
+    </div>
+    <div class="sq-fb"></div>
+  </div>
+  <div class="sq-item">
+    <div class="sq-q"><span class="sq-num">Q5.</span>Prim 演算法建最小生成樹（MST）時，什麼是「安全邊」（safe edge）？</div>
+    <div class="sq-opts">
+      <button class="sq-opt" data-c="0" data-fb="不對。Prim 的 safe edge 必須是跨越目前 tree cut 的最小權重邊。">任何加入目前的樹之後不會形成循環的邊。</button>
+      <button class="sq-opt" data-c="1" data-fb="正確！這正是 Prim 使用 cut property 做出的安全貪婪選擇。">跨越樹內與樹外頂點之 cut 的最小權重邊。</button>
+      <button class="sq-opt" data-c="0" data-fb="不對。演算法看的是目前邊界上絕對最小權重的連接，不是平均值。">權重低於全圖平均邊權重的邊。</button>
+      <button class="sq-opt" data-c="0" data-fb="不對。Prim 跟 DFS 是不同的演算法，它靠權重決定下一條邊。">對圖做深度優先搜尋時最先遇到的邊。</button>
+    </div>
+    <div class="sq-fb"></div>
+  </div>
+  <div class="sq-item">
+    <div class="sq-q"><span class="sq-num">Q6.</span>課程的 prim(g, start) 遇到不連通圖時會怎麼做？</div>
+    <div class="sq-opts">
+      <button class="sq-opt" data-c="0" data-fb="不對。這是另一種契約；本函式要求一棵涵蓋所有頂點的 spanning tree。">安靜地回傳 minimum spanning forest。</button>
+      <button class="sq-opt" data-c="0" data-fb="不對。Prim 只能選圖中既有的邊。">自行加入不存在的邊來連接 components。</button>
+      <button class="sq-opt" data-c="1" data-fb="正確！不連通圖沒有 spanning tree，void API 以例外回報前提不成立。">發現並非所有頂點都進樹後，丟出 invalid_argument。</button>
+      <button class="sq-opt" data-c="0" data-fb="不對。Lazy queue 會清空，之後程式明確檢查 connectivity。">永遠等待下一個 priority-queue entry。</button>
+    </div>
+    <div class="sq-fb"></div>
+  </div>
+</section>
+<section id="cards">
+  <div class="section-number">CARDS · 關鍵詞彙卡</div>
+  <h2>關鍵詞彙卡：點卡片翻面 <span class="sec-badge">題庫 ch8.json · 29 張</span></h2>
+  <p>詞彙卡取自本章課程題庫，已譯為繁體中文，正面附英文原名。先看正面術語，心中默想定義再翻面對答案；洗牌後再過一輪，直到每張都能不假思索說出來。</p>
+  <div class="fc-controls">
+    <button id="fcShuffle">🔀 洗牌</button>
+    <button id="fcFlipAll">全部翻面</button>
+    <button id="fcUnflip">全部翻回</button>
+  </div>
+  <div class="fc-grid" id="fcGrid"></div>
+</section>
+
 </div>
 
 <footer>
@@ -1318,6 +1711,63 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 </footer>
 
 <script>
+/* player-v2 */
+/* 逐步動畫播放器 v2：frames = [{...}]，apply(frame) 負責渲染。
+   與 v1 相容：建構子 {frames, apply, delayInput, onDone}、play/step/stop/reset。
+   新增：pause()、playing 狀態、toggle(btn)（▶/⏸ 按鈕一行接線）、setDelay(ms)。
+   每個 tick 重讀 delayInput.value，速度滑桿拖了即時生效。 */
+class Player {
+  constructor({frames, apply, delayInput, onDone}) {
+    this.frames = frames; this.apply = apply;
+    this.delayInput = delayInput; this.i = -1; this.timer = null;
+    this.playing = false; this._delay = null; this._done = false;
+    this._btn = null;  // toggle 按過的 ⏸/▶ 按鈕，之後狀態變化都同步文字
+    this.onDone = onDone || (()=>{});
+  }
+  _sync() { if (this._btn) this._btn.textContent = this.playing ? '⏸ 暫停' : '▶ 繼續'; }
+  _d() {
+    if (this._delay != null) return this._delay;
+    return this.delayInput ? parseInt(this.delayInput.value, 10) : 700;
+  }
+  setDelay(ms) { this._delay = ms; }
+  _advance() {
+    if (this.i + 1 >= this.frames.length) {
+      this.pause();
+      if (!this._done) { this._done = true; this.onDone(); }  // 播畢只通知一次
+      return false;
+    }
+    this.i += 1; this.apply(this.frames[this.i]);
+    return true;
+  }
+  step() { this.pause(); this._advance(); }
+  play() {
+    this.pause(); this.playing = true;
+    const tick = () => {
+      if (!this.playing) return;
+      if (!this._advance()) return;
+      this.timer = setTimeout(tick, this._d());
+    };
+    tick();
+    this._sync();
+  }
+  pause() {
+    if (this.timer) { clearTimeout(this.timer); this.timer = null; }
+    this.playing = false;
+    this._sync();
+  }
+  toggle(btn) {
+    if (btn) this._btn = btn;
+    if (this.playing) this.pause();
+    else {
+      if (this._done && this.frames.length) { this.i = -1; this._done = false; }  // 播畢後再按＝重播
+      this.play();
+    }
+  }
+  stop() { this.pause(); }
+  reset() { this.stop(); this.i = -1; this._done = false; if (this.frames.length) this.apply(this.frames[0]); }
+}
+/* /player-v2 */
+
 /* =============================================================
    通用：SVG 圖渲染工具
    ============================================================= */
@@ -2440,8 +2890,8 @@ class DijkstraController {
     const dist = {}, prev = {}, visited = {};
     for (const v of verts) { dist[v] = Infinity; prev[v] = null; visited[v] = false; }
     dist[start] = 0;
-    // PQ as array of [d, v]; sorted ascending by d
-    let pq = verts.map(v => [dist[v], v]);
+    // Lazy priority queue: push improvements; skip stale entries on pop.
+    let pq = [[0, start]];
     const sortPq = () => pq.sort((a,b) => a[0] - b[0]);
     const steps = [];
     sortPq();
@@ -2450,21 +2900,19 @@ class DijkstraController {
     while (pq.length > 0) {
       sortPq();
       const [d, u] = pq.shift();
-      if (d === Infinity) break;
-      if (visited[u]) continue;
+      if (d > dist[u]) {
+        const treeEdges = verts.filter(vv => prev[vv]).map(vv => [prev[vv], vv]);
+        steps.push({ kind:'stale', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`略過 stale entry：${u}:${d}，目前最佳距離是 ${dist[u]}`, treeEdges });
+        continue;
+      }
       visited[u] = true;
       const treeEdges = verts.filter(vv => prev[vv]).map(vv => [prev[vv], vv]);
       steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges });
       for (const { to: vv, w: weight } of adj[u]) {
-        if (visited[vv]) {
-          steps.push({ kind:'skip', codeLine:10, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鄰居 ${vv} 已 visited，跳過`, treeEdges });
-          continue;
-        }
-        const newD = d + weight;
+        const newD = dist[u] + weight;
         steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：newD = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv])?dist[vv]:'∞'}`, treeEdges });
         if (newD < dist[vv]) {
           dist[vv] = newD; prev[vv] = u;
-          pq = pq.filter(p => p[1] !== vv);
           pq.push([newD, vv]);
           sortPq();
           steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: [...treeEdges.filter(e => e[1] !== vv), [u, vv]] });
@@ -2818,7 +3266,7 @@ tsConfig.edges.forEach(([u, v]) => { (tsAdj[u] = tsAdj[u] || []).push(v); });
 const tsR = new GraphRenderer('canvas-ts', tsConfig, {
   directed: true, showWeights: false, width: 600, height: 400,
 });
-let tsTimer = null, tsClose = null;
+let tsPlayer = null, tsClose = null;
 
 function tsStatus(html) {
   document.querySelector('#tsStatus').innerHTML = html;
@@ -2828,14 +3276,7 @@ function tsRunDFS() {
   const events = dfsCloseEvents(Object.keys(tsConfig.vertices), tsAdj);
   const startT = {};
   tsClose = {};
-  let i = 0;
-  tsTimer = setInterval(() => {
-    if (i >= events.length) {
-      clearInterval(tsTimer); tsTimer = null;
-      tsStatus('DFS 完成：每個節點都有 start/close time。接著按 ②。');
-      return;
-    }
-    const e = events[i++];
+  const apply = (e) => {
     if (e.act === 'start') {
       startT[e.v] = e.t;
       tsR.setNodeClass(e.v, 'gray');
@@ -2847,33 +3288,41 @@ function tsRunDFS() {
       tsR.setNodeMeta(e.v, startT[e.v] + '/' + e.t);
       tsStatus(`t=${e.t}：「${TS_FULL[e.v]}」完成（黑），closing time = ${e.t}`);
     }
-  }, 420);
+  };
+  tsPlayer = new Player({
+    frames: events,
+    apply,
+    delayInput: document.getElementById('tsSpeed'),
+    onDone: () => tsStatus('DFS 完成：每個節點都有 start/close time。接著按 ②。'),
+  });
+  tsPlayer.play();
 }
 function tsOrder() {
   if (!tsClose || !Object.keys(tsClose).length) {
     tsStatus('要先按 ① 跑 DFS，才有 closing time 可排。'); return;
   }
-  if (tsTimer) { clearInterval(tsTimer); tsTimer = null; }
+  if (tsPlayer) tsPlayer.pause();
   const order = Object.keys(tsClose).sort((a, b) => tsClose[b] - tsClose[a]);
   const out = document.getElementById('tsOrderOut');
   out.innerHTML = '';
-  let i = 0;
-  tsTimer = setInterval(() => {
-    if (i >= order.length) {
-      clearInterval(tsTimer); tsTimer = null;
-      tsStatus('完成！這一列保證每條邊的起點都排在終點前面：照著做就不會把生麵糊吃下肚。');
-      return;
-    }
-    const v = order[i++];
-    tsR.setNodeClass(v, 'found');
-    out.innerHTML = order.slice(0, i)
+  const frames = order.map((v, idx) => ({ v, idx }));
+  const apply = (f) => {
+    tsR.setNodeClass(f.v, 'found');
+    out.innerHTML = order.slice(0, f.idx + 1)
       .map(k => `${TS_FULL[k]}<span style="opacity:.55;">(f=${tsClose[k]})</span>`)
       .join(' → ');
-    tsStatus(`第 ${i} 位：「${TS_FULL[v]}」（closing time ${tsClose[v]}）`);
-  }, 520);
+    tsStatus(`第 ${f.idx + 1} 位：「${TS_FULL[f.v]}」（closing time ${tsClose[f.v]}）`);
+  };
+  tsPlayer = new Player({
+    frames,
+    apply,
+    delayInput: document.getElementById('tsSpeed'),
+    onDone: () => tsStatus('完成！這一列保證每條邊的起點都排在終點前面：照著做就不會把生麵糊吃下肚。'),
+  });
+  tsPlayer.play();
 }
 function tsReset(keepStatus) {
-  if (tsTimer) { clearInterval(tsTimer); tsTimer = null; }
+  if (tsPlayer) { tsPlayer.pause(); tsPlayer = null; }  // 舊 frames 引用已失效的 tsClose，不能再被 ⏸/單步 喚醒
   tsR.resetAll();
   tsClose = null;
   document.getElementById('tsOrderOut').innerHTML = '';
@@ -2897,7 +3346,7 @@ const sccEdges = [
 ];
 const sccOpts = { directed: true, showWeights: false, width: 600, height: 400 };
 let sccR = new GraphRenderer('canvas-scc', { vertices: sccPos, edges: sccEdges }, sccOpts);
-let sccTimer = null, sccCloseT = null, sccOnGT = false;
+let sccPlayer = null, sccCloseT = null, sccOnGT = false;
 
 function sccStatus(html) { document.querySelector('#sccStatus').innerHTML = html; }
 function sccAdjOf(edges) {
@@ -2910,14 +3359,7 @@ function sccStep1() {
   const events = dfsCloseEvents(Object.keys(sccPos), sccAdjOf(sccEdges));
   const startT = {};
   sccCloseT = {};
-  let i = 0;
-  sccTimer = setInterval(() => {
-    if (i >= events.length) {
-      clearInterval(sccTimer); sccTimer = null;
-      sccStatus('第 ① 步完成：每個頂點都有 closing time。接著按 ② 轉置。');
-      return;
-    }
-    const e = events[i++];
+  const apply = (e) => {
     if (e.act === 'start') {
       startT[e.v] = e.t;
       sccR.setNodeClass(e.v, 'gray');
@@ -2928,13 +3370,20 @@ function sccStep1() {
       sccR.setNodeMeta(e.v, startT[e.v] + '/' + e.t);
     }
     sccStatus(`t=${e.t}：${e.act === 'start' ? '發現' : '完成'} ${e.v}`);
-  }, 380);
+  };
+  sccPlayer = new Player({
+    frames: events,
+    apply,
+    delayInput: document.getElementById('sccSpeed'),
+    onDone: () => sccStatus('第 ① 步完成：每個頂點都有 closing time。接著按 ② 轉置。'),
+  });
+  sccPlayer.play();
 }
 function sccStep2() {
   if (!sccCloseT || !Object.keys(sccCloseT).length) {
     sccStatus('要先按 ① 在 G 上跑 DFS。'); return;
   }
-  if (sccTimer) { clearInterval(sccTimer); sccTimer = null; }
+  if (sccPlayer) { sccPlayer.pause(); sccPlayer = null; }  // 換到 G^T 之後，① 的 frames 不能再重播
   const rev = sccEdges.map(([u, v]) => [v, u]);
   sccR = new GraphRenderer('canvas-scc', { vertices: sccPos, edges: rev }, sccOpts);
   Object.keys(sccCloseT).forEach(v => sccR.setNodeMeta(v, 'f=' + sccCloseT[v]));
@@ -2943,7 +3392,7 @@ function sccStep2() {
 }
 function sccStep3() {
   if (!sccOnGT) { sccStatus('要先按 ② 轉置成 G&#7488;。'); return; }
-  if (sccTimer) { clearInterval(sccTimer); sccTimer = null; }
+  if (sccPlayer) sccPlayer.pause();
   const revAdj = sccAdjOf(sccEdges.map(([u, v]) => [v, u]));
   const roots = Object.keys(sccCloseT).sort((a, b) => sccCloseT[b] - sccCloseT[a]);
   // 依 closing 遞減長森林；每棵樹＝一個 SCC
@@ -2960,21 +3409,23 @@ function sccStep3() {
   trees.forEach((tree, ti) => tree.forEach(v => steps.push({ v, ti })));
   const out = document.getElementById('sccOut');
   out.innerHTML = '';
-  let i = 0;
-  sccTimer = setInterval(() => {
-    if (i >= steps.length) {
-      clearInterval(sccTimer); sccTimer = null;
-      out.innerHTML = trees.map((t, k) => `SCC${k + 1} = { ${t.join(', ')} }`).join('　｜　');
-      sccStatus(`完成：${trees.length} 棵樹＝${trees.length} 個強連通元件。跨元件的邊在 G&#7488; 裡走不出去，樹被「困」在元件內。`);
-      return;
-    }
-    const s = steps[i++];
+  const apply = (s) => {
     sccR.setNodeClass(s.v, treeCls[s.ti % treeCls.length]);
     sccStatus(`第 ${s.ti + 1} 棵樹收下 ${s.v}（起點是剩餘 closing time 最大者）`);
-  }, 380);
+  };
+  sccPlayer = new Player({
+    frames: steps,
+    apply,
+    delayInput: document.getElementById('sccSpeed'),
+    onDone: () => {
+      out.innerHTML = trees.map((t, k) => `SCC${k + 1} = { ${t.join(', ')} }`).join('　｜　');
+      sccStatus(`完成：${trees.length} 棵樹＝${trees.length} 個強連通元件。跨元件的邊在 G&#7488; 裡走不出去，樹被「困」在元件內。`);
+    },
+  });
+  sccPlayer.play();
 }
 function sccReset(keepStatus) {
-  if (sccTimer) { clearInterval(sccTimer); sccTimer = null; }
+  if (sccPlayer) { sccPlayer.pause(); sccPlayer = null; }  // 同 tsReset：清掉指向舊圖狀態的 player
   sccR = new GraphRenderer('canvas-scc', { vertices: sccPos, edges: sccEdges }, sccOpts);
   sccCloseT = null; sccOnGT = false;
   document.getElementById('sccOut').innerHTML = '';
@@ -2998,32 +3449,13 @@ function quizCheck(quizId, optEl) {
 
   if (quizId === 'ex1') {
     if (isCorrect) {
-      fb.innerHTML = `<strong>正確 ✓</strong> Dijkstra（含 visited 檢查）從 A 出發的執行追蹤如下：<br>
-        <span style="font-family:monospace;font-size:.82rem;">
-        Pop A(0) → 鬆弛 B=2, C=7, E=12<br>
-        Pop B(2) → 鬆弛 D=4 (prev=B)<br>
-        Pop D(4) → 標 visited，鬆弛 F=6<br>
-        Pop F(6) → 鬆弛 G=10<br>
-        Pop C(7) → 試算 C→D = 7+(−5)=2，但 D 已 visited，<strong style="color:var(--accent);">跳過！</strong> 鬆弛 E=9<br>
-        Pop E(9) → 鬆弛 G=2 (用負邊 −7)<br>
-        Pop G(2) → 完成
-        </span><br>
-        最終 dist[D] = 4，prev[D] = B，路徑為 <strong>A → B → D</strong>。<br>
-        ⚠️ 真實最短路徑其實是 <strong>A → C → D = 7 + (−5) = 2</strong>，但 Dijkstra 因為 visited 檢查而錯過。這正是 Dijkstra 不能處理負邊權的根本原因。<br>
-        圖中已用紅色標記兩條負邊：<code>C→D(−5)</code> 與 <code>E→G(−7)</code>。`;
-      // 同時把 Dijkstra 實際走的路徑高亮（不是真正最短的）
+      fb.innerHTML = `<strong>正確 ✓</strong> Dijkstra 的貪婪證明要求邊權非負；lazy PQ 只取代 decrease-key，不能解除此前提。課程實作先掃描 edges，看到負權就丟出 <code>invalid_argument</code>，不會產生一條「Dijkstra 路徑」。`;
       ex1R.resetAll();
-      ex1R.setEdgeClass('A','B','tree');
-      ex1R.setEdgeClass('B','D','tree');
-      // 仍然標出負邊作為對比
       ex1R.setEdgeClass('C','D','path');
       ex1R.setEdgeClass('E','G','path');
       ex1R.setNodeClass('A','start');
-      ex1R.setNodeClass('B','in-mst');
-      ex1R.setNodeClass('D','found');
     } else {
-      fb.innerHTML = `<strong>不對 ✗</strong> 重點是：Dijkstra 從 A 開始後，PQ 依序取出最小者 A(0) → B(2) → D(4) → F(6) → C(7) → E(9) → G。<br>
-        當 D 在第 3 步以距離 4 被 pop 時，<strong>就被標記為 visited</strong>。後來 C 被 pop 時，雖然 C→D 給出更短的距離 2（= 7+(−5)），但<strong>已 visited 的 D 不會再被更新</strong>。所以 Dijkstra 的最終結果路徑是 prev 指標往回追：D ← B ← A。`;
+      fb.innerHTML = `<strong>不對 ✗</strong> 這張圖不符合非負邊權前提。課程的 <code>dijkstra()</code> 在進入 priority-queue traversal 前就拒絕輸入；不應把某個錯誤路徑當成函式輸出。`;
     }
   } else if (quizId === 'ex2') {
     if (isCorrect) {
@@ -3077,6 +3509,47 @@ function quizCheck(quizId, optEl) {
     }
   }
 }
+</script>
+<script>
+const FLASHCARDS = [{"front": "圖（Graph）", "back": "由頂點（節點）集合與連接頂點配對的邊組成的資料結構，用來建模複雜系統中的關係。"}, {"front": "頂點（Vertex）", "back": "也叫節點（node）：代表圖中的一個實體，是圖結構的基本單位。"}, {"front": "邊（Edge）", "back": "兩個頂點之間的連接。在有向圖中，邊帶有方向，表示特定方向的關係。"}, {"front": "權重（Weight）", "back": "指定給邊的數值，代表成本、距離或其他影響走訪的度量。"}, {"front": "路徑（Path）", "back": "由邊串起來的一串頂點：從某頂點出發，沿著邊走到另一個頂點的序列。"}, {"front": "循環（Cycle）", "back": "起點與終點是同一個頂點的路徑：至少包含一條邊，且不重複使用邊或中間頂點。"}, {"front": "無循環圖（Acyclic Graph）", "back": "不含任何循環的圖：沿著邊走，不可能回到出發的頂點。"}, {"front": "有向圖（Directed Graph）", "back": "邊帶有方向的圖：每條邊表示從一個頂點到另一個頂點的單向關係。"}, {"front": "有向無循環圖（DAG, Directed Acyclic Graph）", "back": "不含循環的有向圖，常用於工作排程等「任務不重複」的先後關係建模。"}, {"front": "樹（Tree）", "back": "有指定根頂點的無循環圖：其他每個頂點到根都恰好只有一條路徑。"}, {"front": "相鄰矩陣（Adjacency Matrix）", "back": "用方陣表示圖的方法：矩陣元素標記兩兩頂點是否相鄰（有邊）。"}, {"front": "相鄰串列／map（Adjacency List）", "back": "只儲存實際鄰居的稀疏表示；本課程用有序 map 儲存頂點與鄰居權重。"}, {"front": "廣度優先搜尋（BFS, Breadth-First Search）", "back": "先把目前深度的所有鄰居探索完，才前進到下一層的搜尋演算法：像水波一層一層往外擴散。"}, {"front": "騎士巡遊（Knight's Tour）", "back": "在西洋棋盤上讓騎士每一格都恰好走過一次的移動序列。"}, {"front": "深度優先搜尋（DFS, Depth-First Search）", "back": "沿著一條分支盡量往深處探索、碰壁才回頭（backtrack）的走訪演算法。"}, {"front": "搜尋樹（Search Tree）", "back": "用來高效率定位鍵的樹狀資料結構，支援插入、刪除與搜尋操作。"}, {"front": "啟發式（Heuristic）", "back": "在傳統方法太慢或不可行時，用來快速求解或找近似解的技巧。"}, {"front": "Warnsdorff 法則（Warnsdorff's Algorithm）", "back": "騎士巡遊的啟發式：騎士永遠先跳到「後續可走步數最少」的那一格。"}, {"front": "深度優先森林（Depth-First Forest）", "back": "深度優先搜尋過程中形成的一群樹：每棵樹對應一段連續探索到的頂點集合。"}, {"front": "括號性質（Parenthesis Property）", "back": "DFS 的性質：任兩個頂點的「發現時間、完成時間」區間，要嘛完全不相交，要嘛一個完全包住另一個。"}, {"front": "拓撲排序（Topological Sorting）", "back": "把有向圖的頂點排成一條線性順序：對每條邊 u→v，u 都排在 v 前面。只有 DAG 做得到。"}, {"front": "強連通元件（Strongly Connected Components）", "back": "有向圖中「任兩頂點彼此都有有向路徑可達」的極大子圖。"}, {"front": "最短路徑問題（Shortest Path Problems）", "back": "在兩頂點之間找一條「邊權重總和最小」的路徑的問題。"}, {"front": "Dijkstra 演算法（Dijkstra's Algorithm）", "back": "在非負邊權圖上求單源最短路徑；本課程的 lazy PQ 版本會推入改善後的 pair，並略過 stale entries。"}, {"front": "優先佇列（Priority Queue）", "back": "每個元素帶優先權的資料結構：出隊順序由優先權決定，而不是單純的先來後到。"}, {"front": "無控制氾濫（Uncontrolled Flooding）", "back": "網路技術：把封包往除了來源連線以外的所有出口連線轉送，會造成大量重複流量。"}, {"front": "最小生成樹（MST, Minimum Spanning Tree）", "back": "連接圖中所有頂點、不含循環、且邊權重總和最小的邊子集合。"}, {"front": "Prim 演算法（Prim's Algorithm）", "back": "反覆加入跨越目前 cut 的最小權重邊。課程 prim() 要求圖連通，否則丟出 invalid_argument。"}, {"front": "貪婪演算法（Greedy Algorithms）", "back": "每一步都選「當下看起來最有利」的選項來組出解的一類演算法。"}];
+
+/* ===== Flashcards engine ===== */
+(function(){
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const grid = document.getElementById('fcGrid');
+  if (!grid) return;
+  const render = cards => {
+    grid.innerHTML = cards.map(c =>
+      `<div class="fc-card"><div class="fc-inner">
+         <div class="fc-face fc-front"><div>${esc(c.front)}</div><div class="fc-hint">CLICK TO FLIP</div></div>
+         <div class="fc-face fc-back">${esc(c.back)}</div>
+       </div></div>`).join('');
+  };
+  render(FLASHCARDS);
+  grid.addEventListener('click', e => {
+    const card = e.target.closest('.fc-card');
+    if (card) card.classList.toggle('flipped');
+  });
+  document.getElementById('fcShuffle').addEventListener('click', () => render([...FLASHCARDS].sort(() => Math.random() - .5)));
+  document.getElementById('fcUnflip').addEventListener('click', () => grid.querySelectorAll('.fc-card').forEach(c => c.classList.remove('flipped')));
+  document.getElementById('fcFlipAll').addEventListener('click', () => grid.querySelectorAll('.fc-card').forEach(c => c.classList.add('flipped')));
+})();
+</script>
+<script>
+(function(){
+  document.querySelectorAll('.sq-item').forEach(item => {
+    const fb = item.querySelector('.sq-fb');
+    item.querySelectorAll('.sq-opt').forEach(btn => btn.addEventListener('click', () => {
+      const good = btn.dataset.c === '1';
+      item.querySelectorAll('.sq-opt').forEach(b => b.classList.remove('correct','wrong'));
+      btn.classList.add(good ? 'correct' : 'wrong');
+      fb.textContent = btn.dataset.fb;
+      fb.classList.add('show');
+      fb.classList.toggle('good', good);
+      fb.classList.toggle('bad', !good);
+    }));
+  });
+})();
 </script>
 </body>
 </html>

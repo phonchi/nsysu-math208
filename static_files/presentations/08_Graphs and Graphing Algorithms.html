@@ -7815,10 +7815,10 @@ a.anchor-link {
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <table align="left">
 <td>
-<a href="https://colab.research.google.com/github/phonchi/nsysu-math208/blob/main/static_files/presentations/08_Graphs and Graphing Algorithms.ipynb" target="_parent"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg"/></a>
+<a href="https://colab.research.google.com/github/phonchi/nsysu-math208/blob/master/static_files/presentations/08_Graphs and Graphing Algorithms.ipynb" target="_parent"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg"/></a>
 </td>
 <td>
-<a href="https://kaggle.com/kernels/welcome?src=https://github.com/phonchi/nsysu-math208/blob/main/static_files/presentations/08_Graphs and Graphing Algorithms.ipynb" target="_blank"><img alt="No description has been provided for this image" src="https://kaggle.com/static/images/open-in-kaggle.svg"/></a>
+<a href="https://kaggle.com/kernels/welcome?src=https://github.com/phonchi/nsysu-math208/blob/master/static_files/presentations/08_Graphs and Graphing Algorithms.ipynb" target="_blank"><img alt="No description has been provided for this image" src="https://kaggle.com/static/images/open-in-kaggle.svg"/></a>
 </td>
 </table>
 </div>
@@ -7834,7 +7834,7 @@ a.anchor-link {
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="n">from</span><span class="w"> </span><span class="n">jupyterquiz</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="n">display_quiz</span>
 
-<span class="n">quiz_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch8/"</span>
+<span class="n">quiz_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"questions/ch8/"</span>
 </pre></div>
 </div>
 </div>
@@ -8150,25 +8150,9 @@ is a set of edges $e$ and vertices $v$ such that $e \subset E$ and $v \subset V$
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ul>
-<li><p><code>Graph()</code>: creates a new empty graph.</p>
+<li><p><code>Graph()</code>: creates an empty graph.</p>
 </li>
-<li><p><code>set_vertex(vert)</code>: adds an instance of Vertex to the graph.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<ul>
-<li><p><code>add_edge(from_vert, to_vert)</code>: adds a new directed edge to the graph that connects two vertices.</p>
-</li>
-<li><p><code>add_edge(from_vert, to_vert, weight)</code>: adds a new weighted directed edge to the graph that connects two vertices.</p>
+<li><p><code>setVertex(key)</code>: inserts a missing vertex. If the key already exists, it is a no-op, so existing edges and traversal state are preserved.</p>
 </li>
 </ul>
 </div>
@@ -8182,13 +8166,28 @@ is a set of edges $e$ and vertices $v$ such that $e \subset E$ and $v \subset V$
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ul>
-<li><p><code>get_vertex(vert_key)</code>: finds the vertex in the graph named <code>vert_key</code>.</p>
+<li><p><code>addEdge(fromKey, toKey)</code>: adds a directed, zero-weight edge and creates missing endpoint vertices.</p>
 </li>
-<li><p><code>get_vertices()</code>: returns the list of all vertices in the graph.</p>
-</li>
-<li><p><code>in</code>: returns <code>True</code> for a statement <code>vertex in graph</code> if the given vertex is in the graph, <code>False</code> otherwise.</p>
+<li><p><code>addEdge(fromKey, toKey, weight)</code>: adds or updates a weighted directed edge.</p>
 </li>
 </ul>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<ul>
+<li><p><code>vertices.find(key)</code> or <code>vertices.count(key)</code>: tests whether a key exists.</p>
+</li>
+<li><p>A range-based loop over <code>vertices</code> visits all key/<code>Vertex</code> pairs.</p>
+</li>
+</ul>
+<p>The compact course header intentionally exposes the ordered <code>vertices</code> map; it does not define Python-style <code>in</code> or iterator magic.</p>
 </div>
 </div>
 </div>
@@ -8287,7 +8286,7 @@ is a set of edges $e$ and vertices $v$ such that $e \subset E$ and $v \subset V$
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>A more space-efficient way to implement a sparsely connected graph is to use an adjacency list. In this implementation, we keep a master list of all the vertices in the <code>Graph</code> object, and each vertex object in the graph maintains a list of the other vertices that it is connected to.</p>
+<p>A sparse graph is stored as an adjacency structure. In our C++ implementation, <code>Graph::vertices</code> is a <code>map&lt;string, Vertex&gt;</code>, and each <code>Vertex::neighbors</code> is a <code>map&lt;string, int&gt;</code> from neighbor key to edge weight.</p>
 </div>
 </div>
 </div>
@@ -8298,7 +8297,7 @@ is a set of edges $e$ and vertices $v$ such that $e \subset E$ and $v \subset V$
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In our implementation of the <code>Vertex</code> class we will use a dictionary rather than a list, where the dictionary keys are the vertices and the values are the weights.</p>
+<p>In the C++ implementation, each <code>Vertex</code> stores <code>map&lt;string, int&gt; neighbors</code>: keys identify adjacent vertices and values store edge weights.</p>
 </div>
 </div>
 </div>
@@ -8309,7 +8308,7 @@ is a set of edges $e$ and vertices $v$ such that $e \subset E$ and $v \subset V$
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The advantage of the adjacency list implementation is that it allows us to compactly represent a sparse graph. The adjacency list also allows us to easily find all the links that are directly connected to a particular vertex!</p>
+<p>An adjacency structure uses $O(|V|+|E|)$ storage and lists the neighbors of $v$ in $O(\deg(v))$ time. Our ordered-map implementation additionally makes vertex and edge-key lookup $O(\log |V|)$ and $O(\log \deg(v))$, respectively; those logarithmic factors come from <code>std::map</code>, not from the graph ADT itself.</p>
 </div>
 </div>
 </div>
@@ -8345,8 +8344,8 @@ is a set of edges $e$ and vertices $v$ such that $e \subset E$ and $v \subset V$
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="NTiNcDHLBvTM" style="border-radius: 10px; text-align: left"><style>
-#NTiNcDHLBvTM {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="XQPYrDqyjjjI" style="border-radius: 10px; text-align: left"><style>
+#XQPYrDqyjjjI {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -8574,10 +8573,10 @@ is a set of edges $e$ and vertices $v$ such that $e \subset E$ and $v \subset V$
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="c3b0e1fd-ce6c-40d4-b4ad-7fe319aaa17d" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="cb1d89ba-bb81-47f5-9b98-2597eea0cf25" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('c3b0e1fd-ce6c-40d4-b4ad-7fe319aaa17d');
-var questionsNTiNcDHLBvTM=[
+var element = document.getElementById('cb1d89ba-bb81-47f5-9b98-2597eea0cf25');
+var questionsXQPYrDqyjjjI=[
 	{
         "question": "Regarding graph implementation methods, which of the following statements is true according to the materials?",
         "type": "multiple_choice",
@@ -9667,8 +9666,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("NTiNcDHLBvTM")) {
-    show_questions(questionsNTiNcDHLBvTM, NTiNcDHLBvTM);
+  if (document.getElementById("XQPYrDqyjjjI")) {
+    show_questions(questionsXQPYrDqyjjjI, XQPYrDqyjjjI);
   } else {
     setTimeout(try_show, 200);
   }
@@ -9733,7 +9732,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Each <code>Vertex</code> uses a dictionary to keep track of the vertices to which it is connected and the weight of each edge. Note that the constructor simply initializes the key, which will typically be a string and the <code>get_neighbor()</code> method returns the weight of the edge from this vertex to the vertex passed as a parameter.</p>
+<p>Each <code>Vertex</code> uses <code>map&lt;string, int&gt; neighbors</code> to associate a neighbor key with an edge weight. <code>setNeighbor(other, weight)</code> inserts or updates that mapping, and <code>getNeighbor(other)</code> retrieves the weight when the edge exists.</p>
 </div>
 </div>
 </div>
@@ -9749,7 +9748,7 @@ function try_show() {
 <span class="w">        </span><span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">Vertex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vertices</span><span class="p">;</span>
 
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">setVertex</span><span class="p">(</span><span class="n">string</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">vertices</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Vertex</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">vertices</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">vertices</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">Vertex</span><span class="p">(</span><span class="n">key</span><span class="p">));</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">addEdge</span><span class="p">(</span><span class="n">string</span><span class="w"> </span><span class="n">fromVert</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="n">toVert</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">weight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">vertices</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">fromVert</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">setVertex</span><span class="p">(</span><span class="n">fromVert</span><span class="p">);</span>
@@ -9771,7 +9770,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The <code>Graph</code> class, also contains a dictionary that <strong>maps vertex names to vertex objects</strong>. Note that we have implemented the <code>__iter__</code> method to make it easy to iterate over all the vertex objects in a particular graph.</p>
+<p>The <code>Graph</code> class also uses <code>map&lt;string, Vertex&gt; vertices</code> to map vertex keys to objects. C++ range-based loops iterate over its key/value pairs; <code>vertices.count(key)</code> tests membership.</p>
 </div>
 </div>
 </div>
@@ -9782,7 +9781,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Now let us define the graph that we have seen earlier. First we create six vertices numbered 0 through 5. Then we display the vertex dictionary. Notice that for each key 0 through 5 we have created an instance of a <code>Vertex</code>:</p>
+<p>Now let us define the graph seen earlier. We create six vertices numbered 0 through 5, then inspect the <code>vertices</code> map. Each key names one <code>Vertex</code> object.</p>
 </div>
 </div>
 </div>
@@ -10095,7 +10094,7 @@ SAGE
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The graph classes are collected in <code>pythonds3/cppds/graphs/adjacency_graph.cpp</code>.</p>
+<p>The reusable implementation used by the executable examples is split between <code>pythonds3/cppds/graph.hpp</code> (data structure) and <code>pythonds3/cppds/graph_algos.hpp</code> (algorithms). The longer <code>graphs/adjacency_graph.cpp</code> file is retained as a standalone reference listing.</p>
 </div>
 </div>
 </div>
@@ -10141,7 +10140,7 @@ SAGE
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>We can implement the scheme we have just described by using a dictionary. The labels on the buckets we have just described are the keys in our dictionary. The value stored for each key is a list of words.</p>
+<p>The bucket scheme uses <code>map&lt;string, set&lt;string&gt;&gt;</code>: each wildcard label is a map key and its set contains the words sharing that pattern.</p>
 </div>
 </div>
 </div>
@@ -10152,8 +10151,7 @@ SAGE
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Since this is our first real-world graph problem, you might be wondering how sparse the graph is. The list of four-letter words we have for this problem is 5,110 words long. If we were to use an adjacency matrix, the matrix would have
-$5,110 \cdot 5,110= 26,112,100$ cells. The graph constructed by the <code>build_graph()</code> function has exactly 53,286 edges, so the matrix would have only 0.20% of the cells filled! That is a very sparse matrix indeed.</p>
+<p>The 5,110-word adjacency matrix would contain $5{,}110^2=26{,}112{,}100$ cells. <code>buildGraph()</code> stores 53,286 directed adjacency entries (26,643 undirected word pairs), only about 0.20% of those cells, so the graph is very sparse.</p>
 </div>
 </div>
 </div>
@@ -10284,7 +10282,7 @@ $5,110 \cdot 5,110= 26,112,100$ cells. The graph constructed by the <code>build_
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>BFS begins at the starting vertex <code>start</code> and paints it gray. Two other values, the <code>distance</code> and the <code>previous</code>, are initialized to 0 and <code>None</code> respectively. Finally, <code>start</code> is placed on a <code>Queue</code>. The next step is to begin to systematically explore vertices at the front of the queue. We explore each new node at the front of the queue by iterating over its adjacency list.</p>
+<p>Before each BFS run, every vertex is reset to white, unreachable distance (<code>INT_MAX</code>), and no predecessor (empty string). BFS then sets <code>start.distance = 0</code>, paints <code>start</code> gray <strong>before enqueueing it</strong>, and explores vertices from the front of a FIFO queue.</p>
 </div>
 </div>
 </div>
@@ -10313,9 +10311,9 @@ $5,110 \cdot 5,110= 26,112,100$ cells. The graph constructed by the <code>build_
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ol start="3">
-<li><p>The distance to <code>neighbor</code> is set to the distance to <code>current + 1</code>.</p>
+<li><p>The distance to <code>neighbor</code> is set to <code>current.distance + 1</code>.</p>
 </li>
-<li><p><code>neighbor</code> is added to the end of a queue. This effectively schedules this node for further exploration, but not until all the other vertices on the adjacency list of current have been explored!</p>
+<li><p><code>neighbor</code> is added to the end of the queue. This schedules it after every vertex already waiting at the same or an earlier layer.</p>
 </li>
 </ol>
 </div>
@@ -11482,7 +11480,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         const dist = {}, prev = {}, visited = {};
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; visited[v] = false; }
         dist[start] = 0;
-        let pq = verts.map(v =&gt; [dist[v], v]);
+        // Lazy priority queue: push improvements; stale entries are skipped on pop.
+        let pq = [[0, start]];
         const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0]);
         const steps = [];
         sortPq();
@@ -11491,21 +11490,19 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         while (pq.length &gt; 0) {
           sortPq();
           const [d, u] = pq.shift();
-          if (d === Infinity) break;
-          if (visited[u]) continue;
+          if (d &gt; dist[u]) {
+            const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
+            steps.push({ kind:'stale', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`跳過 stale entry：${u}:${d}，目前最佳距離已是 ${dist[u]}`, treeEdges });
+            continue;
+          }
           visited[u] = true;
           const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
           steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges });
           for (const { to: vv, w: weight } of adj[u]) {
-            if (visited[vv]) {
-              steps.push({ kind:'skip', codeLine:10, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鄰居 ${vv} 已 visited，跳過`, treeEdges });
-              continue;
-            }
-            const newD = d + weight;
+            const newD = dist[u] + weight;
             steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：new_d = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}`, treeEdges });
             if (newD &lt; dist[vv]) {
               dist[vv] = newD; prev[vv] = u;
-              pq = pq.filter(p =&gt; p[1] !== vv);
               pq.push([newD, vv]);
               sortPq();
               steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: [...treeEdges.filter(e =&gt; e[1] !== vv), [u, vv]] });
@@ -11637,20 +11634,19 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         const dist = {}, prev = {}, inTree = {};
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; inTree[v] = false; }
         dist[start] = 0;
-        let pq = verts.map(v =&gt; [dist[v], v]);
+        let pq = [[0, start]];
         const sortPq = () =&gt; pq.sort((a,b) =&gt; {
           if (a[0] === b[0]) return verts.indexOf(a[1]) - verts.indexOf(b[1]);
           if (a[0] === Infinity) return 1;
           if (b[0] === Infinity) return -1;
           return a[0] - b[0];
         });
-        const pqIndex = (v) =&gt; pq.findIndex(p =&gt; p[1] === v);
         const snapPq = () =&gt; pq.map(([key, v]) =&gt; [key, v]);
         const steps = [];
         const mstEdges = [];
         let total = 0;
         sortPq();
-        steps.push({ kind:'init', codeLine:6, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`heapify：所有頂點都在 PQ；${start}.distance = 0，其餘為 sys.maxsize` });
+        steps.push({ kind:'init', codeLine:6, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`初始化 lazy PQ：只加入起點 ${start}:0；其餘 key 為 ∞` });
 
         while (pq.length &gt; 0) {
           sortPq();
@@ -11666,14 +11662,12 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 
           for (const { to: vv, w: weight } of adj[u]) {
             const newD = weight;
-            const idx = pqIndex(vv);
-            const inPq = idx !== -1;
-            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`檢查 ${u}—${vv}：new_distance = ${weight}；條件 next_v in pq 為 ${inPq ? 'True' : 'False'}，目前 distance(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}` });
-            if (inPq &amp;&amp; newD &lt; dist[vv]) {
+            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`檢查 cut edge ${u}—${vv}：weight=${weight}，目前 key(${vv})=${isFinite(dist[vv]) ? dist[vv] : '∞'}` });
+            if (!inTree[vv] &amp;&amp; newD &lt; dist[vv]) {
               dist[vv] = newD; prev[vv] = u;
-              pq[idx][0] = newD;
+              pq.push([newD, vv]);
               sortPq();
-              steps.push({ kind:'relax-update', codeLine:15, current:u, neighbor:vv, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`change_priority(${vv}, ${newD})：previous(${vv}) = ${u}，distance(${vv}) = ${newD}` });
+              steps.push({ kind:'relax-update', codeLine:15, current:u, neighbor:vv, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`push(${vv}, ${newD})：這是目前跨 cut 到 ${vv} 的最便宜 safe-edge candidate` });
             }
           }
         }
@@ -12004,7 +11998,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The <code>knight_grah()</code> function makes one pass over the entire board. At each square on the board the function calls a helper, <code>gen_legal_moves()</code>, to create a list of legal moves for that position on the board.</p>
+<p>The <code>knightGraph()</code> function makes one pass over the board. At each square it calls <code>genLegalMoves()</code> to produce the legal destination coordinates, then stores one directed adjacency entry for each legal move.</p>
 </div>
 </div>
 </div>
@@ -12084,7 +12078,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Once again we can see how sparse the graph is. If the graph was fully connected there would be 4,096 edges. Since there are only 336 edges, the adjacency matrix would be only 8.2 percent full!</p>
+<p>The $8\times8$ adjacency matrix has 4,096 cells. The representation stores 336 <strong>directed adjacency arcs</strong> (each legal undirected move appears in both directions), equivalent to 168 undirected edges, so only 8.2% of the matrix cells would be occupied.</p>
 </div>
 </div>
 </div>
@@ -12161,7 +12155,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The <code>knight_tour()</code> below takes four parameters: <code>n</code>, the current depth in the search tree; path, a <code>list</code> of vertices visited up to this point; <code>u</code>, the vertex in the graph we wish to explore; and <code>limit</code>, the number of nodes in the path.</p>
+<p>The <code>knightTour()</code> function takes four main arguments: <code>n</code>, the current depth; <code>path</code>, a <code>vector&lt;string&gt;</code> of visited vertex keys; <code>uKey</code>, the vertex being explored; and <code>limit</code>, the final path depth.</p>
 </div>
 </div>
 </div>
@@ -12202,7 +12196,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The function is recursive. When the function is called, it first checks the base case condition. If we have a path that contains 64 vertices, we return from <code>knight_tour()</code> with a status of <code>True</code>, indicating that we have found a successful tour. If the path is not long enough, we continue to explore one level deeper by choosing a new vertex to explore and calling it recursively for that vertex.</p>
+<p>The function is recursive. If the path has reached the required depth, it returns <code>true</code>. Otherwise it examines an unvisited neighbor, recurses one level deeper, and returns whether that choice eventually completes the tour.</p>
 </div>
 </div>
 </div>
@@ -12224,7 +12218,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Backtracking happens when we return from <code>knight_tour()</code> with a status of <code>False</code>. In the breadth-first search we used a queue to keep track of which vertex to visit next. Since depth-first search is recursive, we are implicitly using a <strong>stack</strong> to help us with our backtracking.</p>
+<p>Backtracking happens when a recursive call returns <code>false</code>: the last key is removed from <code>path</code> and that vertex is painted white again. The recursive call stack records the choices that remain to be reconsidered.</p>
 </div>
 </div>
 </div>
@@ -12235,7 +12229,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>When we return from a call with a status of <code>False</code>, we remain inside the <code>while</code> loop and look at the next vertex in neighbors.</p>
+<p>When a recursive call returns <code>false</code>, the loop proceeds to the next white neighbor. If none completes the tour, the current call removes its vertex from <code>path</code>, resets it to white, and returns <code>false</code>.</p>
 </div>
 </div>
 </div>
@@ -12246,7 +12240,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Let's look at a simple example of <code>knight_tour()</code> in action. You can refer to the figures below to follow the steps of the search. For this example, we will assume that the call to the <code>get_neighbors()</code> method on line 5 orders the nodes in alphabetical order. We begin by calling <code>knight_tour(1, path, A, 6)</code>.</p>
+<p>For a small trace, assume iteration over the <code>neighbors</code> map follows key order. We call <code>knightTour(1, path, "A", 6, g)</code> and watch the recursive choices and backtracking.</p>
 </div>
 </div>
 </div>
@@ -12335,7 +12329,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><code>knight_tour()</code> starts with node A. The nodes adjacent to A are B and D. Since B is before D alphabetically, DFS selects B to expand next. Exploring B happens when <code>knight_tour()</code> is called recursively. B is adjacent to C and D, so it selects to explore C next.</p>
+<p><code>knightTour()</code> starts at A. Its adjacent vertices are B and D, so ordered map iteration tries B first. From B it tries C before D and reaches a dead end.</p>
 </div>
 </div>
 </div>
@@ -12346,7 +12340,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>However, as you can see node C is a dead end with no adjacent white nodes. At this point we change the color of node C back to white. The call to <code>knight_tour()</code> returns a value of <code>False</code>. The return from the recursive call effectively backtracks the search to vertex B. The next vertex on the list to explore is vertex D, so knight_tour makes a recursive call moving to node D.</p>
+<p>Node C is a dead end with no white neighbor, so its call returns <code>false</code>, resets C to white, and backtracks to B. The search can then try D, the next neighbor.</p>
 </div>
 </div>
 </div>
@@ -12357,7 +12351,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>From vertex D on, <code>knight_tour()</code> can continue to make recursive calls until we get to node C again. However, this time when we get to node C the test <code>n &lt; limit</code> fails so we know that we have exhausted all the nodes in the graph. At this point we can return <code>True</code> to indicate that we have made a successful tour of the graph.</p>
+<p>Later the search reaches C only after every required vertex is already in the path. The base-case test succeeds and returns <code>true</code>, which propagates through the recursive calls.</p>
 </div>
 </div>
 </div>
@@ -12368,7 +12362,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>When we return the list, <code>path</code> has the values <code>[A, B, D, E, F, C]</code>, which is the order we need to traverse the graph to visit each node exactly once.</p>
+<p>When the search succeeds, the <code>vector&lt;string&gt; path</code> contains <code>[A, B, D, E, F, C]</code>, the order that visits each vertex exactly once.</p>
 </div>
 </div>
 </div>
@@ -12591,7 +12585,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Luckily there is a way to speed up the $8 \times 8$ case so that it runs in under one second. The <code>order_by_avail()</code> will be used in place of the call to <code>u.get_neighbors()</code>. The critical line in the function is line 5. This line ensures that we select the vertex that has the fewest available moves to go next.</p>
+<p><code>orderByAvail()</code> orders candidate neighbor keys by their number of remaining white neighbors. Trying the least constrained count first is Warnsdorff's rule and makes the $8\times8$ case practical, without changing the exponential worst-case guarantee.</p>
 </div>
 </div>
 </div>
@@ -12785,7 +12779,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The knight's tour is a special case of a depth-first search where the goal is to create the deepest depth-first tree <strong>without any branches</strong>.</p>
+<p>The knight's tour uses depth-first backtracking to search for one simple path that visits every square. General DFS has a different goal: it explores every reachable vertex and records a depth-first tree; running it from each remaining white vertex produces a depth-first forest, whose trees may have many branches.</p>
 </div>
 </div>
 </div>
@@ -12910,7 +12904,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Note since that <code>dfs()</code> and its helper <code>dfs_visit()</code> use a variable to keep track of the time across calls to <code>dfs_visit()</code>, we chose to implement the code as methods of a class that inherits from the Graph class. This implementation extends the graph class by adding a <code>time</code> instance variable and the two methods.</p>
+<p>Because <code>dfs()</code> and its recursive helper <code>dfsVisit()</code> share the traversal clock, they are methods of <code>DFSGraph</code>, which extends <code>Graph</code> with <code>time</code>, discovery times, and closing times.</p>
 </div>
 </div>
 </div>
@@ -12921,7 +12915,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>You will notice that the <code>dfs()</code> method iterates over all of the vertices in the graph calling <code>dfs_visit()</code> on the nodes that are white.</p>
+<p><code>dfs()</code> first resets traversal state, then iterates over all vertices and calls <code>dfsVisit()</code> on each still-white root. This produces a depth-first forest and also makes repeated runs deterministic.</p>
 </div>
 </div>
 </div>
@@ -12954,7 +12948,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The <code>dfs_visit()</code> method starts with a single vertex called <code>start</code> and explores all of the neighboring white vertices as deeply as possible.</p>
+<p><code>dfsVisit(startKey)</code> paints one vertex gray and recursively explores its white neighbors as deeply as possible before painting it black.</p>
 </div>
 </div>
 </div>
@@ -12965,7 +12959,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>If you look carefully at the code for <code>dfs_visit()</code> and compare it to breadth-first search, what you should notice is that the algorithm is almost identical to <code>bfs()</code> except that on the last line of the inner for loop, <code>dfs_visit()</code> calls itself recursively to continue the search at a deeper level, whereas <code>bfs()</code> adds the node to a queue for later exploration!</p>
+<p><code>dfsVisit()</code> and <code>bfs()</code> share the same color test. The decisive difference is scheduling: DFS immediately recurses on a white neighbor, while BFS enqueues it for later processing.</p>
 </div>
 </div>
 </div>
@@ -12976,7 +12970,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>It is interesting to note that where <code>bfs()</code> uses a queue, <code>dfs_visit()</code> uses a stack. You don't see a stack in the code, but it is implicit in the recursive call.</p>
+<p>BFS stores pending work in an explicit queue. Recursive <code>dfsVisit()</code> uses the C++ call stack implicitly.</p>
 </div>
 </div>
 </div>
@@ -14227,7 +14221,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         const dist = {}, prev = {}, visited = {};
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; visited[v] = false; }
         dist[start] = 0;
-        let pq = verts.map(v =&gt; [dist[v], v]);
+        // Lazy priority queue: push improvements; stale entries are skipped on pop.
+        let pq = [[0, start]];
         const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0]);
         const steps = [];
         sortPq();
@@ -14236,21 +14231,19 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         while (pq.length &gt; 0) {
           sortPq();
           const [d, u] = pq.shift();
-          if (d === Infinity) break;
-          if (visited[u]) continue;
+          if (d &gt; dist[u]) {
+            const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
+            steps.push({ kind:'stale', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`跳過 stale entry：${u}:${d}，目前最佳距離已是 ${dist[u]}`, treeEdges });
+            continue;
+          }
           visited[u] = true;
           const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
           steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges });
           for (const { to: vv, w: weight } of adj[u]) {
-            if (visited[vv]) {
-              steps.push({ kind:'skip', codeLine:10, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鄰居 ${vv} 已 visited，跳過`, treeEdges });
-              continue;
-            }
-            const newD = d + weight;
+            const newD = dist[u] + weight;
             steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：new_d = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}`, treeEdges });
             if (newD &lt; dist[vv]) {
               dist[vv] = newD; prev[vv] = u;
-              pq = pq.filter(p =&gt; p[1] !== vv);
               pq.push([newD, vv]);
               sortPq();
               steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: [...treeEdges.filter(e =&gt; e[1] !== vv), [u, vv]] });
@@ -14382,20 +14375,19 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         const dist = {}, prev = {}, inTree = {};
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; inTree[v] = false; }
         dist[start] = 0;
-        let pq = verts.map(v =&gt; [dist[v], v]);
+        let pq = [[0, start]];
         const sortPq = () =&gt; pq.sort((a,b) =&gt; {
           if (a[0] === b[0]) return verts.indexOf(a[1]) - verts.indexOf(b[1]);
           if (a[0] === Infinity) return 1;
           if (b[0] === Infinity) return -1;
           return a[0] - b[0];
         });
-        const pqIndex = (v) =&gt; pq.findIndex(p =&gt; p[1] === v);
         const snapPq = () =&gt; pq.map(([key, v]) =&gt; [key, v]);
         const steps = [];
         const mstEdges = [];
         let total = 0;
         sortPq();
-        steps.push({ kind:'init', codeLine:6, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`heapify：所有頂點都在 PQ；${start}.distance = 0，其餘為 sys.maxsize` });
+        steps.push({ kind:'init', codeLine:6, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`初始化 lazy PQ：只加入起點 ${start}:0；其餘 key 為 ∞` });
 
         while (pq.length &gt; 0) {
           sortPq();
@@ -14411,14 +14403,12 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 
           for (const { to: vv, w: weight } of adj[u]) {
             const newD = weight;
-            const idx = pqIndex(vv);
-            const inPq = idx !== -1;
-            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`檢查 ${u}—${vv}：new_distance = ${weight}；條件 next_v in pq 為 ${inPq ? 'True' : 'False'}，目前 distance(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}` });
-            if (inPq &amp;&amp; newD &lt; dist[vv]) {
+            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`檢查 cut edge ${u}—${vv}：weight=${weight}，目前 key(${vv})=${isFinite(dist[vv]) ? dist[vv] : '∞'}` });
+            if (!inTree[vv] &amp;&amp; newD &lt; dist[vv]) {
               dist[vv] = newD; prev[vv] = u;
-              pq[idx][0] = newD;
+              pq.push([newD, vv]);
               sortPq();
-              steps.push({ kind:'relax-update', codeLine:15, current:u, neighbor:vv, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`change_priority(${vv}, ${newD})：previous(${vv}) = ${u}，distance(${vv}) = ${newD}` });
+              steps.push({ kind:'relax-update', codeLine:15, current:u, neighbor:vv, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`push(${vv}, ${newD})：這是目前跨 cut 到 ${vv} 的最便宜 safe-edge candidate` });
             }
           }
         }
@@ -14545,7 +14535,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The general running time for depth-first search is as follows. The loops in <code>dfs()</code> run in $O|V|$, not counting what happens in <code>dfs_visit()</code>, since it is executed once for each vertex in the graph.</p>
+<p>The outer loops in <code>dfs()</code> take $O(|V|)$ excluding recursive edge scans: reset visits every vertex once, and the forest loop considers every vertex as a possible root once.</p>
 </div>
 </div>
 </div>
@@ -14556,7 +14546,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In <code>dfs_visit()</code> the loop is executed once for each edge in the adjacency list of the current vertex. Since it is only called recursively if the vertex is white, the loop will execute a maximum of once for every edge in the graph, or $O(E)$. Therefore, the total time for depth-first search is $O(|V| + |E|)$.</p>
+<p>In <code>dfsVisit()</code>, adjacency scans total $O(|E|)$ because each directed adjacency entry is examined once from its source. Therefore DFS takes $O(|V|+|E|)$ time.</p>
 </div>
 </div>
 </div>
@@ -14581,8 +14571,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="rvNkQnQmpdeI" style="border-radius: 10px; text-align: left"><style>
-#rvNkQnQmpdeI {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="ojRUMAkFetxM" style="border-radius: 10px; text-align: left"><style>
+#ojRUMAkFetxM {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -14810,10 +14800,10 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="c6cb5b63-a4fc-46aa-a234-28f093865d20" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="40b0a92e-4b3a-4d31-b6b7-fd1a5a6dbf7b" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('c6cb5b63-a4fc-46aa-a234-28f093865d20');
-var questionsrvNkQnQmpdeI=[
+var element = document.getElementById('40b0a92e-4b3a-4d31-b6b7-fd1a5a6dbf7b');
+var questionsojRUMAkFetxM=[
     {
         "question": "What is the primary structural difference in how Breadth-First Search (BFS) and Depth-First Search (DFS) track the next vertex to explore?",
         "type": "multiple_choice",
@@ -15902,8 +15892,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("rvNkQnQmpdeI")) {
-    show_questions(questionsrvNkQnQmpdeI, rvNkQnQmpdeI);
+  if (document.getElementById("ojRUMAkFetxM")) {
+    show_questions(questionsojRUMAkFetxM, ojRUMAkFetxM);
   } else {
     setTimeout(try_show, 200);
   }
@@ -15926,7 +15916,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="9.17.-Topological-Sorting-(Optional)">9.17. Topological Sorting (Optional)<a class="anchor-link" href="#9.17.-Topological-Sorting-(Optional)">¶</a></h2>
+<h2 id="9.17.-Topological-Sorting">9.17. Topological Sorting<a class="anchor-link" href="#9.17.-Topological-Sorting">¶</a></h2>
 </div>
 </div>
 </div>
@@ -15937,6 +15927,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<blockquote>
+<p><strong>Course status: optional.</strong> Topological sorting is an official cppds section; this concise summary remains visible in RISE while the detailed derivation stays optional.</p>
+</blockquote>
 <p>To demonstrate that computer scientists can turn just about anything into a graph problem, let’s consider the difficult problem of stirring up a batch of pancakes.</p>
 </div>
 </div>
@@ -16029,9 +16022,9 @@ function try_show() {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ol start="2">
-<li><p>Store the vertices in a list in decreasing order of the closing time.</p>
+<li><p>Store the vertex keys in a <code>vector&lt;string&gt;</code> ordered by decreasing closing time.</p>
 </li>
-<li><p>Return the ordered list as the result of the topological sort.</p>
+<li><p>Return that vector as the topological ordering.</p>
 </li>
 </ol>
 </div>
@@ -17011,7 +17004,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         const dist = {}, prev = {}, visited = {};
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; visited[v] = false; }
         dist[start] = 0;
-        let pq = verts.map(v =&gt; [dist[v], v]);
+        // Lazy priority queue: push improvements; stale entries are skipped on pop.
+        let pq = [[0, start]];
         const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0]);
         const steps = [];
         sortPq();
@@ -17020,21 +17014,19 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         while (pq.length &gt; 0) {
           sortPq();
           const [d, u] = pq.shift();
-          if (d === Infinity) break;
-          if (visited[u]) continue;
+          if (d &gt; dist[u]) {
+            const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
+            steps.push({ kind:'stale', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`跳過 stale entry：${u}:${d}，目前最佳距離已是 ${dist[u]}`, treeEdges });
+            continue;
+          }
           visited[u] = true;
           const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
           steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges });
           for (const { to: vv, w: weight } of adj[u]) {
-            if (visited[vv]) {
-              steps.push({ kind:'skip', codeLine:10, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鄰居 ${vv} 已 visited，跳過`, treeEdges });
-              continue;
-            }
-            const newD = d + weight;
+            const newD = dist[u] + weight;
             steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：new_d = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}`, treeEdges });
             if (newD &lt; dist[vv]) {
               dist[vv] = newD; prev[vv] = u;
-              pq = pq.filter(p =&gt; p[1] !== vv);
               pq.push([newD, vv]);
               sortPq();
               steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: [...treeEdges.filter(e =&gt; e[1] !== vv), [u, vv]] });
@@ -17166,20 +17158,19 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         const dist = {}, prev = {}, inTree = {};
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; inTree[v] = false; }
         dist[start] = 0;
-        let pq = verts.map(v =&gt; [dist[v], v]);
+        let pq = [[0, start]];
         const sortPq = () =&gt; pq.sort((a,b) =&gt; {
           if (a[0] === b[0]) return verts.indexOf(a[1]) - verts.indexOf(b[1]);
           if (a[0] === Infinity) return 1;
           if (b[0] === Infinity) return -1;
           return a[0] - b[0];
         });
-        const pqIndex = (v) =&gt; pq.findIndex(p =&gt; p[1] === v);
         const snapPq = () =&gt; pq.map(([key, v]) =&gt; [key, v]);
         const steps = [];
         const mstEdges = [];
         let total = 0;
         sortPq();
-        steps.push({ kind:'init', codeLine:6, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`heapify：所有頂點都在 PQ；${start}.distance = 0，其餘為 sys.maxsize` });
+        steps.push({ kind:'init', codeLine:6, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`初始化 lazy PQ：只加入起點 ${start}:0；其餘 key 為 ∞` });
 
         while (pq.length &gt; 0) {
           sortPq();
@@ -17195,14 +17186,12 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 
           for (const { to: vv, w: weight } of adj[u]) {
             const newD = weight;
-            const idx = pqIndex(vv);
-            const inPq = idx !== -1;
-            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`檢查 ${u}—${vv}：new_distance = ${weight}；條件 next_v in pq 為 ${inPq ? 'True' : 'False'}，目前 distance(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}` });
-            if (inPq &amp;&amp; newD &lt; dist[vv]) {
+            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`檢查 cut edge ${u}—${vv}：weight=${weight}，目前 key(${vv})=${isFinite(dist[vv]) ? dist[vv] : '∞'}` });
+            if (!inTree[vv] &amp;&amp; newD &lt; dist[vv]) {
               dist[vv] = newD; prev[vv] = u;
-              pq[idx][0] = newD;
+              pq.push([newD, vv]);
               sortPq();
-              steps.push({ kind:'relax-update', codeLine:15, current:u, neighbor:vv, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`change_priority(${vv}, ${newD})：previous(${vv}) = ${u}，distance(${vv}) = ${newD}` });
+              steps.push({ kind:'relax-update', codeLine:15, current:u, neighbor:vv, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`push(${vv}, ${newD})：這是目前跨 cut 到 ${vv} 的最便宜 safe-edge candidate` });
             }
           }
         }
@@ -17318,7 +17307,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="9.18.-Strongly-Connected-Components-(Optional)">9.18. Strongly Connected Components (Optional)<a class="anchor-link" href="#9.18.-Strongly-Connected-Components-(Optional)">¶</a></h2>
+<h2 id="9.18.-Strongly-Connected-Components">9.18. Strongly Connected Components<a class="anchor-link" href="#9.18.-Strongly-Connected-Components">¶</a></h2>
 </div>
 </div>
 </div>
@@ -17329,7 +17318,10 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>For the remainder of this chapter we will turn our attention to some extremely large graphs. The graphs we will use to study some additional algorithms are the graphs produced by the connections between hosts on the internet and the links between web pages.</p>
+<blockquote>
+<p><strong>Course status: optional.</strong> Strongly connected components are an official cppds section; this concise summary remains visible in RISE while the detailed derivation stays optional.</p>
+</blockquote>
+<p>For the remainder of this chapter we turn to graphs formed by links between web pages and hosts on the internet.</p>
 </div>
 </div>
 </div>
@@ -17662,8 +17654,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="NRbotoqzhlSy" style="border-radius: 10px; text-align: left"><style>
-#NRbotoqzhlSy {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="pCjFPdANXSdC" style="border-radius: 10px; text-align: left"><style>
+#pCjFPdANXSdC {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -17891,10 +17883,10 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="f9fc73c4-62c6-402c-bd62-3ced39943bf7" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d3cd63f4-96d9-41b0-afc8-b078fef21130" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('f9fc73c4-62c6-402c-bd62-3ced39943bf7');
-var questionsNRbotoqzhlSy=[
+var element = document.getElementById('d3cd63f4-96d9-41b0-afc8-b078fef21130');
+var questionspCjFPdANXSdC=[
 	{
         "question": "Why is Breadth-First Search (BFS) guaranteed to find the shortest path in an unweighted graph?",
         "type": "multiple_choice",
@@ -18984,8 +18976,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("NRbotoqzhlSy")) {
-    show_questions(questionsNRbotoqzhlSy, NRbotoqzhlSy);
+  if (document.getElementById("pCjFPdANXSdC")) {
+    show_questions(questionspCjFPdANXSdC, pCjFPdANXSdC);
   } else {
     setTimeout(try_show, 200);
   }
@@ -19108,7 +19100,7 @@ function try_show() {
 <span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="p">[</span><span class="n">distance</span><span class="p">,</span><span class="w"> </span><span class="n">currentKey</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
 <span class="w">        </span><span class="n">pq</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">distance</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">g</span><span class="p">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">currentKey</span><span class="p">].</span><span class="n">distance</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">continue</span><span class="p">;</span><span class="w">   </span><span class="c1">// stale entry - the C++ version of change_priority</span>
+<span class="w">            </span><span class="k">continue</span><span class="p">;</span><span class="w">   </span><span class="c1">// stale entry - an older candidate superseded by a better one</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">g</span><span class="p">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">currentKey</span><span class="p">].</span><span class="n">neighbors</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">newDistance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g</span><span class="p">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">currentKey</span><span class="p">].</span><span class="n">distance</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
@@ -19131,7 +19123,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Instead of a <code>change_priority</code> operation, the standard C++ idiom pushes a <strong>new</strong> entry with the better distance and skips any <em>stale</em> entries when they surface — same asymptotic complexity, much simpler code. A <code>visited</code> set variant terminates correctly as long as no edge is negative.</p>
+<p>Our C++ implementation uses a <strong>lazy priority queue</strong>. When relaxation improves a distance, it pushes a new <code>(distance, key)</code> pair instead of searching the heap for the old entry. When an older, larger entry reaches the top, the algorithm recognizes it as stale and skips it.</p>
 </div>
 </div>
 </div>
@@ -19142,7 +19134,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The <code>PriorityQueue</code> class stores tuples of <code>(priority, key)</code> pairs. This is an important point, because Dijkstra's algorithm requires the key in the priority queue to match the key of the vertex in the graph.</p>
+<p>The priority queue can therefore contain more than one entry for a vertex. Every entry carries both the tentative distance and the vertex key, so popping the minimum entry still identifies which graph vertex to process.</p>
 </div>
 </div>
 </div>
@@ -19153,7 +19145,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The priority is used for deciding the position of the key in the priority queue. In this implementation we use the distance to the vertex as the priority because as we will see when we are exploring the next vertex, we always want to explore the vertex that has the smallest distance.</p>
+<p>After popping <code>(queuedDistance, key)</code>, compare <code>queuedDistance</code> with the vertex's currently stored distance. If it is larger, a later relaxation has already superseded that entry; skip it without scanning the adjacency map.</p>
 </div>
 </div>
 </div>
@@ -19164,7 +19156,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Note that there is a <code>change_priority()</code> method. This method is used when the distance to a vertex that is already in the queue is reduced, and thus the vertex is moved toward the front of the queue!</p>
+<p>There is no <code>changePriority()</code> call in this version. Each successful relaxation performs one heap push, so there are at most $O(|E|)$ pushed entries and the same number of pops.</p>
 </div>
 </div>
 </div>
@@ -19175,8 +19167,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Let's walk through it. We begin with the vertex $u$. The three vertices adjacent to it are $v,w$ and $x$. Since the initial distances to them are all initialized to <code>sys.maxsize</code>, the new costs to get to them through the start node are all their direct costs. So we update the costs to each of these three nodes. We also set the predecessor for each node to $u$
-and we add each node to the priority queue. We use the distance as the key for the priority queue.</p>
+<p>Start at $u$ with <code>distance = 0</code>; every other vertex begins at <code>INT_MAX</code> (unreachable). Relaxing $u$'s incident edges assigns their first finite candidate distances and records $u$ as predecessor.</p>
 </div>
 </div>
 </div>
@@ -19264,9 +19255,7 @@ and we add each node to the priority queue. We use the distance as the key for t
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>For each neighboring vertex we check to see if the distance to that vertex through $x$ is smaller than the previously known distance. Obviously this is the case for $y$ since its distance was <code>sys.maxsize</code>. It is not the case for $u$ or $v$ since their distances are 0 and 2 respectively. However, we now learn that the distance to $w$ is smaller if we go through $x$
-than from $u$ directly to $w$. Since that is the case we update $w$ with a new distance and change the predecessor for $w$
-from $u$ to $x$.</p>
+<p>When $x$ is popped, relaxation gives $y$ its first finite distance and improves the candidate for $w$. The lazy queue pushes the improved pairs; any superseded larger pair is skipped when it later reaches the top.</p>
 </div>
 </div>
 </div>
@@ -19387,7 +19376,7 @@ from $u$ to $x$.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>It is important to note that Dijkstra's algorithm works only when the weights are all <strong>positive</strong>. You should convince yourself that if you introduced a negative weight on one of the edges of the graph, the algorithm would never exit.</p>
+<p>Dijkstra's correctness requires every edge weight to be <strong>non-negative</strong>; zero-weight edges are valid. A negative edge can reveal a shorter route after a vertex has been treated as final, so the greedy proof no longer applies. It does not imply that the program must loop forever: the result is simply not guaranteed. The course implementation rejects negative weights.</p>
 </div>
 </div>
 </div>
@@ -20353,7 +20342,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         const dist = {}, prev = {}, visited = {};
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; visited[v] = false; }
         dist[start] = 0;
-        let pq = verts.map(v =&gt; [dist[v], v]);
+        // Lazy priority queue: push improvements; stale entries are skipped on pop.
+        let pq = [[0, start]];
         const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0]);
         const steps = [];
         sortPq();
@@ -20362,21 +20352,19 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         while (pq.length &gt; 0) {
           sortPq();
           const [d, u] = pq.shift();
-          if (d === Infinity) break;
-          if (visited[u]) continue;
+          if (d &gt; dist[u]) {
+            const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
+            steps.push({ kind:'stale', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`跳過 stale entry：${u}:${d}，目前最佳距離已是 ${dist[u]}`, treeEdges });
+            continue;
+          }
           visited[u] = true;
           const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
           steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges });
           for (const { to: vv, w: weight } of adj[u]) {
-            if (visited[vv]) {
-              steps.push({ kind:'skip', codeLine:10, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鄰居 ${vv} 已 visited，跳過`, treeEdges });
-              continue;
-            }
-            const newD = d + weight;
+            const newD = dist[u] + weight;
             steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：new_d = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}`, treeEdges });
             if (newD &lt; dist[vv]) {
               dist[vv] = newD; prev[vv] = u;
-              pq = pq.filter(p =&gt; p[1] !== vv);
               pq.push([newD, vv]);
               sortPq();
               steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: [...treeEdges.filter(e =&gt; e[1] !== vv), [u, vv]] });
@@ -20508,20 +20496,19 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         const dist = {}, prev = {}, inTree = {};
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; inTree[v] = false; }
         dist[start] = 0;
-        let pq = verts.map(v =&gt; [dist[v], v]);
+        let pq = [[0, start]];
         const sortPq = () =&gt; pq.sort((a,b) =&gt; {
           if (a[0] === b[0]) return verts.indexOf(a[1]) - verts.indexOf(b[1]);
           if (a[0] === Infinity) return 1;
           if (b[0] === Infinity) return -1;
           return a[0] - b[0];
         });
-        const pqIndex = (v) =&gt; pq.findIndex(p =&gt; p[1] === v);
         const snapPq = () =&gt; pq.map(([key, v]) =&gt; [key, v]);
         const steps = [];
         const mstEdges = [];
         let total = 0;
         sortPq();
-        steps.push({ kind:'init', codeLine:6, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`heapify：所有頂點都在 PQ；${start}.distance = 0，其餘為 sys.maxsize` });
+        steps.push({ kind:'init', codeLine:6, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`初始化 lazy PQ：只加入起點 ${start}:0；其餘 key 為 ∞` });
 
         while (pq.length &gt; 0) {
           sortPq();
@@ -20537,14 +20524,12 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 
           for (const { to: vv, w: weight } of adj[u]) {
             const newD = weight;
-            const idx = pqIndex(vv);
-            const inPq = idx !== -1;
-            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`檢查 ${u}—${vv}：new_distance = ${weight}；條件 next_v in pq 為 ${inPq ? 'True' : 'False'}，目前 distance(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}` });
-            if (inPq &amp;&amp; newD &lt; dist[vv]) {
+            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`檢查 cut edge ${u}—${vv}：weight=${weight}，目前 key(${vv})=${isFinite(dist[vv]) ? dist[vv] : '∞'}` });
+            if (!inTree[vv] &amp;&amp; newD &lt; dist[vv]) {
               dist[vv] = newD; prev[vv] = u;
-              pq[idx][0] = newD;
+              pq.push([newD, vv]);
               sortPq();
-              steps.push({ kind:'relax-update', codeLine:15, current:u, neighbor:vv, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`change_priority(${vv}, ${newD})：previous(${vv}) = ${u}，distance(${vv}) = ${newD}` });
+              steps.push({ kind:'relax-update', codeLine:15, current:u, neighbor:vv, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`push(${vv}, ${newD})：這是目前跨 cut 到 ${vv} 的最便宜 safe-edge candidate` });
             }
           }
         }
@@ -20682,7 +20667,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Let's look at the running time of Dijkstra's algorithm. We first note that building the priority queue takes $O(|V|)$ time since we initially add every vertex in the graph to the priority queue (or in our case we perform initialization). Once the queue is constructed, the <code>while</code> loop is executed once for every vertex since vertices are all added at the beginning and only removed after that.</p>
+<p>In the lazy C++ implementation, resetting all vertex distances costs $O(|V|)$ and only <code>(0, start)</code> is initially pushed. Scanning adjacency maps examines each directed edge once during the effective expansions.</p>
 </div>
 </div>
 </div>
@@ -20693,7 +20678,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Within that loop each call to <code>delete()</code> takes $O(\log{|V|})$ time. Taken together, that part of the loop and the calls to <code>delete()</code> take $O(|V| \times \log{|V|})$. The <code>for</code> loop is executed once for each edge in the graph, and within the for loop the call to <code>change_priority()</code> takes $O(|E| \times \log{|V|})$ time. So the combined running time is $O((|V|+|E|) \times \log{|V|})$.</p>
+<p>Each successful relaxation adds one heap entry, so there are at most $O(|E|)$ pushes and pops. A heap operation costs $O(\log |E|)=O(\log |V|)$ for this simple map-backed graph, and ordered-map vertex lookup contributes the same logarithmic factor. The total is $O((|V|+|E|)\log |V|)$, with $O(|V|+|E|)$ storage including stale entries.</p>
 </div>
 </div>
 </div>
@@ -20718,8 +20703,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="hTcFDDTerskW" style="border-radius: 10px; text-align: left"><style>
-#hTcFDDTerskW {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="TGVCpdnkOgxR" style="border-radius: 10px; text-align: left"><style>
+#TGVCpdnkOgxR {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -20947,10 +20932,10 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="f7e9ccb0-ad75-418a-94d0-836a31489220" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="bacea66b-a4f0-4a8e-8f73-0799f2dcbac0" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('f7e9ccb0-ad75-418a-94d0-836a31489220');
-var questionshTcFDDTerskW=[
+var element = document.getElementById('bacea66b-a4f0-4a8e-8f73-0799f2dcbac0');
+var questionsTGVCpdnkOgxR=[
 	{
         "question": "Which of the following is a known limitation or characteristic of Dijkstra's algorithm?",
         "type": "multiple_choice",
@@ -20958,12 +20943,12 @@ var questionshTcFDDTerskW=[
             {
                 "answer": "It can accurately find shortest paths in graphs with negative edge weights.",
                 "correct": false,
-                "feedback": "Incorrect. The lecture notes specify that Dijkstra's algorithm only works correctly when all edge weights are positive."
+        "feedback": "Incorrect. Dijkstra's algorithm requires non-negative edge weights; zero-weight edges are valid, but negative edges invalidate the greedy finalization argument."
             },
             {
                 "answer": "It is an iterative algorithm that provides the shortest path from a single source to all other reachable vertices.",
                 "correct": true,
-                "feedback": "Correct! It repeatedly expands the 'known' set of vertices by choosing the one with the smallest distance estimate."
+        "feedback": "Correct! The lazy C++ implementation repeatedly pops the smallest candidate distance and skips entries made stale by later improvements."
             },
             {
                 "answer": "The time complexity is independent of the number of edges in the graph.",
@@ -22040,8 +22025,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("hTcFDDTerskW")) {
-    show_questions(questionshTcFDDTerskW, hTcFDDTerskW);
+  if (document.getElementById("TGVCpdnkOgxR")) {
+    show_questions(questionsTGVCpdnkOgxR, TGVCpdnkOgxR);
   } else {
     setTimeout(try_show, 200);
   }
@@ -22064,11 +22049,13 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Exercise-1:-Given-a-weighted-directed-graph-with-negative-edges-as-follows,-what-is-the-resulting-shortest-path-from-vertex-A-to-D-after-performing-Dijkstra's-algorithm-if-we-do-check-the-visited-node?">Exercise 1: Given a weighted directed graph with negative edges as follows, what is the resulting shortest path from vertex A to D after performing Dijkstra's algorithm if we do check the visited node?<a class="anchor-link" href="#Exercise-1:-Given-a-weighted-directed-graph-with-negative-edges-as-follows,-what-is-the-resulting-shortest-path-from-vertex-A-to-D-after-performing-Dijkstra's-algorithm-if-we-do-check-the-visited-node?">¶</a></h4><center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/Dij.png" width="25%"/></center>
-<p>(A) <code>A-&gt;B-&gt;D</code></p>
-<p>(B) <code>A-&gt;C-&gt;D</code></p>
-<p>(C) <code>A-&gt;E-&gt;G-&gt;D</code></p>
-<p>(D) <code>A-&gt;C-&gt;E-&gt;G-&gt;D</code></p>
+<h4 id="Exercise-1:-Negative-edge-precondition">Exercise 1: Negative-edge precondition<a class="anchor-link" href="#Exercise-1:-Negative-edge-precondition">¶</a></h4><p>The pictured graph contains negative-weight edges. What happens if it is passed to the course <code>dijkstra(g, "A")</code> implementation?</p>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/Dij.png" width="25%"/></center>
+<p>(A) It returns <code>A-&gt;B-&gt;D</code>.</p>
+<p>(B) It returns <code>A-&gt;C-&gt;D</code>.</p>
+<p>(C) It silently deletes the negative edges.</p>
+<p>(D) It throws <code>invalid_argument</code> before running the priority-queue traversal.</p>
+<p><strong>Answer: (D).</strong> Lazy duplicate entries do not make Dijkstra valid for negative weights; the implementation explicitly enforces the non-negative precondition.</p>
 </div>
 </div>
 </div>
@@ -22222,7 +22209,8 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The algorithm we will use to solve this problem is called <u>Prim's algorithm</u>. Prim's algorithm belongs to a family of algorithms called the <u>greedy algorithms</u> that applies to <strong>undirected graph</strong> because at each step it will choose the cheapest next step. In this case, the cheapest next step is to follow the edge with the lowest weight.</p>
+<p>Prim's algorithm is a greedy algorithm for a weighted <strong>undirected</strong> graph. At each step it chooses a <strong>safe edge</strong>: a minimum-weight edge crossing the cut between vertices already in the growing tree and vertices still outside it. The cheapest edge elsewhere in the graph is not necessarily eligible.</p>
+<p>The course <code>prim()</code> requires one connected component containing every vertex. After the lazy priority queue empties, it compares the number of vertices added to the tree with <code>g.vertices.size()</code> and throws <code>invalid_argument</code> if the graph is disconnected.</p>
 </div>
 </div>
 </div>
@@ -22247,7 +22235,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The trick is in the step that directs us to "find an edge that is safe." We define a safe edge as any edge that connects a vertex that is in the spanning tree to a vertex that is not in the spanning tree. This ensures that the tree will always remain a tree and therefore have no cycles.</p>
+<p>The key step is to find a safe edge: among all edges crossing from the current tree to a vertex outside it, Prim's algorithm chooses one with minimum weight. Crossing the cut preserves connectivity without creating a cycle, and the cut property guarantees that this minimum-weight choice can belong to an MST.</p>
 </div>
 </div>
 </div>
@@ -22297,6 +22285,8 @@ function try_show() {
 <span class="w">            </span><span class="p">}</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">inTree</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">g</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">invalid_argument</span><span class="p">(</span><span class="s">"Prim requires a connected graph"</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 <p><em>(complete listing: <code>pythonds3/cppds/graph_algos.hpp</code>)</em></p>
@@ -23244,7 +23234,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         const dist = {}, prev = {}, visited = {};
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; visited[v] = false; }
         dist[start] = 0;
-        let pq = verts.map(v =&gt; [dist[v], v]);
+        // Lazy priority queue: push improvements; stale entries are skipped on pop.
+        let pq = [[0, start]];
         const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0]);
         const steps = [];
         sortPq();
@@ -23253,21 +23244,19 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         while (pq.length &gt; 0) {
           sortPq();
           const [d, u] = pq.shift();
-          if (d === Infinity) break;
-          if (visited[u]) continue;
+          if (d &gt; dist[u]) {
+            const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
+            steps.push({ kind:'stale', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`跳過 stale entry：${u}:${d}，目前最佳距離已是 ${dist[u]}`, treeEdges });
+            continue;
+          }
           visited[u] = true;
           const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
           steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges });
           for (const { to: vv, w: weight } of adj[u]) {
-            if (visited[vv]) {
-              steps.push({ kind:'skip', codeLine:10, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鄰居 ${vv} 已 visited，跳過`, treeEdges });
-              continue;
-            }
-            const newD = d + weight;
+            const newD = dist[u] + weight;
             steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：new_d = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}`, treeEdges });
             if (newD &lt; dist[vv]) {
               dist[vv] = newD; prev[vv] = u;
-              pq = pq.filter(p =&gt; p[1] !== vv);
               pq.push([newD, vv]);
               sortPq();
               steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: [...treeEdges.filter(e =&gt; e[1] !== vv), [u, vv]] });
@@ -23399,20 +23388,19 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         const dist = {}, prev = {}, inTree = {};
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; inTree[v] = false; }
         dist[start] = 0;
-        let pq = verts.map(v =&gt; [dist[v], v]);
+        let pq = [[0, start]];
         const sortPq = () =&gt; pq.sort((a,b) =&gt; {
           if (a[0] === b[0]) return verts.indexOf(a[1]) - verts.indexOf(b[1]);
           if (a[0] === Infinity) return 1;
           if (b[0] === Infinity) return -1;
           return a[0] - b[0];
         });
-        const pqIndex = (v) =&gt; pq.findIndex(p =&gt; p[1] === v);
         const snapPq = () =&gt; pq.map(([key, v]) =&gt; [key, v]);
         const steps = [];
         const mstEdges = [];
         let total = 0;
         sortPq();
-        steps.push({ kind:'init', codeLine:6, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`heapify：所有頂點都在 PQ；${start}.distance = 0，其餘為 sys.maxsize` });
+        steps.push({ kind:'init', codeLine:6, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`初始化 lazy PQ：只加入起點 ${start}:0；其餘 key 為 ∞` });
 
         while (pq.length &gt; 0) {
           sortPq();
@@ -23428,14 +23416,12 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 
           for (const { to: vv, w: weight } of adj[u]) {
             const newD = weight;
-            const idx = pqIndex(vv);
-            const inPq = idx !== -1;
-            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`檢查 ${u}—${vv}：new_distance = ${weight}；條件 next_v in pq 為 ${inPq ? 'True' : 'False'}，目前 distance(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}` });
-            if (inPq &amp;&amp; newD &lt; dist[vv]) {
+            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`檢查 cut edge ${u}—${vv}：weight=${weight}，目前 key(${vv})=${isFinite(dist[vv]) ? dist[vv] : '∞'}` });
+            if (!inTree[vv] &amp;&amp; newD &lt; dist[vv]) {
               dist[vv] = newD; prev[vv] = u;
-              pq[idx][0] = newD;
+              pq.push([newD, vv]);
               sortPq();
-              steps.push({ kind:'relax-update', codeLine:15, current:u, neighbor:vv, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`change_priority(${vv}, ${newD})：previous(${vv}) = ${u}，distance(${vv}) = ${newD}` });
+              steps.push({ kind:'relax-update', codeLine:15, current:u, neighbor:vv, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`push(${vv}, ${newD})：這是目前跨 cut 到 ${vv} 的最便宜 safe-edge candidate` });
             }
           }
         }
@@ -23728,7 +23714,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The printed edges form the minimum spanning tree rooted at <code>A</code> — the same tree the Python version produced, discovered by always growing along the cheapest frontier edge.</p>
+<p>The printed edges form the minimum spanning tree rooted at <code>A</code>, discovered by repeatedly choosing the cheapest edge that crosses the current tree boundary.</p>
 </div>
 </div>
 </div>
@@ -23753,8 +23739,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="oUIHrdFntlXQ" style="border-radius: 10px; text-align: left"><style>
-#oUIHrdFntlXQ {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="MpMQQkMPOjAL" style="border-radius: 10px; text-align: left"><style>
+#MpMQQkMPOjAL {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -23982,36 +23968,62 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="8c86999b-317e-48b0-8f20-fd89af3f48d1" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="1d657e87-53b1-45b4-a5cd-04d651baf8c1" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('8c86999b-317e-48b0-8f20-fd89af3f48d1');
-var questionsoUIHrdFntlXQ=[
-	{
-        "question": "In Prim's algorithm for finding a Minimum Spanning Tree (MST), what defines a safe edge?",
-        "type": "multiple_choice",
-        "answers": [
-            {
-                "answer": "Any edge that does not create a cycle when added to the current tree.",
-                "correct": false,
-                "feedback": "Incorrect. While true of any tree edge, Prim's specifically looks for the minimum weight edge connecting the tree to a new vertex."
-            },
-            {
-                "answer": "The edge with the minimum weight that connects a vertex in the tree to a vertex outside the tree.",
-                "correct": true,
-                "feedback": "Correct! This greedy choice ensures that we grow the tree while keeping the total weight as low as possible without creating cycles."
-            },
-            {
-                "answer": "An edge that has a weight lower than the average of all edges in the graph.",
-                "correct": false,
-                "feedback": "Incorrect. The algorithm focuses on the absolute minimum weight connection for the current boundary."
-            },
-            {
-                "answer": "The first edge encountered during a depth-first search of the graph.",
-                "correct": false,
-                "feedback": "Incorrect. Prim's algorithm is distinct from DFS and uses weights to determine the next edge."
-            }
-        ]
-    }
+var element = document.getElementById('1d657e87-53b1-45b4-a5cd-04d651baf8c1');
+var questionsMpMQQkMPOjAL=[
+  {
+    "question": "In Prim's algorithm for finding a Minimum Spanning Tree (MST), what defines a safe edge?",
+    "type": "multiple_choice",
+    "answers": [
+      {
+        "answer": "Any edge that does not create a cycle when added to the current tree.",
+        "correct": false,
+        "feedback": "Incorrect. Prim's safe edge is the minimum-weight edge crossing the cut between the current tree and the vertices outside it."
+      },
+      {
+        "answer": "A minimum-weight edge crossing from the current tree to a vertex outside it.",
+        "correct": true,
+        "feedback": "Correct! This is the cut-property safe edge used by Prim's greedy step."
+      },
+      {
+        "answer": "An edge that has a weight lower than the average of all edges in the graph.",
+        "correct": false,
+        "feedback": "Incorrect. The algorithm focuses on the absolute minimum weight connection for the current boundary."
+      },
+      {
+        "answer": "The first edge encountered during a depth-first search of the graph.",
+        "correct": false,
+        "feedback": "Incorrect. Prim's algorithm is distinct from DFS and uses weights to determine the next edge."
+      }
+    ]
+  },
+  {
+    "question": "What does the course prim(g, start) function do when the graph is disconnected?",
+    "type": "multiple_choice",
+    "answers": [
+      {
+        "answer": "It silently returns a minimum spanning forest.",
+        "correct": false,
+        "feedback": "That would be a different contract. This function requires one spanning tree containing every vertex."
+      },
+      {
+        "answer": "It adds arbitrary edges between disconnected components.",
+        "correct": false,
+        "feedback": "Prim may only choose edges that exist; it cannot connect separate components."
+      },
+      {
+        "answer": "It throws invalid_argument after detecting that not every vertex entered the tree.",
+        "correct": true,
+        "feedback": "Correct! A disconnected graph has no spanning tree, so the void API reports the failed precondition with an exception."
+      },
+      {
+        "answer": "It loops forever waiting for another priority-queue entry.",
+        "correct": false,
+        "feedback": "The lazy queue becomes empty; the implementation then performs an explicit connectivity check."
+      }
+    ]
+  }
 ]
 ;
 
@@ -25075,8 +25087,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("oUIHrdFntlXQ")) {
-    show_questions(questionsoUIHrdFntlXQ, oUIHrdFntlXQ);
+  if (document.getElementById("MpMQQkMPOjAL")) {
+    show_questions(questionsMpMQQkMPOjAL, MpMQQkMPOjAL);
   } else {
     setTimeout(try_show, 200);
   }
@@ -25123,8 +25135,8 @@ function try_show() {
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="n">from</span><span class="w"> </span><span class="n">jupytercards</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="n">display_flashcards</span>
-<span class="n">fpath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/flashcards/"</span>
-<span class="n">display_flashcards</span><span class="p">(</span><span class="n">fpath</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="err">'</span><span class="n">ch8</span><span class="p">.</span><span class="n">json</span><span class="err">'</span><span class="p">)</span>
+
+<span class="n">display_flashcards</span><span class="p">(</span><span class="s">"flashcards/ch8.json"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -25497,14 +25509,14 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="kXSTkMmKBagH" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="kXSTkMmKBagH-next" onclick="window.checkFlip('kXSTkMmKBagH')"> </div> <div style="height:40px"></div>
+<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="cVwRREKjjZpj" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="cVwRREKjjZpj-next" onclick="window.checkFlip('cVwRREKjjZpj')"> </div> <div style="height:40px"></div>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="e9409078-262c-46bb-86ce-815df6f55e60" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="87033eb8-f87f-434e-9ccd-b6bc20514441" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('e9409078-262c-46bb-86ce-815df6f55e60');
+var element = document.getElementById('87033eb8-f87f-434e-9ccd-b6bc20514441');
 /*!
  * swiped-events.js - v1.1.4
  * Pure JavaScript swipe events
@@ -26301,10 +26313,10 @@ window.setTopics = function(idOrElem, topics) {
 
 (function() {
     var observer = new MutationObserver(function(mutations, obs) {
-        var el = document.getElementById("kXSTkMmKBagH");
+        var el = document.getElementById("cVwRREKjjZpj");
         if (el) {
             el.dataset.url = "";
-            el.dataset.cards = JSON.stringify([{"front": "Graph", "back": "A data structure composed of a set of vertices (nodes) and edges (links) that connect pairs of these vertices. It is used to model relationships in complex systems.", "seqNum": 0}, {"front": "Vertex", "back": "Also known as a node, it represents an entity within a graph and serves as the fundamental unit of the structure.", "seqNum": 1}, {"front": "Edge", "back": "A connection between two vertices. In a directed graph, edges indicate a specific direction of relationship.", "seqNum": 2}, {"front": "Weight", "back": "A numerical value assigned to an edge representing cost, distance, or another measure impacting traversal.", "seqNum": 3}, {"front": "Path", "back": "A sequence of vertices connected by edges, defined by starting at one vertex and traversing through edges to reach another.", "seqNum": 4}, {"front": "Cycle", "back": "A path that begins and ends at the same vertex, containing at least one edge and no repeated edges or internal vertices.", "seqNum": 5}, {"front": "Acyclic Graph", "back": "A graph with no cycles, meaning it is impossible to return to a starting vertex by following edges.", "seqNum": 6}, {"front": "Directed Graph", "back": "A graph where edges have a specific direction, indicating a one-way relationship from one vertex to another.", "seqNum": 7}, {"front": "DAG (Directed Acyclic Graph)", "back": "A directed graph containing no cycles, often used for task scheduling and sequences where tasks do not repeat.", "seqNum": 8}, {"front": "Tree", "back": "A type of acyclic graph with a designated root vertex where all other vertices are connected by exactly one path to that root.", "seqNum": 9}, {"front": "Adjacency Matrix", "back": "A square matrix used to represent a graph where elements indicate whether pairs of vertices are adjacent.", "seqNum": 10}, {"front": "Adjacency List", "back": "A collection of lists used to represent a graph, where each list describes the neighbors of a specific vertex.", "seqNum": 11}, {"front": "Breadth-First Search (BFS)", "back": "A search algorithm that explores all neighbor nodes at the current depth prior to moving on to nodes at the next depth level.", "seqNum": 12}, {"front": "Knight's Tour", "back": "A sequence of moves on a chessboard where a knight visits every square exactly once.", "seqNum": 13}, {"front": "Depth-First Search (DFS)", "back": "A traversal algorithm that explores as far as possible along each branch before backtracking.", "seqNum": 14}, {"front": "Search Tree", "back": "A tree data structure used for efficiently locating specific keys within a set through insertion, deletion, and search operations.", "seqNum": 15}, {"front": "Heuristic", "back": "A technique designed to solve problems quickly or find approximate solutions when classic methods are too slow or infeasible.", "seqNum": 16}, {"front": "Warnsdorff's Algorithm", "back": "A heuristic for the knight's tour where the knight always moves to the square with the fewest onward moves.", "seqNum": 17}, {"front": "Depth-First Forest", "back": "A collection of trees formed during a depth-first search, where each tree corresponds to a set of vertices explored contiguously.", "seqNum": 18}, {"front": "Parenthesis Property", "back": "A DFS property stating that discovery and finish time intervals for any two vertices are either entirely disjoint or nested.", "seqNum": 19}, {"front": "Topological Sorting", "back": "A linear ordering of vertices in a directed graph where for every edge uv, vertex u comes before v.", "seqNum": 20}, {"front": "Strongly Connected Components", "back": "Maximal subgraphs where every pair of vertices has a directed path to and from each other.", "seqNum": 21}, {"front": "Shortest Path Problems", "back": "The challenge of finding a path between two vertices such that the sum of the weights of the edges is minimized.", "seqNum": 22}, {"front": "Dijkstra's Algorithm", "back": "An algorithm for finding the shortest paths between nodes in a graph with non-negative edge weights.", "seqNum": 23}, {"front": "Priority Queue", "back": "A data structure where each element has a priority, and elements are served based on that priority rather than just arrival order.", "seqNum": 24}, {"front": "Uncontrolled Flooding", "back": "A networking technique where a packet is sent to every outgoing link except the one it arrived on.", "seqNum": 25}, {"front": "Minimum Spanning Tree (MST)", "back": "A subset of edges connecting all vertices without cycles and with the minimum total edge weight.", "seqNum": 26}, {"front": "Prim's Algorithm", "back": "An algorithm that finds a minimum spanning tree by growing a tree one edge at a time from a starting vertex.", "seqNum": 27}, {"front": "Greedy Algorithms", "back": "A class of algorithms that build a solution by always choosing the next piece that offers the most immediate benefit.", "seqNum": 28}]);
+            el.dataset.cards = JSON.stringify([{"front": "Graph", "back": "A data structure composed of a set of vertices (nodes) and edges (links) that connect pairs of these vertices. It is used to model relationships in complex systems.", "seqNum": 0}, {"front": "Vertex", "back": "Also known as a node, it represents an entity within a graph and serves as the fundamental unit of the structure.", "seqNum": 1}, {"front": "Edge", "back": "A connection between two vertices. In a directed graph, edges indicate a specific direction of relationship.", "seqNum": 2}, {"front": "Weight", "back": "A numerical value assigned to an edge representing cost, distance, or another measure impacting traversal.", "seqNum": 3}, {"front": "Path", "back": "A sequence of vertices connected by edges, defined by starting at one vertex and traversing through edges to reach another.", "seqNum": 4}, {"front": "Cycle", "back": "A path that begins and ends at the same vertex, containing at least one edge and no repeated edges or internal vertices.", "seqNum": 5}, {"front": "Acyclic Graph", "back": "A graph with no cycles, meaning it is impossible to return to a starting vertex by following edges.", "seqNum": 6}, {"front": "Directed Graph", "back": "A graph where edges have a specific direction, indicating a one-way relationship from one vertex to another.", "seqNum": 7}, {"front": "DAG (Directed Acyclic Graph)", "back": "A directed graph containing no cycles, often used for task scheduling and sequences where tasks do not repeat.", "seqNum": 8}, {"front": "Tree", "back": "A type of acyclic graph with a designated root vertex where all other vertices are connected by exactly one path to that root.", "seqNum": 9}, {"front": "Adjacency Matrix", "back": "A square matrix used to represent a graph where elements indicate whether pairs of vertices are adjacent.", "seqNum": 10}, {"front": "Adjacency List", "back": "A collection of lists used to represent a graph, where each list describes the neighbors of a specific vertex.", "seqNum": 11}, {"front": "Breadth-First Search (BFS)", "back": "A search algorithm that explores all neighbor nodes at the current depth prior to moving on to nodes at the next depth level.", "seqNum": 12}, {"front": "Knight's Tour", "back": "A sequence of moves on a chessboard where a knight visits every square exactly once.", "seqNum": 13}, {"front": "Depth-First Search (DFS)", "back": "A traversal algorithm that explores as far as possible along each branch before backtracking.", "seqNum": 14}, {"front": "Search Tree", "back": "A tree data structure used for efficiently locating specific keys within a set through insertion, deletion, and search operations.", "seqNum": 15}, {"front": "Heuristic", "back": "A technique designed to solve problems quickly or find approximate solutions when classic methods are too slow or infeasible.", "seqNum": 16}, {"front": "Warnsdorff's Algorithm", "back": "A heuristic for the knight's tour where the knight always moves to the square with the fewest onward moves.", "seqNum": 17}, {"front": "Depth-First Forest", "back": "A collection of trees formed during a depth-first search, where each tree corresponds to a set of vertices explored contiguously.", "seqNum": 18}, {"front": "Parenthesis Property", "back": "A DFS property stating that discovery and finish time intervals for any two vertices are either entirely disjoint or nested.", "seqNum": 19}, {"front": "Topological Sorting", "back": "A linear ordering of vertices in a directed graph where for every edge uv, vertex u comes before v.", "seqNum": 20}, {"front": "Strongly Connected Components", "back": "Maximal subgraphs where every pair of vertices has a directed path to and from each other.", "seqNum": 21}, {"front": "Shortest Path Problems", "back": "The challenge of finding a path between two vertices such that the sum of the weights of the edges is minimized.", "seqNum": 22}, {"front": "Dijkstra's Algorithm", "back": "A single-source shortest-path algorithm for non-negative edge weights. This course's lazy priority-queue version pushes improved pairs and skips stale entries.", "seqNum": 23}, {"front": "Priority Queue", "back": "A data structure where each element has a priority, and elements are served based on that priority rather than just arrival order.", "seqNum": 24}, {"front": "Uncontrolled Flooding", "back": "A networking technique where a packet is sent to every outgoing link except the one it arrived on.", "seqNum": 25}, {"front": "Minimum Spanning Tree (MST)", "back": "A subset of edges connecting all vertices without cycles and with the minimum total edge weight.", "seqNum": 26}, {"front": "Prim's Algorithm", "back": "An MST algorithm that repeatedly adds a minimum-weight edge crossing the current cut. The course prim() requires a connected graph and throws invalid_argument otherwise.", "seqNum": 27}, {"front": "Greedy Algorithms", "back": "A class of algorithms that build a solution by always choosing the next piece that offers the most immediate benefit.", "seqNum": 28}]);
             el.dataset.frontColors = JSON.stringify(["var(--asparagus)", "var(--terra-cotta)", "var(--cyan-process)"]);
             el.dataset.backColors = JSON.stringify(["var(--dark-blue-gray)"]);
             el.dataset.textColors = JSON.stringify(["var(--snow)"]);
@@ -26313,7 +26325,7 @@ window.setTopics = function(idOrElem, topics) {
             el.dataset.shuffleCards = false;
             el.dataset.title = "";
             el.dataset.subject = "";
-            createCards("kXSTkMmKBagH");
+            createCards("cVwRREKjjZpj");
             obs.disconnect();
         }
     });
@@ -26390,7 +26402,7 @@ window.setTopics = function(idOrElem, topics) {
 </li>
 <li><p><strong>Adjacency Matrix</strong>: A square matrix used to represent a graph where elements indicate whether pairs of vertices are adjacent.</p>
 </li>
-<li><p><strong>Adjacency List</strong>: A collection of lists used to represent a graph, where each list describes the neighbors of a specific vertex.</p>
+<li><p><strong>Adjacency List</strong>: A sparse representation storing only actual neighbors; this course uses ordered maps for vertices and neighbor weights.</p>
 </li>
 <li><p><strong>Breadth-First Search (BFS)</strong>: A search algorithm that explores all neighbor nodes at the current depth prior to moving on to nodes at the next depth level.</p>
 </li>
@@ -26414,7 +26426,7 @@ window.setTopics = function(idOrElem, topics) {
 </li>
 <li><p><strong>Shortest Path Problems</strong>: The challenge of finding a path between two vertices such that the sum of the weights of the edges is minimized.</p>
 </li>
-<li><p><strong>Dijkstra's Algorithm</strong>: An algorithm for finding the shortest paths between nodes in a graph with non-negative edge weights.</p>
+<li><p><strong>Dijkstra's Algorithm</strong>: A single-source shortest-path algorithm for non-negative edge weights; the lazy C++ version pushes improved pairs and skips stale entries.</p>
 </li>
 <li><p><strong>Priority Queue</strong>: A data structure where each element has a priority, and elements are served based on that priority rather than just arrival order.</p>
 </li>
@@ -26422,7 +26434,7 @@ window.setTopics = function(idOrElem, topics) {
 </li>
 <li><p><strong>Minimum Spanning Tree (MST)</strong>: A subset of edges connecting all vertices without cycles and with the minimum total edge weight.</p>
 </li>
-<li><p><strong>Prim's Algorithm</strong>: An algorithm that finds a minimum spanning tree by growing a tree one edge at a time from a starting vertex.</p>
+<li><p><strong>Prim's Algorithm</strong>: An MST algorithm that repeatedly adds a minimum-weight edge crossing the cut from the current tree to an outside vertex.</p>
 </li>
 <li><p><strong>Greedy Algorithms</strong>: A class of algorithms that build a solution by always choosing the next piece that offers the most immediate benefit.</p>
 </li>

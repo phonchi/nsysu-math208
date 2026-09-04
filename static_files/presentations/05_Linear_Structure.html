@@ -7815,10 +7815,10 @@ a.anchor-link {
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <table align="left">
 <td>
-<a href="https://colab.research.google.com/github/phonchi/nsysu-math208/blob/main/static_files/presentations/05_Linear_Structure.ipynb" target="_parent"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg"/></a>
+<a href="https://colab.research.google.com/github/phonchi/nsysu-math208/blob/master/static_files/presentations/05_Linear_Structure.ipynb" target="_parent"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg"/></a>
 </td>
 <td>
-<a href="https://kaggle.com/kernels/welcome?src=https://github.com/phonchi/nsysu-math208/blob/main/static_files/presentations/05_Linear_Structure.ipynb" target="_blank"><img alt="No description has been provided for this image" src="https://kaggle.com/static/images/open-in-kaggle.svg"/></a>
+<a href="https://kaggle.com/kernels/welcome?src=https://github.com/phonchi/nsysu-math208/blob/master/static_files/presentations/05_Linear_Structure.ipynb" target="_blank"><img alt="No description has been provided for this image" src="https://kaggle.com/static/images/open-in-kaggle.svg"/></a>
 </td>
 </table>
 </div>
@@ -7845,7 +7845,7 @@ a.anchor-link {
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="n">from</span><span class="w"> </span><span class="n">jupyterquiz</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="n">display_quiz</span>
 
-<span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch5/"</span>
+<span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"questions/ch5/"</span>
 </pre></div>
 </div>
 </div>
@@ -8068,10 +8068,9 @@ a.anchor-link {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ul>
-<li><p><code>push(item)</code> adds a new item to the top of the stack. It needs the item and returns nothing.</p>
-</li>
-<li><p><code>pop()</code> removes the top item from the stack. It needs no parameters and returns the item. The stack is modified.</p>
-</li>
+<li><code>push(item)</code> adds at the top and returns <code>void</code>.</li>
+<li><code>top()</code> reads the top without removing it.</li>
+<li><code>pop()</code> removes the top and returns <code>void</code>; call <code>top()</code> first when the value is needed.</li>
 </ul>
 </div>
 </div>
@@ -8084,10 +8083,10 @@ a.anchor-link {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ul>
-<li><code>peek()</code> returns the top item from the stack but does not remove it. It needs no parameters. The stack is not modified.</li>
-<li><code>is_empty()</code> tests to see whether the stack is empty. It needs no parameters and returns a boolean value.</li>
-<li><code>size()</code> returns the number of items on the stack. It needs no parameters and returns an integer.</li>
+<li><code>empty()</code> tests whether the stack is empty.</li>
+<li><code>size()</code> returns the number of elements.</li>
 </ul>
+<p>Calling <code>top()</code> or <code>pop()</code> on an empty <code>std::stack</code> violates its precondition.</p>
 </div>
 </div>
 </div>
@@ -8098,7 +8097,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Under Stack Contents, the top item is listed at the far right:</p>
+<p>For <code>std::stack</code>, only the top is observable; the conceptual table lists the top item at the far right.</p>
 </div>
 </div>
 </div>
@@ -8112,66 +8111,41 @@ a.anchor-link {
 <table>
 <thead>
 <tr>
-<th>Stack Operation</th>
-<th>Stack Contents</th>
-<th>Return Value</th>
+<th><code>std::stack&lt;int&gt;</code> operation</th>
+<th>Conceptual contents (top at right)</th>
+<th>Return value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>s.is_empty()</code></td>
-<td>[]</td>
-<td>True</td>
+<td><code>s.empty()</code></td>
+<td><code>[]</code></td>
+<td><code>true</code></td>
 </tr>
 <tr>
 <td><code>s.push(4)</code></td>
-<td>[4]</td>
-<td></td>
+<td><code>[4]</code></td>
+<td><code>void</code></td>
 </tr>
 <tr>
-<td><code>s.push('dog')</code></td>
-<td>[4, 'dog']</td>
-<td></td>
+<td><code>s.push(7)</code></td>
+<td><code>[4, 7]</code></td>
+<td><code>void</code></td>
 </tr>
 <tr>
-<td><code>s.peek()</code></td>
-<td>[4, 'dog']</td>
-<td>'dog'</td>
-</tr>
-<tr>
-<td><code>s.push(True)</code></td>
-<td>[4, 'dog', True]</td>
-<td></td>
-</tr>
-<tr>
-<td><code>s.size()</code></td>
-<td>[4, 'dog', True]</td>
-<td>3</td>
-</tr>
-<tr>
-<td><code>s.is_empty()</code></td>
-<td>[4, 'dog', True]</td>
-<td>False</td>
-</tr>
-<tr>
-<td><code>s.push(8.4)</code></td>
-<td>[4, 'dog', True, 8.4]</td>
-<td></td>
+<td><code>s.top()</code></td>
+<td><code>[4, 7]</code></td>
+<td><code>7</code></td>
 </tr>
 <tr>
 <td><code>s.pop()</code></td>
-<td>[4, 'dog', True]</td>
-<td>8.4</td>
-</tr>
-<tr>
-<td><code>s.pop()</code></td>
-<td>[4, 'dog']</td>
-<td>True</td>
+<td><code>[4]</code></td>
+<td><code>void</code></td>
 </tr>
 <tr>
 <td><code>s.size()</code></td>
-<td>[4, 'dog']</td>
-<td>2</td>
+<td><code>[4]</code></td>
+<td><code>1</code></td>
 </tr>
 </tbody>
 </table>
@@ -8185,7 +8159,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.5-Implementing-a-Stack-in-C++">3.5 Implementing a Stack in <code>C++</code><a class="anchor-link" href="#3.5-Implementing-a-Stack-in-C++">¶</a></h2>
+<h2 id="3.5-Using-std::stack-in-C++">3.5 Using <code>std::stack</code> in C++<a class="anchor-link" href="#3.5-Using-std::stack-in-C++">¶</a></h2>
 </div>
 </div>
 </div>
@@ -8196,7 +8170,10 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Now that we have clearly defined the stack as an ADT, we will turn our attention to using <code>C++</code> to implement the stack. We build a class whose <strong>underlying storage is a <code>vector</code></strong> — the direct counterpart of the Python list implementation. (A fixed-size array version is in <code>pythonds3/cppds/basic/stack.cpp</code>.)</p>
+<p>The cppds C++ text uses the Standard Library container adapter
+<code>std::stack&lt;T&gt;</code>.  Its public operations are <code>push</code>, <code>pop</code>, <code>top</code>, <code>empty</code>, and
+<code>size</code>.  Unlike the course's teaching class, STL <code>pop()</code> removes an item but
+returns <code>void</code>; read <code>top()</code> before popping when the value is needed.</p>
 </div>
 </div>
 </div>
@@ -8207,7 +8184,10 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The implementation of choice for an abstract data type such as a stack is the creation of <strong>a new class</strong>. The stack operations are implemented as <u>methods</u>. Further, to implement a stack, which is a collection of elements, it makes sense to utilize the power and simplicity of the <code>list</code> provided by <code>Python</code>.</p>
+<p><code>std::stack</code> is a <strong>container adapter</strong>: by default it stores elements in a
+<code>std::deque</code>, while exposing only LIFO operations.  Client code depends on the
+stack contract rather than on an arbitrary position in the underlying
+container.</p>
 </div>
 </div>
 </div>
@@ -8218,7 +8198,9 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Recall that the <code>list</code> class in <code>Python</code> provides an ordered collection mechanism and a set of methods. We need only to decide which end of the <code>list</code> will be considered the top of the stack and which will be the base. Once that decision is made, the operations can be implemented using the list methods such as <code>append()</code> and <code>pop()</code>.</p>
+<p>STL mapping: <code>push(item)</code> adds at the top, <code>top()</code> observes the top, <code>pop()</code>
+removes it, and <code>empty()</code>/<code>size()</code> inspect the state.  Calling <code>top()</code> or
+<code>pop()</code> on an empty stack violates the precondition.</p>
 </div>
 </div>
 </div>
@@ -8229,7 +8211,8 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Assume that the end (back) of the <code>vector</code> will hold the top element of the stack. Note one difference from Python: our template stack holds elements of a <strong>single type</strong> chosen when it is created:</p>
+<p>The following is the official C++ interface.  A stack object has one element
+type, such as <code>stack&lt;string&gt;</code>:</p>
 </div>
 </div>
 </div>
@@ -8240,22 +8223,13 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">Stack</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">items</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stack&gt;</span>
 
-<span class="w">    </span><span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">isEmpty</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">items</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">push</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">item</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">items</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">items</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="p">};</span>
+<span class="n">std</span><span class="o">::</span><span class="n">stack</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">;</span>
+<span class="n">s</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="s">"first"</span><span class="p">);</span>
+<span class="n">s</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="s">"second"</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">top</span><span class="p">();</span><span class="w">   </span><span class="c1">// second</span>
+<span class="n">s</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span><span class="w">               </span><span class="c1">// removes second; returns void</span>
 </pre></div>
 </div>
 </div>
@@ -8267,20 +8241,38 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<div class="highlight"><pre><span></span><span class="n">T</span><span class="w"> </span><span class="nf">pop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">T</span><span class="w"> </span><span class="n">top</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">items</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>
-<span class="w">    </span><span class="n">items</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">top</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="n">T</span><span class="w"> </span><span class="nf">peek</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">items</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>
-<span class="p">}</span>
-<span class="kt">void</span><span class="w"> </span><span class="nf">display</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">items</span><span class="p">)</span><span class="w"> </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" "</span><span class="p">;</span>
-<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-<p><em>(complete class: <code>pythonds3/cppds/stack.hpp</code>)</em></p>
+<p><strong>Three distinct APIs are used in this course:</strong></p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Construction</th>
+<th>Inspect top</th>
+<th>Remove top</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>STL <code>std::stack&lt;T&gt;</code></td>
+<td><code>std::stack&lt;T&gt; s;</code></td>
+<td><code>top()</code></td>
+<td><code>pop()</code> returns <code>void</code></td>
+</tr>
+<tr>
+<td>pythonds3 <code>Stack&lt;T&gt;</code></td>
+<td><code>Stack&lt;T&gt; s;</code></td>
+<td><code>peek()</code></td>
+<td><code>pop()</code> returns <code>T</code></td>
+</tr>
+<tr>
+<td>HW3 capacity stack</td>
+<td><code>Stack&lt;T&gt; s(capacity);</code></td>
+<td><code>stackTop()</code> or <code>peek(index)</code></td>
+<td><code>pop()</code> returns <code>T</code></td>
+</tr>
+</tbody>
+</table>
+<p>The HW3 class additionally provides <code>isFull()</code>. Do not mix method names between these interfaces.</p>
 </div>
 </div>
 </div>
@@ -8291,7 +8283,8 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Notice that the definition of the Stack class is imported from the <code>pythonds3</code> module that is included with the materials for this book.</p>
+<p>The custom header is retained for assignments that explicitly request the
+course ADT.  It is supplementary, not the default C++ library interface.</p>
 </div>
 </div>
 </div>
@@ -8302,7 +8295,8 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>A fixed-capacity array version of the same class is collected in <code>pythonds3/cppds/basic/stack.cpp</code>. Here is the vector-backed stack in action:</p>
+<p>First use the canonical STL adapter.  The following cell is self-contained and
+shows its value-before-pop pattern.</p>
 </div>
 </div>
 </div>
@@ -8315,20 +8309,18 @@ a.anchor-link {
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">"pythonds3/cppds/stack.hpp"</span><span class="c1">   // the vector-backed Stack of this section</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stack&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">Stack</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">;</span>
-<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">boolalpha</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
-<span class="w">    </span><span class="n">s</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
-<span class="w">    </span><span class="n">s</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mf">7.5</span><span class="p">);</span>
-<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">peek</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
-<span class="w">    </span><span class="n">s</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mf">8.4</span><span class="p">);</span>
-<span class="w">    </span><span class="n">s</span><span class="p">.</span><span class="n">display</span><span class="p">();</span>
-<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">stack</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">;</span>
+<span class="w">    </span><span class="n">s</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="s">"4"</span><span class="p">);</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="s">"dog"</span><span class="p">);</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="s">"true"</span><span class="p">);</span>
 <span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">boolalpha</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">top</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">s</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">top</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -8342,11 +8334,10 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
+<p>3</p>
+<p>false</p>
 <p>true</p>
-<p>7.5</p>
-<p>4 7.5 8.4</p>
-<p>8.4</p>
-<p>2</p>
+<p>dog</p>
 </div>
 </div>
 </div>
@@ -8473,7 +8464,9 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Recall that the <code>append()</code> and <code>pop()</code> operations were both $O(1)$. This means that the first implementation will perform <code>push()</code> and <code>pop()</code> in constant time no matter how many items are on the stack.</p>
+<p>For <code>std::stack</code>, <code>push</code>, <code>pop</code>, and <code>top</code> are constant time with the default
+<code>deque</code> backend.  For the supplementary vector-backed class, tail <code>push_back</code>
+is amortized $O(1)$ and tail <code>pop_back</code> is $O(1)$.</p>
 </div>
 </div>
 </div>
@@ -8484,7 +8477,9 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The performance of the second implementation suffers in that the <code>insert(0)</code> and <code>pop(0)</code> operations will both require $O(n)$ for a stack of size $n$. Clearly, even though the implementations are logically equivalent, they would have very different timings when performing benchmark testing!</p>
+<p>The supplementary <code>Stack2</code> deliberately puts the top at <code>vector::begin()</code>;
+both insertion and erasure then shift elements and cost $O(n)$.  It illustrates
+that identical ADT behavior does not imply identical implementation cost.</p>
 </div>
 </div>
 </div>
@@ -8509,8 +8504,8 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="YbvAgigVdacr" style="border-radius: 10px; text-align: left"><style>
-#YbvAgigVdacr {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="vDOGKLrffDqI" style="border-radius: 10px; text-align: left"><style>
+#vDOGKLrffDqI {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -8738,13 +8733,13 @@ a.anchor-link {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="6a0a66ce-60b6-409f-a847-74f0b25a1319" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="eb4522de-9a75-414d-81ea-de5cd0255a43" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('6a0a66ce-60b6-409f-a847-74f0b25a1319');
-var questionsYbvAgigVdacr=[
+var element = document.getElementById('eb4522de-9a75-414d-81ea-de5cd0255a43');
+var questionsvDOGKLrffDqI=[
     {
         "question": "Given the following sequence of stack operations, what is the top item on the stack when the sequence is complete?",
-        "code": "Stack<string> m;\nm.push(\"x\");\nm.push(\"y\");\nm.pop();\nm.push(\"z\");\nm.peek();",
+        "code": "std::stack&lt;std::string&gt; m;\nm.push(\"x\");\nm.push(\"y\");\nm.pop();\nm.push(\"z\");\nm.top();",
         "type": "multiple_choice",
         "answers": [
             {
@@ -8760,7 +8755,7 @@ var questionsYbvAgigVdacr=[
             {
                 "answer": "\"z\"",
                 "correct": true,
-                "feedback": "Correct! Here is the trace: 1. push(\"x\") -> [\"x\"]; 2. push(\"y\") -> [\"x\", \"y\"]; 3. pop() removes \"y\" -> [\"x\"]; 4. push(\"z\") -> [\"x\", \"z\"]. The `peek()` operation returns \"z\", which is at the top."
+                "feedback": "Correct! Here is the trace: 1. push(\"x\") -> [\"x\"]; 2. push(\"y\") -> [\"x\", \"y\"]; 3. pop() removes \"y\" -> [\"x\"]; 4. push(\"z\") -> [\"x\", \"z\"]. The `top()` operation returns \"z\"."
             },
             {
                 "answer": "The stack is empty",
@@ -8769,7 +8764,8 @@ var questionsYbvAgigVdacr=[
             }
         ]
     }
-];
+]
+;
 
 if (typeof Question === 'undefined') {
 // Make a random ID
@@ -9831,8 +9827,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("YbvAgigVdacr")) {
-    show_questions(questionsYbvAgigVdacr, YbvAgigVdacr);
+  if (document.getElementById("vDOGKLrffDqI")) {
+    show_questions(questionsvDOGKLrffDqI, vDOGKLrffDqI);
   } else {
     setTimeout(try_show, 200);
   }
@@ -9869,8 +9865,8 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="DotHdUyyNFsY" style="border-radius: 10px; text-align: left"><style>
-#DotHdUyyNFsY {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="UkCpPpJNhPER" style="border-radius: 10px; text-align: left"><style>
+#UkCpPpJNhPER {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -10098,13 +10094,13 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="f1ba569b-fc34-464f-9010-0b5464a4e860" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="183c2d0f-380e-4c00-967e-67c33343088d" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('f1ba569b-fc34-464f-9010-0b5464a4e860');
-var questionsDotHdUyyNFsY=[
+var element = document.getElementById('183c2d0f-380e-4c00-967e-67c33343088d');
+var questionsUkCpPpJNhPER=[
     {
-        "question": "Given the following sequence of stack operations, what is the top item on the stack when the sequence is complete?",
-        "code": "Stack<string> m;\nm.push(\"x\");\nm.push(\"y\");\nm.push(\"z\");\nwhile (!m.isEmpty()) {\n    m.pop();\n    m.pop();\n}",
+        "question": "What happens when this std::stack code executes?",
+        "code": "std::stack&lt;std::string&gt; m;\nm.push(\"x\");\nm.push(\"y\");\nm.push(\"z\");\nwhile (!m.empty()) {\n    m.pop();\n    m.pop();\n}",
         "type": "multiple_choice",
         "answers": [
             {
@@ -10120,7 +10116,7 @@ var questionsDotHdUyyNFsY=[
             {
                 "answer": "a pop on an empty stack occurs (undefined behavior / likely crash)",
                 "correct": true,
-                "feedback": "Correct! After the first two pops remove \"z\" and \"y\", the loop condition is checked again with one item left (\"x\"). The next iteration pops \"x\" and then pops an empty stack — in C++ this is undefined behavior and typically crashes the program (unlike Python, no exception is raised for you)."
+                "feedback": "Correct! After the first two pops remove \"z\" and \"y\", one item remains. The next iteration removes \"x\" and then calls pop() on an empty std::stack, violating its precondition and causing undefined behavior."
             },
             {
                 "answer": "\"z\"",
@@ -10129,7 +10125,8 @@ var questionsDotHdUyyNFsY=[
             }
         ]
     }
-];
+]
+;
 
 if (typeof Question === 'undefined') {
 // Make a random ID
@@ -11191,8 +11188,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("DotHdUyyNFsY")) {
-    show_questions(questionsDotHdUyyNFsY, DotHdUyyNFsY);
+  if (document.getElementById("UkCpPpJNhPER")) {
+    show_questions(questionsUkCpPpJNhPER, UkCpPpJNhPER);
   } else {
     setTimeout(try_show, 200);
   }
@@ -11215,7 +11212,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Exercise:-Write-a-function-rev_string(my_str)-that-uses-a-stack-to-reverse-the-characters-in-a-string.">Exercise: Write a function <code>rev_string(my_str)</code> that uses a stack to reverse the characters in a string.<a class="anchor-link" href="#Exercise:-Write-a-function-rev_string(my_str)-that-uses-a-stack-to-reverse-the-characters-in-a-string.">¶</a></h4>
+<h4 id="Exercise:-Write-revString(const-string&amp;)-using-std::stack%3Cchar%3E.">Exercise: Write <code>revString(const string&amp;)</code> using <code>std::stack&lt;char&gt;</code>.<a class="anchor-link" href="#Exercise:-Write-revString(const-string&amp;)-using-std::stack%3Cchar%3E.">¶</a></h4>
 </div>
 </div>
 </div>
@@ -11257,8 +11254,8 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/tmp/tmpl39zn56s.cpp: In function ‘std::string revString(std::string)’:
-/tmp/tmpl39zn56s.cpp:13:5: error: expected primary-expression before ‘}’ token
+<pre>/tmp/tmp9pp2wk7f.cpp: In function ‘std::string revString(std::string)’:
+/tmp/tmp9pp2wk7f.cpp:13:5: error: expected primary-expression before ‘}’ token
    13 |     }
       |     ^
 </pre>
@@ -11502,7 +11499,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>If the stack becomes empty before we reach the end of the symbol_string, then there are too many closing parentheses and the string is not balanced, so we immediately return <code>False</code> (line 11).</p>
+<p>If the stack becomes empty before the end of <code>symbolString</code>, there are too many closing delimiters, so the C++ function immediately returns <code>false</code>.</p>
 </div>
 </div>
 </div>
@@ -11546,7 +11543,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>For example, in Python square brackets, <code>[</code> and <code>]</code>, are used for lists; curly braces, <code>{</code> and <code>}</code>, are used for sets and dictionaries; and parentheses, <code>(</code> and <code>)</code>, are used for tuples and arithmetic expressions.</p>
+<p>In C++, square brackets appear in array indexing, braces delimit blocks or
+initializers, and parentheses group expressions and function calls.  A stack
+can check whether nested delimiters <code>()</code>, <code>[]</code>, and <code>{}</code> close in LIFO order.</p>
 </div>
 </div>
 </div>
@@ -11635,7 +11634,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The <code>Python</code> code only change appears in line 12 where we call a helper function, matches, to assist with symbol-matching. Each symbol that is removed from the stack must be checked to see that it matches the current closing symbol.</p>
+<p>The generalized C++ version adds a <code>matches(open, close)</code> helper.  Every
+closing delimiter is compared with the most recent unmatched opening delimiter
+on the stack.</p>
 </div>
 </div>
 </div>
@@ -12061,8 +12062,8 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="oHBJfMOvIlge" style="border-radius: 10px; text-align: left"><style>
-#oHBJfMOvIlge {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="LPIIvUXYRKmV" style="border-radius: 10px; text-align: left"><style>
+#LPIIvUXYRKmV {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -12290,10 +12291,10 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="971f8880-41fa-40f7-bf1e-331d8d877214" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="3a27ab8e-d6fc-4b05-9b22-5c005f9f339b" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('971f8880-41fa-40f7-bf1e-331d8d877214');
-var questionsoHBJfMOvIlge=[
+var element = document.getElementById('3a27ab8e-d6fc-4b05-9b22-5c005f9f339b');
+var questionsLPIIvUXYRKmV=[
     {
         "question": "What is the value of 25 expressed as an octal number?",
         "type": "string",
@@ -12306,11 +12307,12 @@ var questionsoHBJfMOvIlge=[
             {
                 "answer": "031",
                 "correct": true,
-                "feedback": "Correct! 031 is the standard C++ representation for the octal value 31."
+                "feedback": "Correct! In C++ source, the leading zero in the integer literal 031 denotes base 8; the literal therefore has decimal value 25."
             }
         ]
     }
-];
+]
+;
 
 if (typeof Question === 'undefined') {
 // Make a random ID
@@ -13372,8 +13374,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("oHBJfMOvIlge")) {
-    show_questions(questionsoHBJfMOvIlge, oHBJfMOvIlge);
+  if (document.getElementById("LPIIvUXYRKmV")) {
+    show_questions(questionsLPIIvUXYRKmV, LPIIvUXYRKmV);
   } else {
     setTimeout(try_show, 200);
   }
@@ -13816,8 +13818,8 @@ function try_show() {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ol>
-<li>Create an empty stack (<code>op_stack</code>) for operators and an empty list for output.</li>
-<li>Convert the input infix string to a list using the string method <code>split()</code>.</li>
+<li>Create <code>std::stack&lt;string&gt; operators</code> and <code>vector&lt;string&gt; output</code>.</li>
+<li>Tokenize the input with <code>std::istringstream</code>.</li>
 </ol>
 </div>
 </div>
@@ -13903,7 +13905,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Tokens are extracted from the input with a <code>stringstream</code>, <code>C++</code>'s counterpart of Python's <code>split()</code>. The complete program:</p>
+<p>Tokens are extracted with <code>std::istringstream</code>; the complete C++ program is below.</p>
 </div>
 </div>
 </div>
@@ -14041,8 +14043,8 @@ A B + C * D E - F G + * -
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ol>
-<li>Create an empty stack called <code>operand_stack</code>.</li>
-<li>Convert the string to a list by using the string method <code>split()</code>.</li>
+<li>Create <code>std::stack&lt;int&gt; operands</code>.</li>
+<li>Tokenize with <code>std::istringstream</code> and scan from left to right.</li>
 </ol>
 </div>
 </div>
@@ -14175,8 +14177,8 @@ A B + C * D E - F G + * -
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="cghLgdQZegpM" style="border-radius: 10px; text-align: left"><style>
-#cghLgdQZegpM {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="xJMAzqCqpbgV" style="border-radius: 10px; text-align: left"><style>
+#xJMAzqCqpbgV {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -14404,10 +14406,10 @@ A B + C * D E - F G + * -
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="946ce54e-57ae-404e-94ec-a53caa61cbb3" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="7940f635-444d-442f-86d6-2f974fde3d46" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('946ce54e-57ae-404e-94ec-a53caa61cbb3');
-var questionscghLgdQZegpM=[
+var element = document.getElementById('7940f635-444d-442f-86d6-2f974fde3d46');
+var questionsxJMAzqCqpbgV=[
     {
         "question": "Convert the following infix expression to postfix: $10 + 3 * 5 / (16 - 4)$",
         "type": "multiple_choice",
@@ -15496,8 +15498,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("cghLgdQZegpM")) {
-    show_questions(questionscghLgdQZegpM, cghLgdQZegpM);
+  if (document.getElementById("xJMAzqCqpbgV")) {
+    show_questions(questionsxJMAzqCqpbgV, xJMAzqCqpbgV);
   } else {
     setTimeout(try_show, 200);
   }
@@ -15534,8 +15536,8 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="fSjRLgmJpzqT" style="border-radius: 10px; text-align: left"><style>
-#fSjRLgmJpzqT {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="uDiayVTYEOig" style="border-radius: 10px; text-align: left"><style>
+#uDiayVTYEOig {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -15763,10 +15765,10 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="82a6c36f-f27b-4b80-bc01-9593a819b8cb" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="bfac10da-755e-4266-b880-db56fe489a8f" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('82a6c36f-f27b-4b80-bc01-9593a819b8cb');
-var questionsfSjRLgmJpzqT=[
+var element = document.getElementById('bfac10da-755e-4266-b880-db56fe489a8f');
+var questionsuDiayVTYEOig=[
     {
         "question": "What is the result of evaluating the following postfix expression: $17 \\ 10 \\ + \\ 3 \\ * \\ 9 \\ /$ ?",
         "type": "multiple_choice",
@@ -16855,8 +16857,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("fSjRLgmJpzqT")) {
-    show_questions(questionsfSjRLgmJpzqT, fSjRLgmJpzqT);
+  if (document.getElementById("uDiayVTYEOig")) {
+    show_questions(questionsuDiayVTYEOig, uDiayVTYEOig);
   } else {
     setTimeout(try_show, 200);
   }
@@ -16879,7 +16881,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Exercise:-Modify-the-infix_to_postfix()-function-so-that-it-can-convert-the-following-expression:-5-*-3-%5E-(4---2).-Run-the-function-on-the-expression-and-paste-the-answer-here:">Exercise: Modify the <code>infix_to_postfix()</code> function so that it can convert the following expression: <code>5 * 3 ^ (4 - 2)</code>. Run the function on the expression and paste the answer here:<a class="anchor-link" href="#Exercise:-Modify-the-infix_to_postfix()-function-so-that-it-can-convert-the-following-expression:-5-*-3-%5E-(4---2).-Run-the-function-on-the-expression-and-paste-the-answer-here:">¶</a></h4>
+<h4 id="Exercise:-Extend-infixToPostfix()-to-convert-5-*-3-%5E-(4---2).">Exercise: Extend <code>infixToPostfix()</code> to convert <code>5 * 3 ^ (4 - 2)</code>.<a class="anchor-link" href="#Exercise:-Extend-infixToPostfix()-to-convert-5-*-3-%5E-(4---2).">¶</a></h4>
 </div>
 </div>
 </div>
@@ -16922,8 +16924,8 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/tmp/tmpnuhnarzj.cpp: In function ‘std::string infixToPostfix(std::string)’:
-/tmp/tmpnuhnarzj.cpp:15:12: error: ‘result’ was not declared in this scope
+<pre>/tmp/tmpuq9sn4bq.cpp: In function ‘std::string infixToPostfix(std::string)’:
+/tmp/tmpuq9sn4bq.cpp:15:12: error: ‘result’ was not declared in this scope
    15 |     return result;
       |            ^~~~~~
 </pre>
@@ -17067,7 +17069,8 @@ function try_show() {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ul>
-<li><code>Queue()</code> creates a new queue that is empty. It needs no parameters and returns an empty queue.</li>
+<li><code>std::queue&lt;T&gt; q;</code> constructs an empty queue.</li>
+<li><code>push(item)</code> adds at the rear and returns <code>void</code>.</li>
 </ul>
 </div>
 </div>
@@ -17080,8 +17083,9 @@ function try_show() {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ul>
-<li><code>enqueue(item)</code> adds a new item to the rear of the queue. It needs the item and returns nothing.</li>
-<li><code>dequeue()</code> removes the front item from the queue. It needs no parameters and returns the item. The queue is modified.</li>
+<li><code>front()</code> and <code>back()</code> inspect the two ends.</li>
+<li><code>pop()</code> removes the front and returns <code>void</code>.</li>
+<li><code>empty()</code> and <code>size()</code> inspect the queue state.</li>
 </ul>
 </div>
 </div>
@@ -17093,10 +17097,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<ul>
-<li><code>is_empty()</code> tests to see whether the queue is empty. It needs no parameters and returns a boolean value.</li>
-<li><code>size()</code> returns the number of items in the queue. It needs no parameters and returns an integer.</li>
-</ul>
+<p>Call <code>front()</code> before <code>pop()</code> when the removed value is needed. Calling <code>front()</code>, <code>back()</code>, or <code>pop()</code> on an empty queue violates the precondition.</p>
 </div>
 </div>
 </div>
@@ -17107,7 +17108,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Table below shows the results of a sequence of queue operations. The queue contents are shown such that the <strong>front is on the right.</strong></p>
+<p>The conceptual table lists <code>front()</code> on the left and <code>back()</code> on the right, matching the normal STL view.</p>
 </div>
 </div>
 </div>
@@ -17121,61 +17122,41 @@ function try_show() {
 <table>
 <thead>
 <tr>
-<th>Queue Operation</th>
-<th>Queue Contents</th>
-<th>Return Value</th>
+<th><code>std::queue&lt;int&gt;</code> operation</th>
+<th>Conceptual contents (front at left)</th>
+<th>Return value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>q.is_empty()</code></td>
-<td>[]</td>
-<td>True</td>
+<td><code>q.empty()</code></td>
+<td><code>[]</code></td>
+<td><code>true</code></td>
 </tr>
 <tr>
-<td><code>q.enqueue(4)</code></td>
-<td>[4]</td>
-<td></td>
+<td><code>q.push(4)</code></td>
+<td><code>[4]</code></td>
+<td><code>void</code></td>
 </tr>
 <tr>
-<td><code>q.enqueue("dog")</code></td>
-<td>['dog', 4]</td>
-<td></td>
+<td><code>q.push(7)</code></td>
+<td><code>[4, 7]</code></td>
+<td><code>void</code></td>
 </tr>
 <tr>
-<td><code>q.enqueue(True)</code></td>
-<td>[True, 'dog', 4]</td>
-<td></td>
+<td><code>q.front()</code></td>
+<td><code>[4, 7]</code></td>
+<td><code>4</code></td>
 </tr>
 <tr>
-<td><code>q.size()</code></td>
-<td>[True, 'dog', 4]</td>
-<td>3</td>
+<td><code>q.back()</code></td>
+<td><code>[4, 7]</code></td>
+<td><code>7</code></td>
 </tr>
 <tr>
-<td><code>q.is_empty()</code></td>
-<td>[True, 'dog', 4]</td>
-<td>False</td>
-</tr>
-<tr>
-<td><code>q.enqueue(8.4)</code></td>
-<td>[8.4, True, 'dog', 4]</td>
-<td></td>
-</tr>
-<tr>
-<td><code>q.dequeue()</code></td>
-<td>[8.4, True, 'dog']</td>
-<td>4</td>
-</tr>
-<tr>
-<td><code>q.dequeue()</code></td>
-<td>[8.4, True]</td>
-<td>'dog'</td>
-</tr>
-<tr>
-<td><code>q.size()</code></td>
-<td>[8.4, True]</td>
-<td>2</td>
+<td><code>q.pop()</code></td>
+<td><code>[7]</code></td>
+<td><code>void</code></td>
 </tr>
 </tbody>
 </table>
@@ -17189,7 +17170,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.12-Implementing-a-Queue-in-C++">3.12 Implementing a Queue in <code>C++</code><a class="anchor-link" href="#3.12-Implementing-a-Queue-in-C++">¶</a></h2>
+<h2 id="3.12-Using-std::queue-in-C++">3.12 Using <code>std::queue</code> in C++<a class="anchor-link" href="#3.12-Using-std::queue-in-C++">¶</a></h2>
 </div>
 </div>
 </div>
@@ -17200,7 +17181,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The implementation assumes that the rear is at position 0 in the underlying <code>vector</code>. This allows us to insert at the front of the vector for enqueue and <code>pop_back</code> for dequeue (the complete class is in <code>pythonds3/cppds/basic/queue.cpp</code>):</p>
+<p>The cppds C++ text uses <code>std::queue&lt;T&gt;</code>.  Enqueue with <code>push</code>, inspect with
+<code>front</code>, then remove with <code>pop</code> (which returns <code>void</code>).  <code>back</code> observes the
+rear.  All are $O(1)$ with the default <code>deque</code> backend.</p>
 </div>
 </div>
 </div>
@@ -17211,28 +17194,16 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">Queue</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">items</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;queue&gt;</span>
 
-<span class="w">    </span><span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">isEmpty</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">items</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">enqueue</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">item</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">items</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">item</span><span class="p">);</span><span class="w">   </span><span class="c1">// rear at position 0</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="n">T</span><span class="w"> </span><span class="n">dequeue</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">T</span><span class="w"> </span><span class="n">front</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">items</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>
-<span class="w">            </span><span class="n">items</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">front</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">items</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="p">};</span>
+<span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">;</span>
+<span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="s">"first"</span><span class="p">);</span>
+<span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="s">"second"</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span><span class="w"> </span><span class="c1">// first</span>
+<span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span><span class="w">                </span><span class="c1">// removes first; returns void</span>
 </pre></div>
+<p><strong>Course implementation supplement:</strong> <code>pythonds3/cppds/queue.hpp</code> uses
+<code>enqueue</code>, value-returning <code>dequeue</code>, and <code>isEmpty</code> for assignment compatibility.</p>
 </div>
 </div>
 </div>
@@ -17245,18 +17216,18 @@ function try_show() {
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">"pythonds3/cppds/queue.hpp"</span><span class="c1">   // the vector-backed Queue of this section</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;queue&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">Queue</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">;</span>
-<span class="w">    </span><span class="n">q</span><span class="p">.</span><span class="n">enqueue</span><span class="p">(</span><span class="s">"4"</span><span class="p">);</span>
-<span class="w">    </span><span class="n">q</span><span class="p">.</span><span class="n">enqueue</span><span class="p">(</span><span class="s">"dog"</span><span class="p">);</span>
-<span class="w">    </span><span class="n">q</span><span class="p">.</span><span class="n">enqueue</span><span class="p">(</span><span class="s">"true"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">queue</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">;</span>
+<span class="w">    </span><span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="s">"4"</span><span class="p">);</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="s">"dog"</span><span class="p">);</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="s">"true"</span><span class="p">);</span>
 <span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
-<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">boolalpha</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
-<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">dequeue</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">boolalpha</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -17273,6 +17244,7 @@ function try_show() {
 <p>3</p>
 <p>false</p>
 <p>4</p>
+<p>dog</p>
 </div>
 </div>
 </div>
@@ -17298,8 +17270,8 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="vVFCXCatJyvx" style="border-radius: 10px; text-align: left"><style>
-#vVFCXCatJyvx {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="zygDbtEhHfwP" style="border-radius: 10px; text-align: left"><style>
+#zygDbtEhHfwP {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -17527,38 +17499,39 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="2e209742-ee30-4663-9e68-611791f0cb4c" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d56ddb9b-4de2-411e-9ea2-7416cb9c238e" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('2e209742-ee30-4663-9e68-611791f0cb4c');
-var questionsvVFCXCatJyvx=[
+var element = document.getElementById('d56ddb9b-4de2-411e-9ea2-7416cb9c238e');
+var questionszygDbtEhHfwP=[
     {
         "question": "Suppose you have the following series of queue operations. What items are left on the queue?",
-        "code": "Queue<string> q;\nq.enqueue(\"hello\");\nq.enqueue(\"dog\");\nq.enqueue(\"3\");\nq.dequeue();",
+        "code": "std::queue&lt;std::string&gt; q;\nq.push(\"hello\");\nq.push(\"dog\");\nq.push(\"3\");\nq.pop();",
         "type": "multiple_choice",
         "answers": [
             {
                 "answer": "{\"dog\", \"3\"}",
                 "correct": true,
-                "feedback": "Correct! A queue follows the First-In, First-Out (FIFO) principle. The sequence of operations works as follows: 1. enqueue(\"hello\") adds \"hello\" to the front. 2. enqueue(\"dog\") adds \"dog\" behind it. 3. enqueue(3) adds 3 to the rear. 4. dequeue() removes the item at the front, which was \"hello\". This leaves \"dog\" and 3 in the queue."
+                "feedback": "Correct! A queue is FIFO. push appends at the rear; pop removes the front item (\"hello\") and returns void, leaving \"dog\" and \"3\"."
             },
             {
                 "answer": "{\"hello\", \"dog\"}",
                 "correct": false,
-                "feedback": "Incorrect. This would happen if the dequeue operation removed the last item added (LIFO behavior), which is characteristic of a stack, not a queue."
+                "feedback": "Incorrect. This would happen if pop() removed the last item added (LIFO behavior), which is characteristic of a stack, not a queue."
             },
             {
                 "answer": "{\"hello\", \"dog\", \"3\"}",
                 "correct": false,
-                "feedback": "Incorrect. This is the state of the queue before the dequeue operation was performed. The dequeue operation must remove one element from the front."
+                "feedback": "Incorrect. This is the state before pop(); queue::pop removes one element from the front."
             },
             {
                 "answer": "{\"3\"}",
                 "correct": false,
-                "feedback": "Incorrect. This would imply that two dequeue operations were performed, or that the queue only kept the most recent entry."
+                "feedback": "Incorrect. This would imply two pop() calls, or that the queue kept only the most recent entry."
             }
         ]
     }
-];
+]
+;
 
 if (typeof Question === 'undefined') {
 // Make a random ID
@@ -18620,8 +18593,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("vVFCXCatJyvx")) {
-    show_questions(questionsvVFCXCatJyvx, vVFCXCatJyvx);
+  if (document.getElementById("zygDbtEhHfwP")) {
+    show_questions(questionszygDbtEhHfwP, zygDbtEhHfwP);
   } else {
     setTimeout(try_show, 200);
   }
@@ -18677,7 +18650,8 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>We will implement a general simulation of Hot Potato. Our program will input a list of names and a constant, call it "num," to be used for counting. It will return the name of the last person remaining after repetitive counting by num.</p>
+<p>The simulation receives a <code>vector&lt;string&gt;</code> of names and a count.  The active
+circle is a <code>std::queue&lt;string&gt;</code>; it returns the last remaining name.</p>
 </div>
 </div>
 </div>
@@ -18780,7 +18754,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Notice that the list is loaded into the queue such that the first name on the list will be at the front of the queue. 'Bill' in this case is the first item in the list and therefore moves to the front of the queue.</p>
+<p>Names are pushed in their given order, so the first name is initially at
+<code>front()</code>.  Moving one player means copying <code>front()</code>, pushing that value at
+the rear, and then popping the old front.</p>
 </div>
 </div>
 </div>
@@ -18791,7 +18767,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Exercise:-Implement-the-queue-ADT,-using-a-list-such-that-the-rear-of-the-queue-is-at-the-end-of-the-list.">Exercise: Implement the queue ADT, using a list such that the rear of the queue is at the end of the list.<a class="anchor-link" href="#Exercise:-Implement-the-queue-ADT,-using-a-list-such-that-the-rear-of-the-queue-is-at-the-end-of-the-list.">¶</a></h4>
+<h4 id="Exercise:-Implement-the-same-simulation-with-the-course-Queue%3CT%3E-API-and-document-the-API-translation.">Exercise: Implement the same simulation with the course <code>Queue&lt;T&gt;</code> API and document the API translation.<a class="anchor-link" href="#Exercise:-Implement-the-same-simulation-with-the-course-Queue%3CT%3E-API-and-document-the-API-translation.">¶</a></h4>
 </div>
 </div>
 </div>
@@ -18958,7 +18934,7 @@ function try_show() {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ol start="3">
-<li>After the simulation is complete, compute the average waiting time from the list of waiting times generated.</li>
+<li>After the simulation, compute the mean of the recorded waiting times; handle the empty sample explicitly.</li>
 </ol>
 </div>
 </div>
@@ -18970,7 +18946,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="3.14.2.-Python-Implementation">3.14.2. Python Implementation<a class="anchor-link" href="#3.14.2.-Python-Implementation">¶</a></h3>
+<h3 id="3.14.2-C++17-Implementation-with-Value-Semantics">3.14.2 C++17 Implementation with Value Semantics<a class="anchor-link" href="#3.14.2-C++17-Implementation-with-Value-Semantics">¶</a></h3>
 </div>
 </div>
 </div>
@@ -18981,7 +18957,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>To design this simulation we will create classes for the three real-world objects described above: <code>Printer</code>, <code>Task</code>, and <code>PrintQueue</code>.</p>
+<p>The C++17 model uses <code>Task</code> values, <code>queue&lt;Task&gt;</code>, and <code>optional&lt;Task&gt;</code> inside
+the printer.  Ownership is automatic: the simulation contains no raw <code>new</code> or
+<code>delete</code> and leaves no queued-task leak at the end of a trial.</p>
 </div>
 </div>
 </div>
@@ -18993,32 +18971,19 @@ function try_show() {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Printer</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">pageRate</span><span class="p">;</span>
-<span class="w">        </span><span class="n">Task</span><span class="o">*</span><span class="w"> </span><span class="n">currentTask</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">timeRemaining</span><span class="p">;</span>
-
-<span class="w">    </span><span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="n">Printer</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">ppm</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">pageRate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ppm</span><span class="p">;</span>
-<span class="w">            </span><span class="n">currentTask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
-<span class="w">            </span><span class="n">timeRemaining</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">tick</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">currentTask</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">timeRemaining</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">timeRemaining</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="n">currentTask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
-<span class="w">                </span><span class="p">}</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">busy</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">currentTask</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">startNext</span><span class="p">(</span><span class="n">Task</span><span class="o">*</span><span class="w"> </span><span class="n">newTask</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">currentTask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newTask</span><span class="p">;</span>
-<span class="w">            </span><span class="n">timeRemaining</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newTask</span><span class="o">-&gt;</span><span class="n">getPages</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">60.0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">pageRate</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">pageRate</span><span class="p">;</span>
+<span class="w">    </span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Task</span><span class="o">&gt;</span><span class="w"> </span><span class="n">currentTask</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">timeRemaining</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">Printer</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">ppm</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">pageRate</span><span class="p">(</span><span class="n">ppm</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">busy</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">currentTask</span><span class="p">.</span><span class="n">has_value</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">startNext</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Task</span><span class="o">&amp;</span><span class="w"> </span><span class="n">task</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">currentTask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">task</span><span class="p">;</span>
+<span class="w">        </span><span class="n">timeRemaining</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">task</span><span class="p">.</span><span class="n">getPages</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">60.0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">pageRate</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">tick</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">currentTask</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">--</span><span class="n">timeRemaining</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">currentTask</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
 <span class="p">};</span>
 </pre></div>
 </div>
@@ -19031,7 +18996,8 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The <code>tick()</code> method decrements the internal timer and sets the printer to idle (line 11) if the task is completed. When the task is created, a random number generator will provide a length from 1 to 20 pages. We have chosen to use the <code>randrange()</code> function from the <code>random()</code> module.</p>
+<p><code>tick()</code> decrements the remaining duration and resets the <code>optional</code> when the
+job finishes.  Page counts come from <code>std::uniform_int_distribution&lt;int&gt;(1, 20)</code> driven by a seeded <code>std::mt19937</code> engine.</p>
 </div>
 </div>
 </div>
@@ -19054,20 +19020,12 @@ function try_show() {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Task</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">timestamp</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">pages</span><span class="p">;</span>
-
-<span class="w">    </span><span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="n">Task</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">time</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">timestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">time</span><span class="p">;</span>
-<span class="w">            </span><span class="n">pages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rand</span><span class="p">()</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">getStamp</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">timestamp</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">getPages</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">pages</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">waitTime</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">currentTime</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">currentTime</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">timestamp</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">timestamp</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">pages</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">Task</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">pageCount</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">timestamp</span><span class="p">(</span><span class="n">time</span><span class="p">),</span><span class="w"> </span><span class="n">pages</span><span class="p">(</span><span class="n">pageCount</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">getPages</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">pages</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">waitTime</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">now</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">now</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">timestamp</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="p">};</span>
 </pre></div>
 </div>
@@ -19080,7 +19038,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The <code>print_queue</code> object is an instance of our existing queue ADT.</p>
+<p>The waiting line is a <code>std::queue&lt;Task&gt;</code> containing values, not owning pointers.</p>
 </div>
 </div>
 </div>
@@ -19091,30 +19049,13 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">simulation</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">numSeconds</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">pagesPerMinute</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">Printer</span><span class="w"> </span><span class="n">labPrinter</span><span class="p">(</span><span class="n">pagesPerMinute</span><span class="p">);</span>
-<span class="w">    </span><span class="n">queue</span><span class="o">&lt;</span><span class="n">Task</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">printQueue</span><span class="p">;</span>
-<span class="w">    </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">waitingTimes</span><span class="p">;</span>
-
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">currentSecond</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">currentSecond</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">numSeconds</span><span class="p">;</span><span class="w"> </span><span class="n">currentSecond</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">newPrintTask</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">printQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Task</span><span class="p">(</span><span class="n">currentSecond</span><span class="p">));</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">labPrinter</span><span class="p">.</span><span class="n">busy</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">printQueue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">Task</span><span class="o">*</span><span class="w"> </span><span class="n">nextTask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">printQueue</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
-<span class="w">            </span><span class="n">printQueue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-<span class="w">            </span><span class="n">waitingTimes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nextTask</span><span class="o">-&gt;</span><span class="n">waitTime</span><span class="p">(</span><span class="n">currentSecond</span><span class="p">));</span>
-<span class="w">            </span><span class="n">labPrinter</span><span class="p">.</span><span class="n">startNext</span><span class="p">(</span><span class="n">nextTask</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span>
-
-<span class="w">        </span><span class="n">labPrinter</span><span class="p">.</span><span class="n">tick</span><span class="p">();</span>
-<span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">waitingTimes</span><span class="p">)</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">w</span><span class="p">;</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"Average Wait %6.2f secs %3d tasks remaining.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
-<span class="w">           </span><span class="n">sum</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">waitingTimes</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">printQueue</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<div class="highlight"><pre><span></span><span class="n">queue</span><span class="o">&lt;</span><span class="n">Task</span><span class="o">&gt;</span><span class="w"> </span><span class="n">printQueue</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">arrival</span><span class="p">(</span><span class="n">rng</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">180</span><span class="p">)</span><span class="w"> </span><span class="n">printQueue</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">now</span><span class="p">,</span><span class="w"> </span><span class="n">pages</span><span class="p">(</span><span class="n">rng</span><span class="p">));</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">printer</span><span class="p">.</span><span class="n">busy</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">printQueue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Task</span><span class="w"> </span><span class="n">nextTask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">printQueue</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+<span class="w">    </span><span class="n">printQueue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+<span class="w">    </span><span class="n">waits</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nextTask</span><span class="p">.</span><span class="n">waitTime</span><span class="p">(</span><span class="n">now</span><span class="p">));</span>
+<span class="w">    </span><span class="n">printer</span><span class="p">.</span><span class="n">startNext</span><span class="p">(</span><span class="n">nextTask</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -19127,7 +19068,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>A boolean helper function, <code>new_print_task()</code>, decides whether a new printing task has been created. We have again chosen to use the randrange function from the random module to return a random integer between 1 and 180:</p>
+<p>At each second, <code>uniform_int_distribution&lt;int&gt;(1, 180)</code> produces one of 180
+equally likely values.  Treating one value as an arrival models an average of
+20 tasks per hour.  A fixed seed makes the classroom demonstration repeatable.</p>
 </div>
 </div>
 </div>
@@ -19140,78 +19083,62 @@ function try_show() {
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;optional&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;queue&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;random&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdlib&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">Task</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">timestamp</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">pages</span><span class="p">;</span>
-<span class="w">    </span><span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="n">Task</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">time</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">timestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">time</span><span class="p">;</span><span class="w"> </span><span class="n">pages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rand</span><span class="p">()</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">getPages</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">pages</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">waitTime</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">currentTime</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">currentTime</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">timestamp</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">timestamp</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">pages</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">Task</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">pageCount</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">timestamp</span><span class="p">(</span><span class="n">time</span><span class="p">),</span><span class="w"> </span><span class="n">pages</span><span class="p">(</span><span class="n">pageCount</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">getPages</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">pages</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">waitTime</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">now</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">now</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">timestamp</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="p">};</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">Printer</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">pageRate</span><span class="p">;</span>
-<span class="w">        </span><span class="n">Task</span><span class="o">*</span><span class="w"> </span><span class="n">currentTask</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">timeRemaining</span><span class="p">;</span>
-<span class="w">    </span><span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="n">Printer</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">ppm</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">pageRate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ppm</span><span class="p">;</span><span class="w"> </span><span class="n">currentTask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"> </span><span class="n">timeRemaining</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">tick</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">currentTask</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">timeRemaining</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">timeRemaining</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">delete</span><span class="w"> </span><span class="n">currentTask</span><span class="p">;</span><span class="w"> </span><span class="n">currentTask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">busy</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">currentTask</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">startNext</span><span class="p">(</span><span class="n">Task</span><span class="o">*</span><span class="w"> </span><span class="n">newTask</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">currentTask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newTask</span><span class="p">;</span>
-<span class="w">            </span><span class="n">timeRemaining</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newTask</span><span class="o">-&gt;</span><span class="n">getPages</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">60.0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">pageRate</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">pageRate</span><span class="p">;</span>
+<span class="w">    </span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Task</span><span class="o">&gt;</span><span class="w"> </span><span class="n">currentTask</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">timeRemaining</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">Printer</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">ppm</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">pageRate</span><span class="p">(</span><span class="n">ppm</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">busy</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">currentTask</span><span class="p">.</span><span class="n">has_value</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">startNext</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Task</span><span class="o">&amp;</span><span class="w"> </span><span class="n">task</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">currentTask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">task</span><span class="p">;</span>
+<span class="w">        </span><span class="n">timeRemaining</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">task</span><span class="p">.</span><span class="n">getPages</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">60.0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">pageRate</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">tick</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">currentTask</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">--</span><span class="n">timeRemaining</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">currentTask</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
 <span class="p">};</span>
 
-<span class="kt">bool</span><span class="w"> </span><span class="nf">newPrintTask</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">rand</span><span class="p">()</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">180</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">180</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">void</span><span class="w"> </span><span class="nf">simulation</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">numSeconds</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">pagesPerMinute</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">Printer</span><span class="w"> </span><span class="n">labPrinter</span><span class="p">(</span><span class="n">pagesPerMinute</span><span class="p">);</span>
-<span class="w">    </span><span class="n">queue</span><span class="o">&lt;</span><span class="n">Task</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">printQueue</span><span class="p">;</span>
-<span class="w">    </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">waitingTimes</span><span class="p">;</span>
-
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">currentSecond</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">currentSecond</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">numSeconds</span><span class="p">;</span><span class="w"> </span><span class="n">currentSecond</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">newPrintTask</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">printQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Task</span><span class="p">(</span><span class="n">currentSecond</span><span class="p">));</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">simulation</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">seconds</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">ppm</span><span class="p">,</span><span class="w"> </span><span class="n">mt19937</span><span class="o">&amp;</span><span class="w"> </span><span class="n">rng</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">uniform_int_distribution</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">arrival</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">180</span><span class="p">),</span><span class="w"> </span><span class="n">pages</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Printer</span><span class="w"> </span><span class="n">printer</span><span class="p">(</span><span class="n">ppm</span><span class="p">);</span>
+<span class="w">    </span><span class="n">queue</span><span class="o">&lt;</span><span class="n">Task</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tasks</span><span class="p">;</span>
+<span class="w">    </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">waits</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">now</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">now</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">seconds</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">now</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">arrival</span><span class="p">(</span><span class="n">rng</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">180</span><span class="p">)</span><span class="w"> </span><span class="n">tasks</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">now</span><span class="p">,</span><span class="w"> </span><span class="n">pages</span><span class="p">(</span><span class="n">rng</span><span class="p">));</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">printer</span><span class="p">.</span><span class="n">busy</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">tasks</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Task</span><span class="w"> </span><span class="n">nextTask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tasks</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+<span class="w">            </span><span class="n">tasks</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+<span class="w">            </span><span class="n">waits</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nextTask</span><span class="p">.</span><span class="n">waitTime</span><span class="p">(</span><span class="n">now</span><span class="p">));</span>
+<span class="w">            </span><span class="n">printer</span><span class="p">.</span><span class="n">startNext</span><span class="p">(</span><span class="n">nextTask</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">labPrinter</span><span class="p">.</span><span class="n">busy</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">printQueue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">Task</span><span class="o">*</span><span class="w"> </span><span class="n">nextTask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">printQueue</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
-<span class="w">            </span><span class="n">printQueue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-<span class="w">            </span><span class="n">waitingTimes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nextTask</span><span class="o">-&gt;</span><span class="n">waitTime</span><span class="p">(</span><span class="n">currentSecond</span><span class="p">));</span>
-<span class="w">            </span><span class="n">labPrinter</span><span class="p">.</span><span class="n">startNext</span><span class="p">(</span><span class="n">nextTask</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="n">labPrinter</span><span class="p">.</span><span class="n">tick</span><span class="p">();</span>
+<span class="w">        </span><span class="n">printer</span><span class="p">.</span><span class="n">tick</span><span class="p">();</span>
 <span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">waitingTimes</span><span class="p">)</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">w</span><span class="p">;</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"Average Wait %6.2f secs %3d tasks remaining.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
-<span class="w">           </span><span class="n">waitingTimes</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">waitingTimes</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">printQueue</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">wait</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">waits</span><span class="p">)</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">wait</span><span class="p">;</span>
+<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"average wait = "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">waits</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">waits</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+<span class="w">         </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">", tasks remaining = "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">tasks</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">srand</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span>
-<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"pages per minute = 5:"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">simulation</span><span class="p">(</span><span class="mi">3600</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span>
-
-<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"pages per minute = 10:"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">simulation</span><span class="p">(</span><span class="mi">3600</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">mt19937</span><span class="w"> </span><span class="n">rng</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span>
+<span class="w">    </span><span class="n">simulation</span><span class="p">(</span><span class="mi">3600</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">rng</span><span class="p">);</span>
+<span class="w">    </span><span class="n">simulation</span><span class="p">(</span><span class="mi">3600</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="n">rng</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -19225,68 +19152,13 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>pages per minute = 5:</p>
+<p>average wait = 37.3, tasks remaining = 1</p>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Average Wait 215.91 secs   0 tasks remaining.</p>
-<p>Average Wait 130.50 secs   1 tasks remaining.</p>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Average Wait  55.45 secs   0 tasks remaining.</p>
-<p>Average Wait  64.58 secs   0 tasks remaining.</p>
-<p>Average Wait 114.26 secs   0 tasks remaining.</p>
-<p>Average Wait 166.00 secs   0 tasks remaining.</p>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Average Wait 100.50 secs   2 tasks remaining.</p>
-<p>Average Wait 152.41 secs   0 tasks remaining.</p>
-<p>Average Wait 108.53 secs   2 tasks remaining.</p>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Average Wait 340.14 secs   4 tasks remaining.</p>
-<p>pages per minute = 10:</p>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Average Wait  15.11 secs   0 tasks remaining.</p>
-<p>Average Wait  14.85 secs   0 tasks remaining.</p>
-<p>Average Wait   4.64 secs   0 tasks remaining.</p>
-<p>Average Wait  65.68 secs   0 tasks remaining.</p>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Average Wait  49.50 secs   0 tasks remaining.</p>
-<p>Average Wait  32.50 secs   0 tasks remaining.</p>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Average Wait   8.00 secs   0 tasks remaining.</p>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Average Wait  10.00 secs   0 tasks remaining.</p>
-<p>Average Wait  14.80 secs   0 tasks remaining.</p>
-<p>Average Wait  31.80 secs   0 tasks remaining.</p>
+<p>average wait = 34.45, tasks remaining = 0</p>
 </div>
 </div>
 </div>
@@ -19320,7 +19192,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>With the faster printer (10 pages per minute) the average wait drops sharply and no tasks are left in the queue — the same conclusion as the textbook's Python experiment.</p>
+<p>With the faster printer, the simulated waiting time usually drops.  This is a
+model result under the stated arrival and page-count assumptions, not a
+language-dependent conclusion.</p>
 </div>
 </div>
 </div>
@@ -19375,13 +19249,14 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>We can simulate any number of interesting behaviors. For example,</p>
+<p>We can simulate other workloads.  For example:</p>
 <ul>
-<li>What if enrollment goes up and the average number of students increases by 20?</li>
-<li>What if it is Saturday and students do not need to get to class? Can they afford to wait?</li>
-<li>What if the size of the average print task decreases since <code>Python</code> is such a powerful language and programs tend to be much shorter?</li>
+<li>What if enrollment increases by 20 students?</li>
+<li>What if a weekend workload can tolerate a longer wait?</li>
+<li>What if the mean print-task size decreases?</li>
 </ul>
-<p>These questions could all be answered by modifying the above simulation. However, it is important to remember that the simulation is only as good as the assumptions that are used to build it.</p>
+<p>These questions can be tested by changing the model parameters.  Conclusions
+are only as reliable as those assumptions.</p>
 </div>
 </div>
 </div>
@@ -19459,7 +19334,8 @@ function try_show() {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ul>
-<li><code>Deque()</code> creates a new deque that is empty. It needs no parameters and returns an empty deque.</li>
+<li><code>std::deque&lt;T&gt; d;</code> constructs an empty deque.</li>
+<li><code>push_front(item)</code> and <code>push_back(item)</code> add at either end.</li>
 </ul>
 </div>
 </div>
@@ -19472,10 +19348,8 @@ function try_show() {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ul>
-<li><code>add_front(item)</code> adds a new item to the front of the deque. It needs the item and returns nothing.</li>
-<li><code>add_rear(item)</code> adds a new item to the rear of the deque. It needs the item and returns nothing.</li>
-<li><code>remove_front()</code> removes the front item from the deque. It needs no parameters and returns the item. The deque is modified.</li>
-<li><code>remove_rear()</code> removes the rear item from the deque. It needs no parameters and returns the item. The deque is modified.</li>
+<li><code>front()</code> and <code>back()</code> inspect the ends.</li>
+<li><code>pop_front()</code> and <code>pop_back()</code> remove and return <code>void</code>.</li>
 </ul>
 </div>
 </div>
@@ -19488,9 +19362,9 @@ function try_show() {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ul>
-<li><code>is_empty()</code> tests to see whether the deque is empty. It needs no parameters and returns a boolean value.</li>
-<li><code>size()</code> returns the number of items in the deque. It needs no parameters and returns an integer.</li>
+<li><code>empty()</code> and <code>size()</code> inspect state.</li>
 </ul>
+<p>The supplementary pythonds3 <code>Deque&lt;T&gt;</code> instead uses <code>addFront/addRear/removeFront/removeRear/isEmpty</code>.</p>
 </div>
 </div>
 </div>
@@ -19501,7 +19375,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>The contents in front are listed on the right.</strong> It is very important to keep track of the front and the rear as you move items in and out of the collection as things can get a bit confusing.</p>
+<p>For <code>std::deque</code>, <code>front()</code> is shown on the left and <code>back()</code> on the right.</p>
 </div>
 </div>
 </div>
@@ -19515,61 +19389,41 @@ function try_show() {
 <table>
 <thead>
 <tr>
-<th>Deque Operation</th>
-<th>Deque Contents</th>
-<th>Return Value</th>
+<th><code>std::deque&lt;int&gt;</code> operation</th>
+<th>Contents (front at left)</th>
+<th>Return value</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>d.is_empty()</code></td>
-<td>[]</td>
-<td>True</td>
+<td><code>d.empty()</code></td>
+<td><code>[]</code></td>
+<td><code>true</code></td>
 </tr>
 <tr>
-<td><code>d.add_rear(4)</code></td>
-<td>[4]</td>
-<td></td>
+<td><code>d.push_back(4)</code></td>
+<td><code>[4]</code></td>
+<td><code>void</code></td>
 </tr>
 <tr>
-<td><code>d.add_rear("dog")</code></td>
-<td>['dog', 4]</td>
-<td></td>
+<td><code>d.push_front(7)</code></td>
+<td><code>[7, 4]</code></td>
+<td><code>void</code></td>
 </tr>
 <tr>
-<td><code>d.add_front("cat")</code></td>
-<td>['dog', 4, 'cat']</td>
-<td></td>
+<td><code>d.front()</code></td>
+<td><code>[7, 4]</code></td>
+<td><code>7</code></td>
 </tr>
 <tr>
-<td><code>d.add_front(True)</code></td>
-<td>['dog', 4, 'cat', True]</td>
-<td></td>
+<td><code>d.back()</code></td>
+<td><code>[7, 4]</code></td>
+<td><code>4</code></td>
 </tr>
 <tr>
-<td><code>d.size()</code></td>
-<td>['dog', 4, 'cat', True]</td>
-<td>4</td>
-</tr>
-<tr>
-<td><code>d.is_empty()</code></td>
-<td>['dog', 4, 'cat', True]</td>
-<td>False</td>
-</tr>
-<tr>
-<td><code>d.add_rear(8.4)</code></td>
-<td>[8.4, 'dog', 4, 'cat', True]</td>
-<td></td>
-</tr>
-<tr>
-<td><code>d.remove_rear()</code></td>
-<td>['dog', 4, 'cat', True]</td>
-<td>8.4</td>
-</tr>
-<tr>
-<td><code>d.remove_front()</code></td>
-<td>['dog', 4, 'cat']</td>
-<td>True</td>
+<td><code>d.pop_front()</code></td>
+<td><code>[4]</code></td>
+<td><code>void</code></td>
 </tr>
 </tbody>
 </table>
@@ -19583,7 +19437,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.17.-Implementing-a-Deque-in-C++">3.17. Implementing a Deque in <code>C++</code><a class="anchor-link" href="#3.17.-Implementing-a-Deque-in-C++">¶</a></h2>
+<h2 id="3.17-Using-std::deque-in-C++">3.17 Using <code>std::deque</code> in C++<a class="anchor-link" href="#3.17-Using-std::deque-in-C++">¶</a></h2>
 </div>
 </div>
 </div>
@@ -19594,7 +19448,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Our implementation will assume that the <strong>rear of the deque is at position 0 in the vector</strong> (the complete class is in <code>pythonds3/cppds/basic/deque.cpp</code>):</p>
+<p>The C++ Standard Library <code>std::deque&lt;T&gt;</code> supports constant-time insertion and
+removal at both ends with <code>push_front</code>, <code>push_back</code>, <code>pop_front</code>, and
+<code>pop_back</code>.</p>
 </div>
 </div>
 </div>
@@ -19605,22 +19461,15 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">Deque</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">private</span><span class="o">:</span>
-<span class="w">        </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">items</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;deque&gt;</span>
 
-<span class="w">    </span><span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">isEmpty</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">items</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">addFront</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">item</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">items</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">addRear</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">item</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">items</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">item</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="p">};</span>
+<span class="n">std</span><span class="o">::</span><span class="n">deque</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">d</span><span class="p">;</span>
+<span class="n">d</span><span class="p">.</span><span class="n">push_front</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="n">d</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+<span class="n">d</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>
+<span class="n">d</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
@@ -19632,21 +19481,10 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<div class="highlight"><pre><span></span><span class="n">T</span><span class="w"> </span><span class="nf">removeFront</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">T</span><span class="w"> </span><span class="n">front</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">items</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>
-<span class="w">    </span><span class="n">items</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">front</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="n">T</span><span class="w"> </span><span class="nf">removeRear</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">T</span><span class="w"> </span><span class="n">rear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">items</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
-<span class="w">    </span><span class="n">items</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">begin</span><span class="p">());</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">rear</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="kt">int</span><span class="w"> </span><span class="nf">size</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">items</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
-<span class="p">}</span>
-</pre></div>
-<p><em>(complete class: <code>pythonds3/cppds/deque.hpp</code>)</em></p>
+<p><strong>Course implementation supplement.</strong> <code>pythonds3/cppds/deque.hpp</code> uses
+<code>addFront</code>, <code>addRear</code>, and value-returning <code>removeFront</code>/<code>removeRear</code>.  Its
+chosen vector representation makes the operations at one end $O(n)$; this is
+not the complexity of <code>std::deque</code>.</p>
 </div>
 </div>
 </div>
@@ -19657,7 +19495,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>You can see many similarities to the <code>C++</code> code already described for stacks and queues. The STL also ships a ready-made <code>std::deque</code> with <code>push_front/push_back/pop_front/pop_back</code> — we use it below.</p>
+<p>Use <code>std::deque</code> as the normal C++ implementation.  Use the course <code>Deque&lt;T&gt;</code>
+only where an exercise explicitly asks you to study its representation and
+operation costs.</p>
 </div>
 </div>
 </div>
@@ -19795,8 +19635,7 @@ function try_show() {
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="n">from</span><span class="w"> </span><span class="n">jupytercards</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="n">display_flashcards</span>
-<span class="n">fpath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/flashcards/"</span>
-<span class="n">display_flashcards</span><span class="p">(</span><span class="n">fpath</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="err">'</span><span class="n">ch5</span><span class="p">.</span><span class="n">json</span><span class="err">'</span><span class="p">)</span>
+<span class="n">display_flashcards</span><span class="p">(</span><span class="s">"flashcards/ch5.json"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -20169,14 +20008,14 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="QGjqFlxOwLmP" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="QGjqFlxOwLmP-next" onclick="window.checkFlip('QGjqFlxOwLmP')"> </div> <div style="height:40px"></div>
+<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="QLwKjtrneAba" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="QLwKjtrneAba-next" onclick="window.checkFlip('QLwKjtrneAba')"> </div> <div style="height:40px"></div>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="4446ffb8-d2c2-42d7-83ce-b39be2f7f582" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="ad89d519-0ed6-4b7d-afb9-b8010f1f5e40" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('4446ffb8-d2c2-42d7-83ce-b39be2f7f582');
+var element = document.getElementById('ad89d519-0ed6-4b7d-afb9-b8010f1f5e40');
 /*!
  * swiped-events.js - v1.1.4
  * Pure JavaScript swipe events
@@ -20973,10 +20812,10 @@ window.setTopics = function(idOrElem, topics) {
 
 (function() {
     var observer = new MutationObserver(function(mutations, obs) {
-        var el = document.getElementById("QGjqFlxOwLmP");
+        var el = document.getElementById("QLwKjtrneAba");
         if (el) {
             el.dataset.url = "";
-            el.dataset.cards = JSON.stringify([{"front": "Linear ADT", "back": "An abstract data type where data elements are arranged in a sequential order, and each member element is connected to its previous and next element in a single level. Examples include stacks and queues.", "seqNum": 0}, {"front": "Stack", "back": "A linear data structure that follows a particular order in which operations are performed. The order is Last In First Out (LIFO), meaning the element added last is the first one to be removed.", "seqNum": 1}, {"front": "Front", "back": "In the context of queues, the start of the queue where the first element resides and from which elements are removed during the dequeue operation.", "seqNum": 2}, {"front": "Rear", "back": "In the context of queues, the end of the queue where new elements are added during the enqueue operation.", "seqNum": 3}, {"front": "Top", "back": "In the context of stacks, the last added element and the current endpoint of the structure. It is the first element to be removed due to the LIFO policy.", "seqNum": 4}, {"front": "Base", "back": "In the context of stacks, the bottom of the stack where the first inserted element resides.", "seqNum": 5}, {"front": "LIFO (Last In First Out)", "back": "A principle used primarily in stacks where the last element added to the structure is the first one to be removed.", "seqNum": 6}, {"front": "Infix", "back": "A notation in which operators are written in-between their operands, such as the expression A + B.", "seqNum": 7}, {"front": "Prefix", "back": "A notation in which operators precede their operands. For example, the infix expression A + B would be written as +AB.", "seqNum": 8}, {"front": "Postfix", "back": "A notation in which operators follow their operands. For example, the infix expression A + B would be written as AB+.", "seqNum": 9}, {"front": "Fully Parenthesized Expression", "back": "An expression where every binary or unary operation is explicitly enclosed in parentheses to specify the order of operations without ambiguity.", "seqNum": 10}, {"front": "Queue", "back": "A linear data structure that follows the First In First Out (FIFO) principle, where the first element added is the first one to be removed.", "seqNum": 11}, {"front": "FIFO (First In First Out)", "back": "A principle used primarily in queues where the first element added to the structure is the first one to be removed.", "seqNum": 12}, {"front": "Deque", "back": "Short for double-ended queue, it is a data structure that allows the insertion and removal of elements from both the front and the rear, providing more flexibility than standard queues or stacks.", "seqNum": 13}]);
+            el.dataset.cards = JSON.stringify([{"front": "Linear ADT", "back": "An abstract data type where data elements are arranged in a sequential order, and each member element is connected to its previous and next element in a single level. Examples include stacks and queues.", "seqNum": 0}, {"front": "Stack", "back": "A linear data structure that follows a particular order in which operations are performed. The order is Last In First Out (LIFO), meaning the element added last is the first one to be removed.", "seqNum": 1}, {"front": "Front", "back": "In the context of queues, the start of the queue where the first element resides and from which elements are removed during the dequeue operation.", "seqNum": 2}, {"front": "Rear", "back": "In the context of queues, the end of the queue where new elements are added during the enqueue operation.", "seqNum": 3}, {"front": "Top", "back": "In the context of stacks, the last added element and the current endpoint of the structure. It is the first element to be removed due to the LIFO policy.", "seqNum": 4}, {"front": "Base", "back": "In the context of stacks, the bottom of the stack where the first inserted element resides.", "seqNum": 5}, {"front": "LIFO (Last In First Out)", "back": "A principle used primarily in stacks where the last element added to the structure is the first one to be removed.", "seqNum": 6}, {"front": "Infix", "back": "A notation in which operators are written in-between their operands, such as the expression A + B.", "seqNum": 7}, {"front": "Prefix", "back": "A notation in which operators precede their operands. For example, the infix expression A + B would be written as +AB.", "seqNum": 8}, {"front": "Postfix", "back": "A notation in which operators follow their operands. For example, the infix expression A + B would be written as AB+.", "seqNum": 9}, {"front": "Fully Parenthesized Expression", "back": "An expression where every binary or unary operation is explicitly enclosed in parentheses to specify the order of operations without ambiguity.", "seqNum": 10}, {"front": "Queue", "back": "A linear data structure that follows the First In First Out (FIFO) principle, where the first element added is the first one to be removed.", "seqNum": 11}, {"front": "FIFO (First In First Out)", "back": "A principle used primarily in queues where the first element added to the structure is the first one to be removed.", "seqNum": 12}, {"front": "Deque", "back": "Short for double-ended queue, it is a data structure that allows the insertion and removal of elements from both the front and the rear, providing more flexibility than standard queues or stacks.", "seqNum": 13}, {"front": "STL Container Adapter", "back": "std::stack and std::queue restrict an underlying container to LIFO or FIFO operations. Their pop() removes an item and returns void, so read top() or front() first when the value is needed.", "seqNum": 14}, {"front": "Three Stack APIs", "back": "STL std::stack uses top()/empty() and void pop(). The pythonds3 Stack<T> uses peek()/isEmpty() and value-returning pop(). HW3 Stack<T>(capacity) uses stackTop() or peek(index), value-returning pop(), and isFull().", "seqNum": 15}]);
             el.dataset.frontColors = JSON.stringify(["var(--asparagus)", "var(--terra-cotta)", "var(--cyan-process)"]);
             el.dataset.backColors = JSON.stringify(["var(--dark-blue-gray)"]);
             el.dataset.textColors = JSON.stringify(["var(--snow)"]);
@@ -20985,7 +20824,7 @@ window.setTopics = function(idOrElem, topics) {
             el.dataset.shuffleCards = false;
             el.dataset.title = "";
             el.dataset.subject = "";
-            createCards("QGjqFlxOwLmP");
+            createCards("QLwKjtrneAba");
             obs.disconnect();
         }
     });
@@ -21067,6 +20906,10 @@ window.setTopics = function(idOrElem, topics) {
 <li><p><strong>FIFO (First In First Out)</strong>: A principle used primarily in queues where the first element added to the structure is the first one to be removed.</p>
 </li>
 <li><p><strong>Deque</strong>: Short for double-ended queue, it is a data structure that allows the insertion and removal of elements from both the front and the rear, providing more flexibility than standard queues or stacks.</p>
+</li>
+<li><p><strong>STL Container Adapter</strong>: <code>std::stack</code> and <code>std::queue</code> restrict an underlying container to LIFO or FIFO operations; their <code>pop()</code> removes and returns <code>void</code>.</p>
+</li>
+<li><p><strong>Three Stack APIs</strong>: STL uses <code>top()/empty()</code> and void <code>pop()</code>; pythonds3 uses <code>peek()/isEmpty()</code> and value-returning <code>pop()</code>; HW3 uses <code>Stack(capacity)</code>, <code>stackTop()</code> or <code>peek(index)</code>, and <code>isFull()</code>.</p>
 </li>
 </ul>
 </div>

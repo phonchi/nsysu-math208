@@ -7815,10 +7815,10 @@ a.anchor-link {
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <table align="left">
 <td>
-<a href="https://colab.research.google.com/github/phonchi/nsysu-math208/blob/main/static_files/presentations/02_Analysis.ipynb" target="_parent"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg"/></a>
+<a href="https://colab.research.google.com/github/phonchi/nsysu-math208/blob/master/static_files/presentations/02_Analysis.ipynb" target="_parent"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg"/></a>
 </td>
 <td>
-<a href="https://kaggle.com/kernels/welcome?src=https://github.com/phonchi/nsysu-math208/blob/main/static_files/presentations/02_Analysis.ipynb" target="_blank"><img alt="No description has been provided for this image" src="https://kaggle.com/static/images/open-in-kaggle.svg"/></a>
+<a href="https://kaggle.com/kernels/welcome?src=https://github.com/phonchi/nsysu-math208/blob/master/static_files/presentations/02_Analysis.ipynb" target="_blank"><img alt="No description has been provided for this image" src="https://kaggle.com/static/images/open-in-kaggle.svg"/></a>
 </td>
 </table>
 </div>
@@ -7845,7 +7845,7 @@ a.anchor-link {
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="n">from</span><span class="w"> </span><span class="n">jupyterquiz</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="n">display_quiz</span>
 
-<span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch2/"</span>
+<span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"questions/ch2/"</span>
 </pre></div>
 </div>
 </div>
@@ -7861,11 +7861,11 @@ a.anchor-link {
 <ol>
 <li><p>What Is Algorithm Analysis?</p>
 </li>
-<li><p>Big O Notation</p>
+<li><p>Big-O Notation and Case Analysis</p>
 </li>
 <li><p>Example: Anagram Detection</p>
 </li>
-<li><p>Benchmark of <code>Python</code> Data Structures: <code>Lists/Dictionaries</code></p>
+<li><p>C++ Collections: <code>vector</code>, <code>string</code>, and <code>unordered_map</code></p>
 </li>
 </ol>
 </div>
@@ -8036,7 +8036,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The function <code>sum_of_n()</code> is certainly better than the function <code>foo()</code> if you are concerned with readability. Easy to read and easy to understand is important for beginner. In this course, however, we are also interested in characterizing the algorithm itself.</p>
+<p>The function <code>sumOfN()</code> is certainly better than the function <code>foo()</code> if you are concerned with readability. Easy to read and easy to understand is important for beginner. In this course, however, we are also interested in characterizing the algorithm itself.</p>
 </div>
 </div>
 </div>
@@ -8091,7 +8091,10 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>One way is that we can measure the execution time for the function <code>sum_of_n()</code> to do a <u>benchmark analysis</u>. In <code>Python</code>, we can benchmark a function by noting the starting time and ending time within the system we are using.</p>
+<p>One way to measure <code>sumOfN()</code> is a <strong>benchmark</strong>: record two
+<code>std::chrono::steady_clock</code> time points and subtract them.  A benchmark
+describes this compiled program on this machine; it is not the complexity of
+the underlying algorithm.</p>
 </div>
 </div>
 </div>
@@ -8176,21 +8179,26 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Sum is 5000050000 required  0.0001346 seconds</p>
+<p>Sum is 5000050000 required  0.0001458 seconds</p>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Sum is 5000050000 required  0.0001432 seconds</p>
+<p>Sum is 5000050000 required  0.0001458 seconds</p>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Sum is 5000050000 required  0.0001412 seconds</p>
-<p>Sum is 5000050000 required  0.0001413 seconds</p>
-<p>Sum is 5000050000 required  0.0001350 seconds</p>
+<p>Sum is 5000050000 required  0.0001457 seconds</p>
+<p>Sum is 5000050000 required  0.0001385 seconds</p>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
+<p>Sum is 5000050000 required  0.0001456 seconds</p>
 </div>
 </div>
 </div>
@@ -8244,31 +8252,31 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Sum is 500000500000 required  0.0014261 seconds</p>
+<p>Sum is 500000500000 required  0.0015191 seconds</p>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Sum is 500000500000 required  0.0014092 seconds</p>
+<p>Sum is 500000500000 required  0.0014851 seconds</p>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Sum is 500000500000 required  0.0015807 seconds</p>
+<p>Sum is 500000500000 required  0.0011351 seconds</p>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Sum is 500000500000 required  0.0012599 seconds</p>
+<p>Sum is 500000500000 required  0.0014653 seconds</p>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Sum is 500000500000 required  0.0014389 seconds</p>
+<p>Sum is 500000500000 required  0.0015039 seconds</p>
 </div>
 </div>
 </div>
@@ -8280,7 +8288,11 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Now consider the following function, which shows a different means of solving the summation problem. This function takes advantage of a closed equation $\sum_{i=1}^{n} i = \frac {(n)(n+1)}{2}$ to compute the sum of the first $n$ integers without iterating.</p>
+<p>Now consider the closed form</p>
+<p>$$\sum_{i=1}^{n} i = 1+2+\cdots+n = \frac{n(n+1)}{2}.$$</p>
+<p>The loop performs one addition for each term, whereas the formula uses a
+constant number of arithmetic operations.  Both compute the same mathematical
+sum, but their work grows differently.</p>
 </div>
 </div>
 </div>
@@ -8333,7 +8345,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>If we do the same benchmark measurement for <code>sum_of_n_3()</code>, using four different values for $n$ (100,000, 1,000,000, 10,000,000, and 100,000,000), we get the following results:</p>
+<p>If we do the same benchmark measurement for <code>sumOfN3()</code>, using four different values for $n$ (100,000, 1,000,000, 10,000,000, and 100,000,000), we get the following results:</p>
 </div>
 </div>
 </div>
@@ -8508,7 +8520,10 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The number of assignment statements is 1 (<code>the_sum = 0</code>) plus the value of $n$ (the number of times we perform <code>the_sum = the_sum + 1</code>). We can denote this by a function, call it $T$, where $T(n)= n+1$.</p>
+<p>The initialization executes once and the update executes $n$ times:</p>
+<p>$$T(n)=1+\sum_{i=1}^{n}1=1+n.$$</p>
+<p>For later use, remember $\sum_{i=1}^{n} i=n(n+1)/2\in\Theta(n^2)$ and
+$\sum_{i=1}^{n}1=n\in\Theta(n)$.  These sums turn loop counts into formulas.</p>
 </div>
 </div>
 </div>
@@ -8630,7 +8645,10 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Sometimes the performance of an algorithm depends on the <strong>exact values of the data rather than simply the size of the problem.</strong> For these kinds of algorithms we need to characterize their performance in terms of <u>best-case</u>, <u>worst-case</u>, or <u>average-case</u> performance.</p>
+<p>Big-O and case analysis answer different questions.  <strong>Big-O</strong> gives an
+asymptotic upper bound on a cost function.  <strong>Best, average, and worst case</strong>
+specify which inputs of size $n$ define that cost function.  For example, an
+algorithm may have best-case $O(1)$ and worst-case $O(n)$ behavior.</p>
 </div>
 </div>
 </div>
@@ -8641,7 +8659,9 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The worst-case performance refers to a particular data set where the algorithm performs especially poorly, whereas a different data set for the exact same algorithm might have extraordinarily good (best-case) performance.</p>
+<p>Worst-case cost is the maximum over all inputs of size $n$; best-case cost is
+the minimum.  Neither word is a synonym for Big-O: either case can be described
+with $O$, $\Omega$, or $\Theta$ when the corresponding bound is known.</p>
 </div>
 </div>
 </div>
@@ -8652,7 +8672,10 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>However, in most cases the algorithm performs somewhere in between these two extremes (average-case performance).</p>
+<p>Average-case cost is an expected cost under a stated probability model for the
+inputs.  <strong>Amortized cost is different</strong>: it bounds the average cost per
+operation over a sequence, without assuming random inputs.  <code>vector::push_back</code>
+is the standard amortized-analysis example.</p>
 </div>
 </div>
 </div>
@@ -8744,7 +8767,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8752,25 +8775,38 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-C++"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span>
-<span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
-<span class="c1">// Start of the code</span>
-<span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
-<span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
-<span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
-<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">j</span><span class="p">;</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">j</span><span class="p">;</span>
+<div class="highlight hl-C++"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">j</span><span class="p">;</span>
+<span class="w">            </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">y</span><span class="p">;</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">z</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="w">        </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">w</span><span class="p">;</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">v</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">33</span><span class="p">;</span>
+<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">45</span><span class="p">;</span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="kt">int</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">33</span><span class="p">;</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
+<p>43</p>
 </div>
 </div>
 </div>
@@ -8844,8 +8880,8 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="FSmDRRaPhpTT" style="border-radius: 10px; text-align: left"><style>
-#FSmDRRaPhpTT {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="CmIxLmeHauCE" style="border-radius: 10px; text-align: left"><style>
+#CmIxLmeHauCE {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -9073,10 +9109,10 @@ a.anchor-link {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="2ff39778-ce2e-4e9b-a4c0-ec3f69458603" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="9c120475-7bd1-4bfa-9e3a-1d4f269ada0c" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('2ff39778-ce2e-4e9b-a4c0-ec3f69458603');
-var questionsFSmDRRaPhpTT=[
+var element = document.getElementById('9c120475-7bd1-4bfa-9e3a-1d4f269ada0c');
+var questionsCmIxLmeHauCE=[
     {
         "question": "Given the following code fragment, what is its Big O running time?",
         "code": "int test = 0;\nfor (int i = 0; i < n; i++) {\n    for (int j = 0; j < n; j++) {\n        test = test + i * j;\n    }\n}",
@@ -10166,8 +10202,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("FSmDRRaPhpTT")) {
-    show_questions(questionsFSmDRRaPhpTT, FSmDRRaPhpTT);
+  if (document.getElementById("CmIxLmeHauCE")) {
+    show_questions(questionsCmIxLmeHauCE, CmIxLmeHauCE);
   } else {
     setTimeout(try_show, 200);
   }
@@ -10204,8 +10240,8 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="hWLoGiNqSXVi" style="border-radius: 10px; text-align: left"><style>
-#hWLoGiNqSXVi {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="gTiFPFeCfxjT" style="border-radius: 10px; text-align: left"><style>
+#gTiFPFeCfxjT {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -10433,10 +10469,10 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d4db2bca-87f1-4fc7-bbbd-aa8f65d57712" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="3823d678-09c3-45d9-9f8d-b3296e426f44" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('d4db2bca-87f1-4fc7-bbbd-aa8f65d57712');
-var questionshWLoGiNqSXVi=[
+var element = document.getElementById('3823d678-09c3-45d9-9f8d-b3296e426f44');
+var questionsgTiFPFeCfxjT=[
     {
         "question": "Given the following code fragment, what is its Big O running time?",
         "code": "int test = 0;\nfor (int i = 0; i < n; i++) {\n    test = test + 1;\n}\nfor (int j = 0; j < n; j++) {\n    test = test - 1;\n}",
@@ -11526,8 +11562,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("hWLoGiNqSXVi")) {
-    show_questions(questionshWLoGiNqSXVi, hWLoGiNqSXVi);
+  if (document.getElementById("gTiFPFeCfxjT")) {
+    show_questions(questionsgTiFPFeCfxjT, gTiFPFeCfxjT);
   } else {
     setTimeout(try_show, 200);
   }
@@ -11564,8 +11600,8 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="jiyAcYqrLtBO" style="border-radius: 10px; text-align: left"><style>
-#jiyAcYqrLtBO {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="MCwIuZsyFZqp" style="border-radius: 10px; text-align: left"><style>
+#MCwIuZsyFZqp {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -11793,10 +11829,10 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="78c9ded1-cf45-4278-a1af-91568b99eb4a" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="00fc8850-c571-43ed-8c91-d23fe8f834f2" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('78c9ded1-cf45-4278-a1af-91568b99eb4a');
-var questionsjiyAcYqrLtBO=[
+var element = document.getElementById('00fc8850-c571-43ed-8c91-d23fe8f834f2');
+var questionsMCwIuZsyFZqp=[
     {
         "question": "Given the following code fragment, what is its Big O running time?",
         "code": "int i = n;\nwhile (i > 0) {\n    int k = 2 + 2;\n    i = i / 2;\n}",
@@ -12886,8 +12922,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("jiyAcYqrLtBO")) {
-    show_questions(questionsjiyAcYqrLtBO, jiyAcYqrLtBO);
+  if (document.getElementById("MCwIuZsyFZqp")) {
+    show_questions(questionsMCwIuZsyFZqp, MCwIuZsyFZqp);
   } else {
     setTimeout(try_show, 200);
   }
@@ -12921,7 +12957,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>A good example problem for showing algorithms with different orders of magnitude is the classic anagram detection problem for strings. One string is an <strong>anagram</strong> of another if the second is simply a rearrangement of the first. For example, "heart" and "earth" are anagrams. The strings "python" and "typhon" are anagrams as well!</p>
+<p>A good example problem for showing algorithms with different orders of magnitude is the classic anagram detection problem for strings. One string is an <strong>anagram</strong> of another if the second is simply a rearrangement of the first. For example, "heart" and "earth" are anagrams. The strings "silent" and "listen" are anagrams as well!</p>
 </div>
 </div>
 </div>
@@ -12992,7 +13028,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Checking off a character will be accomplished by delete the element. However, since strings in <code>Python</code> are immutable, the first step will be to convert the second string to a <code>list</code>. Each character from the first string can be checked against the characters in the list and if found, checked off by delete it.</p>
+<p>Checking off uses a mutable <code>vector&lt;char&gt;</code> copy of the second <code>std::string</code>.  For each character in the first string, linearly find one matching character in the vector and erase it.  The nested search and shifting make this solution $O(n^2)$.</p>
 </div>
 </div>
 </div>
@@ -13202,7 +13238,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>At first glance you may be tempted to think that this algorithm is $O(n)$, since there is one simple iteration to compare the $n$ characters after the sorting process. However, the two calls to the <code>Python</code> <code>sort()</code> method are not without their own cost. As we will see in Chapter 5, sorting is typically either $O(n^2)$ or $O(n\log n)$, so the sorting operations dominate the iteration.</p>
+<p>The final comparison loop is $O(n)$, but both calls to <code>std::sort</code> cost $O(n\log n)`.  Sorting dominates, so the complete C++ algorithm is $O(n\log n)$.</p>
 </div>
 </div>
 </div>
@@ -13279,10 +13315,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In order to decide whether two strings are anagrams</p>
-<ol>
-<li>First count the number of times each character occurs. Since there are 26 possible characters, we can use a list of 26 counters, one for each possible character. Each time we see a particular character, we will increment the counter at that position.</li>
-</ol>
+<p>To test lower-case English strings, count each character in two fixed <code>array&lt;int, 26&gt;</code> tables and compare the tables.  For a general alphabet, use a suitable map instead of assuming 26 symbols.</p>
 </div>
 </div>
 </div>
@@ -13293,9 +13326,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<ol start="2">
-<li>In the end, if the two lists of counters are identical, the strings must be anagrams!</li>
-</ol>
+<p>If the two counter arrays are identical, the strings are anagrams.</p>
 </div>
 </div>
 </div>
@@ -13423,7 +13454,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="2.5~2.6-Performance-of-C++-Data-Structures:-Vectors">2.5~2.6 Performance of <code>C++</code> Data Structures: Vectors<a class="anchor-link" href="#2.5~2.6-Performance-of-C++-Data-Structures:-Vectors">¶</a></h2>
+<h2 id="2.5~2.6-C++-Collections:-vector">2.5~2.6 C++ Collections: <code>vector</code><a class="anchor-link" href="#2.5~2.6-C++-Collections:-vector">¶</a></h2>
 </div>
 </div>
 </div>
@@ -13434,7 +13465,11 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The designers of <code>C++</code> had many choices to make when they implemented the <code>vector</code> data structure. To help them make the right choices they looked at the ways that people would most commonly use vectors, and they optimized the implementation so that the most common operations were very fast — in particular, a vector <strong>doubles its capacity</strong> when it runs out of room, making <code>push_back</code> amortized $O(1)$.</p>
+<p><code>std::vector</code> stores elements contiguously and grows dynamically.  Indexing is
+$O(1)$; inserting or erasing near the front is $O(n)$ because later elements
+shift.  When capacity is exhausted, an implementation allocates a larger
+buffer and moves the elements.  <strong>Doubling is a useful model, not a C++
+standard guarantee</strong>; the guaranteed result is amortized $O(1)$ <code>push_back</code>.</p>
 </div>
 </div>
 </div>
@@ -13456,7 +13491,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Two common operations are <u>indexing</u> and <u>assigning to an index position</u>. Both of these operations take the same amount of time no matter how large the list becomes. When an operation like this is independent of the size of the list, it is $O(1)$.</p>
+<p>Two common operations are indexing and assignment to an existing position.
+Both are $O(1)$ because a <code>vector</code> uses contiguous storage and computes the
+element address directly.</p>
 </div>
 </div>
 </div>
@@ -13478,10 +13515,13 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Let's look at four different ways we might generate a list of first $n$ integers starting with 0.</p>
+<p>We compare four genuine C++ construction strategies for the integers
+$0,\ldots,n-1$:</p>
 <ol>
-<li>First we'll try a <code>for</code> loop and create the <code>list</code> by concatenation</li>
-<li>We'll use <code>append()</code> rather than concatenation.</li>
+<li>insert every item at <code>begin()</code>;</li>
+<li>append with <code>push_back()</code>;</li>
+<li>call <code>reserve(n)</code> and then <code>push_back()</code>;</li>
+<li>construct <code>vector&lt;int&gt;(n)</code> and assign by index.</li>
 </ol>
 </div>
 </div>
@@ -13493,10 +13533,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<ol start="3">
-<li>Next, we'll try creating the <code>list</code> using <u>list comprehension</u></li>
-<li>using the <code>range()</code> function wrapped by a call to the <code>list</code> constructor.</li>
-</ol>
+<p>The first strategy repeatedly shifts elements and is $O(n^2)$ overall.  The
+other three are $O(n)$ overall.  <code>reserve</code> removes reallocations from this
+particular run, while ordinary <code>push_back</code> retains amortized $O(1)$ per append.</p>
 </div>
 </div>
 </div>
@@ -13556,7 +13595,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>We will use <code>Python</code>'s <code>timeit</code> module. The module is designed to allow developers to make cross-platform timing measurements by running functions in a consistent environment and using timing mechanisms that are as similar as possible across operating systems!</p>
+<p>Use <code>std::chrono::steady_clock</code> for elapsed time.  A sound microbenchmark runs
+each candidate repeatedly, uses the result so work is not optimized away, and
+compares the trend over several input sizes rather than one timing.</p>
 </div>
 </div>
 </div>
@@ -13582,7 +13623,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>By default, <code>timeit</code> will try to run the statement one million times. When it's done it returns the time as a floating-point value representing the total number of seconds.</p>
+<p>The repetition count is explicit in C++: run the same callable many times and
+divide or report the total duration.  <code>steady_clock</code> is monotonic, so wall-clock
+adjustments cannot make an elapsed interval run backward.</p>
 </div>
 </div>
 </div>
@@ -13593,7 +13636,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>You can also pass <code>timeit</code> a named parameter called <code>number</code> that allows you to specify how many times the test statement is executed.</p>
+<p>Timing still includes allocation, function calls, compiler optimizations, and
+machine effects.  Use it to test a prediction from analysis, not to replace
+analysis.</p>
 </div>
 </div>
 </div>
@@ -13637,25 +13682,25 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>insert at front     88.98 ms</p>
+<p>insert at front     92.12 ms</p>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>push_back            4.41 ms</p>
+<p>push_back            4.52 ms</p>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>with reserve         3.44 ms</p>
+<p>with reserve         3.34 ms</p>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>direct index         1.43 ms</p>
+<p>direct index         1.45 ms</p>
 </div>
 </div>
 </div>
@@ -13667,7 +13712,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In the experiment above the statement that we are timing is the function call to <code>test1()</code>, <code>test2()</code>, and so on. You are probably very familiar with the <code>from... import</code> statement, but this is usually used at the beginning of a <code>Python</code> program file.</p>
+<p>The timed statement is a call to <code>test1</code>, <code>test2</code>, <code>test3</code>, or <code>test4</code>.
+Because every candidate is compiled in the same program and repeated equally,
+the comparison exposes the very different amount of element movement.</p>
 </div>
 </div>
 </div>
@@ -13678,7 +13725,8 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The helper <code>timeIt</code> runs each candidate 1000 times on a vector of 1000 elements, so tiny per-call overheads average out and the differences we see come from the algorithms themselves — the same reason Python's <code>timeit</code> runs statements many times in a clean namespace.</p>
+<p>Each candidate runs 1,000 times on 1,000 elements.  Repetition makes the signal
+large enough to measure; it does not change the asymptotic class.</p>
 </div>
 </div>
 </div>
@@ -13689,7 +13737,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>From the experiment above it is clear that the <code>append()</code> operation is much faster than concatenation. It is interesting to note that the list comprehension is faster than  a <code>for</code> loop with an <code>append()</code> operation.</p>
+<p><code>insert(begin(), value)</code> is slow because it shifts the current contents on
+every insertion.  <code>push_back</code>, reserved <code>push_back</code>, and direct indexed
+assignment avoid those repeated front shifts.</p>
 </div>
 </div>
 </div>
@@ -13725,77 +13775,42 @@ function try_show() {
 <table>
 <thead>
 <tr>
-<th>Operation</th>
-<th>Big O Efficiency</th>
+<th><code>std::vector</code> operation</th>
+<th>Complexity</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>index <code>[]</code></td>
-<td>O(1)</td>
+<td><code>v[i]</code>, assignment to <code>v[i]</code></td>
+<td>$O(1)$</td>
 </tr>
 <tr>
-<td>index assignment</td>
-<td>O(1)</td>
+<td><code>push_back()</code></td>
+<td>amortized $O(1)$; one reallocation can be $O(n)$</td>
 </tr>
 <tr>
-<td><code>append()</code></td>
-<td>O(1)</td>
+<td><code>pop_back()</code></td>
+<td>$O(1)$</td>
 </tr>
 <tr>
-<td><code>pop()</code></td>
-<td>O(1)</td>
+<td><code>insert(pos, x)</code>, <code>erase(pos)</code></td>
+<td>$O(n)$ in the worst case</td>
 </tr>
 <tr>
-<td><code>pop(i)</code></td>
-<td>O(n)</td>
+<td><code>reserve(k)</code> when capacity grows</td>
+<td>$O(n)$</td>
 </tr>
 <tr>
-<td><code>insert(i, item)</code></td>
-<td>O(n)</td>
+<td><code>size()</code>, <code>begin()</code>, <code>end()</code></td>
+<td>$O(1)$</td>
 </tr>
 <tr>
-<td><code>del</code> operator</td>
-<td>O(n)</td>
-</tr>
-<tr>
-<td>iteration</td>
-<td>O(n)</td>
-</tr>
-<tr>
-<td>contains (<code>in</code>)</td>
-<td>O(n)</td>
-</tr>
-<tr>
-<td>get slice <code>[x:y]</code></td>
-<td>O(k)</td>
-</tr>
-<tr>
-<td>del slice</td>
-<td>O(n)</td>
-</tr>
-<tr>
-<td>set slice</td>
-<td>O(n+k)</td>
-</tr>
-<tr>
-<td><code>reverse()</code></td>
-<td>O(n)</td>
-</tr>
-<tr>
-<td>concatenate</td>
-<td>O(k)</td>
-</tr>
-<tr>
-<td><code>sort()</code></td>
-<td>O(n log n)</td>
-</tr>
-<tr>
-<td>multiply</td>
-<td>O(nk)</td>
+<td>linear search</td>
+<td>$O(n)$</td>
 </tr>
 </tbody>
 </table>
+<p>The cost of <code>insert</code>/<code>erase</code> depends on how many elements follow <code>pos</code>.</p>
 </div>
 </div>
 </div>
@@ -13817,7 +13832,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>When an item is taken from the front of the <code>list</code>, all the other elements in the <code>list</code> are shifted one position closer to the beginning. This may seem silly to you now, but if you look at Table you will see that this implementation also allows the index operation to be $O(1)$. This is a tradeoff that the Python designers thought was a good one!</p>
+<p>Erasing the first <code>vector</code> element shifts every remaining element one position
+left.  This $O(n)$ update is the trade-off for contiguous storage and $O(1)$
+random access.</p>
 </div>
 </div>
 </div>
@@ -13828,7 +13845,8 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Let’s do another experiment using the <code>timeit</code> module. Our goal is to be able to verify the performance of the <code>pop()</code> operation on a <code>list</code> of a known size when the program pops from the end of the list, and again when the program pops from the beginning of the list.</p>
+<p>The next experiment compares one hundred <code>erase(begin())</code> operations with one
+hundred <code>pop_back()</code> operations over increasing vector sizes.</p>
 </div>
 </div>
 </div>
@@ -13870,13 +13888,13 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>erase(begin()):  156.24149 ms</p>
+<p>erase(begin()):  164.25691 ms</p>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>pop_back():        0.00343 ms</p>
+<p>pop_back():        0.00333 ms</p>
 </div>
 </div>
 </div>
@@ -13936,25 +13954,25 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>2500000         20.63682     0.00156</p>
+<p>2500000         20.60543     0.00298</p>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>5000000         40.33524     0.00033</p>
+<p>5000000         43.14150     0.00031</p>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>7500000        108.14922     0.00025</p>
+<p>7500000         94.59665     0.00026</p>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>10000000       151.60363     0.00023</p>
+<p>10000000       152.78438     0.00026</p>
 </div>
 </div>
 </div>
@@ -13977,7 +13995,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>You can see that as the list gets longer and longer the time it takes to <code>pop(0)</code> also increases while the time for <code>pop()</code> stays very flat. This is exactly what we would expect to see for an $O(n)$ and $O(1)$ algorithm!</p>
+<p>As $n$ grows, <code>erase(begin())</code> time grows with the number of shifted elements,
+while <code>pop_back()</code> remains approximately flat.  Measurements vary by machine,
+but the trend agrees with the $O(n)$ versus $O(1)$ analysis.</p>
 </div>
 </div>
 </div>
@@ -14021,7 +14041,105 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="2.8-Hash-Tables-(unordered_map)">2.8 Hash Tables (unordered_map)<a class="anchor-link" href="#2.8-Hash-Tables-(unordered_map)">¶</a></h2>
+<h2 id="2.7-C++-Strings:-std::string">2.7 C++ Strings: <code>std::string</code><a class="anchor-link" href="#2.7-C++-Strings:-std::string">¶</a></h2>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Since C++11, <code>std::string</code> stores characters contiguously.  Its cost model therefore resembles <code>vector&lt;char&gt;</code>: indexing and <code>size()</code> are $O(1)$, appending is amortized $O(1)$, and insertion or erasure near the front is $O(n)$ because characters shift.  Searching for a general substring is not guaranteed to be logarithmic.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<table>
+<thead>
+<tr>
+<th><code>std::string</code> operation</th>
+<th>Complexity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>s[i]</code>, assignment to <code>s[i]</code>, <code>size()</code></td>
+<td>$O(1)$</td>
+</tr>
+<tr>
+<td><code>push_back()</code></td>
+<td>amortized $O(1)$</td>
+</tr>
+<tr>
+<td><code>pop_back()</code></td>
+<td>$O(1)$</td>
+</tr>
+<tr>
+<td><code>insert(pos, text)</code>, <code>erase(pos, count)</code></td>
+<td>$O(n)$ in the worst case</td>
+</tr>
+<tr>
+<td>comparison / general substring search</td>
+<td>up to $O(n)$ or more, depending on operands/algorithm</td>
+</tr>
+</tbody>
+</table>
+<p>As with <code>vector</code>, growth policy is implementation-dependent; only the stated complexity guarantees are portable.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-C++"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">string</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"data"</span><span class="p">;</span>
+<span class="w">    </span><span class="n">s</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="sc">'!'</span><span class="p">);</span>
+<span class="w">    </span><span class="n">s</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s">"C++ "</span><span class="p">);</span>
+<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" | size="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
+<p>C++ data! | size=9</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="2.8-Hash-Tables:-std::unordered_map">2.8 Hash Tables: <code>std::unordered_map</code><a class="anchor-link" href="#2.8-Hash-Tables:-std::unordered_map">¶</a></h2>
 </div>
 </div>
 </div>
@@ -14043,7 +14161,10 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The thing that is most important to notice right now is that the get item and set item operations on a dictionary are $O(1)$. Another important dictionary operation is the <code>contains</code> operation. Checking to see whether a key is in the dictionary or not is also $O(1)$. The efficiency of all dictionary operations is summarized in Table below:</p>
+<p>For <code>std::unordered_map</code>, lookup, insertion, and erasure are $O(1)$ <strong>on
+average</strong> when hashing distributes keys well.  They are not worst-case
+constant-time guarantees; a bad collision pattern can make an operation
+$O(n)$.</p>
 </div>
 </div>
 </div>
@@ -14098,8 +14219,11 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>One important side note on dictionary performance is that the efficiencies we provide in the table are for <strong>average-case performance</strong> or <strong>amortized analysis</strong>. In some rare cases the contains, get item, and set item operations can degenerate into <a href="https://github.com/AbdulMalikDev/PythonCheatSheet?tab=readme-ov-file">$O(n)$
-performance</a>, you can refer to Chapter 8 for more information.</p>
+<p>These hash-table bounds are <strong>average-case</strong>, not amortized merely because they
+are averages.  Average-case analysis assumes a distribution of hash outcomes;
+amortized analysis instead spreads occasional expensive work, such as a
+rehash, over a sequence of operations.  A single operation may still be
+$O(n)$ in the worst case.</p>
 </div>
 </div>
 </div>
@@ -14119,7 +14243,7 @@ performance</a>, you can refer to Chapter 8 for more information.</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_map&gt;</span>
@@ -14160,19 +14284,19 @@ performance</a>, you can refer to Chapter 8 for more information.</p>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>250000        54.191       0.035</p>
+<p>250000        56.425       0.031</p>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>500000       108.132       0.036</p>
+<p>500000       115.414       0.042</p>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>1000000      176.195       0.043</p>
+<p>1000000      184.663       0.046</p>
 </div>
 </div>
 </div>
@@ -14195,7 +14319,10 @@ performance</a>, you can refer to Chapter 8 for more information.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>You can see that the <code>dictionary</code> is consistently faster. You can also see that the time it takes for the <code>contains</code> operator on the <code>list</code> grows linearly with the size of the <code>list</code>. This verifies the assertion that the <code>contains</code> operator on a <code>list</code> is $O(n)$. It can also be seen that the time for the <code>contains</code> operator on a dictionary is constant even as the dictionary size grows.</p>
+<p>The hash table is consistently faster for membership tests in this experiment.
+Linear search in the <code>vector</code> grows with $n$, whereas <code>unordered_map::count</code>
+stays roughly constant on average.  This is empirical support for the analysis,
+not a worst-case guarantee.</p>
 </div>
 </div>
 </div>
@@ -14220,8 +14347,8 @@ performance</a>, you can refer to Chapter 8 for more information.</p>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="RpUcKpDPzoBN" style="border-radius: 10px; text-align: left"><style>
-#RpUcKpDPzoBN {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="EpluCxGWRxyg" style="border-radius: 10px; text-align: left"><style>
+#EpluCxGWRxyg {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -14449,10 +14576,10 @@ performance</a>, you can refer to Chapter 8 for more information.</p>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="868d5857-a2bc-4e6d-96a7-f483c9880f75" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="a2a40c88-552f-4902-9afc-c7699c87c064" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('868d5857-a2bc-4e6d-96a7-f483c9880f75');
-var questionsRpUcKpDPzoBN=[
+var element = document.getElementById('a2a40c88-552f-4902-9afc-c7699c87c064');
+var questionsEpluCxGWRxyg=[
     {
         "question": "Which of the vector operations shown below is NOT $O(1)$?",
         "type": "multiple_choice",
@@ -15541,8 +15668,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("RpUcKpDPzoBN")) {
-    show_questions(questionsRpUcKpDPzoBN, RpUcKpDPzoBN);
+  if (document.getElementById("EpluCxGWRxyg")) {
+    show_questions(questionsEpluCxGWRxyg, EpluCxGWRxyg);
   } else {
     setTimeout(try_show, 200);
   }
@@ -15579,8 +15706,8 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="wUvNhhZdooZD" style="border-radius: 10px; text-align: left"><style>
-#wUvNhhZdooZD {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="vHMITilNnIHo" style="border-radius: 10px; text-align: left"><style>
+#vHMITilNnIHo {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -15808,10 +15935,10 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="c6b1396a-60e9-4614-8aa4-bfae0b542f6e" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="27f5164d-2e1f-472a-ba53-5b75942b200c" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('c6b1396a-60e9-4614-8aa4-bfae0b542f6e');
-var questionswUvNhhZdooZD=[
+var element = document.getElementById('27f5164d-2e1f-472a-ba53-5b75942b200c');
+var questionsvHMITilNnIHo=[
     {
         "question": "Which of the unordered_map operations shown below is $O(1)$ on average?",
         "type": "multiple_choice",
@@ -16905,8 +17032,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("wUvNhhZdooZD")) {
-    show_questions(questionswUvNhhZdooZD, wUvNhhZdooZD);
+  if (document.getElementById("vHMITilNnIHo")) {
+    show_questions(questionsvHMITilNnIHo, vHMITilNnIHo);
   } else {
     setTimeout(try_show, 200);
   }
@@ -16929,7 +17056,9 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>You can check more in <a href="https://wiki.python.org/moin/TimeComplexity">here</a>.</p>
+<p>Current C++ references: <a href="https://en.cppreference.com/w/cpp/container/vector"><code>std::vector</code></a>,
+<a href="https://en.cppreference.com/w/cpp/string/basic_string"><code>std::string</code></a>, and
+<a href="https://en.cppreference.com/w/cpp/container/unordered_map"><code>std::unordered_map</code></a>.</p>
 </div>
 </div>
 </div>
@@ -16940,32 +17069,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Exercise:-Devise-an-experiment-to-verify-that-the-list-index-operator-is-$O(1)$.">Exercise: Devise an experiment to verify that the list index operator is $O(1)$.<a class="anchor-link" href="#Exercise:-Devise-an-experiment-to-verify-that-the-list-index-operator-is-$O(1)$.">¶</a></h4>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-C++"><pre><span></span><span class="c1">// Your code here</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Exercise:-Given-a-list-of-numbers-in-random-order,-write-an-algorithm-that-works-in--$O(n%5Clog-n)$-to-find-the-kth-smallest-number-in-the-list.">Exercise: Given a list of numbers in random order, write an algorithm that works in  $O(n\log n)$ to find the kth smallest number in the list.<a class="anchor-link" href="#Exercise:-Given-a-list-of-numbers-in-random-order,-write-an-algorithm-that-works-in--$O(n%5Clog-n)$-to-find-the-kth-smallest-number-in-the-list.">¶</a></h4>
+<h4 id="Exercise:-Devise-an-experiment-to-verify-that-vector::operator%5B%5D-is-$O(1)$.">Exercise: Devise an experiment to verify that <code>vector::operator[]</code> is $O(1)$.<a class="anchor-link" href="#Exercise:-Devise-an-experiment-to-verify-that-vector::operator%5B%5D-is-$O(1)$.">¶</a></h4>
 </div>
 </div>
 </div>
@@ -16983,6 +17087,31 @@ function try_show() {
 </div>
 </div>
 </div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h4 id="Exercise:-Given-a-vector%3Cint%3E-in-arbitrary-order,-find-the-kth-smallest-value-in-$O(n%5Clog-n)$-time.">Exercise: Given a <code>vector&lt;int&gt;</code> in arbitrary order, find the kth smallest value in $O(n\log n)$ time.<a class="anchor-link" href="#Exercise:-Given-a-vector%3Cint%3E-in-arbitrary-order,-find-the-kth-smallest-value-in-$O(n%5Clog-n)$-time.">¶</a></h4>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-C++"><pre><span></span><span class="c1">// Your code here</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16992,8 +17121,7 @@ function try_show() {
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="n">from</span><span class="w"> </span><span class="n">jupytercards</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="n">display_flashcards</span>
-<span class="n">fpath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/flashcards/"</span>
-<span class="n">display_flashcards</span><span class="p">(</span><span class="n">fpath</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="err">'</span><span class="n">ch2</span><span class="p">.</span><span class="n">json</span><span class="err">'</span><span class="p">)</span>
+<span class="n">display_flashcards</span><span class="p">(</span><span class="s">"flashcards/ch2.json"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -17366,14 +17494,14 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="GqqJdTEIUQkr" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="GqqJdTEIUQkr-next" onclick="window.checkFlip('GqqJdTEIUQkr')"> </div> <div style="height:40px"></div>
+<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="kRCmDFntEjht" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="kRCmDFntEjht-next" onclick="window.checkFlip('kRCmDFntEjht')"> </div> <div style="height:40px"></div>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="3d31032f-8ffc-4995-9ccc-6363196a1156" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="6792d563-cb33-41df-b95d-fc4277f73c06" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('3d31032f-8ffc-4995-9ccc-6363196a1156');
+var element = document.getElementById('6792d563-cb33-41df-b95d-fc4277f73c06');
 /*!
  * swiped-events.js - v1.1.4
  * Pure JavaScript swipe events
@@ -18170,10 +18298,10 @@ window.setTopics = function(idOrElem, topics) {
 
 (function() {
     var observer = new MutationObserver(function(mutations, obs) {
-        var el = document.getElementById("GqqJdTEIUQkr");
+        var el = document.getElementById("kRCmDFntEjht");
         if (el) {
             el.dataset.url = "";
-            el.dataset.cards = JSON.stringify([{"front": "Readability", "back": "The ease with which a human reader can comprehend the purpose, control flow, and operation of source code. It is a measure of how simple it is to understand and maintain code.", "seqNum": 0}, {"front": "Algorithm Analysis", "back": "The process of determining the computational complexity of algorithms, measuring the amount of computing resources (time and space) an algorithm uses.", "seqNum": 1}, {"front": "Benchmark Analysis", "back": "Evaluating the performance of a program by running a series of standard tests and trials to compare the relative performance of the objects being measured.", "seqNum": 2}, {"front": "Space Complexity", "back": "The amount of memory space required by an algorithm to execute, as a function of the length of the input.", "seqNum": 3}, {"front": "Time Complexity", "back": "The computational complexity that describes the amount of time it takes to run an algorithm, typically expressed as a function of the size of the input.", "seqNum": 4}, {"front": "Big-O", "back": "A notation used to express the upper bound of the time complexity or space complexity of an algorithm, helping to describe how the algorithm scales as the input size grows.", "seqNum": 5}, {"front": "Average-Case Performance", "back": "The expected time or space complexity of an algorithm when all possible inputs are considered, providing a measure of the algorithm's efficiency under typical conditions.", "seqNum": 6}, {"front": "Worst-Case Performance", "back": "The maximum time or space complexity of an algorithm across all possible inputs, indicating the algorithm's efficiency in the most unfavorable conditions.", "seqNum": 7}, {"front": "Brute-Force", "back": "An algorithmic approach that tries all possible solutions to find the answer, typically considered inefficient but simple to implement.", "seqNum": 8}, {"front": "Time and Space Trade-offs", "back": "The concept that sometimes an algorithm can be made faster by using more memory space, or use less memory at the cost of slower performance, depending on the algorithm's design choices.", "seqNum": 9}, {"front": "Indexing", "back": "The process of creating an index to improve data retrieval speed by efficiently locating and accessing the data in a data structure.", "seqNum": 10}, {"front": "Contains Operator", "back": "An operator used in programming to check if a particular element is present within a data structure.", "seqNum": 11}]);
+            el.dataset.cards = JSON.stringify([{"front": "Readability", "back": "The ease with which a human reader can comprehend the purpose, control flow, and operation of source code. It is a measure of how simple it is to understand and maintain code.", "seqNum": 0}, {"front": "Algorithm Analysis", "back": "The process of determining the computational complexity of algorithms, measuring the amount of computing resources (time and space) an algorithm uses.", "seqNum": 1}, {"front": "Benchmark Analysis", "back": "Evaluating the performance of a program by running a series of standard tests and trials to compare the relative performance of the objects being measured.", "seqNum": 2}, {"front": "Space Complexity", "back": "The amount of memory space required by an algorithm to execute, as a function of the length of the input.", "seqNum": 3}, {"front": "Time Complexity", "back": "The computational complexity that describes the amount of time it takes to run an algorithm, typically expressed as a function of the size of the input.", "seqNum": 4}, {"front": "Big-O", "back": "An asymptotic upper-bound notation for a cost function. It does not by itself mean worst case; first state which case or operation sequence the cost function describes.", "seqNum": 5}, {"front": "Average-Case Performance", "back": "The expected cost over inputs of size n under a stated probability distribution. Without that distribution, an average-case claim is incomplete.", "seqNum": 6}, {"front": "Worst-Case Performance", "back": "The maximum time or space complexity of an algorithm across all possible inputs, indicating the algorithm's efficiency in the most unfavorable conditions.", "seqNum": 7}, {"front": "Brute-Force", "back": "An algorithmic approach that tries all possible solutions to find the answer, typically considered inefficient but simple to implement.", "seqNum": 8}, {"front": "Time and Space Trade-offs", "back": "The concept that sometimes an algorithm can be made faster by using more memory space, or use less memory at the cost of slower performance, depending on the algorithm's design choices.", "seqNum": 9}, {"front": "Indexing", "back": "Accessing an element by its numeric position. For contiguous std::vector and std::string storage, operator[] takes O(1) time.", "seqNum": 10}, {"front": "Contains Operator", "back": "A membership test. Linear search in an unsorted vector is O(n), whereas unordered_map lookup is O(1) on average and O(n) in the worst case.", "seqNum": 11}, {"front": "Amortized Analysis", "back": "A bound on average cost per operation over a sequence, without assuming random inputs. std::vector::push_back is amortized O(1) although one reallocation can cost O(n).", "seqNum": 12}, {"front": "std::string Complexity", "back": "Since C++11, characters are contiguous: indexing and size are O(1), push_back is amortized O(1), and insertion or erasure near the front is O(n).", "seqNum": 13}]);
             el.dataset.frontColors = JSON.stringify(["var(--asparagus)", "var(--terra-cotta)", "var(--cyan-process)"]);
             el.dataset.backColors = JSON.stringify(["var(--dark-blue-gray)"]);
             el.dataset.textColors = JSON.stringify(["var(--snow)"]);
@@ -18182,7 +18310,7 @@ window.setTopics = function(idOrElem, topics) {
             el.dataset.shuffleCards = false;
             el.dataset.title = "";
             el.dataset.subject = "";
-            createCards("GqqJdTEIUQkr");
+            createCards("kRCmDFntEjht");
             obs.disconnect();
         }
     });
@@ -18249,7 +18377,7 @@ window.setTopics = function(idOrElem, topics) {
 </li>
 <li><p><strong>Big-O</strong>: A notation used to express the upper bound of the time complexity or space complexity of an algorithm, helping to describe how the algorithm scales as the input size grows.</p>
 </li>
-<li><p><strong>Average-Case Performance</strong>: The expected time or space complexity of an algorithm when all possible inputs are considered, providing a measure of the algorithm's efficiency under typical conditions.</p>
+<li><p><strong>Average-Case Performance</strong>: The expected cost over inputs of size n under a stated probability distribution; without that distribution, an average-case claim is incomplete.</p>
 </li>
 <li><p><strong>Worst-Case Performance</strong>: The maximum time or space complexity of an algorithm across all possible inputs, indicating the algorithm's efficiency in the most unfavorable conditions.</p>
 </li>
@@ -18260,6 +18388,10 @@ window.setTopics = function(idOrElem, topics) {
 <li><p><strong>Indexing</strong>: The process of creating an index to improve data retrieval speed by efficiently locating and accessing the data in a data structure.</p>
 </li>
 <li><p><strong>Contains Operator</strong>: An operator used in programming to check if a particular element is present within a data structure.</p>
+</li>
+<li><p><strong>Amortized Analysis</strong>: Bounds average cost per operation over a sequence without assuming random inputs; <code>vector::push_back</code> is amortized $O(1)$.</p>
+</li>
+<li><p><strong>C++ String Cost Model</strong>: <code>std::string</code> has contiguous characters, $O(1)$ indexing, amortized $O(1)$ tail growth, and potentially $O(n)$ middle insertion or erasure.</p>
 </li>
 </ul>
 </div>

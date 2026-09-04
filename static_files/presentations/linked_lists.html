@@ -380,7 +380,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
 <section id="node">
   <div class="section-number">PART 01 · 節點</div>
-  <h2>Node 類別：資料 + 一根指向下一個的指標 <span class="sec-badge">cppds §4.3.1</span></h2>
+  <h2>Node 類別：資料 + 一根指向下一個的指標 <span class="sec-badge">cppds §4.4.1</span></h2>
   <p>節點是鏈結串列的積木：<code>data</code> 放資料、<code>next</code> 指向下一個節點。
   <code>next == NULL</code> 表示「後面沒有了」：這就是串列的結尾記號（grounded）。</p>
   <div class="viz-layout">
@@ -390,8 +390,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <div class="status-banner" id="nodeStatus"><span class="status-icon">›</span><span class="status-text">按「new Node(93)」建立節點，觀察 data 與 next 欄位。</span></div>
         <div class="controls-bar">
           <button class="btn" onclick="nodeDemo(1)">Node *temp = new Node(93)</button>
-          <button class="btn" onclick="nodeDemo(2)">temp-&gt;data？</button>
-          <button class="btn" onclick="nodeDemo(3)">temp-&gt;next？</button>
+          <button class="btn" onclick="nodeDemo(2)">temp-&gt;getData()？</button>
+          <button class="btn" onclick="nodeDemo(3)">temp-&gt;getNext()？</button>
         </div>
       </div>
     </div>
@@ -413,17 +413,36 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <div class="ic-title">指標語法速記</div>
         <div style="font-size:.86rem;line-height:2;" class="mono">
         Node *p = new Node(93);<br>
-        p-&gt;data&nbsp;&nbsp;// 93<br>
-        p-&gt;next&nbsp;&nbsp;// NULL<br>
+        p-&gt;getData()&nbsp;&nbsp;// 93<br>
+        p-&gt;getNext()&nbsp;&nbsp;// NULL<br>
         delete p;&nbsp;// 記得釋放！</div>
       </div>
     </div>
   </div>
+
+<div class="deck-extra">
+  <div class="dx-label">講義 04 · Node 的使用畫面</div>
+  <div class="pseudo-code" style="font-size:.8rem;"><span class="line"><span class="kw">#</span><span class="kw">include</span> <span class="kw">&lt;iostream&gt;</span><span class="kw"></span>
+<span class="line"></span><span class="kw">#</span><span class="kw">include</span> <span class="kw">"linked_list.hpp"</span><span class="com">   // Node / UnorderedList / OrderedList</span><span class="kw"></span>
+<span class="line"></span><span class="kw">using</span> <span class="kw">namespace</span> std;</span>
+<span class="line"> </span>
+<span class="line"><span class="kw">int</span> <span class="fn">main</span>() {</span>
+<span class="line">    Node&lt;<span class="kw">int</span>&gt; *temp = <span class="kw">new</span> Node&lt;<span class="kw">int</span>&gt;(<span class="num">93</span>);</span>
+<span class="line">    cout &lt;&lt; temp-&gt;getData() &lt;&lt; endl;</span>
+<span class="line">    cout &lt;&lt; temp-&gt;getNext() &lt;&lt; endl;   <span class="com">// NULL 印出來是 0</span>
+<span class="line"></span>    <span class="kw">delete</span> temp;</span>
+<span class="line">    <span class="kw">return</span> <span class="num">0</span>;</span>
+<span class="line">}</span>
+<span class="line"> </span></div>
+  <div class="expected-out"><span class="eo-tag">預期輸出</span><pre>93
+0</pre></div>
+  <p class="dx-note"><span id="dx-node"></span>new 出來的節點住在 heap，用指標操作、用 -&gt; 呼叫方法。getNext() 是 0（NULL）：新節點還沒接上任何人。用完 delete，這是 C++ 跟你的約定。</p>
+</div>
 </section>
 
 <section id="unordered">
   <div class="section-number">PART 02 · 未排序串列</div>
-  <h2>UnorderedList：add、search、remove 的指標舞步 <span class="sec-badge">cppds §4.3</span></h2>
+  <h2>UnorderedList：add、search、remove 的指標舞步 <span class="sec-badge">cppds §4.3–4.4</span></h2>
   <p>未排序串列把新元素<strong>加在 head</strong>（最省事的位置，O(1)）。
   重點戲是 <code>remove</code>：需要 <strong>prev / cur 雙指標</strong>同行，找到後讓 prev「跳過」cur。
   <strong>順序錯了串列就斷</strong>：先接住後面，再改前面。</p>
@@ -439,29 +458,31 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
           <button class="btn" onclick="ullRemove()">remove</button>
           <button class="btn" onclick="ullReset()">重置</button>
           <button class="btn" onclick="ullPlayer &amp;&amp; ullPlayer.step()">→ 單步</button>
+          <button class="btn" onclick="ullPlayer &amp;&amp; ullPlayer.toggle(this)">⏸ 暫停</button>
+          <span class="mono" style="font-size:.8rem;color:var(--muted);">速度 <input id="ullSpeed" type="range" min="120" max="1200" value="650" style="vertical-align:middle;"></span>
         </div>
       </div>
     </div>
     <div class="side-panel">
       <div class="info-card"><div class="ic-title">三大操作（動畫對照）<span class="ic-badge">CODE</span></div><div class="pseudo-code" id="ullCode">
-<span class="line" data-l="1"><span class="kw">void</span> <span class="fn">add</span>(<span class="kw">int</span> item):        <span class="com">// 加在 head，O(1)</span></span>
-<span class="line" data-l="2">    Node *temp = <span class="kw">new</span> <span class="fn">Node</span>(item)</span>
-<span class="line" data-l="3">    temp-&gt;next = head        <span class="com">// ① 先接住整條串列</span></span>
-<span class="line" data-l="4">    head = temp              <span class="com">// ② 再移動 head</span></span>
+<span class="line" data-l="1"><span class="kw">void</span> <span class="fn">add</span>(<span class="kw">int</span> item) {        <span class="com">// 加在 head，O(1)</span></span>
+<span class="line" data-l="2">    Node *temp = <span class="kw">new</span> <span class="fn">Node</span>(item);</span>
+<span class="line" data-l="3">    temp-&gt;<span class="fn">setNext</span>(head);      <span class="com">// ① 先接住整條串列</span></span>
+<span class="line" data-l="4">    head = temp; }           <span class="com">// ② 再移動 head</span></span>
 <span class="line" data-l="5"> </span>
-<span class="line" data-l="6"><span class="kw">bool</span> <span class="fn">search</span>(<span class="kw">int</span> item):</span>
-<span class="line" data-l="7">    Node *cur = head</span>
-<span class="line" data-l="8">    <span class="kw">while</span> cur != <span class="num">NULL</span>:</span>
-<span class="line" data-l="9">        <span class="kw">if</span> cur-&gt;data == item: <span class="kw">return</span> <span class="num">true</span></span>
-<span class="line" data-l="10">        cur = cur-&gt;next       <span class="com">// 走訪 traversal</span></span>
-<span class="line" data-l="11">    <span class="kw">return</span> <span class="num">false</span></span>
+<span class="line" data-l="6"><span class="kw">bool</span> <span class="fn">search</span>(<span class="kw">int</span> item) {</span>
+<span class="line" data-l="7">    Node *cur = head;</span>
+<span class="line" data-l="8">    <span class="kw">while</span> (cur != <span class="num">NULL</span>) {</span>
+<span class="line" data-l="9">        <span class="kw">if</span> (cur-&gt;<span class="fn">getData</span>() == item) <span class="kw">return</span> <span class="num">true</span>;</span>
+<span class="line" data-l="10">        cur = cur-&gt;<span class="fn">getNext</span>(); } <span class="com">// 走訪 traversal</span></span>
+<span class="line" data-l="11">    <span class="kw">return</span> <span class="num">false</span>; }</span>
 <span class="line" data-l="12"> </span>
-<span class="line" data-l="13"><span class="kw">void</span> <span class="fn">remove</span>(<span class="kw">int</span> item):    <span class="com">// 雙指標：prev 跟著 cur</span></span>
-<span class="line" data-l="14">    cur = head; prev = <span class="num">NULL</span></span>
-<span class="line" data-l="15">    <span class="kw">while</span> cur-&gt;data != item:</span>
-<span class="line" data-l="16">        prev = cur; cur = cur-&gt;next</span>
-<span class="line" data-l="17">    <span class="kw">if</span> prev == <span class="num">NULL</span>: head = cur-&gt;next</span>
-<span class="line" data-l="18">    <span class="kw">else</span>: prev-&gt;next = cur-&gt;next</span></div></div>
+<span class="line" data-l="13"><span class="kw">void</span> <span class="fn">remove</span>(<span class="kw">int</span> item) { <span class="com">// 找不到就不修改串列</span></span>
+<span class="line" data-l="14">    Node *cur = head, *prev = <span class="num">NULL</span>;</span>
+<span class="line" data-l="15">    <span class="kw">while</span> (cur != <span class="num">NULL</span> &amp;&amp; cur-&gt;<span class="fn">getData</span>() != item)</span>
+<span class="line" data-l="16">        { prev = cur; cur = cur-&gt;<span class="fn">getNext</span>(); }</span>
+<span class="line" data-l="17">    <span class="kw">if</span> (cur == <span class="num">NULL</span>) <span class="kw">return</span>;</span>
+<span class="line" data-l="18">    <span class="kw">if</span> (prev == <span class="num">NULL</span>) head = cur-&gt;<span class="fn">getNext</span>(); <span class="kw">else</span> prev-&gt;<span class="fn">setNext</span>(cur-&gt;<span class="fn">getNext</span>()); <span class="kw">delete</span> cur; }</span></div></div>
     </div>
   </div>
 
@@ -470,6 +491,9 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <code>getNext()／setNext()</code> 操作。<code>size()</code>、<code>search()</code>、<code>remove()</code>
   都建立在同一個技巧上：<strong>走訪</strong>（traversal），也就是從 head 出發、
   一個節點一個節點地拜訪到 NULL 為止。</p>
+  <p><strong>所有權契約：</strong>教學類別擁有它配置的節點，destructor 逐節點釋放。
+  copy constructor／copy assignment 必須複製整條鏈，不能只複製 head，否則會共享節點並 double free。
+  <code>remove(item)</code> 採 erase-if-found：找不到時不丟例外，也不改串列。</p>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:.8rem;">
     <div class="info-card"><div class="ic-title">isEmpty / size <span class="ic-badge">CODE</span></div>
       <div class="pseudo-code" style="font-size:.74rem;">
@@ -507,23 +531,76 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     刪 head 是特殊情況：previous 還是 NULL，這時改的是 head 本身。
     講義留了一題思考：<strong>刪最後一個節點時，這兩個分支夠用嗎？</strong>（提示：夠。想想 current->getNext() 那時是什麼。）
   </div>
-  
+
 <div class="quiz-box">
   <div class="quiz-label">QUIZ · add 的兩行順序</div>
-  <p><code>add</code> 裡若把兩行寫反（先 <code>head = temp</code>、再 <code>temp-&gt;next = head</code>），會發生什麼事？</p>
-  
+  <p><code>add</code> 裡若把兩行寫反（先 <code>head = temp</code>、再 <code>temp-&gt;setNext(head)</code>），會發生什麼事？</p>
+
   <div class="quiz-options" id="qUllOptions">
-    <div class="quiz-opt" data-correct="true" data-fb="head 先被改成 temp，之後 temp->next = head 就是指向自己；原本的串列再也沒有任何指標能到達（記憶體洩漏）。" onclick="quizCheck('qUll', this)"><span class="opt-letter">(A)</span> temp 的 next 指向自己，其餘節點全部漏接</div><div class="quiz-opt" data-correct="false" data-fb="順序是關鍵！先讓新節點接住原串列，才能安全移動 head。" onclick="quizCheck('qUll', this)"><span class="opt-letter">(B)</span> 沒差，結果一樣</div><div class="quiz-opt" data-correct="false" data-fb="語法完全合法，這是「邏輯炸彈」，編譯器不會救你。" onclick="quizCheck('qUll', this)"><span class="opt-letter">(C)</span> 編譯錯誤</div>
+    <div class="quiz-opt" data-correct="true" data-fb="head 先被改成 temp，之後 temp->setNext(head) 會讓新節點指向自己；原串列再也無法到達（記憶體洩漏）。" onclick="quizCheck('qUll', this)"><span class="opt-letter">(A)</span> temp 的 next 指向自己，其餘節點全部漏接</div><div class="quiz-opt" data-correct="false" data-fb="順序是關鍵！先讓新節點接住原串列，才能安全移動 head。" onclick="quizCheck('qUll', this)"><span class="opt-letter">(B)</span> 沒差，結果一樣</div><div class="quiz-opt" data-correct="false" data-fb="語法完全合法，這是「邏輯炸彈」，編譯器不會救你。" onclick="quizCheck('qUll', this)"><span class="opt-letter">(C)</span> 編譯錯誤</div>
   </div>
   <div class="quiz-feedback" id="qUllFeedback"></div>
+</div>
+
+<h3 id="dx-uno">講義完整範例：UnorderedList 全套操作</h3>
+<div class="deck-extra">
+  <div class="dx-label">講義 04 · add / size / search / remove</div>
+  <div class="pseudo-code" style="font-size:.8rem;"><span class="line"><span class="kw">#</span><span class="kw">include</span> <span class="kw">&lt;iostream&gt;</span><span class="kw"></span>
+<span class="line"></span><span class="kw">#</span><span class="kw">include</span> <span class="kw">"linked_list.hpp"</span><span class="kw"></span>
+<span class="line"></span><span class="kw">using</span> <span class="kw">namespace</span> std;</span>
+<span class="line"> </span>
+<span class="line"><span class="kw">int</span> <span class="fn">main</span>() {</span>
+<span class="line">    UnorderedList&lt;<span class="kw">int</span>&gt; myList;</span>
+<span class="line">    myList.add(<span class="num">31</span>); myList.add(<span class="num">77</span>); myList.add(<span class="num">17</span>);</span>
+<span class="line">    myList.add(<span class="num">93</span>); myList.add(<span class="num">26</span>); myList.add(<span class="num">54</span>);</span>
+<span class="line"> </span>
+<span class="line">    cout &lt;&lt; myList &lt;&lt; endl;</span>
+<span class="line">    cout &lt;&lt; myList.size() &lt;&lt; endl;</span>
+<span class="line">    cout &lt;&lt; boolalpha &lt;&lt; myList.search(<span class="num">93</span>) &lt;&lt; endl;</span>
+<span class="line"> </span>
+<span class="line">    myList.remove(<span class="num">54</span>);</span>
+<span class="line">    myList.remove(<span class="num">93</span>);</span>
+<span class="line">    myList.remove(<span class="num">31</span>);</span>
+<span class="line">    cout &lt;&lt; myList &lt;&lt; endl;</span>
+<span class="line">    <span class="kw">return</span> <span class="num">0</span>;</span>
+<span class="line">}</span>
+<span class="line"> </span></div>
+  <div class="expected-out"><span class="eo-tag">預期輸出</span><pre>54 26 93 17 77 31
+6
+true
+26 17 77 </pre></div>
+  <p class="dx-note">第一行輸出印證了 add 是<strong>頭插</strong>：最後加入的 54 排最前面。三次 remove 分別打中「中間、中間、尾巴」三種位置，下一張卡把指標動作攤開看。</p>
+</div>
+<div class="deck-extra">
+  <div class="dx-label">講義 04 · remove(26) 的指標舞步逐格看</div>
+  <table style="width:100%;border-collapse:collapse;font-size:.88rem;">
+    <tr style="border-bottom:2px solid var(--card-border);"><th style="text-align:left;padding:.4rem;">步驟</th><th style="text-align:left;">prev</th><th style="text-align:left;">cur</th><th style="text-align:left;">動作</th></tr>
+    <tr style="border-bottom:1px solid var(--card-border);"><td style="padding:.4rem;">開始</td><td>NULL</td><td>head（54）</td><td>兩根指標起跑</td></tr>
+    <tr style="border-bottom:1px solid var(--card-border);"><td style="padding:.4rem;">比對 54</td><td>54</td><td>26</td><td>不是目標：prev 跟上、cur 前進</td></tr>
+    <tr style="border-bottom:1px solid var(--card-border);"><td style="padding:.4rem;">比對 26</td><td>54</td><td>26</td><td>找到了，停</td></tr>
+    <tr style="border-bottom:1px solid var(--card-border);"><td style="padding:.4rem;">摘除</td><td colspan="2">prev-&gt;setNext(cur-&gt;getNext())</td><td>54 直接指向 93，26 被跳過</td></tr>
+    <tr><td style="padding:.4rem;">收尾</td><td colspan="2">delete cur</td><td>歸還記憶體（若 cur == head，改成 head = head-&gt;getNext()）</td></tr>
+  </table>
+  <p class="dx-note">要背的只有一件事：<strong>單向串列摘節點需要「前一個」的協助</strong>，所以永遠帶著 prev、cur 兩根指標同行；目標剛好是 head 時沒有 prev，單獨處理。</p>
+</div>
+
+<div class="deck-extra">
+  <div class="dx-label">講義 04 · 所有權與 deep copy</div>
+  <div class="pseudo-code" style="font-size:.8rem;"><span class="line" data-l="1">UnorderedList&lt;<span class="kw">int</span>&gt; a;</span>
+<span class="line" data-l="2">a.add(<span class="num">1</span>); a.add(<span class="num">2</span>);</span>
+<span class="line" data-l="3">UnorderedList&lt;<span class="kw">int</span>&gt; b = a;  <span class="com">// 必須複製整條鏈</span>
+<span class="line" data-l="4"></span>b.remove(<span class="num">2</span>);               <span class="com">// 不可改到 a</span>
+<span class="line" data-l="5"></span></span></div>
+  <p class="dx-note"><span id="dx-own"></span>教學類別擁有 new 出來的節點：destructor 要逐一 delete；copy constructor 與 copy assignment 要 deep copy。若只複製 head，兩個物件會共用節點，最後可能 double free。remove 採 erase-if-found，找不到時保持不變。</p>
 </div>
 </section>
 
 <section id="ordered">
   <div class="section-number">PART 03 · 排序串列</div>
-  <h2>OrderedList：維持大小順序的插入 <span class="sec-badge">cppds §4.4–4.5</span></h2>
-  <p>排序串列的 <code>add</code> 不能亂插：prev/cur 往前走，直到 <code>cur-&gt;data ≥ item</code> 就是插入點。
+  <h2>OrderedList：維持大小順序的插入 <span class="sec-badge">cppds §4.5–4.6</span></h2>
+  <p>排序串列的 <code>add</code> 不能亂插：prev/cur 往前走，直到 <code>cur-&gt;getData() ≥ item</code> 就是插入點。
   <code>search</code> 因此能<strong>提前失敗</strong>：一旦看到比目標大的值就確定不存在。</p>
+  <p><code>remove(item)</code> 也利用排序提前停止；找到後 unlink 並 <code>delete</code>，找不到則保持不變。</p>
   <div class="viz-layout">
     <div>
       <div class="viz-panel">
@@ -533,28 +610,25 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
           <input id="ollInput" type="number" class="mono" style="width:80px;padding:.35rem .5rem;border:1px solid var(--card-border);border-radius:6px;" value="40">
           <button class="btn" onclick="ollAdd()">▶ add（動畫）</button>
           <button class="btn" onclick="ollPlayer &amp;&amp; ollPlayer.step()">→ 單步</button>
+          <button class="btn" onclick="ollPlayer &amp;&amp; ollPlayer.toggle(this)">⏸ 暫停</button>
+          <span class="mono" style="font-size:.8rem;color:var(--muted);">速度 <input id="ollSpeed" type="range" min="120" max="1200" value="650" style="vertical-align:middle;"></span>
           <button class="btn" onclick="ollReset()">重置</button>
         </div>
       </div>
     </div>
     <div class="side-panel">
       <div class="info-card"><div class="ic-title">排序版操作 <span class="ic-badge">CODE</span></div><div class="pseudo-code" id="ollCode">
-<span class="line" data-l="1"><span class="kw">void</span> <span class="fn">add</span>(<span class="kw">int</span> item):        <span class="com">// 排序版：先找位置</span></span>
-<span class="line" data-l="2">    cur = head; prev = <span class="num">NULL</span></span>
-<span class="line" data-l="3">    <span class="kw">while</span> cur != <span class="num">NULL</span> &amp;&amp; cur-&gt;data &lt; item:</span>
-<span class="line" data-l="4">        prev = cur; cur = cur-&gt;next</span>
-<span class="line" data-l="5">    Node *temp = <span class="kw">new</span> <span class="fn">Node</span>(item)</span>
-<span class="line" data-l="6">    <span class="kw">if</span> prev == <span class="num">NULL</span>:      <span class="com">// 插在最前</span></span>
-<span class="line" data-l="7">        temp-&gt;next = head; head = temp</span>
-<span class="line" data-l="8">    <span class="kw">else</span>:</span>
-<span class="line" data-l="9">        temp-&gt;next = cur; prev-&gt;next = temp</span>
+<span class="line" data-l="1"><span class="kw">void</span> <span class="fn">add</span>(<span class="kw">int</span> item) { <span class="com">// 排序版：先找位置</span></span>
+<span class="line" data-l="2">    Node *cur = head, *prev = <span class="num">NULL</span>;</span>
+<span class="line" data-l="3">    <span class="kw">while</span> (cur != <span class="num">NULL</span> &amp;&amp; cur-&gt;<span class="fn">getData</span>() &lt; item) {</span>
+<span class="line" data-l="4">        prev = cur; cur = cur-&gt;<span class="fn">getNext</span>(); }</span>
+<span class="line" data-l="5">    Node *temp = <span class="kw">new</span> <span class="fn">Node</span>(item);</span>
+<span class="line" data-l="6">    temp-&gt;<span class="fn">setNext</span>(cur);</span>
+<span class="line" data-l="7">    <span class="kw">if</span> (prev == <span class="num">NULL</span>) head = temp;</span>
+<span class="line" data-l="8">    <span class="kw">else</span> prev-&gt;<span class="fn">setNext</span>(temp);</span>
+<span class="line" data-l="9">}</span>
 <span class="line" data-l="10"> </span>
-<span class="line" data-l="11"><span class="kw">bool</span> <span class="fn">search</span>(<span class="kw">int</span> item):   <span class="com">// 可提前停</span></span>
-<span class="line" data-l="12">    <span class="kw">while</span> cur != <span class="num">NULL</span>:</span>
-<span class="line" data-l="13">        <span class="kw">if</span> cur-&gt;data == item: <span class="kw">return</span> <span class="num">true</span></span>
-<span class="line" data-l="14">        <span class="kw">if</span> cur-&gt;data &gt; item: <span class="kw">return</span> <span class="num">false</span>  <span class="com">// 超過了</span></span>
-<span class="line" data-l="15">        cur = cur-&gt;next</span>
-<span class="line" data-l="16">    <span class="kw">return</span> <span class="num">false</span></span></div></div>
+<span class="line" data-l="11"><span class="com">// search 以 getData() 比較、以 getNext() 前進，可提前停止</span></span></div></div>
       <div class="info-card">
         <div class="ic-title">複雜度（n 節點）</div>
         <div class="ic-row"><span class="ic-label">未排序 add</span><span class="ic-value">O(1)</span></div>
@@ -565,7 +639,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     </div>
   </div>
 
-  <h3 style="margin-top:1.5rem;">分析：哪些操作 O(1)、哪些逃不掉走訪（cppds §4.4.1）</h3>
+  <h3 style="margin-top:1.5rem;">分析：哪些操作 O(1)、哪些逃不掉走訪（cppds §4.6.1）</h3>
   <p>判斷準則一句話：<strong>只碰 head 的操作是 O(1)，其他都要走訪</strong>。
   search 平均找到目標時走了 n/2 步：聽起來省一半，但 Big-O 只看成長率，
   係數 1/2 會被丟掉，而且最壞情況（不在串列裡、或排在最後）還是得走完全程，所以仍是 O(n)。
@@ -573,7 +647,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
     <thead><tr><th>方法</th><th>做什麼</th><th>未排序</th><th>排序</th></tr></thead>
     <tbody>
-      <tr><td class="mono">is_empty()</td><td>串列是空的嗎（看 head）</td><td>O(1)</td><td>O(1)</td></tr>
+      <tr><td class="mono">isEmpty()</td><td>串列是空的嗎（看 head）</td><td>O(1)</td><td>O(1)</td></tr>
       <tr><td class="mono">add(item)</td><td>加入元素</td><td><strong>O(1)</strong>（插 head）</td><td>O(n)（找位置）</td></tr>
       <tr><td class="mono">size()</td><td>邊走邊數</td><td>O(n)</td><td>O(n)</td></tr>
       <tr><td class="mono">search(item)</td><td>找得到嗎</td><td>O(n)</td><td>O(n)，可提前停</td></tr>
@@ -584,15 +658,44 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       <tr><td class="mono">pop() / pop(pos)</td><td>移除尾端／指定位置並回傳</td><td>O(n)</td><td>O(n)</td></tr>
     </tbody>
   </table></div>
-  
+
 <div class="quiz-box">
   <div class="quiz-label">QUIZ · 平均走一半，為什麼還是 O(n)？</div>
   <p>search 平均只要走 n/2 個節點就找到目標。為什麼複雜度不寫成 O(n/2)？</p>
-  
+
   <div class="quiz-options" id="qAnaOptions">
     <div class="quiz-opt" data-correct="true" data-fb="n/2 與 n 的成長率相同：n 加倍、時間都加倍。Big-O 抓的是成長率，1/2 這種常數係數一律丟掉；何況目標不在串列裡時一步都少不了。" onclick="quizCheck('qAna', this)"><span class="opt-letter">(A)</span> 係數在 Big-O 裡沒有意義，且最壞情況要走完全程</div><div class="quiz-opt" data-correct="false" data-fb="Big-O 不是四捨五入：是「成長率相同的函數視為同類」。" onclick="quizCheck('qAna', this)"><span class="opt-letter">(B)</span> 因為 n/2 四捨五入之後就是 n</div><div class="quiz-opt" data-correct="false" data-fb="平均情況可以分析（第 2 章的 average case）；只是它跟最壞情況同為線性，結論不變。" onclick="quizCheck('qAna', this)"><span class="opt-letter">(C)</span> 平均情況根本不能分析</div>
   </div>
   <div class="quiz-feedback" id="qAnaFeedback"></div>
+</div>
+
+<div class="deck-extra">
+  <div class="dx-label">講義 04 · OrderedList：一樣的介面、排好的內容</div>
+  <div class="pseudo-code" style="font-size:.8rem;"><span class="line"><span class="kw">#</span><span class="kw">include</span> <span class="kw">&lt;iostream&gt;</span><span class="kw"></span>
+<span class="line"></span><span class="kw">#</span><span class="kw">include</span> <span class="kw">"linked_list.hpp"</span><span class="kw"></span>
+<span class="line"></span><span class="kw">using</span> <span class="kw">namespace</span> std;</span>
+<span class="line"> </span>
+<span class="line"><span class="kw">int</span> <span class="fn">main</span>() {</span>
+<span class="line">    OrderedList&lt;<span class="kw">int</span>&gt; myList;</span>
+<span class="line">    myList.add(<span class="num">31</span>);</span>
+<span class="line">    myList.add(<span class="num">77</span>);</span>
+<span class="line">    myList.add(<span class="num">17</span>);</span>
+<span class="line">    myList.add(<span class="num">93</span>);</span>
+<span class="line">    myList.add(<span class="num">26</span>);</span>
+<span class="line">    myList.add(<span class="num">54</span>);</span>
+<span class="line"> </span>
+<span class="line">    cout &lt;&lt; myList &lt;&lt; endl;</span>
+<span class="line">    cout &lt;&lt; myList.size() &lt;&lt; endl;</span>
+<span class="line">    cout &lt;&lt; boolalpha &lt;&lt; myList.search(<span class="num">93</span>) &lt;&lt; endl;</span>
+<span class="line">    cout &lt;&lt; myList.search(<span class="num">100</span>) &lt;&lt; endl;</span>
+<span class="line">    <span class="kw">return</span> <span class="num">0</span>;</span>
+<span class="line">}</span>
+<span class="line"> </span></div>
+  <div class="expected-out"><span class="eo-tag">預期輸出</span><pre>17 26 31 54 77 93
+6
+true
+false</pre></div>
+  <p class="dx-note"><span id="dx-odr"></span>同樣六次 add、同樣的呼叫介面，印出來卻是由小到大：差別全在 add 內部「找到正確位置再插」。search(100) 也更聰明：一碰到比 100 大的節點就能放棄（這條串列裡沒有更大的希望了）。</p>
 </div>
 </section>
 
@@ -615,11 +718,11 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       <button class="btn" onclick="varShow('circular')">環狀</button>
     </div>
   </div>
-  
+
 <div class="quiz-box">
   <div class="quiz-label">QUIZ · 尾端刪除</div>
   <p>要讓「刪除尾端節點」變成 O(1)，需要哪種配置？</p>
-  
+
   <div class="quiz-options" id="qVarOptions">
     <div class="quiz-opt" data-correct="true" data-fb="tail 直接定位尾端，tail->prev 直接定位倒數第二個：兩步搞定。" onclick="quizCheck('qVar', this)"><span class="opt-letter">(A)</span> 雙向串列 + tail 指標</div><div class="quiz-opt" data-correct="false" data-fb="tail 找得到尾端，但刪除還需要「倒數第二個」的 next 清 NULL：單向串列拿不到它，仍要 O(n) 走訪。" onclick="quizCheck('qVar', this)"><span class="opt-letter">(B)</span> 單向串列 + tail 指標</div><div class="quiz-opt" data-correct="false" data-fb="環狀解決「輪轉」問題；刪尾端一樣需要前一個節點，仍是 O(n)。" onclick="quizCheck('qVar', this)"><span class="opt-letter">(C)</span> 環狀單向串列</div>
   </div>
@@ -629,7 +732,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
 <section id="stl">
   <div class="section-number">PART 05 · 工業級</div>
-  <h2>STL 的現成品：std::forward_list 與 std::list <span class="sec-badge">cppds §4.5</span></h2>
+  <h2>STL 的現成品：std::forward_list 與 std::list <span class="sec-badge">cppds §4.7</span></h2>
   <p>理解原理之後，實戰請用 STL：<code>std::forward_list</code> 是單向串列、<code>std::list</code> 是雙向串列。
   它們保證<strong>任意位置插入/刪除 O(1)</strong>（拿到迭代器之後），但<strong>不支援 <code>[i]</code> 隨機存取</strong>。</p>
   <div style="overflow-x:auto;">
@@ -645,7 +748,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     </tbody>
   </table>
   </div>
-  <h3 style="margin-top:1.2rem;">forward_list 的操作長相（cppds §4.5）</h3>
+  <h3 style="margin-top:1.2rem;">forward_list 的操作長相（cppds §4.7）</h3>
   <p>單向串列的 STL 版本連命名都在提醒你它的限制：插入叫 <code>insert_after</code>、
   刪除叫 <code>erase_after</code>，因為單向串列只能「在某個節點後面」動手。常用操作：</p>
   <div style="overflow-x:auto;"><table class="cmp-table" style="width:100%;font-size:.85rem;">
@@ -664,11 +767,11 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
     選 list 家族的時機是：頻繁在中間插刪，而且手上已經握有位置（迭代器）。
     沒有這兩個條件，先用 vector。
   </div>
-  
+
 <div class="quiz-box">
   <div class="quiz-label">QUIZ · 為什麼叫 insert_after？</div>
   <p>forward_list 只提供 insert_after，不提供 insert（插在某節點前面）。原因是？</p>
-  
+
   <div class="quiz-options" id="qStlOptions">
     <div class="quiz-opt" data-correct="true" data-fb="要插在 it 前面，就得改「it 前一個節點」的 next，但單向串列走不回去。命名直接反映了資料結構的能力邊界。" onclick="quizCheck('qStl', this)"><span class="opt-letter">(A)</span> 單向串列拿不到「前一個節點」，只能在已知節點後面接</div><div class="quiz-opt" data-correct="false" data-fb="這是能力問題：雙向的 std::list 就有真正的 insert。" onclick="quizCheck('qStl', this)"><span class="opt-letter">(B)</span> 歷史包袱，沒有技術原因</div><div class="quiz-opt" data-correct="false" data-fb="不是快慢問題，是「做不做得到」的問題。" onclick="quizCheck('qStl', this)"><span class="opt-letter">(C)</span> insert_after 比較快</div>
   </div>
@@ -679,31 +782,31 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <section id="exercises">
   <div class="section-number">EXERCISES · 練習</div>
   <h2>動手驗證 <span class="sec-badge">cppds §4 綜合</span></h2>
-  
+
 <div class="quiz-box">
   <div class="quiz-label">EXERCISE 1 · 走訪計數</div>
   <p>一條長度 n 的單向串列，<code>size()</code>（用走訪實作）與「取第 k 個元素」的成本分別是？</p>
-  
+
   <div class="quiz-options" id="ex1Options">
     <div class="quiz-opt" data-correct="true" data-fb="兩者都得從 head 一步步走；這是串列與陣列最根本的差別。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(A)</span> O(n) 與 O(k)</div><div class="quiz-opt" data-correct="false" data-fb="除非額外維護 size 計數器，否則串列沒有免費的 size；取第 k 個永遠要走 k 步。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(B)</span> O(1) 與 O(1)</div><div class="quiz-opt" data-correct="false" data-fb="沒有隨機存取就沒有二分：log 是陣列的專利。" onclick="quizCheck('ex1', this)"><span class="opt-letter">(C)</span> O(n) 與 O(log k)</div>
   </div>
   <div class="quiz-feedback" id="ex1Feedback"></div>
 </div>
-  
+
 <div class="quiz-box">
   <div class="quiz-label">EXERCISE 2 · remove 邊界</div>
   <p><code>remove(item)</code> 用 prev/cur 雙指標。刪除的是 <strong>head 節點</strong>時，正確動作是？</p>
-  
+
   <div class="quiz-options" id="ex2Options">
-    <div class="quiz-opt" data-correct="true" data-fb="prev == NULL 代表 cur 就是 head：特殊情況要直接搬 head。這正是虛擬碼第 17 行。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(A)</span> <code>head = cur-&gt;next</code>（prev 是 NULL）</div><div class="quiz-opt" data-correct="false" data-fb="prev 是 NULL，解參考會當機（segfault）！" onclick="quizCheck('ex2', this)"><span class="opt-letter">(B)</span> <code>prev-&gt;next = cur-&gt;next</code></div><div class="quiz-opt" data-correct="false" data-fb="大可不必，一個 if 就解決的邊界情況。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(C)</span> 先把串列反轉再刪</div>
+    <div class="quiz-opt" data-correct="true" data-fb="prev == NULL 代表 cur 就是 head：特殊情況要直接搬 head。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(A)</span> <code>head = cur-&gt;getNext()</code>（prev 是 NULL）</div><div class="quiz-opt" data-correct="false" data-fb="prev 是 NULL，解參考會當機（segfault）！" onclick="quizCheck('ex2', this)"><span class="opt-letter">(B)</span> <code>prev-&gt;setNext(cur-&gt;getNext())</code></div><div class="quiz-opt" data-correct="false" data-fb="大可不必，一個 if 就解決的邊界情況。" onclick="quizCheck('ex2', this)"><span class="opt-letter">(C)</span> 先把串列反轉再刪</div>
   </div>
   <div class="quiz-feedback" id="ex2Feedback"></div>
 </div>
-  
+
 <div class="quiz-box">
   <div class="quiz-label">EXERCISE 3 · 記憶體</div>
   <p>C++ 手刻串列 <code>remove</code> 之後少做了什麼，會發生什麼事？</p>
-  
+
   <div class="quiz-options" id="ex3Options">
     <div class="quiz-opt" data-correct="true" data-fb="節點脫鉤後若不 delete，這塊 heap 記憶體永遠拿不回來：C++ 沒有垃圾回收，釋放永遠要自己來。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(A)</span> 少 <code>delete cur</code> → 記憶體洩漏</div><div class="quiz-opt" data-correct="false" data-fb="不設 NULL 不影響編譯；dangling pointer 是執行期風險。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(B)</span> 少 <code>cur = NULL</code> → 編譯錯誤</div><div class="quiz-opt" data-correct="false" data-fb="單次洩漏也許無感，長時間執行的服務會被漏死。" onclick="quizCheck('ex3', this)"><span class="opt-letter">(C)</span> 什麼都不會發生</div>
   </div>
@@ -723,15 +826,28 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <span class="line">        current = current-&gt;<span class="fn">getNext</span>();       <span class="com">// 一路走到最後一個節點</span></span>
 <span class="line">    current-&gt;<span class="fn">setNext</span>(temp);</span>
 <span class="line">}</span></div></div>
-  
+
 <div class="quiz-box">
   <div class="quiz-label">補充練習 · append 的成本</div>
   <p>上面這個 <code>append()</code> 是 O(n)。要讓它變成 O(1)，正確的做法是？</p>
-  
+
   <div class="quiz-options" id="ex4Options">
     <div class="quiz-opt" data-correct="true" data-fb="tail 一步定位尾端：接上新節點、tail 往後搬即可。代價是 add/remove 都要順手維護 tail（尤其刪到尾端節點時），這是「空間與維護成本換時間」的老交易。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(A)</span> 類別多存一根 tail 指標，append 直接接在 tail 後面</div><div class="quiz-opt" data-correct="false" data-fb="這只是把問題鏡射：append 變快了，原本 O(1) 的頭端 add 就變 O(n)。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(B)</span> 把串列改成從尾端往頭端指</div><div class="quiz-opt" data-correct="false" data-fb="兩次反轉各 O(n)，比原本更慢。" onclick="quizCheck('ex4', this)"><span class="opt-letter">(C)</span> 先把串列反轉、插入、再反轉回來</div>
   </div>
   <div class="quiz-feedback" id="ex4Feedback"></div>
+</div>
+
+<div class="deck-extra" id="dx-exx">
+  <div class="dx-label">cppds Ch.4 課後題精選（自我挑戰）</div>
+  <ol style="font-size:.92rem;line-height:1.9;padding-left:1.4rem;">
+    <li><strong>size 的 O(1) 版</strong>：現在的 size() 要走訪整條串列。把「節點數」存成成員變數，改寫 add / remove / size，讓 size() 變 O(1)。</li>
+    <li><strong>驗證 remove 契約</strong>：目標不在串列裡時應保持不變。替空串列、缺少目標、刪 head、刪尾端各寫一個測試。</li>
+    <li><strong>補完 ADT</strong>：實作 append、index、pop、insert 四個缺席的方法，並分析各自的 Big-O。</li>
+    <li><strong>slice(start, stop)</strong>：回傳從 start 到 stop（不含）的新串列。</li>
+    <li><strong>用繼承減少重複</strong>：OrderedList 與 UnorderedList 大量方法相同。設計繼承階層，讓共同的部分只寫一次。</li>
+    <li><strong>串列版 Stack／Queue／Deque</strong>：用鏈結串列各實作一次，跟第 3 章的 vector 版比效能。哪些操作變快、哪些變慢？</li>
+  </ol>
+  <p class="dx-note">完整題目在 <a href="https://github.com/pearcej/cppds/blob/master/_sources/LinearLinked/ProgrammingExercises.rst" target="_blank" rel="noopener">cppds ProgrammingExercises</a>；第 1、2 題是課本的自我檢測熱身，第 5 題會逼你把兩個類別的差異想透。</p>
 </div>
 </section>
 
@@ -917,9 +1033,9 @@ function nodeDemo(step) {
     el.innerHTML = '<div class="bq-item" style="background:#2c3e7a;padding:.6rem 1rem;">data: 93 | next: <strong>NULL</strong></div>';
     setStatus('nodeStatus', 'new 在 heap 配置了一個 Node；建構子把 data 設成 93、next 設成 NULL。');
   } else if (step === 2) {
-    setStatus('nodeStatus', '<code>temp->data</code> 回傳 93。箭頭運算子 -> = 「解參考 + 取成員」。');
+    setStatus('nodeStatus', '<code>temp->getData()</code> 回傳 93；private 欄位只能透過公開方法存取。');
   } else {
-    setStatus('nodeStatus', '<code>temp->next</code> 是 NULL：這個節點還沒接上任何串列。');
+    setStatus('nodeStatus', '<code>temp->getNext()</code> 是 NULL：這個節點還沒接上任何串列。');
   }
 }
 
@@ -934,24 +1050,24 @@ function ullAdd() {
   const v = parseInt($('ullInput').value || '54', 10);
   const frames = [
     {hl:-1, line:2, msg:`new Node(${v})`},
-    {hl:-1, line:3, msg:`temp->next = head（新節點接住 ${ull[0] ?? 'NULL'} 開頭的整條串列）`},
+    {hl:-1, line:3, msg:`temp->setNext(head)（新節點接住 ${ull[0] ?? 'NULL'} 開頭的整條串列）`},
     {act:'do', hl:0, line:4, msg:`head = temp → ${v} 成為新的第一個節點。O(1) 完工！`},
   ];
   ullPlayer = new Player({frames, apply: f => {
     if (f.act === 'do' && !f.done) { ull.unshift(v); f.done = true; }
     ullRender({hl:f.hl}, f.msg); hlLine('ullCode', f.line);
-  }});
+  }, delayInput: $('ullSpeed')});
   ullPlayer.reset(); ullPlayer.play();
 }
 function ullSearch() {
   const v = parseInt($('ullInput').value || '17', 10);
   const frames = [];
   for (let i = 0; i < ull.length; i++) {
-    frames.push({hl:i, line:9, msg:`cur->data = ${ull[i]}，${ull[i] === v ? `等於 ${v} → <strong>找到 ✓</strong>` : `不是 ${v}，cur = cur->next`}`});
+    frames.push({hl:i, line:9, msg:`cur->getData() = ${ull[i]}，${ull[i] === v ? `等於 ${v} → <strong>找到 ✓</strong>` : `不是 ${v}，cur = cur->getNext()`}`});
     if (ull[i] === v) break;
   }
   if (ull.indexOf(v) < 0) frames.push({hl:-1, line:11, msg:`cur 走到 NULL → <strong>${v} 不在串列中 ✗</strong>`});
-  ullPlayer = new Player({frames, apply: f => { ullRender({hl:f.hl}, f.msg); hlLine('ullCode', f.line); }});
+  ullPlayer = new Player({frames, apply: f => { ullRender({hl:f.hl}, f.msg); hlLine('ullCode', f.line); }, delayInput: $('ullSpeed')});
   ullPlayer.reset(); ullPlayer.play();
 }
 function ullRemove() {
@@ -962,12 +1078,12 @@ function ullRemove() {
   for (let i = 0; i <= idx; i++)
     frames.push({hl:i, prevHl:i-1, line:15, msg:`cur = ${ull[i]}${i===idx?'（就是它！）':'，prev 跟上'}`});
   frames.push({act:'do', hl:-1, line: idx===0?17:18,
-    msg: idx===0 ? `prev 是 NULL → head = cur->next。別忘了 delete cur！`
-                 : `prev->next = cur->next，${ull[idx-1]} 直接跳過 ${v}。別忘了 delete cur！`});
+    msg: idx===0 ? `prev 是 NULL → head = cur->getNext()。別忘了 delete cur！`
+                 : `prev->setNext(cur->getNext())，${ull[idx-1]} 直接跳過 ${v}。別忘了 delete cur！`});
   ullPlayer = new Player({frames, apply: f => {
     if (f.act === 'do' && !f.done) { ull.splice(idx,1); f.done = true; }
     ullRender({hl:f.hl, prevHl:f.prevHl}, f.msg); hlLine('ullCode', f.line);
-  }});
+  }, delayInput: $('ullSpeed')});
   ullPlayer.reset(); ullPlayer.play();
 }
 function ullReset() { ull = [31,77,17,93]; ullRender({}, '已重置為 31→77→17→93。'); }
@@ -982,18 +1098,18 @@ function ollAdd() {
   const frames = [];
   let i = 0;
   while (i < oll.length && oll[i] < v) {
-    frames.push({hl:i, line:3, msg:`cur->data = ${oll[i]} < ${v}，繼續前進`});
+    frames.push({hl:i, line:3, msg:`cur->getData() = ${oll[i]} < ${v}，繼續前進`});
     i++;
   }
   const at = i;
   frames.push({hl: i < oll.length ? i : -1, line:5,
-    msg: i < oll.length ? `cur->data = ${oll[i]} ≥ ${v} → 插在 prev 與 cur 之間` : `走到尾端 → 插在最後`});
+    msg: i < oll.length ? `cur->getData() = ${oll[i]} ≥ ${v} → 插在 prev 與 cur 之間` : `走到尾端 → 插在最後`});
   frames.push({act:'do', hl:at, line: at===0?7:9,
-    msg: at===0 ? `插在最前：temp->next = head; head = temp` : `temp->next = cur; prev->next = temp ✓`});
+    msg: at===0 ? `插在最前：temp->setNext(head); head = temp` : `temp->setNext(cur); prev->setNext(temp) ✓`});
   ollPlayer = new Player({frames, apply: f => {
     if (f.act === 'do' && !f.done) { oll.splice(at,0,v); f.done = true; }
     ollRender({hl:f.hl}, f.msg); hlLine('ollCode', f.line);
-  }});
+  }, delayInput: $('ollSpeed')});
   ollPlayer.reset(); ollPlayer.play();
 }
 function ollReset() { oll = [17,26,31,54,77,93]; ollRender({}, '已重置。'); }

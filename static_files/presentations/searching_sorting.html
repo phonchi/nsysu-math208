@@ -386,13 +386,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="seqCode"><span class="line" data-l="1"><span class="fn">sequentialSearch</span>(aList, item):</span>
-<span class="line" data-l="2">    pos = <span class="num">0</span></span>
-<span class="line" data-l="3">    <span class="kw">while</span> pos &lt; aList.<span class="fn">size</span>():</span>
-<span class="line" data-l="4">        <span class="kw">if</span> aList[pos] == item:</span>
-<span class="line" data-l="5">            <span class="kw">return</span> <span class="num">true</span></span>
-<span class="line" data-l="6">        pos = pos + <span class="num">1</span></span>
-<span class="line" data-l="7">    <span class="kw">return</span> <span class="num">false</span></span></div>
+        <div class="pseudo-code" id="seqCode"><span class="line" data-l="1"><span class="kw">bool</span> <span class="fn">sequentialSearch</span>(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; aList, <span class="kw">int</span> item) {</span><span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;size_t pos = <span class="num">0</span>;</span><span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> (pos &lt; aList.<span class="fn">size</span>()) {</span><span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (aList[pos] == item) {</span><span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="num">true</span>;</span><span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} ++pos;</span><span class="line" data-l="7">&nbsp;&nbsp;&nbsp;&nbsp;} <span class="kw">return</span> <span class="num">false</span>;</span><span class="line" data-l="8">}</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -413,16 +407,16 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <div class="info-card" style="margin-top:.8rem;">
     <div class="ic-title">虛擬碼 — orderedSequentialSearch <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-    <div class="pseudo-code">
-<span class="line"><span class="fn">orderedSequentialSearch</span>(aList, item):</span>
-<span class="line">    pos = <span class="num">0</span></span>
-<span class="line">    <span class="kw">while</span> pos &lt; aList.<span class="fn">size</span>():</span>
-<span class="line">        <span class="kw">if</span> aList[pos] == item:</span>
-<span class="line">            <span class="kw">return</span> <span class="num">true</span></span>
-<span class="line">        <span class="kw">if</span> aList[pos] &gt; item:    <span class="com">// 提前結束的關鍵</span></span>
-<span class="line">            <span class="kw">return</span> <span class="num">false</span></span>
-<span class="line">        pos = pos + <span class="num">1</span></span>
-<span class="line">    <span class="kw">return</span> <span class="num">false</span></span></div>
+    <div class="pseudo-code"><span class="line" data-l="1"><span class="kw">bool</span> <span class="fn">orderedSequentialSearch</span>(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; aList, <span class="kw">int</span> item) {</span>
+<span class="line" data-l="2">    <span class="kw">size_t</span> pos = <span class="num">0</span>;</span>
+<span class="line" data-l="3">    <span class="kw">while</span> (pos &lt; aList.size()) {</span>
+<span class="line" data-l="4">        <span class="kw">if</span> (aList[pos] == item) <span class="kw">return</span> <span class="fn">true</span>;</span>
+<span class="line" data-l="5">        <span class="kw">if</span> (aList[pos] &gt; item) <span class="kw">return</span> <span class="fn">false</span>;</span>
+<span class="line" data-l="6">        ++pos;</span>
+<span class="line" data-l="7">    }</span>
+<span class="line" data-l="8">    <span class="kw">return</span> <span class="fn">false</span>;</span>
+<span class="line" data-l="9">}</span>
+<span class="line" data-l="10"> </span></div>
   </div>
 
   <div class="info-box green" style="margin-top:.8rem;">
@@ -478,24 +472,13 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <div class="ic-title">當前指標 <span class="ic-badge">LIVE</span></div>
         <div class="ic-row"><span class="ic-label">first</span><span class="ic-value" id="binLow" style="color:#2980b9;">0</span></div>
         <div class="ic-row"><span class="ic-label">last</span><span class="ic-value" id="binHigh" style="color:var(--accent);">9</span></div>
-        <div class="ic-row"><span class="ic-label">midpoint = (first+last)//2</span><span class="ic-value" id="binMid" style="color:var(--accent3);">4</span></div>
+        <div class="ic-row"><span class="ic-label">midpoint = first + (last-first)/2</span><span class="ic-value" id="binMid" style="color:var(--accent3);">4</span></div>
         <div class="ic-row" style="margin-top:.4rem;border-top:1px solid var(--card-border);padding-top:.4rem;"><span class="ic-label">比較次數</span><span class="ic-value highlight" id="binCmp">0</span></div>
         <div class="ic-row"><span class="ic-label">結果</span><span class="ic-value highlight" id="binResult">—</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="binCode"><span class="line" data-l="1"><span class="fn">binarySearch</span>(aList, item):</span>
-<span class="line" data-l="2">    first = <span class="num">0</span></span>
-<span class="line" data-l="3">    last = aList.<span class="fn">size</span>() - <span class="num">1</span></span>
-<span class="line" data-l="4">    <span class="kw">while</span> first &lt;= last:</span>
-<span class="line" data-l="5">        midpoint = (first + last) / <span class="num">2</span></span>
-<span class="line" data-l="6">        <span class="kw">if</span> aList[midpoint] == item:</span>
-<span class="line" data-l="7">            <span class="kw">return</span> <span class="num">true</span></span>
-<span class="line" data-l="8">        <span class="kw">else if</span> item &lt; aList[midpoint]:</span>
-<span class="line" data-l="9">            last = midpoint - <span class="num">1</span></span>
-<span class="line" data-l="10">        <span class="kw">else</span>:</span>
-<span class="line" data-l="11">            first = midpoint + <span class="num">1</span></span>
-<span class="line" data-l="12">    <span class="kw">return</span> <span class="num">false</span></span></div>
+        <div class="pseudo-code" id="binCode"><span class="line" data-l="1"><span class="kw">bool</span> <span class="fn">binarySearch</span>(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; aList, <span class="kw">int</span> item) {</span><span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">int</span> first = <span class="num">0</span>;</span><span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">int</span> last = <span class="kw">static_cast</span>&lt;<span class="kw">int</span>&gt;(aList.<span class="fn">size</span>()) - <span class="num">1</span>;</span><span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> (first &lt;= last) {</span><span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">int</span> midpoint = first + (last - first) / <span class="num">2</span>;</span><span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (aList[midpoint] == item)</span><span class="line" data-l="7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="num">true</span>;</span><span class="line" data-l="8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (item &lt; aList[midpoint])</span><span class="line" data-l="9">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;last = midpoint - <span class="num">1</span>;</span><span class="line" data-l="10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">else</span></span><span class="line" data-l="11">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first = midpoint + <span class="num">1</span>;</span><span class="line" data-l="12">&nbsp;&nbsp;&nbsp;&nbsp;} <span class="kw">return</span> <span class="num">false</span>;</span><span class="line" data-l="13">}</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -522,22 +505,48 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <div class="info-card" style="margin-top:.5rem;">
     <div class="ic-title">虛擬碼 — binarySearchRec <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-    <div class="pseudo-code">
-<span class="line"><span class="fn">binarySearchRec</span>(aList, item):</span>
-<span class="line">    <span class="kw">if</span> aList.<span class="fn">size</span>() == <span class="num">0</span>:           <span class="com">// base case: 找不到</span></span>
-<span class="line">        <span class="kw">return</span> <span class="num">false</span></span>
-<span class="line">    midpoint = (aList.<span class="fn">size</span>() - <span class="num">1</span>) / <span class="num">2</span></span>
-<span class="line">    <span class="kw">if</span> aList[midpoint] == item:</span>
-<span class="line">        <span class="kw">return</span> <span class="num">true</span></span>
-<span class="line">    <span class="kw">else if</span> item &lt; aList[midpoint]:</span>
-<span class="line">        <span class="kw">return</span> <span class="fn">binarySearchRec</span>({aList.begin(), aList.begin()+midpoint}, item)   <span class="com">// 左半</span></span>
-<span class="line">    <span class="kw">else</span>:</span>
-<span class="line">        <span class="kw">return</span> <span class="fn">binarySearchRec</span>({aList.begin()+midpoint+<span class="num">1</span>, aList.end()}, item)  <span class="com">// 右半</span></span></div>
+    <div class="pseudo-code" style="font-size:.8rem;"><span class="line" data-l="1"><span class="kw">#</span><span class="kw">include</span> <span class="kw">&lt;iostream&gt;</span><span class="kw"></span>
+<span class="line" data-l="2"></span><span class="kw">#</span><span class="kw">include</span> <span class="kw">&lt;vector&gt;</span><span class="kw"></span>
+<span class="line" data-l="3"></span><span class="kw">using</span> <span class="kw">namespace</span> std;</span>
+<span class="line" data-l="4"> </span>
+<span class="line" data-l="5"><span class="kw">bool</span> <span class="fn">binarySearch</span>(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; aList, <span class="kw">int</span> item) {</span>
+<span class="line" data-l="6">    <span class="kw">int</span> first = <span class="num">0</span>;</span>
+<span class="line" data-l="7">    <span class="kw">int</span> last = <span class="kw">static_cast</span>&lt;<span class="kw">int</span>&gt;(aList.size()) - <span class="num">1</span>;</span>
+<span class="line" data-l="8">    <span class="kw">while</span> (first &lt;= last) {</span>
+<span class="line" data-l="9">        <span class="kw">int</span> midpoint = first + (last - first) / <span class="num">2</span>;</span>
+<span class="line" data-l="10">        <span class="kw">if</span> (aList[midpoint] == item) <span class="kw">return</span> <span class="fn">true</span>;</span>
+<span class="line" data-l="11">        <span class="kw">if</span> (item &lt; aList[midpoint]) last = midpoint - <span class="num">1</span>;</span>
+<span class="line" data-l="12">        <span class="kw">else</span> first = midpoint + <span class="num">1</span>;</span>
+<span class="line" data-l="13">    }</span>
+<span class="line" data-l="14">    <span class="kw">return</span> <span class="fn">false</span>;</span>
+<span class="line" data-l="15">}</span>
+<span class="line" data-l="16"> </span>
+<span class="line" data-l="17"><span class="kw">bool</span> <span class="fn">binarySearchRecRange</span>(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; aList, <span class="kw">int</span> item,</span>
+<span class="line" data-l="18">                          <span class="kw">int</span> first, <span class="kw">int</span> last) {</span>
+<span class="line" data-l="19">    <span class="kw">if</span> (first &gt; last) <span class="kw">return</span> <span class="fn">false</span>;</span>
+<span class="line" data-l="20">    <span class="kw">int</span> midpoint = first + (last - first) / <span class="num">2</span>;</span>
+<span class="line" data-l="21">    <span class="kw">if</span> (aList[midpoint] == item) <span class="kw">return</span> <span class="fn">true</span>;</span>
+<span class="line" data-l="22">    <span class="kw">if</span> (item &lt; aList[midpoint])</span>
+<span class="line" data-l="23">        <span class="kw">return</span> binarySearchRecRange(aList, item, first, midpoint - <span class="num">1</span>);</span>
+<span class="line" data-l="24">    <span class="kw">return</span> binarySearchRecRange(aList, item, midpoint + <span class="num">1</span>, last);</span>
+<span class="line" data-l="25">}</span>
+<span class="line" data-l="26"> </span>
+<span class="line" data-l="27"><span class="kw">bool</span> <span class="fn">binarySearchRec</span>(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; aList, <span class="kw">int</span> item) {</span>
+<span class="line" data-l="28">    <span class="kw">return</span> binarySearchRecRange(aList, item, <span class="num">0</span>,</span>
+<span class="line" data-l="29">                                <span class="kw">static_cast</span>&lt;<span class="kw">int</span>&gt;(aList.size()) - <span class="num">1</span>);</span>
+<span class="line" data-l="30">}</span>
+<span class="line" data-l="31"> </span>
+<span class="line" data-l="32"><span class="kw">int</span> <span class="fn">main</span>() {</span>
+<span class="line" data-l="33">    vector&lt;<span class="kw">int</span>&gt; a = {<span class="num">17</span>, <span class="num">20</span>, <span class="num">26</span>, <span class="num">31</span>, <span class="num">44</span>, <span class="num">54</span>, <span class="num">55</span>, <span class="num">65</span>, <span class="num">77</span>, <span class="num">93</span>};</span>
+<span class="line" data-l="34">    cout &lt;&lt; boolalpha &lt;&lt; binarySearchRec(a, <span class="num">44</span>) &lt;&lt; endl;</span>
+<span class="line" data-l="35">    cout &lt;&lt; binarySearchRec(a, <span class="num">50</span>) &lt;&lt; endl;</span>
+<span class="line" data-l="36">}</span>
+<span class="line" data-l="37"> </span></div>
   </div>
 
   <div class="info-box">
     <span class="info-label">小細節</span>
-    這個版本用 <strong>list slicing</strong>（<code>aList[:midpoint]</code>），看起來簡潔，但每次切片其實會<strong>複製整個子陣列</strong>，多花 $O(n)$ 空間，整體變 $O(n \log n)$ 而不是 $O(\log n)$！更乾淨的寫法是傳入 <code>start</code>、<code>end</code> 索引（講義 Exercise 1：<code>binarySearchRec2(aList, item, start, last)</code>），不切片就能保留 $O(\log n)$ 空間複雜度。
+    若每次遞迴都建構新的子 vector，單一路徑會複製 $n/2+n/4+\cdots=O(n)$ 個元素，因此是 $O(n)$ 時間與 $O(n)$ 峰值元素儲存，而非嚴格的 $O(\log n)$。改傳同一個 <code>const vector&lt;int&gt;&amp;</code> 與 <code>first</code>、<code>last</code> 邊界後，才保留 $O(\log n)$ 比較與 $O(\log n)$ call stack。
   </div>
 </section>
 
@@ -642,9 +651,12 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <div class="ic-title">字串雜湊 string hashing</div>
         <div style="font-size:.84rem;line-height:1.65;">
           字串可以用每個字元的 <strong>ordinal value</strong>（ASCII 碼）來算：
-          <div class="pseudo-code" style="margin-top:.4rem;">
-<span class="line"><span class="fn">hashStr</span>(s, m):</span>
-<span class="line">    sum = <span class="num">0</span>; <span class="kw">for</span> (char c : s) sum += <span class="fn">int</span>(c); <span class="kw">return</span> sum % m</span></div>
+          <div class="pseudo-code"><span class="line" data-l="1"><span class="kw">int</span> <span class="fn">hashStr</span>(<span class="kw">const</span> string&amp; text, <span class="kw">int</span> tableSize) {</span>
+<span class="line" data-l="2">    <span class="kw">int</span> sum = <span class="num">0</span>;</span>
+<span class="line" data-l="3">    <span class="kw">for</span> (<span class="kw">unsigned</span> <span class="kw">char</span> c : text) sum += c;</span>
+<span class="line" data-l="4">    <span class="kw">return</span> sum % tableSize;</span>
+<span class="line" data-l="5">}</span>
+<span class="line" data-l="6"> </span></div>
           <strong>陷阱：</strong>"cat"、"act"、"tac" 全是同樣 ord 總和，會撞在一起（anagrams 衝突）。改良：<strong>用位置當權重</strong>，例如 $\sum i \cdot \text{ord}(c_i) \bmod m$。
         </div>
       </div>
@@ -672,32 +684,31 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
   <h3 style="margin-top:1.5rem;">應用：Map ADT (字典/HashTable)</h3>
   <div class="info-box warm">
     <span class="info-label">用 hash 表實作 key-value 字典</span>
-    `C++` 的 <code>unordered_map</code> 背後就是 hash table。Map ADT 定義為「key 與 data value 之間關聯的無序集合」，包含 6 個核心操作：
+    Map ADT 是介面概念；<code>std::unordered_map</code> 是標準函式庫的具體 hash-table 容器。本頁的固定容量 <code>HashTable</code> 只實作 <code>put/get</code> 與顯示輔助，下面同時列出完整 ADT 常見操作作為對照：
     <div style="font-size:.84rem;line-height:1.7;margin:.5rem 0;">
       <table style="width:100%;font-family:'JetBrains Mono',monospace;font-size:.78rem;border-collapse:collapse;">
         <thead><tr style="background:var(--paper);border-bottom:2px solid var(--card-border);"><th style="text-align:left;padding:.35rem;">操作</th><th style="text-align:left;padding:.35rem;">語意</th></tr></thead>
         <tbody>
-          <tr><td style="padding:.3rem;color:var(--accent2);font-weight:600;">Map()</td><td>建立一個新的空 map</td></tr>
+          <tr><td style="padding:.3rem;color:var(--accent2);font-weight:600;">HashTable(size)</td><td>建立固定容量的教學用 hash table</td></tr>
           <tr style="background:#fff;"><td style="padding:.3rem;color:var(--accent2);font-weight:600;">put(key, val)</td><td>新增 key–value 對；若 key 已存在則覆寫舊值</td></tr>
-          <tr><td style="padding:.3rem;color:var(--accent2);font-weight:600;">get(key)</td><td>傳回對應 value，找不到則回傳空字串 <code>""</code></td></tr>
-          <tr style="background:#fff;"><td style="padding:.3rem;color:var(--accent2);font-weight:600;">del map[key]</td><td>刪除指定的 key–value 對</td></tr>
+          <tr><td style="padding:.3rem;color:var(--accent2);font-weight:600;">get(key)</td><td>教學版傳回對應 value；找不到回空字串，因此無法區分「不存在」與「值本來就是空字串」</td></tr>
+          <tr style="background:#fff;"><td style="padding:.3rem;color:var(--accent2);font-weight:600;">erase(key)</td><td>刪除指定的 key–value 對</td></tr>
           <tr><td style="padding:.3rem;color:var(--accent2);font-weight:600;">size()</td><td>回傳目前儲存的 key–value 對總數</td></tr>
-          <tr style="background:#fff;"><td style="padding:.3rem;color:var(--accent2);font-weight:600;">in</td><td><code>key in map</code> 回傳 True/False</td></tr>
+          <tr style="background:#fff;"><td style="padding:.3rem;color:var(--accent2);font-weight:600;">in</td><td><code>contains(key)</code> 回傳 <code>true</code>/<code>false</code></td></tr>
         </tbody>
       </table>
     </div>
     <div class="pseudo-code" style="margin-top:.4rem;">
-<span class="line"><span class="kw">class</span> <span class="fn">HashTable</span>:</span>
-<span class="line">    <span class="kw">int</span> size = <span class="num">11</span></span>
-<span class="line">    vector&lt;<span class="kw">int</span>&gt;    slots   <span class="com">// 存 key（-1 = 空位）</span></span>
-<span class="line">    vector&lt;string&gt; data    <span class="com">// 平行陣列存 value</span></span>
-<span class="line">    <span class="fn">hashFunction</span>(key): <span class="kw">return</span> key % size</span>
-<span class="line">    <span class="fn">rehash</span>(oldHash):   <span class="kw">return</span> (oldHash + <span class="num">1</span>) % size</span>
-<span class="line">    <span class="fn">put</span>(key, val): <span class="com">// 用 hash + rehash 找空位插入；若 key 已存在則覆寫</span></span>
-<span class="line">    <span class="fn">get</span>(key):      <span class="com">// 同樣的 probe 路徑找回，position == startSlot 時繞回即停</span></span>
-<span class="line">    <span class="com">// C++ 版讀寫都走 h.put(key, val) 與 h.get(key)</span></span>
-<span class="line">    <span class="com">//（完整實作見 pythonds3/cppds/hashtable.hpp，-1 標記空槽）</span></span></div>
-    <strong>關鍵：</strong>用兩個平行 list (<code>slots</code>、<code>data</code>) 分別存 key 和 value，索引位置必須對齊。<code>get</code> 時要走和 <code>put</code> 一樣的 rehash 路徑，且要偵測「<strong>繞回起點</strong>」(<code>position == startSlot</code>) 以結束搜尋（代表整個探查鏈都沒有該 key）。
+<span class="line"><span class="kw">class</span> <span class="fn">HashTable</span> {</span>
+<span class="line">  <span class="kw">public</span>:</span>
+<span class="line">    <span class="kw">void</span> <span class="fn">put</span>(<span class="kw">int</span> key, string value);</span>
+<span class="line">    string <span class="fn">get</span>(<span class="kw">int</span> key);</span>
+<span class="line">  <span class="kw">private</span>:</span>
+<span class="line">    vector&lt;<span class="kw">int</span>&gt; slots; <span class="com">// -1 保留為空槽</span></span>
+<span class="line">    vector&lt;string&gt; data;</span>
+<span class="line">};</span>
+<span class="line"><span class="com">// put 探查一圈仍無空位時 throw overflow_error</span></span></div>
+    <strong>關鍵：</strong>用兩個平行 vector (<code>slots</code>、<code>data</code>) 分別存 key 和 value，索引位置必須對齊。<code>get</code> 時要走和 <code>put</code> 一樣的 rehash 路徑，且要偵測「<strong>繞回起點</strong>」(<code>position == startSlot</code>) 以結束搜尋（代表整個探查鏈都沒有該 key）。
   </div>
 
   <h3 style="margin-top:1.5rem;">分析：載入因子 $\lambda$ 與比較次數</h3>
@@ -761,11 +772,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-        <div class="pseudo-code" id="bubbleCode"><span class="line" data-l="1"><span class="fn">bubbleSort</span>(a):</span>
-<span class="line" data-l="2">    <span class="kw">for</span> i = a.<span class="fn">size</span>()-<span class="num">1</span>; i &gt; <span class="num">0</span>; i--:</span>
-<span class="line" data-l="3">        <span class="kw">for</span> j = <span class="num">0</span>; j &lt; i; j++:</span>
-<span class="line" data-l="4">            <span class="kw">if</span> a[j] &gt; a[j+<span class="num">1</span>]:</span>
-<span class="line" data-l="5">                <span class="fn">swap</span>(a[j], a[j+<span class="num">1</span>])</span></div>
+        <div class="pseudo-code" id="bubbleCode"><span class="line" data-l="1"><span class="kw">void</span> <span class="fn">bubbleSort</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a) {</span><span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> i = a.<span class="fn">size</span>() - <span class="num">1</span>; i &gt; <span class="num">0</span>; --i) {</span><span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; i; ++j) {</span><span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (a[j] &gt; a[j + <span class="num">1</span>])</span><span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">swap</span>(a[j], a[j + <span class="num">1</span>]);</span><span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="line" data-l="7">&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="line" data-l="8">}</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -783,16 +790,19 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <div class="info-card" style="margin-top:.8rem;">
     <div class="ic-title">虛擬碼 — bubbleSortShort <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-    <div class="pseudo-code">
-<span class="line"><span class="fn">bubbleSortShort</span>(aList):</span>
-<span class="line">    <span class="kw">for</span> i = aList.<span class="fn">size</span>()-<span class="num">1</span>; i &gt; <span class="num">0</span>; i--:</span>
-<span class="line">        exchanges = <span class="num">false</span></span>
-<span class="line">        <span class="kw">for</span> j = <span class="num">0</span>; j &lt; i; j++:</span>
-<span class="line">            <span class="kw">if</span> aList[j] &gt; aList[j+<span class="num">1</span>]:</span>
-<span class="line">                exchanges = <span class="num">true</span></span>
-<span class="line">                <span class="fn">swap</span>(aList[j], aList[j+<span class="num">1</span>])</span>
-<span class="line">        <span class="kw">if</span> !exchanges:</span>
-<span class="line">            <span class="kw">break</span>    <span class="com">// 已經排序好，可以離開</span></span></div>
+    <div class="pseudo-code"><span class="line" data-l="1"><span class="kw">void</span> <span class="fn">bubbleSortShort</span>(vector&lt;<span class="kw">int</span>&gt;&amp; aList) {</span>
+<span class="line" data-l="2">    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="kw">static_cast</span>&lt;<span class="kw">int</span>&gt;(aList.size()) - <span class="num">1</span>; i &gt; <span class="num">0</span>; --i) {</span>
+<span class="line" data-l="3">        <span class="kw">bool</span> exchanged = <span class="fn">false</span>;</span>
+<span class="line" data-l="4">        <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; i; ++j) {</span>
+<span class="line" data-l="5">            <span class="kw">if</span> (aList[j] &gt; aList[j + <span class="num">1</span>]) {</span>
+<span class="line" data-l="6">                swap(aList[j], aList[j + <span class="num">1</span>]);</span>
+<span class="line" data-l="7">                exchanged = <span class="fn">true</span>;</span>
+<span class="line" data-l="8">            }</span>
+<span class="line" data-l="9">        }</span>
+<span class="line" data-l="10">        <span class="kw">if</span> (!exchanged) <span class="kw">break</span>;</span>
+<span class="line" data-l="11">    }</span>
+<span class="line" data-l="12">}</span>
+<span class="line" data-l="13"> </span></div>
   </div>
 </section>
 
@@ -801,8 +811,8 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <!-- ============================================================ -->
 <section id="selection">
   <div class="section-number">PART 05 · 選擇排序</div>
-  <h2>選擇排序：每一輪挑出最小者放到前面 <span class="sec-badge">cppds §7.4</span></h2>
-  <p><strong>Selection sort</strong> 跟氣泡排序的<strong>比較次數一樣多</strong>，但聰明在「<strong>每一輪只交換一次</strong>」：先掃一遍找出未排序區裡<strong>最小</strong>的元素，再把它和未排序區的<strong>第一格</strong>直接交換，就完成一輪。氣泡排序每比一次就可能交換，selection sort 把交換成本壓到最低。<small>（講義版本以「找最小放前面」實作；也有等價的「找最大放後面」變體。）</small></p>
+  <h2>選擇排序：每一輪挑出最大者放到後面 <span class="sec-badge">cppds §7.4</span></h2>
+  <p><strong>Selection sort</strong> 跟氣泡排序的<strong>比較次數一樣多</strong>，但聰明在「<strong>每一輪只交換一次</strong>」：先掃一遍找出未排序區裡<strong>最大</strong>的元素，再把它和未排序區的<strong>最後一格</strong>直接交換，就完成一輪。氣泡排序每比一次就可能交換，selection sort 把交換成本壓到最低。<small>（與 cppds 與 HW4 一致：找最大值放到未排序區尾端。）</small></p>
 
   <div class="viz-layout">
     <div>
@@ -834,18 +844,11 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
           <div class="stat-tile compare"><div class="stat-label">比較</div><div class="stat-value" id="selCmp">0</div></div>
           <div class="stat-tile swap"><div class="stat-label">交換</div><div class="stat-value" id="selSwp">0</div></div>
         </div>
-        <div class="ic-row" style="margin-top:.6rem;"><span class="ic-label">本輪當前最小 idx</span><span class="ic-value highlight" id="selMinIdx">—</span></div>
+        <div class="ic-row" style="margin-top:.6rem;"><span class="ic-label">本輪當前最大 idx</span><span class="ic-value highlight" id="selMinIdx">—</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼</div>
-        <div class="pseudo-code" id="selCode"><span class="line" data-l="1"><span class="fn">selectionSort</span>(aList):</span>
-<span class="line" data-l="2">    <span class="kw">for</span> i = <span class="num">0</span>; i &lt; aList.<span class="fn">size</span>(); i++:</span>
-<span class="line" data-l="3">        minIdx = aList.<span class="fn">size</span>() - <span class="num">1</span></span>
-<span class="line" data-l="4">        <span class="kw">for</span> j = i; j &lt; aList.<span class="fn">size</span>(); j++:</span>
-<span class="line" data-l="5">            <span class="kw">if</span> aList[j] &lt; aList[minIdx]:</span>
-<span class="line" data-l="6">                minIdx = j</span>
-<span class="line" data-l="7">        <span class="kw">if</span> minIdx != i:</span>
-<span class="line" data-l="8">            <span class="fn">swap</span>(aList[minIdx], aList[i])</span></div>
+        <div class="pseudo-code" id="selCode"><span class="line" data-l="1"><span class="kw">void</span> <span class="fn">selectionSort</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a) {</span><span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> fill = a.<span class="fn">size</span>() - <span class="num">1</span>; fill &gt; <span class="num">0</span>; --fill) {</span><span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">int</span> maxPos = <span class="num">0</span>;</span><span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">1</span>; j &lt;= fill; ++j) {</span><span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (a[j] &gt; a[maxPos])</span><span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maxPos = j;</span><span class="line" data-l="7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="line" data-l="8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">swap</span>(a[maxPos], a[fill]);</span><span class="line" data-l="9">&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="line" data-l="10">}</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -904,14 +907,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼</div>
-        <div class="pseudo-code" id="insCode"><span class="line" data-l="1"><span class="fn">insertionSort</span>(aList):</span>
-<span class="line" data-l="2">    <span class="kw">for</span> i = <span class="num">1</span>; i &lt; aList.<span class="fn">size</span>(); i++:</span>
-<span class="line" data-l="3">        curVal = aList[i]</span>
-<span class="line" data-l="4">        curPos = i</span>
-<span class="line" data-l="5">        <span class="kw">while</span> curPos &gt; <span class="num">0</span> &amp;&amp; aList[curPos-<span class="num">1</span>] &gt; curVal:</span>
-<span class="line" data-l="6">            aList[curPos] = aList[curPos-<span class="num">1</span>]</span>
-<span class="line" data-l="7">            curPos = curPos - <span class="num">1</span></span>
-<span class="line" data-l="8">        aList[curPos] = curVal</span></div>
+        <div class="pseudo-code" id="insCode"><span class="line" data-l="1"><span class="kw">void</span> <span class="fn">insertionSort</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a) {</span><span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> (size_t i = <span class="num">1</span>; i &lt; a.<span class="fn">size</span>(); ++i) {</span><span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">int</span> curVal = a[i];</span><span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size_t curPos = i;</span><span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> (curPos &gt; <span class="num">0</span> &amp;&amp; a[curPos - <span class="num">1</span>] &gt; curVal) {</span><span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a[curPos] = a[curPos - <span class="num">1</span>];</span><span class="line" data-l="7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--curPos;</span><span class="line" data-l="8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} a[curPos] = curVal;</span><span class="line" data-l="9">&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="line" data-l="10">}</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -975,21 +971,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼 (對齊講義 §7.6)</div>
-        <div class="pseudo-code" id="shellCode"><span class="line" data-l="1"><span class="fn">shellSort</span>(aList):</span>
-<span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;sublistCount = aList.<span class="fn">size</span>() / <span class="num">2</span></span>
-<span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> sublistCount &gt; <span class="num">0</span>:</span>
-<span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> posStart = <span class="num">0</span>; posStart &lt; sublistCount; posStart++:</span>
-<span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">gapInsertionSort</span>(aList, posStart, sublistCount)</span>
-<span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sublistCount = sublistCount / <span class="num">2</span></span>
-<span class="line" data-l="7">&nbsp;</span>
-<span class="line" data-l="8"><span class="fn">gapInsertionSort</span>(aList, start, gap):</span>
-<span class="line" data-l="9">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> i = start + gap; i &lt; aList.<span class="fn">size</span>(); i += gap:</span>
-<span class="line" data-l="10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curVal = aList[i]</span>
-<span class="line" data-l="11">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curPos = i</span>
-<span class="line" data-l="12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> curPos &gt;= gap &amp;&amp; aList[curPos - gap] &gt; curVal:</span>
-<span class="line" data-l="13">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aList[curPos] = aList[curPos - gap]</span>
-<span class="line" data-l="14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curPos = curPos - gap</span>
-<span class="line" data-l="15">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aList[curPos] = curVal</span></div>
+        <div class="pseudo-code" id="shellCode"><span class="line"><span class="kw">void</span> <span class="fn">gapInsertionSort</span>(vector&lt;<span class="kw">int</span>&gt;&amp;, <span class="kw">int</span>, <span class="kw">int</span>);</span><span class="line" data-l="1"><span class="kw">void</span> <span class="fn">shellSort</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a) {</span><span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">int</span> gap = a.<span class="fn">size</span>() / <span class="num">2</span>;</span><span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> (gap &gt; <span class="num">0</span>) {</span><span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> start = <span class="num">0</span>; start &lt; gap; ++start)</span><span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">gapInsertionSort</span>(a, start, gap);</span><span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gap /= <span class="num">2</span>;</span><span class="line" data-l="7">&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="line" data-l="8">}</span><span class="line"><span class="kw">void</span> <span class="fn">gapInsertionSort</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> start, <span class="kw">int</span> gap) {</span><span class="line" data-l="9">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> i = start + gap; i &lt; a.<span class="fn">size</span>(); i += gap) {</span><span class="line" data-l="10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">int</span> curVal = a[i];</span><span class="line" data-l="11">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">int</span> curPos = i;</span><span class="line" data-l="12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> (curPos &gt;= gap &amp;&amp; a[curPos-gap] &gt; curVal) {</span><span class="line" data-l="13">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a[curPos] = a[curPos-gap];</span><span class="line" data-l="14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curPos -= gap;</span><span class="line" data-l="15">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} a[curPos] = curVal;</span><span class="line" data-l="16">&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="line">}</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -1090,20 +1072,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼</div>
-        <div class="pseudo-code" id="mergeCode"><span class="line" data-l="1"><span class="fn">mergeSort</span>(a):</span>
-<span class="line" data-l="2">    <span class="kw">if</span> a.<span class="fn">size</span>() &lt;= <span class="num">1</span>: <span class="kw">return</span></span>
-<span class="line" data-l="3">    mid = a.<span class="fn">size</span>() / <span class="num">2</span></span>
-<span class="line" data-l="4">    L = {a.begin(), a.begin()+mid};  R = {a.begin()+mid, a.end()}</span>
-<span class="line" data-l="5">    <span class="fn">mergeSort</span>(L)</span>
-<span class="line" data-l="6">    <span class="fn">mergeSort</span>(R)</span>
-<span class="line" data-l="7">    <span class="com">// merge L and R back into a</span></span>
-<span class="line" data-l="8">    i = j = k = <span class="num">0</span></span>
-<span class="line" data-l="9">    <span class="kw">while</span> i &lt; L.<span class="fn">size</span>() &amp;&amp; j &lt; R.<span class="fn">size</span>():</span>
-<span class="line" data-l="10">        <span class="kw">if</span> L[i] &lt;= R[j]:</span>
-<span class="line" data-l="11">            a[k] = L[i]; i += <span class="num">1</span></span>
-<span class="line" data-l="12">        <span class="kw">else</span>:</span>
-<span class="line" data-l="13">            a[k] = R[j]; j += <span class="num">1</span></span>
-<span class="line" data-l="14">        k += <span class="num">1</span></span></div>
+        <div class="pseudo-code" id="mergeCode"><span class="line" data-l="1"><span class="kw">void</span> <span class="fn">mergeSort</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a) {</span><span class="line" data-l="2">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (a.<span class="fn">size</span>() &lt;= <span class="num">1</span>) <span class="kw">return</span>;</span><span class="line" data-l="3">&nbsp;&nbsp;&nbsp;&nbsp;size_t mid = a.<span class="fn">size</span>() / <span class="num">2</span>;</span><span class="line" data-l="4">&nbsp;&nbsp;&nbsp;&nbsp;vector&lt;<span class="kw">int</span>&gt; left(a.<span class="fn">begin</span>(), a.<span class="fn">begin</span>() + mid);</span><span class="line" data-l="5">&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">mergeSort</span>(left);</span><span class="line" data-l="6">&nbsp;&nbsp;&nbsp;&nbsp;vector&lt;<span class="kw">int</span>&gt; right(a.<span class="fn">begin</span>() + mid, a.<span class="fn">end</span>()); <span class="fn">mergeSort</span>(right);</span><span class="line" data-l="7">&nbsp;&nbsp;&nbsp;&nbsp;<span class="com">// merge left and right back into a</span></span><span class="line" data-l="8">&nbsp;&nbsp;&nbsp;&nbsp;size_t i = <span class="num">0</span>, j = <span class="num">0</span>, k = <span class="num">0</span>;</span><span class="line" data-l="9">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> (i &lt; left.<span class="fn">size</span>() &amp;&amp; j &lt; right.<span class="fn">size</span>()) {</span><span class="line" data-l="10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (left[i] &lt;= right[j])</span><span class="line" data-l="11">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a[k++] = left[i++];</span><span class="line" data-l="12">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">else</span></span><span class="line" data-l="13">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a[k++] = right[j++];</span><span class="line" data-l="14">&nbsp;&nbsp;&nbsp;&nbsp;} <span class="com">// then copy either remaining tail</span></span><span class="line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> (i &lt; left.<span class="fn">size</span>()) a[k++] = left[i++];</span><span class="line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> (j &lt; right.<span class="fn">size</span>()) a[k++] = right[j++];</span><span class="line" data-l="15">}</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -1182,26 +1151,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
       </div>
       <div class="info-card">
         <div class="ic-title">虛擬碼</div>
-        <div class="pseudo-code" id="quickCode"><span class="line" data-l="1"><span class="fn">quickSortHelper</span>(aList, first, last):</span>
-<span class="line" data-l="2">    <span class="kw">if</span> first &lt; last:</span>
-<span class="line" data-l="3">        split = <span class="fn">partition</span>(aList, first, last)</span>
-<span class="line" data-l="4">        <span class="fn">quickSortHelper</span>(aList, first, split-<span class="num">1</span>)</span>
-<span class="line" data-l="5">        <span class="fn">quickSortHelper</span>(aList, split+<span class="num">1</span>, last)</span>
-<span class="line" data-l="6"><span class="fn">partition</span>(aList, first, last):</span>
-<span class="line" data-l="7">    pivotVal = aList[first]</span>
-<span class="line" data-l="8">    leftMark = first+<span class="num">1</span>;  rightMark = last</span>
-<span class="line" data-l="9">    done = <span class="num">false</span></span>
-<span class="line" data-l="10">    <span class="kw">while</span> !done:</span>
-<span class="line" data-l="11">        <span class="kw">while</span> leftMark &lt;= rightMark &amp;&amp; aList[leftMark] &lt;= pivotVal:</span>
-<span class="line" data-l="12">            leftMark += <span class="num">1</span></span>
-<span class="line" data-l="13">        <span class="kw">while</span> leftMark &lt;= rightMark &amp;&amp; aList[rightMark] &gt;= pivotVal:</span>
-<span class="line" data-l="14">            rightMark -= <span class="num">1</span></span>
-<span class="line" data-l="15">        <span class="kw">if</span> rightMark &lt; leftMark:</span>
-<span class="line" data-l="16">            done = <span class="num">true</span></span>
-<span class="line" data-l="17">        <span class="kw">else</span>:</span>
-<span class="line" data-l="18">            <span class="fn">swap</span>(aList[leftMark], aList[rightMark])</span>
-<span class="line" data-l="19">    <span class="fn">swap</span>(aList[first], aList[rightMark])</span>
-<span class="line" data-l="20">    <span class="kw">return</span> rightMark  <span class="com">// split point</span></span></div>
+        <div class="pseudo-code" id="quickCode"><span class="line"><span class="kw">void</span> <span class="fn">quickSortHelper</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> first, <span class="kw">int</span> last) {</span><span class="line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (first &lt; last) {</span><span class="line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">int</span> split = <span class="fn">partition</span>(a, first, last);</span><span class="line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">quickSortHelper</span>(a, first, split - <span class="num">1</span>);</span><span class="line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">quickSortHelper</span>(a, split + <span class="num">1</span>, last);</span><span class="line">&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="line">}</span></div>
       </div>
       <div class="info-card">
         <div class="ic-title">複雜度</div>
@@ -1219,7 +1169,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <div class="info-box">
     <span class="info-label">vs. merge sort</span>
-    quicksort <strong>就地排序，不需要 $O(n)$ 額外空間</strong>，常數係數也比 merge sort 小，<strong>實務上通常更快</strong>。但 quicksort 不穩定、且最差是 $O(n^2)$；merge sort 任何情況都是 $O(n\log n)$ 且穩定。`C++` 的 <code>std::sort()</code> 用 <em>introsort</em>（quicksort 混合變種）；<code>std::stable_sort()</code> 則基於 merge sort。
+    quicksort <strong>就地排序，不需要 $O(n)$ 額外空間</strong>，常數係數也比 merge sort 小，<strong>實務上通常更快</strong>。但 quicksort 不穩定、且最差是 $O(n^2)$；merge sort 任何情況都是 $O(n\log n)$ 且穩定。C++ 標準只規定 <code>std::sort()</code> 的最差比較次數為 $O(n\log n)$，不指定實作策略；常見標準函式庫採 introsort 類混合實作。<code>std::stable_sort()</code> 保證穩定，但實作方式同樣由函式庫決定。
   </div>
 
   <h3 style="margin-top:1.6rem;">講義練習：讓 quicksort 支援降冪排序（Exercise 3）</h3>
@@ -1349,7 +1299,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
         <td>隨機存取 + 可交換</td>
         <td class="best">✓</td>
         <td>△ 慢但可</td>
-        <td>找到 minIdx 後 swap a[i] ↔ a[minIdx]</td>
+        <td>找到 maxPos 後 swap a[maxPos] ↔ a[fill]</td>
       </tr>
       <tr>
         <td>插入排序</td>
@@ -1391,7 +1341,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 
   <div class="info-box warm">
     <span class="info-label">為何「Binary Search 必須要 Array」？</span>
-    Binary search 每次跳到 <code>midpoint = (first+last)//2</code>。<br>
+    Binary search 每次跳到 <code>midpoint = first + (last-first)/2</code>。<br>
     　・在 Array：用記憶體位址計算就能 $O(1)$ 取到 a[midpoint]<br>
     　・在 Linked List：要走到第 midpoint 個 node 必須<strong>從頭走 midpoint 步</strong>，每次比較都要 $O(n)$<br><br>
     這樣總時間就從 $O(\log n)$ 退化成 $O(n \log n)$，比循序搜尋還慢！結論：<strong>排序好的資料若以 Linked List 儲存，binary search 沒有意義</strong>，必須轉成 Array（或一開始就用 Array）。
@@ -1623,35 +1573,30 @@ val : 77   44   20   55   26   93   17    .    .   31    54</pre>
     <p style="margin-top:.5rem;font-size:.92em;">情況一、二 在程式裡都會「<code>slots[hash]</code> 已經有東西」，但只有情況二才是真 collision：差別就在那個被佔的 slot 裡放的 key 跟我「是不是同一個 item」。</p>
   </div>
 
-  <h4 style="margin-top:1.2rem;color:var(--accent2);font-family:'Noto Serif TC',serif;">教科書版本的 <code>put()</code></h4>
+  <h4 style="margin-top:1.2rem;color:var(--accent2);font-family:'Noto Serif TC',serif;">課程強化版本的 <code>put()</code>：探查一圈就停</h4>
   <div class="pseudo-code">
-<span class="line"><span class="fn">put</span>(key, val):</span>
-<span class="line">    hashValue = <span class="fn">hashFunction</span>(key, slots.<span class="fn">size</span>())</span>
-<span class="line">&nbsp;</span>
-<span class="line">    <span class="kw">if</span> slots[hashValue] == -<span class="num">1</span>:           <span class="com">// ① 外層 if（-1 = 空位）</span></span>
-<span class="line">        slots[hashValue] = key</span>
-<span class="line">        data[hashValue]  = val</span>
-<span class="line">    <span class="kw">else</span>:                                  <span class="com">//    外層 else：slot 被佔了，但被誰佔？</span></span>
-<span class="line">        <span class="kw">if</span> slots[hashValue] == key:        <span class="com">// ② 內層 if：被「同一個 key」佔（不是 collision）</span></span>
-<span class="line">            data[hashValue] = val</span>
-<span class="line">        <span class="kw">else</span>:                              <span class="com">//    內層 else：hash 值撞到別人的 key → 真 collision</span></span>
-<span class="line">            nextSlot = <span class="fn">rehash</span>(hashValue, slots.<span class="fn">size</span>())</span>
-<span class="line">            <span class="kw">while</span> slots[nextSlot] != -<span class="num">1</span></span>
-<span class="line">                   &amp;&amp; slots[nextSlot] != key:</span>
-<span class="line">                nextSlot = <span class="fn">rehash</span>(nextSlot, slots.<span class="fn">size</span>())</span>
-<span class="line">&nbsp;</span>
-<span class="line">            <span class="kw">if</span> slots[nextSlot] == -<span class="num">1</span>:    <span class="com">// ③ 探查後 if：路徑上撞到空槽 → 新插入</span></span>
-<span class="line">                slots[nextSlot] = key</span>
-<span class="line">                data[nextSlot]  = val</span>
-<span class="line">            <span class="kw">else</span>:                          <span class="com">// ④ 探查後 else：路徑上撞到「同 key」 → 覆寫</span></span>
-<span class="line">                data[nextSlot] = val</span></div>
+<span class="line"><span class="kw">void</span> <span class="fn">put</span>(<span class="kw">int</span> key, string value) {</span>
+<span class="line">    <span class="kw">int</span> start = <span class="fn">hashFunction</span>(key);</span>
+<span class="line">    <span class="kw">int</span> position = start;</span>
+<span class="line">    <span class="kw">do</span> {</span>
+<span class="line">        <span class="kw">if</span> (slots[position] == -<span class="num">1</span>) { <span class="com">// ① 或 ③：插入</span></span>
+<span class="line">            slots[position] = key; data[position] = value; <span class="kw">return</span>;</span>
+<span class="line">        }</span>
+<span class="line">        <span class="kw">if</span> (slots[position] == key) {   <span class="com">// ② 或 ④：更新</span></span>
+<span class="line">            data[position] = value; <span class="kw">return</span>;</span>
+<span class="line">        }</span>
+<span class="line">        position = <span class="fn">rehash</span>(position);</span>
+<span class="line">    } <span class="kw">while</span> (position != start);</span>
+<span class="line">    <span class="kw">throw</span> overflow_error(<span class="str">"hash table is full"</span>);</span>
+<span class="line">}</span></div>
+  <p style="font-size:.9rem;color:var(--muted);">教科書的基本版若只寫「找到空槽或同 key 才停」，滿表時會無限繞圈。課程 header 用起點作哨兵：完整探查一圈後明確丟出 <code>overflow_error</code>。</p>
 
   <h4 style="margin-top:1.2rem;color:var(--accent2);font-family:'Noto Serif TC',serif;">把 4 個分支按「碰撞 / 探查」分類</h4>
   <table class="cmp-table">
     <thead><tr><th></th><th>hash 第一次命中（無探查）</th><th>rehash 探查之後</th></tr></thead>
     <tbody>
-      <tr><td><strong>新增 entry</strong>（slot 是空的）</td><td>① 外層 if</td><td>③ 探查後 if<br><span style="color:var(--accent3);font-weight:700;">↑ 唯一真正在「處理 collision」的分支</span></td></tr>
-      <tr><td><strong>覆寫已有同 key</strong>（不是 collision）</td><td>② 內層 if</td><td>④ 探查後 else<br><span style="color:var(--muted);">同 key 在探查路徑上，沿路找回去覆寫</span></td></tr>
+      <tr><td><strong>新增 entry</strong>（slot 是空的）</td><td>① 起始槽直接插入</td><td>③ 探查後遇空槽<br><span style="color:var(--accent3);font-weight:700;">↑ 真正在「處理 collision」的路徑</span></td></tr>
+      <tr><td><strong>覆寫已有同 key</strong>（不是 collision）</td><td>② 起始槽直接更新</td><td>④ 探查後遇同 key<br><span style="color:var(--muted);">沿探查路徑找回既有 key</span></td></tr>
     </tbody>
   </table>
 
@@ -1661,10 +1606,10 @@ val : 77   44   20   55   26   93   17    .    .   31    54</pre>
   <table class="cmp-table">
     <thead><tr><th>步驟</th><th>操作</th><th>hash</th><th>slots[hash]</th><th>走哪條分支</th><th>是 collision 嗎？</th><th>為何</th></tr></thead>
     <tbody>
-      <tr><td>1</td><td><code>h[77]="bird"</code></td><td>0</td><td><code>-1</code></td><td><strong>① 外層 if</strong></td><td>—</td><td style="text-align:left;font-family:'Noto Sans TC',sans-serif;">slot 0 空，直接寫入，不必探查</td></tr>
-      <tr><td>2</td><td><code>h[77]="eagle"</code></td><td>0</td><td><code>77</code></td><td><strong>② 內層 if</strong></td><td><span class="pill pill-green">否</span></td><td style="text-align:left;font-family:'Noto Sans TC',sans-serif;">slot 0 已有的 key 就是 77 → 同 key 重新賦值，直接覆寫，<strong>不啟動 rehash</strong></td></tr>
-      <tr><td>3</td><td><code>h[44]="goat"</code></td><td>0</td><td><code>77</code> (≠ 44)</td><td><strong>③ 探查後 if</strong></td><td><span class="pill pill-orange">是</span></td><td style="text-align:left;font-family:'Noto Sans TC',sans-serif;">44 和 77 hash 值都是 0（不同 key、相同 hash） → 真 collision → 進 while：<code>nextSlot = 1</code>、<code>slots[1] == -1</code> → 退出 → 在 slot 1 新插入</td></tr>
-      <tr><td>4</td><td><code>h[44]="lamb"</code></td><td>0</td><td><code>77</code> (≠ 44)</td><td><strong>④ 探查後 else</strong></td><td><span class="pill pill-green">否（很容易被誤認）</span></td><td style="text-align:left;font-family:'Noto Sans TC',sans-serif;">hash slot 雖然被別人佔，但 44 真正的家在 slot 1（步驟 3 放的）→ while 沿著 rehash 路徑走到 slot 1 找到 key 44 → 退出 → 覆寫 slot 1 的值</td></tr>
+      <tr><td>1</td><td><code>h[77]="bird"</code></td><td>0</td><td><code>-1</code></td><td><strong>① 起始槽直接插入</strong></td><td>—</td><td style="text-align:left;font-family:'Noto Sans TC',sans-serif;">slot 0 空，直接寫入，不必探查</td></tr>
+      <tr><td>2</td><td><code>h[77]="eagle"</code></td><td>0</td><td><code>77</code></td><td><strong>② 起始槽直接更新</strong></td><td><span class="pill pill-green">否</span></td><td style="text-align:left;font-family:'Noto Sans TC',sans-serif;">slot 0 已有的 key 就是 77 → 同 key 重新賦值，直接覆寫，<strong>不啟動 rehash</strong></td></tr>
+      <tr><td>3</td><td><code>h[44]="goat"</code></td><td>0</td><td><code>77</code> (≠ 44)</td><td><strong>③ 探查後遇空槽</strong></td><td><span class="pill pill-orange">是</span></td><td style="text-align:left;font-family:'Noto Sans TC',sans-serif;">44 和 77 hash 值都是 0（不同 key、相同 hash） → collision → 探查到 slot 1 的空槽後插入</td></tr>
+      <tr><td>4</td><td><code>h[44]="lamb"</code></td><td>0</td><td><code>77</code> (≠ 44)</td><td><strong>④ 探查後遇同 key</strong></td><td><span class="pill pill-green">不是新的 collision</span></td><td style="text-align:left;font-family:'Noto Sans TC',sans-serif;">44 真正存於 slot 1；沿既有碰撞探查鏈找到同 key 後覆寫 value</td></tr>
     </tbody>
   </table>
 
@@ -1692,22 +1637,22 @@ step 4 (④ h[44]="lamb"):   ← 不是 collision，沿著 rehash 路徑找到�
   <div class="info-box green">
     <span class="info-label">最容易誤會的兩件事</span>
     <strong>誤會 1：「分支 ② 是 collision」</strong> ❌<br>
-    分支 ② 發生時 <code>slots[hash] == key</code>，這是<strong>同一個 key 第二次 <code>put</code></strong>。雖然 hash 值相同，但 collision 的判準是「<strong>不同 item 的 hash 值相同</strong>」，這裡兩次 put 的根本是同一個 item，所以不是 collision，只是字典重新賦值。真正在處理 collision 的路徑是「外層 else → 內層 else → 進 rehash 迴圈」，亦即步驟 3、4 走的路。
+    分支 ② 發生時 <code>slots[hash] == key</code>，這是<strong>同一個 key 第二次 <code>put</code></strong>，直接更新即可；只有碰到不同 key 才要沿 rehash 路徑探查。
     <br><br>
     <strong>誤會 2：「分支 ④ 是 collision」</strong> ❌<br>
     分支 ④ 表示「我這個 key 之前因為 hash 撞到別人（步驟 3：44 跟 77 hash 值都是 0）被擠到 slot 1；現在我又要 <code>put</code> 同一個 key，沿著當年的 rehash 路徑走回去把舊值覆寫」。這次 put 的還是同一個 key，<strong>不是新的不同 item 撞到</strong>，所以也不是新的 collision 事件，跟字典 <code>d[k] = v2</code> 改寫舊值是完全一樣的語意。新的 collision 只在分支 ③（不同 item hash 到已被別人佔的格、需要找新位置安置）才發生。
     <br><br>
-    <strong>結論</strong>：<code>put</code> 的 4 個分支中，<strong>只有 ③ 是真正在「解決 collision」</strong>；① 是無事發生，②、④ 都是「同 key 覆寫」（差別只在 hash 第一次就命中、還是探查後才命中）。判 collision 看的是「<u>不同 item、相同 hash 值</u>」，不是「同一個 key 第二次來」。
+    <strong>結論</strong>：①、③ 是插入；②、④ 是同 key 更新。③ 會為新碰撞的 key 找空槽，④ 則沿既有碰撞鏈找回舊 key。判 collision 看的是「<u>不同 item、相同 hash 值</u>」，不是「同一個 key 第二次來」。
   </div>
 
   <div class="info-box">
-    <span class="info-label">為什麼 while 要同時檢查 <code>!= -1</code> 和 <code>!= key</code>？</span>
-    迴圈兩個條件<strong>任一</strong>不滿足就停：
+    <span class="info-label">每個探查位置都要檢查哪兩件事？</span>
+    每到一格都依序判斷：
     <ul style="margin:.4rem 0 .4rem 1.4rem;line-height:1.8;">
       <li>撞到 <code>-1</code>（空槽）停 → 落到分支 ③（新插入）</li>
       <li>撞到 <code>== key</code> 停 → 落到分支 ④（覆寫）</li>
     </ul>
-    <strong>不能只檢查 <code>!= -1</code></strong>：否則「同 key 已在路徑上」（步驟 4 那種情況）時會繼續往下走，最後在另一個 slot 又寫一次，<strong>製造出兩個 slots 都是同一個 key</strong>。字典就壞掉了：<code>get</code> 查回來的值會看 rehash 路徑長度而異。這就是分支 ④ 必須存在、while 必須帶 <code>!= key</code> 條件的原因。
+    <strong>不能只檢查空槽</strong>：否則「同 key 已在路徑上」時會繼續往下走，在另一格再寫一次，製造重複 key。也不能忘記「繞回起點」：滿表且 key 不存在時必須丟出 <code>overflow_error</code>，不能無限迴圈。
   </div>
 </section>
 
@@ -2051,7 +1996,7 @@ function genBubbleSort(initial) {
   return frames;
 }
 
-// --- Selection Sort (lecture version: find min, place at front) ---
+// --- Selection Sort (cppds/HW4 version: find max, place at end) ---
 function genSelectionSort(initial) {
   const frames = [];
   const a = [...initial];
@@ -2059,28 +2004,27 @@ function genSelectionSort(initial) {
   const oi = a.map((_,i)=>i);
   let cmp = 0, swp = 0;
   frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:'初始陣列', stats:{cmp,swp,minIdx:'—'}, pcLine:1});
-  for (let i = 0; i < N - 1; i++) {
-    // Lecture's exact init: minIdx = aList.size() - 1
-    let minIdx = N - 1;
-    const sortedSet = range(0, i);
-    frames.push({arr:[...a], origIdx:[...oi], highlights:{[minIdx]:'active'}, sorted:sortedSet, message:`pass ${i+1}: 從 a[${i}..${N-1}] 找最小值，依講義初始 minIdx = ${N-1}（最末端），a[${minIdx}]=${a[minIdx]}`, stats:{cmp,swp,minIdx}, pcLine:3});
-    for (let j = i; j < N; j++) {
+  for (let fill = N - 1; fill > 0; fill--) {
+    let maxPos = 0;
+    const sortedSet = range(fill + 1, N);
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{[maxPos]:'active'}, sorted:sortedSet, message:`pass ${N-fill}: 從 a[0..${fill}] 找最大值，初始 maxPos = 0（值 ${a[maxPos]}）`, stats:{cmp,swp,minIdx:maxPos}, pcLine:3});
+    for (let j = 1; j <= fill; j++) {
       cmp++;
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[minIdx]:'active',[j]:'compare'}, sorted:sortedSet, message:`比較 a[${j}]=${a[j]} 與目前最小 a[${minIdx}]=${a[minIdx]}`, stats:{cmp,swp,minIdx}, pcLine:5});
-      if (a[j] < a[minIdx]) {
-        minIdx = j;
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[minIdx]:'active'}, sorted:sortedSet, message:`更小！更新 minIdx = ${minIdx}（值 ${a[minIdx]}）`, stats:{cmp,swp,minIdx}, pcLine:6});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[maxPos]:'active',[j]:'compare'}, sorted:sortedSet, message:`比較 a[${j}]=${a[j]} 與目前最大 a[${maxPos}]=${a[maxPos]}`, stats:{cmp,swp,minIdx:maxPos}, pcLine:5});
+      if (a[j] > a[maxPos]) {
+        maxPos = j;
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[maxPos]:'active'}, sorted:sortedSet, message:`更大！更新 maxPos = ${maxPos}（值 ${a[maxPos]}）`, stats:{cmp,swp,minIdx:maxPos}, pcLine:6});
       }
     }
-    if (minIdx !== i) {
-      [a[i], a[minIdx]] = [a[minIdx], a[i]];
-      [oi[i], oi[minIdx]] = [oi[minIdx], oi[i]];
+    if (maxPos !== fill) {
+      [a[fill], a[maxPos]] = [a[maxPos], a[fill]];
+      [oi[fill], oi[maxPos]] = [oi[maxPos], oi[fill]];
       swp++;
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'swap',[minIdx]:'swap'}, sorted:sortedSet, message:`交換 a[${minIdx}] ↔ a[${i}]：最小值歸位到 a[${i}]`, stats:{cmp,swp,minIdx}, pcLine:8});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[fill]:'swap',[maxPos]:'swap'}, sorted:sortedSet, message:`交換 a[${maxPos}] ↔ a[${fill}]：最大值歸位到 a[${fill}]`, stats:{cmp,swp,minIdx:maxPos}, pcLine:8});
     } else {
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'sorted'}, sorted:sortedSet, message:`minIdx == i，已在正確位置，無需交換`, stats:{cmp,swp,minIdx}, pcLine:7});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[fill]:'sorted'}, sorted:sortedSet, message:`maxPos == fill，已在正確位置，無需交換`, stats:{cmp,swp,minIdx:maxPos}, pcLine:7});
     }
-    frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(0, i+1), message:`pass ${i+1} 結束：a[${i}]=${a[i]} 已就位`, stats:{cmp,swp,minIdx:'—'}, pcLine:1});
+    frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(fill, N), message:`pass ${N-fill} 結束：a[${fill}]=${a[fill]} 已就位`, stats:{cmp,swp,minIdx:'—'}, pcLine:1});
   }
   frames.push({arr:[...a], origIdx:[...oi], highlights:{}, sorted:range(0, N), message:`★ 排序完成！${cmp} 次比較、${swp} 次交換（最多 n−1 次）`, stats:{cmp,swp,minIdx:'—'}, pcLine:1});
   return frames;
@@ -2152,7 +2096,7 @@ function genShellSort(initial, gapSeq) {
   function gapInsertionSort(start, gap) {
     // pcLine 9: for i = start + gap; i < aList.size(); i += gap
     for (let i = start + gap; i < N; i += gap) {
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, message:`for i in range(${start}+${gap}, ${N}, ${gap})：i = ${i}`, stats:{cmp,swp,gap}, pcLine:9});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{[i]:'key'}, message:`for (i = ${start}+${gap}; i < ${N}; i += ${gap})：i = ${i}`, stats:{cmp,swp,gap}, pcLine:9});
 
       const curVal = a[i];
       const oiKey = oi[i];
@@ -2211,7 +2155,7 @@ function genShellSort(initial, gapSeq) {
       // pcLine 4: for posStart in range(sublistCount)
       const indices = [];
       for (let k = posStart; k < N; k += sublistCount) indices.push(k);
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`for posStart in range(${sublistCount})：posStart = ${posStart}, 子列索引 = [${indices.join(', ')}]`, stats:{cmp,swp,gap:sublistCount}, pcLine:4});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`for (posStart = 0; posStart < ${sublistCount}; ++posStart)：posStart = ${posStart}，子列索引 = [${indices.join(', ')}]`, stats:{cmp,swp,gap:sublistCount}, pcLine:4});
       // pcLine 5: 呼叫 gapInsertionSort
       frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`gapInsertionSort(aList, ${posStart}, ${sublistCount})`, stats:{cmp,swp,gap:sublistCount}, pcLine:5});
 
@@ -2222,9 +2166,9 @@ function genShellSort(initial, gapSeq) {
     // pcLine 6: sublistCount = sublistCount // 2 (outer while 收尾)
     if (gIdx < gaps.length - 1) {
       const newGap = gaps[gIdx + 1];
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublistCount = sublistCount // 2 = ${newGap}`, stats:{cmp,swp,gap:newGap}, pcLine:6});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublistCount /= 2 → ${newGap}`, stats:{cmp,swp,gap:newGap}, pcLine:6});
     } else {
-      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublistCount = sublistCount // 2 = 0 → while 結束`, stats:{cmp,swp,gap:'—'}, pcLine:6});
+      frames.push({arr:[...a], origIdx:[...oi], highlights:{}, message:`sublistCount /= 2 → 0，while 結束`, stats:{cmp,swp,gap:'—'}, pcLine:6});
     }
   }
 
