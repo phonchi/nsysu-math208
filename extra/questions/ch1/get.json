@@ -1,7 +1,7 @@
 [
     {
         "question": "What is printed by the following statements?",
-        "code": "map<string, string> d = {{\"name\", \"Alice\"}, {\"age\", \"25\"}};\ncout << d[\"name\"] << endl;\ncout << d[\"gender\"] << endl;",
+        "code": "map&lt;string, string&gt; d = {{\"name\", \"Alice\"}, {\"age\", \"25\"}};\ncout &lt;&lt; d[\"name\"] &lt;&lt; endl;\ncout &lt;&lt; d[\"gender\"] &lt;&lt; endl;",
         "type": "multiple_choice",
         "answers": [
             {

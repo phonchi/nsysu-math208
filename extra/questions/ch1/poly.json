@@ -1,7 +1,7 @@
 [
     {
         "question": "What is printed by the following code?",
-        "code": "class Shape {\npublic:\n    virtual double area() {\n        return 0;\n    }\n};\n\nclass Circle : public Shape {\npublic:\n    double radius;\n    Circle(double r) { radius = r; }\n    double area() {\n        return 3.14 * radius * radius;\n    }\n};\n\nclass Square : public Shape {\npublic:\n    double side;\n    Square(double s) { side = s; }\n    double area() {\n        return side * side;\n    }\n};\n\nint main() {\n    vector<Shape*> shapes = {new Circle(2), new Square(3)};\n    for (Shape* shape : shapes) {\n        cout << shape->area() << endl;\n    }\n    return 0;\n}",
+        "code": "class Shape {\npublic:\n    virtual double area() {\n        return 0;\n    }\n};\n\nclass Circle : public Shape {\npublic:\n    double radius;\n    Circle(double r) { radius = r; }\n    double area() {\n        return 3.14 * radius * radius;\n    }\n};\n\nclass Square : public Shape {\npublic:\n    double side;\n    Square(double s) { side = s; }\n    double area() {\n        return side * side;\n    }\n};\n\nint main() {\n    vector&lt;Shape*&gt; shapes = {new Circle(2), new Square(3)};\n    for (Shape* shape : shapes) {\n        cout &lt;&lt; shape-&gt;area() &lt;&lt; endl;\n    }\n    return 0;\n}",
         "type": "multiple_choice",
         "answers": [
             {

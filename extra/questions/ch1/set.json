@@ -1,7 +1,7 @@
 [
     {
         "question": "Which of the following is equal to the set 's' after executing the following statements?",
-        "code": "set<int> s = {1, 2, 3, 4};\ns.insert(5);\ns.insert(3);\ns.insert(6);\ns.insert(7);\ns.erase(4);",
+        "code": "set&lt;int&gt; s = {1, 2, 3, 4};\ns.insert(5);\ns.insert(3);\ns.insert(6);\ns.insert(7);\ns.erase(4);",
         "type": "multiple_choice",
         "answers": [
             {

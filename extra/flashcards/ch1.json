@@ -73,7 +73,7 @@
     },
     {
         "front": "Stream Manipulator",
-        "back": "A helper such as fixed, setprecision, setw, or endl that is inserted into a C++ stream with << to control how subsequent values are formatted (decimal places, field width, line breaks). Most live in the <iomanip> header."
+        "back": "A helper such as fixed, setprecision, setw, or endl that is inserted into a C++ stream with &lt;&lt; to control how subsequent values are formatted (decimal places, field width, line breaks). Most live in the &lt;iomanip&gt; header."
     },
     {
         "front": "Format Modifier",
@@ -97,7 +97,7 @@
     },
     {
         "front": "Header File",
-        "back": "A file (such as <iostream> or \"myclass.h\") containing declarations that a C++ program pulls in with #include. Headers let code be organized and reused across multiple source files, playing the role that modules play in other languages."
+        "back": "A file (such as &lt;iostream&gt; or \"myclass.h\") containing declarations that a C++ program pulls in with #include. Headers let code be organized and reused across multiple source files, playing the role that modules play in other languages."
     },
     {
         "front": "Functions",

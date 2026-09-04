@@ -1,7 +1,7 @@
 [
     {
         "question": "What is printed by the following statements?",
-        "code": "unordered_map<string, int> d1 = {{\"a\", 1}, {\"b\", 2}};\nunordered_map<string, int> d2 = d1;\nd2[\"a\"] = 99;\ncout << d1[\"a\"] << endl;",
+        "code": "unordered_map&lt;string, int&gt; d1 = {{\"a\", 1}, {\"b\", 2}};\nunordered_map&lt;string, int&gt; d2 = d1;\nd2[\"a\"] = 99;\ncout &lt;&lt; d1[\"a\"] &lt;&lt; endl;",
         "type": "multiple_choice",
         "answers": [
             {

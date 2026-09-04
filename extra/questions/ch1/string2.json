@@ -20,9 +20,9 @@
                 "feedback": "Incorrect. The variable name is not quoted, so its value 'Alice' is printed."
             },
             {
-                "answer": "Nothing is printed. setprecision requires the <iomanip> header and always causes an error.",
+                "answer": "Nothing is printed. setprecision requires the &lt;iomanip&gt; header and always causes an error.",
                 "correct": false,
-                "feedback": "Incorrect. With <iomanip> included the statement is valid and prints the formatted line."
+                "feedback": "Incorrect. With &lt;iomanip&gt; included the statement is valid and prints the formatted line."
             }
         ]
     }

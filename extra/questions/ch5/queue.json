@@ -1,7 +1,7 @@
 [
     {
         "question": "Suppose you have the following series of queue operations. What items are left on the queue?",
-        "code": "Queue<string> q;\nq.enqueue(\"hello\");\nq.enqueue(\"dog\");\nq.enqueue(\"3\");\nq.dequeue();",
+        "code": "Queue&lt;string&gt; q;\nq.enqueue(\"hello\");\nq.enqueue(\"dog\");\nq.enqueue(\"3\");\nq.dequeue();",
         "type": "multiple_choice",
         "answers": [
             {

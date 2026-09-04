@@ -1,7 +1,7 @@
 [
     {
         "question": "Given the following sequence of stack operations, what is the top item on the stack when the sequence is complete?",
-        "code": "Stack<string> m;\nm.push(\"x\");\nm.push(\"y\");\nm.push(\"z\");\nwhile (!m.isEmpty()) {\n    m.pop();\n    m.pop();\n}",
+        "code": "Stack&lt;string&gt; m;\nm.push(\"x\");\nm.push(\"y\");\nm.push(\"z\");\nwhile (!m.isEmpty()) {\n    m.pop();\n    m.pop();\n}",
         "type": "multiple_choice",
         "answers": [
             {
