@@ -857,7 +857,7 @@ direct index         2.10 ms</pre></div>
 
 <section id="reference">
   <div class="section-number">REFERENCE · 總覽</div>
-  <h2>本章總結 <span class="sec-badge">cppds §2 總覽</span></h2>
+  <h2>本章總結與容器複雜度速查 <span class="sec-badge">cppds §2 總覽</span></h2>
   <div class="info-box">
     <span class="info-label">關鍵概念複習</span>
     ① 演算法分析比 benchmark 穩：數操作、看成長率。<br>
@@ -866,6 +866,28 @@ direct index         2.10 ms</pre></div>
     ④ C++ 容器成本表要背：vector 索引 O(1)／前端插入 O(n)；unordered_map 平均 O(1)。<br>
     ⑤ 「平均」有前提（好的 hash、健康的載入因子）：第 6 章雜湊專章見。
   </div>
+  <h3 style="margin-top:1.3rem;">本課程校正版：Ch2 容器複雜度總覽</h3>
+  <p>只保留本章已出現的結構；$n$ 是目前元素或字元數。「—」表示固定大小容器沒有該操作。</p>
+  <div style="overflow-x:auto;margin-top:.8rem;">
+  <table class="cmp-table" style="width:100%;font-size:.78rem;">
+    <thead><tr><th>Ch2 結構</th><th>存取</th><th>搜尋</th><th>插入</th><th>刪除</th><th>總儲存量</th></tr></thead>
+    <tbody>
+      <tr><td><code>std::array&lt;T,N&gt;</code></td><td>索引 O(1)</td><td>線性掃描 O(n)</td><td>— 固定大小</td><td>— 固定大小</td><td>O(n)</td></tr>
+      <tr><td><code>std::vector&lt;T&gt;</code></td><td>索引 O(1)</td><td>依值 O(n)</td><td>尾端攤銷 O(1)；前／中 O(n)</td><td>尾端 O(1)；前／中 O(n)</td><td>O(n)，capacity 可大於 size</td></tr>
+      <tr><td><code>std::string</code></td><td>索引 O(1)</td><td>單字元掃描 O(n)；子字串依演算法</td><td>單字元尾加攤銷 O(1)；前／中 O(n)</td><td>尾端 O(1)；前／中 O(n)</td><td>O(n)</td></tr>
+      <tr><td><code>std::unordered_map&lt;K,V&gt;</code></td><td>用 key，非索引</td><td>key：平均 O(1)、最壞 O(n)</td><td>平均 O(1)、最壞 O(n)</td><td>平均 O(1)、最壞 O(n)</td><td>O(n) entries + buckets</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="info-box green" style="margin-top:1.2rem;">
+    <span class="info-label">讀表前先看條件</span>
+    <code>vector</code>／<code>string</code> 尾端加入的 O(1) 是<strong>攤銷</strong>；
+    <code>unordered_map</code> 的 O(1) 是<strong>平均</strong>，最壞仍可退化成 O(n)。兩者不是同一種保證。
+    string key 的 hash／比較時間還要另外計入 key 長度。
+  </div>
+  <p><strong>學生延伸參考：</strong>
+    <a href="https://github.com/gibsjose/cpp-cheat-sheet/blob/b14a18faba57239056dd7c7e609f311c0d026ac7/Data%20Structures%20and%20Algorithms.md" target="_blank" rel="noopener">C++ Data Structures and Algorithms Cheat Sheet</a>
+    還涵蓋後續章節的結構。原頁是精簡速查；考試與作業以本課程校正版及各章定義為準。</p>
   <div style="overflow-x:auto;margin-top:1rem;">
   <table class="cmp-table" style="width:100%;font-size:.88rem;">
     <thead><tr><th>本章對應</th><th>cppds</th><th>自學頁</th></tr></thead>
@@ -873,8 +895,9 @@ direct index         2.10 ms</pre></div>
       <tr><td>什麼是演算法分析</td><td>§2.1–2.2</td><td>P00</td></tr>
       <tr><td>Big-O</td><td>§2.3</td><td>P01–P02</td></tr>
       <tr><td>Anagram</td><td>§2.4</td><td>P03</td></tr>
-      <tr><td>C++ 集合效能（vector/string）</td><td>§2.5–2.7</td><td>P04</td></tr>
-      <tr><td>Hash Tables</td><td>§2.8</td><td>P05</td></tr>
+      <tr><td>C++ vector</td><td>§2.5–2.6</td><td>P04</td></tr>
+      <tr><td>C++ string</td><td>§2.7</td><td>P05</td></tr>
+      <tr><td>Hash Tables</td><td>§2.8</td><td>P06</td></tr>
     </tbody>
   </table>
   </div>
