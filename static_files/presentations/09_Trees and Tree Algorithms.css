@@ -28,3 +28,13 @@ div.centeredImage {
     width: 50%; /* or whatever percentage or pixel value you want */
 }
 
+/* JupyterQuiz omits paragraph inheritance for multiple/many-choice prompts.
+ * Keep this local to quiz prompts so the RISE night theme is not altered. */
+body.rise-enabled .Quiz .MultipleChoiceQn p,
+body.rise-enabled .Quiz .ManyChoiceQn p,
+body.rise-enabled .Quiz .MultipleChoiceQn li,
+body.rise-enabled .Quiz .ManyChoiceQn li,
+body.rise-enabled .Quiz .MultipleChoiceQn > [id^="quizQn"],
+body.rise-enabled .Quiz .ManyChoiceQn > [id^="quizQn"] {
+    color: inherit !important;
+}
