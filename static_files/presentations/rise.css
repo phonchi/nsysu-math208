@@ -19,21 +19,3 @@ body.rise-enabled td {
 body.rise-enabled th {
   font-size: 2.3vmin;
 }
-
-/* Keep JupyterQuiz question text legible on its dark question panels.
-   RISE's Reveal theme assigns a dark color directly to text elements, so
-   setting the container color alone is not sufficient. */
-body.rise-enabled .MultipleChoiceQn,
-body.rise-enabled .ManyChoiceQn,
-body.rise-enabled .NumericQn,
-body.rise-enabled .StringQn,
-body.rise-enabled .MultipleChoiceQn p,
-body.rise-enabled .ManyChoiceQn p,
-body.rise-enabled .NumericQn p,
-body.rise-enabled .StringQn p,
-body.rise-enabled .MultipleChoiceQn li,
-body.rise-enabled .ManyChoiceQn li,
-body.rise-enabled .NumericQn li,
-body.rise-enabled .StringQn li {
-  color: #fafafa !important;
-}
