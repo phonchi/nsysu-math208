@@ -691,7 +691,8 @@
         dist[start] = 0;
         // Lazy priority queue: push improvements; stale entries are skipped on pop.
         let pq = [[0, start]];
-        const sortPq = () => pq.sort((a,b) => a[0] - b[0]);
+        const sortPq = () => pq.sort((a,b) => a[0] - b[0] || (a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0));
+        const snapshotTree = () => verts.filter(vv => prev[vv]).map(vv => [prev[vv], vv]);
         const steps = [];
         sortPq();
         steps.push({ kind:'init', codeLine:4, current:null, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`初始化：start=${start}, distance=0；其他全部 ∞`, treeEdges: [] });
@@ -700,26 +701,26 @@
           sortPq();
           const [d, u] = pq.shift();
           if (d > dist[u]) {
-            const treeEdges = verts.filter(vv => prev[vv]).map(vv => [prev[vv], vv]);
-            steps.push({ kind:'stale', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`跳過 stale entry：${u}:${d}，目前最佳距離已是 ${dist[u]}`, treeEdges });
+
+            steps.push({ kind:'stale', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`跳過 stale entry：${u}:${d}，目前最佳距離已是 ${dist[u]}`, treeEdges: snapshotTree() });
             continue;
           }
           visited[u] = true;
-          const treeEdges = verts.filter(vv => prev[vv]).map(vv => [prev[vv], vv]);
-          steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges });
+
+          steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges: snapshotTree() });
           for (const { to: vv, w: weight } of adj[u]) {
             const newD = dist[u] + weight;
-            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：new_d = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}`, treeEdges });
+            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：new_d = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}`, treeEdges: snapshotTree() });
             if (newD < dist[vv]) {
               dist[vv] = newD; prev[vv] = u;
               pq.push([newD, vv]);
               sortPq();
-              steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: [...treeEdges.filter(e => e[1] !== vv), [u, vv]] });
+              steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: snapshotTree() });
             }
           }
         }
-        const treeEdges = verts.filter(vv => prev[vv]).map(vv => [prev[vv], vv]);
-        steps.push({ kind:'done', codeLine:null, current:null, pq:[], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`Dijkstra 完成。最短路徑樹已建立。`, treeEdges });
+
+        steps.push({ kind:'done', codeLine:null, current:null, pq:[], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`Dijkstra 完成。最短路徑樹已建立。`, treeEdges: snapshotTree() });
         this.steps = steps; this.idx = 0; this.start = start;
       }
       applyStep(s) {
@@ -844,12 +845,7 @@
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; inTree[v] = false; }
         dist[start] = 0;
         let pq = [[0, start]];
-        const sortPq = () => pq.sort((a,b) => {
-          if (a[0] === b[0]) return verts.indexOf(a[1]) - verts.indexOf(b[1]);
-          if (a[0] === Infinity) return 1;
-          if (b[0] === Infinity) return -1;
-          return a[0] - b[0];
-        });
+        const sortPq = () => pq.sort((a,b) => a[0] - b[0] || (a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0));
         const snapPq = () => pq.map(([key, v]) => [key, v]);
         const steps = [];
         const mstEdges = [];
@@ -861,7 +857,10 @@
           sortPq();
           steps.push({ kind:'print-pq', codeLine:8, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`print(pq)：目前 PQ = ${pq.map(([key, v]) => `${v}:${key === Infinity ? '∞' : key}`).join(', ')}` });
           const [d, u] = pq.shift();
-          if (inTree[u]) continue;
+          if (inTree[u]) {
+            steps.push({ kind:'stale', codeLine:8, current:u, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`略過 stale entry：${u}:${d}；${u} 已在 MST 中，保留目前 MST` });
+            continue;
+          }
           inTree[u] = true;
           if (prev[u]) {
             mstEdges.push([prev[u], u, d]);

@@ -290,6 +290,9 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 .tok-new{outline:3px solid #f39c12;}
 .mono{font-family:'JetBrains Mono',monospace;}
 </style>
+<style id="analysis-mobile-navigation">
+@media (max-width: 768px) { .float-nav { display: none; } }
+</style>
 </head>
 <body>
 <nav class="float-nav" id="floatNav" aria-label="章節導覽">
@@ -687,6 +690,11 @@ direct index         2.10 ms</pre></div>
 10000000       625.40067     0.00022</pre></div>
   <p class="dx-note">重點在<strong>走勢</strong>：n 翻倍，erase(begin()) 的時間跟著翻倍（O(n)）；pop_back 文風不動（O(1)）。這就是「量測驗證 Big-O」的標準做法。</p>
 </div>
+
+<figure id="benchmark-pop-20260906" style="max-width:900px;margin:1.5rem auto;">
+  <img src="imgs/pop_benchmark.png" alt="本機 C++ 實測：vector 前端刪除與尾端刪除的時間比較" width="1800" height="1350" loading="lazy" style="display:block;width:100%;max-width:100%;height:auto;background:#fff;">
+  <figcaption style="font-size:.9rem;line-height:1.7;margin-top:.6rem;">2026-09-06 本機獨立實測，並非範例程式的示範輸出：每組 100 次操作，取 7 次執行的中位數；縱軸為微秒（µs）的對數刻度。pop_back 接近計時下限，包含迴圈與結果觀測的成本。準備工作排除於計時之外；量測結果不能單獨證明 Big-O。</figcaption>
+</figure>
 </section>
 
 <section id="strings">
@@ -798,6 +806,11 @@ direct index         2.10 ms</pre></div>
 1000000       35.917       0.012</pre></div>
   <p class="dx-note">vector 的 find 是線性掃描：n 翻倍、時間翻倍。雜湊表的 count 平均 O(1)，最壞仍可能 O(n)。平均情況依賴 hash 分布；rehash 的偶發成本則用攤還分析描述，兩者不要混為一談。</p>
 </div>
+
+<figure id="benchmark-lookup-20260906" style="max-width:900px;margin:1.5rem auto;">
+  <img src="imgs/dict_benchmark.png" alt="本機 C++ 實測：vector 線性搜尋與雜湊表成功查詢的時間比較" width="1800" height="1350" loading="lazy" style="display:block;width:100%;max-width:100%;height:auto;background:#fff;">
+  <figcaption style="font-size:.9rem;line-height:1.7;margin-top:.6rem;">2026-09-06 本機獨立實測，並非範例程式的示範輸出：每組 100 次操作，取 7 次執行的中位數；縱軸為微秒（µs）的對數刻度。兩方法使用相同的預先產生查詢；快取與工作集會影響時間，雜湊查詢實測不一定水平。準備工作排除於計時之外；量測結果不能單獨證明 Big-O。</figcaption>
+</figure>
 </section>
 
 <section id="exercises">
