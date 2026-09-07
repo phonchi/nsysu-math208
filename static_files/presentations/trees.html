@@ -999,7 +999,7 @@ hello</pre></div>
   </div>
   <p style="font-size:.85rem;color:var(--muted);margin-top:.5rem;">講義的 demo 依序 insert
   {10, 4, 9, 8, 12, 15, 3, 5, 14, 18}：不管插入順序怎麼亂，<code>heap[0]</code> 永遠是目前最小值，
-  <code>delet()</code> 也總是取出最小者。相容 API 同時提供較標準的 <code>findMin()</code>、<code>delMin()</code>、<code>size()</code>、<code>buildHeap()</code>；舊教材的 <code>delet()</code> 與 <code>heapify()</code> 保留。</p>
+  <code>delet()</code> 也總是取出最小者。<code>findMin()</code> 讀取最小值，<code>delMin()</code> 移除最小值，<code>size()</code> 回傳元素數，<code>buildHeap()</code> 從一批資料建堆。<code>delet()</code> 與 <code>heapify()</code> 分別是 <code>delMin()</code> 與 <code>buildHeap()</code> 的別名。</p>
 
   <h3>應用：Heap Sort（堆排序）</h3>
   <p>有了 <code>heapify</code>（$O(n)$）和 $n$ 次 <code>delete-min</code>（每次 $O(\log n)$），教學版可把結果寫到另一個 vector，總時間 $O(n \log n)$、額外空間 $O(n)$。真正的 in-place heapsort 則直接在原陣列管理 heap 範圍。</p>
@@ -1031,9 +1031,9 @@ hello</pre></div>
 <span class="line">    <span class="kw">return</span> <span class="num">0</span>;</span>
 <span class="line">}</span>
 <span class="line"> </span></div>
-  <div class="expected-out"><span class="eo-tag">buildHeap 快照＋heapSort 完成後的輸出</span><pre>3 4 9 5 12 15 10 8 14 18
+  <div class="expected-out"><span class="eo-tag">buildHeap 與 heapSort 的輸出</span><pre>3 4 9 5 12 15 10 8 14 18
 1 2 3 5 7 8 9 10 15 </pre></div>
-  <p class="dx-note"><span id="dx-hp"></span>第一行是 buildHeap 後的陣列：不是排序！只保證每個節點 ≤ 兩個小孩。buildHeap 為 O(n)，逐一 insert 則是 O(n log n)；delMin 每次 O(log n)。舊名稱 heapify/delet 仍相容。</p>
+  <p class="dx-note"><span id="dx-hp"></span>第一行是 buildHeap 建立的最小堆積，每個父節點都小於或等於其子節點；第二行是 heapSort 排好的結果。buildHeap 為 O(n)，逐一 insert 建堆的最差成本為 O(n log n)；delMin 每次 O(log n)。</p>
 </div>
 </section>
 

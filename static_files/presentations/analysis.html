@@ -385,15 +385,11 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <span class="line"><span class="com">// ... 要計時的程式 ...</span></span>
 <span class="line">secs = duration&lt;<span class="kw">double</span>&gt;(</span>
 <span class="line">    steady_clock::<span class="fn">now</span>() - start).<span class="fn">count</span>();</span></div>
-        <div style="font-size:.82rem;line-height:1.8;color:var(--muted);margin-top:.4rem;">講義的實測：迴圈版
-        n 從 10⁵ 加到 10⁶，時間差不多也乘十；公式版對 10⁵ 到 10⁸ 四種 n 的耗時幾乎是同一個數字。
-        短小的操作要重複跑很多次再取平均，雜訊才壓得下來。</div>
+        <div style="font-size:.82rem;line-height:1.8;color:var(--muted);margin-top:.4rem;">把開始與結束時間夾在要比較的程式碼兩側，就能量出經過時間。比較迴圈版與公式版，觀察輸入 n 增加時各自的耗時變化。</div>
       </div>
       <div class="info-card">
-        <div class="ic-title">benchmark 的干擾因素</div>
-        <div style="font-size:.86rem;line-height:1.9;">CPU、編譯器最佳化（-O2 有時會把整個迴圈摺掉！）、
-        當下的系統負載，都會影響碼表讀數。操作次數的成長級別才是演算法本身的性質，
-        這就是接下來 Big-O 要抓的東西。</div>
+        <div class="ic-title">從操作次數看效率</div>
+        <div style="font-size:.86rem;line-height:1.9;">迴圈版逐項相加，加法次數隨 n 增加；公式版用固定次數的整數運算完成計算。接下來用 Big-O 描述操作次數如何隨輸入規模成長。</div>
       </div>
     </div>
   </div>
@@ -656,7 +652,7 @@ footer{text-align:center;padding:2rem;font-size:.85rem;color:var(--muted);border
 <span class="line">    }</span>
 <span class="line">}</span>
 <span class="line"> </span></div>
-  <div class="expected-out"><span class="eo-tag">示範執行（數字依機器而異，看量級）</span><pre>insert at front   285.31 ms
+  <div class="expected-out"><span class="eo-tag">耗時比較範例</span><pre>insert at front   285.31 ms
 push_back            6.42 ms
 with reserve         3.85 ms
 direct index         2.10 ms</pre></div>
@@ -683,17 +679,17 @@ direct index         2.10 ms</pre></div>
 <span class="line">    }</span>
 <span class="line">}</span>
 <span class="line"> </span></div>
-  <div class="expected-out"><span class="eo-tag">示範執行（數字依機器而異，看走勢）</span><pre>n           erase(begin)    pop_back
+  <div class="expected-out"><span class="eo-tag">耗時比較範例</span><pre>n           erase(begin)    pop_back
 2500000        155.20031     0.00022
 5000000        311.87542     0.00021
 7500000        468.11289     0.00023
 10000000       625.40067     0.00022</pre></div>
-  <p class="dx-note">重點在<strong>走勢</strong>：n 翻倍，erase(begin()) 的時間跟著翻倍（O(n)）；pop_back 文風不動（O(1)）。這就是「量測驗證 Big-O」的標準做法。</p>
+  <p class="dx-note">從<strong>需要做的工作</strong>看成本：erase(begin()) 要把後續元素往前搬，單次操作是 O(n)；pop_back() 只移除尾端元素，單次操作是 O(1)。下圖比較兩種操作隨資料量增加的耗時。</p>
 </div>
 
 <figure id="benchmark-pop-20260906" style="max-width:900px;margin:1.5rem auto;">
-  <img src="imgs/pop_benchmark.png" alt="本機 C++ 實測：vector 前端刪除與尾端刪除的時間比較" width="1800" height="1350" loading="lazy" style="display:block;width:100%;max-width:100%;height:auto;background:#fff;">
-  <figcaption style="font-size:.9rem;line-height:1.7;margin-top:.6rem;">2026-09-06 本機獨立實測，並非範例程式的示範輸出：每組 100 次操作，取 7 次執行的中位數；縱軸為微秒（µs）的對數刻度。pop_back 接近計時下限，包含迴圈與結果觀測的成本。準備工作排除於計時之外；量測結果不能單獨證明 Big-O。</figcaption>
+  <div class="benchmark-chart" style="aspect-ratio:1800 / 1160;overflow:hidden;"><img src="imgs/pop_benchmark.png" alt="vector 前端刪除與尾端刪除的耗時比較；每組 100 次操作，縱軸為微秒的對數刻度" width="1800" height="1350" loading="lazy" style="display:block;width:100%;max-width:100%;height:auto;background:#fff;"></div>
+  <figcaption style="font-size:.9rem;line-height:1.7;margin-top:.6rem;">比較 vector 從前端與尾端刪除元素的耗時。前端刪除需要搬移後續元素，尾端刪除則不需要。</figcaption>
 </figure>
 </section>
 
@@ -800,16 +796,16 @@ direct index         2.10 ms</pre></div>
 <span class="line">    }</span>
 <span class="line">}</span>
 <span class="line"> </span></div>
-  <div class="expected-out"><span class="eo-tag">示範執行（數字依機器而異，看走勢）</span><pre>n             vector  hash table
+  <div class="expected-out"><span class="eo-tag">耗時比較範例</span><pre>n             vector  hash table
 250000         8.512       0.011
 500000        17.204       0.012
 1000000       35.917       0.012</pre></div>
-  <p class="dx-note">vector 的 find 是線性掃描：n 翻倍、時間翻倍。雜湊表的 count 平均 O(1)，最壞仍可能 O(n)。平均情況依賴 hash 分布；rehash 的偶發成本則用攤還分析描述，兩者不要混為一談。</p>
+  <p class="dx-note">vector 的 find 逐一比對元素，搜尋成本隨資料量增加。雜湊表的 count 利用雜湊值定位；雜湊分布良好、負載因子受控時，平均查詢成本為 O(1)，最差為 O(n)。</p>
 </div>
 
 <figure id="benchmark-lookup-20260906" style="max-width:900px;margin:1.5rem auto;">
-  <img src="imgs/dict_benchmark.png" alt="本機 C++ 實測：vector 線性搜尋與雜湊表成功查詢的時間比較" width="1800" height="1350" loading="lazy" style="display:block;width:100%;max-width:100%;height:auto;background:#fff;">
-  <figcaption style="font-size:.9rem;line-height:1.7;margin-top:.6rem;">2026-09-06 本機獨立實測，並非範例程式的示範輸出：每組 100 次操作，取 7 次執行的中位數；縱軸為微秒（µs）的對數刻度。兩方法使用相同的預先產生查詢；快取與工作集會影響時間，雜湊查詢實測不一定水平。準備工作排除於計時之外；量測結果不能單獨證明 Big-O。</figcaption>
+  <div class="benchmark-chart" style="aspect-ratio:1800 / 1160;overflow:hidden;"><img src="imgs/dict_benchmark.png" alt="vector 線性搜尋與雜湊表成功查詢的耗時比較；每組 100 次操作，縱軸為微秒的對數刻度" width="1800" height="1350" loading="lazy" style="display:block;width:100%;max-width:100%;height:auto;background:#fff;"></div>
+  <figcaption style="font-size:.9rem;line-height:1.7;margin-top:.6rem;">比較 vector 線性搜尋與雜湊表查詢的耗時。觀察資料量增加時，逐一比對與利用雜湊定位的成本差異。</figcaption>
 </figure>
 </section>
 
