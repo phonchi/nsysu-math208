@@ -14,6 +14,8 @@ links:
       name: Ch1_Slides_html
 ---
 **Suggested Readings:**
+- [環境安裝](https://phonchi.github.io/ds-cpp-selfstudy/00b_setup.html)
+- [C++導論](https://phonchi.github.io/ds-cpp-selfstudy/introduction.html)
 - [Notebook](https://github.com/phonchi/nsysu-math208/blob/main/static_files/presentations/01_Introduction.ipynb)
 - [Exercise](https://github.com/phonchi/nsysu-math208/blob/main/static_files/presentations/Ch1.ipynb)
 - [Exercise_sol](https://github.com/phonchi/nsysu-math208/blob/main/static_files/presentations/Ch1_sol.ipynb)
