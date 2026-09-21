@@ -19,3 +19,4 @@ links:
 - [Textbook Chapter 2: Analysis（C++）](https://runestone.academy/ns/books/published/cppds/AlgorithmAnalysis/toctree.html)
 - [C++ 線性搜尋：std::find](https://en.cppreference.com/w/cpp/algorithm/find.html)
 - [C++ 雜湊查找：unordered_map::find](https://en.cppreference.com/w/cpp/container/unordered_map/find.html)
+- [[Recorded video]](https://www.youtube.com/playlist?list=PLRkAywYxA1FM)
