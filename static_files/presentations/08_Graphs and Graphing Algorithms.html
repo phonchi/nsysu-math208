@@ -7802,7 +7802,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Graphs-and-Graphing-Algorithms">Graphs and Graphing Algorithms<a class="anchor-link" href="#Graphs-and-Graphing-Algorithms">¶</a></h1>
+<h1 id="Graphs-and-Graph-Algorithms">Graphs and Graph Algorithms<a class="anchor-link" href="#Graphs-and-Graph-Algorithms">¶</a></h1>
 </div>
 </div>
 </div>
@@ -7945,7 +7945,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="9.1-Introduction">9.1 Introduction<a class="anchor-link" href="#9.1-Introduction">¶</a></h2>
+<h2 id="Introduction">Introduction<a class="anchor-link" href="#Introduction">¶</a></h2>
 </div>
 </div>
 </div>
@@ -8039,7 +8039,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>A graph can be represented by $G =(V,E)$. For the graph $G$, $V$ is a set of vertices and $E$ is a set of edges. Each edge is a tuple $(v,w)$ where $v, w \in V$. We can add a third component to the edge tuple to represent a weight. A subgraph $s$
+<p>A graph can be represented by $G =(V,E)$. For the graph $G$, $V$ is a set of vertices and $E$ is a set of edges. Each edge is a pair $(v,w)$ where $v, w \in V$. A weighted edge adds a third component, the weight. A subgraph $s$
 is a set of edges $e$ and vertices $v$ such that $e \subset E$ and $v \subset V$.</p>
 </div>
 </div>
@@ -8187,7 +8187,7 @@ is a set of edges $e$ and vertices $v$ such that $e \subset E$ and $v \subset V$
 <li><p>A range-based loop over <code>vertices</code> visits all key/<code>Vertex</code> pairs.</p>
 </li>
 </ul>
-<p>The compact course header intentionally exposes the ordered <code>vertices</code> map; it does not define Python-style <code>in</code> or iterator magic.</p>
+<p>The compact course header intentionally exposes the ordered <code>vertices</code> map (<code>map&lt;string, Vertex&gt;</code>), so membership tests and iteration use the standard map operations above.</p>
 </div>
 </div>
 </div>
@@ -8319,7 +8319,7 @@ is a set of edges $e$ and vertices $v$ such that $e \subset E$ and $v \subset V$
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/adjlist.png" width="40%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/adjlist.png" width="76%"/></center>
 </div>
 </div>
 </div>
@@ -8573,9 +8573,9 @@ is a set of edges $e$ and vertices $v$ such that $e \subset E$ and $v \subset V$
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="cb1d89ba-bb81-47f5-9b98-2597eea0cf25" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="0226db2b-c292-447a-998b-3d94630b2a61" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('cb1d89ba-bb81-47f5-9b98-2597eea0cf25');
+var element = document.getElementById('0226db2b-c292-447a-998b-3d94630b2a61');
 var questionsXQPYrDqyjjjI=[
 	{
         "question": "Regarding graph implementation methods, which of the following statements is true according to the materials?",
@@ -10162,7 +10162,7 @@ SAGE
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="9.9.-Implementing-Breadth-First-Search">9.9. Implementing Breadth-First Search<a class="anchor-link" href="#9.9.-Implementing-Breadth-First-Search">¶</a></h2>
+<h2 id="9.9.-Implementing-Breadth-First-Search">9.9. Implementing Breadth First Search<a class="anchor-link" href="#9.9.-Implementing-Breadth-First-Search">¶</a></h2>
 </div>
 </div>
 </div>
@@ -10271,7 +10271,7 @@ SAGE
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The BFS algorithm uses an extended version of the <code>Vertex</code> class that adds three new instance variables: <code>distance</code>, <code>previous</code>, and <code>color</code>. Each of these instance variables also has the appropriate getter and setter methods.</p>
+<p>The BFS algorithm uses three extra data members of the <code>Vertex</code> class: <code>distance</code>, <code>previous</code>, and <code>color</code>. They are public members, so the algorithm reads and updates them directly.</p>
 </div>
 </div>
 </div>
@@ -11482,7 +11482,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         dist[start] = 0;
         // Lazy priority queue: push improvements; stale entries are skipped on pop.
         let pq = [[0, start]];
-        const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0]);
+        const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0] || (a[1] &lt; b[1] ? -1 : a[1] &gt; b[1] ? 1 : 0));
+        const snapshotTree = () =&gt; verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
         const steps = [];
         sortPq();
         steps.push({ kind:'init', codeLine:4, current:null, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`初始化：start=${start}, distance=0；其他全部 ∞`, treeEdges: [] });
@@ -11491,26 +11492,26 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
           sortPq();
           const [d, u] = pq.shift();
           if (d &gt; dist[u]) {
-            const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
-            steps.push({ kind:'stale', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`跳過 stale entry：${u}:${d}，目前最佳距離已是 ${dist[u]}`, treeEdges });
+
+            steps.push({ kind:'stale', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`跳過 stale entry：${u}:${d}，目前最佳距離已是 ${dist[u]}`, treeEdges: snapshotTree() });
             continue;
           }
           visited[u] = true;
-          const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
-          steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges });
+
+          steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges: snapshotTree() });
           for (const { to: vv, w: weight } of adj[u]) {
             const newD = dist[u] + weight;
-            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：new_d = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}`, treeEdges });
+            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：new_d = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}`, treeEdges: snapshotTree() });
             if (newD &lt; dist[vv]) {
               dist[vv] = newD; prev[vv] = u;
               pq.push([newD, vv]);
               sortPq();
-              steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: [...treeEdges.filter(e =&gt; e[1] !== vv), [u, vv]] });
+              steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: snapshotTree() });
             }
           }
         }
-        const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
-        steps.push({ kind:'done', codeLine:null, current:null, pq:[], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`Dijkstra 完成。最短路徑樹已建立。`, treeEdges });
+
+        steps.push({ kind:'done', codeLine:null, current:null, pq:[], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`Dijkstra 完成。最短路徑樹已建立。`, treeEdges: snapshotTree() });
         this.steps = steps; this.idx = 0; this.start = start;
       }
       applyStep(s) {
@@ -11635,12 +11636,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; inTree[v] = false; }
         dist[start] = 0;
         let pq = [[0, start]];
-        const sortPq = () =&gt; pq.sort((a,b) =&gt; {
-          if (a[0] === b[0]) return verts.indexOf(a[1]) - verts.indexOf(b[1]);
-          if (a[0] === Infinity) return 1;
-          if (b[0] === Infinity) return -1;
-          return a[0] - b[0];
-        });
+        const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0] || (a[1] &lt; b[1] ? -1 : a[1] &gt; b[1] ? 1 : 0));
         const snapPq = () =&gt; pq.map(([key, v]) =&gt; [key, v]);
         const steps = [];
         const mstEdges = [];
@@ -11650,9 +11646,12 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 
         while (pq.length &gt; 0) {
           sortPq();
-          steps.push({ kind:'print-pq', codeLine:8, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`print(pq)：目前 PQ = ${pq.map(([key, v]) =&gt; `${v}:${key === Infinity ? '∞' : key}`).join(', ')}` });
+          steps.push({ kind:'print-pq', codeLine:8, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`目前 PQ = ${pq.map(([key, v]) =&gt; `${v}:${key === Infinity ? '∞' : key}`).join(', ')}` });
           const [d, u] = pq.shift();
-          if (inTree[u]) continue;
+          if (inTree[u]) {
+            steps.push({ kind:'stale', codeLine:8, current:u, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`略過 stale entry：${u}:${d}；${u} 已在 MST 中，保留目前 MST` });
+            continue;
+          }
           inTree[u] = true;
           if (prev[u]) {
             mstEdges.push([prev[u], u, d]);
@@ -11783,7 +11782,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="9.10.-Breadth-First-Search-Analysis">9.10. Breadth-First Search Analysis<a class="anchor-link" href="#9.10.-Breadth-First-Search-Analysis">¶</a></h2>
+<h2 id="9.10.-Breadth-First-Search-Analysis">9.10. Breadth First Search Analysis<a class="anchor-link" href="#9.10.-Breadth-First-Search-Analysis">¶</a></h2>
 </div>
 </div>
 </div>
@@ -12020,7 +12019,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The <code>gen_legal_moves()</code> takes the position of the knight on the board and generates each of the eight possible moves, making sure those moves are still within the board:</p>
+<p>The <code>genLegalMoves()</code> takes the position of the knight on the board and generates each of the eight possible moves, making sure those moves are still within the board:</p>
 </div>
 </div>
 </div>
@@ -12089,7 +12088,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="9.13.-Implementing-Knight%E2%80%99s-Tour">9.13. Implementing Knight’s Tour<a class="anchor-link" href="#9.13.-Implementing-Knight%E2%80%99s-Tour">¶</a></h2>
+<h2 id="9.13.-Implementing-Knight's-Tour">9.13. Implementing Knight's Tour<a class="anchor-link" href="#9.13.-Implementing-Knight's-Tour">¶</a></h2>
 </div>
 </div>
 </div>
@@ -12460,7 +12459,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><code>knight_tour()</code> is very sensitive to the method you use to select the next vertex to visit. For example, on a $5 \times 5$ board you can produce a path in about 1.5 seconds on a reasonably fast computer. But what happens if you try an $8 \times 8$ board? In this case, depending on the speed of your computer, you may have to wait up to several minutes to get the results!</p>
+<p><code>knightTour()</code> is very sensitive to the method you use to select the next vertex to visit. For example, on a $5 \times 5$ board you can produce a path in about 1.5 seconds on a reasonably fast computer. But what happens if you try an $8 \times 8$ board? In this case, depending on the speed of your computer, you may have to wait up to several minutes to get the results!</p>
 </div>
 </div>
 </div>
@@ -12638,7 +12637,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>You can try that approach easily by running the program yourself and inserting the line <code>res_list.reverse()</code> right after the sort.</p>
+<p>You can try that approach easily by running the program yourself and inserting the line <code>reverse(resList.begin(), resList.end());</code> right after the sort.</p>
 </div>
 </div>
 </div>
@@ -12768,7 +12767,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="9.15.-General-Depth-First-Search">9.15. General Depth-First Search<a class="anchor-link" href="#9.15.-General-Depth-First-Search">¶</a></h2>
+<h2 id="9.15.-General-Depth-First-Search">9.15. General Depth First Search<a class="anchor-link" href="#9.15.-General-Depth-First-Search">¶</a></h2>
 </div>
 </div>
 </div>
@@ -12812,7 +12811,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>As with the breadth-first search, our depth-first search makes use of predecessor links to construct the tree. In addition, the depth-first search will make use of two additional instance variables in the <code>Vertex</code> class. The new instance variables are the discovery and closing times.</p>
+<p>As with the breadth-first search, our depth-first search makes use of predecessor links to construct the tree. In addition, the depth-first search records two timestamps for every vertex: its discovery and closing times, stored in the <code>DFSGraph</code> members <code>discovery</code> and <code>closing</code>.</p>
 </div>
 </div>
 </div>
@@ -12937,7 +12936,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>It may look unusual to see the statement <code>for vertex in self</code>, but remember that in this case <code>self</code> is an instance of the <code>DFSGraph</code> class, and iterating over all the vertices in an instance of a graph is a natural thing to do.</p>
+<p>The loop <code>for (auto&amp; p : vertices)</code> visits every entry of the graph's own <code>vertices</code> map: <code>p.first</code> is the vertex key and <code>p.second</code> is the <code>Vertex</code> object, so <code>dfs()</code> can reset and start from every vertex.</p>
 </div>
 </div>
 </div>
@@ -14223,7 +14222,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         dist[start] = 0;
         // Lazy priority queue: push improvements; stale entries are skipped on pop.
         let pq = [[0, start]];
-        const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0]);
+        const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0] || (a[1] &lt; b[1] ? -1 : a[1] &gt; b[1] ? 1 : 0));
+        const snapshotTree = () =&gt; verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
         const steps = [];
         sortPq();
         steps.push({ kind:'init', codeLine:4, current:null, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`初始化：start=${start}, distance=0；其他全部 ∞`, treeEdges: [] });
@@ -14232,26 +14232,26 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
           sortPq();
           const [d, u] = pq.shift();
           if (d &gt; dist[u]) {
-            const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
-            steps.push({ kind:'stale', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`跳過 stale entry：${u}:${d}，目前最佳距離已是 ${dist[u]}`, treeEdges });
+
+            steps.push({ kind:'stale', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`跳過 stale entry：${u}:${d}，目前最佳距離已是 ${dist[u]}`, treeEdges: snapshotTree() });
             continue;
           }
           visited[u] = true;
-          const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
-          steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges });
+
+          steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges: snapshotTree() });
           for (const { to: vv, w: weight } of adj[u]) {
             const newD = dist[u] + weight;
-            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：new_d = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}`, treeEdges });
+            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：new_d = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}`, treeEdges: snapshotTree() });
             if (newD &lt; dist[vv]) {
               dist[vv] = newD; prev[vv] = u;
               pq.push([newD, vv]);
               sortPq();
-              steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: [...treeEdges.filter(e =&gt; e[1] !== vv), [u, vv]] });
+              steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: snapshotTree() });
             }
           }
         }
-        const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
-        steps.push({ kind:'done', codeLine:null, current:null, pq:[], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`Dijkstra 完成。最短路徑樹已建立。`, treeEdges });
+
+        steps.push({ kind:'done', codeLine:null, current:null, pq:[], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`Dijkstra 完成。最短路徑樹已建立。`, treeEdges: snapshotTree() });
         this.steps = steps; this.idx = 0; this.start = start;
       }
       applyStep(s) {
@@ -14376,12 +14376,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; inTree[v] = false; }
         dist[start] = 0;
         let pq = [[0, start]];
-        const sortPq = () =&gt; pq.sort((a,b) =&gt; {
-          if (a[0] === b[0]) return verts.indexOf(a[1]) - verts.indexOf(b[1]);
-          if (a[0] === Infinity) return 1;
-          if (b[0] === Infinity) return -1;
-          return a[0] - b[0];
-        });
+        const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0] || (a[1] &lt; b[1] ? -1 : a[1] &gt; b[1] ? 1 : 0));
         const snapPq = () =&gt; pq.map(([key, v]) =&gt; [key, v]);
         const steps = [];
         const mstEdges = [];
@@ -14391,9 +14386,12 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 
         while (pq.length &gt; 0) {
           sortPq();
-          steps.push({ kind:'print-pq', codeLine:8, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`print(pq)：目前 PQ = ${pq.map(([key, v]) =&gt; `${v}:${key === Infinity ? '∞' : key}`).join(', ')}` });
+          steps.push({ kind:'print-pq', codeLine:8, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`目前 PQ = ${pq.map(([key, v]) =&gt; `${v}:${key === Infinity ? '∞' : key}`).join(', ')}` });
           const [d, u] = pq.shift();
-          if (inTree[u]) continue;
+          if (inTree[u]) {
+            steps.push({ kind:'stale', codeLine:8, current:u, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`略過 stale entry：${u}:${d}；${u} 已在 MST 中，保留目前 MST` });
+            continue;
+          }
           inTree[u] = true;
           if (prev[u]) {
             mstEdges.push([prev[u], u, d]);
@@ -14524,7 +14522,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="9.16.-Depth-First-Search-Analysis">9.16. Depth-First Search Analysis<a class="anchor-link" href="#9.16.-Depth-First-Search-Analysis">¶</a></h2>
+<h2 id="9.16.-Depth-First-Search-Analysis">9.16. Depth First Search Analysis<a class="anchor-link" href="#9.16.-Depth-First-Search-Analysis">¶</a></h2>
 </div>
 </div>
 </div>
@@ -14800,9 +14798,9 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="40b0a92e-4b3a-4d31-b6b7-fd1a5a6dbf7b" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="fe6e9fe0-3d7e-466e-bbca-679bcf38ada2" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('40b0a92e-4b3a-4d31-b6b7-fd1a5a6dbf7b');
+var element = document.getElementById('fe6e9fe0-3d7e-466e-bbca-679bcf38ada2');
 var questionsojRUMAkFetxM=[
     {
         "question": "What is the primary structural difference in how Breadth-First Search (BFS) and Depth-First Search (DFS) track the next vertex to explore?",
@@ -16009,7 +16007,7 @@ function try_show() {
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>The topological sort is a simple but useful adaptation of a depth-first search. The algorithm for the topological sort is as follows:</p>
 <ol>
-<li>Call <code>dfs(g)</code> for some graph <code>g</code>. The main reason we want to call depth-first search is to compute the closing times for each of the vertices.</li>
+<li>Call <code>g.dfs()</code> for some graph <code>g</code>. The main reason we want to call depth-first search is to compute the closing times for each of the vertices.</li>
 </ol>
 </div>
 </div>
@@ -17006,7 +17004,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         dist[start] = 0;
         // Lazy priority queue: push improvements; stale entries are skipped on pop.
         let pq = [[0, start]];
-        const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0]);
+        const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0] || (a[1] &lt; b[1] ? -1 : a[1] &gt; b[1] ? 1 : 0));
+        const snapshotTree = () =&gt; verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
         const steps = [];
         sortPq();
         steps.push({ kind:'init', codeLine:4, current:null, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`初始化：start=${start}, distance=0；其他全部 ∞`, treeEdges: [] });
@@ -17015,26 +17014,26 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
           sortPq();
           const [d, u] = pq.shift();
           if (d &gt; dist[u]) {
-            const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
-            steps.push({ kind:'stale', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`跳過 stale entry：${u}:${d}，目前最佳距離已是 ${dist[u]}`, treeEdges });
+
+            steps.push({ kind:'stale', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`跳過 stale entry：${u}:${d}，目前最佳距離已是 ${dist[u]}`, treeEdges: snapshotTree() });
             continue;
           }
           visited[u] = true;
-          const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
-          steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges });
+
+          steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges: snapshotTree() });
           for (const { to: vv, w: weight } of adj[u]) {
             const newD = dist[u] + weight;
-            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：new_d = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}`, treeEdges });
+            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：new_d = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}`, treeEdges: snapshotTree() });
             if (newD &lt; dist[vv]) {
               dist[vv] = newD; prev[vv] = u;
               pq.push([newD, vv]);
               sortPq();
-              steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: [...treeEdges.filter(e =&gt; e[1] !== vv), [u, vv]] });
+              steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: snapshotTree() });
             }
           }
         }
-        const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
-        steps.push({ kind:'done', codeLine:null, current:null, pq:[], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`Dijkstra 完成。最短路徑樹已建立。`, treeEdges });
+
+        steps.push({ kind:'done', codeLine:null, current:null, pq:[], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`Dijkstra 完成。最短路徑樹已建立。`, treeEdges: snapshotTree() });
         this.steps = steps; this.idx = 0; this.start = start;
       }
       applyStep(s) {
@@ -17159,12 +17158,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; inTree[v] = false; }
         dist[start] = 0;
         let pq = [[0, start]];
-        const sortPq = () =&gt; pq.sort((a,b) =&gt; {
-          if (a[0] === b[0]) return verts.indexOf(a[1]) - verts.indexOf(b[1]);
-          if (a[0] === Infinity) return 1;
-          if (b[0] === Infinity) return -1;
-          return a[0] - b[0];
-        });
+        const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0] || (a[1] &lt; b[1] ? -1 : a[1] &gt; b[1] ? 1 : 0));
         const snapPq = () =&gt; pq.map(([key, v]) =&gt; [key, v]);
         const steps = [];
         const mstEdges = [];
@@ -17174,9 +17168,12 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 
         while (pq.length &gt; 0) {
           sortPq();
-          steps.push({ kind:'print-pq', codeLine:8, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`print(pq)：目前 PQ = ${pq.map(([key, v]) =&gt; `${v}:${key === Infinity ? '∞' : key}`).join(', ')}` });
+          steps.push({ kind:'print-pq', codeLine:8, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`目前 PQ = ${pq.map(([key, v]) =&gt; `${v}:${key === Infinity ? '∞' : key}`).join(', ')}` });
           const [d, u] = pq.shift();
-          if (inTree[u]) continue;
+          if (inTree[u]) {
+            steps.push({ kind:'stale', codeLine:8, current:u, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`略過 stale entry：${u}:${d}；${u} 已在 MST 中，保留目前 MST` });
+            continue;
+          }
           inTree[u] = true;
           if (prev[u]) {
             mstEdges.push([prev[u], u, d]);
@@ -17883,9 +17880,9 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d3cd63f4-96d9-41b0-afc8-b078fef21130" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="5be50b09-9ec4-4e68-9505-f8e420d2489b" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('d3cd63f4-96d9-41b0-afc8-b078fef21130');
+var element = document.getElementById('5be50b09-9ec4-4e68-9505-f8e420d2489b');
 var questionspCjFPdANXSdC=[
 	{
         "question": "Why is Breadth-First Search (BFS) guaranteed to find the shortest path in an unweighted graph?",
@@ -20344,7 +20341,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         dist[start] = 0;
         // Lazy priority queue: push improvements; stale entries are skipped on pop.
         let pq = [[0, start]];
-        const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0]);
+        const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0] || (a[1] &lt; b[1] ? -1 : a[1] &gt; b[1] ? 1 : 0));
+        const snapshotTree = () =&gt; verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
         const steps = [];
         sortPq();
         steps.push({ kind:'init', codeLine:4, current:null, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`初始化：start=${start}, distance=0；其他全部 ∞`, treeEdges: [] });
@@ -20353,26 +20351,26 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
           sortPq();
           const [d, u] = pq.shift();
           if (d &gt; dist[u]) {
-            const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
-            steps.push({ kind:'stale', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`跳過 stale entry：${u}:${d}，目前最佳距離已是 ${dist[u]}`, treeEdges });
+
+            steps.push({ kind:'stale', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`跳過 stale entry：${u}:${d}，目前最佳距離已是 ${dist[u]}`, treeEdges: snapshotTree() });
             continue;
           }
           visited[u] = true;
-          const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
-          steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges });
+
+          steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges: snapshotTree() });
           for (const { to: vv, w: weight } of adj[u]) {
             const newD = dist[u] + weight;
-            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：new_d = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}`, treeEdges });
+            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：new_d = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}`, treeEdges: snapshotTree() });
             if (newD &lt; dist[vv]) {
               dist[vv] = newD; prev[vv] = u;
               pq.push([newD, vv]);
               sortPq();
-              steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: [...treeEdges.filter(e =&gt; e[1] !== vv), [u, vv]] });
+              steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: snapshotTree() });
             }
           }
         }
-        const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
-        steps.push({ kind:'done', codeLine:null, current:null, pq:[], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`Dijkstra 完成。最短路徑樹已建立。`, treeEdges });
+
+        steps.push({ kind:'done', codeLine:null, current:null, pq:[], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`Dijkstra 完成。最短路徑樹已建立。`, treeEdges: snapshotTree() });
         this.steps = steps; this.idx = 0; this.start = start;
       }
       applyStep(s) {
@@ -20497,12 +20495,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; inTree[v] = false; }
         dist[start] = 0;
         let pq = [[0, start]];
-        const sortPq = () =&gt; pq.sort((a,b) =&gt; {
-          if (a[0] === b[0]) return verts.indexOf(a[1]) - verts.indexOf(b[1]);
-          if (a[0] === Infinity) return 1;
-          if (b[0] === Infinity) return -1;
-          return a[0] - b[0];
-        });
+        const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0] || (a[1] &lt; b[1] ? -1 : a[1] &gt; b[1] ? 1 : 0));
         const snapPq = () =&gt; pq.map(([key, v]) =&gt; [key, v]);
         const steps = [];
         const mstEdges = [];
@@ -20512,9 +20505,12 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 
         while (pq.length &gt; 0) {
           sortPq();
-          steps.push({ kind:'print-pq', codeLine:8, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`print(pq)：目前 PQ = ${pq.map(([key, v]) =&gt; `${v}:${key === Infinity ? '∞' : key}`).join(', ')}` });
+          steps.push({ kind:'print-pq', codeLine:8, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`目前 PQ = ${pq.map(([key, v]) =&gt; `${v}:${key === Infinity ? '∞' : key}`).join(', ')}` });
           const [d, u] = pq.shift();
-          if (inTree[u]) continue;
+          if (inTree[u]) {
+            steps.push({ kind:'stale', codeLine:8, current:u, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`略過 stale entry：${u}:${d}；${u} 已在 MST 中，保留目前 MST` });
+            continue;
+          }
           inTree[u] = true;
           if (prev[u]) {
             mstEdges.push([prev[u], u, d]);
@@ -20932,9 +20928,9 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="bacea66b-a4f0-4a8e-8f73-0799f2dcbac0" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="81e3e64b-3f8f-425f-8821-9e508166c5b3" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('bacea66b-a4f0-4a8e-8f73-0799f2dcbac0');
+var element = document.getElementById('81e3e64b-3f8f-425f-8821-9e508166c5b3');
 var questionsTGVCpdnkOgxR=[
 	{
         "question": "Which of the following is a known limitation or characteristic of Dijkstra's algorithm?",
@@ -22050,7 +22046,7 @@ function try_show() {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h4 id="Exercise-1:-Negative-edge-precondition">Exercise 1: Negative-edge precondition<a class="anchor-link" href="#Exercise-1:-Negative-edge-precondition">¶</a></h4><p>The pictured graph contains negative-weight edges. What happens if it is passed to the course <code>dijkstra(g, "A")</code> implementation?</p>
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/Dij.png" width="25%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/Dij.png" width="34%"/></center>
 <p>(A) It returns <code>A-&gt;B-&gt;D</code>.</p>
 <p>(B) It returns <code>A-&gt;C-&gt;D</code>.</p>
 <p>(C) It silently deletes the negative edges.</p>
@@ -23236,7 +23232,8 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         dist[start] = 0;
         // Lazy priority queue: push improvements; stale entries are skipped on pop.
         let pq = [[0, start]];
-        const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0]);
+        const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0] || (a[1] &lt; b[1] ? -1 : a[1] &gt; b[1] ? 1 : 0));
+        const snapshotTree = () =&gt; verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
         const steps = [];
         sortPq();
         steps.push({ kind:'init', codeLine:4, current:null, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`初始化：start=${start}, distance=0；其他全部 ∞`, treeEdges: [] });
@@ -23245,26 +23242,26 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
           sortPq();
           const [d, u] = pq.shift();
           if (d &gt; dist[u]) {
-            const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
-            steps.push({ kind:'stale', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`跳過 stale entry：${u}:${d}，目前最佳距離已是 ${dist[u]}`, treeEdges });
+
+            steps.push({ kind:'stale', codeLine:8, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`跳過 stale entry：${u}:${d}，目前最佳距離已是 ${dist[u]}`, treeEdges: snapshotTree() });
             continue;
           }
           visited[u] = true;
-          const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
-          steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges });
+
+          steps.push({ kind:'pop', codeLine:7, current:u, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`從 PQ 取出最小：${u} (distance = ${d})，標記為 visited`, treeEdges: snapshotTree() });
           for (const { to: vv, w: weight } of adj[u]) {
             const newD = dist[u] + weight;
-            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：new_d = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}`, treeEdges });
+            steps.push({ kind:'relax-check', codeLine:11, current:u, neighbor:vv, edge:[u,vv], pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`鬆弛邊 ${u}—${vv}：new_d = ${d} + ${weight} = ${newD}，目前 d(${vv}) = ${isFinite(dist[vv]) ? dist[vv] : '∞'}`, treeEdges: snapshotTree() });
             if (newD &lt; dist[vv]) {
               dist[vv] = newD; prev[vv] = u;
               pq.push([newD, vv]);
               sortPq();
-              steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: [...treeEdges.filter(e =&gt; e[1] !== vv), [u, vv]] });
+              steps.push({ kind:'relax-update', codeLine:13, current:u, neighbor:vv, pq:[...pq], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`更新！d(${vv}) = ${newD}，previous(${vv}) = ${u}`, treeEdges: snapshotTree() });
             }
           }
         }
-        const treeEdges = verts.filter(vv =&gt; prev[vv]).map(vv =&gt; [prev[vv], vv]);
-        steps.push({ kind:'done', codeLine:null, current:null, pq:[], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`Dijkstra 完成。最短路徑樹已建立。`, treeEdges });
+
+        steps.push({ kind:'done', codeLine:null, current:null, pq:[], dist:{...dist}, prev:{...prev}, visited:{...visited}, msg:`Dijkstra 完成。最短路徑樹已建立。`, treeEdges: snapshotTree() });
         this.steps = steps; this.idx = 0; this.start = start;
       }
       applyStep(s) {
@@ -23389,12 +23386,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
         for (const v of verts) { dist[v] = Infinity; prev[v] = null; inTree[v] = false; }
         dist[start] = 0;
         let pq = [[0, start]];
-        const sortPq = () =&gt; pq.sort((a,b) =&gt; {
-          if (a[0] === b[0]) return verts.indexOf(a[1]) - verts.indexOf(b[1]);
-          if (a[0] === Infinity) return 1;
-          if (b[0] === Infinity) return -1;
-          return a[0] - b[0];
-        });
+        const sortPq = () =&gt; pq.sort((a,b) =&gt; a[0] - b[0] || (a[1] &lt; b[1] ? -1 : a[1] &gt; b[1] ? 1 : 0));
         const snapPq = () =&gt; pq.map(([key, v]) =&gt; [key, v]);
         const steps = [];
         const mstEdges = [];
@@ -23404,9 +23396,12 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 
         while (pq.length &gt; 0) {
           sortPq();
-          steps.push({ kind:'print-pq', codeLine:8, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`print(pq)：目前 PQ = ${pq.map(([key, v]) =&gt; `${v}:${key === Infinity ? '∞' : key}`).join(', ')}` });
+          steps.push({ kind:'print-pq', codeLine:8, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`目前 PQ = ${pq.map(([key, v]) =&gt; `${v}:${key === Infinity ? '∞' : key}`).join(', ')}` });
           const [d, u] = pq.shift();
-          if (inTree[u]) continue;
+          if (inTree[u]) {
+            steps.push({ kind:'stale', codeLine:8, current:u, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`略過 stale entry：${u}:${d}；${u} 已在 MST 中，保留目前 MST` });
+            continue;
+          }
           inTree[u] = true;
           if (prev[u]) {
             mstEdges.push([prev[u], u, d]);
@@ -23658,7 +23653,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Now we examine the vertices adjacent to node D. We find that we can update E and reduce the distance to E from 6 to 4. When we do this we change the predecessor link on E to point back to D, thus preparing it to be grafted into the spanning tree but in a different location. The rest of the algorithm proceeds as you would expect, adding each new node to the tree.</p>
+<p>Now we examine the vertices adjacent to node D. We find that we can update E and reduce the distance to E from 4 to 1. When we do this we change the predecessor link on E to point back to D, thus preparing it to be grafted into the spanning tree but in a different location. The rest of the algorithm proceeds as you would expect, adding each new node to the tree.</p>
 </div>
 </div>
 </div>
@@ -23968,9 +23963,9 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="1d657e87-53b1-45b4-a5cd-04d651baf8c1" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="6f3e2310-0d55-4123-b797-2757065093fe" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('1d657e87-53b1-45b4-a5cd-04d651baf8c1');
+var element = document.getElementById('6f3e2310-0d55-4123-b797-2757065093fe');
 var questionsMpMQQkMPOjAL=[
   {
     "question": "In Prim's algorithm for finding a Minimum Spanning Tree (MST), what defines a safe edge?",
@@ -25122,7 +25117,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Exercise-2:-Considering-the-following-graph,-when-Prim's-algorithm-is-used-and-starts-from-node-F,-what-is-the-weight-of-the-last-edge-to-be-added-into-the-minimum-spanning-tree?">Exercise 2: Considering the following graph, when Prim's algorithm is used and starts from node F, what is the weight of the last edge to be added into the minimum spanning tree?<a class="anchor-link" href="#Exercise-2:-Considering-the-following-graph,-when-Prim's-algorithm-is-used-and-starts-from-node-F,-what-is-the-weight-of-the-last-edge-to-be-added-into-the-minimum-spanning-tree?">¶</a></h4><center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/primq.png" width="25%"/></center>
+<h4 id="Exercise-2:-Considering-the-following-graph,-when-Prim's-algorithm-is-used-and-starts-from-node-F,-what-is-the-weight-of-the-last-edge-to-be-added-into-the-minimum-spanning-tree?">Exercise 2: Considering the following graph, when Prim's algorithm is used and starts from node F, what is the weight of the last edge to be added into the minimum spanning tree?<a class="anchor-link" href="#Exercise-2:-Considering-the-following-graph,-when-Prim's-algorithm-is-used-and-starts-from-node-F,-what-is-the-weight-of-the-last-edge-to-be-added-into-the-minimum-spanning-tree?">¶</a></h4><center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/primq.png" width="55%"/></center>
 </div>
 </div>
 </div>
@@ -25514,9 +25509,9 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="87033eb8-f87f-434e-9ccd-b6bc20514441" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="2a92aaff-5b00-47c4-bff9-067d06fa6aa9" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('87033eb8-f87f-434e-9ccd-b6bc20514441');
+var element = document.getElementById('2a92aaff-5b00-47c4-bff9-067d06fa6aa9');
 /*!
  * swiped-events.js - v1.1.4
  * Pure JavaScript swipe events

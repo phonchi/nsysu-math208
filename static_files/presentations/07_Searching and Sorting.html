@@ -8385,11 +8385,11 @@ function genSequentialSearch(arr, target) {
     cmp++;
     frames.push({arr:[...arr], origIdx:arr.map((_,i)=>i), highlights:{[pos]:'compare'}, message:`比較 a[${pos}]=${arr[pos]} 與目標 ${target}`, stats:{cmp,pos,result:'搜尋中...'}, pcLine:4});
     if (arr[pos] === target) {
-      frames.push({arr:[...arr], origIdx:arr.map((_,i)=>i), highlights:{[pos]:'found'}, message:`★ 找到！a[${pos}] = ${target}`, stats:{cmp,pos,result:`True (位置 ${pos})`}, pcLine:5});
+      frames.push({arr:[...arr], origIdx:arr.map((_,i)=>i), highlights:{[pos]:'found'}, message:`★ 找到！a[${pos}] = ${target}`, stats:{cmp,pos,result:`true (位置 ${pos})`}, pcLine:5});
       return frames;
     }
   }
-  frames.push({arr:[...arr], origIdx:arr.map((_,i)=>i), highlights:{}, faded:range(0,arr.length), message:`✗ 走完整個 list 沒找到 ${target}`, stats:{cmp,pos:'—',result:'False'}, pcLine:7});
+  frames.push({arr:[...arr], origIdx:arr.map((_,i)=>i), highlights:{}, faded:range(0,arr.length), message:`✗ 走完整個陣列沒找到 ${target}`, stats:{cmp,pos:'—',result:'false'}, pcLine:7});
   return frames;
 }
 
@@ -8410,7 +8410,7 @@ function genBinarySearch(arr, target) {
     frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'compare'}, eliminated:[...elimL,...elimR], pointers:{low:{idx:first,label:'first',cls:'low'},high:{idx:last,label:'last',cls:'high'},mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`midpoint = (${first}+${last})//2 = ${midpoint}，比較 aList[${midpoint}] = ${sorted[midpoint]} 與 ${target}`, stats:{cmp,low:first,high:last,mid:midpoint,result:'搜尋中...'}, pcLine:5});
 
     if (sorted[midpoint] === target) {
-      frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'found'}, eliminated:[...elimL,...elimR], pointers:{mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`★ 命中！aList[${midpoint}] = ${target}`, stats:{cmp,low:first,high:last,mid:midpoint,result:`True (位置 ${midpoint})`}, pcLine:7});
+      frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'found'}, eliminated:[...elimL,...elimR], pointers:{mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`★ 命中！aList[${midpoint}] = ${target}`, stats:{cmp,low:first,high:last,mid:midpoint,result:`true (位置 ${midpoint})`}, pcLine:7});
       return frames;
     } else if (target < sorted[midpoint]) {
       frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'compare'}, eliminated:[...elimL,...elimR,...range(midpoint,sorted.length)], pointers:{low:{idx:first,label:'first',cls:'low'},high:{idx:last,label:'last',cls:'high'},mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`${target} < ${sorted[midpoint]} → 右半全部排除，last = ${midpoint-1}`, stats:{cmp,low:first,high:last,mid:midpoint,result:'搜尋中...'}, pcLine:9});
@@ -8420,7 +8420,7 @@ function genBinarySearch(arr, target) {
       first = midpoint + 1;
     }
   }
-  frames.push({arr:[...sorted], origIdx:oi, highlights:{}, eliminated:range(0,sorted.length), message:`✗ first (${first}) > last (${last})，沒找到 ${target}`, stats:{cmp,low:first,high:last,mid:'—',result:'False'}, pcLine:12});
+  frames.push({arr:[...sorted], origIdx:oi, highlights:{}, eliminated:range(0,sorted.length), message:`✗ first (${first}) > last (${last})，沒找到 ${target}`, stats:{cmp,low:first,high:last,mid:'—',result:'false'}, pcLine:12});
   return frames;
 }
 
@@ -8564,7 +8564,7 @@ function genShellSort(initial, gapSeq) {
       while (curPos >= gap && a[curPos - gap] > curVal) {
         cmp++;
         // pcLine 12: while-condition 為真
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos-gap]:'compare',[curPos]:'key'}, message:`while ${curPos} >= ${gap} and aList[${curPos-gap}]=${a[curPos-gap]} > curVal=${curVal} → 進入迴圈`, stats:{cmp,swp,gap}, pcLine:12});
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos-gap]:'compare',[curPos]:'key'}, message:`while ${curPos} >= ${gap} && aList[${curPos-gap}]=${a[curPos-gap]} > curVal=${curVal} → 進入迴圈`, stats:{cmp,swp,gap}, pcLine:12});
 
         // SHIFT: a[curPos] ← a[curPos - gap]
         // 同步維持 moving key 的 visual hole，讓 origIdx 與 arr 一致。
@@ -8862,8 +8862,8 @@ function initSeqSearch() {
       $('seqPos').textContent = s.pos ?? '—';
       const r = $('seqResult');
       const res = s.result || '';
-      if (res.startsWith('True'))      { r.textContent = '✓ ' + res; r.style.color = 'var(--bar-found)'; }
-      else if (res === 'False')        { r.textContent = '✗ False (未找到)'; r.style.color = 'var(--accent)'; }
+      if (res.startsWith('true'))      { r.textContent = '✓ ' + res; r.style.color = 'var(--bar-found)'; }
+      else if (res === 'false')        { r.textContent = '✗ false (未找到)'; r.style.color = 'var(--accent)'; }
       else                              { r.textContent = res || '—'; r.style.color = ''; }
     }
   });
@@ -8888,8 +8888,8 @@ function initBinSearch() {
       $('binMid').textContent  = s.mid  ?? '—';
       const r = $('binResult');
       const res = s.result || '';
-      if (res.startsWith('True'))      { r.textContent = '✓ ' + res; r.style.color = 'var(--bar-found)'; }
-      else if (res === 'False')        { r.textContent = '✗ False (未找到)'; r.style.color = 'var(--accent)'; }
+      if (res.startsWith('true'))      { r.textContent = '✓ ' + res; r.style.color = 'var(--bar-found)'; }
+      else if (res === 'false')        { r.textContent = '✗ false (未找到)'; r.style.color = 'var(--accent)'; }
       else                              { r.textContent = res || '—'; r.style.color = ''; }
     }
   });
@@ -10131,9 +10131,9 @@ function initQuick() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d9313de1-0a0e-4d4e-8b68-5fca3b3a1569" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d9af57d7-73c6-453c-a021-dbcd09e8cbe8" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('d9313de1-0a0e-4d4e-8b68-5fca3b3a1569');
+var element = document.getElementById('d9af57d7-73c6-453c-a021-dbcd09e8cbe8');
 var questionsLDPeGuZCDjek=[
     {
         "question": "Suppose you are doing a sequential search of the ordered list [3, 5, 6, 8, 11, 12, 14, 15, 17, 18]. How many comparisons would you need to do in order to find the key 13?",
@@ -11904,9 +11904,9 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="38b2e01a-ba4d-4cfb-a7e3-0bb14c464e27" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="9f9cb235-19a0-47ef-b1fe-25a293bf88e3" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('38b2e01a-ba4d-4cfb-a7e3-0bb14c464e27');
+var element = document.getElementById('9f9cb235-19a0-47ef-b1fe-25a293bf88e3');
 var questionsZMtsgjuqwIBu=[
     {
         "question": "Suppose recursive binary search uses index bounds and midpoint = first + (last - first) / 2. For the sorted vector {3, 5, 6, 8, 11, 12, 14, 15, 17, 18}, which values are compared while searching for 16?",
@@ -13021,7 +13021,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h4 id="Exercise-1:-Implement-the-binary-search-using-recursion-without-the-slice-operator.-Recall-that-you-will-need-to-pass-the-list-along-with-the-starting-and-ending-index-values-for-the-sublist.">Exercise 1: Implement the binary search using recursion without the slice operator. Recall that you will need to pass the list along with the starting and ending index values for the sublist.<a class="anchor-link" href="#Exercise-1:-Implement-the-binary-search-using-recursion-without-the-slice-operator.-Recall-that-you-will-need-to-pass-the-list-along-with-the-starting-and-ending-index-values-for-the-sublist.">¶</a></h4>
+<h4 id="Exercise-1:-Implement-the-binary-search-using-recursion-without-copying-sub-vectors.-Recall-that-you-will-need-to-pass-the-vector-along-with-the-starting-and-ending-index-values-of-the-active-range.">Exercise 1: Implement the binary search using recursion without copying sub-vectors. Recall that you will need to pass the vector along with the starting and ending index values of the active range.<a class="anchor-link" href="#Exercise-1:-Implement-the-binary-search-using-recursion-without-copying-sub-vectors.-Recall-that-you-will-need-to-pass-the-vector-along-with-the-starting-and-ending-index-values-of-the-active-range.">¶</a></h4>
 </div>
 </div>
 </div>
@@ -13059,27 +13059,13 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/tmp/tmpg5tg_cbt.cpp: In function ‘bool binarySearchRec2(const std::vector&lt;int&gt;&amp;, int, int, int)’:
-/tmp/tmpg5tg_cbt.cpp:7:9: error: ‘____’ was not declared in this scope
+<pre>/tmp/tmpis2vjgth.cpp: In function ‘bool binarySearchRec2(const std::vector&lt;int&gt;&amp;, int, int, int)’:
+/tmp/tmpis2vjgth.cpp:7:9: error: ‘____’ was not declared in this scope
     7 |     if (____) return false;
       |         ^~~~
+/tmp/tmpis2vjgth.cpp:8:20: error: ‘____’ was not declared in this scope
+    ... (truncated; run the cell to see the full message)
 </pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/tmp/tmpg5tg_cbt.cpp:8:20: error: ‘____’ was not declared in this scope
-    8 |     int midpoint = ____;
-      |                    ^~~~
-</pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>
-[C++ kernel] Error: Unable to compile the source code. Return error: 0x1.</pre>
 </div>
 </div>
 </div>
@@ -13157,7 +13143,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/hashtable.png" width="40%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/hashtable.png" width="63%"/></center>
 </div>
 </div>
 </div>
@@ -13256,7 +13242,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/hashtable2.png" width="40%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/hashtable2.png" width="63%"/></center>
 </div>
 </div>
 </div>
@@ -13575,7 +13561,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/stringhash2.png" width="30%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/stringhash2.png" width="55%"/></center>
 </div>
 </div>
 </div>
@@ -13642,7 +13628,7 @@ function try_show() {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>Consider an extended set of integer items under the simple remainder method hash function (54, 26, 93, 17, 77, 31, 44, 55, 20). The following is the placement of the original first six values:</p>
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/hashtable2.png" width="40%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/hashtable2.png" width="63%"/></center>
 </div>
 </div>
 </div>
@@ -13664,7 +13650,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/linearprobing1.png" width="40%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/linearprobing1.png" width="63%"/></center>
 </div>
 </div>
 </div>
@@ -13708,7 +13694,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/clustering.png" width="40%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/clustering.png" width="63%"/></center>
 </div>
 </div>
 </div>
@@ -13730,7 +13716,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/linearprobing2.png" width="40%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/linearprobing2.png" width="63%"/></center>
 </div>
 </div>
 </div>
@@ -13829,7 +13815,7 @@ With simple linear probing, the rehash function is $new\_hash=rehash(old\_hash),
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/quadratic.png" width="40%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/quadratic.png" width="63%"/></center>
 </div>
 </div>
 </div>
@@ -13851,7 +13837,7 @@ With simple linear probing, the rehash function is $new\_hash=rehash(old\_hash),
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/chaining.png" width="35%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/chaining.png" width="63%"/></center>
 </div>
 </div>
 </div>
@@ -14116,9 +14102,9 @@ With simple linear probing, the rehash function is $new\_hash=rehash(old\_hash),
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="33f60df7-676a-47b3-bbd1-9402cbd4a6da" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="05f839e6-07ad-40cb-acef-41637ff63bdd" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('33f60df7-676a-47b3-bbd1-9402cbd4a6da');
+var element = document.getElementById('05f839e6-07ad-40cb-acef-41637ff63bdd');
 var questionsWXrjXfqTjYCK=[
     {
         "question": "In a hash table of size 13, which index positions would the following two keys map to: 27 and 130?",
@@ -15475,9 +15461,9 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="1983666d-6a93-41a5-afe5-bc74655b99c3" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d26c6a64-1943-4638-9ad1-d4a1565abf96" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('1983666d-6a93-41a5-afe5-bc74655b99c3');
+var element = document.getElementById('d26c6a64-1943-4638-9ad1-d4a1565abf96');
 var questionsYrEbVpUTEBad=[
     {
         "question": "Suppose you are given the following set of keys to insert into a hash table that holds exactly 11 values: 113, 117, 97, 100, 114, 108, 116, 105, 99. Which of the following best demonstrates the contents of the hash table after all the keys have been inserted using linear probing?",
@@ -16633,18 +16619,13 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/tmp/tmptmdgsma6.cpp: In function ‘std::vector&lt;int&gt; quadraticProbing(const std::vector&lt;int&gt;&amp;, int)’:
-/tmp/tmptmdgsma6.cpp:13:21: error: ‘____’ was not declared in this scope
+<pre>/tmp/tmpnc8p97xb.cpp: In function ‘std::vector&lt;int&gt; quadraticProbing(const std::vector&lt;int&gt;&amp;, int)’:
+/tmp/tmpnc8p97xb.cpp:13:21: error: ‘____’ was not declared in this scope
    13 |             index = ____;
       |                     ^~~~
+
+    ... (truncated; run the cell to see the full message)
 </pre>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>
-[C++ kernel] Error: Unable to compile the source code. Return error: 0x1.</pre>
 </div>
 </div>
 </div>
@@ -16667,7 +16648,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="6.5.3.-Implementing-the-Map-Abstract-Data-Type">6.5.3. Implementing the Map Abstract Data Type<a class="anchor-link" href="#6.5.3.-Implementing-the-Map-Abstract-Data-Type">¶</a></h3>
+<h3 id="6.5.3.-Implementing-the-Map-Abstract-Data-Type">6.5.3. Implementing the <code>Map</code> Abstract Data Type<a class="anchor-link" href="#6.5.3.-Implementing-the-Map-Abstract-Data-Type">¶</a></h3>
 </div>
 </div>
 </div>
@@ -16816,7 +16797,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><code>hash_function()</code> implements the simple remainder method. The collision resolution technique is linear probing with a "plus 1" rehash value. The <code>put()</code> function assumes that there will eventually be an empty slot. <strong>If a nonempty slot already contains the key, the old data value is replaced with the new data value.</strong></p>
+<p><code>hashFunction()</code> implements the simple remainder method. The collision resolution technique is linear probing with a "plus 1" rehash value. The <code>put()</code> function assumes that there will eventually be an empty slot. <strong>If a nonempty slot already contains the key, the old data value is replaced with the new data value.</strong></p>
 </div>
 </div>
 </div>
@@ -17661,9 +17642,9 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="1c4f8867-6b30-4440-bccd-f2c3cbec0efe" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="b909cf9a-252b-4d2f-ad98-d0e878d28a47" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('1c4f8867-6b30-4440-bccd-f2c3cbec0efe');
+var element = document.getElementById('b909cf9a-252b-4d2f-ad98-d0e878d28a47');
 var questionsrRciPJFNjFFy=[
     {
         "question": "After the first complete pass of ascending bubble sort on {5, 1, 4, 2, 8}, what is the vector?",
@@ -18979,13 +18960,13 @@ function try_show() {
 <p>11 7 12 14 19 1 6 18 8 20</p>
 <p>11 7 12 14 8 1 6 18 19 20</p>
 <p>11 7 12 14 8 1 6 18 19 20</p>
-<p>11 7 12 6 8 1 14 18 19</p>
+<p>11 7 12 6</p>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>20</p>
+<p>8 1 14 18 19 20</p>
 <p>11 7 1 6 8 12 14 18 19 20</p>
 <p>8 7 1 6 11 12 14 18 19 20</p>
 <p>6 7 1 8 11 12 14 18 19 20</p>
@@ -19146,7 +19127,7 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The implementation of <code>insertion_sort()</code> shows that there are again $n-1$ passes to sort $n$ items. The iteration starts at position 1 and moves through position $n-1$, as these are the items that need to be inserted back into the sorted sublists.</p>
+<p>The implementation of <code>insertionSort()</code> shows that there are again $n-1$ passes to sort $n$ items. The iteration starts at position 1 and moves through position $n-1$, as these are the items that need to be inserted back into the sorted sublists.</p>
 </div>
 </div>
 </div>
@@ -19619,6 +19600,11 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 <p>Splitting 17</p>
 <p>Merging 17</p>
 <p>Merging 17 93</p>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
 <p>Merging 17 26 54 93</p>
 </div>
 </div>
@@ -20030,9 +20016,9 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d6cfcd66-01a4-45e7-84c9-7164ae6c341a" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="7eff1ce1-3dea-443d-a923-ac7223d38993" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('d6cfcd66-01a4-45e7-84c9-7164ae6c341a');
+var element = document.getElementById('7eff1ce1-3dea-443d-a923-ac7223d38993');
 var questionsQgNPgzABAfho=[
     {
         "question": "Given the following list of numbers: [21, 1, 26, 45, 29, 28, 2, 9, 16, 49, 39, 27, 43, 34, 46, 40], which answer illustrates the list to be sorted after 3 recursive calls to mergesort?",
@@ -21146,7 +21132,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="7.8.-The-Quicksort">7.8. The Quicksort<a class="anchor-link" href="#7.8.-The-Quicksort">¶</a></h2>
+<h2 id="7.8.-The-Quick-Sort">7.8. The Quick Sort<a class="anchor-link" href="#7.8.-The-Quick-Sort">¶</a></h2>
 </div>
 </div>
 </div>
@@ -21213,7 +21199,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Partitioning begins by locating two position markers — let's call them <code>left_mark</code> and <code>right_mark</code> — at the beginning and end of the remaining items in the list. The goal of the partition process is to move items that are on the wrong side with respect to the pivot value while also converging on the split point.</p>
+<p>Partitioning begins by locating two position markers — let's call them <code>leftMark</code> and <code>rightMark</code> — at the beginning and end of the remaining items in the list. The goal of the partition process is to move items that are on the wrong side with respect to the pivot value while also converging on the split point.</p>
 </div>
 </div>
 </div>
@@ -21224,7 +21210,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/partitionA.png" width="35%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/partitionA.png" width="76%"/></center>
 </div>
 </div>
 </div>
@@ -21235,7 +21221,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>We begin by incrementing <code>left_mark</code> until we locate a value that is greater than the pivot value. We then decrement <code>right_mark</code> until we find a value that is less than the pivot value. At this point we have discovered two items that are out of place with respect to the eventual split point. Now we can exchange these two items and then repeat the process again.</p>
+<p>We begin by incrementing <code>leftMark</code> until we locate a value that is greater than the pivot value. We then decrement <code>rightMark</code> until we find a value that is less than the pivot value. At this point we have discovered two items that are out of place with respect to the eventual split point. Now we can exchange these two items and then repeat the process again.</p>
 </div>
 </div>
 </div>
@@ -21246,7 +21232,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>At the point where <code>right_mark</code> becomes less than <code>left_mark</code>, we stop. The position of <code>right_mark</code> is now the split point! The pivot value can be exchanged with the contents of the split point and the pivot value is now in place.</p>
+<p>At the point where <code>rightMark</code> becomes less than <code>leftMark</code>, we stop. The position of <code>rightMark</code> is now the split point! The pivot value can be exchanged with the contents of the split point and the pivot value is now in place.</p>
 </div>
 </div>
 </div>
@@ -21330,11 +21316,6 @@ function try_show() {
 <p>17 26 20 31 44 54 77 55 93</p>
 <p>17 20 26 31 44 54 77 55 93</p>
 <p>17 20 26 31 44 54 55 77 93</p>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
 <p>17 20 26 31 44 54 55 77 93</p>
 </div>
 </div>
@@ -21719,9 +21700,9 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="39964be1-fbc1-4e81-a144-60a3f136acf3" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="5553f24d-f9a2-444b-8f1a-77a597078899" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('39964be1-fbc1-4e81-a144-60a3f136acf3');
+var element = document.getElementById('5553f24d-f9a2-444b-8f1a-77a597078899');
 var questionsQSUkEuBZQIgn=[
     {
         "question": "Given the following list of numbers [14, 17, 13, 15, 19, 10, 3, 16, 9, 12] which answer shows the contents of the list after the second partitioning according to the quicksort algorithm?",
@@ -23358,9 +23339,9 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="94e2c90a-023b-420e-9ae5-1cda15d0ea8f" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="4170a5ad-a93b-4056-9501-875e41b69f76" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('94e2c90a-023b-420e-9ae5-1cda15d0ea8f');
+var element = document.getElementById('4170a5ad-a93b-4056-9501-875e41b69f76');
 /*!
  * swiped-events.js - v1.1.4
  * Pure JavaScript swipe events

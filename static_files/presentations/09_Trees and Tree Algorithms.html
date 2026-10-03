@@ -8285,8 +8285,8 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="EhyZrsKfFqvT" style="border-radius: 10px; text-align: left"><style>
-#EhyZrsKfFqvT {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="YqDHxoIFEGRY" style="border-radius: 10px; text-align: left"><style>
+#YqDHxoIFEGRY {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -8514,10 +8514,10 @@ a.anchor-link {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="7bdd5f61-5dbb-4d12-afe4-8724ae31985d" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="60c71d44-938f-4b64-a78f-4e2aa7164f42" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('7bdd5f61-5dbb-4d12-afe4-8724ae31985d');
-var questionsEhyZrsKfFqvT=[
+var element = document.getElementById('60c71d44-938f-4b64-a78f-4e2aa7164f42');
+var questionsYqDHxoIFEGRY=[
 	{
         "question": "Which statement about edges and nodes in a tree is correct?",
         "type": "multiple_choice",
@@ -9607,8 +9607,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("EhyZrsKfFqvT")) {
-    show_questions(questionsEhyZrsKfFqvT, EhyZrsKfFqvT);
+  if (document.getElementById("YqDHxoIFEGRY")) {
+    show_questions(questionsYqDHxoIFEGRY, YqDHxoIFEGRY);
   } else {
     setTimeout(try_show, 200);
   }
@@ -9695,163 +9695,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The key decision in implementing a tree is choosing a good internal storage technique. We have two very interesting possibilities, and we will examine both before choosing one. We call them <u>list of lists</u> and <u>nodes and references</u>.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="8.3a.-List-of-Lists-Representation-(Python-textbook-reference)">8.3a. List of Lists Representation (Python textbook reference)<a class="anchor-link" href="#8.3a.-List-of-Lists-Representation-(Python-textbook-reference)">¶</a></h2>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<blockquote>
-<p><strong>Language note:</strong> this is the Python textbook's compact representation, included only to compare representations. The C++ course implementation begins with nodes and pointers in §8.4.</p>
-</blockquote>
-<p>In the Python list-of-lists representation, element 0 stores the root, element 1 the left subtree, and element 2 the right subtree.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/smalltree.png" width="40%"/></center>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<div class="highlight"><pre><span></span><span class="n">my_tree</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">"a"</span><span class="p">,</span>  <span class="c1"># root</span>
-        <span class="p">[</span><span class="s2">"b"</span><span class="p">,</span>  <span class="c1"># left subtree</span>
-            <span class="p">[</span><span class="s2">"d"</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[]],</span>
-            <span class="p">[</span><span class="s2">"e"</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[]]</span>
-        <span class="p">],</span>
-        <span class="p">[</span><span class="s2">"c"</span><span class="p">,</span>  <span class="c1"># right subtree</span>
-            <span class="p">[</span><span class="s2">"f"</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[]],</span>
-            <span class="p">[]</span>
-        <span class="p">],</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Notice that we can access subtrees of the list using standard list indexing. The root of the tree is <code>my_tree[0]</code>, the left subtree of the root is <code>my_tree[1]</code>, and the right subtree is <code>my_tree[2]</code>.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The structure of a list representing a subtree adheres to the structure defined for a tree; the structure itself is recursive! A subtree that has a root value and two empty lists is a leaf node. Another nice feature of the list of lists approach is that it generalizes to a tree that has many subtrees. In the case where the tree is more than a binary tree, another subtree is just another list!</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In Python, a binary tree can be improvised out of <strong>nested lists</strong>: <code>["a", ["b", ["d", [], []], ["e", [], []]], ["c", ["f", [], []], []]]</code> — the root value followed by the left and right subtrees. Statically-typed <code>C++</code> has no such heterogeneous nested literal, so we go straight to the <em>nodes and references</em> representation, which is the natural one in C++ anyway.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The Python text supplies helper functions that treat the nested list as a tree. They are not part of the C++ API; the next section implements the same tree operations with <code>BinaryTree*</code> child links.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><em>(For reference, the Python helper was: <code>make_binary_tree(root)</code> returning <code>[root, [], []]</code>.)</em></p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><em>(<code>insert_left</code> popped the old child list and nested it under the new child — pure list surgery.)</em></p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In the reference representation, inserting a child nests any existing subtree below the new list. In C++, <code>insertLeft()</code> and <code>insertRight()</code> perform the analogous pointer reassignment.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><em>(<code>insert_right</code> and the getter/setter helpers worked the same way on index 2.)</em></p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The nodes-and-references implementation on the next slides provides exactly the same behavior with pointers instead of nested lists.</p>
+<p>The key decision in implementing a tree is choosing a good internal storage technique. We use <u>nodes and references</u>, described next.</p>
 </div>
 </div>
 </div>
@@ -9873,7 +9717,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Our second method to represent a tree uses nodes and references. In this case we will define a class that has attributes for the root value as well as the left and right subtrees.</p>
+<p>To represent a tree with nodes and references, we define a class that has attributes for the root value as well as the left and right subtrees.</p>
 </div>
 </div>
 </div>
@@ -9895,7 +9739,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/treerecs.png" width="50%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/treerecs.png" width="76%"/></center>
 </div>
 </div>
 </div>
@@ -10706,7 +10550,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The C++ implementation does not use Python's operator-function dictionary. It stores the operator as a <code>string</code> and dispatches with <code>if</code>/<code>else if</code> (or a <code>switch</code> on a character), as shown in <code>evaluate()</code> above.</p>
+<p>The C++ implementation stores the operator as a <code>string</code> and dispatches with <code>if</code>/<code>else if</code> (or a <code>switch</code> on a character), as shown in <code>evaluate()</code> above.</p>
 </div>
 </div>
 </div>
@@ -10717,7 +10561,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Finally, we will trace the evaluate function on the parse tree we created before. When we first call <code>evaluate()</code>, we pass the root of the entire tree as the parameter <code>parse_tree()</code>. Then we obtain references to the left and right children to make sure they exist. The recursive call takes place on line 16.</p>
+<p>Finally, we will trace the evaluate function on the parse tree we created before. When we first call <code>evaluate()</code>, we pass the root of the entire tree as the parameter <code>parseTree</code>. Then we obtain references to the left and right children to make sure they exist. The recursive calls take place on lines 7–10.</p>
 </div>
 </div>
 </div>
@@ -10762,7 +10606,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>At the root, <code>evaluate()</code> sees <code>+</code>, recursively evaluates the left leaf as 3 and the right subtree as 20, then returns 23. The recursion order follows the expression tree; no Python evaluation rule is involved.</p>
+<p>At the root, <code>evaluate()</code> sees <code>+</code>, recursively evaluates the left leaf as 3 and the right subtree as 20, then returns 23. The recursion order follows the structure of the expression tree.</p>
 </div>
 </div>
 </div>
@@ -11195,11 +11039,13 @@ body.rise-enabled .ds09-anim { font-size: 2.2vmin; }
 &lt;div class=&quot;side-panel&quot;&gt;
 &lt;div class=&quot;info-card&quot;&gt;
 &lt;div class=&quot;ic-title&quot;&gt;虛擬碼 &lt;span class=&quot;ic-badge&quot; style=&quot;background:var(--accent2)&quot;&gt;CODE&lt;/span&gt;&lt;/div&gt;
-&lt;div class=&quot;pseudo-code&quot; id=&quot;travCodePre&quot;&gt;&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;&lt;/div&gt;
+&lt;div class=&quot;pseudo-code&quot; id=&quot;travCodePre&quot;&gt;&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&quot;info-card&quot;&gt;
 &lt;div class=&quot;ic-title&quot;&gt;遞迴呼叫堆疊 &lt;span class=&quot;ic-badge&quot; style=&quot;background:var(--accent2)&quot;&gt;STACK&lt;/span&gt;&lt;/div&gt;
@@ -12044,21 +11890,27 @@ function initTraversals(suffix = '', lockedKind = null) {
     player.reset();
     // Update code panel to match traversal
     const codeMap = {
-      preorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;`,
-      inorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;`,
-      postorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;`,
+      preorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
+      inorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
+      postorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
     };
     $$('travCode').innerHTML = codeMap[currentTrav];
   }
@@ -13574,11 +13426,13 @@ body.rise-enabled .ds09-anim { font-size: 2.2vmin; }
 &lt;div class=&quot;side-panel&quot;&gt;
 &lt;div class=&quot;info-card&quot;&gt;
 &lt;div class=&quot;ic-title&quot;&gt;虛擬碼 &lt;span class=&quot;ic-badge&quot; style=&quot;background:var(--accent2)&quot;&gt;CODE&lt;/span&gt;&lt;/div&gt;
-&lt;div class=&quot;pseudo-code&quot; id=&quot;travCodePost&quot;&gt;&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;&lt;/div&gt;
+&lt;div class=&quot;pseudo-code&quot; id=&quot;travCodePost&quot;&gt;&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&quot;info-card&quot;&gt;
 &lt;div class=&quot;ic-title&quot;&gt;遞迴呼叫堆疊 &lt;span class=&quot;ic-badge&quot; style=&quot;background:var(--accent2)&quot;&gt;STACK&lt;/span&gt;&lt;/div&gt;
@@ -14423,21 +14277,27 @@ function initTraversals(suffix = '', lockedKind = null) {
     player.reset();
     // Update code panel to match traversal
     const codeMap = {
-      preorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;`,
-      inorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;`,
-      postorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;`,
+      preorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
+      inorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
+      postorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
     };
     $$('travCode').innerHTML = codeMap[currentTrav];
   }
@@ -15967,11 +15827,13 @@ body.rise-enabled .ds09-anim { font-size: 2.2vmin; }
 &lt;div class=&quot;side-panel&quot;&gt;
 &lt;div class=&quot;info-card&quot;&gt;
 &lt;div class=&quot;ic-title&quot;&gt;虛擬碼 &lt;span class=&quot;ic-badge&quot; style=&quot;background:var(--accent2)&quot;&gt;CODE&lt;/span&gt;&lt;/div&gt;
-&lt;div class=&quot;pseudo-code&quot; id=&quot;travCodeIn&quot;&gt;&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;&lt;/div&gt;
+&lt;div class=&quot;pseudo-code&quot; id=&quot;travCodeIn&quot;&gt;&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&quot;info-card&quot;&gt;
 &lt;div class=&quot;ic-title&quot;&gt;遞迴呼叫堆疊 &lt;span class=&quot;ic-badge&quot; style=&quot;background:var(--accent2)&quot;&gt;STACK&lt;/span&gt;&lt;/div&gt;
@@ -16816,21 +16678,27 @@ function initTraversals(suffix = '', lockedKind = null) {
     player.reset();
     // Update code panel to match traversal
     const codeMap = {
-      preorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;`,
-      inorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;`,
-      postorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;`,
+      preorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
+      inorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
+      postorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
     };
     $$('travCode').innerHTML = codeMap[currentTrav];
   }
@@ -18098,8 +17966,8 @@ function initAVL() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="VdwQdrgqlzNW" style="border-radius: 10px; text-align: left"><style>
-#VdwQdrgqlzNW {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="IcFgcPlLdSMj" style="border-radius: 10px; text-align: left"><style>
+#IcFgcPlLdSMj {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -18327,10 +18195,10 @@ function initAVL() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="6cb88a0d-7a33-4eb6-a3de-3f7a489f4caa" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="ebb096b7-9e49-41e2-9284-e72e2fd71925" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('6cb88a0d-7a33-4eb6-a3de-3f7a489f4caa');
-var questionsVdwQdrgqlzNW=[
+var element = document.getElementById('ebb096b7-9e49-41e2-9284-e72e2fd71925');
+var questionsIcFgcPlLdSMj=[
 	{
         "question": "In which type of tree traversal is the root node visited after all of its subtrees have been visited?",
         "type": "multiple_choice",
@@ -19420,8 +19288,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("VdwQdrgqlzNW")) {
-    show_questions(questionsVdwQdrgqlzNW, VdwQdrgqlzNW);
+  if (document.getElementById("IcFgcPlLdSMj")) {
+    show_questions(questionsIcFgcPlLdSMj, IcFgcPlLdSMj);
   } else {
     setTimeout(try_show, 200);
   }
@@ -19555,7 +19423,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="8.8.-Binary-Heap-Priority-Queue-Example">8.8. Binary Heap Priority Queue Example<a class="anchor-link" href="#8.8.-Binary-Heap-Priority-Queue-Example">¶</a></h2>
+<h2 id="8.8.-Priority-Queues-with-Binary-Heaps-Example">8.8. Priority Queues with Binary Heaps Example<a class="anchor-link" href="#8.8.-Priority-Queues-with-Binary-Heaps-Example">¶</a></h2>
 </div>
 </div>
 </div>
@@ -19866,7 +19734,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Figure below shows a complete binary tree and also gives the list representation of the tree. Note the $2p+1$ and $2p+2$ relationship between parent and children.</p>
+<p>Figure below shows a complete binary tree and also gives the vector representation of the tree. Note the $2p+1$ and $2p+2$ relationship between parent and children.</p>
 </div>
 </div>
 </div>
@@ -19888,7 +19756,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The list representation of the tree, along with the full structure property, allows us to efficiently traverse a complete binary tree using only a few simple mathematical operations.</p>
+<p>The vector representation of the tree, along with the full structure property, allows us to efficiently traverse a complete binary tree using only a few simple mathematical operations.</p>
 </div>
 </div>
 </div>
@@ -21172,21 +21040,27 @@ function initTraversals(suffix = '', lockedKind = null) {
     player.reset();
     // Update code panel to match traversal
     const codeMap = {
-      preorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;`,
-      inorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;`,
-      postorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;`,
+      preorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
+      inorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
+      postorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
     };
     $$('travCode').innerHTML = codeMap[currentTrav];
   }
@@ -23654,21 +23528,27 @@ function initTraversals(suffix = '', lockedKind = null) {
     player.reset();
     // Update code panel to match traversal
     const codeMap = {
-      preorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;`,
-      inorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;`,
-      postorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;`,
+      preorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
+      inorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
+      postorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
     };
     $$('travCode').innerHTML = codeMap[currentTrav];
   }
@@ -26071,21 +25951,27 @@ function initTraversals(suffix = '', lockedKind = null) {
     player.reset();
     // Update code panel to match traversal
     const codeMap = {
-      preorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;`,
-      inorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;`,
-      postorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;`,
+      preorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
+      inorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
+      postorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
     };
     $$('travCode').innerHTML = codeMap[currentTrav];
   }
@@ -27337,8 +27223,8 @@ i = 0  [2, 3, 5, 6, 9]
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="EYdmjhirlTfZ" style="border-radius: 10px; text-align: left"><style>
-#EYdmjhirlTfZ {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="jILsExfgoEqR" style="border-radius: 10px; text-align: left"><style>
+#jILsExfgoEqR {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -27566,10 +27452,10 @@ i = 0  [2, 3, 5, 6, 9]
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="59deb2e2-feb8-4401-bc04-42637c9ba7a1" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="e1c8421c-7e20-45bb-888b-3bf968b11558" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('59deb2e2-feb8-4401-bc04-42637c9ba7a1');
-var questionsEYdmjhirlTfZ=[
+var element = document.getElementById('e1c8421c-7e20-45bb-888b-3bf968b11558');
+var questionsjILsExfgoEqR=[
   {
     "question": "What is the primary reason for using a Binary Heap to implement a Priority Queue?",
     "type": "multiple_choice",
@@ -28685,8 +28571,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("EYdmjhirlTfZ")) {
-    show_questions(questionsEYdmjhirlTfZ, EYdmjhirlTfZ);
+  if (document.getElementById("jILsExfgoEqR")) {
+    show_questions(questionsjILsExfgoEqR, jILsExfgoEqR);
   } else {
     setTimeout(try_show, 200);
   }
@@ -28773,8 +28659,8 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/tmp/tmp8gnwk88y.cpp: In function ‘std::vector&lt;int&gt; heapSort(std::vector&lt;int&gt;)’:
-/tmp/tmp8gnwk88y.cpp:11:5: error: ‘____’ was not declared in this scope
+<pre>/tmp/tmp1askiu7j.cpp: In function ‘std::vector&lt;int&gt; heapSort(std::vector&lt;int&gt;)’:
+/tmp/tmp1askiu7j.cpp:11:5: error: ‘____’ was not declared in this scope
    11 |     ____;
       |     ^~~~
 </pre>
@@ -28883,7 +28769,7 @@ function try_show() {
 <li><code>length()</code>: returns the number of distinct keys.</li>
 <li><code>contains(key)</code>: returns a C++ <code>bool</code>.</li>
 </ul>
-<p>These methods express the Map ADT without Python's <code>del</code>, <code>in</code>, <code>None</code>, or special-method syntax.</p>
+<p>These named member functions provide the complete Map ADT interface.</p>
 </div>
 </div>
 </div>
@@ -30094,21 +29980,27 @@ function initTraversals(suffix = '', lockedKind = null) {
     player.reset();
     // Update code panel to match traversal
     const codeMap = {
-      preorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;`,
-      inorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;`,
-      postorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;`,
+      preorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
+      inorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
+      postorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
     };
     $$('travCode').innerHTML = codeMap[currentTrav];
   }
@@ -32728,21 +32620,27 @@ function initTraversals(suffix = '', lockedKind = null) {
     player.reset();
     // Update code panel to match traversal
     const codeMap = {
-      preorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;`,
-      inorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;`,
-      postorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;`,
+      preorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
+      inorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
+      postorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
     };
     $$('travCode').innerHTML = codeMap[currentTrav];
   }
@@ -35505,21 +35403,27 @@ function initTraversals(suffix = '', lockedKind = null) {
     player.reset();
     // Update code panel to match traversal
     const codeMap = {
-      preorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;`,
-      inorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;`,
-      postorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree):&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; tree:&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._leftChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree._rightChild)&lt;/span&gt;
-&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;print&lt;/span&gt;(tree._key, end=&lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;)&lt;/span&gt;`,
+      preorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;preorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
+      inorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;inorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
+      postorder: `&lt;span class=&quot;line&quot; data-l=&quot;1&quot;&gt;&lt;span class=&quot;kw&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(BinaryTree* tree) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;2&quot;&gt;    &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (tree != NULL) {&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;3&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getLeftChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;4&quot;&gt;        &lt;span class=&quot;fn&quot;&gt;postorder&lt;/span&gt;(tree-&amp;gt;getRightChild());&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;5&quot;&gt;        cout &amp;lt;&amp;lt; tree-&amp;gt;getRootVal() &amp;lt;&amp;lt; &lt;span class=&quot;str&quot;&gt;&quot; &quot;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;6&quot;&gt;    }&lt;/span&gt;
+&lt;span class=&quot;line&quot; data-l=&quot;7&quot;&gt;}&lt;/span&gt;`,
     };
     $$('travCode').innerHTML = codeMap[currentTrav];
   }
@@ -36745,7 +36649,7 @@ function initAVL() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The recursion is explicit: each call processes a smaller subtree, and the base case is a <code>NULL</code> pointer. Appending during the middle visit produces sorted BST keys without Python iterator machinery.</p>
+<p>The recursion is explicit: each call processes a smaller subtree, and the base case is a <code>NULL</code> pointer. Appending during the middle visit produces the BST keys in sorted order.</p>
 </div>
 </div>
 </div>
@@ -36867,8 +36771,8 @@ function initAVL() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/tmp/tmpm67bixs5.cpp: In function ‘std::vector&lt;std::__cxx11::basic_string&lt;char&gt; &gt; treeSort(std::vector&lt;std::__cxx11::basic_string&lt;char&gt; &gt;)’:
-/tmp/tmpm67bixs5.cpp:11:5: error: ‘____’ was not declared in this scope
+<pre>/tmp/tmp7q324g7s.cpp: In function ‘std::vector&lt;std::__cxx11::basic_string&lt;char&gt; &gt; treeSort(std::vector&lt;std::__cxx11::basic_string&lt;char&gt; &gt;)’:
+/tmp/tmp7q324g7s.cpp:11:5: error: ‘____’ was not declared in this scope
    11 |     ____;
       |     ^~~~
 </pre>
@@ -36978,7 +36882,7 @@ function initAVL() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Unfortunately it is possible to construct a search tree that has height $n$ simply by inserting the keys in sorted order! An example of this is shown below:</p>
+<p>Unfortunately it is possible to construct a search tree that has height $n-1$ (for $n$ nodes) simply by inserting the keys in sorted order! An example of this is shown below:</p>
 </div>
 </div>
 </div>
@@ -37049,8 +36953,8 @@ function initAVL() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="UQObcVEkSZhd" style="border-radius: 10px; text-align: left"><style>
-#UQObcVEkSZhd {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="SfIPlcKzTvcn" style="border-radius: 10px; text-align: left"><style>
+#SfIPlcKzTvcn {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -37278,10 +37182,10 @@ function initAVL() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="3d4a9165-5163-4af3-b87a-5d0c3d3721db" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="1042e696-97cd-4de6-b667-5466f3f87b4c" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('3d4a9165-5163-4af3-b87a-5d0c3d3721db');
-var questionsUQObcVEkSZhd=[
+var element = document.getElementById('1042e696-97cd-4de6-b667-5466f3f87b4c');
+var questionsSfIPlcKzTvcn=[
   {
     "question": "In a Binary Search Tree (BST), what property must hold for every node to ensure efficient searching?",
     "type": "multiple_choice",
@@ -38397,8 +38301,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("UQObcVEkSZhd")) {
-    show_questions(questionsUQObcVEkSZhd, UQObcVEkSZhd);
+  if (document.getElementById("SfIPlcKzTvcn")) {
+    show_questions(questionsSfIPlcKzTvcn, SfIPlcKzTvcn);
   } else {
     setTimeout(try_show, 200);
   }
@@ -38880,7 +38784,7 @@ h &amp;\approx \frac{\log_2(N_h+1)+\tfrac12\log_2 5}{\log_2\Phi}-3.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>If that is the case then the rebalancing is done and no further updating to parents is required. If the current node does not require rebalancing then the balance factor of the parent is adjusted. If the balance factor of the parent is nonzero then the algorithm continues to work its way up the tree toward the root by recursively calling <code>update_balance()</code> on the parent.</p>
+<p>If that is the case then the rebalancing is done and no further updating to parents is required. If the current node does not require rebalancing then the balance factor of the parent is adjusted. If the balance factor of the parent is nonzero then the algorithm continues to work its way up the tree toward the root by recursively calling <code>updateBalance()</code> on the parent.</p>
 </div>
 </div>
 </div>
@@ -39049,7 +38953,7 @@ h &amp;\approx \frac{\log_2(N_h+1)+\tfrac12\log_2 5}{\log_2\Phi}-3.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The code is for the left rotation (the <code>rotate_right()</code> method is symmetrical).</p>
+<p>The code is for the left rotation (the <code>rotateRight()</code> method is symmetrical).</p>
 </div>
 </div>
 </div>
@@ -39071,8 +38975,8 @@ h &amp;\approx \frac{\log_2(N_h+1)+\tfrac12\log_2 5}{\log_2\Phi}-3.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The next step is to adjust the parent pointers of the two nodes. If <code>new_root</code> has a left child then the new parent of the left child becomes the old root. The parent of the new root is set to the parent of the old root. If the old root was the root of the entire tree then we must set the root of the tree to point to this new root.</p>
-<p>Otherwise, if the old root is a left child then we change the parent of the left child to point to the new root; otherwise we change the parent of the right child to point to the new root. Finally we set the parent of the old root to be the new root.</p>
+<p>The next step is to adjust the parent pointers of the two nodes. If <code>newRoot</code> has a left child then the new parent of the left child becomes the old root. The parent of the new root is set to the parent of the old root. If the old root was the root of the entire tree then we must set the root of the tree to point to this new root.</p>
+<p>Otherwise, if the old root is a left child we set the old parent's <code>leftChild</code> to <code>newRoot</code>; otherwise we set the old parent's <code>rightChild</code> to <code>newRoot</code>. Finally we set the parent of the old root to be the new root.</p>
 </div>
 </div>
 </div>
@@ -39446,8 +39350,8 @@ new\_bal(B) = old\_bal(B) + 1 - min(0 , old\_bal(D)) \\\end{split}$$</p>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="dGbmRDqToJWu" style="border-radius: 10px; text-align: left"><style>
-#dGbmRDqToJWu {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="xdsoqezWfgId" style="border-radius: 10px; text-align: left"><style>
+#xdsoqezWfgId {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -39675,10 +39579,10 @@ new\_bal(B) = old\_bal(B) + 1 - min(0 , old\_bal(D)) \\\end{split}$$</p>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="94d23efb-99ed-4aff-84bc-e12739984a55" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d8c6e3f6-02b1-4335-9c4b-25cf4e418141" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('94d23efb-99ed-4aff-84bc-e12739984a55');
-var questionsdGbmRDqToJWu=[
+var element = document.getElementById('d8c6e3f6-02b1-4335-9c4b-25cf4e418141');
+var questionsxdsoqezWfgId=[
   {
     "question": "How does an AVL tree improve upon a standard Binary Search Tree?",
     "type": "multiple_choice",
@@ -40794,8 +40698,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("dGbmRDqToJWu")) {
-    show_questions(questionsdGbmRDqToJWu, dGbmRDqToJWu);
+  if (document.getElementById("xdsoqezWfgId")) {
+    show_questions(questionsxdsoqezWfgId, xdsoqezWfgId);
   } else {
     setTimeout(try_show, 200);
   }
@@ -40829,7 +40733,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="8.18.-Chapter-Summary-and-Map-ADT-Implementations">8.18. Chapter Summary and Map ADT Implementations<a class="anchor-link" href="#8.18.-Chapter-Summary-and-Map-ADT-Implementations">¶</a></h2>
+<h2 id="8.18.-Summary-of-Map-ADT-Implementations">8.18. Summary of Map ADT Implementations<a class="anchor-link" href="#8.18.-Summary-of-Map-ADT-Implementations">¶</a></h2>
 </div>
 </div>
 </div>
@@ -41281,14 +41185,14 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="PVlNHIMbhQTw" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="PVlNHIMbhQTw-next" onclick="window.checkFlip('PVlNHIMbhQTw')"> </div> <div style="height:40px"></div>
+<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="eowZBRfSqOtb" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="eowZBRfSqOtb-next" onclick="window.checkFlip('eowZBRfSqOtb')"> </div> <div style="height:40px"></div>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="756710ba-444c-4032-8770-8d7fd704b8fc" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="9042ac20-5734-438e-aca1-5c1a52b613cb" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('756710ba-444c-4032-8770-8d7fd704b8fc');
+var element = document.getElementById('9042ac20-5734-438e-aca1-5c1a52b613cb');
 /*!
  * swiped-events.js - v1.1.4
  * Pure JavaScript swipe events
@@ -42085,10 +41989,10 @@ window.setTopics = function(idOrElem, topics) {
 
 (function() {
     var observer = new MutationObserver(function(mutations, obs) {
-        var el = document.getElementById("PVlNHIMbhQTw");
+        var el = document.getElementById("eowZBRfSqOtb");
         if (el) {
             el.dataset.url = "";
-            el.dataset.cards = JSON.stringify([{"front": "Trees", "back": "A hierarchical data structure consisting of nodes, where each node contains data and references to child nodes, facilitating efficient data organization and retrieval.", "seqNum": 0}, {"front": "Node", "back": "A fundamental part of a tree that stores data and contains references to other nodes (children). Each node can represent a data point or a position in the structure.", "seqNum": 1}, {"front": "Edge", "back": "The connection between two nodes in a tree, representing the relationship or link from a parent node to a child node.", "seqNum": 2}, {"front": "Root", "back": "The topmost node in a tree, from which all other nodes descend. It does not have a parent node.", "seqNum": 3}, {"front": "Path", "back": "A sequence of nodes and edges connecting a node with a descendant, showing the route from one node to another within the tree.", "seqNum": 4}, {"front": "Children", "back": "Nodes that are directly connected and descend from another node (the parent) within a tree.", "seqNum": 5}, {"front": "Parent", "back": "A node that has one or more nodes (children) directly under it in the hierarchy.", "seqNum": 6}, {"front": "Sibling", "back": "Nodes that share the same parent and reside at the same level within a tree.", "seqNum": 7}, {"front": "Subtree", "back": "A portion of a tree structure consisting of a node and all its descendants, forming a tree itself.", "seqNum": 8}, {"front": "Leaf node", "back": "A node with no children, representing an endpoint of a tree.", "seqNum": 9}, {"front": "Level", "back": "The layer or depth of a node, starting at zero for the root and increasing by one for each step down.", "seqNum": 10}, {"front": "Height", "back": "The maximum number of edges on a path from the root to a leaf; a one-node tree has height 0.", "seqNum": 11}, {"front": "Binary Tree", "back": "A type of tree where each node has at most two children, typically called the left and right children.", "seqNum": 12}, {"front": "List of Lists", "back": "The Python textbook's nested-list tree representation; the C++ course uses nodes and child pointers as its main implementation.", "seqNum": 13}, {"front": "Nodes and References", "back": "A tree implementation method where each node contains its data and explicit links to its child nodes.", "seqNum": 14}, {"front": "Parse Tree", "back": "A tree representing the syntactic structure of a string according to a formal grammar, used in compilers.", "seqNum": 15}, {"front": "Expression Tree", "back": "A binary tree used to represent expressions where internal nodes are operators and leaf nodes are operands.", "seqNum": 16}, {"front": "Preorder", "back": "A tree traversal where each node is processed before its child nodes (root, left, right).", "seqNum": 17}, {"front": "Postorder", "back": "A tree traversal where each node is processed after its child nodes (left, right, root).", "seqNum": 18}, {"front": "Inorder", "back": "A traversal for binary trees where nodes are processed in the order: left-child, root, right-child.", "seqNum": 19}, {"front": "Priority Queue", "back": "An abstract data type where each element has a priority, and elements are served based on that priority.", "seqNum": 20}, {"front": "Binary Heap", "back": "A complete binary tree stored in a zero-based vector; a min-heap keeps each parent no greater than its children.", "seqNum": 21}, {"front": "Complete Binary Tree", "back": "A binary tree where every level except possibly the last is filled, and all nodes are as far left as possible.", "seqNum": 22}, {"front": "Heap Structure Property", "back": "A requirement that a heap must be a complete binary tree to ensure balance.", "seqNum": 23}, {"front": "Heap Order Property", "back": "A requirement maintaining a specific order between a node and its children (max-heap or min-heap).", "seqNum": 24}, {"front": "Max-Heap", "back": "A heap where the value of each node is greater than or equal to its children, keeping the maximum value at the root.", "seqNum": 25}, {"front": "Min-Heap", "back": "A heap where the value of each node is less than or equal to its children, keeping the minimum value at the root.", "seqNum": 26}, {"front": "Binary Search Tree (BST)", "back": "A binary tree where each node's key is greater than all keys in its left subtree and less than those in its right subtree.", "seqNum": 27}, {"front": "BST Property", "back": "The defining rule for a BST: left subtree elements are less than the node, and right subtree elements are greater.", "seqNum": 28}, {"front": "Successor", "back": "The node that immediately follows a given node in an inorder traversal of a binary search tree.", "seqNum": 29}, {"front": "Recursive Inorder Traversal", "back": "Visit the left subtree, then the node, then the right subtree; on a BST this emits keys in sorted order.", "seqNum": 30}, {"front": "Balanced Binary Search Tree", "back": "A BST that automatically adjusts to maintain a low height, ensuring minimal path lengths.", "seqNum": 31}, {"front": "Balance Factor", "back": "In AVL trees, the difference between the heights of a node's left and right subtrees.", "seqNum": 32}, {"front": "AVL Tree", "back": "A self-balancing BST whose subtree heights differ by at most one, giving height O(log n); rotations are an optional implementation topic.", "seqNum": 33}, {"front": "Bottom-up buildHeap", "back": "Build a heap in O(n) by calling percDown from the last non-leaf toward the root; repeated insertions take O(n log n).", "seqNum": 34}]);
+            el.dataset.cards = JSON.stringify([{"front": "Trees", "back": "A hierarchical data structure consisting of nodes, where each node contains data and references to child nodes, facilitating efficient data organization and retrieval.", "seqNum": 0}, {"front": "Node", "back": "A fundamental part of a tree that stores data and contains references to other nodes (children). Each node can represent a data point or a position in the structure.", "seqNum": 1}, {"front": "Edge", "back": "The connection between two nodes in a tree, representing the relationship or link from a parent node to a child node.", "seqNum": 2}, {"front": "Root", "back": "The topmost node in a tree, from which all other nodes descend. It does not have a parent node.", "seqNum": 3}, {"front": "Path", "back": "A sequence of nodes and edges connecting a node with a descendant, showing the route from one node to another within the tree.", "seqNum": 4}, {"front": "Children", "back": "Nodes that are directly connected and descend from another node (the parent) within a tree.", "seqNum": 5}, {"front": "Parent", "back": "A node that has one or more nodes (children) directly under it in the hierarchy.", "seqNum": 6}, {"front": "Sibling", "back": "Nodes that share the same parent and reside at the same level within a tree.", "seqNum": 7}, {"front": "Subtree", "back": "A portion of a tree structure consisting of a node and all its descendants, forming a tree itself.", "seqNum": 8}, {"front": "Leaf node", "back": "A node with no children, representing an endpoint of a tree.", "seqNum": 9}, {"front": "Level", "back": "The layer or depth of a node, starting at zero for the root and increasing by one for each step down.", "seqNum": 10}, {"front": "Height", "back": "The maximum number of edges on a path from the root to a leaf; a one-node tree has height 0.", "seqNum": 11}, {"front": "Binary Tree", "back": "A type of tree where each node has at most two children, typically called the left and right children.", "seqNum": 12}, {"front": "Nodes and References", "back": "A tree implementation method where each node contains its data and explicit links to its child nodes.", "seqNum": 13}, {"front": "Parse Tree", "back": "A tree representing the syntactic structure of a string according to a formal grammar, used in compilers.", "seqNum": 14}, {"front": "Expression Tree", "back": "A binary tree used to represent expressions where internal nodes are operators and leaf nodes are operands.", "seqNum": 15}, {"front": "Preorder", "back": "A tree traversal where each node is processed before its child nodes (root, left, right).", "seqNum": 16}, {"front": "Postorder", "back": "A tree traversal where each node is processed after its child nodes (left, right, root).", "seqNum": 17}, {"front": "Inorder", "back": "A traversal for binary trees where nodes are processed in the order: left-child, root, right-child.", "seqNum": 18}, {"front": "Priority Queue", "back": "An abstract data type where each element has a priority, and elements are served based on that priority.", "seqNum": 19}, {"front": "Binary Heap", "back": "A complete binary tree stored in a zero-based vector; a min-heap keeps each parent no greater than its children.", "seqNum": 20}, {"front": "Complete Binary Tree", "back": "A binary tree where every level except possibly the last is filled, and all nodes are as far left as possible.", "seqNum": 21}, {"front": "Heap Structure Property", "back": "A requirement that a heap must be a complete binary tree to ensure balance.", "seqNum": 22}, {"front": "Heap Order Property", "back": "A requirement maintaining a specific order between a node and its children (max-heap or min-heap).", "seqNum": 23}, {"front": "Max-Heap", "back": "A heap where the value of each node is greater than or equal to its children, keeping the maximum value at the root.", "seqNum": 24}, {"front": "Min-Heap", "back": "A heap where the value of each node is less than or equal to its children, keeping the minimum value at the root.", "seqNum": 25}, {"front": "Binary Search Tree (BST)", "back": "A binary tree where each node's key is greater than all keys in its left subtree and less than those in its right subtree.", "seqNum": 26}, {"front": "BST Property", "back": "The defining rule for a BST: left subtree elements are less than the node, and right subtree elements are greater.", "seqNum": 27}, {"front": "Successor", "back": "The node that immediately follows a given node in an inorder traversal of a binary search tree.", "seqNum": 28}, {"front": "Recursive Inorder Traversal", "back": "Visit the left subtree, then the node, then the right subtree; on a BST this emits keys in sorted order.", "seqNum": 29}, {"front": "Balanced Binary Search Tree", "back": "A BST that automatically adjusts to maintain a low height, ensuring minimal path lengths.", "seqNum": 30}, {"front": "Balance Factor", "back": "In AVL trees, the difference between the heights of a node's left and right subtrees.", "seqNum": 31}, {"front": "AVL Tree", "back": "A self-balancing BST whose subtree heights differ by at most one, giving height O(log n); rotations are an optional implementation topic.", "seqNum": 32}, {"front": "Bottom-up buildHeap", "back": "Build a heap in O(n) by calling percDown from the last non-leaf toward the root; repeated insertions take O(n log n).", "seqNum": 33}]);
             el.dataset.frontColors = JSON.stringify(["var(--asparagus)", "var(--terra-cotta)", "var(--cyan-process)"]);
             el.dataset.backColors = JSON.stringify(["var(--dark-blue-gray)"]);
             el.dataset.textColors = JSON.stringify(["var(--snow)"]);
@@ -42097,7 +42001,7 @@ window.setTopics = function(idOrElem, topics) {
             el.dataset.shuffleCards = false;
             el.dataset.title = "";
             el.dataset.subject = "";
-            createCards("PVlNHIMbhQTw");
+            createCards("eowZBRfSqOtb");
             obs.disconnect();
         }
     });
@@ -42177,8 +42081,6 @@ window.setTopics = function(idOrElem, topics) {
 <li><p><strong>Height</strong>: The maximum number of edges on a path from the root to a leaf; a one-node tree has height 0.</p>
 </li>
 <li><p><strong>Binary Tree</strong>: A type of tree where each node has at most two children, typically called the left and right children.</p>
-</li>
-<li><p><strong>List of Lists</strong>: The Python textbook's nested-list representation; the C++ course uses nodes and child pointers as its main implementation.</p>
 </li>
 <li><p><strong>Nodes and References</strong>: A tree implementation method where each node contains its data and explicit links to its child nodes.</p>
 </li>
