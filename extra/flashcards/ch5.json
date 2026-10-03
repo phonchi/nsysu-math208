@@ -61,6 +61,6 @@
     },
     {
         "front": "Three Stack APIs",
-        "back": "STL std::stack uses top()/empty() and void pop(). The pythonds3 Stack<T> uses peek()/isEmpty() and value-returning pop(). HW3 Stack<T>(capacity) uses stackTop() or peek(index), value-returning pop(), and isFull()."
+        "back": "STL std::stack uses top()/empty() and void pop(). The course header stack.hpp Stack<T> uses peek()/isEmpty() and value-returning pop(). HW3 Stack<T>(capacity) uses stackTop() or peek(index), value-returning pop(), and isFull()."
     }
 ]

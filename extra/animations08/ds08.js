@@ -855,7 +855,7 @@
 
         while (pq.length > 0) {
           sortPq();
-          steps.push({ kind:'print-pq', codeLine:8, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`print(pq)：目前 PQ = ${pq.map(([key, v]) => `${v}:${key === Infinity ? '∞' : key}`).join(', ')}` });
+          steps.push({ kind:'print-pq', codeLine:8, current:null, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`目前 PQ = ${pq.map(([key, v]) => `${v}:${key === Infinity ? '∞' : key}`).join(', ')}` });
           const [d, u] = pq.shift();
           if (inTree[u]) {
             steps.push({ kind:'stale', codeLine:8, current:u, pq:snapPq(), dist:{...dist}, prev:{...prev}, inTree:{...inTree}, mstEdges:[...mstEdges], total, msg:`略過 stale entry：${u}:${d}；${u} 已在 MST 中，保留目前 MST` });

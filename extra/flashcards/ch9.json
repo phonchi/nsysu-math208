@@ -52,10 +52,6 @@
         "back": "A type of tree where each node has at most two children, typically called the left and right children."
     },
     {
-        "front": "List of Lists",
-    "back": "The Python textbook's nested-list tree representation; the C++ course uses nodes and child pointers as its main implementation."
-    },
-    {
         "front": "Nodes and References",
         "back": "A tree implementation method where each node contains its data and explicit links to its child nodes."
     },

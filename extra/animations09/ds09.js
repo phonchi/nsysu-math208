@@ -829,21 +829,27 @@ function initTraversals(suffix = '', lockedKind = null) {
     player.reset();
     // Update code panel to match traversal
     const codeMap = {
-      preorder: `<span class="line" data-l="1"><span class="fn">preorder</span>(tree):</span>
-<span class="line" data-l="2">    <span class="kw">if</span> tree:</span>
-<span class="line" data-l="3">        <span class="fn">print</span>(tree._key, end=<span class="str">" "</span>)</span>
-<span class="line" data-l="4">        <span class="fn">preorder</span>(tree._leftChild)</span>
-<span class="line" data-l="5">        <span class="fn">preorder</span>(tree._rightChild)</span>`,
-      inorder: `<span class="line" data-l="1"><span class="fn">inorder</span>(tree):</span>
-<span class="line" data-l="2">    <span class="kw">if</span> tree:</span>
-<span class="line" data-l="3">        <span class="fn">inorder</span>(tree._leftChild)</span>
-<span class="line" data-l="4">        <span class="fn">print</span>(tree._key, end=<span class="str">" "</span>)</span>
-<span class="line" data-l="5">        <span class="fn">inorder</span>(tree._rightChild)</span>`,
-      postorder: `<span class="line" data-l="1"><span class="fn">postorder</span>(tree):</span>
-<span class="line" data-l="2">    <span class="kw">if</span> tree:</span>
-<span class="line" data-l="3">        <span class="fn">postorder</span>(tree._leftChild)</span>
-<span class="line" data-l="4">        <span class="fn">postorder</span>(tree._rightChild)</span>
-<span class="line" data-l="5">        <span class="fn">print</span>(tree._key, end=<span class="str">" "</span>)</span>`,
+      preorder: `<span class="line" data-l="1"><span class="kw">void</span> <span class="fn">preorder</span>(BinaryTree* tree) {</span>
+<span class="line" data-l="2">    <span class="kw">if</span> (tree != NULL) {</span>
+<span class="line" data-l="3">        cout &lt;&lt; tree-&gt;getRootVal() &lt;&lt; <span class="str">" "</span>;</span>
+<span class="line" data-l="4">        <span class="fn">preorder</span>(tree-&gt;getLeftChild());</span>
+<span class="line" data-l="5">        <span class="fn">preorder</span>(tree-&gt;getRightChild());</span>
+<span class="line" data-l="6">    }</span>
+<span class="line" data-l="7">}</span>`,
+      inorder: `<span class="line" data-l="1"><span class="kw">void</span> <span class="fn">inorder</span>(BinaryTree* tree) {</span>
+<span class="line" data-l="2">    <span class="kw">if</span> (tree != NULL) {</span>
+<span class="line" data-l="3">        <span class="fn">inorder</span>(tree-&gt;getLeftChild());</span>
+<span class="line" data-l="4">        cout &lt;&lt; tree-&gt;getRootVal() &lt;&lt; <span class="str">" "</span>;</span>
+<span class="line" data-l="5">        <span class="fn">inorder</span>(tree-&gt;getRightChild());</span>
+<span class="line" data-l="6">    }</span>
+<span class="line" data-l="7">}</span>`,
+      postorder: `<span class="line" data-l="1"><span class="kw">void</span> <span class="fn">postorder</span>(BinaryTree* tree) {</span>
+<span class="line" data-l="2">    <span class="kw">if</span> (tree != NULL) {</span>
+<span class="line" data-l="3">        <span class="fn">postorder</span>(tree-&gt;getLeftChild());</span>
+<span class="line" data-l="4">        <span class="fn">postorder</span>(tree-&gt;getRightChild());</span>
+<span class="line" data-l="5">        cout &lt;&lt; tree-&gt;getRootVal() &lt;&lt; <span class="str">" "</span>;</span>
+<span class="line" data-l="6">    }</span>
+<span class="line" data-l="7">}</span>`,
     };
     $$('travCode').innerHTML = codeMap[currentTrav];
   }

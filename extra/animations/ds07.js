@@ -270,11 +270,11 @@ function genSequentialSearch(arr, target) {
     cmp++;
     frames.push({arr:[...arr], origIdx:arr.map((_,i)=>i), highlights:{[pos]:'compare'}, message:`比較 a[${pos}]=${arr[pos]} 與目標 ${target}`, stats:{cmp,pos,result:'搜尋中...'}, pcLine:4});
     if (arr[pos] === target) {
-      frames.push({arr:[...arr], origIdx:arr.map((_,i)=>i), highlights:{[pos]:'found'}, message:`★ 找到！a[${pos}] = ${target}`, stats:{cmp,pos,result:`True (位置 ${pos})`}, pcLine:5});
+      frames.push({arr:[...arr], origIdx:arr.map((_,i)=>i), highlights:{[pos]:'found'}, message:`★ 找到！a[${pos}] = ${target}`, stats:{cmp,pos,result:`true (位置 ${pos})`}, pcLine:5});
       return frames;
     }
   }
-  frames.push({arr:[...arr], origIdx:arr.map((_,i)=>i), highlights:{}, faded:range(0,arr.length), message:`✗ 走完整個 list 沒找到 ${target}`, stats:{cmp,pos:'—',result:'False'}, pcLine:7});
+  frames.push({arr:[...arr], origIdx:arr.map((_,i)=>i), highlights:{}, faded:range(0,arr.length), message:`✗ 走完整個陣列沒找到 ${target}`, stats:{cmp,pos:'—',result:'false'}, pcLine:7});
   return frames;
 }
 
@@ -295,7 +295,7 @@ function genBinarySearch(arr, target) {
     frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'compare'}, eliminated:[...elimL,...elimR], pointers:{low:{idx:first,label:'first',cls:'low'},high:{idx:last,label:'last',cls:'high'},mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`midpoint = (${first}+${last})//2 = ${midpoint}，比較 aList[${midpoint}] = ${sorted[midpoint]} 與 ${target}`, stats:{cmp,low:first,high:last,mid:midpoint,result:'搜尋中...'}, pcLine:5});
 
     if (sorted[midpoint] === target) {
-      frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'found'}, eliminated:[...elimL,...elimR], pointers:{mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`★ 命中！aList[${midpoint}] = ${target}`, stats:{cmp,low:first,high:last,mid:midpoint,result:`True (位置 ${midpoint})`}, pcLine:7});
+      frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'found'}, eliminated:[...elimL,...elimR], pointers:{mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`★ 命中！aList[${midpoint}] = ${target}`, stats:{cmp,low:first,high:last,mid:midpoint,result:`true (位置 ${midpoint})`}, pcLine:7});
       return frames;
     } else if (target < sorted[midpoint]) {
       frames.push({arr:[...sorted], origIdx:oi, highlights:{[midpoint]:'compare'}, eliminated:[...elimL,...elimR,...range(midpoint,sorted.length)], pointers:{low:{idx:first,label:'first',cls:'low'},high:{idx:last,label:'last',cls:'high'},mid:{idx:midpoint,label:'mid',cls:'mid'}}, message:`${target} < ${sorted[midpoint]} → 右半全部排除，last = ${midpoint-1}`, stats:{cmp,low:first,high:last,mid:midpoint,result:'搜尋中...'}, pcLine:9});
@@ -305,7 +305,7 @@ function genBinarySearch(arr, target) {
       first = midpoint + 1;
     }
   }
-  frames.push({arr:[...sorted], origIdx:oi, highlights:{}, eliminated:range(0,sorted.length), message:`✗ first (${first}) > last (${last})，沒找到 ${target}`, stats:{cmp,low:first,high:last,mid:'—',result:'False'}, pcLine:12});
+  frames.push({arr:[...sorted], origIdx:oi, highlights:{}, eliminated:range(0,sorted.length), message:`✗ first (${first}) > last (${last})，沒找到 ${target}`, stats:{cmp,low:first,high:last,mid:'—',result:'false'}, pcLine:12});
   return frames;
 }
 
@@ -449,7 +449,7 @@ function genShellSort(initial, gapSeq) {
       while (curPos >= gap && a[curPos - gap] > curVal) {
         cmp++;
         // pcLine 12: while-condition 為真
-        frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos-gap]:'compare',[curPos]:'key'}, message:`while ${curPos} >= ${gap} and aList[${curPos-gap}]=${a[curPos-gap]} > curVal=${curVal} → 進入迴圈`, stats:{cmp,swp,gap}, pcLine:12});
+        frames.push({arr:[...a], origIdx:[...oi], highlights:{[curPos-gap]:'compare',[curPos]:'key'}, message:`while ${curPos} >= ${gap} && aList[${curPos-gap}]=${a[curPos-gap]} > curVal=${curVal} → 進入迴圈`, stats:{cmp,swp,gap}, pcLine:12});
 
         // SHIFT: a[curPos] ← a[curPos - gap]
         // 同步維持 moving key 的 visual hole，讓 origIdx 與 arr 一致。
@@ -747,8 +747,8 @@ function initSeqSearch() {
       $('seqPos').textContent = s.pos ?? '—';
       const r = $('seqResult');
       const res = s.result || '';
-      if (res.startsWith('True'))      { r.textContent = '✓ ' + res; r.style.color = 'var(--bar-found)'; }
-      else if (res === 'False')        { r.textContent = '✗ False (未找到)'; r.style.color = 'var(--accent)'; }
+      if (res.startsWith('true'))      { r.textContent = '✓ ' + res; r.style.color = 'var(--bar-found)'; }
+      else if (res === 'false')        { r.textContent = '✗ false (未找到)'; r.style.color = 'var(--accent)'; }
       else                              { r.textContent = res || '—'; r.style.color = ''; }
     }
   });
@@ -773,8 +773,8 @@ function initBinSearch() {
       $('binMid').textContent  = s.mid  ?? '—';
       const r = $('binResult');
       const res = s.result || '';
-      if (res.startsWith('True'))      { r.textContent = '✓ ' + res; r.style.color = 'var(--bar-found)'; }
-      else if (res === 'False')        { r.textContent = '✗ False (未找到)'; r.style.color = 'var(--accent)'; }
+      if (res.startsWith('true'))      { r.textContent = '✓ ' + res; r.style.color = 'var(--bar-found)'; }
+      else if (res === 'false')        { r.textContent = '✗ false (未找到)'; r.style.color = 'var(--accent)'; }
       else                              { r.textContent = res || '—'; r.style.color = ''; }
     }
   });

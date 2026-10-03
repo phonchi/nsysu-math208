@@ -33,11 +33,13 @@
 <div class="side-panel">
 <div class="info-card">
 <div class="ic-title">虛擬碼 <span class="ic-badge" style="background:var(--accent2)">CODE</span></div>
-<div class="pseudo-code" id="travCodePost"><span class="line" data-l="1"><span class="fn">postorder</span>(tree):</span>
-<span class="line" data-l="2">    <span class="kw">if</span> tree:</span>
-<span class="line" data-l="3">        <span class="fn">postorder</span>(tree._leftChild)</span>
-<span class="line" data-l="4">        <span class="fn">postorder</span>(tree._rightChild)</span>
-<span class="line" data-l="5">        <span class="fn">print</span>(tree._key, end=<span class="str">" "</span>)</span></div>
+<div class="pseudo-code" id="travCodePost"><span class="line" data-l="1"><span class="kw">void</span> <span class="fn">postorder</span>(BinaryTree* tree) {</span>
+<span class="line" data-l="2">    <span class="kw">if</span> (tree != NULL) {</span>
+<span class="line" data-l="3">        <span class="fn">postorder</span>(tree-&gt;getLeftChild());</span>
+<span class="line" data-l="4">        <span class="fn">postorder</span>(tree-&gt;getRightChild());</span>
+<span class="line" data-l="5">        cout &lt;&lt; tree-&gt;getRootVal() &lt;&lt; <span class="str">" "</span>;</span>
+<span class="line" data-l="6">    }</span>
+<span class="line" data-l="7">}</span></div>
 </div>
 <div class="info-card">
 <div class="ic-title">遞迴呼叫堆疊 <span class="ic-badge" style="background:var(--accent2)">STACK</span></div>
