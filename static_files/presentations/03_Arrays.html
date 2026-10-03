@@ -7865,7 +7865,7 @@ a.anchor-link {
 </li>
 <li><p>Multidimensional Arrays (Matrix)</p>
 </li>
-<li><p>Sparse Martrix</p>
+<li><p>Sparse Matrix</p>
 </li>
 </ol>
 </div>
@@ -7889,7 +7889,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In this section we will look at the principles behind low-level arrays. In <code>C++</code> we get to work with the real thing: a <code>C++</code> array <strong>is</strong> a contiguous block of memory — the very construct that Python's <code>list</code> is built on top of in its C implementation. Understanding it explains the performance of every sequence-based structure we will meet.</p>
+<p>In this section we will look at the principles behind low-level arrays. In <code>C++</code> we get to work with the real thing: a <code>C++</code> array <strong>is</strong> a contiguous block of memory, and it is the foundation of dynamic sequences such as <code>std::vector</code>. Understanding it explains the performance of every sequence-based structure we will meet.</p>
 </div>
 </div>
 </div>
@@ -7900,7 +7900,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The key to <code>Python</code>'s implementation of a <code>list</code> is to use a data type called an <u>array</u> common to C, C++, Java, and many other programming languages.</p>
+<p>The <u>array</u> is a data type common to C, C++, Java, and many other programming languages; dynamic sequences such as <code>vector</code> are built on top of it.</p>
 </div>
 </div>
 </div>
@@ -7944,7 +7944,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/array.png" width="50%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/array.png" width="69%"/></center>
 </div>
 </div>
 </div>
@@ -8005,7 +8005,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>You have seen addresses before in <code>Python</code> for different objects that you have defined. For example: <code>&lt;__main__.Foo object at 0x5eca30&gt;</code> shows that the object <code>Foo</code> is stored at memory address <code>0x5eca30</code>. The address is very important because an array implements the index operator using a very simple calculation:</p>
+<p>You can see where an object lives with the address-of operator: <code>cout &lt;&lt; &amp;x</code> prints something like <code>0x7ffd5eca30</code>, the memory address of <code>x</code>. The address is very important because an array implements the index operator using a very simple calculation:</p>
 </div>
 </div>
 </div>
@@ -8311,9 +8311,9 @@ a.anchor-link {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="031d8209-7fae-4b52-9037-42d18594ff70" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="f45d4287-bc3d-4716-a9ca-eb52ba92cfa6" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('031d8209-7fae-4b52-9037-42d18594ff70');
+var element = document.getElementById('f45d4287-bc3d-4716-a9ca-eb52ba92cfa6');
 var questionsbRixGdGpeKmk=[
     {
         "question": "If a low-level array starts at memory address 1024 and each element (e.g., an integer) occupies 4 bytes of memory, what is the address of the element at index 8?",
@@ -9427,7 +9427,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>As you might imagine this can cause big problems that are hard to track down. In the Linux operating system, accessing a value that is beyond the boundaries of an array will often produce the rather uninformative error message "segmentation fault."</p>
+<p>As you might imagine this can cause big problems that are hard to track down. In the Linux operating system, accessing a value that is beyond the boundaries of an array will often produce the rather uninformative error message "segmentation fault." <code>C++</code> does not check array bounds: writing past the end is undefined behavior.</p>
 </div>
 </div>
 </div>
@@ -9438,8 +9438,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/segfault.png" width="50%"/></center>
-<center>source:https://www.deviantart.com/froaproa/art/Programming-meme-983116183</center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/segfault.png" width="69%"/></center>
 </div>
 </div>
 </div>
@@ -9450,7 +9449,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The general strategy that a dynamic array (like <code>C++</code>'s <code>vector</code> or Python's <code>list</code>) uses is as follows:</p>
+<p>The general strategy that a dynamic array (like <code>std::vector</code>) uses is as follows:</p>
 <ul>
 <li>Allocate a raw array with <strong>extra capacity</strong>, and remember how many slots are actually used.</li>
 <li>When the array fills up, allocate a <strong>bigger</strong> raw array (typically twice the size), copy the elements over, and free the old one.</li>
@@ -9467,7 +9466,7 @@ function try_show() {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ul>
-<li>Python uses a strategy called over-allocation to allocate an array with space for more objects than is needed initially.</li>
+<li><code>std::vector</code> over-allocates: <code>capacity()</code> can exceed <code>size()</code>, so most <code>push_back</code> calls need no new allocation.</li>
 </ul>
 </div>
 </div>
@@ -9479,7 +9478,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/refarray.png" width="50%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/refarray.png" width="72%"/></center>
 </div>
 </div>
 </div>
@@ -9512,7 +9511,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In the constructor, we will need to initialize two instance variables. The first will keep track of the size of the current array; we will call this <code>max_size</code>. The second instance variable will keep track of the current end of the list; we will call this one <code>last_index</code>.</p>
+<p>In the constructor, we will need to initialize two instance variables. The first will keep track of the size of the current array; we will call this <code>maxSize</code>. The second instance variable will keep track of the current end of the array; we will call this one <code>lastIndex</code>.</p>
 </div>
 </div>
 </div>
@@ -9523,7 +9522,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>We will use a <code>list</code> to simulate an array:</p>
+<p>We allocate a raw array with <code>new int[maxSize]</code>:</p>
 </div>
 </div>
 </div>
@@ -9581,7 +9580,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Notice that the constructor method initializes the instance variables described above and then creates a zero element array called <code>my_array</code>.</p>
+<p>Notice that the constructor method initializes the instance variables described above and then creates a raw array of <code>maxSize</code> ints called <code>myArray</code>.</p>
 </div>
 </div>
 </div>
@@ -9603,7 +9602,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Even languages like C hide that calculation behind a nice array index operator, so in this case the C and the <code>Python</code> look very much the same:</p>
+<p>The built-in index operator already hides the address calculation <code>base + idx * sizeof(int)</code>; our <code>operator[]</code> adds a bounds check and then simply forwards to it:</p>
 </div>
 </div>
 </div>
@@ -9632,7 +9631,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Finally, let's take a look at one of the more expensive list operations, <code>insertion()</code>. When we insert an item into an <code>ArrayList</code> we will need to first shift everything in the list at the insertion point and beyond ahead by one index position in order to make room for the item we are inserting. The process is illustrated in Figure below:</p>
+<p>Finally, let's take a look at one of the more expensive array operations, <code>insert()</code>. When we insert an item into an <code>ArrayList</code> we will need to first shift everything in the array at the insertion point and beyond ahead by one index position in order to make room for the item we are inserting. The process is illustrated in Figure below, where <code>lastIndex</code> is the first empty slot:</p>
 </div>
 </div>
 </div>
@@ -9643,7 +9642,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/insert_list.png" width="50%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/insert_list.png" width="72%"/></center>
 </div>
 </div>
 </div>
@@ -9654,7 +9653,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The key to implementing insert correctly is to realize that as you are shifting values in the array you do not want to overwrite any important data. <strong>The way to do this is to work from the end of the list back toward the insertion point, copying data forward.</strong></p>
+<p>The key to implementing insert correctly is to realize that as you are shifting values in the array you do not want to overwrite any important data. <strong>The way to do this is to work from the end of the array back toward the insertion point, copying data forward.</strong></p>
 </div>
 </div>
 </div>
@@ -9665,7 +9664,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/insert_list2.png" width="50%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/insert_list2.png" width="72%"/></center>
 </div>
 </div>
 </div>
@@ -9676,7 +9675,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Our implementation of insert is shown below. Note how the range is set up on line to ensure that we are copying existing data into the unused part of the array first, and then subsequent values are copied over old values that have already been shifted.</p>
+<p>Our implementation of insert is shown below. Note how the loop starts at <code>lastIndex</code> and runs down to <code>idx + 1</code>, so we copy existing data into the unused slot first, and then subsequent values are copied over old values that have already been shifted.</p>
 </div>
 </div>
 </div>
@@ -9727,7 +9726,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The class offers another method, named <code>remove()</code>, that allows the caller to specify the value that should be removed (not the index at which it resides). Formally, it removes only the first occurrence of such a value from an array, or raises an error if no such value is found.</p>
+<p>The class offers another method, named <code>remove()</code>, that allows the caller to specify the value that should be removed (not the index at which it resides). Formally, it removes only the first occurrence of such a value from an array, or throws an exception if no such value is found.</p>
 </div>
 </div>
 </div>
@@ -9738,7 +9737,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/remove_list.png" width="50%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/remove_list.png" width="69%"/></center>
 </div>
 </div>
 </div>
@@ -9783,7 +9782,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>You can also implements other method like <code>erase(idx)</code>.</p>
+<p>You can also implement other methods such as <code>erase(idx)</code>.</p>
 </div>
 </div>
 </div>
@@ -9794,7 +9793,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The complete class (with <code>erase()</code>, growth handling, and printing) is collected in <code>pythonds3/cppds/basic/</code>. Here is the whole thing in action:</p>
+<p>The complete class (with <code>erase()</code>, growth handling, and printing) is collected in <code>pythonds3/cppds/arraylist.hpp</code>. Here is the whole thing in action:</p>
 </div>
 </div>
 </div>
@@ -10096,9 +10095,9 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="fb0742c7-e129-49ac-a4db-c718b9449bc9" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="99ba817f-87f8-4f96-bdf3-d04a6a9da0f5" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('fb0742c7-e129-49ac-a4db-c718b9449bc9');
+var element = document.getElementById('99ba817f-87f8-4f96-bdf3-d04a6a9da0f5');
 var questionsIUYCYCGOrOqF=[
     {
         "question": "In C++, an array of pointers (for example, Animal* zoo[10]) is considered a referential array. Why?",
@@ -11234,7 +11233,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>To represent such a list with an array, <code>Python</code> must adhere to the requirement that each cell of the array use the same number of bytes. Yet the elements are strings, and strings naturally have different lengths!</p>
+<p>An array requires every cell to use the same number of bytes. Yet names have different lengths, so how can an array hold them?</p>
 </div>
 </div>
 </div>
@@ -11245,7 +11244,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Instead, <code>Python</code> represents a list or tuple instance using an internal storage mechanism of an <strong>array of object references.</strong> Although the relative size of the individual elements may vary, the number of bits used to store the memory address of each element is fixed (e.g., 64-bits per address). In this way, <code>Python</code> can support constant-time access!</p>
+<p>Instead, we store an <strong>array of pointers</strong> (<code>string*</code>): each slot holds a fixed-size 8-byte address of a string stored elsewhere. Although the strings differ in length, every slot has the same size, so indexing stays $O(1)$!</p>
 </div>
 </div>
 </div>
@@ -11256,7 +11255,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>On the other hand, <code>strings</code> are represented using an array of characters (not an array of references). We will refer to this more direct representation as a <u>compact array</u> because the array is storing the bits that represent the primary data (characters, in the case of strings)!</p>
+<p>On the other hand, a C-style string such as <code>char s[] = "SAMPLE"</code> is a <code>char</code> array that stores the characters themselves plus a terminating <code>'\0'</code> (not an array of pointers). We will refer to this more direct representation as a <u>compact array</u> because the array is storing the bits that represent the primary data (characters, in the case of strings)!</p>
 </div>
 </div>
 </div>
@@ -11267,7 +11266,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/comarray.png" width="35%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/comarray.png" width="44%"/></center>
 </div>
 </div>
 </div>
@@ -11337,7 +11336,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/comarray2.png" width="35%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/comarray2.png" width="38%"/></center>
 </div>
 </div>
 </div>
@@ -11348,7 +11347,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The element type plays the role of NumPy's <u>type code</u>: declaring <code>int</code> (4 bytes) versus <code>double</code> (8 bytes) versus <code>char</code> (1 byte) tells the <strong>compiler</strong> precisely how many bits are needed per element of the array — no interpreter needed at run time.</p>
+<p>The element type tells the <strong>compiler</strong> exactly how many bytes each element uses: <code>int</code> (4 bytes), <code>double</code> (8 bytes), <code>char</code> (1 byte). Compare a compact <code>int a[6]</code> (24 bytes) with a referential <code>int* p[6]</code> (48 bytes of pointers, plus the ints stored elsewhere):</p>
 </div>
 </div>
 </div>
@@ -11359,7 +11358,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/array2.png" width="55%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/array2.png" width="76%"/></center>
 </div>
 </div>
 </div>
@@ -11371,7 +11370,7 @@ function try_show() {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <blockquote>
-<h4 id="Example-1:-Try-to-compare-the-speed-of-increment-an-array-of-integers-containing-0-to-9999-by-1-using-python-list-and-numpy-array.">Example 1: Try to compare the speed of increment an array of integers containing 0 to 9999 by 1 using python list and numpy array.<a class="anchor-link" href="#Example-1:-Try-to-compare-the-speed-of-increment-an-array-of-integers-containing-0-to-9999-by-1-using-python-list-and-numpy-array.">¶</a></h4></blockquote>
+<h4 id="Example-1:-Increment-every-element-of-an-int-array-holding-0-to-9999,-and-of-a-vector%3Cint*%3E-of-separately-allocated-ints.-Time-both-with-%3Cchrono%3E-and-explain-the-difference-(contiguity-and-cache).">Example 1: Increment every element of an <code>int</code> array holding 0 to 9999, and of a <code>vector&lt;int*&gt;</code> of separately allocated ints. Time both with <code>&lt;chrono&gt;</code> and explain the difference (contiguity and cache).<a class="anchor-link" href="#Example-1:-Increment-every-element-of-an-int-array-holding-0-to-9999,-and-of-a-vector%3Cint*%3E-of-separately-allocated-ints.-Time-both-with-%3Cchrono%3E-and-explain-the-difference-(contiguity-and-cache).">¶</a></h4></blockquote>
 </div>
 </div>
 </div>
@@ -11382,7 +11381,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The type codes supported by the <code>array</code> module are formally based upon the native data types used by the C programming language. The precise number of bits for the C data types is system-dependent.</p>
+<p>The fixed-width types <code>int32_t</code> and <code>int64_t</code> in <code>&lt;cstdint&gt;</code> give exact sizes; the sizes of plain <code>int</code> and <code>long</code> are implementation-defined (check them with <code>sizeof</code>).</p>
 </div>
 </div>
 </div>
@@ -11636,9 +11635,9 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="46a26754-c43b-4dc0-b42b-e6fcd8676dbd" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="ce3c9a4c-c55c-4331-b3eb-f0bd26823632" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('46a26754-c43b-4dc0-b42b-e6fcd8676dbd');
+var element = document.getElementById('ce3c9a4c-c55c-4331-b3eb-f0bd26823632');
 var questionsOZpXgfjvXrAR=[
     {
         "question": "When using a C++ vector, which of the following operations has a time complexity of $O(n)$ due to the need to shift elements?",
@@ -12774,7 +12773,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/multiarray.png" width="55%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/multiarray.png" width="69%"/></center>
 </div>
 </div>
 </div>
@@ -12785,7 +12784,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The array holds the scores of students in a class. There are five students in the class and each student has four different scores for four subjects. The variable <code>scores[2][3]</code> show the score of the second student in the third quiz.</p>
+<p>The array <code>int scores[5][4]</code> holds the scores of students in a class. There are five students (rows <code>[0]</code>..<code>[4]</code>) and each student has four quiz scores (columns <code>[0]</code>..<code>[3]</code>). <code>scores[2][3]</code> is the score of the third student (row 2) on the fourth quiz (column 3) — <code>C++</code> indexes start at 0.</p>
 </div>
 </div>
 </div>
@@ -12807,8 +12806,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/arraylayout.png" width="20%"/></center>
-<div align="center"> source: https://scipy-lectures.org/intro/numpy/operations.html </div>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/arraylayout.png" width="37%"/></center>
 </div>
 </div>
 </div>
@@ -12851,7 +12849,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Note the slicing of array works the same way as <code>Python</code> <code>list</code>!</p>
+<p><code>C++</code> arrays have no slicing: to read a row fix <code>i</code> and loop over <code>j</code>; to read a column fix <code>j</code> and loop over <code>i</code>.</p>
 </div>
 </div>
 </div>
@@ -12985,7 +12983,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/arrayorder.png" width="60%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/arrayorder.png" width="83%"/></center>
 </div>
 </div>
 </div>
@@ -13436,9 +13434,9 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="ca16f057-3e30-4c95-b313-5bf5965da15d" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="569e5ad5-34ca-4d75-b5f2-9facfd30003c" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('ca16f057-3e30-4c95-b313-5bf5965da15d');
+var element = document.getElementById('569e5ad5-34ca-4d75-b5f2-9facfd30003c');
 var questionsfUmMJaBVYqka=[
     {
         "question": "In a 2D array (Matrix) with 5 rows and 10 columns stored in Row-Major order, which formula represents the 1D index of the element at row $i$ and column $j$?",
@@ -14552,7 +14550,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="A.4-Sparse-Martrix">A.4 Sparse Martrix<a class="anchor-link" href="#A.4-Sparse-Martrix">¶</a></h2>
+<h2 id="A.4-Sparse-Matrix">A.4 Sparse Matrix<a class="anchor-link" href="#A.4-Sparse-Matrix">¶</a></h2>
 </div>
 </div>
 </div>
@@ -14574,8 +14572,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/sparse_matrix.png" width="50%"/></center>
-<div align="center"> source: https://matteding.github.io/2019/04/25/sparse-matrices/ </div>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/sparse_matrix.png" width="76%"/></center>
 </div>
 </div>
 </div>
@@ -14630,8 +14627,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/sparse_coo.png" width="50%"/></center>
-<div align="center"> source: https://matteding.github.io/2019/04/25/sparse-matrices/ </div>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/sparse_coo.png" width="76%"/></center>
 </div>
 </div>
 </div>
@@ -14675,7 +14671,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><u>Dictionary Of Keys (DOK)</u> is very much like COO except that it uses a <strong>map with (row, column) pairs as keys</strong> to store coordinate-data information as key-value pairs. Using a hash-based container, identifying values at any given location has constant lookup time!</p>
+<p><u>Dictionary Of Keys (DOK)</u> is very much like COO except that it uses a <strong>map with (row, column) pairs as keys</strong> to store coordinate-data information as key-value pairs. Our implementation uses <code>std::map</code>, a balanced search tree, so a lookup costs $O(\log nnz)$; an <code>std::unordered_map</code> (hash table) would give average $O(1)$.</p>
 </div>
 </div>
 </div>
@@ -14686,7 +14682,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Use this format if you need the functionality that come with builtin dictionaries, but be mindful that hash tables hog more memory than arrays.</p>
+<p>Use this format if you need the functionality of associative containers (<code>map</code> / <code>unordered_map</code>), but be mindful that tree or hash nodes use more memory than arrays.</p>
 </div>
 </div>
 </div>
@@ -14697,7 +14693,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The <code>SparseMatrix</code> class uses a dictionary to store non-zero elements, with keys as <code>(row, column)</code> tuples and values as the non-zero elements.</p>
+<p>The <code>SparseMatrix</code> class uses a <code>map</code> whose keys are <code>(row, column)</code> pairs (<code>pair&lt;size_t, size_t&gt;</code>) and whose values are the non-zero elements.</p>
 </div>
 </div>
 </div>
@@ -14907,7 +14903,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The complete class lives in <code>pythonds3/cppds/basic/sparse.cpp</code>. Here it is in action:</p>
+<p>The complete class lives in <code>pythonds3/cppds/sparsematrix.hpp</code> (a standalone version is in <code>pythonds3/cppds/basic/sparse.cpp</code>). Here it is in action:</p>
 </div>
 </div>
 </div>
@@ -15224,9 +15220,9 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d2577d77-0250-4bf1-8850-6c73025ad3fa" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="25e0220c-62ac-478e-83d7-f84f4e6db067" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('d2577d77-0250-4bf1-8850-6c73025ad3fa');
+var element = document.getElementById('25e0220c-62ac-478e-83d7-f84f4e6db067');
 var questionsSRePLMCkumbZ=[
     {
         "question": "What is the primary reason for using a specialized Sparse Matrix class instead of a standard 2D array?",
@@ -16340,7 +16336,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="A.4.3-Linear-list">A.4.3 Linear list<a class="anchor-link" href="#A.4.3-Linear-list">¶</a></h3>
+<h3 id="A.4.3-Linear-list">A.4.3 Linear list<a class="anchor-link" href="#A.4.3-Linear-list">¶</a></h3><p>Store each non-zero as a node <code>{row, col, value, next}</code> in row-major order: <code>struct Node { int row, col; double value; Node* next; };</code></p>
 </div>
 </div>
 </div>
@@ -16351,8 +16347,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/sparse_matrixlist.png" width="70%"/></center>
-<div align="center"> source: https://www.geeksforgeeks.org/sparse-matrix-representation/ </div>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/sparse_matrixlist.png" width="90%"/></center>
 </div>
 </div>
 </div>
@@ -16744,9 +16739,9 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="5a487b88-a8bb-4ffd-bcc9-e4c665bb8027" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="f1406b6d-11ae-44c9-b75f-6d0d5198834f" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('5a487b88-a8bb-4ffd-bcc9-e4c665bb8027');
+var element = document.getElementById('f1406b6d-11ae-44c9-b75f-6d0d5198834f');
 /*!
  * swiped-events.js - v1.1.4
  * Pure JavaScript swipe events
@@ -17629,7 +17624,7 @@ window.setTopics = function(idOrElem, topics) {
 </li>
 <li><p><strong>Coordinate Format (COO)</strong>: A method for storing sparse matrices by representing them as three lists (row, column, value), where each list represents a non-zero element and its position in the matrix.</p>
 </li>
-<li><p><strong>Dictionaries of Keys Matrix (DOK)</strong>: A sparse matrix representation using a hash map (such as std::map or std::unordered_map) where each key is a (row, column) pair and the value is the element value.</p>
+<li><p><strong>Dictionary of Keys Matrix (DOK)</strong>: A sparse matrix representation using an associative container (<code>std::map</code>, a balanced tree, or <code>std::unordered_map</code>, a hash table) where each key is a (row, column) pair and the value is the element value.</p>
 </li>
 <li><p><strong>Sparse Matrix as Linear List</strong>: Representing a sparse matrix by linking the non-zero elements together in a linear list, possibly sorted by row and column indices. This approach can optimize certain operations but may be less efficient for random access compared to other sparse matrix representations.</p>
 </li>
