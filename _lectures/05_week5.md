@@ -28,3 +28,4 @@ links:
 - Reference book: Forouzan, *Foundations of Computer Science*, Chapter 11
 - [C++ 動態陣列：std::vector](https://en.cppreference.com/w/cpp/container/vector.html)
 - [C++ 鏈結串列：std::forward_list](https://en.cppreference.com/w/cpp/container/forward_list.html)、[std::list](https://en.cppreference.com/w/cpp/container/list.html)
+- [[Recorded video]](https://youtube.com/playlist?list=PLY4RRB8N-iEY&si=c1vywZ2WNu8th2hE)
