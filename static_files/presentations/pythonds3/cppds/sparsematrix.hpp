@@ -20,6 +20,18 @@ class SparseMatrix {
             return it != data.end() ? it->second : 0.0;
         }
         double& operator()(size_t i, size_t j) { return data[{i, j}]; }
+        bool operator==(const SparseMatrix& other) const {
+            return data == other.data;
+        }
+        bool operator!=(const SparseMatrix& other) const {
+            return !(*this == other);
+        }
+        double sparsity(size_t rows, size_t cols) const {
+            return 1.0 - double(data.size()) / double(rows * cols);
+        }
+        size_t nnz() const {
+            return data.size();   // number of non-zeros
+        }
         SparseMatrix operator+(const SparseMatrix& other) const {
             SparseMatrix result;
             for (const auto& item : data)
