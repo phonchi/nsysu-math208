@@ -171,17 +171,21 @@ class OrderedList {
             return false;
         }
         void add(T item) {
+            Node<T> *current = head;
+            Node<T> *previous = NULL;
+
+            while (current != NULL && current->getData() <= item) {
+                previous = current;
+                current = current->getNext();
+            }
+
             Node<T> *newNode = new Node<T>(item);
-            if (head == NULL || head->getData() >= item) {
-                newNode->setNext(head);
+            newNode->setNext(current);
+
+            if (previous == NULL) {
                 head = newNode;
             } else {
-                Node<T> *current = head;
-                while (current->getNext() != NULL && current->getNext()->getData() < item) {
-                    current = current->getNext();
-                }
-                newNode->setNext(current->getNext());
-                current->setNext(newNode);
+                previous->setNext(newNode);
             }
         }
         void remove(T item) {

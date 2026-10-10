@@ -7652,7 +7652,7 @@ main {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>It is important to note that the location of the first item of the list must be explicitly specified. Once we know where the first item is, the first item can tell us where the second is, and so on. The external reference is often referred to as the <u>head</u> of the list. Similarly, the last item needs to know that there is no next item.</p>
+<p>It is important to note that the location of the first item of the list must be explicitly specified. Once we know where the first item is, the first item can tell us where the second is, and so on. The external pointer is often referred to as the <u>head</u> of the list. Similarly, the last item needs to know that there is no next item.</p>
 </div>
 </div>
 </div>
@@ -7674,7 +7674,7 @@ main {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The basic building block for the linked list implementation is the <u>node</u>. Each node object must hold at least two pieces of information. First, the node must contain the list item itself. We will call this the <u>data field</u> of the node. In addition, each node must hold a reference to the next node.</p>
+<p>The basic building block for the linked list implementation is the <u>node</u>. Each node object must hold at least two pieces of information. First, the node must contain the list item itself. We will call this the <u>data field</u> of the node. In addition, each node must hold a pointer to the next node.</p>
 </div>
 </div>
 </div>
@@ -7741,7 +7741,7 @@ main {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
@@ -7766,10 +7766,9 @@ main {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>93
-0
-</pre>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
+<p>93</p>
+<p>0</p>
 </div>
 </div>
 </div>
@@ -7815,7 +7814,7 @@ main {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The unordered list will be built from a collection of nodes, each linked to the next by explicit references. With this in mind, the <code>UnorderedList</code> class must maintain a reference to the first node. Code below shows the constructor. Note that each list object will maintain a single reference to the head of the list.</p>
+<p>The unordered list will be built from a collection of nodes, each linked to the next by explicit pointers. With this in mind, the <code>UnorderedList</code> class must maintain a pointer to the first node. Code below shows the constructor. Note that each list object will maintain a single pointer to the head of the list.</p>
 </div>
 </div>
 </div>
@@ -7879,7 +7878,7 @@ main {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>As we discussed in the <code>Node</code> class, the special reference <code>NULL</code> will again be used to state that the head of the list does not refer to anything. Eventually, the example list given earlier will be represented by a linked list as shown below:</p>
+<p>As we discussed in the <code>Node</code> class, the special pointer <code>NULL</code> will again be used to state that the head of the list does not refer to anything. Eventually, the example list given earlier will be represented by a linked list as shown below:</p>
 </div>
 </div>
 </div>
@@ -7901,8 +7900,8 @@ main {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The head of the list refers to the first node which contains the first item of the list. In turn, that node holds a reference to the next node (the next item), and so on.</p>
-<p>It is very important to note that the <code>UnorderedList</code> class itself does not contain any node objects. Instead it contains a single reference to only the first node in the linked structure.</p>
+<p>The head of the list refers to the first node which contains the first item of the list. In turn, that node holds a pointer to the next node (the next item), and so on.</p>
+<p>It is very important to note that the <code>UnorderedList</code> class itself does not contain any node objects. Instead it contains a single pointer to only the first node in the linked structure.</p>
 </div>
 </div>
 </div>
@@ -8059,7 +8058,7 @@ main {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Since the head was the only external reference to the list nodes, all of the original nodes are lost and can no longer be accessed.</p>
+<p>Since the head was the only external pointer to the list nodes, all of the original nodes are lost and can no longer be accessed.</p>
 </div>
 </div>
 </div>
@@ -8081,7 +8080,7 @@ main {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>To do this we use an external reference that starts at the first node in the list. As we visit each node, we move the reference to the next node by "traversing" the next reference.</p>
+<p>To do this we use an external pointer that starts at the first node in the list. As we visit each node, we move the pointer to the next node by "traversing" the next pointer.</p>
 </div>
 </div>
 </div>
@@ -8225,7 +8224,7 @@ an interior node require different pointer updates.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The first step is very similar to search. Starting with an external reference set to the head of the list, we traverse the links until we discover the item we are looking for.</p>
+<p>The first step is very similar to search. Starting with an external pointer set to the head of the list, we traverse the links until we discover the item we are looking for.</p>
 </div>
 </div>
 </div>
@@ -8236,7 +8235,7 @@ an interior node require different pointer updates.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>When the item is found and we break out of the loop, <code>current</code> will be a reference to the node containing the item to be removed. But how do we remove it?</p>
+<p>When the item is found and we break out of the loop, <code>current</code> will be a pointer to the node containing the item to be removed. But how do we remove it?</p>
 </div>
 </div>
 </div>
@@ -8258,7 +8257,7 @@ an interior node require different pointer updates.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The solution to this dilemma is to use two external references as we traverse down the linked list. <code>current</code> will behave just as it did before, marking the current location of the traversal. The new reference, which we will call <code>previous</code>, will always travel one node behind <code>current</code>. That way, when <code>current</code> stops at the node to be removed, <code>previous</code> will refer to the proper place in the linked list for the modification!</p>
+<p>The solution to this dilemma is to use two external pointers as we traverse down the linked list. <code>current</code> will behave just as it did before, marking the current location of the traversal. The new pointer, which we will call <code>previous</code>, will always travel one node behind <code>current</code>. That way, when <code>current</code> stops at the node to be removed, <code>previous</code> will refer to the proper place in the linked list for the modification!</p>
 </div>
 </div>
 </div>
@@ -8297,7 +8296,7 @@ an interior node require different pointer updates.</p>
 </div>
 </div>
 </div>
-</div><div class="fragment">
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -8308,7 +8307,7 @@ an interior node require different pointer updates.</p>
 </div>
 </div>
 </div>
-</div></div></section><section>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -8319,7 +8318,7 @@ an interior node require different pointer updates.</p>
 </div>
 </div>
 </div>
-</div><div class="fragment">
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -8359,7 +8358,7 @@ an interior node require different pointer updates.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>However, there is a special case that needs to be addressed. If the item to be removed happens to be the first item in the list, then <code>current</code> will reference the first node in the linked list. This also means that <code>previous</code> will be <code>NULL</code>. We said earlier that previous would be referring to the node whose next reference needs to be modified in order to complete the removal. In this case, it is not previous but rather the head of the list that needs to be changed.</p>
+<p>However, there is a special case that needs to be addressed. If the item to be removed happens to be the first item in the list, then <code>current</code> will pointer the first node in the linked list. This also means that <code>previous</code> will be <code>NULL</code>. We said earlier that previous would be referring to the node whose next pointer needs to be modified in order to complete the removal. In this case, it is not previous but rather the head of the list that needs to be changed.</p>
 </div>
 </div>
 </div>
@@ -8392,7 +8391,7 @@ an interior node require different pointer updates.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In this case the previous reference is providing us with the node whose next reference must be changed. Line 16 modifies the <code>next</code> property of the previous to accomplish the removal. Note that in both cases the destination of the reference change is <code>current-&gt;getNext()</code>.</p>
+<p>In this case the previous pointer is providing us with the node whose next pointer must be changed. Line 16 modifies and accomplish the removal. Note that in both cases the destination of the pointer change is <code>current-&gt;getNext()</code>.</p>
 </div>
 </div>
 </div>
@@ -8454,23 +8453,12 @@ an interior node require different pointer updates.</p>
 </div>
 </div>
 </div>
-</div></section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Notice <code>remove(54)</code>, <code>remove(93)</code>, <code>remove(31)</code> shrink the size step by step, and searching for a removed value now returns <code>false</code> — with each removed node's memory properly <code>delete</code>d.</p>
-</div>
-</div>
-</div>
 </div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="n">display_quiz</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s">"unordered.json"</span><span class="p">,</span><span class="w"> </span><span class="n">max_width</span><span class="o">=</span><span class="mi">800</span><span class="p">)</span>
@@ -8486,8 +8474,8 @@ an interior node require different pointer updates.</p>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="yhkiFkamanDS" style="border-radius: 10px; text-align: left"><style>
-#yhkiFkamanDS {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="OTrqFMQnTvKt" style="border-radius: 10px; text-align: left"><style>
+#OTrqFMQnTvKt {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -8715,10 +8703,10 @@ an interior node require different pointer updates.</p>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="9d24ea4f-649f-44c1-b43a-240a0034a72e" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d120352d-c123-446a-a3f6-fbe6a330020c" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('9d24ea4f-649f-44c1-b43a-240a0034a72e');
-var questionsyhkiFkamanDS=[
+var element = document.getElementById('d120352d-c123-446a-a3f6-fbe6a330020c');
+var questionsOTrqFMQnTvKt=[
     {
         "question": "In the implementation of the add(item) method for an unordered linked list, what is the consequence of reversing the order of the linking steps (specifically, setting head = temp before calling temp->setNext(head))?",
         "type": "multiple_choice",
@@ -9803,19 +9791,20 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
     });
 }
 /*
- * Handle asynchrony issues when re-running quizzes in Jupyter notebooks.
- * Ensures show_questions is called after the container div is in the DOM.
+ * Attempt to fetch questions JSON, with timeout and fallback to embedded data.
  */
-function try_show() {
-  if (document.getElementById("yhkiFkamanDS")) {
-    show_questions(questionsyhkiFkamanDS, yhkiFkamanDS);
-  } else {
-    setTimeout(try_show, 200);
-  }
-};
-// Invoke immediately
 {
-  try_show();
+  const controller = new AbortController();
+  const signal = controller.signal;
+  // Abort fetch after 5 seconds
+  setTimeout(() => controller.abort(), 5000);
+  fetch("https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch4/unordered.json", { signal })
+    .then(response => response.json())
+    .then(json => show_questions(json, OTrqFMQnTvKt))
+    .catch(err => {
+      console.log("Fetch error or timeout", err);
+      show_questions(questionsOTrqFMQnTvKt, OTrqFMQnTvKt);
+    });
 }
 }
 
@@ -10073,7 +10062,7 @@ this <code>OrderedList</code> class.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Traversal continues while node values are smaller than the target.  Once a larger value is seen, the method returns <code>false</code>; C++ Boolean literals are lowercase.</p>
+<p>Traversal continues while node values are smaller than the target.  Once a larger value is seen, the method returns <code>false</code>.</p>
 </div>
 </div>
 </div>
@@ -10139,7 +10128,7 @@ this <code>OrderedList</code> class.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>As we saw with unordered lists, it is necessary to have an additional reference, again called <code>previous</code>, since <code>current</code> will not provide access to the node that must be modified.</p>
+<p>As we saw with unordered lists, it is necessary to have an additional pointer, again called <code>previous</code>, since <code>current</code> will not provide access to the node that must be modified.</p>
 </div>
 </div>
 </div>
@@ -10151,17 +10140,18 @@ this <code>OrderedList</code> class.</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">item</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="n">current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="n">previous</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">current</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">current</span><span class="o">-&gt;</span><span class="n">getData</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">item</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">previous</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">current</span><span class="p">;</span>
+<span class="w">        </span><span class="n">current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">current</span><span class="o">-&gt;</span><span class="n">getNext</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="n">newNode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">head</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">head</span><span class="o">-&gt;</span><span class="n">getData</span><span class="p">()</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">item</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">newNode</span><span class="o">-&gt;</span><span class="n">setNext</span><span class="p">(</span><span class="n">head</span><span class="p">);</span>
+<span class="w">    </span><span class="n">newNode</span><span class="o">-&gt;</span><span class="n">setNext</span><span class="p">(</span><span class="n">current</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">previous</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">head</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newNode</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="n">current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head</span><span class="p">;</span>
-<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">current</span><span class="o">-&gt;</span><span class="n">getNext</span><span class="p">()</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">current</span><span class="o">-&gt;</span><span class="n">getNext</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getData</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">item</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">current</span><span class="o">-&gt;</span><span class="n">getNext</span><span class="p">();</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="n">newNode</span><span class="o">-&gt;</span><span class="n">setNext</span><span class="p">(</span><span class="n">current</span><span class="o">-&gt;</span><span class="n">getNext</span><span class="p">());</span>
-<span class="w">        </span><span class="n">current</span><span class="o">-&gt;</span><span class="n">setNext</span><span class="p">(</span><span class="n">newNode</span><span class="p">);</span>
+<span class="w">        </span><span class="n">previous</span><span class="o">-&gt;</span><span class="n">setNext</span><span class="p">(</span><span class="n">newNode</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
@@ -10175,7 +10165,7 @@ this <code>OrderedList</code> class.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The <code>OrderedList</code> class with methods discussed thus far can be found below:</p>
+<p>The <code>OrderedList</code> class with methods discussed thus far can be found in the repo.</p>
 </div>
 </div>
 </div>
@@ -10207,7 +10197,7 @@ this <code>OrderedList</code> class.</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
@@ -10251,7 +10241,7 @@ this <code>OrderedList</code> class.</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="n">display_quiz</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s">"ordered.json"</span><span class="p">,</span><span class="w"> </span><span class="n">max_width</span><span class="o">=</span><span class="mi">800</span><span class="p">)</span>
@@ -10267,8 +10257,8 @@ this <code>OrderedList</code> class.</p>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="vWwozfeaXWuB" style="border-radius: 10px; text-align: left"><style>
-#vWwozfeaXWuB {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="XoojvQRuNYrn" style="border-radius: 10px; text-align: left"><style>
+#XoojvQRuNYrn {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -10496,10 +10486,10 @@ this <code>OrderedList</code> class.</p>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="1cda919f-462e-4b42-a395-599c210fa59d" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d993b007-f013-4905-b98c-b169424d4b38" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('1cda919f-462e-4b42-a395-599c210fa59d');
-var questionsvWwozfeaXWuB=[
+var element = document.getElementById('d993b007-f013-4905-b98c-b169424d4b38');
+var questionsXoojvQRuNYrn=[
 	{
         "question": "What is the primary optimization in the search(item) method of an OrderedList compared to an UnorderedList when the item is not present in the list?",
         "type": "multiple_choice",
@@ -11584,19 +11574,20 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
     });
 }
 /*
- * Handle asynchrony issues when re-running quizzes in Jupyter notebooks.
- * Ensures show_questions is called after the container div is in the DOM.
+ * Attempt to fetch questions JSON, with timeout and fallback to embedded data.
  */
-function try_show() {
-  if (document.getElementById("vWwozfeaXWuB")) {
-    show_questions(questionsvWwozfeaXWuB, vWwozfeaXWuB);
-  } else {
-    setTimeout(try_show, 200);
-  }
-};
-// Invoke immediately
 {
-  try_show();
+  const controller = new AbortController();
+  const signal = controller.signal;
+  // Abort fetch after 5 seconds
+  setTimeout(() => controller.abort(), 5000);
+  fetch("https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch4/ordered.json", { signal })
+    .then(response => response.json())
+    .then(json => show_questions(json, XoojvQRuNYrn))
+    .catch(err => {
+      console.log("Fetch error or timeout", err);
+      show_questions(questionsXoojvQRuNYrn, XoojvQRuNYrn);
+    });
 }
 }
 
@@ -11638,7 +11629,7 @@ member on every insertion and removal.</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>Head insertion into <code>UnorderedList</code> is $O(1)$.  <code>search(item)</code> and
-<code>remove(item)</code> are $O(n)$  in the worst case because they may traverse the whole list.  Ordered search can stop early, but its worst case remains $O(n)$. Insertion or erasure is $O(1)$ <strong>once the predecessor iterator/pointer is
+<code>remove(item)</code> are $O(n)$  in the worst case because they may traverse the whole list.  Ordered search can stop early, but its worst case remains $O(n)$. It is noted that add or remove is $O(1)$ <strong>once the predecessor iterator/pointer is
 already known</strong>; locating that position may still cost $O(n)$.</p>
 </div>
 </div>
@@ -11648,7 +11639,7 @@ already known</strong>; locating that position may still cost $O(n)$.</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="n">display_quiz</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s">"complexity.json"</span><span class="p">,</span><span class="w"> </span><span class="n">max_width</span><span class="o">=</span><span class="mi">800</span><span class="p">)</span>
@@ -11664,8 +11655,8 @@ already known</strong>; locating that position may still cost $O(n)$.</p>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="cuyVsHJCeLDP" style="border-radius: 10px; text-align: left"><style>
-#cuyVsHJCeLDP {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="IJMZRWUomtKR" style="border-radius: 10px; text-align: left"><style>
+#IJMZRWUomtKR {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -11893,10 +11884,10 @@ already known</strong>; locating that position may still cost $O(n)$.</p>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="483768e5-fb4e-43bd-bbad-a8e9d4464728" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="62914c95-0a0f-43e1-8478-cbda95df3fce" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('483768e5-fb4e-43bd-bbad-a8e9d4464728');
-var questionscuyVsHJCeLDP=[
+var element = document.getElementById('62914c95-0a0f-43e1-8478-cbda95df3fce');
+var questionsIJMZRWUomtKR=[
     {
         "question": "Which of the following UnorderedList methods has an average and worst-case time complexity of $O(1)$?",
         "type": "multiple_choice",
@@ -12981,19 +12972,20 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
     });
 }
 /*
- * Handle asynchrony issues when re-running quizzes in Jupyter notebooks.
- * Ensures show_questions is called after the container div is in the DOM.
+ * Attempt to fetch questions JSON, with timeout and fallback to embedded data.
  */
-function try_show() {
-  if (document.getElementById("cuyVsHJCeLDP")) {
-    show_questions(questionscuyVsHJCeLDP, cuyVsHJCeLDP);
-  } else {
-    setTimeout(try_show, 200);
-  }
-};
-// Invoke immediately
 {
-  try_show();
+  const controller = new AbortController();
+  const signal = controller.signal;
+  // Abort fetch after 5 seconds
+  setTimeout(() => controller.abort(), 5000);
+  fetch("https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/questions/ch4/complexity.json", { signal })
+    .then(response => response.json())
+    .then(json => show_questions(json, IJMZRWUomtKR))
+    .catch(err => {
+      console.log("Fetch error or timeout", err);
+      show_questions(questionsIJMZRWUomtKR, IJMZRWUomtKR);
+    });
 }
 }
 
@@ -13029,7 +13021,7 @@ function try_show() {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;forward_list&gt;</span>
@@ -13106,7 +13098,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In the case of linked lists, there is a more tangible notion of a circularly linked list, as we can have the tail of the list use its next reference to point back to the head of the list, as shown below. We call such a structure a <u>circularly linked list</u>.</p>
+<p>In the case of linked lists, there is a more tangible notion of a circularly linked list, as we can have the tail of the list use its next pointer to point back to the head of the list, as shown below. We call such a structure a <u>circularly linked list</u>.</p>
 </div>
 </div>
 </div>
@@ -13139,8 +13131,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>A circular view could be used, for example, to describe the order of train stops, or the order in which players take turns
-during a game. Even though a circularly linked list has no beginning or end, per se, we must maintain a reference to a particular node in order to make use of the list.</p>
+<p>A circular view could be used, for example, to describe the order of train stops, or the order in which players take turns during a game. Even though a circularly linked list has no beginning or end, per se, we must maintain a pointer to a particular node in order to make use of the list.</p>
 </div>
 </div>
 </div>
@@ -13184,8 +13175,7 @@ during a game. Even though a circularly linked list has no beginning or end, per
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In a singly linked list, each node maintains a reference to the node that is immediately after it. We have demonstrated the usefulness of such a representation when managing a sequence of elements. However, there are limitations that stem from
-the asymmetry of a singly linked list.</p>
+<p>In a singly linked list, each node maintains a pointer to the node that is immediately after it. We have demonstrated the usefulness of such a representation when managing a sequence of elements. However, there are limitations that stem from the asymmetry of a singly linked list.</p>
 </div>
 </div>
 </div>
@@ -13207,7 +13197,7 @@ the asymmetry of a singly linked list.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>More generally, we cannot efficiently delete an arbitrary node from an interior position of the list if only given a reference to that node, because we cannot determine the node that immediately precedes the node to be deleted!</p>
+<p>More generally, we cannot efficiently delete an arbitrary node from an interior position of the list if only given a pointer to that node, because we cannot determine the node that immediately precedes the node to be deleted!</p>
 </div>
 </div>
 </div>
@@ -13218,7 +13208,7 @@ the asymmetry of a singly linked list.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>To provide greater symmetry, we define a linked list in which each node keeps an explicit reference to the node before it and a reference to the node after it. Such a structure is known as a <u>doubly linked list</u>.</p>
+<p>To provide greater symmetry, we define a linked list in which each node keeps an explicit pointer to the node before it and a pointer to the node after it. Such a structure is known as a <u>doubly linked list</u>.</p>
 </div>
 </div>
 </div>
@@ -13229,7 +13219,7 @@ the asymmetry of a singly linked list.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>These lists allow a greater variety of $O(1)$-time update operations, including insertions and deletions at arbitrary positions within the list. We continue to use the term <code>next</code> for the reference to the node that follows another, and we introduce the term <code>prev</code> for the reference to the node that precedes it.</p>
+<p>These lists allow a greater variety of $O(1)$-time update operations, including insertions and deletions at arbitrary positions within the list. We continue to use the term <code>next</code> for the pointer to the node that follows another, and we introduce the term <code>prev</code> for the pointer to the node that precedes it.</p>
 </div>
 </div>
 </div>
@@ -13273,7 +13263,7 @@ the asymmetry of a singly linked list.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>For a nonempty list, the header's next will refer to a node containing the first real element of a sequence, just as the trailer's prev references the node containing the last element of a sequence.</p>
+<p>For a nonempty list, the header's next will refer to a node containing the first real element of a sequence, just as the trailer's prev pointers the node containing the last element of a sequence.</p>
 </div>
 </div>
 </div>
@@ -13359,7 +13349,7 @@ the asymmetry of a singly linked list.</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="n">from</span><span class="w"> </span><span class="n">jupytercards</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="n">display_flashcards</span>
@@ -13737,14 +13727,14 @@ the asymmetry of a singly linked list.</p>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="HreJaSGtTbJt" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="HreJaSGtTbJt-next" onclick="window.checkFlip('HreJaSGtTbJt')"> </div> <div style="height:40px"></div>
+<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="sgvSTKyyaUYM" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="sgvSTKyyaUYM-next" onclick="window.checkFlip('sgvSTKyyaUYM')"> </div> <div style="height:40px"></div>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="a5403290-998d-440f-8501-5fbb8ad37800" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="98cfe12a-07cd-42b0-9898-1e7b247d30e5" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('a5403290-998d-440f-8501-5fbb8ad37800');
+var element = document.getElementById('98cfe12a-07cd-42b0-9898-1e7b247d30e5');
 /*!
  * swiped-events.js - v1.1.4
  * Pure JavaScript swipe events
@@ -14541,7 +14531,7 @@ window.setTopics = function(idOrElem, topics) {
 
 (function() {
     var observer = new MutationObserver(function(mutations, obs) {
-        var el = document.getElementById("HreJaSGtTbJt");
+        var el = document.getElementById("sgvSTKyyaUYM");
         if (el) {
             el.dataset.url = "https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/flashcards/ch4.json";
             el.dataset.cards = JSON.stringify([{"front": "Unordered List", "back": "A collection of items where each item holds a relative position with respect to the others, but the specific sequence is not based on the values themselves. In a linked implementation, items are typically added at the head for efficiency.", "seqNum": 0}, {"front": "Linked List", "back": "A data structure used to maintain the relative positioning of items without requiring contiguous memory. It consists of nodes where each node contains the item and an explicit reference to the location of the next item.", "seqNum": 1}, {"front": "Node", "back": "The basic building block of a linked list. It contains a data field to store the list item and a next field to store a reference to the following node.", "seqNum": 2}, {"front": "Head of Linked List", "back": "An external reference that specifies the location of the first item in the list. It serves as the single entry point for traversing the linked structure.", "seqNum": 3}, {"front": "Tail of Linked List", "back": "The last node in a linked list. Its next pointer is set to NULL to indicate that there is no subsequent node in the sequence.", "seqNum": 4}, {"front": "Ordered List", "back": "A collection of items where each item holds a relative position based on some underlying characteristic (such as ascending or descending value). The ordering is preserved during additions.", "seqNum": 5}, {"front": "Circularly Linked List", "back": "A variant of a linked list where the tail of the list uses its next reference to point back to the head node instead of NULL. This is useful for data sets that are cyclic.", "seqNum": 6}, {"front": "Doubly Linked List", "back": "A linked list where each node keeps two explicit references: one to the node after it (next) and one to the node before it (prev). This allows for efficient bidirectional traversal and updates.", "seqNum": 7}, {"front": "std::forward_list", "back": "The STL singly linked container. It supports forward iteration and constant-time insert_after or erase_after once the predecessor iterator is known, but no random access.", "seqNum": 8}, {"front": "std::list", "back": "The STL doubly linked container. Insertion and erasure at a known iterator are O(1), but locating a position is O(n) and operator[] is not provided.", "seqNum": 9}, {"front": "Deep Copy", "back": "Copying every node into independently owned storage. Copying only the head pointer aliases one chain and can cause shared mutation and double deletion.", "seqNum": 10}]);
@@ -14553,7 +14543,7 @@ window.setTopics = function(idOrElem, topics) {
             el.dataset.shuffleCards = false;
             el.dataset.title = "";
             el.dataset.subject = "";
-            createCards("HreJaSGtTbJt");
+            createCards("sgvSTKyyaUYM");
             obs.disconnect();
         }
     });
