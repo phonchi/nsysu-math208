@@ -8291,8 +8291,8 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="SPGmlnNkNbQW" style="border-radius: 10px; text-align: left"><style>
-#SPGmlnNkNbQW {
+<div data-maxwidth="800" data-numquestions="1000000" data-preserveresponses="false" data-shuffleanswers="True" data-shufflequestions="False" id="TlzNXJpOZcZC" style="border-radius: 10px; text-align: left"><style>
+#TlzNXJpOZcZC {
    --jq-multiple-choice-bg: #392061;
    --jq-mc-button-bg: #fafafa;
    --jq-mc-button-border: #e0e0e0e0;
@@ -8520,33 +8520,33 @@ a.anchor-link {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="c59c1478-1ef7-4bca-914f-d87371c7e5ce" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="e44869d6-3d72-454f-985a-477b8b6b2a04" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('c59c1478-1ef7-4bca-914f-d87371c7e5ce');
-var questionsSPGmlnNkNbQW=[
+var element = document.getElementById('e44869d6-3d72-454f-985a-477b8b6b2a04');
+var questionsTlzNXJpOZcZC=[
     {
-        "question": "How many recursive calls are made when computing the sum of the vector {2, 4, 6, 8, 10}?",
+        "question": "How many recursive calls are made when computing the sum of the vector {2, 4, 6, 8, 10} with listSum()?",
         "type": "multiple_choice",
         "answers": [
             {
                 "answer": "6",
                 "correct": false,
-                "feedback": "Incorrect. This number exceeds the total number of elements in the list."
+                "feedback": "Incorrect. 6 is the total number of calls to listSumFrom(): the initial call listSumFrom(numList, 0) plus the recursive calls. The initial call is not itself a recursive call."
             },
             {
                 "answer": "5",
-                "correct": false,
-                "feedback": "Incorrect. While the function is executed a total of 5 times, only 4 of those are recursive calls (the first call is the initial call, not a recursive one)."
+                "correct": true,
+                "feedback": "Correct! The initial call listSumFrom(numList, 0) makes 5 recursive calls, with index 1, 2, 3, 4 and 5. The last one sees index == numList.size(), the empty range, and returns 0 without recursing. That is 6 calls in total, 5 of them recursive."
             },
             {
                 "answer": "4",
-                "correct": true,
-                "feedback": "Correct! For a list of 5 elements, the first call is the initial call. It then makes 4 recursive calls: 1. sum([4,6,8,10]), 2. sum([6,8,10]), 3. sum([8,10]), and 4. sum([10]). The call with a single element [10] is the base case and does not make a further recursive call."
+                "correct": false,
+                "feedback": "Incorrect. That would be right only if a one-element range were the base case. In listSumFrom() the base case is the empty range (index == numList.size()), so the call for {10} still recurses once more."
             },
             {
                 "answer": "3",
                 "correct": false,
-                "feedback": "Incorrect. This would not be enough calls to reduce the 5-element list down to the base case."
+                "feedback": "Incorrect. Each recursive call advances index by one, so going from index 0 to index 5 (the empty range) takes 5 recursive calls."
             }
         ]
     }
@@ -9612,8 +9612,8 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
  * Ensures show_questions is called after the container div is in the DOM.
  */
 function try_show() {
-  if (document.getElementById("SPGmlnNkNbQW")) {
-    show_questions(questionsSPGmlnNkNbQW, SPGmlnNkNbQW);
+  if (document.getElementById("TlzNXJpOZcZC")) {
+    show_questions(questionsTlzNXJpOZcZC, TlzNXJpOZcZC);
   } else {
     setTimeout(try_show, 200);
   }
@@ -9879,9 +9879,9 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d0bd349f-d037-4575-8401-0857c9e6da83" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="73da9998-1bbe-43de-b9a1-25e94283fee2" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('d0bd349f-d037-4575-8401-0857c9e6da83');
+var element = document.getElementById('73da9998-1bbe-43de-b9a1-25e94283fee2');
 var questionsHOlCuXCIuPXb=[
     {
         "question": "Suppose you are going to write a recursive function to calculate the factorial of a number. fact(n) returns n * (n-1) * (n-2) * ... where the factorial of zero is defined to be 1. What would be the most efficient and appropriate base case?",
@@ -11307,16 +11307,27 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/tmp/tmpizioudnl.cpp: In function ‘std::string reverse(std::string)’:
-/tmp/tmpizioudnl.cpp:8:16: error: ‘____’ was not declared in this scope
+<pre>/tmp/tmpn2mv89sa.cpp: In function ‘std::string reverse(std::string)’:
+/tmp/tmpn2mv89sa.cpp:8:16: error: ‘____’ was not declared in this scope
     8 |         return ____;
       |                ^~~~
-/tmp/tmpizioudnl.cpp:10:12: error: ‘____’ was not declared in this scope
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>/tmp/tmpn2mv89sa.cpp:10:12: error: ‘____’ was not declared in this scope
    10 |     return ____ + s[0];
       |            ^~~~
-
-    ... (truncated; run the cell to see the full message)
 </pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>
+[C++ kernel] Error: Unable to compile the source code. Return error: 0x1.</pre>
 </div>
 </div>
 </div>
@@ -11571,9 +11582,9 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="0aaf8c7d-43c3-4478-96dc-9d83319c9434" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="bbe630d7-4d05-4641-8dd2-715c32ff1036" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('0aaf8c7d-43c3-4478-96dc-9d83319c9434');
+var element = document.getElementById('bbe630d7-4d05-4641-8dd2-715c32ff1036');
 var questionsnUbmTIYhatYZ=[
     {
         "question": "Which base case makes a recursive C++ reverse(string s) function correct for both an empty string and a one-character string?",
@@ -14841,7 +14852,13 @@ min
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
 <p>Making change for 63 requires the following 3 coins: 21 21 21</p>
 <p>The used list is as follows:</p>
-<p>1 1 1 1 1 5 1 1 1 1 10 1 1 1 1 5 1 1 1 1 10 21 1 1 1 25 1 1 1 1 5 10 1 1 1 10 1 1 1 1 5 10 21 1 1 10 21 1 1 1 25 1 10 1 1 5 10 1 1 1 10 1 10 21</p>
+<p>1 1 1 1 1 5 1 1 1 1 10 1 1 1 1 5 1 1 1 1 10 21 1 1 1 25 1 1 1 1</p>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
+<p>5 10 1 1 1 10 1 1 1 1 5 10 21 1 1 10 21 1 1 1 25 1 10 1 1 5 10 1 1 1 10 1 10 21</p>
 </div>
 </div>
 </div>
@@ -15255,9 +15272,9 @@ min
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="52542a83-65d6-400c-b5e8-17b45d2718ae" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="854a1aab-ca6b-4ce2-aaba-fd8ef06d9457" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('52542a83-65d6-400c-b5e8-17b45d2718ae');
+var element = document.getElementById('854a1aab-ca6b-4ce2-aaba-fd8ef06d9457');
 /*!
  * swiped-events.js - v1.1.4
  * Pure JavaScript swipe events

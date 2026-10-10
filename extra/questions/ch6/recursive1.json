@@ -1,27 +1,27 @@
 [
     {
-        "question": "How many recursive calls are made when computing the sum of the vector {2, 4, 6, 8, 10}?",
+        "question": "How many recursive calls are made when computing the sum of the vector {2, 4, 6, 8, 10} with listSum()?",
         "type": "multiple_choice",
         "answers": [
             {
                 "answer": "6",
                 "correct": false,
-                "feedback": "Incorrect. This number exceeds the total number of elements in the list."
+                "feedback": "Incorrect. 6 is the total number of calls to listSumFrom(): the initial call listSumFrom(numList, 0) plus the recursive calls. The initial call is not itself a recursive call."
             },
             {
                 "answer": "5",
-                "correct": false,
-                "feedback": "Incorrect. While the function is executed a total of 5 times, only 4 of those are recursive calls (the first call is the initial call, not a recursive one)."
+                "correct": true,
+                "feedback": "Correct! The initial call listSumFrom(numList, 0) makes 5 recursive calls, with index 1, 2, 3, 4 and 5. The last one sees index == numList.size(), the empty range, and returns 0 without recursing. That is 6 calls in total, 5 of them recursive."
             },
             {
                 "answer": "4",
-                "correct": true,
-                "feedback": "Correct! For a list of 5 elements, the first call is the initial call. It then makes 4 recursive calls: 1. sum([4,6,8,10]), 2. sum([6,8,10]), 3. sum([8,10]), and 4. sum([10]). The call with a single element [10] is the base case and does not make a further recursive call."
+                "correct": false,
+                "feedback": "Incorrect. That would be right only if a one-element range were the base case. In listSumFrom() the base case is the empty range (index == numList.size()), so the call for {10} still recurses once more."
             },
             {
                 "answer": "3",
                 "correct": false,
-                "feedback": "Incorrect. This would not be enough calls to reduce the 5-element list down to the base case."
+                "feedback": "Incorrect. Each recursive call advances index by one, so going from index 0 to index 5 (the empty range) takes 5 recursive calls."
             }
         ]
     }

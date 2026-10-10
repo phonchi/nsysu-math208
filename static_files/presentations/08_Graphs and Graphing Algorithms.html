@@ -8573,9 +8573,9 @@ is a set of edges $e$ and vertices $v$ such that $e \subset E$ and $v \subset V$
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="0226db2b-c292-447a-998b-3d94630b2a61" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="2d5409ca-b868-4366-a031-efb5415e0f78" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('0226db2b-c292-447a-998b-3d94630b2a61');
+var element = document.getElementById('2d5409ca-b868-4366-a031-efb5415e0f78');
 var questionsXQPYrDqyjjjI=[
 	{
         "question": "Regarding graph implementation methods, which of the following statements is true according to the materials?",
@@ -9705,6 +9705,9 @@ function try_show() {
 <span class="w">    </span><span class="k">public</span><span class="o">:</span>
 <span class="w">        </span><span class="n">string</span><span class="w"> </span><span class="n">key</span><span class="p">;</span>
 <span class="w">        </span><span class="n">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">neighbors</span><span class="p">;</span><span class="w">   </span><span class="c1">// neighbor key -&gt; edge weight</span>
+<span class="w">        </span><span class="n">string</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"white"</span><span class="p">;</span><span class="w">       </span><span class="c1">// traversal state used by BFS/DFS</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">distance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">INT_MAX</span><span class="p">;</span>
+<span class="w">        </span><span class="n">string</span><span class="w"> </span><span class="n">previous</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
 
 <span class="w">        </span><span class="n">Vertex</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
 <span class="w">        </span><span class="n">Vertex</span><span class="p">(</span><span class="n">string</span><span class="w"> </span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -9732,7 +9735,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Each <code>Vertex</code> uses <code>map&lt;string, int&gt; neighbors</code> to associate a neighbor key with an edge weight. <code>setNeighbor(other, weight)</code> inserts or updates that mapping, and <code>getNeighbor(other)</code> retrieves the weight when the edge exists.</p>
+<p>Each <code>Vertex</code> uses <code>map&lt;string, int&gt; neighbors</code> to associate a neighbor key with an edge weight. <code>setNeighbor(other, weight)</code> inserts or updates that mapping, and <code>getNeighbor(other)</code> retrieves the weight when the edge exists. The header <code>graph.hpp</code> used by the examples has the same members but leaves out these two convenience methods; its code reads and writes <code>neighbors</code> directly.</p>
 </div>
 </div>
 </div>
@@ -9770,7 +9773,7 @@ function try_show() {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The <code>Graph</code> class also uses <code>map&lt;string, Vertex&gt; vertices</code> to map vertex keys to objects. C++ range-based loops iterate over its key/value pairs; <code>vertices.count(key)</code> tests membership.</p>
+<p>The <code>Graph</code> class also uses <code>map&lt;string, Vertex&gt; vertices</code> to map vertex keys to objects. C++ range-based loops iterate over its key/value pairs; <code>vertices.count(key)</code> tests membership; <code>graph.hpp</code> has no <code>contains()</code> and calls <code>vertices.count(key)</code> directly.</p>
 </div>
 </div>
 </div>
@@ -10240,8 +10243,11 @@ SAGE
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">bfs</span><span class="p">(</span><span class="n">Graph</span><span class="o">&amp;</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="n">startKey</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">g</span><span class="p">.</span><span class="n">vertices</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">   </span><span class="c1">// reset every vertex</span>
+<span class="w">        </span><span class="n">p</span><span class="p">.</span><span class="n">second</span><span class="p">.</span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"white"</span><span class="p">;</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">second</span><span class="p">.</span><span class="n">distance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">INT_MAX</span><span class="p">;</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">second</span><span class="p">.</span><span class="n">previous</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="n">g</span><span class="p">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">startKey</span><span class="p">].</span><span class="n">distance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">    </span><span class="n">g</span><span class="p">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">startKey</span><span class="p">].</span><span class="n">previous</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
+<span class="w">    </span><span class="n">g</span><span class="p">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">startKey</span><span class="p">].</span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"gray"</span><span class="p">;</span>
 <span class="w">    </span><span class="n">queue</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vertQueue</span><span class="p">;</span>
 <span class="w">    </span><span class="n">vertQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">startKey</span><span class="p">);</span>
 <span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">vertQueue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
@@ -10392,7 +10398,7 @@ SAGE
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/bfs3.png" width="33%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/bfs3.png" width="45%"/></center>
 </div>
 </div>
 </div>
@@ -10414,7 +10420,7 @@ SAGE
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/bfsDone.png" width="33%"/></center>
+<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/bfsDone.png" width="52%"/></center>
 </div>
 </div>
 </div>
@@ -10478,7 +10484,6 @@ SAGE
 <span class="w">    </span><span class="n">Graph</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buildGraph</span><span class="p">({</span><span class="s">"fool"</span><span class="p">,</span><span class="w"> </span><span class="s">"cool"</span><span class="p">,</span><span class="w"> </span><span class="s">"pool"</span><span class="p">,</span><span class="w"> </span><span class="s">"poll"</span><span class="p">,</span><span class="w"> </span><span class="s">"pole"</span><span class="p">,</span>
 <span class="w">                         </span><span class="s">"pall"</span><span class="p">,</span><span class="w"> </span><span class="s">"fall"</span><span class="p">,</span><span class="w"> </span><span class="s">"fail"</span><span class="p">,</span><span class="w"> </span><span class="s">"foil"</span><span class="p">,</span><span class="w"> </span><span class="s">"foul"</span><span class="p">,</span>
 <span class="w">                         </span><span class="s">"pope"</span><span class="p">,</span><span class="w"> </span><span class="s">"pale"</span><span class="p">,</span><span class="w"> </span><span class="s">"sale"</span><span class="p">,</span><span class="w"> </span><span class="s">"sage"</span><span class="p">,</span><span class="w"> </span><span class="s">"page"</span><span class="p">});</span>
-<span class="w">    </span><span class="n">g</span><span class="p">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">"fool"</span><span class="p">].</span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"gray"</span><span class="p">;</span>
 <span class="w">    </span><span class="n">bfs</span><span class="p">(</span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="s">"fool"</span><span class="p">);</span>
 <span class="w">    </span><span class="n">traverse</span><span class="p">(</span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="s">"sage"</span><span class="p">);</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
@@ -12551,7 +12556,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Let's look at how rapidly this grows! For a board that is $5 \times 5$ the tree will be 25 levels deep. The average branching factor is $k=3.8$ so the number of nodes in the search tree is $3.8^{25}-1$ or $3.12 \times 10^{14}$.</p>
+<p>Let's look at how rapidly this grows! For a board that is $5 \times 5$ the tree will be 25 levels deep. The average branching factor is $k=3.8$ so the number of nodes in the search tree is on the order of $k^N$: $3.8^{25} \approx 3.1 \times 10^{14}$.</p>
 </div>
 </div>
 </div>
@@ -12562,7 +12567,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>For a $6 \times 6$ board, $k = 4.4$, there are $1.5 \times 10^{23}$ nodes, and for a regular $8 \times 8$ chess board, $k = 5.25$, there are $1.2 \times 10^{46}$!</p>
+<p>For a $6 \times 6$ board, $k = 4.4$, there are on the order of $4.4^{36} \approx 1.5 \times 10^{23}$ nodes, and for a regular $8 \times 8$ chess board, $k = 5.25$, on the order of $5.25^{64} \approx 1.2 \times 10^{46}$!</p>
 </div>
 </div>
 </div>
@@ -12681,7 +12686,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<div class="highlight"><pre><span></span><span class="kt">bool</span><span class="w"> </span><span class="nf">knightTour</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="n">uKey</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">limit</span><span class="p">,</span><span class="w"> </span><span class="n">Graph</span><span class="o">&amp;</span><span class="w"> </span><span class="n">g</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<div class="highlight"><pre><span></span><span class="kt">bool</span><span class="w"> </span><span class="nf">knightTourWarnsdorff</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="n">uKey</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">limit</span><span class="p">,</span><span class="w"> </span><span class="n">Graph</span><span class="o">&amp;</span><span class="w"> </span><span class="n">g</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">g</span><span class="p">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">uKey</span><span class="p">].</span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"gray"</span><span class="p">;</span>
 <span class="w">    </span><span class="n">path</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">uKey</span><span class="p">);</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">limit</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -12689,7 +12694,7 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 <span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">string</span><span class="w"> </span><span class="n">nbKey</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">orderByAvail</span><span class="p">(</span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="n">uKey</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">   </span><span class="c1">// Warnsdorff order</span>
 <span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">done</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
 <span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g</span><span class="p">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">nbKey</span><span class="p">].</span><span class="n">color</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"white"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="n">done</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">knightTour</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="n">nbKey</span><span class="p">,</span><span class="w"> </span><span class="n">limit</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">);</span>
+<span class="w">                </span><span class="n">done</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">knightTourWarnsdorff</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="n">nbKey</span><span class="p">,</span><span class="w"> </span><span class="n">limit</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">);</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">done</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -14798,9 +14803,9 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="fe6e9fe0-3d7e-466e-bbca-679bcf38ada2" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="9f57ab11-54e6-4fc7-a2a6-c97fec685bc1" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('fe6e9fe0-3d7e-466e-bbca-679bcf38ada2');
+var element = document.getElementById('9f57ab11-54e6-4fc7-a2a6-c97fec685bc1');
 var questionsojRUMAkFetxM=[
     {
         "question": "What is the primary structural difference in how Breadth-First Search (BFS) and Depth-First Search (DFS) track the next vertex to explore?",
@@ -17880,9 +17885,9 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="5be50b09-9ec4-4e68-9505-f8e420d2489b" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="51640e61-ad55-4fbe-88b9-1797e5b5ddd5" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('5be50b09-9ec4-4e68-9505-f8e420d2489b');
+var element = document.getElementById('51640e61-ad55-4fbe-88b9-1797e5b5ddd5');
 var questionspCjFPdANXSdC=[
 	{
         "question": "Why is Breadth-First Search (BFS) guaranteed to find the shortest path in an unweighted graph?",
@@ -20928,9 +20933,9 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="81e3e64b-3f8f-425f-8821-9e508166c5b3" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d3fd8fc4-a949-42d3-91ef-b05314e9f80b" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('81e3e64b-3f8f-425f-8821-9e508166c5b3');
+var element = document.getElementById('d3fd8fc4-a949-42d3-91ef-b05314e9f80b');
 var questionsTGVCpdnkOgxR=[
 	{
         "question": "Which of the following is a known limitation or characteristic of Dijkstra's algorithm?",
@@ -23963,9 +23968,9 @@ body.rise-enabled .ds08-anim .topsort-result{min-height:28px;padding:.28rem .5re
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="6f3e2310-0d55-4123-b797-2757065093fe" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="1eab83d0-17ec-431c-a719-36e225161f8e" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('6f3e2310-0d55-4123-b797-2757065093fe');
+var element = document.getElementById('1eab83d0-17ec-431c-a719-36e225161f8e');
 var questionsMpMQQkMPOjAL=[
   {
     "question": "In Prim's algorithm for finding a Minimum Spanning Tree (MST), what defines a safe edge?",
@@ -25504,14 +25509,14 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
-<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="cVwRREKjjZpj" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="cVwRREKjjZpj-next" onclick="window.checkFlip('cVwRREKjjZpj')"> </div> <div style="height:40px"></div>
+<div style="height:40px"></div><div class="flip-container" data-known-widgets="true" data-local-storage="false" data-topics="[]" id="NfSvPBDIKxPw" style="outline:none;" tabindex="0"></div><div style="height:40px"></div><div class="next" id="NfSvPBDIKxPw-next" onclick="window.checkFlip('NfSvPBDIKxPw')"> </div> <div style="height:40px"></div>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="2a92aaff-5b00-47c4-bff9-067d06fa6aa9" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="fd683448-296c-4124-96e1-c228191287b2" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('2a92aaff-5b00-47c4-bff9-067d06fa6aa9');
+var element = document.getElementById('fd683448-296c-4124-96e1-c228191287b2');
 /*!
  * swiped-events.js - v1.1.4
  * Pure JavaScript swipe events
@@ -26308,10 +26313,10 @@ window.setTopics = function(idOrElem, topics) {
 
 (function() {
     var observer = new MutationObserver(function(mutations, obs) {
-        var el = document.getElementById("cVwRREKjjZpj");
+        var el = document.getElementById("NfSvPBDIKxPw");
         if (el) {
             el.dataset.url = "";
-            el.dataset.cards = JSON.stringify([{"front": "Graph", "back": "A data structure composed of a set of vertices (nodes) and edges (links) that connect pairs of these vertices. It is used to model relationships in complex systems.", "seqNum": 0}, {"front": "Vertex", "back": "Also known as a node, it represents an entity within a graph and serves as the fundamental unit of the structure.", "seqNum": 1}, {"front": "Edge", "back": "A connection between two vertices. In a directed graph, edges indicate a specific direction of relationship.", "seqNum": 2}, {"front": "Weight", "back": "A numerical value assigned to an edge representing cost, distance, or another measure impacting traversal.", "seqNum": 3}, {"front": "Path", "back": "A sequence of vertices connected by edges, defined by starting at one vertex and traversing through edges to reach another.", "seqNum": 4}, {"front": "Cycle", "back": "A path that begins and ends at the same vertex, containing at least one edge and no repeated edges or internal vertices.", "seqNum": 5}, {"front": "Acyclic Graph", "back": "A graph with no cycles, meaning it is impossible to return to a starting vertex by following edges.", "seqNum": 6}, {"front": "Directed Graph", "back": "A graph where edges have a specific direction, indicating a one-way relationship from one vertex to another.", "seqNum": 7}, {"front": "DAG (Directed Acyclic Graph)", "back": "A directed graph containing no cycles, often used for task scheduling and sequences where tasks do not repeat.", "seqNum": 8}, {"front": "Tree", "back": "A type of acyclic graph with a designated root vertex where all other vertices are connected by exactly one path to that root.", "seqNum": 9}, {"front": "Adjacency Matrix", "back": "A square matrix used to represent a graph where elements indicate whether pairs of vertices are adjacent.", "seqNum": 10}, {"front": "Adjacency List", "back": "A collection of lists used to represent a graph, where each list describes the neighbors of a specific vertex.", "seqNum": 11}, {"front": "Breadth-First Search (BFS)", "back": "A search algorithm that explores all neighbor nodes at the current depth prior to moving on to nodes at the next depth level.", "seqNum": 12}, {"front": "Knight's Tour", "back": "A sequence of moves on a chessboard where a knight visits every square exactly once.", "seqNum": 13}, {"front": "Depth-First Search (DFS)", "back": "A traversal algorithm that explores as far as possible along each branch before backtracking.", "seqNum": 14}, {"front": "Search Tree", "back": "A tree data structure used for efficiently locating specific keys within a set through insertion, deletion, and search operations.", "seqNum": 15}, {"front": "Heuristic", "back": "A technique designed to solve problems quickly or find approximate solutions when classic methods are too slow or infeasible.", "seqNum": 16}, {"front": "Warnsdorff's Algorithm", "back": "A heuristic for the knight's tour where the knight always moves to the square with the fewest onward moves.", "seqNum": 17}, {"front": "Depth-First Forest", "back": "A collection of trees formed during a depth-first search, where each tree corresponds to a set of vertices explored contiguously.", "seqNum": 18}, {"front": "Parenthesis Property", "back": "A DFS property stating that discovery and finish time intervals for any two vertices are either entirely disjoint or nested.", "seqNum": 19}, {"front": "Topological Sorting", "back": "A linear ordering of vertices in a directed graph where for every edge uv, vertex u comes before v.", "seqNum": 20}, {"front": "Strongly Connected Components", "back": "Maximal subgraphs where every pair of vertices has a directed path to and from each other.", "seqNum": 21}, {"front": "Shortest Path Problems", "back": "The challenge of finding a path between two vertices such that the sum of the weights of the edges is minimized.", "seqNum": 22}, {"front": "Dijkstra's Algorithm", "back": "A single-source shortest-path algorithm for non-negative edge weights. This course's lazy priority-queue version pushes improved pairs and skips stale entries.", "seqNum": 23}, {"front": "Priority Queue", "back": "A data structure where each element has a priority, and elements are served based on that priority rather than just arrival order.", "seqNum": 24}, {"front": "Uncontrolled Flooding", "back": "A networking technique where a packet is sent to every outgoing link except the one it arrived on.", "seqNum": 25}, {"front": "Minimum Spanning Tree (MST)", "back": "A subset of edges connecting all vertices without cycles and with the minimum total edge weight.", "seqNum": 26}, {"front": "Prim's Algorithm", "back": "An MST algorithm that repeatedly adds a minimum-weight edge crossing the current cut. The course prim() requires a connected graph and throws invalid_argument otherwise.", "seqNum": 27}, {"front": "Greedy Algorithms", "back": "A class of algorithms that build a solution by always choosing the next piece that offers the most immediate benefit.", "seqNum": 28}]);
+            el.dataset.cards = JSON.stringify([{"front": "Graph", "back": "A data structure composed of a set of vertices (nodes) and edges (links) that connect pairs of these vertices. It is used to model relationships in complex systems.", "seqNum": 0}, {"front": "Vertex", "back": "Also known as a node, it represents an entity within a graph and serves as the fundamental unit of the structure.", "seqNum": 1}, {"front": "Edge", "back": "A connection between two vertices. In a directed graph, edges indicate a specific direction of relationship.", "seqNum": 2}, {"front": "Weight", "back": "A numerical value assigned to an edge representing cost, distance, or another measure impacting traversal.", "seqNum": 3}, {"front": "Path", "back": "A sequence of vertices connected by edges, defined by starting at one vertex and traversing through edges to reach another.", "seqNum": 4}, {"front": "Cycle", "back": "A path that begins and ends at the same vertex, containing at least one edge and no repeated edges or internal vertices.", "seqNum": 5}, {"front": "Acyclic Graph", "back": "A graph with no cycles, meaning it is impossible to return to a starting vertex by following edges.", "seqNum": 6}, {"front": "Directed Graph", "back": "A graph where edges have a specific direction, indicating a one-way relationship from one vertex to another.", "seqNum": 7}, {"front": "DAG (Directed Acyclic Graph)", "back": "A directed graph containing no cycles, often used for task scheduling and sequences where tasks do not repeat.", "seqNum": 8}, {"front": "Tree", "back": "A type of acyclic graph with a designated root vertex where all other vertices are connected by exactly one path to that root.", "seqNum": 9}, {"front": "Adjacency Matrix", "back": "A square matrix used to represent a graph where elements indicate whether pairs of vertices are adjacent.", "seqNum": 10}, {"front": "Adjacency List", "back": "A collection of lists used to represent a graph, where each list describes the neighbors of a specific vertex.", "seqNum": 11}, {"front": "Breadth-First Search (BFS)", "back": "A search algorithm that explores all neighbor nodes at the current depth prior to moving on to nodes at the next depth level.", "seqNum": 12}, {"front": "Knight's Tour", "back": "A sequence of moves on a chessboard where a knight visits every square exactly once.", "seqNum": 13}, {"front": "Depth-First Search (DFS)", "back": "A traversal algorithm that explores as far as possible along each branch before backtracking.", "seqNum": 14}, {"front": "Search Tree", "back": "The tree formed by the predecessor (previous) links that BFS or DFS records as it discovers vertices; following those links from any vertex leads back to the start.", "seqNum": 15}, {"front": "Heuristic", "back": "A technique designed to solve problems quickly or find approximate solutions when classic methods are too slow or infeasible.", "seqNum": 16}, {"front": "Warnsdorff's Algorithm", "back": "A heuristic for the knight's tour where the knight always moves to the square with the fewest onward moves.", "seqNum": 17}, {"front": "Depth-First Forest", "back": "A collection of trees formed during a depth-first search, where each tree corresponds to a set of vertices explored contiguously.", "seqNum": 18}, {"front": "Parenthesis Property", "back": "A DFS property stating that discovery and finish time intervals for any two vertices are either entirely disjoint or nested.", "seqNum": 19}, {"front": "Topological Sorting", "back": "A linear ordering of vertices in a directed graph where for every edge uv, vertex u comes before v.", "seqNum": 20}, {"front": "Strongly Connected Components", "back": "Maximal subgraphs where every pair of vertices has a directed path to and from each other.", "seqNum": 21}, {"front": "Shortest Path Problems", "back": "The challenge of finding a path between two vertices such that the sum of the weights of the edges is minimized.", "seqNum": 22}, {"front": "Dijkstra's Algorithm", "back": "A single-source shortest-path algorithm for non-negative edge weights. This course's lazy priority-queue version pushes improved pairs and skips stale entries.", "seqNum": 23}, {"front": "Priority Queue", "back": "A data structure where each element has a priority, and elements are served based on that priority rather than just arrival order.", "seqNum": 24}, {"front": "Uncontrolled Flooding", "back": "A networking technique where a packet is sent to every outgoing link except the one it arrived on.", "seqNum": 25}, {"front": "Minimum Spanning Tree (MST)", "back": "A subset of edges connecting all vertices without cycles and with the minimum total edge weight.", "seqNum": 26}, {"front": "Prim's Algorithm", "back": "An MST algorithm that repeatedly adds a minimum-weight edge crossing the current cut. The course prim() requires a connected graph and throws invalid_argument otherwise.", "seqNum": 27}, {"front": "Greedy Algorithms", "back": "A class of algorithms that build a solution by always choosing the next piece that offers the most immediate benefit.", "seqNum": 28}]);
             el.dataset.frontColors = JSON.stringify(["var(--asparagus)", "var(--terra-cotta)", "var(--cyan-process)"]);
             el.dataset.backColors = JSON.stringify(["var(--dark-blue-gray)"]);
             el.dataset.textColors = JSON.stringify(["var(--snow)"]);
@@ -26320,7 +26325,7 @@ window.setTopics = function(idOrElem, topics) {
             el.dataset.shuffleCards = false;
             el.dataset.title = "";
             el.dataset.subject = "";
-            createCards("cVwRREKjjZpj");
+            createCards("NfSvPBDIKxPw");
             obs.disconnect();
         }
     });
@@ -26405,7 +26410,7 @@ window.setTopics = function(idOrElem, topics) {
 </li>
 <li><p><strong>Depth-First Search (DFS)</strong>: A traversal algorithm that explores as far as possible along each branch before backtracking.</p>
 </li>
-<li><p><strong>Search Tree</strong>: A tree data structure used for efficiently locating specific keys within a set through insertion, deletion, and search operations.</p>
+<li><p><strong>Search Tree</strong>: The tree formed by the predecessor (<code>previous</code>) links that BFS or DFS records as it discovers vertices; following those links from any vertex leads back to the start.</p>
 </li>
 <li><p><strong>Heuristic</strong>: A technique designed to solve problems quickly or find approximate solutions when classic methods are too slow or infeasible.</p>
 </li>

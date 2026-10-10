@@ -61,7 +61,7 @@
     },
     {
         "front": "Search Tree",
-        "back": "A tree data structure used for efficiently locating specific keys within a set through insertion, deletion, and search operations."
+        "back": "The tree formed by the predecessor (previous) links that BFS or DFS records as it discovers vertices; following those links from any vertex leads back to the start."
     },
     {
         "front": "Heuristic",
