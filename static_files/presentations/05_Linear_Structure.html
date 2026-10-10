@@ -8006,7 +8006,13 @@ shows its value-before-pop pattern.</p>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>true 7.5 3 2 7.5 1</p>
+<p>true</p>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
+<p>7.5 3 2 7.5 1</p>
 </div>
 </div>
 </div>
@@ -8298,9 +8304,9 @@ that identical ADT behavior does not imply identical implementation cost.</p>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="e88f21bf-1da0-4635-9ffa-54b2cc6c3c37" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="731d011c-5d43-4b03-a32b-26a60329cfd6" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('e88f21bf-1da0-4635-9ffa-54b2cc6c3c37');
+var element = document.getElementById('731d011c-5d43-4b03-a32b-26a60329cfd6');
 var questionsIttFIqHXCvis=[
     {
         "question": "Given the following sequence of stack operations, what is the top item on the stack when the sequence is complete?",
@@ -9660,9 +9666,9 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="bb963359-0ec0-4310-8055-2a68c50929e1" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="94cd1c2f-c792-411e-bbcb-62fca907faae" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('bb963359-0ec0-4310-8055-2a68c50929e1');
+var element = document.getElementById('94cd1c2f-c792-411e-bbcb-62fca907faae');
 var questionsrOptgRuBeuRI=[
     {
         "question": "What happens when this std::stack code executes?",
@@ -10948,21 +10954,17 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stack&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span>
-
 <span class="n">string</span><span class="w"> </span><span class="nf">divideBy2</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">decimalNum</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">remStack</span><span class="p">;</span>
 <span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">decimalNum</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">remStack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">decimalNum</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
-<span class="w">        </span><span class="n">decimalNum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">decimalNum</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
+<span class="w">        </span><span class="n">decimalNum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">decimalNum</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">;}</span>
 <span class="w">    </span><span class="n">string</span><span class="w"> </span><span class="n">binString</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="p">;</span>
 <span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">remStack</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">binString</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">to_string</span><span class="p">(</span><span class="n">remStack</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
-<span class="w">        </span><span class="n">remStack</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-<span class="w">    </span><span class="p">}</span>
+<span class="w">        </span><span class="n">remStack</span><span class="p">.</span><span class="n">pop</span><span class="p">();}</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">binString</span><span class="p">;</span>
 <span class="p">}</span>
-
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">divideBy2</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">divideBy2</span><span class="p">(</span><span class="mi">31</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
@@ -10981,17 +10983,6 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
 <div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
 <p>101010 11111</p>
 </div>
-</div>
-</div>
-</div>
-</div></div><div class="fragment">
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Expected: <code>101010 11111</code>.</p>
 </div>
 </div>
 </div>
@@ -11369,9 +11360,9 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="5015f2f9-23e3-4f43-aad5-21fdfc80b211" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="a393964a-a558-45d2-b293-6d554badd0cb" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('5015f2f9-23e3-4f43-aad5-21fdfc80b211');
+var element = document.getElementById('a393964a-a558-45d2-b293-6d554badd0cb');
 var questionsQHtDgsjCJUCN=[
     {
         "question": "What is the value of 25 expressed as an octal number?",
@@ -12944,7 +12935,7 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-C++"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">"pythonds3/cppds/expression.hpp"</span><span class="c1">   // the complete converter (md listing above)</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"pythonds3/cppds/expression.hpp"</span><span class="c1">   // full converter shown above</span>
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -13432,9 +13423,9 @@ A B + C * D E - F G + * -
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="11eed0e8-4176-4b3b-a940-0e3f23bc7d3b" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="b84aa387-a5c0-4eb0-bd49-b7f9e7beec07" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('11eed0e8-4176-4b3b-a940-0e3f23bc7d3b');
+var element = document.getElementById('b84aa387-a5c0-4eb0-bd49-b7f9e7beec07');
 var questionsyvCOgYrJsTKi=[
     {
         "question": "Convert the following infix expression to postfix: $10 + 3 * 5 / (16 - 4)$",
@@ -14791,9 +14782,9 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="18b73b63-5b8e-4df6-b530-1db2e74755e9" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="c2f27dad-fe59-4a1c-bf67-54a7fe6424e4" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('18b73b63-5b8e-4df6-b530-1db2e74755e9');
+var element = document.getElementById('c2f27dad-fe59-4a1c-bf67-54a7fe6424e4');
 var questionsAPUkggMdsxco=[
     {
         "question": "What is the result of evaluating the following postfix expression: $17 \\ 10 \\ + \\ 3 \\ * \\ 9 \\ /$ ?",
@@ -16502,9 +16493,9 @@ rear.  All are $O(1)$ with the default <code>deque</code> backend.</p>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="f5bfd542-f20a-45b8-aa87-5863691b0b5e" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="303dfc90-cd01-448c-8e76-32df6b6554a9" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('f5bfd542-f20a-45b8-aa87-5863691b0b5e');
+var element = document.getElementById('303dfc90-cd01-448c-8e76-32df6b6554a9');
 var questionsdkuCrBppBteE=[
     {
         "question": "Suppose you have the following series of queue operations. What items are left on the queue?",
@@ -17711,15 +17702,13 @@ circle is a <code>std::queue&lt;string&gt;</code>; it returns the last remaining
 <span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">simQueue</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">num</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">simQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">simQueue</span><span class="p">.</span><span class="n">front</span><span class="p">());</span>
-<span class="w">            </span><span class="n">simQueue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="n">simQueue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-<span class="w">    </span><span class="p">}</span>
+<span class="w">            </span><span class="n">simQueue</span><span class="p">.</span><span class="n">pop</span><span class="p">();}</span>
+<span class="w">        </span><span class="n">simQueue</span><span class="p">.</span><span class="n">pop</span><span class="p">();}</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">simQueue</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
 <span class="p">}</span>
-
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">hotPotato</span><span class="p">({</span><span class="s">"Bill"</span><span class="p">,</span><span class="w"> </span><span class="s">"David"</span><span class="p">,</span><span class="w"> </span><span class="s">"Susan"</span><span class="p">,</span><span class="w"> </span><span class="s">"Jane"</span><span class="p">,</span><span class="w"> </span><span class="s">"Kent"</span><span class="p">,</span><span class="w"> </span><span class="s">"Brad"</span><span class="p">},</span><span class="w"> </span><span class="mi">7</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">hotPotato</span><span class="p">({</span><span class="s">"Bill"</span><span class="p">,</span><span class="w"> </span><span class="s">"David"</span><span class="p">,</span><span class="w"> </span><span class="s">"Susan"</span><span class="p">,</span><span class="w"> </span><span class="s">"Jane"</span><span class="p">,</span><span class="w"> </span><span class="s">"Kent"</span><span class="p">,</span><span class="w"> </span><span class="s">"Brad"</span><span class="p">},</span><span class="w"> </span><span class="mi">7</span><span class="p">)</span>
+<span class="w">         </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
@@ -18143,18 +18132,7 @@ operation costs.</p>
 </div>
 </div>
 </div>
-</div><div class="fragment">
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Expected: <code>false</code> then <code>true</code>.</p>
-</div>
-</div>
-</div>
-</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
+</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -18542,9 +18520,9 @@ operation costs.</p>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="01449a15-bebf-4f6b-baaf-7393eeaf1036" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="8266e616-0bc0-4355-b1e3-7f0afb418d5a" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('01449a15-bebf-4f6b-baaf-7393eeaf1036');
+var element = document.getElementById('8266e616-0bc0-4355-b1e3-7f0afb418d5a');
 /*!
  * swiped-events.js - v1.1.4
  * Pure JavaScript swipe events
