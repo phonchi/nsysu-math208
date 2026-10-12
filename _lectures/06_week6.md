@@ -19,3 +19,4 @@ links:
 - [Textbook Chapter 3: Linear Structures（C++）](https://runestone.academy/ns/books/published/cppds/LinearBasic/toctree.html)
 - [C++ 堆疊：std::stack](https://en.cppreference.com/w/cpp/container/stack.html)
 - [C++ 佇列：std::queue](https://en.cppreference.com/w/cpp/container/queue.html)、[std::deque](https://en.cppreference.com/w/cpp/container/deque.html)
+- [[Recorded video]](https://youtube.com/playlist?list=PLKfVlE23FEcw&si=BoNOthRSAAyNLxim)
