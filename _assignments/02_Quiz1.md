@@ -8,6 +8,7 @@ due_event:
     date: 2026-10-23T18:00:00
     description: 'Quiz #1 due'
 description: '請繳交紙本至 SC2003-2 的紙袋'
+hide_late_policy: true
 ---
 大家好：
 
