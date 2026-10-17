@@ -19,4 +19,6 @@ links:
 - [Infix to postfix visualization](https://www.dsavisualizer.in/visualizer/stack/polish/postfix)
 - [Postfix evaluation visualization](https://notation-visualizer.ajayliu.com/stack)
 - [Textbook Chapter 3: Linear Structures（C++）](https://runestone.academy/ns/books/published/cppds/LinearBasic/toctree.html)
-- [[Recorded video]](https://www.youtube.com/playlist?list=PLHNZtBNWQ-86DDNfao7eMt8yYkZUfvO4E)
+- [[Recorded video]](https://www.youtube.com/playlist?list=PLHNZtBNWQ-86DDNfao7eMt8yYkZUfvO4E)（往年錄影，供觀念複習）
+
+本學期使用 C++，程式實作請以本學期講義、Notebook 與 C++ 自學教材為準。
