@@ -12,3 +12,4 @@ links:
 - [Infix to postfix visualization](https://www.dsavisualizer.in/visualizer/stack/polish/postfix)
 - [Postfix evaluation visualization](https://notation-visualizer.ajayliu.com/stack)
 - [Textbook Chapter 3: Linear Structures（C++）](https://runestone.academy/ns/books/published/cppds/LinearBasic/toctree.html)
+- [[Recorded video]](https://youtube.com/playlist?list=PLZAdKohP8LHE&si=frncvrxQzt9ewV2p)
