@@ -8095,9 +8095,9 @@ main {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="a287384a-aa1d-4dd6-a99a-0b28a02182ea" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d7ba77bf-6b35-4798-9483-096331d1b2b5" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('a287384a-aa1d-4dd6-a99a-0b28a02182ea');
+var element = document.getElementById('d7ba77bf-6b35-4798-9483-096331d1b2b5');
 var questionsusnrPRciutgE=[
     {
         "question": "How many recursive calls are made when computing the sum of the vector {2, 4, 6, 8, 10} with listSum()?",
@@ -9455,9 +9455,9 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="9228a888-0899-472e-91ef-4ba33524376e" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="49ed609a-ea2d-4ad7-ab09-69fe90531f66" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('9228a888-0899-472e-91ef-4ba33524376e');
+var element = document.getElementById('49ed609a-ea2d-4ad7-ab09-69fe90531f66');
 var questionsGzXrYXvFEKfC=[
     {
         "question": "Suppose you are going to write a recursive function to calculate the factorial of a number. fact(n) returns n * (n-1) * (n-2) * ... where the factorial of zero is defined to be 1. What would be the most efficient and appropriate base case?",
@@ -11116,9 +11116,9 @@ function make_string(qa, outerqDiv, qDiv, aDiv, id) {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="39d0f7e5-3103-4db0-aa1d-ad61587d92a6" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="f50d9dcf-5e8f-47f7-aed3-45a136b6004b" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('39d0f7e5-3103-4db0-aa1d-ad61587d92a6');
+var element = document.getElementById('f50d9dcf-5e8f-47f7-aed3-45a136b6004b');
 var questionsMjbAgxKTcfMw=[
     {
         "question": "Which base case makes a recursive C++ reverse(string s) function correct for both an empty string and a one-character string?",
@@ -12930,11 +12930,11 @@ moving disk from A to B
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The <code>Maze</code> object will provide the following methods for us to use in writing our search algorithm:</p>
+<p>The <code>Maze</code> object provides the following methods for our search algorithm:</p>
 <ol>
-<li><p><code>Maze(filename)</code> constructor Reads in a data file representing a maze, initializes the internal representation of the maze, and finds the starting grid position.</p>
+<li><p><code>Maze(filename, useGui)</code> reads a maze and finds its starting position. Set <code>useGui</code> to <code>true</code> to open the drawing window; omitting it selects text-only mode.</p>
 </li>
-<li><p><code>print()</code> Prints the current character-grid representation.</p>
+<li><p><code>print()</code> prints the current character grid.</p>
 </li>
 </ol>
 </div>
@@ -12948,9 +12948,11 @@ moving disk from A to B
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <ol start="3">
-<li><p><code>updatePosition()</code> Updates the character stored at a grid position of the maze.</p>
+<li><p><code>updatePosition()</code> updates a grid square and its colored marker when GUI mode is enabled.</p>
 </li>
-<li><p><code>isExit()</code> Checks to see if the current position is an exit from the maze.</p>
+<li><p><code>isExit()</code> checks whether the current position is an exit.</p>
+</li>
+<li><p><code>waitForClose()</code> keeps the completed maze visible until you close its window.</p>
 </li>
 </ol>
 </div>
@@ -12974,7 +12976,7 @@ moving disk from A to B
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>We represent the maze with a few named constants — the <code>C++</code> version prints its progress as text instead of animating with turtle graphics:</p>
+<p>We represent each square with a named constant. The GUI marks tried squares in blue, dead ends in red, and the successful path in green:</p>
 <div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">START</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">'S'</span><span class="p">;</span>
 <span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">OBSTACLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">'+'</span><span class="p">;</span>
 <span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">TRIED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">'.'</span><span class="p">;</span>
@@ -12991,7 +12993,7 @@ moving disk from A to B
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The <code>Maze(filename)</code> constructor method takes the name of a file as its only parameter. This file is a text file that represents a maze by using "+" characters for walls, spaces for open squares, and the letter "S" to indicate the starting position.</p>
+<p>The constructor reads a maze file: <code>+</code> represents a wall, a space represents an open square, and <code>S</code> marks the start. It checks the local file first; the course kernel also includes <code>maze2.txt</code> as a fallback. The following excerpts show the core grid-loading logic; validation, fallback lookup, and GUI setup are omitted.</p>
 </div>
 </div>
 </div>
@@ -13004,7 +13006,7 @@ moving disk from A to B
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Maze</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">public</span><span class="o">:</span>
-<span class="w">        </span><span class="n">Maze</span><span class="p">(</span><span class="n">string</span><span class="w"> </span><span class="n">mazeFilename</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Maze</span><span class="p">(</span><span class="n">string</span><span class="w"> </span><span class="n">mazeFilename</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">useGui</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">ifstream</span><span class="w"> </span><span class="nf">mazeFile</span><span class="p">(</span><span class="n">mazeFilename</span><span class="p">);</span>
 <span class="w">            </span><span class="n">string</span><span class="w"> </span><span class="n">line</span><span class="p">;</span>
 <span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">getline</span><span class="p">(</span><span class="n">mazeFile</span><span class="p">,</span><span class="w"> </span><span class="n">line</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
@@ -13053,7 +13055,7 @@ moving disk from A to B
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The C++ version keeps the same recursive maze-search state transitions and prints the character grid. Each update is visible in the final grid without requiring a GUI turtle window:</p>
+<p>Each call to <code>updatePosition()</code> changes the character grid. In GUI mode, it also moves the turtle and updates the colored marker, making exploration and backtracking visible.</p>
 </div>
 </div>
 </div>
@@ -13066,6 +13068,7 @@ moving disk from A to B
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">updatePosition</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">row</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">col</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">val</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">mazeList</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">val</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">gui</span><span class="p">)</span><span class="w"> </span><span class="n">gui</span><span class="o">-&gt;</span><span class="n">update</span><span class="p">(</span><span class="n">row</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="kt">void</span><span class="w"> </span><span class="nf">print</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -13213,7 +13216,7 @@ moving disk from A to B
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>The maze file <code>maze2.txt</code> (already in the course folder):</p>
+<p>The sample <code>maze2.txt</code> is included with the course kernel. Put your own <code>maze2.txt</code> beside the notebook to use it instead. The included sample is:</p>
 <pre><code>++++++++++++++++++++++
 +   +   ++ ++        +
       +     ++++++++++
@@ -13236,7 +13239,8 @@ moving disk from A to B
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In the printed C++ result, <code>O</code> marks the successful path, <code>.</code> marks tried squares, and <code>-</code> marks dead ends. This console representation preserves the backtracking algorithm without requiring a GUI turtle window.</p>
+<p>Run the example with the course <strong>C++ 17</strong> kernel. Orange squares are walls; blue marks exploration, red marks dead ends, and green marks the successful path. Close the maze window to finish the cell.</p>
+<p>Change <code>true</code> to <code>false</code> for text-only execution: <code>print()</code> still shows the final grid, and <code>waitForClose()</code> returns immediately.</p>
 </div>
 </div>
 </div>
@@ -13628,9 +13632,9 @@ moving disk from A to B
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="353a10ff-529c-40f5-9504-f2881912100e" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="e5d0eae3-dcf0-44c6-b011-ca66048fcbe2" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('353a10ff-529c-40f5-9504-f2881912100e');
+var element = document.getElementById('e5d0eae3-dcf0-44c6-b011-ca66048fcbe2');
 /*!
  * swiped-events.js - v1.1.4
  * Pure JavaScript swipe events
