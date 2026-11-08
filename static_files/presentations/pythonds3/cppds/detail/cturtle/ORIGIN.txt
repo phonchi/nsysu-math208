@@ -1,0 +1,5 @@
+Unmodified copies from ds_cpp/HW3/02_FILE/Cpp:
+  CTurtle.hpp: C-Turtle 1.0.4, https://github.com/walkerje/C-Turtle
+  CImg.h: CImg 2.6.2, https://cimg.eu/
+
+Original copyright and license notices are retained in each header.

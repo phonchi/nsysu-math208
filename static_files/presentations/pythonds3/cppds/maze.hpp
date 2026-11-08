@@ -1,10 +1,13 @@
-// pythonds3/cppds/maze.hpp -- text-based maze and recursive solver (Chapter 6)
+// pythonds3/cppds/maze.hpp -- maze and recursive solver, with optional CTurtle GUI
 #ifndef DSCPP_MAZE_HPP
 #define DSCPP_MAZE_HPP
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
+#include <memory>
+#include <stdexcept>
+#include "detail/maze_gui.hpp"
 using namespace std;
 
 const char START = 'S';
@@ -15,16 +18,31 @@ const char PART_OF_PATH = 'O';
 
 class Maze {
     public:
-        Maze(string mazeFilename) {
+        Maze(string mazeFilename, bool useGui = false) {
             ifstream mazeFile(mazeFilename);
+            // A student only needs the notebook: use packaged sample data if
+            // the named file is absent locally. A local file always wins.
+            if (!mazeFile && mazeFilename.find_first_of("/\\") == string::npos) {
+                mazeFile.clear();
+                const string header = __FILE__;
+                const auto slash = header.find_last_of("/\\");
+                mazeFile.open(header.substr(0, slash + 1) + "data/" + mazeFilename);
+            }
+            if (!mazeFile) throw runtime_error("Cannot open maze: " + mazeFilename);
             string line;
             while (getline(mazeFile, line)) {
+                if (!line.empty() && line.back() == '\r') line.pop_back();
                 if (!line.empty()) mazeList.push_back(line);
             }
+            if (mazeList.empty()) throw runtime_error("Maze is empty: " + mazeFilename);
             rowsInMaze = mazeList.size();
             columnsInMaze = mazeList[0].size();
-            startRow = 0;
-            startCol = 0;
+            for (const string& row : mazeList) {
+                if (row.size() != static_cast<size_t>(columnsInMaze))
+                    throw runtime_error("Maze rows must have equal width");
+            }
+            startRow = -1;
+            startCol = -1;
             for (int row = 0; row < rowsInMaze; row++) {
                 size_t col = mazeList[row].find(START);
                 if (col != string::npos) {
@@ -33,9 +51,26 @@ class Maze {
                     break;
                 }
             }
+            if (startRow < 0) throw runtime_error("Maze has no starting position S");
+            if (useGui) gui = make_unique<cppds_detail::MazeGui>(mazeList);
         }
         char get(int row, int col) { return mazeList[row][col]; }
-        void updatePosition(int row, int col, char val) { mazeList[row][col] = val; }
+        void updatePosition(int row, int col, char val) {
+            mazeList[row][col] = val;
+            if (gui) gui->update(row, col, val);
+        }
+        // GUI turtle shape: "snorlax" (default), "pikachu", "turtle", "arrow", ...
+        // Text-only mode ignores it.
+        void setShape(const string& name) {
+            if (gui) gui->setShape(name);
+        }
+        // Zero means wait for the user to close the window.
+        void waitForClose(unsigned timeoutMilliseconds = 0) {
+            if (gui) gui->wait(timeoutMilliseconds);
+        }
+        void saveGuiImage(const string& filename) {
+            if (gui) gui->save(filename);
+        }
         bool isExit(int row, int col) {
             return (row == 0 || row == rowsInMaze - 1 || col == 0 || col == columnsInMaze - 1);
         }
@@ -48,6 +83,7 @@ class Maze {
         vector<string> mazeList;
         int rowsInMaze;
         int columnsInMaze;
+        unique_ptr<cppds_detail::MazeGui> gui;
 };
 
 bool searchFrom(Maze& maze, int row, int column) {
