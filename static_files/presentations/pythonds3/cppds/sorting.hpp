@@ -1,4 +1,9 @@
 // pythonds3/cppds/sorting.hpp -- the six sorting algorithms of Chapter 7
+//
+// The sorts print their intermediate steps so the lecture can show each pass.
+// Set sortingTrace = false (e.g. at the start of main) to silence them, which
+// is what you want for benchmarks such as HW4. printl() itself always prints.
+// All functions are inline, so several .cpp files may include this header.
 #ifndef DSCPP_SORTING_HPP
 #define DSCPP_SORTING_HPP
 #include <iostream>
@@ -6,14 +11,16 @@
 #include <algorithm>
 using namespace std;
 
-void printl(vector<int>& aList) {
+inline bool sortingTrace = true;   // false: the sorts below print nothing
+
+inline void printl(vector<int>& aList) {
     for (int x : aList) cout << x << " ";
     cout << endl;
 }
 
-void bubbleSort(vector<int>& aList) {
+inline void bubbleSort(vector<int>& aList) {
     for (int i = aList.size() - 1; i > 0; i--) {
-        printl(aList);
+        if (sortingTrace) printl(aList);
         for (int j = 0; j < i; j++) {
             if (aList[j] > aList[j + 1]) {
                 int temp = aList[j];
@@ -24,7 +31,7 @@ void bubbleSort(vector<int>& aList) {
     }
 }
 
-void bubbleSortShort(vector<int>& aList) {
+inline void bubbleSortShort(vector<int>& aList) {
     for (int i = aList.size() - 1; i > 0; i--) {
         bool exchanges = false;
         for (int j = 0; j < i; j++) {
@@ -37,10 +44,10 @@ void bubbleSortShort(vector<int>& aList) {
     }
 }
 
-void selectionSort(vector<int>& aList) {
+inline void selectionSort(vector<int>& aList) {
     int n = static_cast<int>(aList.size());
     for (int fillSlot = n - 1; fillSlot > 0; fillSlot--) {
-        printl(aList);
+        if (sortingTrace) printl(aList);
         int positionOfMax = 0;
         for (int location = 1; location <= fillSlot; location++) {
             if (aList[location] > aList[positionOfMax]) {
@@ -53,9 +60,9 @@ void selectionSort(vector<int>& aList) {
     }
 }
 
-void insertionSort(vector<int>& aList) {
+inline void insertionSort(vector<int>& aList) {
     for (unsigned i = 1; i < aList.size(); i++) {
-        printl(aList);
+        if (sortingTrace) printl(aList);
         int curVal = aList[i];
         int curPos = i;
         while (curPos > 0 && aList[curPos - 1] > curVal) {
@@ -66,7 +73,7 @@ void insertionSort(vector<int>& aList) {
     }
 }
 
-void gapInsertionSort(vector<int>& aList, int start, int gap) {
+inline void gapInsertionSort(vector<int>& aList, int start, int gap) {
     for (unsigned i = start + gap; i < aList.size(); i += gap) {
         int curVal = aList[i];
         int curPos = i;
@@ -78,21 +85,22 @@ void gapInsertionSort(vector<int>& aList, int start, int gap) {
     }
 }
 
-void shellSort(vector<int>& aList) {
+inline void shellSort(vector<int>& aList) {
     int sublistCount = aList.size() / 2;
     while (sublistCount > 0) {
         for (int posStart = 0; posStart < sublistCount; posStart++) {
             gapInsertionSort(aList, posStart, sublistCount);
         }
-        cout << "After increments of size " << sublistCount << " the list is ";
-        printl(aList);
+        if (sortingTrace) {
+            cout << "After increments of size " << sublistCount << " the list is ";
+            printl(aList);
+        }
         sublistCount = sublistCount / 2;
     }
 }
 
-void mergeSort(vector<int>& aList) {
-    cout << "Splitting ";
-    printl(aList);
+inline void mergeSort(vector<int>& aList) {
+    if (sortingTrace) { cout << "Splitting "; printl(aList); }
     if (aList.size() > 1) {
         int mid = aList.size() / 2;
         vector<int> leftHalf(aList.begin(), aList.begin() + mid);
@@ -108,11 +116,10 @@ void mergeSort(vector<int>& aList) {
         while (i < leftHalf.size()) { aList[k] = leftHalf[i]; i++; k++; }
         while (j < rightHalf.size()) { aList[k] = rightHalf[j]; j++; k++; }
     }
-    cout << "Merging ";
-    printl(aList);
+    if (sortingTrace) { cout << "Merging "; printl(aList); }
 }
 
-int partition(vector<int>& aList, int first, int last) {
+inline int partition(vector<int>& aList, int first, int last) {
     int pivotVal = aList[first];
     int leftMark = first + 1;
     int rightMark = last;
@@ -127,20 +134,20 @@ int partition(vector<int>& aList, int first, int last) {
     return rightMark;
 }
 
-void quickSortHelper(vector<int>& aList, int first, int last) {
+inline void quickSortHelper(vector<int>& aList, int first, int last) {
     if (first < last) {
         int split = partition(aList, first, last);
-        printl(aList);
+        if (sortingTrace) printl(aList);
         quickSortHelper(aList, first, split - 1);
         quickSortHelper(aList, split + 1, last);
     }
 }
 
-void quickSort(vector<int>& aList) {
+inline void quickSort(vector<int>& aList) {
     quickSortHelper(aList, 0, aList.size() - 1);
 }
 
-int partitionDesc(vector<int>& aList, int first, int last, bool descending) {
+inline int partitionDesc(vector<int>& aList, int first, int last, bool descending) {
     int pivotVal = aList[first];
     int leftMark = first + 1;
     int rightMark = last;
@@ -160,7 +167,7 @@ int partitionDesc(vector<int>& aList, int first, int last, bool descending) {
     return rightMark;
 }
 
-void quickSortHelperDesc(vector<int>& aList, int first, int last, bool descending) {
+inline void quickSortHelperDesc(vector<int>& aList, int first, int last, bool descending) {
     if (first < last) {
         int split = partitionDesc(aList, first, last, descending);
         quickSortHelperDesc(aList, first, split - 1, descending);
@@ -168,7 +175,7 @@ void quickSortHelperDesc(vector<int>& aList, int first, int last, bool descendin
     }
 }
 
-void quickSortDesc(vector<int>& aList, bool descending = false) {
+inline void quickSortDesc(vector<int>& aList, bool descending = false) {
     quickSortHelperDesc(aList, 0, aList.size() - 1, descending);
 }
 #endif
