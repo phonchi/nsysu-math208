@@ -2,8 +2,24 @@
 
 <html lang="en">
 <head><meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>07_Searching and Sorting.executed</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<meta content="chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
+<title>07_Searching and Sorting.executed slides</title><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script><script type="module">
+  import mermaid from 'https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.0/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true });
+</script>
+<!-- General and theme style sheets -->
+<link href="https://unpkg.com/reveal.js@4.0.2/dist/reveal.css" rel="stylesheet"/>
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+}
+</script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7234,61 +7250,148 @@ all of MD as it is not optimized for dense, information rich UIs.
 }
 </style>
 <style type="text/css">
-/* Force rendering true colors when outputing to pdf */
-* {
-  -webkit-print-color-adjust: exact;
-}
-
-/* Misc */
 a.anchor-link {
-  display: none;
+   display: none;
+}
+.highlight  {
+    margin: 0.4em;
+}
+.jp-Notebook {
+    padding: 0;
+}
+:root {
+    --jp-ui-font-size1: 20px;       /* instead of 14px */
+    --jp-content-font-size1: 20px;  /* instead of 14px */
+    --jp-code-font-size: 19px;      /* instead of 13px */
+    --jp-cell-prompt-width: 110px;  /* instead of 64px */
+}
+@media print {
+  body {
+    margin: 0;
+  }
+}
+</style>
+<style type="text/css">
+/* Overrides of notebook CSS for static HTML export */
+.reveal {
+  font-size: 160%;
+}
+.reveal table {
+  font-size: var(--jp-ui-font-size1);
+}
+.reveal pre {
+  width: inherit;
+  padding: 0.4em;
+  margin: 0px;
+  font-family: monospace, sans-serif;
+  font-size: 80%;
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+}
+.reveal pre code {
+  padding: 0px;
+}
+.reveal section img {
+  border: 0px solid black;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+}
+.reveal .slides {
+  text-align: left;
+}
+.reveal.fade {
+  opacity: 1;
+}
+.reveal .progress {
+  position: static;
 }
 
-/* Input area styling */
-.jp-InputArea {
-  overflow: hidden;
+div.jp-InputArea-editor {
+  padding: 0.06em;
 }
 
-.jp-InputArea-editor {
-  overflow: hidden;
+div.code_cell {
+  background-color: transparent;
 }
 
-.cm-editor.cm-s-jupyter .highlight pre {
-/* weird, but --jp-code-padding defined to be 5px but 4px horizontal padding is hardcoded for pre.cm-line */
-  padding: var(--jp-code-padding) 4px;
+div.output_area pre {
+  font-family: monospace, sans-serif;
+  font-size: 80%;
+}
+
+div.jp-OutputPrompt {
+  /* 5px right shift to account for margin in parent container */
+  margin: 5px 5px 0 0;
+}
+
+.reveal div.highlight {
   margin: 0;
-
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  color: inherit;
-
 }
 
-.jp-OutputArea-output pre {
-  line-height: inherit;
-  font-family: inherit;
-}
-
-.jp-RenderedText pre {
-  color: var(--jp-content-font-color1);
+.reveal div.highlight > pre {
+  margin: 0;
+  width: 100%;
   font-size: var(--jp-code-font-size);
 }
 
-/* Hiding the collapser by default */
-.jp-Collapser {
-  display: none;
+.reveal div.jp-OutputArea-output > pre {
+  margin: 0;
+  width: 90%;
+  font-size: var(--jp-code-font-size);
+  box-shadow: none;
 }
 
-@page {
-    margin: 0.5in; /* Margin for each printed piece of paper */
+main {
+  height: 100%;
 }
 
-@media print {
-  .jp-Cell-inputWrapper,
-  .jp-Cell-outputWrapper {
-    display: block;
-  }
+/* Reveal navigation controls */
+
+.reveal .controls .navigate-left,
+.reveal .controls .navigate-left.enabled {
+  border-right-color: #727272;
+}
+.reveal .controls .navigate-left.enabled:hover,
+.reveal .controls .navigate-left.enabled.enabled:hover {
+  border-right-color: #dfdfdf;
+}
+.reveal .controls .navigate-right,
+.reveal .controls .navigate-right.enabled {
+  border-left-color: #727272;
+}
+.reveal .controls .navigate-right.enabled:hover,
+.reveal .controls .navigate-right.enabled.enabled:hover {
+  border-left-color: #dfdfdf;
+}
+.reveal .controls .navigate-up,
+.reveal .controls .navigate-up.enabled {
+  border-bottom-color: #727272;
+}
+.reveal .controls .navigate-up.enabled:hover,
+.reveal .controls .navigate-up.enabled.enabled:hover {
+  border-bottom-color: #dfdfdf;
+}
+.reveal .controls .navigate-down,
+.reveal .controls .navigate-down.enabled {
+  border-top-color: #727272;
+}
+.reveal .controls .navigate-down.enabled:hover,
+.reveal .controls .navigate-down.enabled.enabled:hover {
+  border-top-color: #dfdfdf;
+}
+.reveal .progress span {
+  background: #727272;
+}
+
+/* Scrollbars */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar * {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #727272 !important;
 }
 </style>
 <!-- Load mathjax -->
@@ -7325,477 +7428,13 @@ a.anchor-link {
     }
     init_mathjax();
     </script>
-<!-- End of mathjax configuration --><script type="module">
-  document.addEventListener("DOMContentLoaded", async () => {
-    const diagrams = document.querySelectorAll(".jp-Mermaid > pre.mermaid");
-    // do not load mermaidjs if not needed
-    if (!diagrams.length) {
-      return;
-    }
-    const mermaid = (await import("https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.0/mermaid.esm.min.mjs")).default;
-    const elkUrl = "https://cdnjs.cloudflare.com/ajax/libs/mermaid-layout-elk/0.1.9/mermaid-layout-elk.esm.min.mjs";
-    if(elkUrl) {
-      const elkLayouts = (await import(elkUrl)).default;
-      mermaid.registerLayoutLoaders(elkLayouts);
-    }
-    const parser = new DOMParser();
-
-    mermaid.initialize({
-      maxTextSize: 100000,
-      maxEdges: 100000,
-      startOnLoad: false,
-      fontFamily: window
-        .getComputedStyle(document.body)
-        .getPropertyValue("--jp-ui-font-family"),
-      theme: document.querySelector("body[data-jp-theme-light='true']")
-        ? "default"
-        : "dark",
-    });
-
-    let _nextMermaidId = 0;
-
-    function makeMermaidImage(svg) {
-      const img = document.createElement("img");
-      const doc = parser.parseFromString(svg, "image/svg+xml");
-      const svgEl = doc.querySelector("svg");
-      const { maxWidth } = svgEl?.style || {};
-      const firstTitle = doc.querySelector("title");
-      const firstDesc = doc.querySelector("desc");
-
-      img.setAttribute("src", `data:image/svg+xml,${encodeURIComponent(svg)}`);
-      if (maxWidth) {
-        img.width = parseInt(maxWidth);
-      }
-      if (firstTitle) {
-        img.setAttribute("alt", firstTitle.textContent);
-      }
-      if (firstDesc) {
-        const caption = document.createElement("figcaption");
-        caption.className = "sr-only";
-        caption.textContent = firstDesc.textContent;
-        return [img, caption];
-      }
-      return [img];
-    }
-
-    async function makeMermaidError(text) {
-      let errorMessage = "";
-      try {
-        await mermaid.parse(text);
-      } catch (err) {
-        errorMessage = `${err}`;
-      }
-
-      const result = document.createElement("details");
-      result.className = 'jp-RenderedMermaid-Details';
-      const summary = document.createElement("summary");
-      summary.className = 'jp-RenderedMermaid-Summary';
-      const pre = document.createElement("pre");
-      const code = document.createElement("code");
-      code.innerText = text;
-      pre.appendChild(code);
-      summary.appendChild(pre);
-      result.appendChild(summary);
-
-      const warning = document.createElement("pre");
-      warning.innerText = errorMessage;
-      result.appendChild(warning);
-      return [result];
-    }
-
-    async function renderOneMarmaid(src) {
-      const id = `jp-mermaid-${_nextMermaidId++}`;
-      const parent = src.parentNode;
-      let raw = src.textContent.trim();
-      const el = document.createElement("div");
-      el.style.visibility = "hidden";
-      document.body.appendChild(el);
-      let results = null;
-      let output = null;
-      try {
-        let { svg } = await mermaid.render(id, raw, el);
-        svg = cleanMermaidSvg(svg);
-        results = makeMermaidImage(svg);
-        output = document.createElement("figure");
-        results.map(output.appendChild, output);
-      } catch (err) {
-        parent.classList.add("jp-mod-warning");
-        results = await makeMermaidError(raw);
-        output = results[0];
-      } finally {
-        el.remove();
-      }
-      parent.classList.add("jp-RenderedMermaid");
-      parent.appendChild(output);
-    }
-
-
-    /**
-     * Post-process to ensure mermaid diagrams contain only valid SVG and XHTML.
-     */
-    function cleanMermaidSvg(svg) {
-      svg = svg.replace(RE_VOID_ELEMENT, replaceVoidElement);
-      return `${SVG_XML_HEADER}${svg}`;
-    }
-
-
-    /**
-     * A regular expression for all void elements, which may include attributes and
-     * a slash.
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Glossary/Void_element
-     *
-     * Of these, only `<br>` is generated by Mermaid in place of `\n`,
-     * but _any_ "malformed" tag will break the SVG rendering entirely.
-     */
-    const RE_VOID_ELEMENT =
-      /<\s*(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)\s*([^>]*?)\s*>/gi;
-
-    /**
-     * Ensure a void element is closed with a slash, preserving any attributes.
-     */
-    function replaceVoidElement(match, tag, rest) {
-      rest = rest.trim();
-      if (!rest.endsWith('/')) {
-        rest = `${rest} /`;
-      }
-      return `<${tag} ${rest}>`;
-    }
-
-
-  /**
-   * Named HTML entities with their decimal equivalent codes.
-   *
-   * @see https://www.w3.org/TR/WD-html40-970708/sgml/entities.html
-   * */
-  const HTML_ENTITIES = `<!ENTITY Aacute "&#193;">
-<!ENTITY aacute "&#225;">
-<!ENTITY Acirc "&#194;">
-<!ENTITY acirc "&#226;">
-<!ENTITY acute "&#180;">
-<!ENTITY AElig "&#198;">
-<!ENTITY aelig "&#230;">
-<!ENTITY Agrave "&#192;">
-<!ENTITY agrave "&#224;">
-<!ENTITY alefsym "&#8501;">
-<!ENTITY Alpha "&#913;">
-<!ENTITY alpha "&#945;">
-<!ENTITY amp "&#38;">
-<!ENTITY and "&#8869;">
-<!ENTITY ang "&#8736;">
-<!ENTITY Aring "&#197;">
-<!ENTITY aring "&#229;">
-<!ENTITY asymp "&#8776;">
-<!ENTITY Atilde "&#195;">
-<!ENTITY atilde "&#227;">
-<!ENTITY Auml "&#196;">
-<!ENTITY auml "&#228;">
-<!ENTITY bdquo "&#8222;">
-<!ENTITY Beta "&#914;">
-<!ENTITY beta "&#946;">
-<!ENTITY brvbar "&#166;">
-<!ENTITY bull "&#8226;">
-<!ENTITY cap "&#8745;">
-<!ENTITY Ccedil "&#199;">
-<!ENTITY ccedil "&#231;">
-<!ENTITY cedil "&#184;">
-<!ENTITY cent "&#162;">
-<!ENTITY Chi "&#935;">
-<!ENTITY chi "&#967;">
-<!ENTITY circ "&#710;">
-<!ENTITY clubs "&#9827;">
-<!ENTITY cong "&#8773;">
-<!ENTITY copy "&#169;">
-<!ENTITY crarr "&#8629;">
-<!ENTITY cup "&#8746;">
-<!ENTITY curren "&#164;">
-<!ENTITY dagger "&#8224;">
-<!ENTITY Dagger "&#8225;">
-<!ENTITY darr "&#8595;">
-<!ENTITY dArr "&#8659;">
-<!ENTITY deg "&#176;">
-<!ENTITY Delta "&#916;">
-<!ENTITY delta "&#948;">
-<!ENTITY diams "&#9830;">
-<!ENTITY divide "&#247;">
-<!ENTITY Eacute "&#201;">
-<!ENTITY eacute "&#233;">
-<!ENTITY Ecirc "&#202;">
-<!ENTITY ecirc "&#234;">
-<!ENTITY Egrave "&#200;">
-<!ENTITY egrave "&#232;">
-<!ENTITY empty "&#8709;">
-<!ENTITY emsp "&#8195;">
-<!ENTITY ensp "&#8194;">
-<!ENTITY epsilon "&#949;">
-<!ENTITY Epsilon "&#917;">
-<!ENTITY equiv "&#8801;">
-<!ENTITY Eta "&#919;">
-<!ENTITY eta "&#951;">
-<!ENTITY ETH "&#208;">
-<!ENTITY eth "&#240;">
-<!ENTITY Euml "&#203;">
-<!ENTITY euml "&#235;">
-<!ENTITY exist "&#8707;">
-<!ENTITY fnof "&#402;">
-<!ENTITY forall "&#8704;">
-<!ENTITY frac12 "&#189;">
-<!ENTITY frac14 "&#188;">
-<!ENTITY frac34 "&#190;">
-<!ENTITY frasl "&#8260;">
-<!ENTITY Gamma "&#915;">
-<!ENTITY gamma "&#947;">
-<!ENTITY ge "&#8805;">
-<!ENTITY gt "&#62;">
-<!ENTITY harr "&#8596;">
-<!ENTITY hArr "&#8660;">
-<!ENTITY hearts "&#9829;">
-<!ENTITY hellip "&#8230;">
-<!ENTITY Iacute "&#205;">
-<!ENTITY iacute "&#237;">
-<!ENTITY Icirc "&#206;">
-<!ENTITY icirc "&#238;">
-<!ENTITY iexcl "&#161;">
-<!ENTITY Igrave "&#204;">
-<!ENTITY igrave "&#236;">
-<!ENTITY image "&#8465;">
-<!ENTITY infin "&#8734;">
-<!ENTITY int "&#8747;">
-<!ENTITY Iota "&#921;">
-<!ENTITY iota "&#953;">
-<!ENTITY iquest "&#191;">
-<!ENTITY isin "&#8712;">
-<!ENTITY Iuml "&#207;">
-<!ENTITY iuml "&#239;">
-<!ENTITY Kappa "&#922;">
-<!ENTITY kappa "&#954;">
-<!ENTITY Lambda "&#923;">
-<!ENTITY lambda "&#955;">
-<!ENTITY lang "&#9001;">
-<!ENTITY laquo "&#171;">
-<!ENTITY larr "&#8592;">
-<!ENTITY lArr "&#8656;">
-<!ENTITY lceil "&#8968;">
-<!ENTITY ldquo "&#8220;">
-<!ENTITY le "&#8804;">
-<!ENTITY lfloor "&#8970;">
-<!ENTITY lowast "&#8727;">
-<!ENTITY loz "&#9674;">
-<!ENTITY lrm "&#8206;">
-<!ENTITY lsaquo "&#8249;">
-<!ENTITY lsquo "&#8216;">
-<!ENTITY lt "&#60;">
-<!ENTITY macr "&#175;">
-<!ENTITY mdash "&#8212;">
-<!ENTITY micro "&#181;">
-<!ENTITY middot "&#183;">
-<!ENTITY minus "&#8722;">
-<!ENTITY Mu "&#924;">
-<!ENTITY mu "&#956;">
-<!ENTITY nabla "&#8711;">
-<!ENTITY nbsp "&#160;">
-<!ENTITY ndash "&#8211;">
-<!ENTITY ne "&#8800;">
-<!ENTITY ni "&#8715;">
-<!ENTITY not "&#172;">
-<!ENTITY notin "&#8713;">
-<!ENTITY nsub "&#8836;">
-<!ENTITY Ntilde "&#209;">
-<!ENTITY ntilde "&#241;">
-<!ENTITY Nu "&#925;">
-<!ENTITY nu "&#957;">
-<!ENTITY Oacute "&#211;">
-<!ENTITY oacute "&#243;">
-<!ENTITY Ocirc "&#212;">
-<!ENTITY ocirc "&#244;">
-<!ENTITY OElig "&#338;">
-<!ENTITY oelig "&#339;">
-<!ENTITY Ograve "&#210;">
-<!ENTITY ograve "&#242;">
-<!ENTITY oline "&#8254;">
-<!ENTITY Omega "&#937;">
-<!ENTITY omega "&#969;">
-<!ENTITY Omicron "&#927;">
-<!ENTITY omicron "&#959;">
-<!ENTITY oplus "&#8853;">
-<!ENTITY or "&#8870;">
-<!ENTITY ordf "&#170;">
-<!ENTITY ordm "&#186;">
-<!ENTITY Oslash "&#216;">
-<!ENTITY oslash "&#248;">
-<!ENTITY Otilde "&#213;">
-<!ENTITY otilde "&#245;">
-<!ENTITY otimes "&#8855;">
-<!ENTITY Ouml "&#214;">
-<!ENTITY ouml "&#246;">
-<!ENTITY para "&#182;">
-<!ENTITY part "&#8706;">
-<!ENTITY permil "&#8240;">
-<!ENTITY perp "&#8869;">
-<!ENTITY Phi "&#934;">
-<!ENTITY phi "&#966;">
-<!ENTITY Pi "&#928;">
-<!ENTITY pi "&#960;">
-<!ENTITY piv "&#982;">
-<!ENTITY plusmn "&#177;">
-<!ENTITY pound "&#163;">
-<!ENTITY prime "&#8242;">
-<!ENTITY Prime "&#8243;">
-<!ENTITY prod "&#8719;">
-<!ENTITY prop "&#8733;">
-<!ENTITY Psi "&#936;">
-<!ENTITY psi "&#968;">
-<!ENTITY quot "&#34;">
-<!ENTITY radic "&#8730;">
-<!ENTITY rang "&#9002;">
-<!ENTITY raquo "&#187;">
-<!ENTITY rarr "&#8594;">
-<!ENTITY rArr "&#8658;">
-<!ENTITY rceil "&#8969;">
-<!ENTITY rdquo "&#8221;">
-<!ENTITY real "&#8476;">
-<!ENTITY reg "&#174;">
-<!ENTITY rfloor "&#8971;">
-<!ENTITY Rho "&#929;">
-<!ENTITY rho "&#961;">
-<!ENTITY rlm "&#8207;">
-<!ENTITY rsaquo "&#8250;">
-<!ENTITY rsquo "&#8217;">
-<!ENTITY sbquo "&#8218;">
-<!ENTITY Scaron "&#352;">
-<!ENTITY scaron "&#353;">
-<!ENTITY sdot "&#8901;">
-<!ENTITY sect "&#167;">
-<!ENTITY shy "&#173;">
-<!ENTITY Sigma "&#931;">
-<!ENTITY sigma "&#963;">
-<!ENTITY sigmaf "&#962;">
-<!ENTITY sim "&#8764;">
-<!ENTITY spades "&#9824;">
-<!ENTITY sub "&#8834;">
-<!ENTITY sube "&#8838;">
-<!ENTITY sum "&#8721;">
-<!ENTITY sup "&#8835;">
-<!ENTITY sup1 "&#185;">
-<!ENTITY sup2 "&#178;">
-<!ENTITY sup3 "&#179;">
-<!ENTITY supe "&#8839;">
-<!ENTITY szlig "&#223;">
-<!ENTITY Tau "&#932;">
-<!ENTITY tau "&#964;">
-<!ENTITY there4 "&#8756;">
-<!ENTITY Theta "&#920;">
-<!ENTITY theta "&#952;">
-<!ENTITY thetasym "&#977;">
-<!ENTITY thinsp "&#8201;">
-<!ENTITY THORN "&#222;">
-<!ENTITY thorn "&#254;">
-<!ENTITY tilde "&#732;">
-<!ENTITY times "&#215;">
-<!ENTITY trade "&#8482;">
-<!ENTITY Uacute "&#218;">
-<!ENTITY uacute "&#250;">
-<!ENTITY uarr "&#8593;">
-<!ENTITY uArr "&#8657;">
-<!ENTITY Ucirc "&#219;">
-<!ENTITY ucirc "&#251;">
-<!ENTITY Ugrave "&#217;">
-<!ENTITY ugrave "&#249;">
-<!ENTITY uml "&#168;">
-<!ENTITY upsih "&#978;">
-<!ENTITY Upsilon "&#933;">
-<!ENTITY upsilon "&#965;">
-<!ENTITY Uuml "&#220;">
-<!ENTITY uuml "&#252;">
-<!ENTITY weierp "&#8472;">
-<!ENTITY Xi "&#926;">
-<!ENTITY xi "&#958;">
-<!ENTITY Yacute "&#221;">
-<!ENTITY yacute "&#253;">
-<!ENTITY yen "&#165;">
-<!ENTITY Yuml "&#376;">
-<!ENTITY yuml "&#255;">
-<!ENTITY Zeta "&#918;">
-<!ENTITY zeta "&#950;">
-<!ENTITY zwj "&#8205;">
-<!ENTITY zwnj "&#8204;">`.replace(/\n/g, ' ');
-
-  /**
-   * A reasonably strict xml declaration.
-   */
-  const XML_DECL = '<?xml version="1.0" standalone="no"?>';
-
-  /**
-   * The beginning of the XML doctype declaration.
-   */
-  const DOCTYPE_START = `<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [`;
-
-  /**
-   * The end of the XML docype declaration.
-   */
-  const DOCTYPE_END = ']>';
-
-  /**
-   * A full header for an SVG XML document.
-   */
-  const SVG_XML_HEADER = `${XML_DECL}
-    ${DOCTYPE_START}${HTML_ENTITIES}${DOCTYPE_END}`;
-
-    void Promise.all([...diagrams].map(renderOneMarmaid));
-  });
-</script>
-<style>
-  .jp-Mermaid:not(.jp-RenderedMermaid) {
-    display: none;
-  }
-
-  .jp-RenderedMermaid {
-    overflow: auto;
-    display: flex;
-  }
-
-  .jp-RenderedMermaid.jp-mod-warning {
-    width: auto;
-    padding: 0.5em;
-    margin-top: 0.5em;
-    border: var(--jp-border-width) solid var(--jp-warn-color2);
-    border-radius: var(--jp-border-radius);
-    color: var(--jp-ui-font-color1);
-    font-size: var(--jp-ui-font-size1);
-    white-space: pre-wrap;
-    word-wrap: break-word;
-  }
-
-  .jp-RenderedMermaid figure {
-    margin: 0;
-    overflow: auto;
-    max-width: 100%;
-  }
-
-  .jp-RenderedMermaid img {
-    max-width: 100%;
-  }
-
-  .jp-RenderedMermaid-Details > pre {
-    margin-top: 1em;
-  }
-
-  .jp-RenderedMermaid-Summary {
-    color: var(--jp-warn-color2);
-  }
-
-  .jp-RenderedMermaid:not(.jp-mod-warning) pre {
-    display: none;
-  }
-
-  .jp-RenderedMermaid-Summary > pre {
-    display: inline-block;
-    white-space: normal;
-  }
-</style>
-<!-- End of mermaid configuration --></head>
+<!-- End of mathjax configuration --><!-- Reveal Theme -->
+<link href="https://unpkg.com/reveal.js@4.0.2/dist/theme/simple.css" id="theme" rel="stylesheet"/>
+</head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 <main>
+<div class="reveal">
+<div class="slides"><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -7806,41 +7445,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<table align="left">
-<td>
-<a href="https://colab.research.google.com/github/phonchi/nsysu-math208/blob/master/static_files/presentations/07_Searching and Sorting.ipynb" target="_parent"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg"/></a>
-</td>
-<td>
-<a href="https://kaggle.com/kernels/welcome?src=https://github.com/phonchi/nsysu-math208/blob/master/static_files/presentations/07_Searching and Sorting.ipynb" target="_blank"><img alt="No description has been provided for this image" src="https://kaggle.com/static/images/open-in-kaggle.svg"/></a>
-</td>
-</table>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs celltag_skip-execution celltag_py-widget">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-C++"><pre><span></span><span class="n">from</span><span class="w"> </span><span class="n">jupyterquiz</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="n">display_quiz</span>
-
-<span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"questions/ch7/"</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -7858,7 +7463,7 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div>
+</div></section></section><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -7869,7 +7474,8 @@ a.anchor-link {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
+</div><aside class="notes">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9374,6 +8980,7 @@ function initQuick() {
 </div>
 </div>
 </div>
+</aside></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9384,7 +8991,7 @@ function initQuick() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9395,7 +9002,7 @@ function initQuick() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9406,7 +9013,7 @@ function initQuick() {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9435,7 +9042,7 @@ function initQuick() {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9464,7 +9071,7 @@ function initQuick() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9475,7 +9082,7 @@ function initQuick() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section></section><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9486,7 +9093,7 @@ function initQuick() {
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9497,7 +9104,7 @@ function initQuick() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9508,7 +9115,7 @@ function initQuick() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9519,7 +9126,7 @@ function initQuick() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9530,7 +9137,7 @@ function initQuick() {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9579,7 +9186,7 @@ false
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9646,7 +9253,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9657,7 +9264,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9668,7 +9275,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9679,7 +9286,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9690,7 +9297,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9701,7 +9308,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9712,7 +9319,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9723,7 +9330,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9734,7 +9341,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9745,7 +9352,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9756,7 +9363,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9767,7 +9374,7 @@ false
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -9814,7 +9421,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9825,7 +9432,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9859,7 +9466,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9893,7 +9500,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9904,7 +9511,7 @@ false
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -10154,9 +9761,9 @@ false
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="a5524b6f-9550-4623-a8a2-a523bac76c23" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="9a244a18-2401-4cfd-9cae-18f2d1f415c5" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('a5524b6f-9550-4623-a8a2-a523bac76c23');
+var element = document.getElementById('9a244a18-2401-4cfd-9cae-18f2d1f415c5');
 var questionsLDPeGuZCDjek=[
     {
         "question": "Suppose you are doing a sequential search of the ordered list [3, 5, 6, 8, 11, 12, 14, 15, 17, 18]. How many comparisons would you need to do in order to find the key 13?",
@@ -11263,7 +10870,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section></section><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -11274,7 +10881,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -11285,7 +10892,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -11296,7 +10903,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -11307,7 +10914,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -11318,7 +10925,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -11329,7 +10936,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -11340,7 +10947,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -11363,7 +10970,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11405,7 +11012,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -11416,7 +11023,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -11427,7 +11034,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -11453,7 +11060,7 @@ false
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11495,7 +11102,7 @@ false
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
+</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11562,7 +11169,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -11573,7 +11180,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -11584,7 +11191,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -11624,7 +11231,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -11635,7 +11242,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -11646,18 +11253,7 @@ false
 </div>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>A recursive implementation that constructs a new sub-vector at every call pays $O(k)$ to copy a range of length $k$. Across the single chain of calls, $n/2+n/4+\cdots=O(n)$ elements are copied, so that version is $O(n)$ time and $O(n)$ peak element storage—not strict $O(\log n)$. Passing one <code>const vector&lt;int&gt;&amp;</code> with <code>first</code> and <code>last</code> bounds retains $O(\log n)$ comparisons, $O(\log n)$ call-stack space, and no sub-vector copies.</p>
-</div>
-</div>
-</div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -11668,7 +11264,7 @@ false
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -11679,7 +11275,7 @@ false
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -11929,9 +11525,9 @@ false
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="e65d86a8-0e84-45cd-bfaf-bd4d3486d582" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="8518f4d8-e49d-4d39-ac92-6c47aa0b5b50" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('e65d86a8-0e84-45cd-bfaf-bd4d3486d582');
+var element = document.getElementById('8518f4d8-e49d-4d39-ac92-6c47aa0b5b50');
 var questionsZMtsgjuqwIBu=[
     {
         "question": "Suppose recursive binary search uses index bounds and midpoint = first + (last - first) / 2. For the sorted vector {3, 5, 6, 8, 11, 12, 14, 15, 17, 18}, which values are compared while searching for 16?",
@@ -13039,7 +12635,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section></section><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13050,7 +12646,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13061,7 +12657,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13072,7 +12668,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13083,7 +12679,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13094,7 +12690,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13105,7 +12701,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13116,7 +12712,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13127,7 +12723,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13171,7 +12767,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13182,7 +12778,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13193,7 +12789,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13204,7 +12800,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13215,7 +12811,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13226,7 +12822,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13237,7 +12833,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13248,7 +12844,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13259,7 +12855,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13270,7 +12866,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13281,7 +12877,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13292,7 +12888,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13303,7 +12899,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13314,7 +12910,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13325,7 +12921,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13336,7 +12932,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13387,7 +12983,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -13434,7 +13030,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13445,7 +13041,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13456,7 +13052,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -13498,7 +13094,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13509,7 +13105,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13520,7 +13116,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13531,7 +13127,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13542,7 +13138,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13553,7 +13149,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13564,7 +13160,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13575,7 +13171,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13587,7 +13183,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13598,7 +13194,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13609,7 +13205,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13620,7 +13216,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13631,7 +13227,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13642,7 +13238,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13653,7 +13249,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13664,7 +13260,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13675,7 +13271,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13687,7 +13283,7 @@ With simple linear probing, the rehash function is $new\_hash=rehash(old\_hash),
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13698,7 +13294,7 @@ With simple linear probing, the rehash function is $new\_hash=rehash(old\_hash),
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -13742,7 +13338,7 @@ With simple linear probing, the rehash function is $new\_hash=rehash(old\_hash),
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13753,7 +13349,7 @@ With simple linear probing, the rehash function is $new\_hash=rehash(old\_hash),
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13764,7 +13360,7 @@ With simple linear probing, the rehash function is $new\_hash=rehash(old\_hash),
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13775,7 +13371,7 @@ With simple linear probing, the rehash function is $new\_hash=rehash(old\_hash),
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13786,7 +13382,7 @@ With simple linear probing, the rehash function is $new\_hash=rehash(old\_hash),
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13797,7 +13393,7 @@ With simple linear probing, the rehash function is $new\_hash=rehash(old\_hash),
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -13808,7 +13404,7 @@ With simple linear probing, the rehash function is $new\_hash=rehash(old\_hash),
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -14058,9 +13654,9 @@ With simple linear probing, the rehash function is $new\_hash=rehash(old\_hash),
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="bc8768bc-1c16-47cc-be28-9327b949a1f9" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="74100d43-30c0-4536-9ec2-424025a9d4c4" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('bc8768bc-1c16-47cc-be28-9327b949a1f9');
+var element = document.getElementById('74100d43-30c0-4536-9ec2-424025a9d4c4');
 var questionsWXrjXfqTjYCK=[
     {
         "question": "In a hash table of size 13, which index positions would the following two keys map to: 27 and 130?",
@@ -15167,7 +14763,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -15417,9 +15013,9 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="69ebe16d-581f-4a46-90c0-8932ed5eaa80" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="067c2491-d865-44c4-a045-d3cc053a93ca" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('69ebe16d-581f-4a46-90c0-8932ed5eaa80');
+var element = document.getElementById('067c2491-d865-44c4-a045-d3cc053a93ca');
 var questionsYrEbVpUTEBad=[
     {
         "question": "Suppose you are given the following set of keys to insert into a hash table that holds exactly 11 values: 113, 117, 97, 100, 114, 108, 116, 105, 99. Which of the following best demonstrates the contents of the hash table after all the keys have been inserted using linear probing?",
@@ -16526,7 +16122,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16537,7 +16133,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs celltag_skip-execution">
+</div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs celltag_skip-execution">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -16568,7 +16164,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16579,7 +16175,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16590,7 +16186,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16601,7 +16197,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16612,7 +16208,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16628,7 +16224,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16644,7 +16240,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16655,7 +16251,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16666,7 +16262,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16698,7 +16294,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16728,7 +16324,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16739,7 +16335,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16765,7 +16361,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16776,7 +16372,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16787,7 +16383,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16798,7 +16394,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div></div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -16840,7 +16436,7 @@ bird goat pig chicken dog lion tiger - - cow cat
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16851,7 +16447,7 @@ bird goat pig chicken dog lion tiger - - cow cat
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -16898,7 +16494,7 @@ bird goat pig duck dog lion tiger - - cow cat
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -16977,7 +16573,7 @@ bird goat pig duck dog lion tiger - - cow cat
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16988,7 +16584,7 @@ bird goat pig duck dog lion tiger - - cow cat
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -16999,7 +16595,7 @@ bird goat pig duck dog lion tiger - - cow cat
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17010,7 +16606,7 @@ bird goat pig duck dog lion tiger - - cow cat
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17021,7 +16617,7 @@ bird goat pig duck dog lion tiger - - cow cat
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17032,7 +16628,7 @@ bird goat pig duck dog lion tiger - - cow cat
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17044,7 +16640,7 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 </div>
 </div>
-</div>
+</div></div></section></section><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17055,7 +16651,7 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17066,7 +16662,7 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17077,7 +16673,7 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17088,7 +16684,7 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17099,7 +16695,7 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17110,7 +16706,7 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17121,7 +16717,7 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 </div>
 </div>
-</div>
+</div></div></section></section><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17132,7 +16728,7 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17143,7 +16739,7 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17154,7 +16750,7 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17165,7 +16761,7 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17176,7 +16772,7 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17192,7 +16788,7 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17203,18 +16799,7 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<center><img alt="No description has been provided for this image" src="https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/static_files/presentations/imgs/swap.png" width="30%"/></center>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -17256,7 +16841,7 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -17267,7 +16852,7 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -17333,7 +16918,7 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
+</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -17583,9 +17168,9 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="df6e54d3-185f-42aa-bafc-da6066c9a45b" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="1b02ad1b-d573-4622-a87a-5c331b92bfdf" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('df6e54d3-185f-42aa-bafc-da6066c9a45b');
+var element = document.getElementById('1b02ad1b-d573-4622-a87a-5c331b92bfdf');
 var questionsrRciPJFNjFFy=[
     {
         "question": "After the first complete pass of ascending bubble sort on {5, 1, 4, 2, 8}, what is the vector?",
@@ -18693,7 +18278,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -18704,7 +18289,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -18744,7 +18329,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -18755,7 +18340,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -18766,7 +18351,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -18777,7 +18362,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div></div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -18813,18 +18398,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>This is often called <strong>short bubble</strong>.</p>
-</div>
-</div>
-</div>
-</div>
+</div></div></section></section><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -18835,7 +18409,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -18846,7 +18420,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -18857,7 +18431,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -18868,7 +18442,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -18913,7 +18487,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -18924,7 +18498,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -18990,7 +18564,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></section></section><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19001,7 +18575,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19012,7 +18586,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19023,7 +18597,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19035,7 +18609,7 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19046,7 +18620,7 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19057,7 +18631,7 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19068,7 +18642,7 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -19110,7 +18684,7 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -19176,7 +18750,7 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19187,7 +18761,7 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 </div>
 </div>
 </div>
-</div>
+</div></div></section></section><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19198,7 +18772,7 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19209,7 +18783,7 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19220,7 +18794,7 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19231,7 +18805,7 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19243,7 +18817,7 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19254,7 +18828,7 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19266,7 +18840,7 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19277,7 +18851,7 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -19316,7 +18890,7 @@ After increments of size 1 the list is 17 20 26 31 44 54 55 77 93
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19327,7 +18901,7 @@ After increments of size 1 the list is 17 20 26 31 44 54 55 77 93
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19338,7 +18912,7 @@ After increments of size 1 the list is 17 20 26 31 44 54 55 77 93
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -19409,7 +18983,7 @@ After increments of size 1 the list is 17 20 26 31 44 54 55 77 93
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19420,7 +18994,7 @@ After increments of size 1 the list is 17 20 26 31 44 54 55 77 93
 </div>
 </div>
 </div>
-</div>
+</div></div></section></section><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19431,7 +19005,7 @@ After increments of size 1 the list is 17 20 26 31 44 54 55 77 93
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19442,7 +19016,7 @@ After increments of size 1 the list is 17 20 26 31 44 54 55 77 93
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19453,7 +19027,7 @@ After increments of size 1 the list is 17 20 26 31 44 54 55 77 93
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19464,7 +19038,7 @@ After increments of size 1 the list is 17 20 26 31 44 54 55 77 93
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19475,7 +19049,7 @@ After increments of size 1 the list is 17 20 26 31 44 54 55 77 93
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19486,7 +19060,7 @@ After increments of size 1 the list is 17 20 26 31 44 54 55 77 93
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19497,7 +19071,7 @@ After increments of size 1 the list is 17 20 26 31 44 54 55 77 93
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -19545,7 +19119,7 @@ Merging 17 26 54 93
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
+</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -19613,7 +19187,7 @@ Merging 17 26 54 93
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19624,7 +19198,7 @@ Merging 17 26 54 93
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19635,7 +19209,7 @@ Merging 17 26 54 93
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19646,7 +19220,7 @@ Merging 17 26 54 93
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19657,7 +19231,7 @@ Merging 17 26 54 93
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19668,7 +19242,7 @@ Merging 17 26 54 93
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19679,18 +19253,7 @@ Merging 17 26 54 93
 </div>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>This implementation constructs <code>leftHalf</code> and <code>rightHalf</code> vectors. Copying all ranges at one recursion level costs $O(n)$, so it is already included in the $O(n \log n)$ time bound. A range-based implementation can avoid repeatedly allocating sub-vectors, although merging still needs auxiliary storage unless a different in-place merge strategy is used.</p>
-</div>
-</div>
-</div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -19701,7 +19264,7 @@ Merging 17 26 54 93
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -19951,9 +19514,9 @@ Merging 17 26 54 93
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="a9765dcc-3e1e-472a-b123-0f7a7817a5d4" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="aa9b1229-c302-4227-b1f5-3300a874745d" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('a9765dcc-3e1e-472a-b123-0f7a7817a5d4');
+var element = document.getElementById('aa9b1229-c302-4227-b1f5-3300a874745d');
 var questionsQgNPgzABAfho=[
     {
         "question": "Given the following list of numbers: [21, 1, 26, 45, 29, 28, 2, 9, 16, 49, 39, 27, 43, 34, 46, 40], which answer illustrates the list to be sorted after 3 recursive calls to mergesort?",
@@ -21060,7 +20623,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section></section><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -21071,7 +20634,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -21082,7 +20645,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -21093,7 +20656,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -21104,7 +20667,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -21116,7 +20679,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -21127,7 +20690,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -21138,7 +20701,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -21149,7 +20712,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -21160,7 +20723,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -21171,7 +20734,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -21182,7 +20745,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -21193,7 +20756,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -21217,7 +20780,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -21258,7 +20821,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
+</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_anim-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -21332,7 +20895,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -21343,7 +20906,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -21354,7 +20917,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -21365,7 +20928,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -21376,7 +20939,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -21387,7 +20950,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -21637,9 +21200,9 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="2672dbb0-a077-439f-bfbb-8bc5f85448e5" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="57f44791-c6f1-4be4-8787-8a706401e227" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('2672dbb0-a077-439f-bfbb-8bc5f85448e5');
+var element = document.getElementById('57f44791-c6f1-4be4-8787-8a706401e227');
 var questionsQSUkEuBZQIgn=[
     {
         "question": "Given the following list of numbers [14, 17, 13, 15, 19, 10, 3, 16, 9, 12] which answer shows the contents of the list after the second partitioning according to the quicksort algorithm?",
@@ -22746,7 +22309,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -22757,7 +22320,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -22779,7 +22342,7 @@ function try_show() {
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -22820,7 +22383,7 @@ Descending: 93 77 55 54 44 31 26 20 17
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -22831,7 +22394,7 @@ Descending: 93 77 55 54 44 31 26 20 17
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -22842,7 +22405,7 @@ Descending: 93 77 55 54 44 31 26 20 17
 </div>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -22853,7 +22416,7 @@ Descending: 93 77 55 54 44 31 26 20 17
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+</div></div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -22891,7 +22454,7 @@ Descending: 93 77 55 54 44 31 26 20 17
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
+</div></div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_skip-execution celltag_py-widget">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -23278,9 +22841,9 @@ Descending: 93 77 55 54 44 31 26 20 17
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="6258d959-abe2-45bd-82c4-0f45ac56435b" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="04eeb051-d0a6-4fef-857c-d18fab3ea00c" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('6258d959-abe2-45bd-82c4-0f45ac56435b');
+var element = document.getElementById('04eeb051-d0a6-4fef-857c-d18fab3ea00c');
 /*!
  * swiped-events.js - v1.1.4
  * Pure JavaScript swipe events
@@ -24100,7 +23663,7 @@ window.setTopics = function(idOrElem, topics) {
 </div>
 </div>
 </div>
-</div>
+</div></section></section><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -24111,7 +23674,7 @@ window.setTopics = function(idOrElem, topics) {
 </div>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -24124,95 +23687,62 @@ window.setTopics = function(idOrElem, topics) {
 </div>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Key-terms">Key terms<a class="anchor-link" href="#Key-terms">¶</a></h2>
+</div></section></section>
 </div>
 </div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Here's a brief definition for each of the key terms:</p>
-<ul>
-<li><p><strong>Searching</strong>: The act of locating a specific number or entry within a collection based on predefined criteria or characteristics.</p>
-</li>
-<li><p><strong>Sorting</strong>: The process by which numbers in a dataset are arranged in a specific sequence, typically ascending or descending order, based on their values.</p>
-</li>
-<li><p><strong>Sequential Search</strong>: A search technique where each number in a list is examined one by one from the start until the desired number is found or the list ends.</p>
-</li>
-<li><p><strong>Binary Search</strong>: A search algorithm applied on a sorted array that repeatedly divides the search range in half, comparing the midpoint against the target number to find it efficiently.</p>
-</li>
-<li><p><strong>Divide and Conquer</strong>: A strategy for solving problems by breaking them into smaller subproblems of the same type, solving these subproblems independently, and combining their solutions to solve the original problem.</p>
-</li>
-<li><p><strong>Hashing</strong>: Applying a hash function to a key to select a table index; different keys can collide and require collision resolution.</p>
-</li>
-<li><p><strong>Hash Table</strong>: A data structure that implements an associative array abstract data type, allowing for the efficient retrieval of values keyed by numbers, through hashing.</p>
-</li>
-<li><p><strong>Collision</strong>: This occurs when two different keys (numbers) hash to the same index in a hash table.</p>
-</li>
-<li><p><strong>Perfect Hash Function</strong>: A hash function that, when applied to each key (number) in the input set, produces a unique index in the hash table, thus eliminating collisions.</p>
-</li>
-<li><p><strong>Remainder Method</strong>: A method for generating a hash value by taking the remainder of the division of the key (number) by the hash table size.</p>
-</li>
-<li><p><strong>Folding Method</strong>: A technique for hashing where a key (number) is divided into parts, these parts are then added together, and the hash value is derived from this sum.</p>
-</li>
-<li><p><strong>Mid-square Method</strong>: A hashing technique where the key (number) is squared, and a portion of the resulting number (often the middle part) is used as the hash value.</p>
-</li>
-<li><p><strong>Collision Resolution</strong>: Various strategies, such as chaining or open addressing, used to address the issue of two keys hashing to the same index in a hash table.</p>
-</li>
-<li><p><strong>Open Addressing</strong>: A method of resolving hash table collisions by probing the hash table to find the next empty slot according to a predefined sequence.</p>
-</li>
-<li><p><strong>Linear Probing</strong>: A specific type of open addressing where the next sequential slot is checked for availability after a collision.</p>
-</li>
-<li><p><strong>Rehashing</strong>: In this chapter, computing the next candidate slot after a collision, such as <code>(oldHash + 1) % size</code>; resizing a production table is a separate use of the term.</p>
-</li>
-<li><p><strong>Quadratic Probing</strong>: A collision resolution technique in open addressing that uses a quadratic function to find the next slot, reducing clustering compared to linear probing.</p>
-</li>
-<li><p><strong>Chaining</strong>: A collision resolution technique in hash tables where each table index points to a list (or chain) of entries that hash to the same index.</p>
-</li>
-<li><p><strong>Map</strong>: A data structure that stores pairs of keys and values, allowing for efficient retrieval of a value based on its associated key (number).</p>
-</li>
-<li><p><strong>Load Factor</strong>: A measure of how full a hash table is, calculated as the ratio of the number of entries to the total number of slots available in the table.</p>
-</li>
-<li><p><strong>Bubble Sort</strong>: A straightforward sorting algorithm that repeatedly steps through the list, compares adjacent numbers, and swaps them if they are in the wrong order.</p>
-</li>
-<li><p><strong>Selection Sort</strong>: An in-place comparison sort that repeatedly finds the largest value in the unsorted prefix and swaps it into the final open slot at the end.</p>
-</li>
-<li><p><strong>Insertion Sort</strong>: A simple sorting technique that builds the final sorted array one number at a time by inserting each new number into its proper position.</p>
-</li>
-<li><p><strong>Shell Sort</strong>: An algorithm that sorts numbers by comparing elements separated by a gap of several positions, reducing the gap size over time until it reaches one.</p>
-</li>
-<li><p><strong>Gap</strong>: The distance between numbers being compared and sorted in the context of the Shell Sort algorithm.</p>
-</li>
-<li><p><strong>Merge Sort</strong>: A divide-and-conquer sorting algorithm that divides the unsorted list into n sublists and then repeatedly merges them to produce sorted sublists.</p>
-</li>
-<li><p><strong>Stable Sort</strong>: A sorting algorithm is considered stable if it maintains the relative order of numbers with equal values within the sorted list.</p>
-</li>
-<li><p><strong>Quick Sort</strong>: An efficient sorting algorithm that employs a divide-and-conquer strategy to select a pivot number and partition the array into two halves.</p>
-</li>
-<li><p><strong>Pivot Value</strong>: The chosen value around which the quick sort algorithm organizes the other numbers in the array during the partitioning process.</p>
-</li>
-<li><p><strong>Split Point</strong>: The position at which the pivot number is placed in the sorted array, such that all numbers to the left are smaller and all numbers to the right are larger.</p>
-</li>
-<li><p><strong>Partition Process</strong>: The critical step in quick sort where numbers are rearranged based on their relationship to a chosen pivot number.</p>
-</li>
-<li><p><strong>Median of Three</strong>: A strategy to choose the pivot number in quick sort by finding the median value of the first, middle, and last numbers of the array segment.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-</div></div></div></div></div></div></div></main>
+</main>
 </body>
+<script>
+require(
+    {
+      // it makes sense to wait a little bit when you are loading
+      // reveal from a cdn in a slow connection environment
+      waitSeconds: 15
+    },
+    [
+      "https://unpkg.com/reveal.js@4.0.2/dist/reveal.js",
+      "https://unpkg.com/reveal.js@4.0.2/plugin/notes/notes.js"
+    ],
+
+    function(Reveal, RevealNotes){
+        // Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            transition: "slide",
+            slideNumber: "c/t",
+            plugins: [RevealNotes],
+            width: 960,
+			      height: 700,
+
+        });
+
+        var update = function(event){
+          if(MathJax.Hub.getAllJax(Reveal.getCurrentSlide())){
+            MathJax.Hub.Rerender(Reveal.getCurrentSlide());
+          }
+        };
+
+        Reveal.addEventListener('slidechanged', update);
+
+        function setScrollingSlide() {
+            var scroll = false
+            if (scroll === true) {
+              var h = $('.reveal').height() * 0.95;
+              $('section.present').find('section')
+                .filter(function() {
+                  return $(this).height() > h;
+                })
+                .css('height', 'calc(95vh)')
+                .css('overflow-y', 'scroll')
+                .css('margin-top', '20px');
+            }
+        }
+
+        // check and set the scrolling slide every time the slide change
+        Reveal.addEventListener('slidechanged', setScrollingSlide);
+    }
+);
+</script>
 </html>
