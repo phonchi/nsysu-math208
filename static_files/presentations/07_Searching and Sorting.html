@@ -7881,13 +7881,23 @@ a.anchor-link {
 <span class="cp"># Local source files are embedded in saved outputs by refresh_interactive_outputs.py.</span>
 <span class="n">from</span><span class="w"> </span><span class="n">functools</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="n">lru_cache</span>
 <span class="n">from</span><span class="w"> </span><span class="n">pathlib</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="n">Path</span>
+<span class="n">from</span><span class="w"> </span><span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="n">urlopen</span>
 <span class="n">from</span><span class="w"> </span><span class="n">IPython</span><span class="p">.</span><span class="n">display</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="n">HTML</span><span class="p">,</span><span class="w"> </span><span class="n">display</span>
 
-<span class="n">_BASE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Path</span><span class="p">(</span><span class="s">"animations"</span><span class="p">)</span>
+<span class="n">_BASE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"https://raw.githubusercontent.com/phonchi/nsysu-math208/refs/heads/main/extra/animations/"</span>
+<span class="n">_LOCAL_ANIM_DIRS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="n">Path</span><span class="p">(</span><span class="s">"animations"</span><span class="p">),</span>
+<span class="w">    </span><span class="n">Path</span><span class="p">(</span><span class="s">"nsysu-math208/extra/animations"</span><span class="p">),</span>
+<span class="w">    </span><span class="n">Path</span><span class="p">(</span><span class="s">"../../extra/animations"</span><span class="p">),</span>
+<span class="p">]</span>
 
 <span class="err">@</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
 <span class="n">def</span><span class="w"> </span><span class="n">_fetch</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">:</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">_BASE</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">name</span><span class="p">).</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s">"utf-8"</span><span class="p">)</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">folder</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">_LOCAL_ANIM_DIRS</span><span class="o">:</span>
+<span class="w">        </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">folder</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">name</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">path</span><span class="p">.</span><span class="n">exists</span><span class="p">()</span><span class="o">:</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">path</span><span class="p">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s">"utf-8"</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">urlopen</span><span class="p">(</span><span class="n">_BASE</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">timeout</span><span class="o">=</span><span class="mi">15</span><span class="p">).</span><span class="n">read</span><span class="p">().</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">)</span>
 
 <span class="n">def</span><span class="w"> </span><span class="n">load_infra</span><span class="p">()</span><span class="o">:</span>
 <span class="w">    </span><span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="s">"&lt;style&gt;"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">_fetch</span><span class="p">(</span><span class="s">"ds07.css"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"&lt;/style&gt;"</span>
@@ -9409,8 +9419,9 @@ function initQuick() {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>false</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>false
+</pre>
 </div>
 </div>
 </div>
@@ -9437,8 +9448,9 @@ function initQuick() {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>true</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>true
+</pre>
 </div>
 </div>
 </div>
@@ -9550,9 +9562,10 @@ function initQuick() {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>true</p>
-<p>false</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>true
+false
+</pre>
 </div>
 </div>
 </div>
@@ -9784,9 +9797,10 @@ function initQuick() {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>true</p>
-<p>false</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>true
+false
+</pre>
 </div>
 </div>
 </div>
@@ -10131,9 +10145,9 @@ function initQuick() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="23ae42ec-7ce1-484f-b62f-9b4ff6de59e9" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="10b27b0b-620c-431d-812e-387ea059c06b" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('23ae42ec-7ce1-484f-b62f-9b4ff6de59e9');
+var element = document.getElementById('10b27b0b-620c-431d-812e-387ea059c06b');
 var questionsLDPeGuZCDjek=[
     {
         "question": "Suppose you are doing a sequential search of the ordered list [3, 5, 6, 8, 11, 12, 14, 15, 17, 18]. How many comparisons would you need to do in order to find the key 13?",
@@ -11370,13 +11384,14 @@ function try_show() {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>4</p>
-<p>true</p>
-<p>4</p>
-<p>2</p>
-<p>0</p>
-<p>false</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>4
+true
+4
+2
+0
+false
+</pre>
 </div>
 </div>
 </div>
@@ -11459,13 +11474,14 @@ function try_show() {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>44</p>
-<p>true</p>
-<p>44</p>
-<p>65</p>
-<p>54</p>
-<p>false</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>44
+true
+44
+65
+54
+false
+</pre>
 </div>
 </div>
 </div>
@@ -11904,9 +11920,9 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="3ed9e4c4-f7c3-4a06-8c2b-3f22485d3ed7" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="e1d38bb3-c39a-478d-acf7-1553c70e7219" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('3ed9e4c4-f7c3-4a06-8c2b-3f22485d3ed7');
+var element = document.getElementById('e1d38bb3-c39a-478d-acf7-1553c70e7219');
 var questionsZMtsgjuqwIBu=[
     {
         "question": "Suppose recursive binary search uses index bounds and midpoint = first + (last - first) / 2. For the sorted vector {3, 5, 6, 8, 11, 12, 14, 15, 17, 18}, which values are compared while searching for 16?",
@@ -13059,8 +13075,8 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/tmp/tmpewbzfk0k.cpp: In function ‘bool binarySearchRec2(const std::vector&lt;int&gt;&amp;, int, int, int)’:
-/tmp/tmpewbzfk0k.cpp:7:9: error: ‘____’ was not declared in this scope
+<pre>/tmp/tmpi7pw7d8h.cpp: In function ‘bool binarySearchRec2(const std::vector&lt;int&gt;&amp;, int, int, int)’:
+/tmp/tmpi7pw7d8h.cpp:7:9: error: ‘____’ was not declared in this scope
     7 |     if (____) return false;
       |         ^~~~
 </pre>
@@ -13069,7 +13085,7 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/tmp/tmpewbzfk0k.cpp:8:20: error: ‘____’ was not declared in this scope
+<pre>/tmp/tmpi7pw7d8h.cpp:8:20: error: ‘____’ was not declared in this scope
     8 |     int midpoint = ____;
       |                    ^~~~
 </pre>
@@ -13481,15 +13497,19 @@ function try_show() {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Item  Remainder  Mid-Square</p>
-<pre><code>54         10           3
-
-26          4           1
-
-93          5           9
-
-17          6           6</code></pre>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>  Item  Remainder  Mid-Square
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>    54         10           3
+    26          4           1
+    93          5           9
+    17          6           6
+</pre>
 </div>
 </div>
 </div>
@@ -13551,8 +13571,9 @@ function try_show() {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>4</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>4
+</pre>
 </div>
 </div>
 </div>
@@ -13794,8 +13815,9 @@ With simple linear probing, the rehash function is $new\_hash=rehash(old\_hash),
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>0:77  1:44  2:55  3:20  4:26  5:93  6:17  7:-1  8:-1  9:31  10:54</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>0:77  1:44  2:55  3:20  4:26  5:93  6:17  7:-1  8:-1  9:31  10:54  
+</pre>
 </div>
 </div>
 </div>
@@ -14116,9 +14138,9 @@ With simple linear probing, the rehash function is $new\_hash=rehash(old\_hash),
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="7c5f9c18-eabf-4c88-9134-b7e50972f0be" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="968c594d-06c8-45c5-96df-bd5b90b73615" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('7c5f9c18-eabf-4c88-9134-b7e50972f0be');
+var element = document.getElementById('968c594d-06c8-45c5-96df-bd5b90b73615');
 var questionsWXrjXfqTjYCK=[
     {
         "question": "In a hash table of size 13, which index positions would the following two keys map to: 27 and 130?",
@@ -15475,9 +15497,9 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="8326abc3-3d72-4d7a-98db-939f75ab6121" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="b55346cb-8df0-4572-9e7e-3a5391c42342" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('8326abc3-3d72-4d7a-98db-939f75ab6121');
+var element = document.getElementById('b55346cb-8df0-4572-9e7e-3a5391c42342');
 var questionsYrEbVpUTEBad=[
     {
         "question": "Suppose you are given the following set of keys to insert into a hash table that holds exactly 11 values: 113, 117, 97, 100, 114, 108, 116, 105, 99. Which of the following best demonstrates the contents of the hash table after all the keys have been inserted using linear probing?",
@@ -16633,8 +16655,8 @@ function try_show() {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/tmp/tmp8025kqu0.cpp: In function ‘std::vector&lt;int&gt; quadraticProbing(const std::vector&lt;int&gt;&amp;, int)’:
-/tmp/tmp8025kqu0.cpp:13:21: error: ‘____’ was not declared in this scope
+<pre>/tmp/tmpfrh2f1ul.cpp: In function ‘std::vector&lt;int&gt; quadraticProbing(const std::vector&lt;int&gt;&amp;, int)’:
+/tmp/tmpfrh2f1ul.cpp:13:21: error: ‘____’ was not declared in this scope
    13 |             index = ____;
       |                     ^~~~
 </pre>
@@ -16913,9 +16935,10 @@ function try_show() {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>77 44 55 20 26 93 17 -1 -1 31 54</p>
-<p>bird goat pig chicken dog lion tiger - - cow cat</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>77 44 55 20 26 93 17 -1 -1 31 54 
+bird goat pig chicken dog lion tiger - - cow cat 
+</pre>
 </div>
 </div>
 </div>
@@ -16968,11 +16991,12 @@ function try_show() {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>chicken tiger</p>
-<p>duck</p>
-<p>bird goat pig duck dog lion tiger - - cow cat</p>
-<p>[]</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>chicken tiger
+duck
+bird goat pig duck dog lion tiger - - cow cat 
+[]
+</pre>
 </div>
 </div>
 </div>
@@ -17322,14 +17346,21 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>4 14 5 21 29 12 16</p>
-<p>4 5 14 21 12 16 29</p>
-<p>4 5 14 12 16 21 29</p>
-<p>4 5 12 14 16 21 29</p>
-<p>4 5 12 14 16 21 29</p>
-<p>4 5 12 14 16 21 29</p>
-<p>4 5 12 14 16 21 29</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>4 14 5 21 29 12 16 
+4 5 14 21 12 16 29 
+4 5 14 12 16 21 29 
+4 5 12 14 16 21 29 
+4 5 12 14 16 21 29 
+4 5 12 14 16 21 29 
+4 5 12 14 16 21 29 </pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>
+</pre>
 </div>
 </div>
 </div>
@@ -17661,9 +17692,9 @@ $\lambda$ comparisons if the search is unsuccessful.</p>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="77a55383-a921-483f-9eff-83e73cb96f1b" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="226e6fb3-ce2e-41b5-85aa-7abb45848616" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('77a55383-a921-483f-9eff-83e73cb96f1b');
+var element = document.getElementById('226e6fb3-ce2e-41b5-85aa-7abb45848616');
 var questionsrRciPJFNjFFy=[
     {
         "question": "After the first complete pass of ascending bubble sort on {5, 1, 4, 2, 8}, what is the vector?",
@@ -18884,8 +18915,9 @@ function try_show() {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>20 30 40 50 60 70 80 90 100 110</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>20 30 40 50 60 70 80 90 100 110 
+</pre>
 </div>
 </div>
 </div>
@@ -18974,23 +19006,24 @@ function try_show() {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>11 7 12 14 19 1 6 18 8 20</p>
-<p>11 7 12 14 19 1 6 18 8 20</p>
-<p>11 7 12 14 8 1 6 18 19 20</p>
-<p>11 7 12 14 8 1 6 18 19 20</p>
-<p>11 7 12 6 8 1 14 18 19 20</p>
-<p>11 7 1 6 8 12 14 18 19 20</p>
-<p>8 7 1 6 11 12 14 18 19 20</p>
-<p>6 7 1 8 11 12 14 18 19 20</p>
-<p>6 1</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>11 7 12 14 19 1 6 18 8 20 
+11 7 12 14 19 1 6 18 8 20 
+11 7 12 14 8 1 6 18 19 20 
+11 7 12 14 8 1 6 18 19 20 
+11 7 12 6 8 1 14 18 19 20 </pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>7 8 11 12 14 18 19 20</p>
-<p>1 6 7 8 11 12 14 18 19 20</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>
+11 7 1 6 8 12 14 18 19 20 
+8 7 1 6 11 12 14 18 19 20 
+6 7 1 8 11 12 14 18 19 20 
+6 1 7 8 11 12 14 18 19 20 
+1 6 7 8 11 12 14 18 19 20 
+</pre>
 </div>
 </div>
 </div>
@@ -19179,19 +19212,15 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>9 2 5 5 7 9 1</p>
-<p>2 9 5 5 7 9 1</p>
-<p>2 5 9 5 7 9 1</p>
-<p>2 5 5 9 7 9 1</p>
-<p>2 5 5 7 9 9 1</p>
-<p>2 5 5 7 9 9 1</p>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>1 2 5 5 7 9 9</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>9 2 5 5 7 9 1 
+2 9 5 5 7 9 1 
+2 5 9 5 7 9 1 
+2 5 5 9 7 9 1 
+2 5 5 7 9 9 1 
+2 5 5 7 9 9 1 
+1 2 5 5 7 9 9 
+</pre>
 </div>
 </div>
 </div>
@@ -19392,11 +19421,12 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>After increments of size 4 the list is 20 26 44 17 54 31 93 55 77</p>
-<p>After increments of size 2 the list is 20 17 44 26 54 31 77 55 93</p>
-<p>After increments of size 1 the list is 17 20 26 31 44 54 55 77 93</p>
-<p>17 20 26 31 44 54 55 77 93</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>After increments of size 4 the list is 20 26 44 17 54 31 93 55 77 
+After increments of size 2 the list is 20 17 44 26 54 31 77 55 93 
+After increments of size 1 the list is 17 20 26 31 44 54 55 77 93 
+17 20 26 31 44 54 55 77 93 
+</pre>
 </div>
 </div>
 </div>
@@ -19610,26 +19640,28 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Splitting 54 26 93 17</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Splitting 54 26 93 17 
+Splitting 54 26 
+Splitting 54 
+Merging 54 
+Splitting 26 
+Merging 26 
+Merging 26 54 
+Splitting 93 17 
+Splitting 93 
+Merging 93 
+Splitting 17 
+Merging 17 
+Merging 17 93 </pre>
 </div>
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Splitting 54 26</p>
-<p>Splitting 54</p>
-<p>Merging 54</p>
-<p>Splitting 26</p>
-<p>Merging 26</p>
-<p>Merging 26 54</p>
-<p>Splitting 93 17</p>
-<p>Splitting 93</p>
-<p>Merging 93</p>
-<p>Splitting 17</p>
-<p>Merging 17</p>
-<p>Merging 17 93</p>
-<p>Merging 17 26 54 93</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>
+Merging 17 26 54 93 
+</pre>
 </div>
 </div>
 </div>
@@ -20040,9 +20072,9 @@ $n-1$, the current item is checked against those in the already sorted sublist.<
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="d5b2b009-68a8-456c-80cf-307e9d2be739" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="f4aeb0b6-3663-4329-ae77-f235aaa47c06" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('d5b2b009-68a8-456c-80cf-307e9d2be739');
+var element = document.getElementById('f4aeb0b6-3663-4329-ae77-f235aaa47c06');
 var questionsQgNPgzABAfho=[
     {
         "question": "Given the following list of numbers: [21, 1, 26, 45, 29, 28, 2, 9, 16, 49, 39, 27, 43, 34, 46, 40], which answer illustrates the list to be sorted after 3 recursive calls to mergesort?",
@@ -21335,19 +21367,14 @@ function try_show() {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>31 26 20 17 44 54 77 55 93</p>
-<p>17 26 20 31 44 54 77 55 93</p>
-<p>17 26 20 31 44 54 77 55 93</p>
-<p>17 20 26 31 44 54 77 55 93</p>
-<p>17 20 26 31 44 54 55 77 93</p>
-<p>17 20 26</p>
-</div>
-</div>
-<div class="jp-OutputArea-child">
-<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>31 44 54 55 77 93</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>31 26 20 17 44 54 77 55 93 
+17 26 20 31 44 54 77 55 93 
+17 26 20 31 44 54 77 55 93 
+17 20 26 31 44 54 77 55 93 
+17 20 26 31 44 54 55 77 93 
+17 20 26 31 44 54 55 77 93 
+</pre>
 </div>
 </div>
 </div>
@@ -21731,9 +21758,9 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="7ef9daf4-6477-43a5-8cf0-7cea8b461abe" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="1518a4fb-5f0a-4c45-ad75-d533e1f6c6de" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('7ef9daf4-6477-43a5-8cf0-7cea8b461abe');
+var element = document.getElementById('1518a4fb-5f0a-4c45-ad75-d533e1f6c6de');
 var questionsQSUkEuBZQIgn=[
     {
         "question": "Given the following list of numbers [14, 17, 13, 15, 19, 10, 3, 16, 9, 12] which answer shows the contents of the list after the second partitioning according to the quicksort algorithm?",
@@ -22906,9 +22933,10 @@ function try_show() {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>Ascending:  17 20 26 31 44 54 55 77 93</p>
-<p>Descending: 93 77 55 54 44 31 26 20 17</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Ascending:  17 20 26 31 44 54 55 77 93 
+Descending: 93 77 55 54 44 31 26 20 17 
+</pre>
 </div>
 </div>
 </div>
@@ -22977,8 +23005,9 @@ function try_show() {
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-OutputArea-output" data-mime-type="text/markdown" tabindex="0">
-<p>17 20 26 31 44 54 55 77 93</p>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>17 20 26 31 44 54 55 77 93 
+</pre>
 </div>
 </div>
 </div>
@@ -23370,9 +23399,9 @@ function try_show() {
 </div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="8a6d033a-e476-41e7-96e7-4497fd4d41e7" tabindex="0">
+<div class="jp-RenderedJavaScript jp-OutputArea-output" data-mime-type="application/javascript" id="c1ff79dd-f177-41f5-b438-b0e6c3302333" tabindex="0">
 <script type="text/javascript">
-var element = document.getElementById('8a6d033a-e476-41e7-96e7-4497fd4d41e7');
+var element = document.getElementById('c1ff79dd-f177-41f5-b438-b0e6c3302333');
 /*!
  * swiped-events.js - v1.1.4
  * Pure JavaScript swipe events
