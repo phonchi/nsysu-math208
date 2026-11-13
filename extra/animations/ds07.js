@@ -859,6 +859,15 @@ function initHashing() {
       slots[highlightSlot].classList.remove('empty','searching');
       slots[highlightSlot].classList.add(highlightCls);
     }
+    // Chain nodes hang below their slot (position:absolute), so they take no room in
+    // the layout and used to cover the status banner and controls. Reserve the height
+    // of the longest chain under the table.
+    let chainRoom = 0;
+    for (let i = 0; i < M; i++) {
+      const c = slots[i].querySelector('.hash-chain');
+      if (c.children.length) chainRoom = Math.max(chainRoom, c.offsetHeight + 6);
+    }
+    wrap.style.paddingBottom = chainRoom ? chainRoom + 'px' : '';
     // stats
     let used;
     if (strategy === 'linear') used = table.filter(x => x != null).length;
